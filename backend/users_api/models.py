@@ -10,6 +10,7 @@ class UserAuthModel(AbstractBaseUser):
 	email_verified = models.BooleanField()
 	email_otp = models.CharField(max_length=6, null=True, blank=True)
 
+	USERNAME_FIELD = email
 	REQUIRED_FIELDS = [username, email]	
 
 	objects = CustomUserManager()
