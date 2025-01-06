@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from .managers import CustomUserManager
 
 # Create your models here.
 class UserAuthModel(AbstractBaseUser):
@@ -10,3 +11,5 @@ class UserAuthModel(AbstractBaseUser):
 	email_otp = models.CharField(max_length=6, null=True, blank=True)
 
 	REQUIRED_FIELDS = [username, email]	
+
+	objects = CustomUserManager()
