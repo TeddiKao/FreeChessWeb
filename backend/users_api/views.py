@@ -5,7 +5,6 @@ from rest_framework.permissions import AllowAny
 
 from .serializers import UserSerializer
 
-
 # Create your views here.
 class CreateUserView(generics.CreateAPIView):
 	user = get_user_model()
