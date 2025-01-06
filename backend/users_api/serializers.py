@@ -13,6 +13,6 @@ class UserSerializer(ModelSerializer):
 
 	def create(self, validated_data):
 		user_model = get_user_model()
-		created_user = user_model.objects.create(**validated_data)
+		created_user = user_model.objects.create_user(**validated_data)
 
 		return created_user
