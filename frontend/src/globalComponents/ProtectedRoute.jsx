@@ -17,6 +17,9 @@ function ProtectedRoute({ children }) {
 
 	async function refreshUserToken() {
 		const refreshToken = localStorage.getItem(REFRESH_TOKEN)
+		if (!refreshToken) {
+			return;
+		}
 
 		try {
 			const response = await api.post("/users_api/create-user/", {
