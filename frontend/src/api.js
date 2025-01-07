@@ -12,6 +12,7 @@ api.interceptors.request(
 			config.headers.Authorization = `Bearer ${accessToken}`	
 		}
 	},
+	
 	(error) => {
 		return Promise.reject(error)
 	}
