@@ -1,0 +1,8 @@
+:root {
+	--default-font: "Segoe UI";
+	--accent-color: hsl(30, 100%, 50%);
+}
+
+body {
+	font-family: var(--default-font);
+}

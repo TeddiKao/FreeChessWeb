@@ -9,8 +9,8 @@ function UnauthenticatedNavbar() {
 			</div>
 
 			<div className="authentication-links">
-				<a>Log in</a>
-				<a>Sign up</a>
+				<a className="login-button">Log in</a>
+				<a className="signup-button">Sign up</a>
 			</div>
 		</div>
 	)
