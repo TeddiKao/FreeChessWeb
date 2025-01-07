@@ -1,6 +1,8 @@
+import "../styles/navbar.css"
+
 function UnauthenticatedNavbar() {
 	return (
-		<div className="navbar-container">
+		<div className="unauthenticated-navbar-container">
 			<div className="site-links">
 				<a>Home</a>
 				<a>Features</a>

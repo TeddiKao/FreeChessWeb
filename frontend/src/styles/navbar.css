@@ -1,0 +1,17 @@
+.unauthenticated-navbar-container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+
+.site-links a, .authentication-links a {
+	margin-left: 20px;
+}
+
+.authentication-links {
+	position: absolute;
+	right: 10%
+}
