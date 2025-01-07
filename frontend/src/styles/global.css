@@ -6,3 +6,7 @@
 body {
 	font-family: var(--default-font);
 }
+
+a:hover {
+	cursor: pointer;
+}
