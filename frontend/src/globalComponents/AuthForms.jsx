@@ -8,7 +8,7 @@ function AuthForm({ method, url }) {
 		)
 	} else {
 		formSubtitleHTML = (
-			<p>Already have an account? <a href="/signup">Login</a></p>
+			<p>Already have an account? <a href="/login">Login</a></p>
 		)
 	}
 
