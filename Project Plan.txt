@@ -2,7 +2,6 @@ FEATURES TO ADD
 1. Authentication
 	- Signup/Login/Logout 
 	- Password reset
-	- Email verification
 
 2. Playing chess
 	- Play against bot
