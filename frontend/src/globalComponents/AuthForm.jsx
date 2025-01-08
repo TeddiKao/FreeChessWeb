@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import api from "../api.js";
+import "../styles/auth-form.css"
 
 function AuthForm({ method, url }) {
     const [email, setEmail] = useState("");
@@ -36,12 +37,12 @@ function AuthForm({ method, url }) {
         );
     }
 
-    const formTitle = method === "Login" ? "Login" : "Signup";
+    const formTitle = method === "Login" ? "Login" : "Sign up";
 
     return (
         <div className="auth-form-container">
             <h1>{formTitle}</h1>
-            <form className="form" onSubmit={handleFormSubmit}>
+            <form className="auth-form" onSubmit={handleFormSubmit}>
                 <input
                     type="email"
                     value={email}
@@ -66,7 +67,7 @@ function AuthForm({ method, url }) {
                 />
                 <br />
 
-                <button type="submit">{formTitle}</button>
+                <button type="submit" className="auth-form-submit">{formTitle}</button>
             </form>
         </div>
     );

@@ -1,12 +1,28 @@
 :root {
 	--default-font: "Segoe UI";
 	--accent-color: hsl(30, 100%, 50%);
+
+	--input-font-size: 1rem;
+	--button-font-size: 1rem
 }
 
 body {
 	font-family: var(--default-font);
 }
 
-a:hover {
+input, button {
+	font-family: var(--default-font);
+	
+}
+
+input {
+	font-size: var(--input-font-size);
+}
+
+button {
+	font-size: var(--button-font-size);
+}
+
+a:hover, button:hover {
 	cursor: pointer;
 }
