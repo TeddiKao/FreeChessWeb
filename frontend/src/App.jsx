@@ -5,6 +5,7 @@ import Login from "./pages/Login.jsx"
 import Signup from "./pages/Signup.jsx"
 
 import "./styles/global.css"
+import NotFound from "./pages/NotFound.jsx"
 
 function App() {
 	return (
@@ -14,6 +15,7 @@ function App() {
 					<Route path="/" element={<GuestHomePage/>}/>
 					<Route path="/login" element={<Login/>}/>
 					<Route path="/signup" element={<Signup/>}/>
+					<Route path="*" element={<NotFound/>}/>
 				</Routes>
 			</BrowserRouter>
 		</>
