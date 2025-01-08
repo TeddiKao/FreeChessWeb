@@ -5,8 +5,10 @@ import Login from "./pages/Login.jsx"
 import Signup from "./pages/Signup.jsx"
 
 import "./styles/global.css"
+
 import NotFound from "./pages/NotFound.jsx"
 import ProtectedRoute from "./globalComponents/ProtectedRoute.jsx"
+import Dashboard from "./pages/Protected/Dashboard.jsx"
 
 function App() {
 	return (
@@ -17,9 +19,11 @@ function App() {
 					<Route path="/login" element={<Login/>}/>
 					<Route path="/signup" element={<Signup/>}/>
 
-					<ProtectedRoute>
-						<Route path="/home"/>
-					</ProtectedRoute>
+					<Route path="/home" element={
+						<ProtectedRoute>
+							<Dashboard/>
+						</ProtectedRoute>
+					}/>
 
 					<Route path="*" element={<NotFound/>}/>
 				</Routes>
