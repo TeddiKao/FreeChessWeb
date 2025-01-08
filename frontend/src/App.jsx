@@ -6,6 +6,7 @@ import Signup from "./pages/Signup.jsx"
 
 import "./styles/global.css"
 import NotFound from "./pages/NotFound.jsx"
+import ProtectedRoute from "./globalComponents/ProtectedRoute.jsx"
 
 function App() {
 	return (
@@ -15,6 +16,11 @@ function App() {
 					<Route path="/" element={<GuestHomePage/>}/>
 					<Route path="/login" element={<Login/>}/>
 					<Route path="/signup" element={<Signup/>}/>
+
+					<ProtectedRoute>
+						<Route path="/home"/>
+					</ProtectedRoute>
+
 					<Route path="*" element={<NotFound/>}/>
 				</Routes>
 			</BrowserRouter>
