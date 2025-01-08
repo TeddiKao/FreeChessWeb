@@ -10,6 +10,11 @@ import NotFound from "./pages/NotFound.jsx"
 import ProtectedRoute from "./globalComponents/ProtectedRoute.jsx"
 import Dashboard from "./pages/Protected/Dashboard.jsx"
 
+function Logout() {
+	localStorage.clear()
+	return <Navigate to="/login"/>
+}
+
 function App() {
 	return (
 		<>
@@ -18,6 +23,7 @@ function App() {
 					<Route path="/" element={<GuestHomePage/>}/>
 					<Route path="/login" element={<Login/>}/>
 					<Route path="/signup" element={<Signup/>}/>
+					<Route path="/logout" element={<Logout/>}/>
 
 					<Route path="/home" element={
 						<ProtectedRoute>
