@@ -7,6 +7,7 @@ function AuthForm({ method, url }) {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     function handleEmailChange(event) {
@@ -22,7 +23,7 @@ function AuthForm({ method, url }) {
     }
 
     function handlePasswordVisibleChange(event) {
-        setIsPasswordVisible(event.target.checked)
+        setIsPasswordVisible(event.target.checked);
     }
 
     function handleFormSubmit(event) {}
@@ -43,6 +44,7 @@ function AuthForm({ method, url }) {
     }
 
     const formTitle = method === "Login" ? "Login" : "Sign up";
+    const shouldRenderUsername = method === "Signup";
 
     return (
         <div className="auth-form-container">
@@ -57,17 +59,21 @@ function AuthForm({ method, url }) {
                 />
                 <br />
 
-                <input
-                    type="text"
-                    className="username-input"
-                    value={username}
-                    onChange={handleUsernameChange}
-                    placeholder="Username"
-                />
-                <br />
+                {shouldRenderUsername ? (
+                    <>
+                        <input
+                            type="text"
+                            className="username-input"
+                            value={username}
+                            onChange={handleUsernameChange}
+                            placeholder="Username"
+                        />
+                        <br />
+                    </>
+                ) : null}
 
                 <input
-                    type={isPasswordVisible? "text" : "password"}
+                    type={isPasswordVisible ? "text" : "password"}
                     className="password-input"
                     value={password}
                     onChange={handlePasswordChange}
