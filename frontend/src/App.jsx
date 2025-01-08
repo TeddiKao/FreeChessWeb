@@ -3,12 +3,13 @@ import { Navigate, BrowserRouter, Routes, Route } from "react-router-dom"
 import GuestHomePage from "./pages/GuestHomePage.jsx"
 import Login from "./pages/Login.jsx"
 import Signup from "./pages/Signup.jsx"
+import Dashboard from "./pages/Protected/Dashboard.jsx"
+import NotFound from "./pages/NotFound.jsx"
 
 import "./styles/global.css"
 
-import NotFound from "./pages/NotFound.jsx"
 import ProtectedRoute from "./globalComponents/ProtectedRoute.jsx"
-import Dashboard from "./pages/Protected/Dashboard.jsx"
+import AuthenticationRoute from "./globalComponents/AuthenticationRoute.jsx"
 
 function Logout() {
 	localStorage.clear()
@@ -21,8 +22,18 @@ function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<GuestHomePage/>}/>
-					<Route path="/login" element={<Login/>}/>
-					<Route path="/signup" element={<Signup/>}/>
+					<Route path="/login" element={
+						<AuthenticationRoute>
+							<Login/>
+						</AuthenticationRoute>
+					}/>
+
+					<Route path="/signup" element={
+						<AuthenticationRoute>
+							<Signup/>
+						</AuthenticationRoute>
+					}/>
+
 					<Route path="/logout" element={<Logout/>}/>
 
 					<Route path="/home" element={

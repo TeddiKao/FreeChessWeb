@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react"
-import { Navigate } from "react-router-dom"
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import { Navigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
-import { jwtDecode } from "jwt-decode"
-
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants"
-import api from "../api.js"
-
-function ProtectedRoute({ children }) {
-	const [isAuthenticated, setIsAuthenticated] = useState(null);
+function AuthenticationRoute({ children }) {
+	const [isAuthenticated, setIsAuthenticated] = useState(null)
 
 	useEffect(() => {
 		auth().catch(() => {
@@ -41,19 +38,27 @@ function ProtectedRoute({ children }) {
 
 	async function auth() {
 		const userAccessToken = localStorage.getItem(ACCESS_TOKEN)
+		console.log(userAccessToken)
+
 		if (!userAccessToken) {
+			console.log(userAccessToken)
 			setIsAuthenticated(false);
 			return;
 		}
 
 		const decodedAccessToken = jwtDecode(userAccessToken)
+		console.log(decodedAccessToken);
+
 		const accessTokenExpiry = decodedAccessToken.exp
 		const now = Date.now() / 1000
+
+		console.log(accessTokenExpiry);
 
 		if (accessTokenExpiry < now) {
 			await refreshUserToken()
 		} else {
 			setIsAuthenticated(true);
+			console.log("You are authenticated!")
 		}
 	}
 
@@ -61,9 +66,9 @@ function ProtectedRoute({ children }) {
 		return <div>Loading ...</div>
 	}
 
-	return (
-		isAuthenticated ? children : <Navigate to={"/login"}/>
-	)
+	console.log(isAuthenticated)
+
+	return isAuthenticated ? <Navigate to="/home"/> : children
 }
 
-export default ProtectedRoute
+export default AuthenticationRoute
