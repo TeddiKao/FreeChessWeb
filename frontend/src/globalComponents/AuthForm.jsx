@@ -44,12 +44,12 @@ function AuthForm({ method }) {
         event.preventDefault();
 
         try {
-            const dataToSend =
+            const userCredentials =
                 method === "login"
                     ? { email, password }
                     : { email, username, password };
 
-            const response = await api.post(url, dataToSend);
+            const response = await api.post(url, userCredentials);
 
             if (method === "login") {
                 logUserIn(response.data.access, response.data.refresh)
@@ -62,9 +62,9 @@ function AuthForm({ method }) {
 						email, password
 					})
 
-					logUserIn(response.data.access, response.data.refresh)
+					logUserIn(loginResponse.data.access, loginResponse.data.refresh)
 					navigate("/home")
-					
+
 				} catch (error) {
 					console.log(error)
 				}
