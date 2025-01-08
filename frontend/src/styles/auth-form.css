@@ -5,7 +5,7 @@
 	align-items: center;
 }
 
-.auth-form input {
+.email-input, .password-input, .username-input {
 	padding-top: 8px;
 	padding-bottom: 8px;
 	padding-left: 6px;
@@ -14,6 +14,14 @@
 	margin-bottom: 12px;
 
 	width: 250px
+}
+
+.password-input {
+	margin-bottom: 4px;
+}
+
+.show-password-container p {
+	margin-top: 4px;
 }
 
 .auth-form-submit {
@@ -27,4 +35,8 @@
 
 	border-radius: 4px;
 	border: none;
+}
+
+.show-password-container p {
+	display: inline-block;
 }

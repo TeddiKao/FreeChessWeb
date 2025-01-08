@@ -1,12 +1,13 @@
 import { useState } from "react";
 
 import api from "../api.js";
-import "../styles/auth-form.css"
+import "../styles/auth-form.css";
 
 function AuthForm({ method, url }) {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     function handleEmailChange(event) {
         setEmail(event.target.value);
@@ -18,6 +19,10 @@ function AuthForm({ method, url }) {
 
     function handlePasswordChange(event) {
         setPassword(event.target.value);
+    }
+
+    function handlePasswordVisibleChange(event) {
+        setIsPasswordVisible(event.target.checked)
     }
 
     function handleFormSubmit(event) {}
@@ -45,29 +50,43 @@ function AuthForm({ method, url }) {
             <form className="auth-form" onSubmit={handleFormSubmit}>
                 <input
                     type="email"
+                    className="email-input"
                     value={email}
                     onChange={handleEmailChange}
-					placeholder="Email"
+                    placeholder="Email"
                 />
                 <br />
 
                 <input
                     type="text"
+                    className="username-input"
                     value={username}
                     onChange={handleUsernameChange}
-					placeholder="Username"
+                    placeholder="Username"
                 />
                 <br />
 
                 <input
-                    type="password"
+                    type={isPasswordVisible? "text" : "password"}
+                    className="password-input"
                     value={password}
                     onChange={handlePasswordChange}
-					placeholder="Password"
+                    placeholder="Password"
                 />
                 <br />
+                <div className="show-password-container">
+                    <input
+                        type="checkbox"
+                        checked={isPasswordVisible}
+                        className="show-password-checkbox"
+                        onChange={handlePasswordVisibleChange}
+                    />
+                    <p>Show password</p>
+                </div>
 
-                <button type="submit" className="auth-form-submit">{formTitle}</button>
+                <button type="submit" className="auth-form-submit">
+                    {formTitle}
+                </button>
             </form>
         </div>
     );
