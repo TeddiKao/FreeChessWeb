@@ -1,9 +1,7 @@
-import AuthForm from "../globalComponents/AuthForms.jsx";
+import AuthForm from "../globalComponents/AuthForm.jsx";
 
 function Signup() {
-	return (
-		<AuthForm/>
-	)
+    return <AuthForm />;
 }
 
-export default Signup
+export default Signup;

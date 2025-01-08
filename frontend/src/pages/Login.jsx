@@ -1,9 +1,7 @@
-import AuthForm from "../globalComponents/AuthForms";
+import AuthForm from "../globalComponents/AuthForm";
 
 function Login() {
-	return (
-		<AuthForm/>
-	)
+    return <AuthForm />;
 }
 
-export default Login
+export default Login;
