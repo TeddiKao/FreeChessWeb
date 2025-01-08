@@ -5,7 +5,7 @@ import "../styles/auth-form.css";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants.js";
 import { useNavigate } from "react-router-dom";
 
-function AuthForm({ method, url }) {
+function AuthForm({ method }) {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -30,6 +30,16 @@ function AuthForm({ method, url }) {
         setIsPasswordVisible(event.target.checked);
     }
 
+	const loginUrl = "/users_api/token/get/"
+	const signupUrl = "/users_api/create-user/"
+
+	const url = method === "login" ? loginUrl : signupUrl
+
+	function logUserIn(accessToken, refreshToken) {
+		localStorage.setItem(ACCESS_TOKEN, accessToken);
+		localStorage.setItem(REFRESH_TOKEN, refreshToken)
+	}
+
     async function handleFormSubmit(event) {
         event.preventDefault();
 
@@ -42,11 +52,9 @@ function AuthForm({ method, url }) {
             const response = await api.post(url, dataToSend);
 
             if (method === "login") {
-                localStorage.setItem(ACCESS_TOKEN, response.data.access);
-                localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
-
-                // Redirect to home page (authenticated users)
+                logUserIn(response.data.access, response.data.refresh)
 				navigate("/home")
+
             } else {
 				// Log the user in
 				try {
@@ -54,10 +62,9 @@ function AuthForm({ method, url }) {
 						email, password
 					})
 
-					localStorage.setItem(ACCESS_TOKEN, loginResponse.data.access);
-					localStorage.setItem(REFRESH_TOKEN, loginResponse.data.refresh)
-					
+					logUserIn(response.data.access, response.data.refresh)
 					navigate("/home")
+					
 				} catch (error) {
 					console.log(error)
 				}
