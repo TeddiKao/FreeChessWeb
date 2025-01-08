@@ -58,7 +58,7 @@ function AuthForm({ method }) {
             } else {
 				// Log the user in
 				try {
-					const loginResponse = await api.post("users_api/token/get/", {
+					const loginResponse = await api.post(loginUrl, {
 						email, password
 					})
 
