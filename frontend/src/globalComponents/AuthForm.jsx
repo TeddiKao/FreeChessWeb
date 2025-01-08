@@ -33,7 +33,7 @@ function AuthForm({ method }) {
 	const loginUrl = "/users_api/token/get/"
 	const signupUrl = "/users_api/create-user/"
 
-	const url = method === "login" ? loginUrl : signupUrl
+    const url = method === "Login" ? loginUrl : signupUrl
 
 	function logUserIn(accessToken, refreshToken) {
 		localStorage.setItem(ACCESS_TOKEN, accessToken);
@@ -57,6 +57,8 @@ function AuthForm({ method }) {
 
             } else {
 				// Log the user in
+				console.log("Logging in")
+
 				try {
 					const loginResponse = await api.post(loginUrl, {
 						email, password
