@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import api from "../api.js";
 
 function AuthenticationRoute({ children }) {
     const [isAuthenticated, setIsAuthenticated] = useState(null);

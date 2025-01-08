@@ -1,6 +1,8 @@
+import Chessboard from "../../globalComponents/Chessboard.jsx";
+
 function Dashboard() {
 	return (
-		<div>Home</div>
+		<Chessboard/>
 	)
 }
 
