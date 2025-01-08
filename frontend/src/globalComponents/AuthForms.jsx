@@ -66,7 +66,7 @@ function AuthForm({ method, url }) {
                 />
                 <br />
 
-                <button type="submit">Submit</button>
+                <button type="submit">{formTitle}</button>
             </form>
         </div>
     );

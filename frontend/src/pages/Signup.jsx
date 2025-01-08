@@ -1,8 +1,8 @@
+import AuthForm from "../globalComponents/AuthForms.jsx";
+
 function Signup() {
 	return (
-		<div>
-			Register
-		</div>
+		<AuthForm/>
 	)
 }
 
