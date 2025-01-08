@@ -1,9 +1,12 @@
 :root {
 	--default-font: "Segoe UI";
-	--accent-color: hsl(30, 100%, 50%);
+	--accent-color: hsl(30, 100%, 45%);
 
 	--input-font-size: 1rem;
-	--button-font-size: 1rem
+	--button-font-size: 1rem;
+
+	--light-square-color: hsl(32, 100%, 87%);
+	--dark-square-color: hsl(32, 100%, 32%);
 }
 
 body {

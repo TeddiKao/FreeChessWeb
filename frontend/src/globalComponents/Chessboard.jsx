@@ -1,3 +1,5 @@
+import "../styles/chessboard.css"
+
 function Chessboard() {
     function generateChessboard() {
 		const squareElements = [];
