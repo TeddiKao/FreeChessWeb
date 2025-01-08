@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import api from "../api.js";
 import "../styles/auth-form.css";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants.js";
+import { useNavigate } from "react-router-dom";
 
 function AuthForm({ method, url }) {
     const [email, setEmail] = useState("");
@@ -9,6 +11,8 @@ function AuthForm({ method, url }) {
     const [password, setPassword] = useState("");
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+	const navigate = useNavigate()
 
     function handleEmailChange(event) {
         setEmail(event.target.value);
@@ -26,7 +30,42 @@ function AuthForm({ method, url }) {
         setIsPasswordVisible(event.target.checked);
     }
 
-    function handleFormSubmit(event) {}
+    async function handleFormSubmit(event) {
+        event.preventDefault();
+
+        try {
+            const dataToSend =
+                method === "login"
+                    ? { email, password }
+                    : { email, username, password };
+
+            const response = await api.post(url, dataToSend);
+
+            if (method === "login") {
+                localStorage.setItem(ACCESS_TOKEN, response.data.access);
+                localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+
+                // Redirect to home page (authenticated users)
+				navigate("/home")
+            } else {
+				// Log the user in
+				try {
+					const loginResponse = await api.post("users_api/token/get/", {
+						email, password
+					})
+
+					localStorage.setItem(ACCESS_TOKEN, loginResponse.data.access);
+					localStorage.setItem(REFRESH_TOKEN, loginResponse.data.refresh)
+					
+					navigate("/home")
+				} catch (error) {
+					console.log(error)
+				}
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     let formSubtitleHTML = null;
     if (method === "Login") {
