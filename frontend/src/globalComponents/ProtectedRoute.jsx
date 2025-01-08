@@ -62,7 +62,7 @@ function ProtectedRoute({ children }) {
 	}
 
 	return (
-		isAuthenticated ? {children} : <Navigate to={"/login"}/>
+		isAuthenticated ? children : <Navigate to={"/login"}/>
 	)
 }
 
