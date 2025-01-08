@@ -1,0 +1,19 @@
+.not-found-page-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.not-found-heading {
+	margin-bottom: 6px;
+}
+
+.home-page-link {
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 12px;
+	padding-bottom: 12px;
+
+	background-color: var(--accent-color);
+	color: white;
+}
