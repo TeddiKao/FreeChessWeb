@@ -12,7 +12,7 @@ function AuthForm({ method }) {
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-	const navigate = useNavigate()
+    const navigate = useNavigate();
 
     function handleEmailChange(event) {
         setEmail(event.target.value);
@@ -30,15 +30,15 @@ function AuthForm({ method }) {
         setIsPasswordVisible(event.target.checked);
     }
 
-	const loginUrl = "/users_api/token/get/"
-	const signupUrl = "/users_api/create-user/"
+    const loginUrl = "/users_api/token/get/";
+    const signupUrl = "/users_api/create-user/";
 
-    const url = method === "Login" ? loginUrl : signupUrl
+    const url = method === "Login" ? loginUrl : signupUrl;
 
-	function logUserIn(accessToken, refreshToken) {
-		localStorage.setItem(ACCESS_TOKEN, accessToken);
-		localStorage.setItem(REFRESH_TOKEN, refreshToken)
-	}
+    function logUserIn(accessToken, refreshToken) {
+        localStorage.setItem(ACCESS_TOKEN, accessToken);
+        localStorage.setItem(REFRESH_TOKEN, refreshToken);
+    }
 
     async function handleFormSubmit(event) {
         event.preventDefault();
@@ -52,27 +52,26 @@ function AuthForm({ method }) {
             const response = await api.post(url, userCredentials);
 
             if (method === "login") {
-                logUserIn(response.data.access, response.data.refresh)
-				navigate("/home")
-
+                logUserIn(response.data.access, response.data.refresh);
+                navigate("/home");
             } else {
-				// Log the user in
-				console.log("Logging in")
+                // Log the user in
 
-				try {
-					const loginResponse = await api.post(loginUrl, {
-						email, password
-					})
+                try {
+                    const loginResponse = await api.post(loginUrl, {
+                        email,
+                        password,
+                    });
 
-					logUserIn(loginResponse.data.access, loginResponse.data.refresh)
-					navigate("/home")
-
-				} catch (error) {
-					console.log(error)
-				}
+                    logUserIn(
+                        loginResponse.data.access,
+                        loginResponse.data.refresh
+                    );
+                    navigate("/home");
+                } catch (error) {}
             }
         } catch (error) {
-            console.log(error);
+            console.log(error)
         }
     }
 
