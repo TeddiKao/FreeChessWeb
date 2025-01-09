@@ -34,6 +34,9 @@ def parse_board_placement(board_placement_string: str):
 
 	return piece_placements
 
+def parse_side_to_move(side_to_move):
+	return "White" if side_to_move == "w" else "Black"
+
 
 def parse_fen(fen_string: str):
 	fen_string_segments = fen_string.split(" ")
@@ -41,11 +44,18 @@ def parse_fen(fen_string: str):
 		return "Invalid FEN!"
 	
 	board_placement_string = fen_string_segments[0]
+	side_to_move = fen_string_segments[1]
+	castling_rights = fen_string_segments[2]
+	en_passant_target_square = fen_string_segments[3]
+	halfmove_clock = fen_string_segments[4]
+	fullmove_number = fen_string_segments[5]
 	
 	parsed_board_placement_string = parse_board_placement(board_placement_string)
+	parsed_side_to_move = parse_side_to_move(side_to_move)
 
 	return {
-		"board_placement": parsed_board_placement_string
+		"board_placement": parsed_board_placement_string,
+		"side_to_move": parsed_side_to_move
 	}
 
 	
