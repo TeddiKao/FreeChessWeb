@@ -1,8 +1,12 @@
 import Chessboard from "../../globalComponents/Chessboard.jsx";
 
+import "../../styles/dashboard.css"
+
 function Dashboard() {
 	return (
-		<Chessboard/>
+		<div className="chessboard-wrapper">
+			<Chessboard/>
+		</div>
 	)
 }
 

@@ -1,10 +1,10 @@
 .chessboard-container {
 	display: grid;
-	grid-template-columns: repeat(8, 60px);
+	grid-template-columns: repeat(8, 70px);
 }
 
 .chessboard-square {
-	height: 60px;
+	height: 70px;
 }
 
 .light {
