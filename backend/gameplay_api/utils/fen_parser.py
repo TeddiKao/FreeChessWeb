@@ -116,6 +116,3 @@ def parse_fen(fen_string: str):
 		"halfmove_clock": int(halfmove_clock),
 		"fullmove_number": int(fullmove_number)
 	}
-
-	
-print(parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"))

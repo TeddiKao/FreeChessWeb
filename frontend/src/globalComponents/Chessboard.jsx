@@ -1,8 +1,14 @@
-import "../styles/chessboard.css"
+import "../styles/chessboard.css";
 
-function Chessboard() {
+function Chessboard({ parsed_fen_string }) {
+    if (!parsed_fen_string) {
+        return null;
+    }
+
+    const piecePlacements = parsed_fen_string["board_placement"];
+
     function generateChessboard() {
-		const squareElements = [];
+        const squareElements = [];
 
         for (let square = 1; square <= 64; square++) {
             // Square 1 is in the top left corner
@@ -17,12 +23,32 @@ function Chessboard() {
                     ? "light"
                     : "dark";
 
-			squareElements.push(
-				<div key={square} id={square} className={`chessboard-square ${squareColor}`}></div>
-			)
+            const boardPlacementSquare = `${square - 1}`;
+
+            if (Object.keys(piecePlacements).includes(boardPlacementSquare)) {
+                const pieceColor =
+                    piecePlacements[boardPlacementSquare]["color"];
+                const pieceType =
+                    piecePlacements[boardPlacementSquare]["piece"];
+
+                squareElements.push(
+                    <div className={`chessboard-square ${squareColor}`}>
+                        <img
+                            src={`../../public/${pieceColor.toLowerCase()}${pieceType}.svg`}
+                        />
+                    </div>
+                );
+            } else {
+                squareElements.push(
+                    <div
+                        className={`chessboard-square ${squareColor}`}
+                        id={square - 1}
+                    ></div>
+                );
+            }
         }
 
-		return squareElements
+        return squareElements;
     }
 
     return <div className="chessboard-container">{generateChessboard()}</div>;

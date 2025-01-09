@@ -3,6 +3,11 @@
 	grid-template-columns: repeat(8, 70px);
 }
 
+.piece-image {
+	width: 90%;
+	height: 90%;
+}
+
 .chessboard-square {
 	height: 70px;
 }
