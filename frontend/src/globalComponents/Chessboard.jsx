@@ -1,16 +1,23 @@
 import "../styles/chessboard.css";
 
-function Chessboard({ parsed_fen_string }) {
+function Chessboard({ parsed_fen_string, orientation }) {
     if (!parsed_fen_string) {
         return null;
     }
 
-    const piecePlacements = parsed_fen_string["board_placement"];
+    const piecePlacements = parsed_fen_string["board_placement"]
 
     function generateChessboard() {
         const squareElements = [];
 
-        for (let square = 1; square <= 64; square++) {
+        const startingIndex = orientation === "White" ? 64 : 1;
+        const endingIndex = orientation === "White" ? 1 : 64;
+
+        for (
+            let square = startingIndex;
+            orientation === "White" ? square >= endingIndex : square <= endingIndex;
+            orientation === "White" ? square-- : square++
+        ) {
             // Square 1 is in the top left corner
             const currentRank = 8 - Math.ceil(square / 8);
 
@@ -24,12 +31,11 @@ function Chessboard({ parsed_fen_string }) {
                     : "dark";
 
             const boardPlacementSquare = `${square - 1}`;
-
-            if (Object.keys(piecePlacements).includes(boardPlacementSquare)) {
-                const pieceColor =
-                    piecePlacements[boardPlacementSquare]["color"];
-                const pieceType =
-                    piecePlacements[boardPlacementSquare]["piece"];
+            if (
+                Object.keys(piecePlacements).includes(boardPlacementSquare)
+            ) {
+                const pieceColor = piecePlacements[boardPlacementSquare]["piece_color"];
+                const pieceType = piecePlacements[boardPlacementSquare]["piece_type"];
 
                 squareElements.push(
                     <div className={`chessboard-square ${squareColor}`}>

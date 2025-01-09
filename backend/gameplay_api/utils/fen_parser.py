@@ -18,9 +18,9 @@ def parse_board_placement(board_placement_string: str):
 			piece_color = "White" if character.isupper() else "Black"
 			piece_type = letter_to_piece_mapping[character.lower()]
 
-			piece_placements[f"{current_square_index}"] = {
-				"color": piece_color,
-				"piece": piece_type
+			piece_placements[current_square_index] = {
+				"piece_color": piece_color,
+				"piece_type": piece_type
 			}
 
 			current_square_index -= 1
@@ -116,3 +116,5 @@ def parse_fen(fen_string: str):
 		"halfmove_clock": int(halfmove_clock),
 		"fullmove_number": int(fullmove_number)
 	}
+
+print(parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"))
