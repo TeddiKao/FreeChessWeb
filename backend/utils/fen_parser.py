@@ -37,6 +37,26 @@ def parse_board_placement(board_placement_string: str):
 def parse_side_to_move(side_to_move):
 	return "White" if side_to_move == "w" else "Black"
 
+def parse_castling_rights(castling_rights: str):
+	castling_rights_info = {
+		"Black": {
+			"Kingside": False,
+			"Queenside": False,
+		},
+
+		"White": {
+			"Kingside": False,
+			"Queenside": False,
+		}
+	}
+
+	for character in castling_rights:
+		color = "Black" if character.islower() else "White"
+		side = "Queenside" if character.lower() == "q" else "Kingside"
+
+		castling_rights_info[color][side] = True
+
+	return castling_rights_info
 
 def parse_fen(fen_string: str):
 	fen_string_segments = fen_string.split(" ")
@@ -52,10 +72,12 @@ def parse_fen(fen_string: str):
 	
 	parsed_board_placement_string = parse_board_placement(board_placement_string)
 	parsed_side_to_move = parse_side_to_move(side_to_move)
+	parsed_castling_rights = parse_castling_rights(castling_rights)
 
 	return {
 		"board_placement": parsed_board_placement_string,
-		"side_to_move": parsed_side_to_move
+		"side_to_move": parsed_side_to_move,
+		"castling_rights": parsed_castling_rights,
 	}
 
 	
