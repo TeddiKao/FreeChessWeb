@@ -61,29 +61,35 @@ def parse_castling_rights(castling_rights: str):
 def parse_en_passant_target_square(target_square: str):
 	files = ["a", "b", "c", "d", "e", "f", "g", "h"]
 
-	if len(target_square) != 2:
+	if len(target_square) != 2 and target_square != "-":
 		return "Invalid FEN!"
 
-	current_char_index = 0
-	file = None
-	rank = None
+	if target_square != "-":
+		current_char_index = 0
+		file = None
+		rank = None
 
-	for character in target_square:
-		if current_char_index == 0 and character not in files:
-			return "Invalid FEN!"
+		for character in target_square:
+			if current_char_index == 0 and character not in files:
+				return "Invalid FEN!"
 
-		if current_char_index == 0:
-			file = character
+			if current_char_index == 0:
+				file = character
+			else:
+				rank = character
+
+			current_char_index += 1
+
+		square_index = None
+		if rank % 2 == 0:
+			square_index = (rank * 8) - (files.index(file) + 1)
 		else:
-			rank = character
+			square_index = (rank * (rank - 1)) + (files.index(file) + 1)
 
-	square_index = None
-	if rank % 2 == 0:
-		square_index = (rank * 8) - (files.index(file) + 1)
+		return square_index
+
 	else:
-		square_index = (rank * (rank - 1)) + (files.index(file) + 1)
-
-	return square_index
+		return None
 
 def parse_fen(fen_string: str):
 	fen_string_segments = fen_string.split(" ")
