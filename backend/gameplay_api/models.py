@@ -1,3 +1,20 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
-# Create your models here.
+class ChessGame(models.Model):
+	white_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+	black_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+	
+	game_status = models.CharField(max_length=50)
+	game_result = models.CharField(max_length=50)
+
+	current_move = models.IntegerField()
+	current_player_turn = models.CharField(30)
+
+	halfmove_clock = models.IntegerField() # 50 move rule detection
+
+	white_player_clock = models.IntegerField() # In seconds
+	black_player_clock = models.IntegerField() # In seconds
+
+	captured_white_material = models.JSONField(default=dict)
+	captured_black_material = models.JSONField(default=dict)
