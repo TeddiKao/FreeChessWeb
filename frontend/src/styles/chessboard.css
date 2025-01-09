@@ -1,6 +1,6 @@
 .chessboard-container {
 	display: grid;
-	grid-template-columns: repeat(8, 70px);
+	grid-template-columns: repeat(8, 50px);
 }
 
 .piece-image {
@@ -9,7 +9,7 @@
 }
 
 .chessboard-square {
-	height: 70px;
+	height: 50px;
 }
 
 .light {
