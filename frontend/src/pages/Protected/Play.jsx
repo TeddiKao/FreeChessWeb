@@ -31,9 +31,15 @@ function Play() {
 
     return (
         <div className="playing-interface-container">
-            <Timer playerColor="black"/>
+            <div className="top-timer-wrapper">
+                <Timer playerColor="black" position="top"/>
+            </div>
+
             <Chessboard parsed_fen_string={parsedFEN} orientation="White"/>
-            <Timer playerColor="white"/>
+            
+            <div className="bottom-timer-wrapper">
+                <Timer playerColor="white" position="bottom"/>
+            </div>
         </div>
     );
 }
