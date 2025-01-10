@@ -19,7 +19,7 @@ function useIsAuthenticated() {
         }
 
         try {
-            const response = await api.post("/users_api/create-user/", {
+            const response = await api.post("/users_api/token/refresh/", {
                 refresh: refreshToken,
             });
 
