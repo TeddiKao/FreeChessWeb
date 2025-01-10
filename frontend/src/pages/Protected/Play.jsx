@@ -13,13 +13,14 @@ function Play() {
         getParsedFEN();
     }, []);
 
-    const positionFEN =
-        "rq1nrn1k/8/1p1pNPp1/3PN2b/4Pp1R/p1pB1Qp1/PpPB4/1K6 w - - 0 3";
+    
+
+    const startingPositionFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
     function getParsedFEN() {
         api.get("/gameplay_api/parse-fen", {
             params: {
-                raw_fen_string: positionFEN,
+                raw_fen_string: startingPositionFEN,
             },
         })
             .then((response) => response.data)
@@ -28,6 +29,8 @@ function Play() {
             })
             .catch((error) => console.log(error));
     }
+
+    console.log(parsedFEN)
 
     return (
         <div className="playing-interface-container">
