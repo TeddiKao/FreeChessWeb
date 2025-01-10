@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
+
 import "../styles/chessboard.css";
 
 function Chessboard({ parsed_fen_string, orientation }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
     const [parsedFENString, setParsedFENString] = useState(parsed_fen_string);
+
+    const [activeId, setActiveId] = useState(null);
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -13,6 +16,17 @@ function Chessboard({ parsed_fen_string, orientation }) {
     useEffect(() => {
         if (previousClickedSquare && clickedSquare) {
             if (previousClickedSquare === clickedSquare) {
+                setPreviousClickedSquare(null);
+                setClickedSquare(null);
+
+                return;
+            }
+
+            if (
+                !Object.keys(parsedFENString["board_placement"]).includes(
+                    previousClickedSquare
+                )
+            ) {
                 setPreviousClickedSquare(null);
                 setClickedSquare(null);
 

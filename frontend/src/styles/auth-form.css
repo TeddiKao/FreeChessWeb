@@ -24,6 +24,16 @@
 	margin-top: 4px;
 }
 
+.form-subtitle {
+	margin-top: 0;
+	margin-bottom: 8px;
+}
+
+.form-subtitle a {
+	color: hsl(200, 100%, 50%);
+	text-decoration: underline;
+}
+
 .auth-form-submit {
 	width: 275px;
 

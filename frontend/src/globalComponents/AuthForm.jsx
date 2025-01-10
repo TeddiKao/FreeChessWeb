@@ -81,13 +81,13 @@ function AuthForm({ method }) {
     let formSubtitleHTML = null;
     if (method === "Login") {
         formSubtitleHTML = (
-            <p>
+            <p className="form-subtitle">
                 Don't have an account yet? <a href="/signup">Sign up</a>
             </p>
         );
     } else {
         formSubtitleHTML = (
-            <p>
+            <p className="form-subtitle">
                 Already have an account? <a href="/login">Login</a>
             </p>
         );
@@ -139,6 +139,8 @@ function AuthForm({ method }) {
                     />
                     <p>Show password</p>
                 </div>
+
+                {formSubtitleHTML}
 
                 <button type="submit" className="auth-form-submit">
                     {formTitle}
