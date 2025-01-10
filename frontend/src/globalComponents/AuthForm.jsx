@@ -53,6 +53,7 @@ function AuthForm({ method }) {
 
             if (method === "login") {
                 logUserIn(response.data.access, response.data.refresh);
+
                 navigate("/home");
             } else {
                 // Log the user in
@@ -68,10 +69,12 @@ function AuthForm({ method }) {
                         loginResponse.data.refresh
                     );
                     navigate("/home");
-                } catch (error) {}
+                } catch (error) {
+                    console.log(error);
+                }
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
 

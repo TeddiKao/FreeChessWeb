@@ -13,9 +13,8 @@ function Play() {
         getParsedFEN();
     }, []);
 
-    
-
-    const startingPositionFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    const startingPositionFEN =
+        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     function getParsedFEN() {
         api.get("/gameplay_api/parse-fen", {
@@ -30,18 +29,16 @@ function Play() {
             .catch((error) => console.log(error));
     }
 
-    console.log(parsedFEN)
-
     return (
         <div className="playing-interface-container">
             <div className="top-timer-wrapper">
-                <Timer playerColor="black" position="top"/>
+                <Timer playerColor="black" position="top" />
             </div>
 
-            <Chessboard parsed_fen_string={parsedFEN} orientation="White"/>
-            
+            <Chessboard parsed_fen_string={parsedFEN} orientation="White" />
+
             <div className="bottom-timer-wrapper">
-                <Timer playerColor="white" position="bottom"/>
+                <Timer playerColor="white" position="bottom" />
             </div>
         </div>
     );

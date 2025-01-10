@@ -1,17 +1,15 @@
-import { Navigate } from "react-router-dom"
+import { Navigate } from "react-router-dom";
 
-import useIsAuthenticated from "../hooks/useIsAuthenticated.jsx"
+import useIsAuthenticated from "../hooks/useIsAuthenticated.jsx";
 
 function ProtectedRoute({ children }) {
-	const isAuthenticated = useIsAuthenticated();
+    const isAuthenticated = useIsAuthenticated();
 
-	if (isAuthenticated === null) {
-		return <div>Loading ...</div>
-	}
+    if (isAuthenticated === null) {
+        return <div>Loading ...</div>;
+    }
 
-	return (
-		isAuthenticated ? children : <Navigate to={"/login"}/>
-	)
+    return isAuthenticated ? children : <Navigate to={"/login"} />;
 }
 
-export default ProtectedRoute
+export default ProtectedRoute;

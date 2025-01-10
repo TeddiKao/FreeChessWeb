@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import "../styles/chessboard.css";
 
 function Chessboard({ parsed_fen_string, orientation }) {
-    console.log(parsed_fen_string);
-
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
     const [parsedFENString, setParsedFENString] = useState(parsed_fen_string);
@@ -22,11 +20,18 @@ function Chessboard({ parsed_fen_string, orientation }) {
             }
 
             setParsedFENString((previousFENString) => {
-                const oringinalBoardPlacements = previousFENString["board_placement"]
+                const oringinalBoardPlacements =
+                    previousFENString["board_placement"];
 
-                const pieceType = oringinalBoardPlacements[`${previousClickedSquare}`]["piece_type"];
-                const pieceColor = oringinalBoardPlacements[`${previousClickedSquare}`]["piece_color"]
-                
+                const pieceType =
+                    oringinalBoardPlacements[`${previousClickedSquare}`][
+                        "piece_type"
+                    ];
+                const pieceColor =
+                    oringinalBoardPlacements[`${previousClickedSquare}`][
+                        "piece_color"
+                    ];
+
                 const newBoardPlacements = {
                     ...previousFENString,
                     board_placement: {
@@ -36,9 +41,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             piece_color: pieceColor,
                         },
                     },
-                }
+                };
 
-                delete newBoardPlacements["board_placement"][`${previousClickedSquare}`]
+                delete newBoardPlacements["board_placement"][
+                    `${previousClickedSquare}`
+                ];
 
                 return newBoardPlacements;
             });
@@ -55,8 +62,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
     const piecePlacements = parsedFENString["board_placement"];
 
     function handleSquareClick(event, square) {
-        console.log(event);
-
         const container = document.getElementById(square);
         event.target = container;
 
@@ -127,8 +132,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
         return squareElements;
     }
-
-    console.log(previousClickedSquare, clickedSquare);
 
     return <div className="chessboard-container">{generateChessboard()}</div>;
 }
