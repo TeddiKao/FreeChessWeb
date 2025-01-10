@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 
 import "../styles/chessboard.css";
+import Square from "./Square";
 
 function Chessboard({ parsed_fen_string, orientation }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
     const [parsedFENString, setParsedFENString] = useState(parsed_fen_string);
-
-    const [activeId, setActiveId] = useState(null);
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -119,27 +118,23 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     piecePlacements[boardPlacementSquare]["piece_type"];
 
                 squareElements.push(
-                    <div
-                        className={`chessboard-square ${squareColor}`}
-                        id={square - 1}
-                        onClick={(event) => {
-                            handleSquareClick(event, square - 1);
-                        }}
-                    >
-                        <img
-                            src={`../../public/${pieceColor.toLowerCase()}${pieceType}.svg`}
-                        />
-                    </div>
+                    <Square
+                        squareNumber={boardPlacementSquare}
+                        squareColor={squareColor}
+                        pieceColor={pieceColor}
+                        pieceType={pieceType}
+                        handleSquareClick={handleSquareClick}
+                        setParsedFENString={setParsedFENString}
+                    />
                 );
             } else {
                 squareElements.push(
-                    <div
-                        className={`chessboard-square ${squareColor}`}
-                        id={square - 1}
-                        onClick={(event) => {
-                            handleSquareClick(event, square - 1);
-                        }}
-                    ></div>
+                    <Square
+                        squareNumber={boardPlacementSquare}
+                        squareColor={squareColor}
+                        handleSquareClick={handleSquareClick}
+                        setParsedFENString={setParsedFENString}
+                    />
                 );
             }
         }

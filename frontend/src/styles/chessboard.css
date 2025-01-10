@@ -2,21 +2,3 @@
 	display: grid;
 	grid-template-columns: repeat(8, 50px);
 }
-
-.piece-image {
-	width: 90%;
-	height: 90%;
-}
-
-.chessboard-square {
-	height: 50px;
-}
-
-.light {
-	background-color: var(--light-square-color);
-}
-
-.dark {
-	background-color: var(--dark-square-color);
-}
-
