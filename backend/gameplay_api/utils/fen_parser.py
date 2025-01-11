@@ -8,29 +8,35 @@ letter_to_piece_mapping = {
 }
 
 def parse_board_placement(board_placement_string: str):
-	current_square_index = 63
-	current_rank = 8
+	current_rank = 7
+	current_file = 0
 
 	piece_placements = {}
 
 	for character in board_placement_string:
+		current_square = (current_rank * 8) + current_file
+		print(character)
+
 		if character.isalpha() and character != "/":
 			piece_color = "White" if character.isupper() else "Black"
 			piece_type = letter_to_piece_mapping[character.lower()]
 
-			piece_placements[current_square_index] = {
+			print(piece_color, piece_type)
+
+			piece_placements[f"{current_square}"] = {
 				"piece_color": piece_color,
 				"piece_type": piece_type
 			}
 
-			current_square_index -= 1
-		
+			if current_file < 7:
+				current_file += 1
+
 		elif character.isdigit():
-			current_square_index -= int(character)
+			current_file += int(character)
 
 		elif character == "/":
+			current_file = 0
 			current_rank -= 1
-			current_square_index = (8 * current_rank) - 1
 
 	return piece_placements
 
