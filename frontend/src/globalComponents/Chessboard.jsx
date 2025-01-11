@@ -88,58 +88,64 @@ function Chessboard({ parsed_fen_string, orientation }) {
     function generateChessboard() {
         const squareElements = [];
 
-        const startingIndex = orientation === "White" ? 64 : 1;
-        const endingIndex = orientation === "White" ? 1 : 64;
+        const startingRow = orientation === "White" ? 8 : 1;
+        const endingRow = orientation === "White" ? 1 : 8;
+
+        console.log(startingRow, endingRow);
 
         for (
-            let square = startingIndex;
-            orientation === "White"
-                ? square >= endingIndex
-                : square <= endingIndex;
-            orientation === "White" ? square-- : square++
+            let row = startingRow;
+            orientation === "White" ? row >= endingRow : row <= endingRow;
+            orientation === "White" ? row-- : row++
         ) {
-            // Square 1 is in the top left corner
-            const currentRank = 8 - Math.ceil(square / 8);
+            const startingIndex = ((row - 1) * 8) + 1;
+            const endingIndex = (row * 8)
 
-            // On odd ranks, odd number = light square, even number = dark square
-            const rankIsEven = currentRank % 2 === 0;
-            const squareIsEven = square % 2 === 0;
+            for (
+                let square = startingIndex;
+                square <= endingIndex;
+                square ++
+            ) {
+                const file = (square - startingIndex) + 1
 
-            const squareColor =
-                (rankIsEven && squareIsEven) || (!rankIsEven && !squareIsEven)
-                    ? "light"
-                    : "dark";
+                // On odd ranks, odd number = light square, even number = dark square
+                const squareIsEven = (file + row) % 2 === 0
 
-            const boardPlacementSquare = `${square - 1}`;
-            if (Object.keys(piecePlacements).includes(boardPlacementSquare)) {
-                const pieceColor =
-                    piecePlacements[boardPlacementSquare]["piece_color"];
-                const pieceType =
-                    piecePlacements[boardPlacementSquare]["piece_type"];
+                const squareColor = squareIsEven? "dark" : "light"
 
-                squareElements.push(
-                    <Square
-                        squareNumber={boardPlacementSquare}
-                        squareColor={squareColor}
-                        pieceColor={pieceColor}
-                        pieceType={pieceType}
-                        handleSquareClick={handleSquareClick}
-                        setParsedFENString={setParsedFENString}
-                    />
-                );
-            } else {
-                squareElements.push(
-                    <Square
-                        squareNumber={boardPlacementSquare}
-                        squareColor={squareColor}
-                        handleSquareClick={handleSquareClick}
-                        setParsedFENString={setParsedFENString}
-                    />
-                );
+                const boardPlacementSquare = `${square - 1}`;
+                if (
+                    Object.keys(piecePlacements).includes(boardPlacementSquare)
+                ) {
+                    const pieceColor =
+                        piecePlacements[boardPlacementSquare]["piece_color"];
+                    const pieceType =
+                        piecePlacements[boardPlacementSquare]["piece_type"];
+
+                    squareElements.push(
+                        <Square
+                            squareNumber={boardPlacementSquare}
+                            squareColor={squareColor}
+                            pieceColor={pieceColor}
+                            pieceType={pieceType}
+                            handleSquareClick={handleSquareClick}
+                            setParsedFENString={setParsedFENString}
+                        />
+                    );
+                } else {
+                    squareElements.push(
+                        <Square
+                            squareNumber={boardPlacementSquare}
+                            squareColor={squareColor}
+                            handleSquareClick={handleSquareClick}
+                            setParsedFENString={setParsedFENString}
+                        />
+                    );
+                }
             }
         }
 
-        return squareElements;
+        return squareElements
     }
 
     return <div className="chessboard-container">{generateChessboard()}</div>;
