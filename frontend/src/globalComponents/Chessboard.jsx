@@ -13,59 +13,61 @@ function Chessboard({ parsed_fen_string, orientation }) {
     }, [parsed_fen_string]);
 
     useEffect(() => {
-        if (previousClickedSquare && clickedSquare) {
-            if (previousClickedSquare === clickedSquare) {
-                setPreviousClickedSquare(null);
-                setClickedSquare(null);
+        if (!(previousClickedSquare && clickedSquare)) {
+            return;
+        }
 
-                return;
-            }
-
-            if (
-                !Object.keys(parsedFENString["board_placement"]).includes(
-                    previousClickedSquare
-                )
-            ) {
-                setPreviousClickedSquare(null);
-                setClickedSquare(null);
-
-                return;
-            }
-
-            setParsedFENString((previousFENString) => {
-                const oringinalBoardPlacements =
-                    previousFENString["board_placement"];
-
-                const pieceType =
-                    oringinalBoardPlacements[`${previousClickedSquare}`][
-                        "piece_type"
-                    ];
-                const pieceColor =
-                    oringinalBoardPlacements[`${previousClickedSquare}`][
-                        "piece_color"
-                    ];
-
-                const newBoardPlacements = {
-                    ...previousFENString,
-                    board_placement: {
-                        ...previousFENString["board_placement"],
-                        [`${clickedSquare}`]: {
-                            piece_type: pieceType,
-                            piece_color: pieceColor,
-                        },
-                    },
-                };
-
-                delete newBoardPlacements["board_placement"][
-                    `${previousClickedSquare}`
-                ];
-
-                return newBoardPlacements;
-            });
-
+        if (previousClickedSquare === clickedSquare) {
             setPreviousClickedSquare(null);
             setClickedSquare(null);
+
+            return;
         }
+
+        if (
+            !Object.keys(parsedFENString["board_placement"]).includes(
+                previousClickedSquare
+            )
+        ) {
+            setPreviousClickedSquare(null);
+            setClickedSquare(null);
+
+            return;
+        }
+
+        setParsedFENString((previousFENString) => {
+            const oringinalBoardPlacements =
+                previousFENString["board_placement"];
+
+            const pieceType =
+                oringinalBoardPlacements[`${previousClickedSquare}`][
+                    "piece_type"
+                ];
+            const pieceColor =
+                oringinalBoardPlacements[`${previousClickedSquare}`][
+                    "piece_color"
+                ];
+
+            const newBoardPlacements = {
+                ...previousFENString,
+                board_placement: {
+                    ...previousFENString["board_placement"],
+                    [`${clickedSquare}`]: {
+                        piece_type: pieceType,
+                        piece_color: pieceColor,
+                    },
+                },
+            };
+
+            delete newBoardPlacements["board_placement"][
+                `${previousClickedSquare}`
+            ];
+
+            return newBoardPlacements;
+        });
+
+        setPreviousClickedSquare(null);
+        setClickedSquare(null);
     }, [previousClickedSquare, clickedSquare]);
 
     if (!parsedFENString) {
@@ -98,20 +100,16 @@ function Chessboard({ parsed_fen_string, orientation }) {
             orientation === "White" ? row >= endingRow : row <= endingRow;
             orientation === "White" ? row-- : row++
         ) {
-            const startingIndex = ((row - 1) * 8) + 1;
-            const endingIndex = (row * 8)
+            const startingIndex = (row - 1) * 8 + 1;
+            const endingIndex = row * 8;
 
-            for (
-                let square = startingIndex;
-                square <= endingIndex;
-                square ++
-            ) {
-                const file = (square - startingIndex) + 1
+            for (let square = startingIndex; square <= endingIndex; square++) {
+                const file = square - startingIndex + 1;
 
                 // On odd ranks, odd number = light square, even number = dark square
-                const squareIsEven = (file + row) % 2 === 0
+                const squareIsEven = (file + row) % 2 === 0;
 
-                const squareColor = squareIsEven? "dark" : "light"
+                const squareColor = squareIsEven ? "dark" : "light";
 
                 const boardPlacementSquare = `${square - 1}`;
                 if (
@@ -145,7 +143,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
             }
         }
 
-        return squareElements
+        return squareElements;
     }
 
     return <div className="chessboard-container">{generateChessboard()}</div>;
