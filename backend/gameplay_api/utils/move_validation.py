@@ -1,4 +1,4 @@
-from .general import get_file, get_row, get_square
+from .general import get_file, get_row, get_square, is_square_on_edge
 
 piece_directions_mapping = {
     "rook": ["north", "south", "east", "west"],
@@ -7,6 +7,8 @@ piece_directions_mapping = {
 }
 
 def get_legal_moves_in_direction(board_placement, start_square, directions, piece_color):
+	print(f"List of directions: {directions}")
+	
 	legal_squares = []
 	
 	piece_file = get_file(start_square)
@@ -79,7 +81,68 @@ def get_legal_moves_in_direction(board_placement, start_square, directions, piec
 
 		# TODO: Add bishop movements
 		elif direction == "northwest":
-			pass
+			square = get_square(piece_file, piece_rank)
+			while True:
+				square += 7
+				legal_squares.append(f"{square}")
+
+				if f"{square}" in board_placement:
+					if board_placement[f"{square}"]["piece_color"] == piece_color:
+						break
+					else:
+						legal_squares.append(square)
+						break
+
+				if is_square_on_edge(f"{square}"):
+					break
+
+		elif direction == "southwest":
+			square = get_square(piece_file, piece_rank)
+			while True:
+				square -= 9
+				legal_squares.append(f"{square}")
+
+				if f"{square}" in board_placement:
+					if board_placement[f"{square}"]["piece_color"] == piece_color:
+						break
+					else:
+						legal_squares.append(square)
+						break
+
+				if is_square_on_edge(f"{square}"):
+					break
+
+		elif direction == "northeast":
+			square = get_square(piece_file, piece_rank)
+			while True:
+				square += 9
+				legal_squares.append(f"{square}")
+
+				if f"{square}" in board_placement:
+					if board_placement[f"{square}"]["piece_color"] == piece_color:
+						break
+					else:
+						legal_squares.append(square)
+						break
+
+				if is_square_on_edge(f"{square}"):
+					break
+
+		elif direction == "southeast":
+			square = get_square(piece_file, piece_rank)
+			while True:
+				square -= 7
+				legal_squares.append(f"{square}")
+
+				if f"{square}" in board_placement:
+					if board_placement[f"{square}"]["piece_color"] == piece_color:
+						break
+					else:
+						legal_squares.append(square)
+						break
+
+				if is_square_on_edge(f"{square}"):
+					break
 
 	return legal_squares
 
@@ -92,10 +155,9 @@ def get_sliding_piece_legal_moves(board_placement, move_info):
 
 	starting_square = move_info["starting_square"]
 
-	if piece_type.lower() == "rook":
-		legal_squares = get_legal_moves_in_direction(board_placement, starting_square, piece_directions_mapping[piece_type], piece_color)
+	legal_squares = get_legal_moves_in_direction(board_placement, starting_square, piece_directions_mapping[piece_type], piece_color)
 
-		return legal_squares
+	return legal_squares
 
 def validate_move(current_fen, move_info):
 	print(f"Move info: {move_info}")
@@ -108,6 +170,7 @@ def validate_move(current_fen, move_info):
 	if move_info["piece_type"].lower() in sliding_pieces:
 		legal_moves = get_sliding_piece_legal_moves(current_fen["board_placement"], move_info)
 		print(f"Legal moves {legal_moves}")
+		print(destination_square, legal_moves)
 		
 		move_is_valid = destination_square in legal_moves
 
