@@ -208,18 +208,24 @@ def get_pawn_legal_moves(board_placement, move_info):
 	return legal_squares
 
 def get_king_legal_moves(board_placement, move_info):
-	legal_moves = []
-
 	starting_square = move_info["starting_square"]
 
-	legal_moves.append(f"{int(starting_square) + 1}")
-	legal_moves.append(f"{int(starting_square) - 1}")
-	legal_moves.append(f"{int(starting_square) + 8}")
-	legal_moves.append(f"{int(starting_square) - 8}")
-	legal_moves.append(f"{int(starting_square) + 7}")
-	legal_moves.append(f"{int(starting_square) - 7}")
-	legal_moves.append(f"{int(starting_square) + 9}")
-	legal_moves.append(f"{int(starting_square) - 9}")
+	left_square = f"{int(starting_square) + 1}"
+	right_square = f"{int(starting_square) - 1}"
+	up_square = f"{int(starting_square) + 8}"
+	down_square = f"{int(starting_square) - 8}"
+	up_left_square = f"{int(starting_square) + 7}"
+	up_right_square = f"{int(starting_square) + 9}"
+	down_left_square = f"{int(starting_square) - 7}"
+	down_right_square = f"{int(starting_square) - 9}"
+
+	legal_moves = [left_square, right_square, up_square, down_square, up_left_square, up_right_square, down_left_square, down_right_square]
+	
+	for legal_move in legal_moves:
+		if f"{legal_move}" in board_placement:
+			if board_placement[f"{legal_move}"]["piece_color"] == move_info["piece_color"]:
+				legal_moves.remove(legal_move)
+
 
 def validate_move(current_fen, move_info):
 	print(f"Move info: {move_info}")
