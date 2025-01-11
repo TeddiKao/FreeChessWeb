@@ -9,59 +9,39 @@ function Square({
     pieceColor,
     pieceType,
     handleSquareClick,
-    setParsedFENString
+    setParsedFENString,
+    setDraggedSquare,
+    setDroppedSquare,
 }) {
     let startingSquare = null;
 
     const [{ isDragging }, drag] = useDrag(() => {
         return {
             type: "square",
-            item: {id: squareNumber},
+            item: { id: squareNumber },
             collect: (monitor) => ({
                 isDragging: monitor.isDragging(),
             }),
-        }
+        };
     });
 
-	const [{ isOver }, drop] = useDrop(() => ({
-		accept: "square",
-		drop: (item, monitor) => {
-            startingSquare = item.id
+    const [{ isOver }, drop] = useDrop(() => ({
+        accept: "square",
+        drop: (item, monitor) => {
+            startingSquare = item.id;
             console.log(squareNumber);
-            handleOnDrop(squareNumber)
-		}
-	}))
+            handleOnDrop(squareNumber);
+        },
+    }));
 
-    function handleOnDrop(droppedSquare) {
-        setParsedFENString((previousFENString) => {
-            const boardPlacement = previousFENString["board_placement"]
-            const squareInfo = boardPlacement[`${startingSquare}`]
-
-            const pieceType = squareInfo["piece_type"]
-            const pieceColor = squareInfo["piece_color"]
-
-            const newPiecePlacements = {
-                ...previousFENString,
-                board_placement: {
-                    ...boardPlacement,
-                    [`${droppedSquare}`]: {
-                        "piece_type": pieceType,
-                        "piece_color": pieceColor
-                    }
-                }
-            }
-
-            console.log(newPiecePlacements);
-
-            delete newPiecePlacements["board_placement"][`${startingSquare}`]
-
-            return newPiecePlacements
-        })
+    async function handleOnDrop(droppedSquare) {
+        setDraggedSquare(startingSquare);
+        setDroppedSquare(droppedSquare);
     }
 
     return (
         <div
-			ref={drop}
+            ref={drop}
             className={`chessboard-square ${squareColor}`}
             id={squareNumber}
             onClick={(event) => {

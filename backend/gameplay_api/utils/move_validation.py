@@ -1,8 +1,12 @@
 from .general import get_file, get_row, get_square
 
-def get_sliding_piece_legal_moves(board_placement, move_info):
-	print(f"Move info: {move_info}")
+piece_directions_mapping = {
+    "rook": ["north", "south", "east", "west"],
+    "bishop": ["northeast", "southeast", "northwest", "southwest"],
+    "queen": ["north", "south", "east", "west", "northeast", "southeast", "northwest", "southwest"]
+}
 
+def get_sliding_piece_legal_moves(board_placement, move_info):
 	legal_squares = []
 
 	piece_type = move_info["piece_type"]
@@ -16,16 +20,14 @@ def get_sliding_piece_legal_moves(board_placement, move_info):
 	distance_east = 7 - piece_file
 	distance_west = piece_file
 
-	print(f"Piece rank {piece_rank}")
-
-	print(piece_rank, piece_rank + distance_north + 1)
+	print(f"Piece rank: {piece_rank}")
 
 	if piece_type.lower() == "rook":
 		if distance_north != 0:
-			for rank in range(piece_rank + 1, piece_rank + distance_north + 1):
+			for rank in range(piece_rank + 1, 7):
 				square = f"{get_square(piece_file, rank)}"
-				print(f"Square: {square}")
 
+				print(board_placement)
 				if square in board_placement:
 					if board_placement[square]["piece_color"] == piece_color:
 						break
@@ -36,7 +38,7 @@ def get_sliding_piece_legal_moves(board_placement, move_info):
 				legal_squares.append(square)
 
 		if distance_south != 0:
-			for rank in range(piece_rank - distance_south - 1, piece_rank + 1):
+			for rank in range(0, piece_rank + 1):
 				square = f"{get_square(rank, piece_file)}"
 				
 				if square in board_placement:
@@ -49,7 +51,7 @@ def get_sliding_piece_legal_moves(board_placement, move_info):
 				legal_squares.append(square)
 
 		if distance_east != 0:
-			for file in range(piece_file + 1, distance_east + piece_file + 1):
+			for file in range(piece_file + 1, 7):
 				square = f"{get_square(file, piece_rank)}"
 				
 				if square in board_placement:
@@ -62,7 +64,7 @@ def get_sliding_piece_legal_moves(board_placement, move_info):
 				legal_squares.append(square)
 
 		if distance_west != 0:
-			for file in range(piece_file - distance_west - 1, piece_file + 1):
+			for file in range(0, piece_file + 1):
 				square = f"{get_square(file, piece_rank)}"
 				
 				if square in board_placement:

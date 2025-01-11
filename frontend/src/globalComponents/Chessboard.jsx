@@ -10,13 +10,103 @@ function Chessboard({ parsed_fen_string, orientation }) {
     const [clickedSquare, setClickedSquare] = useState(null);
     const [parsedFENString, setParsedFENString] = useState(parsed_fen_string);
 
+    const [draggedSquare, setDraggedSquare] = useState(null);
+    const [droppedSquare, setDroppedSquare] = useState(null);
+
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
     }, [parsed_fen_string]);
 
     useEffect(() => {
-        handleClickToMove()
+        handleClickToMove();
     }, [previousClickedSquare, clickedSquare]);
+
+    useEffect(() => {
+        handleOnDrop();
+    }, [draggedSquare, droppedSquare]);
+
+    async function handleOnDrop() {
+        if (!(draggedSquare && droppedSquare)) {
+            setDraggedSquare(null);
+            setDroppedSquare(null);
+
+            return;
+        }
+
+        if (draggedSquare === droppedSquare) {
+            setDraggedSquare(null);
+            setDroppedSquare(null);
+
+            return;
+        }
+
+        let moveIsLegal = null;
+
+        const boardPlacementToValidate = parsedFENString["board_placement"];
+        const squareInfoToValidate = boardPlacementToValidate[`${draggedSquare}`];
+
+        const pieceTypeToValidate = squareInfoToValidate["piece_type"];
+        const pieceColorToValidate = squareInfoToValidate["piece_color"];
+
+        try {
+            const response = await api
+                .post("/gameplay_api/validate-move/", {
+                    parsed_fen_string: parsedFENString,
+                    move_info: {
+                        piece_color: pieceColorToValidate,
+                        piece_type: pieceTypeToValidate,
+                        starting_square: `${draggedSquare}`,
+                        destination_square: `${droppedSquare}`,
+                    },
+                })
+                .catch(() => {
+                    setDraggedSquare(null);
+                    setDroppedSquare(null);
+
+                    return;
+                });
+
+            if (response.status === 200) {
+                console.log("Response" + response)
+                moveIsLegal = response.data.is_valid;
+            }
+        } catch (error) {
+            console.log(error);
+            setDraggedSquare(null);
+            setDroppedSquare(null);
+
+            return;
+        }
+
+        if (!moveIsLegal) {
+            setDraggedSquare(null);
+            setDroppedSquare(null);
+            return;
+        }
+
+        setParsedFENString((previousFENString) => {
+            const boardPlacement = previousFENString["board_placement"];
+            const squareInfo = boardPlacement[`${draggedSquare}`];
+
+            const pieceType = squareInfo["piece_type"];
+            const pieceColor = squareInfo["piece_color"];
+
+            const newPiecePlacements = {
+                ...previousFENString,
+                board_placement: {
+                    ...boardPlacement,
+                    [`${droppedSquare}`]: {
+                        piece_type: pieceType,
+                        piece_color: pieceColor,
+                    },
+                },
+            };
+
+            delete newPiecePlacements["board_placement"][`${draggedSquare}`];
+
+            return newPiecePlacements;
+        });
+    }
 
     async function handleClickToMove() {
         if (!(previousClickedSquare && clickedSquare)) {
@@ -50,25 +140,26 @@ function Chessboard({ parsed_fen_string, orientation }) {
         let isMoveLegal = null;
 
         try {
-            const response = await api.post("/gameplay_api/validate-move/", {
-                parsed_fen_string: parsedFENString,
-                move_info: {
-                    piece_color: pieceColorToValidate,
-                    piece_type: pieceTypeToValidate,
-                    starting_square: `${previousClickedSquare}`,
-                    destination_square: `${clickedSquare}`,
-                },
-            }).catch(() => {
-                setClickedSquare(null);
-                setPreviousClickedSquare(null);
-            })
+            const response = await api
+                .post("/gameplay_api/validate-move/", {
+                    parsed_fen_string: parsedFENString,
+                    move_info: {
+                        piece_color: pieceColorToValidate,
+                        piece_type: pieceTypeToValidate,
+                        starting_square: `${previousClickedSquare}`,
+                        destination_square: `${clickedSquare}`,
+                    },
+                })
+                .catch(() => {
+                    setClickedSquare(null);
+                    setPreviousClickedSquare(null);
+                });
 
-            console.log(response.status)
+            console.log(response.status);
 
             if (response.status === 200) {
-                isMoveLegal = response.data.is_valid
+                isMoveLegal = response.data.is_valid;
             }
-
         } catch (error) {
             console.log(error);
         }
@@ -117,6 +208,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
     }
 
     const piecePlacements = parsedFENString["board_placement"];
+    console.log(parsedFENString);
 
     function handleSquareClick(event, square) {
         const container = document.getElementById(square);
@@ -170,6 +262,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             pieceType={pieceType}
                             handleSquareClick={handleSquareClick}
                             setParsedFENString={setParsedFENString}
+                            setDraggedSquare={setDraggedSquare}
+                            setDroppedSquare={setDroppedSquare}
                         />
                     );
                 } else {
@@ -179,6 +273,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             squareColor={squareColor}
                             handleSquareClick={handleSquareClick}
                             setParsedFENString={setParsedFENString}
+                            setDraggedSquare={setDraggedSquare}
+                            setDroppedSquare={setDroppedSquare}
                         />
                     );
                 }
