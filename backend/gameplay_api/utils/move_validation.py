@@ -207,6 +207,20 @@ def get_pawn_legal_moves(board_placement, move_info):
 
 	return legal_squares
 
+def get_king_legal_moves(board_placement, move_info):
+	legal_moves = []
+
+	starting_square = move_info["starting_square"]
+
+	legal_moves.append(f"{int(starting_square) + 1}")
+	legal_moves.append(f"{int(starting_square) - 1}")
+	legal_moves.append(f"{int(starting_square) + 8}")
+	legal_moves.append(f"{int(starting_square) - 8}")
+	legal_moves.append(f"{int(starting_square) + 7}")
+	legal_moves.append(f"{int(starting_square) - 7}")
+	legal_moves.append(f"{int(starting_square) + 9}")
+	legal_moves.append(f"{int(starting_square) - 9}")
+
 def validate_move(current_fen, move_info):
 	print(f"Move info: {move_info}")
 
@@ -227,5 +241,9 @@ def validate_move(current_fen, move_info):
 		print(destination_square, legal_moves)
 
 		move_is_valid = destination_square in legal_moves
+
+	elif move_info["piece_type"].lower() == "king":
+		legal_moves = get_king_legal_moves(current_fen["board_placement"], move_info)
+		print(destination_square, legal_moves)
 
 	return move_is_valid
