@@ -1,3 +1,5 @@
+import copy
+
 from .general import get_file, get_row, get_square, is_square_on_edge
 
 piece_directions_mapping = {
@@ -220,12 +222,22 @@ def get_king_legal_moves(board_placement, move_info):
 	down_right_square = f"{int(starting_square) - 9}"
 
 	legal_moves = [left_square, right_square, up_square, down_square, up_left_square, up_right_square, down_left_square, down_right_square]
-	
-	for legal_move in legal_moves:
-		if f"{legal_move}" in board_placement:
-			if board_placement[f"{legal_move}"]["piece_color"] == move_info["piece_color"]:
-				legal_moves.remove(legal_move)
+	print(board_placement)
 
+	cleaned_legal_moves = copy.deepcopy(legal_moves)
+
+	print(legal_moves)
+
+	for legal_move in legal_moves:
+		print("3" in board_placement)
+		print(legal_move)
+
+		if f"{legal_move}" in board_placement:
+			if board_placement[f"{legal_move}"]["piece_color"].lower() == move_info["piece_color"].lower():
+				cleaned_legal_moves.remove(legal_move)
+				print(legal_moves)
+
+	return cleaned_legal_moves
 
 def validate_move(current_fen, move_info):
 	print(f"Move info: {move_info}")
@@ -250,6 +262,8 @@ def validate_move(current_fen, move_info):
 
 	elif move_info["piece_type"].lower() == "king":
 		legal_moves = get_king_legal_moves(current_fen["board_placement"], move_info)
-		print(destination_square, legal_moves)
+		print(legal_moves)
+		
+		move_is_valid = destination_square in legal_moves
 
 	return move_is_valid
