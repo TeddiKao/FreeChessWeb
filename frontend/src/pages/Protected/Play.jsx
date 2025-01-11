@@ -17,7 +17,7 @@ function Play() {
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     function getParsedFEN() {
-        api.get("/gameplay_api/parse-fen", {
+        api.get("/gameplay_api/parse-fen/", {
             params: {
                 raw_fen_string: startingPositionFEN,
             },

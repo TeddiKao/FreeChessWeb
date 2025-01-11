@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+import api from "../api.js";
+
 import "../styles/chessboard.css";
 import Square from "./Square";
 
@@ -13,6 +15,10 @@ function Chessboard({ parsed_fen_string, orientation }) {
     }, [parsed_fen_string]);
 
     useEffect(() => {
+        handleClickToMove()
+    }, [previousClickedSquare, clickedSquare]);
+
+    async function handleClickToMove() {
         if (!(previousClickedSquare && clickedSquare)) {
             return;
         }
@@ -32,6 +38,42 @@ function Chessboard({ parsed_fen_string, orientation }) {
             setPreviousClickedSquare(null);
             setClickedSquare(null);
 
+            return;
+        }
+
+        const boardPlacement = parsedFENString["board_placement"];
+        const pieceTypeToValidate =
+            boardPlacement[`${previousClickedSquare}`]["piece_type"];
+        const pieceColorToValidate =
+            boardPlacement[`${previousClickedSquare}`]["piece_color"];
+
+        let isMoveLegal = null;
+
+        try {
+            const response = await api.post("/gameplay_api/validate-move/", {
+                parsed_fen_string: parsedFENString,
+                move_info: {
+                    piece_color: pieceColorToValidate,
+                    piece_type: pieceTypeToValidate,
+                    starting_square: `${previousClickedSquare}`,
+                    destination_square: `${clickedSquare}`,
+                },
+            }).catch(() => {
+                setClickedSquare(null);
+                setPreviousClickedSquare(null);
+            })
+
+            console.log(response.status)
+
+            if (response.status === 200) {
+                isMoveLegal = response.data.is_valid
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+        if (!isMoveLegal) {
             return;
         }
 
@@ -68,7 +110,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
         setPreviousClickedSquare(null);
         setClickedSquare(null);
-    }, [previousClickedSquare, clickedSquare]);
+    }
 
     if (!parsedFENString) {
         return null;

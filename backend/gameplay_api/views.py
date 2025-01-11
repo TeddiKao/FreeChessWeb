@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .models import ChessGame
 
+from .serializers import ChessGameSerializer
+
 from .utils import fen_parser, move_validation
 
 # Create your views here.
@@ -23,11 +25,11 @@ class ParseFENView(APIView):
 class ValidateMoveView(APIView):
 	permission_classes = [IsAuthenticated]
 
-	def get(self, request, *args, **kwargs):
-		move_info = request.query_params.get("move_info")
-
+	def post(self, request):
+		move_info = request.data.get("move_info")
+		print(f"Sent move info {move_info}" )
 		# The user must send a parsed FEN string and not the raw FEN string
-		parsed_fen_string = request.query_params.get("parsed_fen_string")
+		parsed_fen_string = request.data.get("parsed_fen_string")
 		is_move_valid = not not move_validation.validate_move(parsed_fen_string, move_info)
 		
 		if is_move_valid:
@@ -35,9 +37,9 @@ class ValidateMoveView(APIView):
 		else:
 			return Response({"is_valid": False}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-
 class StartChessGameView(generics.CreateAPIView):
 	queryset = ChessGame.objects.all()
+	serializer_class = ChessGameSerializer
 	permission_classes = [IsAuthenticated]
 
 	def perform_create(self, serializer):
