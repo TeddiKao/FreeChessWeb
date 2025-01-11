@@ -6,75 +6,94 @@ piece_directions_mapping = {
     "queen": ["north", "south", "east", "west", "northeast", "southeast", "northwest", "southwest"]
 }
 
+def get_legal_moves_in_direction(board_placement, start_square, directions, piece_color):
+	legal_squares = []
+	
+	piece_file = get_file(start_square)
+	piece_rank = get_row(start_square)
+
+	for direction in directions:
+		print(direction)
+
+		if direction == "north":
+			for rank in range(piece_rank + 1, 8):
+				print(rank)
+
+				square = f"{get_square(piece_file, rank)}"
+				if square == start_square:
+					continue
+
+				if square in board_placement:
+					if board_placement[square]["piece_color"] == piece_color:
+						break
+					else:
+						legal_squares.append(square)
+						break
+
+				legal_squares.append(square)
+
+		elif direction == "south":
+			print(piece_rank)
+
+			for rank in range(piece_rank - 1, -1, -1):
+				print(rank)
+				square = f"{get_square(piece_file, rank)}"
+
+				if square in board_placement:
+					if board_placement[square]["piece_color"] == piece_color:
+						break
+					else:
+						legal_squares.append(square)
+						break
+
+				legal_squares.append(square)
+
+		elif direction == "east":
+			print(f"File {piece_file}")
+
+			for file in range(piece_file + 1, 8):
+				print(file)
+				square = f"{get_square(file, piece_rank)}"
+
+				if square in board_placement:
+					if board_placement[square]["piece_color"] == piece_color:
+						break
+					else:
+						legal_squares.append(square)
+						break
+
+				legal_squares.append(square)
+
+		elif direction == "west":
+			for file in range(piece_file - 1, -1, -1):
+				square = f"{get_square(file, piece_rank)}"
+
+				if square in board_placement:
+					if board_placement[square]["piece_color"] == piece_color:
+						break
+					else:
+						legal_squares.append(square)
+						break
+
+				legal_squares.append(square)
+
+		# TODO: Add bishop movements
+		elif direction == "northwest":
+			pass
+
+	return legal_squares
+
+
 def get_sliding_piece_legal_moves(board_placement, move_info):
 	legal_squares = []
 
-	piece_type = move_info["piece_type"]
+	piece_type = move_info["piece_type"].lower()
 	piece_color = move_info["piece_color"]
 
-	piece_file = get_file(move_info["starting_square"])
-	piece_rank = get_row(move_info["starting_square"])
-	
-	distance_north = 7 - piece_rank
-	distance_south = piece_rank
-	distance_east = 7 - piece_file
-	distance_west = piece_file
-
-	print(f"Piece rank: {piece_rank}")
+	starting_square = move_info["starting_square"]
 
 	if piece_type.lower() == "rook":
-		if distance_north != 0:
-			for rank in range(piece_rank + 1, 7):
-				square = f"{get_square(piece_file, rank)}"
-
-				print(board_placement)
-				if square in board_placement:
-					if board_placement[square]["piece_color"] == piece_color:
-						break
-					else:
-						legal_squares.append(square)
-						break
-
-				legal_squares.append(square)
-
-		if distance_south != 0:
-			for rank in range(0, piece_rank + 1):
-				square = f"{get_square(rank, piece_file)}"
-				
-				if square in board_placement:
-					if board_placement[square]["piece_color"] == piece_color:
-						break
-					else:
-						legal_squares.append(square)
-						break
-
-				legal_squares.append(square)
-
-		if distance_east != 0:
-			for file in range(piece_file + 1, 7):
-				square = f"{get_square(file, piece_rank)}"
-				
-				if square in board_placement:
-					if board_placement[square]["piece_color"] == piece_color:
-						break
-					else:
-						legal_squares.append(square)
-						break
-
-				legal_squares.append(square)
-
-		if distance_west != 0:
-			for file in range(0, piece_file + 1):
-				square = f"{get_square(file, piece_rank)}"
-				
-				if square in board_placement:
-					if board_placement[square]["piece_color"] == piece_color:
-						break
-					else:
-						legal_squares.append(square)
-						break
-
-				legal_squares.append(square)
+		legal_squares = get_legal_moves_in_direction(board_placement, starting_square, piece_directions_mapping[piece_type], piece_color)
 
 		return legal_squares
 
