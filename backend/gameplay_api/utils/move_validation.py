@@ -159,6 +159,54 @@ def get_sliding_piece_legal_moves(board_placement, move_info):
 
 	return legal_squares
 
+def get_pawn_legal_moves(board_placement, move_info):
+	legal_squares = []
+
+	starting_square = move_info["starting_square"]
+	print(f"Starting square: {starting_square}")
+
+	piece_color = move_info["piece_color"]
+
+	if piece_color.lower() == "white":
+		if f"{int(starting_square) + 7}" in board_placement:
+			legal_squares.append(f"{int(starting_square) + 7}")
+
+		if f"{int(starting_square) + 9}" in board_placement:
+			legal_squares.append(f"{int(starting_square) + 9}")
+
+		if f"{int(starting_square) + 8}" in board_placement:
+			return legal_squares
+		
+		legal_squares.append(f"{int(starting_square) + 8}")
+
+		print(starting_square)
+
+		if get_row(starting_square) == 1:
+			if f"{int(starting_square) + 16}" in board_placement:
+				return legal_squares
+
+			legal_squares.append(f"{int(starting_square) + 16}") 
+
+	else:
+		if f"{int(starting_square) - 7}" in board_placement:
+				legal_squares.append(f"{int(starting_square) - 7}")
+
+		if f"{int(starting_square) - 9}" in board_placement:
+			legal_squares.append(f"{int(starting_square) - 9}")
+
+		if f"{int(starting_square) - 8}" in board_placement:
+			return legal_squares
+
+		legal_squares.append(f"{int(starting_square) - 8}")
+
+		if get_row(starting_square) == 6:
+			if f"{int(starting_square) - 16}" in board_placement:
+				return legal_squares
+
+			legal_squares.append(f"{int(starting_square) - 16}") 
+
+	return legal_squares
+
 def validate_move(current_fen, move_info):
 	print(f"Move info: {move_info}")
 
@@ -172,6 +220,12 @@ def validate_move(current_fen, move_info):
 		print(f"Legal moves {legal_moves}")
 		print(destination_square, legal_moves)
 		
+		move_is_valid = destination_square in legal_moves
+
+	elif move_info["piece_type"].lower() == "pawn":
+		legal_moves = get_pawn_legal_moves(current_fen["board_placement"], move_info)
+		print(destination_square, legal_moves)
+
 		move_is_valid = destination_square in legal_moves
 
 	return move_is_valid
