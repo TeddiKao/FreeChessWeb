@@ -5,6 +5,8 @@ from rest_framework import status
 
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
+from .models import ChessGame
+
 from .utils import fen_parser, move_validation
 
 # Create your views here.
@@ -35,6 +37,7 @@ class ValidateMoveView(APIView):
 
 
 class StartChessGameView(generics.CreateAPIView):
+	queryset = ChessGame.objects.all()
 	permission_classes = [IsAuthenticated]
 
 	def perform_create(self, serializer):
