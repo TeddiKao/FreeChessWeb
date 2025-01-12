@@ -1,23 +1,62 @@
 .playing-interface-container {
 	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	position: absolute;
+	left: 15%;
+
+	margin-top: 20px;
+}
+
+.display-chessboard-container {
+	display: flex;
 	flex-direction: column;
 	align-items: center;
 }
 
-.top-timer-wrapper {
-	position: relative;
+.time-control-selection-container {
+	display: flex;
+	flex-direction: column;
 
-	height: 37px;
-	width: 400px;
+	margin-left: 24px;
 
-	margin-bottom: 8px;
+	box-shadow: 5px 5px 10px hsl(0, 0%, 60%);
+
+	padding-top: 16px;
+	padding-bottom: 16px;
+	padding-left: 16px;
+	padding-right: 16px;
+
+	border-radius: 8px;
 }
 
-.bottom-timer-wrapper {
-	position: relative;
+.time-control-type-container {
+	display: flex;
+	flex-direction: column;
+}
 
-	height: 40px;
-	width: 400px;
+.time-control-type-container div {
+	background-color: hsl(0, 0%, 85%);
+	margin-bottom: 8px;
 
-	margin-top: 8px;
+	padding: 12px;
+
+	border-radius: 8px;
+}
+
+.time-control-type-container div:hover {
+	cursor: pointer;
+}
+
+.time-control-type-container div h1 {
+	margin-top: 4px;
+	margin-bottom: 4px;
+
+	font-size: 1.5rem
+}
+
+.time-control-type-container div p {
+	margin-bottom: 4px;
+	margin-top: 4px;
 }

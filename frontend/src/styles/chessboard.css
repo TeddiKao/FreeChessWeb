@@ -1,4 +1,4 @@
 .chessboard-container {
 	display: grid;
-	grid-template-columns: repeat(8, 50px);
+	grid-template-columns: repeat(8, 55px);
 }
