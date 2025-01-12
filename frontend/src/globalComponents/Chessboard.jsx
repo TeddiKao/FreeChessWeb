@@ -89,8 +89,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
         }
 
         setParsedFENString((previousFENString) => {
-            clearSquaresStyling()
-
             const boardPlacement = previousFENString["board_placement"];
             const squareInfo = boardPlacement[`${draggedSquare}`];
 
@@ -115,6 +113,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
     }
 
     async function handleClickToMove() {
+        clearSquaresStyling()
+
         if (!(previousClickedSquare && clickedSquare)) {
             if (!previousClickedSquare) {
                 return;
