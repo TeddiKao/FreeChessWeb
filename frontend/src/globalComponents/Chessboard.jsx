@@ -35,12 +35,12 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 return;
             }
 
-            const boardPlacement = parsedFENString["board_placement"]
-            const squareInfo = boardPlacement[`${draggedSquare}`]
+            const boardPlacement = parsedFENString["board_placement"];
+            const squareInfo = boardPlacement[`${draggedSquare}`];
             const pieceType = squareInfo["piece_type"];
             const pieceColor = squareInfo["piece_color"];
 
-            displayLegalMoves(pieceType, pieceColor, draggedSquare)
+            displayLegalMoves(pieceType, pieceColor, draggedSquare);
 
             return;
         }
@@ -288,10 +288,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
             for (let square = startingIndex; square <= endingIndex; square++) {
                 const file = square - startingIndex + 1;
 
-                // On odd ranks, odd number = light square, even number = dark square
-                const squareIsEven = (file + row) % 2 === 0;
-
-                const squareColor = squareIsEven ? "dark" : "light";
+                const squareIsLight = (file + rank) % 2 !== 0;
+                const squareColor = squareIsLight ? "light" : "dark";
 
                 const boardPlacementSquare = `${square - 1}`;
                 if (
