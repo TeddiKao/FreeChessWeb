@@ -245,8 +245,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
             if (response.status === 200) {
                 for (const square of response.data) {
+                    console.log(square);
                     const squareElement = document.getElementById(square);
-                    squareElement.classList.add("legal-square");
+                    if (squareElement) {
+                        squareElement.classList.add("legal-square");
+                    }
                 }
             }
         } catch (error) {
@@ -288,7 +291,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
             for (let square = startingIndex; square <= endingIndex; square++) {
                 const file = square - startingIndex + 1;
 
-                const squareIsLight = (file + rank) % 2 !== 0;
+                const squareIsLight = (file + row) % 2 !== 0;
                 const squareColor = squareIsLight ? "light" : "dark";
 
                 const boardPlacementSquare = `${square - 1}`;

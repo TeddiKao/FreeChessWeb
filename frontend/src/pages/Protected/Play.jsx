@@ -36,8 +36,7 @@ function Play() {
                 <Timer playerColor="black" position="top" />
             </div>
 
-            <DisplayChessboard fenString={parsedFEN} orientation="White"/>
-            {/* <Chessboard parsed_fen_string={parsedFEN} orientation="White" /> */}
+            <Chessboard parsed_fen_string={parsedFEN} orientation="White" />
 
             <div className="bottom-timer-wrapper">
                 <Timer playerColor="white" position="bottom" />
