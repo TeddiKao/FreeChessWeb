@@ -5,6 +5,7 @@ import Chessboard from "../../globalComponents/Chessboard.jsx";
 import Timer from "../../pageComponents/gameplay/Timer.jsx";
 
 import "../../styles/play.css";
+import DisplayChessboard from "../../globalComponents/DisplayChessboard.jsx";
 
 function Play() {
     const [parsedFEN, setParsedFEN] = useState("");
@@ -35,7 +36,8 @@ function Play() {
                 <Timer playerColor="black" position="top" />
             </div>
 
-            <Chessboard parsed_fen_string={parsedFEN} orientation="White" />
+            <DisplayChessboard fenString={parsedFEN} orientation="White"/>
+            {/* <Chessboard parsed_fen_string={parsedFEN} orientation="White" /> */}
 
             <div className="bottom-timer-wrapper">
                 <Timer playerColor="white" position="bottom" />
