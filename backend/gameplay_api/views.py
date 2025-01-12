@@ -9,7 +9,7 @@ from .models import ChessGame
 
 from .serializers import ChessGameSerializer
 
-from .utils import fen_parser, move_validation
+from .utils import fen_parser, move_validation, show_legal_moves
 
 # Create your views here.
 class ParseFENView(APIView):
@@ -24,9 +24,13 @@ class ParseFENView(APIView):
 class ShowLegalMoveView(APIView):
 	permission_classes = [IsAuthenticated]
 
-	def get(self, request, *args, **kwargs):
-		# TODO: Show legal moves
-		pass
+	def post(self, request):
+		current_fen = request.data.get("parsed_fen_string")
+		move_info = request.data.get("move_info")
+
+		legal_moves = show_legal_moves.get_legal_moves(move_info, current_fen)
+
+		return Response(legal_moves, status=status.HTTP_200_OK)
 
 class ValidateMoveView(APIView):
 	permission_classes = [IsAuthenticated]

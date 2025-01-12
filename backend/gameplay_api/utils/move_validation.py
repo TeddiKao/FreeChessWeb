@@ -294,20 +294,16 @@ def validate_move(current_fen, move_info):
 
 	if move_info["piece_type"].lower() in sliding_pieces:
 		legal_moves = get_sliding_piece_legal_moves(current_fen["board_placement"], move_info)
-		print(f"Legal moves {legal_moves}")
-		print(destination_square, legal_moves)
 		
 		move_is_valid = destination_square in legal_moves
 
 	elif move_info["piece_type"].lower() == "pawn":
 		legal_moves = get_pawn_legal_moves(current_fen["board_placement"], move_info)
-		print(destination_square, legal_moves)
 
 		move_is_valid = destination_square in legal_moves
 
 	elif move_info["piece_type"].lower() == "king":
 		legal_moves = get_king_legal_moves(current_fen["board_placement"], move_info)
-		print(legal_moves)
 		
 		move_is_valid = destination_square in legal_moves
 

@@ -22,7 +22,7 @@ function Square({
             collect: (monitor) => ({
                 isDragging: monitor.isDragging(),
             }),
-        };
+        }
     });
 
     const [{ isOver }, drop] = useDrop(() => ({
@@ -34,7 +34,7 @@ function Square({
         },
     }));
 
-    async function handleOnDrop(droppedSquare) {
+    function handleOnDrop(droppedSquare) {
         setDraggedSquare(startingSquare);
         setDroppedSquare(droppedSquare);
     }

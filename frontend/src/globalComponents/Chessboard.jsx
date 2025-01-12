@@ -110,7 +110,18 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
     async function handleClickToMove() {
         if (!(previousClickedSquare && clickedSquare)) {
-            return;
+            if (!previousClickedSquare) {
+                return;
+            }
+
+            const boardPlacement = parsedFENString["board_placement"];
+            const squareInfo = boardPlacement[`${previousClickedSquare}`]
+
+            const pieceType = squareInfo["piece_type"];
+            const pieceColor = squareInfo["piece_color"];
+            const currentSquare = `${previousClickedSquare}`
+
+            displayLegalMoves(pieceType, pieceColor, currentSquare)
         }
 
         if (previousClickedSquare === clickedSquare) {
@@ -201,6 +212,27 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
         setPreviousClickedSquare(null);
         setClickedSquare(null);
+    }
+
+    async function displayLegalMoves(pieceType, pieceColor, currentSquare) {
+        try {
+            const response = await api.post("/gameplay_api/get-legal-moves/", {
+                parsed_fen_string: parsedFENString,
+                move_info: {
+                    piece_color: pieceColor,
+                    piece_type: pieceType,
+                    starting_square: currentSquare,
+                },
+            });
+
+            if (response.status === 200) {
+                // TODO: Make all legal move squares blue
+                console.log(response.data.legal_moves)
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     if (!parsedFENString) {
