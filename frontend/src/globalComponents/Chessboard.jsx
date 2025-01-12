@@ -5,6 +5,8 @@ import api from "../api.js";
 import "../styles/chessboard.css";
 import Square from "./Square";
 
+import { clearSquaresStyling } from "../utils.js";
+
 function Chessboard({ parsed_fen_string, orientation }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
@@ -12,8 +14,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
     const [draggedSquare, setDraggedSquare] = useState(null);
     const [droppedSquare, setDroppedSquare] = useState(null);
-
-    const [legalSquares, setLegalSquares] = useState([]);
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -28,6 +28,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
     }, [draggedSquare, droppedSquare]);
 
     async function handleOnDrop() {
+        clearSquaresStyling()
+
         if (!(draggedSquare && droppedSquare)) {
             setDraggedSquare(null);
             setDroppedSquare(null);
@@ -87,6 +89,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
         }
 
         setParsedFENString((previousFENString) => {
+            clearSquaresStyling()
+
             const boardPlacement = previousFENString["board_placement"];
             const squareInfo = boardPlacement[`${draggedSquare}`];
 
