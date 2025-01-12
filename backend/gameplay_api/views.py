@@ -21,6 +21,12 @@ class ParseFENView(APIView):
 
 		return Response(parsed_fen, status=status.HTTP_200_OK)
 
+class ShowLegalMoveView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def get(self, request, *args, **kwargs):
+		# TODO: Show legal moves
+		pass
 
 class ValidateMoveView(APIView):
 	permission_classes = [IsAuthenticated]
