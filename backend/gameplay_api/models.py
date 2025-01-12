@@ -13,8 +13,8 @@ class ChessGame(models.Model):
 
 	halfmove_clock = models.IntegerField() # 50 move rule detection
 
-	white_player_clock = models.DecimalField() # In seconds
-	black_player_clock = models.DecimalField() # In seconds
+	white_player_clock = models.DecimalField(max_digits=6, decimal_places=1) # In seconds
+	black_player_clock = models.DecimalField(max_digits=6, decimal_places=1) # In seconds
 
 	captured_white_material = models.JSONField(default=dict)
 	captured_black_material = models.JSONField(default=dict)
