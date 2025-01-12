@@ -16,3 +16,8 @@
 .dark {
 	background-color: var(--dark-square-color);
 }
+
+.legal-square {
+	background-color: hsl(215, 100%, 50%);
+	opacity: 0.75;
+}

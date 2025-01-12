@@ -13,6 +13,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
     const [draggedSquare, setDraggedSquare] = useState(null);
     const [droppedSquare, setDroppedSquare] = useState(null);
 
+    const [legalSquares, setLegalSquares] = useState([]);
+
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
     }, [parsed_fen_string]);
@@ -43,7 +45,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
         let moveIsLegal = null;
 
         const boardPlacementToValidate = parsedFENString["board_placement"];
-        const squareInfoToValidate = boardPlacementToValidate[`${draggedSquare}`];
+        const squareInfoToValidate =
+            boardPlacementToValidate[`${draggedSquare}`];
 
         const pieceTypeToValidate = squareInfoToValidate["piece_type"];
         const pieceColorToValidate = squareInfoToValidate["piece_color"];
@@ -67,7 +70,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 });
 
             if (response.status === 200) {
-                console.log("Response" + response)
                 moveIsLegal = response.data.is_valid;
             }
         } catch (error) {
@@ -115,13 +117,13 @@ function Chessboard({ parsed_fen_string, orientation }) {
             }
 
             const boardPlacement = parsedFENString["board_placement"];
-            const squareInfo = boardPlacement[`${previousClickedSquare}`]
+            const squareInfo = boardPlacement[`${previousClickedSquare}`];
 
             const pieceType = squareInfo["piece_type"];
             const pieceColor = squareInfo["piece_color"];
-            const currentSquare = `${previousClickedSquare}`
+            const currentSquare = `${previousClickedSquare}`;
 
-            displayLegalMoves(pieceType, pieceColor, currentSquare)
+            displayLegalMoves(pieceType, pieceColor, currentSquare);
         }
 
         if (previousClickedSquare === clickedSquare) {
@@ -165,8 +167,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     setClickedSquare(null);
                     setPreviousClickedSquare(null);
                 });
-
-            console.log(response.status);
 
             if (response.status === 200) {
                 isMoveLegal = response.data.is_valid;
@@ -216,7 +216,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
     async function displayLegalMoves(pieceType, pieceColor, currentSquare) {
         try {
-            const response = await api.post("/gameplay_api/get-legal-moves/", {
+            const response = await api.post("/gameplay_api/show-legal-moves/", {
                 parsed_fen_string: parsedFENString,
                 move_info: {
                     piece_color: pieceColor,
@@ -227,9 +227,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
             if (response.status === 200) {
                 // TODO: Make all legal move squares blue
-                console.log(response.data.legal_moves)
+                for (const square of response.data) {
+                    const squareElement = document.getElementById(square);
+                    squareElement.classList.add("legal-square");
+                }
             }
-
         } catch (error) {
             console.log(error);
         }
@@ -240,7 +242,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
     }
 
     const piecePlacements = parsedFENString["board_placement"];
-    console.log(parsedFENString);
 
     function handleSquareClick(event, square) {
         const container = document.getElementById(square);
@@ -258,8 +259,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
         const startingRow = orientation === "White" ? 8 : 1;
         const endingRow = orientation === "White" ? 1 : 8;
-
-        console.log(startingRow, endingRow);
 
         for (
             let row = startingRow;

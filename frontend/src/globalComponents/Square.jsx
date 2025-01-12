@@ -22,14 +22,14 @@ function Square({
             collect: (monitor) => ({
                 isDragging: monitor.isDragging(),
             }),
-        }
+        };
     });
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "square",
         drop: (item, monitor) => {
             startingSquare = item.id;
-            console.log(squareNumber);
+
             handleOnDrop(squareNumber);
         },
     }));

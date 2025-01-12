@@ -207,6 +207,7 @@ def get_pawn_legal_moves(board_placement, move_info):
 
 			legal_squares.append(f"{int(starting_square) - 16}") 
 
+	print(legal_squares)
 	return legal_squares
 
 def get_king_legal_moves(board_placement, move_info):

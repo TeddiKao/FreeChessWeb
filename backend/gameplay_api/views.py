@@ -29,6 +29,7 @@ class ShowLegalMoveView(APIView):
 		move_info = request.data.get("move_info")
 
 		legal_moves = show_legal_moves.get_legal_moves(move_info, current_fen)
+		print(f"Legal moves: {legal_moves}")
 
 		return Response(legal_moves, status=status.HTTP_200_OK)
 
