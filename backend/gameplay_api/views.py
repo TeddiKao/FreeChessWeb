@@ -2,13 +2,12 @@ from rest_framework.decorators import APIView
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
-
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
+from django.db.models import Q
+
 from .models import ChessGame
-
 from .serializers import ChessGameSerializer
-
 from .utils import fen_parser, move_validation, show_legal_moves
 
 # Create your views here.
@@ -58,3 +57,14 @@ class StartChessGameView(generics.CreateAPIView):
 			serializer.save()
 		else:
 			print(serializer.errors)
+
+class UpdateChessGameView(generics.UpdateAPIView):
+	def get_queryset(self):
+		white_player_filter = Q(white_player=self.request.user)
+		black_player_filter = Q(black_player=self.request.user)
+		game_is_ongoing_filter = Q(game_status="Ongoing")
+
+		return ChessGame.objects.filter((white_player_filter | black_player_filter) & game_is_ongoing_filter)
+	
+	serializer_class = ChessGameSerializer
+	permission_classes = [IsAuthenticated]
