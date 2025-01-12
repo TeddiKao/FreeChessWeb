@@ -6,6 +6,7 @@ import Timer from "../../pageComponents/gameplay/Timer.jsx";
 
 import "../../styles/play.css";
 import DisplayChessboard from "../../globalComponents/DisplayChessboard.jsx";
+import { fetchFen } from "../../utils.js";
 
 function Play() {
     const [parsedFEN, setParsedFEN] = useState("");
@@ -17,17 +18,13 @@ function Play() {
     const startingPositionFEN =
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-    function getParsedFEN() {
-        api.get("/gameplay_api/parse-fen/", {
-            params: {
-                raw_fen_string: startingPositionFEN,
-            },
-        })
-            .then((response) => response.data)
-            .then((data) => {
-                setParsedFEN(data);
-            })
-            .catch((error) => console.log(error));
+    async function getParsedFEN() {
+        try {
+            const parsedFEN = await fetchFen(startingPositionFEN);
+            setParsedFEN(parsedFEN)
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
