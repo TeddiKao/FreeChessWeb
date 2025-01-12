@@ -28,11 +28,19 @@ function Chessboard({ parsed_fen_string, orientation }) {
     }, [draggedSquare, droppedSquare]);
 
     async function handleOnDrop() {
-        clearSquaresStyling()
+        clearSquaresStyling();
 
         if (!(draggedSquare && droppedSquare)) {
-            setDraggedSquare(null);
-            setDroppedSquare(null);
+            if (!draggedSquare) {
+                return;
+            }
+
+            const boardPlacement = parsedFENString["board_placement"]
+            const squareInfo = boardPlacement[`${draggedSquare}`]
+            const pieceType = squareInfo["piece_type"];
+            const pieceColor = squareInfo["piece_color"];
+
+            displayLegalMoves(pieceType, pieceColor, draggedSquare)
 
             return;
         }
@@ -110,11 +118,14 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
             return newPiecePlacements;
         });
+
+        setDraggedSquare(null);
+        setDroppedSquare(null);
     }
 
     async function handleClickToMove() {
-        console.log("Clicked")
-        clearSquaresStyling()
+        console.log("Clicked");
+        clearSquaresStyling();
 
         if (!(previousClickedSquare && clickedSquare)) {
             if (!previousClickedSquare) {
@@ -233,7 +244,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
             });
 
             if (response.status === 200) {
-                // TODO: Make all legal move squares blue
                 for (const square of response.data) {
                     const squareElement = document.getElementById(square);
                     squareElement.classList.add("legal-square");

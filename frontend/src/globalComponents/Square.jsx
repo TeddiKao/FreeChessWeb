@@ -9,7 +9,6 @@ function Square({
     pieceColor,
     pieceType,
     handleSquareClick,
-    setParsedFENString,
     setDraggedSquare,
     setDroppedSquare,
 }) {
@@ -35,8 +34,15 @@ function Square({
     }));
 
     function handleOnDrop(droppedSquare) {
-        setDraggedSquare(startingSquare);
+        console.log("Dropped")
+
+        setDraggedSquare(startingSquare)
         setDroppedSquare(droppedSquare);
+    }
+
+    function handleOnDrag(squareDragged) {
+        console.log("Dragged")
+        setDraggedSquare(squareDragged)
     }
 
     return (
@@ -51,6 +57,9 @@ function Square({
             {pieceColor && pieceType ? (
                 <img
                     ref={drag}
+                    onDrag={() => {
+                        handleOnDrag(squareNumber);
+                    }}
                     className="piece-image"
                     src={`../../public/${pieceColor.toLowerCase()}${pieceType}.svg`}
                 />
