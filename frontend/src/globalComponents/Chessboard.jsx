@@ -113,6 +113,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
     }
 
     async function handleClickToMove() {
+        console.log("Clicked")
         clearSquaresStyling()
 
         if (!(previousClickedSquare && clickedSquare)) {
@@ -128,6 +129,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
             const currentSquare = `${previousClickedSquare}`;
 
             displayLegalMoves(pieceType, pieceColor, currentSquare);
+
+            return;
         }
 
         if (previousClickedSquare === clickedSquare) {

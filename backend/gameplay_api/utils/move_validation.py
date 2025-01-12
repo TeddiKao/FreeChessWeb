@@ -1,6 +1,6 @@
 import copy
 
-from .general import get_file, get_row, get_square, is_square_on_edge
+from .general import get_file, get_row, get_square, is_square_on_edge, is_on_same_diagonal
 
 piece_directions_mapping = {
     "rook": ["north", "south", "east", "west"],
@@ -86,13 +86,20 @@ def get_legal_moves_in_direction(board_placement, start_square, directions, piec
 			square = get_square(piece_file, piece_rank)
 			while True:
 				square += 7
+
+				if square < 0 or square > 63:
+					break
+
+				if not is_on_same_diagonal(start_square, square):
+					break
+
 				legal_squares.append(f"{square}")
 
 				if f"{square}" in board_placement:
 					if board_placement[f"{square}"]["piece_color"] == piece_color:
+						legal_squares.remove(f"{square}")
 						break
 					else:
-						legal_squares.append(square)
 						break
 
 				if is_square_on_edge(f"{square}"):
@@ -102,13 +109,19 @@ def get_legal_moves_in_direction(board_placement, start_square, directions, piec
 			square = get_square(piece_file, piece_rank)
 			while True:
 				square -= 9
+				if square < 0 or square > 63:
+					break
+
+				if not is_on_same_diagonal(start_square, square):
+					break
+
 				legal_squares.append(f"{square}")
 
 				if f"{square}" in board_placement:
 					if board_placement[f"{square}"]["piece_color"] == piece_color:
+						legal_squares.remove(f"{square}")
 						break
 					else:
-						legal_squares.append(square)
 						break
 
 				if is_square_on_edge(f"{square}"):
@@ -118,13 +131,19 @@ def get_legal_moves_in_direction(board_placement, start_square, directions, piec
 			square = get_square(piece_file, piece_rank)
 			while True:
 				square += 9
+				if square < 0 or square > 63:
+					break
+
+				if not is_on_same_diagonal(start_square, square):
+					break
+
 				legal_squares.append(f"{square}")
 
 				if f"{square}" in board_placement:
 					if board_placement[f"{square}"]["piece_color"] == piece_color:
+						legal_squares.remove(f"{square}")
 						break
 					else:
-						legal_squares.append(square)
 						break
 
 				if is_square_on_edge(f"{square}"):
@@ -134,13 +153,20 @@ def get_legal_moves_in_direction(board_placement, start_square, directions, piec
 			square = get_square(piece_file, piece_rank)
 			while True:
 				square -= 7
+
+				if not is_on_same_diagonal(start_square, square):
+					break
+
+				if square < 0 or square > 63:
+					break
+
 				legal_squares.append(f"{square}")
 
 				if f"{square}" in board_placement:
 					if board_placement[f"{square}"]["piece_color"] == piece_color:
+						legal_squares.remove(f"{square}")
 						break
 					else:
-						legal_squares.append(square)
 						break
 
 				if is_square_on_edge(f"{square}"):
@@ -171,10 +197,12 @@ def get_pawn_legal_moves(board_placement, move_info):
 
 	if piece_color.lower() == "white":
 		if f"{int(starting_square) + 7}" in board_placement:
-			legal_squares.append(f"{int(starting_square) + 7}")
+			if board_placement[f"{int(starting_square) + 7}"]["piece_color"] != move_info["piece_color"]:
+				legal_squares.append(f"{int(starting_square) + 7}")
 
 		if f"{int(starting_square) + 9}" in board_placement:
-			legal_squares.append(f"{int(starting_square) + 9}")
+			if board_placement[f"{int(starting_square) + 9}"]["piece_color"] != move_info["piece_color"]:
+				legal_squares.append(f"{int(starting_square) + 9}")
 
 		if f"{int(starting_square) + 8}" in board_placement:
 			return legal_squares
@@ -191,10 +219,12 @@ def get_pawn_legal_moves(board_placement, move_info):
 
 	else:
 		if f"{int(starting_square) - 7}" in board_placement:
+			if board_placement[f"{int(starting_square) - 7}"]["piece_color"] != move_info["piece_color"]:
 				legal_squares.append(f"{int(starting_square) - 7}")
 
 		if f"{int(starting_square) - 9}" in board_placement:
-			legal_squares.append(f"{int(starting_square) - 9}")
+			if board_placement[f"{int(starting_square) - 9}"]["piece_color"] != move_info["piece_color"]:
+				legal_squares.append(f"{int(starting_square) - 9}")
 
 		if f"{int(starting_square) - 8}" in board_placement:
 			return legal_squares
@@ -207,7 +237,6 @@ def get_pawn_legal_moves(board_placement, move_info):
 
 			legal_squares.append(f"{int(starting_square) - 16}") 
 
-	print(legal_squares)
 	return legal_squares
 
 def get_king_legal_moves(board_placement, move_info):
