@@ -5,7 +5,7 @@ import api from "../api.js";
 import "../styles/chessboard.css";
 import Square from "./Square";
 
-import { clearSquaresStyling, fetchLegalMoves } from "../utils.js";
+import { clearSquaresStyling, fetchLegalMoves, fetchMoveIsValid } from "../utils.js";
 
 function Chessboard({ parsed_fen_string, orientation }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
@@ -167,30 +167,13 @@ function Chessboard({ parsed_fen_string, orientation }) {
         const pieceColorToValidate =
             boardPlacement[`${previousClickedSquare}`]["piece_color"];
 
-        let isMoveLegal = null;
-
-        try {
-            const response = await api
-                .post("/gameplay_api/validate-move/", {
-                    parsed_fen_string: parsedFENString,
-                    move_info: {
-                        piece_color: pieceColorToValidate,
-                        piece_type: pieceTypeToValidate,
-                        starting_square: `${previousClickedSquare}`,
-                        destination_square: `${clickedSquare}`,
-                    },
-                })
-                .catch(() => {
-                    setClickedSquare(null);
-                    setPreviousClickedSquare(null);
-                });
-
-            if (response.status === 200) {
-                isMoveLegal = response.data.is_valid;
-            }
-        } catch (error) {
-            console.log(error);
-        }
+        const isMoveLegal = await fetchMoveIsValid(
+            parsedFENString,
+            pieceTypeToValidate,
+            pieceColorToValidate,
+            previousClickedSquare,
+            clickedSquare
+        )
 
         if (!isMoveLegal) {
             return;

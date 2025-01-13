@@ -1,6 +1,6 @@
 import api from "./api.js";
 
-import _, { floor } from "lodash"
+import _, { floor } from "lodash";
 
 function clearSquaresStyling() {
     for (let square = 0; square <= 63; square++) {
@@ -19,36 +19,36 @@ function capitaliseFirstLetter(string) {
 }
 
 function compareObjects(objectA, objectB) {
-    return _.isEqual(objectA, objectB)
+    return _.isEqual(objectA, objectB);
 }
 
 function convertTimeControlTime(time) {
-	return time / 60
+    return time / 60;
 }
 
 function padZero(value) {
-    return `0${value}`
+    return `0${value}`;
 }
 
 function formatTime(timeInSeconds) {
-    const hours = floor(timeInSeconds / (60 * 60))
-    const minutes = floor((timeInSeconds % (60 * 60)) / 60)
-    const seconds = floor((timeInSeconds % 60))
+    const hours = floor(timeInSeconds / (60 * 60));
+    const minutes = floor((timeInSeconds % (60 * 60)) / 60);
+    const seconds = floor(timeInSeconds % 60);
 
     const hoursString = hours > 0 ? `${hours}` : "";
-    const minutesString = hours > 0 ? `${padZero(minutes)}` : `${minutes}`
-    const secondsString = `${padZero(seconds)}`
+    const minutesString = hours > 0 ? `${padZero(minutes)}` : `${minutes}`;
+    const secondsString = `${padZero(seconds)}`;
 
-    const leadingColon = hours > 0 ? ":" : ""
+    const leadingColon = hours > 0 ? ":" : "";
 
     return `${hoursString}${leadingColon}${minutesString}:${secondsString}`.trim();
 }
 
 function displayTimeControl({ baseTime, increment }) {
-	const baseTimeString = `${convertTimeControlTime(baseTime)}`
-	const incrementString = increment > 0? `| ${increment}` : ""
+    const baseTimeString = `${convertTimeControlTime(baseTime)}`;
+    const incrementString = increment > 0 ? `| ${increment}` : "";
 
-	return `${baseTimeString} min ${incrementString}`
+    return `${baseTimeString} min ${incrementString}`;
 }
 
 async function fetchLegalMoves(
@@ -79,6 +79,37 @@ async function fetchLegalMoves(
     return legalMoves;
 }
 
+async function fetchMoveIsValid(
+    parsedFENString,
+    piece_color,
+    piece_type,
+    starting_square,
+    destination_square
+) {
+    let isMoveLegal = false;
+
+    try {
+        const response = await api.post("/gameplay_api/validate-move/", {
+            parsed_fen_string: parsedFENString,
+            move_info: {
+                piece_color: piece_color,
+                piece_type: piece_type,
+                starting_square: starting_square,
+                destination_square: destination_square,
+            },
+        });
+
+        if (response.status === 200) {
+            isMoveLegal = response.data.is_valid;
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+
+    return isMoveLegal;
+}
+
 async function fetchFen(rawFenString) {
     let parsedFen = null;
 
@@ -105,7 +136,8 @@ export {
     fetchLegalMoves,
     capitaliseFirstLetter,
     compareObjects,
-	displayTimeControl,
-	convertTimeControlTime,
-    formatTime
+    displayTimeControl,
+    convertTimeControlTime,
+    formatTime,
+    fetchMoveIsValid
 };
