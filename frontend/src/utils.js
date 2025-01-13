@@ -9,6 +9,30 @@ function clearSquaresStyling() {
     }
 }
 
+async function fetchLegalMoves(parsedFENString, pieceType, pieceColor, startingSquare) {
+	let legalMoves = [];
+	
+	try {
+		const response = await api.post("/gameplay_api/show-legal-moves", {
+			parsed_fen_string: parsedFENString,
+            move_info: {
+                piece_color: pieceColor,
+                piece_type: pieceType,
+                starting_square: startingSquare,
+            },
+		})
+
+		if (response.status === 200) {
+			legalMoves = response.data;
+		}
+
+	} catch (error) {
+		console.log(error);
+	}
+
+	return legalMoves;
+}
+
 async function fetchFen(rawFenString) {
     let parsedFen = null;
 
@@ -30,4 +54,4 @@ async function fetchFen(rawFenString) {
     return parsedFen
 }
 
-export { clearSquaresStyling, fetchFen };
+export { clearSquaresStyling, fetchFen, fetchLegalMoves };

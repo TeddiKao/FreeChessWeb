@@ -21,7 +21,6 @@ function Play() {
     async function getParsedFEN() {
         try {
             const parsedFEN = await fetchFen(startingPositionFEN);
-            console.log(parsedFEN);
             setParsedFEN(parsedFEN);
 
         } catch (error) {

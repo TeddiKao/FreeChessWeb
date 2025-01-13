@@ -5,7 +5,7 @@ import api from "../api.js";
 import "../styles/chessboard.css";
 import Square from "./Square";
 
-import { clearSquaresStyling } from "../utils.js";
+import { clearSquaresStyling, fetchLegalMoves } from "../utils.js";
 
 function Chessboard({ parsed_fen_string, orientation }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
@@ -232,28 +232,17 @@ function Chessboard({ parsed_fen_string, orientation }) {
         setClickedSquare(null);
     }
 
-    async function displayLegalMoves(pieceType, pieceColor, currentSquare) {
-        try {
-            const response = await api.post("/gameplay_api/show-legal-moves/", {
-                parsed_fen_string: parsedFENString,
-                move_info: {
-                    piece_color: pieceColor,
-                    piece_type: pieceType,
-                    starting_square: currentSquare,
-                },
-            });
+    async function displayLegalMoves(pieceType, pieceColor, startingSquare) {
+        const legalMoves = await fetchLegalMoves(parsedFENString, pieceType, pieceColor, startingSquare);
+        if (!legalMoves) {
+            return;
+        }
 
-            if (response.status === 200) {
-                for (const square of response.data) {
-                    console.log(square);
-                    const squareElement = document.getElementById(square);
-                    if (squareElement) {
-                        squareElement.classList.add("legal-square");
-                    }
-                }
+        for (const legalMove of legalMoves) {
+            const square = document.getElementById(legalMove);
+            if (square) {
+                square.classList.add("legal-square");
             }
-        } catch (error) {
-            console.log(error);
         }
     }
 
