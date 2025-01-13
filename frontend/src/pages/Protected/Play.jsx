@@ -13,6 +13,7 @@ import {
     rapidTimeControls,
     classicalTimeControls,
 } from "../../constants/timeControls.js";
+import TimeControlSelection from "../../pageComponents/gameplay/TimeControlSelection.jsx";
 
 function Play() {
     const [parsedFEN, setParsedFEN] = useState("");
@@ -38,7 +39,9 @@ function Play() {
     }
 
     function renderTimeControlSelectionPanel() {
+        console.log(timeControlSelectionStage)
         switch (timeControlSelectionStage) {
+
             case "typeSelection":
                 const bulletDescription =
                     "Great for users who enjoy fast-paced and exciting games";
@@ -94,85 +97,32 @@ function Play() {
 
             case "amountSelection":
                 const timeControlType = selectedTimeControlType.toLowerCase();
+                console.log(timeControlType);
 
                 if (timeControlType === "bullet") {
                     return (
                         <div className="time-control-amount-container">
-                            {bulletTimeControls.map((timeControlInfo) => {
-                                return (
-                                    <div
-                                        key={timeControlInfo.id}
-                                        className="time-control-info"
-                                    >
-                                        <p>
-                                            {timeControlInfo.baseTime} |{" "}
-                                            {timeControlInfo.increment > 0
-                                                ? timeControlInfo.increment
-                                                : null}
-                                        </p>
-                                    </div>
-                                );
-                            })}
+                            <TimeControlSelection timeControlType="bullet"/>
                         </div>
                     );
-                } else if (timeControl === "blitz") {
+
+                } else if (timeControlType === "blitz") {
                     return (
                         <div className="time-control-amount-container">
-                            {blitzTimeControls.map((timeControlInfo) => {
-                                return (
-                                    <div
-                                        key={timeControlInfo.id}
-                                        className="time-control-info"
-                                    >
-                                        <p>
-                                            {timeControlInfo.baseTime} |{" "}
-                                            {timeControlInfo.increment > 0
-                                                ? timeControlInfo.increment
-                                                : null}
-                                        </p>
-                                    </div>
-                                );
-                            })}
+                            <TimeControlSelection timeControlType="blitz"/>
                         </div>
                     );
-                } else if (timeControl === "rapid") {
+
+                } else if (timeControlType === "rapid") {
                     return (
                         <div className="time-control-amount-container">
-                            {rapidTimeControls.map((timeControlInfo) => {
-                                return (
-                                    <div
-                                        key={timeControlInfo.id}
-                                        className="time-control-info"
-                                    >
-                                        <p>
-                                            {timeControlInfo.baseTime} |{" "}
-                                            {timeControlInfo.increment > 0
-                                                ? timeControlInfo.increment
-                                                : null}
-                                        </p>
-                                    </div>
-                                );
-                            })}
+                            <TimeControlSelection timeControlType="rapid"/>
                         </div>
                     );
-                } else if (timeControl === "classical") {
-                    eturn (
+                } else if (timeControlType === "classical") {
+                    return (
                         <div className="time-control-amount-container">
-                            {classicalTimeControls.map((timeControlInfo) => {
-                                return (
-                                    <div
-                                        key={timeControlInfo.id}
-                                        className="time-control-info"
-                                    >
-                                        <p>
-                                            {timeControlInfo.baseTime} |{" "}
-                                            {timeControlInfo.increment > 0
-                                                ? timeControlInfo.increment
-                                                : null}
-                                        </p>
-                                    </div>
-                                );
-                            })}
+                            <TimeControlSelection timeControlType="classical"/>
                         </div>
                     );
                 }

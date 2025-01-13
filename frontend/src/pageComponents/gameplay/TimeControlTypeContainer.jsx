@@ -1,11 +1,11 @@
 function TimeControlTypeContainer({ timeControlName, timeControlDescription, setSelectionStage, setType }) {
     function handleRegularTimeControlClick() {
-		setSelectionStage("timeControlSelection")
+		setSelectionStage("amountSelection")
 		setType(timeControlName)
 	}
 
     function handleCustomTimeControlClick() {
-		setSelectionStage("timeControlSelection")
+		setSelectionStage("amountSelection")
 		setType(timeControlName)
 	}
 
