@@ -1,9 +1,10 @@
 import "../../styles/timer.css"
+import { formatTime } from "../../utils.js"
 
-function Timer({ playerColor }) {
+function Timer({ playerColor, timeInSeconds }) {
 	return (
 		<div className={`${playerColor}-player-timer-container`}>
-			<p className="timer-amount">1:00:00</p>
+			<p className="timer-amount">{formatTime(timeInSeconds)}</p>
 		</div>
 	)
 }

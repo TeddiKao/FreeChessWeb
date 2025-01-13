@@ -1,12 +1,21 @@
 import { Navigate, useLocation, useNavigate } from "react-router-dom"
+
 import Chessboard from "../../globalComponents/Chessboard";
+import Timer from "../../pageComponents/gameplay/Timer.jsx";
+
+import "../../styles/play.css"
+
 import { fetchFen } from "../../utils.js";
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 function Play() {
 	const [parsedFEN, setParsedFEN] = useState(null);
 	const location = useLocation();
+
+	useEffect(() => {
+		getParsedFEN()
+	}, [])
 
 	if (!location.state) {
 		console.log("Navigating");
@@ -30,13 +39,13 @@ function Play() {
 	return (
 		<div className="playing-interface-container">
 			<div className="top-timer-wrapper">
-				<Timer playerColor="black" position="top" />
+				<Timer playerColor="black" position="top" timeInSeconds={timeControlBaseTime}/>
 			</div>
 
-			<Chessboard parsed_fen_string={getParsedFEN()} orientation="White"/>
+			<Chessboard parsed_fen_string={parsedFEN} orientation="White"/>
 
 			<div className="bottom-timer-wrapper">
-				<Timer playerColor="black" position="bottom"/>
+				<Timer playerColor="white" position="bottom" timeInSeconds={timeControlBaseTime}/>
 			</div>
 		</div>
 	)

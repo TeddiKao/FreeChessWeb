@@ -124,7 +124,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
     }
 
     async function handleClickToMove() {
-        console.log("Clicked");
         clearSquaresStyling();
 
         if (!(previousClickedSquare && clickedSquare)) {
@@ -234,6 +233,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
     async function displayLegalMoves(pieceType, pieceColor, startingSquare) {
         const legalMoves = await fetchLegalMoves(parsedFENString, pieceType, pieceColor, startingSquare);
+        console.log(legalMoves);
         if (!legalMoves) {
             return;
         }

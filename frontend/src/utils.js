@@ -1,6 +1,6 @@
 import api from "./api.js";
 
-import _ from "lodash"
+import _, { floor } from "lodash"
 
 function clearSquaresStyling() {
     for (let square = 1; square <= 64; square++) {
@@ -26,6 +26,24 @@ function convertTimeControlTime(time) {
 	return time / 60
 }
 
+function padZero(value) {
+    return `0${value}`
+}
+
+function formatTime(timeInSeconds) {
+    const hours = floor(timeInSeconds / (60 * 60))
+    const minutes = floor((timeInSeconds % (60 * 60)) / 60)
+    const seconds = floor((timeInSeconds % 60))
+
+    const hoursString = hours > 0 ? `${hours}` : "";
+    const minutesString = hours > 0 ? `${padZero(minutes)}` : `${minutes}`
+    const secondsString = `${padZero(seconds)}`
+
+    const leadingColon = hours > 0 ? ":" : ""
+
+    return `${hoursString}${leadingColon}${minutesString}:${secondsString}`.trim();
+}
+
 function displayTimeControl({ baseTime, increment }) {
 	const baseTimeString = `${convertTimeControlTime(baseTime)}`
 	const incrementString = increment > 0? `| ${increment}` : ""
@@ -42,7 +60,7 @@ async function fetchLegalMoves(
     let legalMoves = [];
 
     try {
-        const response = await api.post("/gameplay_api/show-legal-moves", {
+        const response = await api.post("/gameplay_api/show-legal-moves/", {
             parsed_fen_string: parsedFENString,
             move_info: {
                 piece_color: pieceColor,
@@ -88,5 +106,6 @@ export {
     capitaliseFirstLetter,
     compareObjects,
 	displayTimeControl,
-	convertTimeControlTime
+	convertTimeControlTime,
+    formatTime
 };

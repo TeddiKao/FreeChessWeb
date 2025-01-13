@@ -127,7 +127,8 @@
     padding-top: 8px;
     padding-bottom: 8px;
     
-    width: 300px;
+    padding-left: 120px;
+    padding-right: 120px;
 
     background-color: var(--accent-color);
     color: white;

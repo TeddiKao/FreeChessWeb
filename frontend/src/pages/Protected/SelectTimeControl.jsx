@@ -39,10 +39,6 @@ function SelectTimeControl() {
         }
     }
 
-    function handleStartGame() {
-        <Link to="/play" state={selectedTimeControl}/>
-    }
-
     function renderTimeControlSelectionPanel() {
         console.log(timeControlSelectionStage);
         switch (timeControlSelectionStage) {
@@ -135,9 +131,7 @@ function SelectTimeControl() {
                         <p className="time-control">
                             {displayTimeControl(selectedTimeControl)}
                         </p>
-                        <button className="start-game-button">
-                            Start game
-                        </button>
+                        <Link to="/play" state={selectedTimeControl} className="start-game-button">Start game</Link>
                     </div>
                 );
         }
@@ -147,13 +141,13 @@ function SelectTimeControl() {
         <div className="time-control-selection-interface-container">
             <div className="display-chessboard-container">
                 <div className="top-timer-wrapper">
-                    <Timer playerColor="black" position="top" />
+                    <Timer playerColor="black" position="top" timeInSeconds={3600}/>
                 </div>
 
                 <DisplayChessboard fenString={parsedFEN} orientation="White" />
 
                 <div className="bottom-timer-wrapper">
-                    <Timer playerColor="white" position="bottom" />
+                    <Timer playerColor="white" position="bottom" timeInSeconds={3600}/>
                 </div>
             </div>
 
