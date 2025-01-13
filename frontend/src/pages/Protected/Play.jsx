@@ -4,9 +4,13 @@ import DisplayChessboard from "../../globalComponents/DisplayChessboard.jsx";
 import TimeControlTypeContainer from "../../pageComponents/gameplay/TimeControlTypeContainer.jsx";
 import Timer from "../../pageComponents/gameplay/Timer.jsx";
 
-import "../../styles/play.css";
+import "../../styles/select-time-control.css";
 
-import { capitaliseFirstLetter, displayTimeControl, fetchFen } from "../../utils.js";
+import {
+    capitaliseFirstLetter,
+    displayTimeControl,
+    fetchFen,
+} from "../../utils.js";
 
 import TimeControlSelection from "../../pageComponents/gameplay/TimeControlSelection.jsx";
 
@@ -106,9 +110,14 @@ function Play() {
                         </div>
 
                         {selectedTimeControl ? (
-                            <button onClick={() => {
-                                setTimeControlSelectionStage("startConfirmation");
-                            }} className="continue-button">
+                            <button
+                                onClick={() => {
+                                    setTimeControlSelectionStage(
+                                        "startConfirmation"
+                                    );
+                                }}
+                                className="continue-button"
+                            >
                                 Continue
                             </button>
                         ) : null}
@@ -116,9 +125,14 @@ function Play() {
                 );
 
             case "startConfirmation":
-                <div className="start-confirmation-container">
-                    <p className="time-control">{displayTimeControl(selectedTimeControl)}</p>
-                </div>;
+                return (
+                    <div className="start-confirmation-container">
+                        <p className="time-control">
+                            {displayTimeControl(selectedTimeControl)}
+                        </p>
+                        <button className="start-game-button">Start game</button>
+                    </div>
+                );
         }
     }
 
