@@ -26,8 +26,8 @@ function convertTimeControlTime(time) {
 	return time / 60
 }
 
-function displayTimeControl(baseTime, increment) {
-	const baseTimeString = `${baseTime}`
+function displayTimeControl({ baseTime, increment }) {
+	const baseTimeString = `${convertTimeControlTime(baseTime)}`
 	const incrementString = increment > 0? `| ${increment}` : null
 
 	return `${baseTimeString} min ${incrementString}`

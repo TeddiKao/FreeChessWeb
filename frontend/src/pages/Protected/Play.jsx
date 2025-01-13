@@ -6,7 +6,7 @@ import Timer from "../../pageComponents/gameplay/Timer.jsx";
 
 import "../../styles/play.css";
 
-import { capitaliseFirstLetter, fetchFen } from "../../utils.js";
+import { capitaliseFirstLetter, displayTimeControl, fetchFen } from "../../utils.js";
 
 import TimeControlSelection from "../../pageComponents/gameplay/TimeControlSelection.jsx";
 
@@ -117,7 +117,7 @@ function Play() {
 
             case "startConfirmation":
                 <div className="start-confirmation-container">
-                    <p className="time-control"></p>
+                    <p className="time-control">{displayTimeControl(selectedTimeControl)}</p>
                 </div>;
         }
     }
