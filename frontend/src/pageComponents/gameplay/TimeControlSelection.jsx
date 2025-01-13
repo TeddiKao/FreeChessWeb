@@ -4,10 +4,22 @@ import {
     classicalTimeControls,
     rapidTimeControls,
 } from "../../constants/timeControls.js";
+import { compareObjects } from "../../utils.js";
 
-function TimeControlSelection({ timeControlType }) {
+function TimeControlSelection({
+    timeControlType,
+    selectedTimeControl,
+    setTimeControl,
+}) {
     function convertTimeControlTime(time) {
         return time / 60;
+    }
+
+    function handleTimeControlClick(timeControlInfo) {
+        setTimeControl({
+            baseTime: timeControlInfo.baseTime,
+            increment: timeControlInfo.increment,
+        });
     }
 
     switch (timeControlType) {
@@ -15,10 +27,20 @@ function TimeControlSelection({ timeControlType }) {
             return (
                 <div className="time-controls-container">
                     {bulletTimeControls.map((timeControlInfo) => {
-						const timeControlElement = (
+                        const timeControlElement = (
                             <div
                                 key={timeControlInfo.id}
-                                className="time-control-container"
+                                className={
+                                    compareObjects(
+                                        timeControlInfo,
+                                        selectedTimeControl
+                                    )
+                                        ? "selected-time-control-container"
+                                        : "time-control-container"
+                                }
+                                onClick={() => {
+                                    handleTimeControlClick(timeControlInfo);
+                                }}
                             >
                                 <p>
                                     {convertTimeControlTime(
@@ -32,8 +54,8 @@ function TimeControlSelection({ timeControlType }) {
                             </div>
                         );
 
-						return timeControlElement
-					})}
+                        return timeControlElement;
+                    })}
                 </div>
             );
 
@@ -41,10 +63,20 @@ function TimeControlSelection({ timeControlType }) {
             return (
                 <div className="time-controls-container">
                     {blitzTimeControls.map((timeControlInfo) => {
-						const timeControlElement = (
+                        const timeControlElement = (
                             <div
                                 key={timeControlInfo.id}
-                                className="time-control-container"
+                                className={
+                                    compareObjects(
+                                        timeControlInfo,
+                                        selectedTimeControl
+                                    )
+                                        ? "selected-time-control-container"
+                                        : "time-control-container"
+                                }
+                                onClick={() => {
+                                    handleTimeControlClick(timeControlInfo);
+                                }}
                             >
                                 <p>
                                     {convertTimeControlTime(
@@ -58,8 +90,8 @@ function TimeControlSelection({ timeControlType }) {
                             </div>
                         );
 
-						return timeControlElement
-					})}
+                        return timeControlElement;
+                    })}
                 </div>
             );
 
@@ -70,7 +102,17 @@ function TimeControlSelection({ timeControlType }) {
                         const timeControlElement = (
                             <div
                                 key={timeControlInfo.id}
-                                className="time-control-container"
+                                className={
+                                    compareObjects(
+                                        timeControlInfo,
+                                        selectedTimeControl
+                                    )
+                                        ? "selected-time-control-container"
+                                        : "time-control-container"
+                                }
+                                onClick={() => {
+                                    handleTimeControlClick(timeControlInfo);
+                                }}
                             >
                                 <p>
                                     {convertTimeControlTime(
@@ -84,7 +126,7 @@ function TimeControlSelection({ timeControlType }) {
                             </div>
                         );
 
-						return timeControlElement;
+                        return timeControlElement;
                     })}
                 </div>
             );
@@ -96,7 +138,17 @@ function TimeControlSelection({ timeControlType }) {
                         const timeControlElement = (
                             <div
                                 key={timeControlInfo.id}
-                                className="time-control-container"
+                                className={
+                                    compareObjects(
+                                        timeControlInfo,
+                                        selectedTimeControl
+                                    )
+                                        ? "selected-time-control-container"
+                                        : "time-control-container"
+                                }
+                                onClick={() => {
+                                    handleTimeControlClick(timeControlInfo);
+                                }}
                             >
                                 <p>
                                     {convertTimeControlTime(

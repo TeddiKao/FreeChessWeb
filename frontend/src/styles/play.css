@@ -1,67 +1,111 @@
 .playing-interface-container {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 
-	position: absolute;
-	left: 15%;
+    position: absolute;
+    left: 15%;
 
-	margin-top: 20px;
+    margin-top: 20px;
 }
 
 .display-chessboard-container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .time-control-selection-container {
-	display: flex;
-	flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-	margin-left: 24px;
+    margin-left: 24px;
 
-	box-shadow: 5px 5px 10px hsl(0, 0%, 60%);
+    box-shadow: 5px 5px 10px hsl(0, 0%, 60%);
 
-	padding-top: 16px;
-	padding-bottom: 16px;
-	padding-left: 16px;
-	padding-right: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
 
-	border-radius: 8px;
+    border-radius: 8px;
 }
 
 .time-control-type-container {
-	display: flex;
-	flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .time-control-type-container div {
-	background-color: hsl(0, 0%, 85%);
-	margin-bottom: 8px;
+    background-color: hsl(0, 0%, 85%);
+    margin-bottom: 8px;
 
-	padding: 12px;
+    padding: 12px;
 
-	border-radius: 8px;
+    border-radius: 8px;
 }
 
 .time-control-type-container div:hover {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .time-control-type-container div h1 {
-	margin-top: 4px;
-	margin-bottom: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
 
-	font-size: 1.5rem
+    font-size: 1.5rem;
 }
 
 .time-control-type-container div p {
-	margin-bottom: 4px;
-	margin-top: 4px;
+    margin-bottom: 4px;
+    margin-top: 4px;
+}
+
+.time-control-type-header {
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .time-controls-container {
-	display: grid;
-	grid-template-columns: 100px 100px 100px;
+    display: grid;
+    grid-template-columns: 100px 100px 100px;
+}
+
+.time-control-container p,
+.selected-time-control-container p {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: 4px;
+    margin-right: 4px;
+
+    padding-top: 8px;
+    padding-bottom: 8px;
+
+    text-align: center;
+
+    background-color: hsl(0, 0%, 85%);
+}
+
+.time-control-container p:hover,
+.selected-time-control-container p:hover {
+    cursor: pointer;
+}
+
+.selected-time-control-container {
+	background-color: hsl(200, 100%, 50%);
+}
+
+.continue-button {
+    padding-top: 8px;
+    padding-bottom: 8px;
+
+    width: 100%;
+
+    margin-top: 8px;
+
+    background-color: var(--accent-color);
+    color: white;
+
+    border: none;
+    border-radius: 4px;
 }

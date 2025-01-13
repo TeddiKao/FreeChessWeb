@@ -7,12 +7,7 @@ import Timer from "../../pageComponents/gameplay/Timer.jsx";
 import "../../styles/play.css";
 
 import { capitaliseFirstLetter, fetchFen } from "../../utils.js";
-import {
-    bulletTimeControls,
-    blitzTimeControls,
-    rapidTimeControls,
-    classicalTimeControls,
-} from "../../constants/timeControls.js";
+
 import TimeControlSelection from "../../pageComponents/gameplay/TimeControlSelection.jsx";
 
 function Play() {
@@ -21,6 +16,7 @@ function Play() {
         useState("typeSelection");
 
     const [selectedTimeControlType, setSelectedTimeControlType] = useState("");
+    const [selectedTimeControl, setSelectedTimeControl] = useState("");
 
     useEffect(() => {
         getParsedFEN();
@@ -73,7 +69,7 @@ function Play() {
 
                         <TimeControlTypeContainer
                             timeControlName="Rapid"
-                            timeControlDescription={classicalDescription}
+                            timeControlDescription={rapidDescription}
                             setSelectionStage={setTimeControlSelectionStage}
                             setType={setSelectedTimeControlType}
                         />
@@ -97,14 +93,24 @@ function Play() {
             case "amountSelection":
                 const timeControlType = selectedTimeControlType.toLowerCase();
                 return (
-                    <>
-                        <h1>{capitaliseFirstLetter(timeControlType)}</h1>
+                    <div className="time-control-amount-selection-container">
+                        <h1 className="time-control-type-header">
+                            {capitaliseFirstLetter(timeControlType)}
+                        </h1>
                         <div className="time-control-amount-container">
                             <TimeControlSelection
                                 timeControlType={timeControlType}
+                                selectedTimeControl={selectedTimeControl}
+                                setTimeControl={setSelectedTimeControl}
                             />
                         </div>
-                    </>
+
+                        {selectedTimeControl ? (
+                            <button className="continue-button">
+                                Continue
+                            </button>
+                        ) : null}
+                    </div>
                 );
 
             case "startConfirmation":
