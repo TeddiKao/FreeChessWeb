@@ -3,7 +3,7 @@ import api from "./api.js";
 import _, { floor } from "lodash"
 
 function clearSquaresStyling() {
-    for (let square = 1; square <= 64; square++) {
+    for (let square = 0; square <= 63; square++) {
         const squareElement = document.getElementById(`${square}`);
         if (squareElement) {
             squareElement.classList.remove("legal-square");
