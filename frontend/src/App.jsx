@@ -58,7 +58,7 @@ function App() {
                         />
 
                         <Route
-                            path="/play"
+                            path="/select-time-control"
                             element={
                                 <ProtectedRoute>
                                     <Play />
