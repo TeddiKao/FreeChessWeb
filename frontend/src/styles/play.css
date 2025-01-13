@@ -82,17 +82,20 @@
     padding-bottom: 8px;
 
     text-align: center;
+}
 
-    background-color: hsl(0, 0%, 85%);
+.time-control-container p {
+	background-color: hsl(0, 0%, 85%);
+}
+
+.selected-time-control-container p {
+	background-color: hsl(200, 100%, 50%);
+	color: white;
 }
 
 .time-control-container p:hover,
 .selected-time-control-container p:hover {
     cursor: pointer;
-}
-
-.selected-time-control-container {
-	background-color: hsl(200, 100%, 50%);
 }
 
 .continue-button {

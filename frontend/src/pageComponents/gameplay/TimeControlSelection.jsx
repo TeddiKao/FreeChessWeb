@@ -39,7 +39,7 @@ function TimeControlSelection({
             {timeControls.map(({ id, baseTime, increment }) => {
                 return (
                     <div
-                        key={timeControlInfo.id}
+                        key={id}
                         className={
                             compareObjects(
                                 {
