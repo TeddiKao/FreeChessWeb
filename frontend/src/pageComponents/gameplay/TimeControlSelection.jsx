@@ -59,10 +59,7 @@ function TimeControlSelection({
                         }}
                     >
                         <p>
-                            {displayTimeControl(
-                                convertTimeControlTime(baseTime),
-                                increment
-                            )}
+                            {displayTimeControl({ baseTime: baseTime, increment: increment})}
                         </p>
                     </div>
                 );
