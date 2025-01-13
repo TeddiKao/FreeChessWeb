@@ -1,23 +1,23 @@
-import axios from "axios"
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "./constants";
+import axios from "axios";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "./constants/tokens";
 
 const api = axios.create({
-	baseURL: import.meta.env.VITE_API_URL
-})
+    baseURL: import.meta.env.VITE_API_URL,
+});
 
 api.interceptors.request.use(
-	(config) => {
-		const accessToken = localStorage.getItem(ACCESS_TOKEN)
-		if (accessToken) {
-			config.headers.Authorization = `Bearer ${accessToken}`	
-		}
+    (config) => {
+        const accessToken = localStorage.getItem(ACCESS_TOKEN);
+        if (accessToken) {
+            config.headers.Authorization = `Bearer ${accessToken}`;
+        }
 
-		return config
-	},
-	
-	(error) => {
-		return Promise.reject(error)
-	}
-)
+        return config;
+    },
 
-export default api
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+export default api;

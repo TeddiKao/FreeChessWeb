@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import api from "../api.js";
 import "../styles/auth-form.css";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants.js";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants/tokens.js";
 import { useNavigate } from "react-router-dom";
 
 function AuthForm({ method }) {

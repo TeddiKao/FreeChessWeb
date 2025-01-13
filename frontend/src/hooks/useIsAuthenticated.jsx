@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import api from "../api.js";
 
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants/tokens.js";
 
 function useIsAuthenticated() {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
