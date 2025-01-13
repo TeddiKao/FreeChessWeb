@@ -5,6 +5,7 @@ import Timer from "../../pageComponents/gameplay/Timer.jsx";
 import "../../styles/play.css";
 import DisplayChessboard from "../../globalComponents/DisplayChessboard.jsx";
 import { fetchFen } from "../../utils.js";
+import TimeControlTypeContainer from "../../pageComponents/gameplay/TimeControlTypeContainer.jsx";
 
 function Play() {
     const [parsedFEN, setParsedFEN] = useState("");
@@ -22,53 +23,61 @@ function Play() {
         try {
             const parsedFEN = await fetchFen(startingPositionFEN);
             setParsedFEN(parsedFEN);
-
         } catch (error) {
             console.log(error);
         }
     }
 
     function renderTimeControlSelectionPanel() {
-        switch(timeControlSelectionStage) {
-            case "typeSelection": 
+        switch (timeControlSelectionStage) {
+            case "typeSelection":
+                const bulletDescription =
+                    "Great for users who enjoy fast-paced and exciting games";
+
+                const blitzDescription =
+                    "Great for practising new chess openings";
+                const rapidDescription =
+                    "The perfect balance of speed and strategy";
+                const classicalDescription =
+                    "Perfect for those with plenty of time to focus on a long game";
+
+                const customDescription =
+                    "Choose a time control that suits your mood and skill level";
+
                 return (
                     <div className="time-control-type-container">
-                        <div className="bullet">
-                            <h1>Bullet</h1>
-                            <p>Great for users who enjoy fast-paced and exciting games</p>
-                        </div>
+                        <TimeControlTypeContainer
+                            timeControlName="Bullet"
+                            timeControlDescription={bulletDescription}
+                        />
 
-                        <div className="blitz">
-                            <h1>Blitz</h1>
-                            <p>Great for practising new chess openings</p>
-                        </div>
+                        <TimeControlTypeContainer
+                            timeControlName="Blitz"
+                            timeControlDescription={blitzDescription}
+                        />
 
-                        <div className="rapid">
-                            <h1>Rapid</h1>
-                            <p>The perfect balance of speed and strategy</p>
-                        </div>
+                        <TimeControlTypeContainer
+                            timeControlName="Rapid"
+                            timeControlDescription={classicalDescription}
+                        />
 
-                        <div className="classical">
-                            <h1>Classical</h1>
-                            <p>Perfect for those with plenty of time to focus on a long game</p>
-                        </div>
+                        <TimeControlTypeContainer
+                            timeControlName="Classical"
+                            timeControlDescription={classicalDescription}
+                        />
 
-                        <div className="custom">
-                            <h1>Custom</h1>
-                            <p>Choose a time control that suits your mood and skill level</p>
-                        </div>
+                        <TimeControlTypeContainer
+                            timeControlName="Custom"
+                            timeControlDescription={customDescription}
+                        />
                     </div>
-                )
+                );
 
             case "amountSelection":
-                return (
-                    <div className="time-control-amount-container">
-
-                    </div>
-                )
+                return <div className="time-control-amount-container"></div>;
 
             case "startConfirmation":
-                <div className="start-confirmation-container"></div>
+                <div className="start-confirmation-container"></div>;
         }
     }
 
@@ -79,7 +88,7 @@ function Play() {
                     <Timer playerColor="black" position="top" />
                 </div>
 
-                <DisplayChessboard fenString={parsedFEN} orientation="White"/>
+                <DisplayChessboard fenString={parsedFEN} orientation="White" />
 
                 <div className="bottom-timer-wrapper">
                     <Timer playerColor="white" position="bottom" />
