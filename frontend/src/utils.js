@@ -1,6 +1,6 @@
 import api from "./api.js";
 
-const _ = require("lodash")
+import _ from "lodash"
 
 function clearSquaresStyling() {
     for (let square = 1; square <= 64; square++) {
@@ -19,7 +19,7 @@ function capitaliseFirstLetter(string) {
 }
 
 function compareObjects(objectA, objectB) {
-    return _.iseEqual(objectA, objectB);
+    return _.isEqual(objectA, objectB)
 }
 
 async function fetchLegalMoves(

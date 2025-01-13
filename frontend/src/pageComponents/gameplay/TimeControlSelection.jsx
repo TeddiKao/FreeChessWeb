@@ -22,151 +22,45 @@ function TimeControlSelection({
         });
     }
 
-    switch (timeControlType) {
-        case "bullet":
-            return (
-                <div className="time-controls-container">
-                    {bulletTimeControls.map((timeControlInfo) => {
-                        const timeControlElement = (
-                            <div
-                                key={timeControlInfo.id}
-                                className={
-                                    compareObjects(
-                                        timeControlInfo,
-                                        selectedTimeControl
-                                    )
-                                        ? "selected-time-control-container"
-                                        : "time-control-container"
-                                }
-                                onClick={() => {
-                                    handleTimeControlClick(timeControlInfo);
-                                }}
-                            >
-                                <p>
-                                    {convertTimeControlTime(
-                                        timeControlInfo.baseTime
-                                    )}
-                                    {" min "}
-                                    {timeControlInfo.increment > 0
-                                        ? `| ${timeControlInfo.increment}`
-                                        : null}
-                                </p>
-                            </div>
-                        );
-
-                        return timeControlElement;
-                    })}
-                </div>
-            );
-
-        case "blitz":
-            return (
-                <div className="time-controls-container">
-                    {blitzTimeControls.map((timeControlInfo) => {
-                        const timeControlElement = (
-                            <div
-                                key={timeControlInfo.id}
-                                className={
-                                    compareObjects(
-                                        timeControlInfo,
-                                        selectedTimeControl
-                                    )
-                                        ? "selected-time-control-container"
-                                        : "time-control-container"
-                                }
-                                onClick={() => {
-                                    handleTimeControlClick(timeControlInfo);
-                                }}
-                            >
-                                <p>
-                                    {convertTimeControlTime(
-                                        timeControlInfo.baseTime
-                                    )}
-                                    {" min "}
-                                    {timeControlInfo.increment > 0
-                                        ? `| ${timeControlInfo.increment}`
-                                        : null}
-                                </p>
-                            </div>
-                        );
-
-                        return timeControlElement;
-                    })}
-                </div>
-            );
-
-        case "rapid":
-            return (
-                <div className="time-controls-container">
-                    {rapidTimeControls.map((timeControlInfo) => {
-                        const timeControlElement = (
-                            <div
-                                key={timeControlInfo.id}
-                                className={
-                                    compareObjects(
-                                        timeControlInfo,
-                                        selectedTimeControl
-                                    )
-                                        ? "selected-time-control-container"
-                                        : "time-control-container"
-                                }
-                                onClick={() => {
-                                    handleTimeControlClick(timeControlInfo);
-                                }}
-                            >
-                                <p>
-                                    {convertTimeControlTime(
-                                        timeControlInfo.baseTime
-                                    )}
-                                    {" min "}
-                                    {timeControlInfo.increment > 0
-                                        ? `| ${timeControlInfo.increment}`
-                                        : null}
-                                </p>
-                            </div>
-                        );
-
-                        return timeControlElement;
-                    })}
-                </div>
-            );
-
-        case "classical":
-            return (
-                <div className="time-controls-container">
-                    {classicalTimeControls.map((timeControlInfo) => {
-                        const timeControlElement = (
-                            <div
-                                key={timeControlInfo.id}
-                                className={
-                                    compareObjects(
-                                        timeControlInfo,
-                                        selectedTimeControl
-                                    )
-                                        ? "selected-time-control-container"
-                                        : "time-control-container"
-                                }
-                                onClick={() => {
-                                    handleTimeControlClick(timeControlInfo);
-                                }}
-                            >
-                                <p>
-                                    {convertTimeControlTime(
-                                        timeControlInfo.baseTime
-                                    )}
-                                    {" min "}
-                                    {timeControlInfo.increment > 0
-                                        ? `| ${timeControlInfo.increment}`
-                                        : null}
-                                </p>
-                            </div>
-                        );
-
-                        return timeControlElement;
-                    })}
-                </div>
-            );
+    let timeControls = null;
+    console.log(timeControlType);
+    if (timeControlType === "bullet") {
+        timeControls = bulletTimeControls;
+    } else if (timeControlType === "blitz") {
+        timeControls = blitzTimeControls;
+    } else if (timeControlType === "rapid") {
+        timeControls = rapidTimeControls;
+    } else if (timeControlType === "classical") {
+        timeControls = classicalTimeControls;
     }
+
+    return (
+        <div className="time-controls-container">
+            {timeControls.map((timeControlInfo) => {
+                return (
+                    <div
+                        key={timeControlInfo.id}
+                        className={
+                            compareObjects(timeControlInfo, selectedTimeControl)
+                                ? "selected-time-control-container"
+                                : "time-control-container"
+                        }
+                        onClick={() => {
+                            handleTimeControlClick(timeControlInfo);
+                        }}
+                    >
+                        <p>
+                            {convertTimeControlTime(timeControlInfo.baseTime)}
+                            {" min "}
+                            {timeControlInfo.increment > 0
+                                ? `| ${timeControlInfo.increment}`
+                                : null}
+                        </p>
+                    </div>
+                );
+            })}
+        </div>
+    );
 }
 
 export default TimeControlSelection;
