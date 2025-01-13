@@ -1,5 +1,7 @@
 import api from "./api.js";
 
+const _ = require("lodash")
+
 function clearSquaresStyling() {
     for (let square = 1; square <= 64; square++) {
         const squareElement = document.getElementById(`${square}`);
