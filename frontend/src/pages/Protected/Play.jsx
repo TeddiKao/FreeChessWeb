@@ -39,9 +39,8 @@ function Play() {
     }
 
     function renderTimeControlSelectionPanel() {
-        console.log(timeControlSelectionStage)
+        console.log(timeControlSelectionStage);
         switch (timeControlSelectionStage) {
-
             case "typeSelection":
                 const bulletDescription =
                     "Great for users who enjoy fast-paced and exciting games";
@@ -97,35 +96,11 @@ function Play() {
 
             case "amountSelection":
                 const timeControlType = selectedTimeControlType.toLowerCase();
-                console.log(timeControlType);
-
-                if (timeControlType === "bullet") {
-                    return (
-                        <div className="time-control-amount-container">
-                            <TimeControlSelection timeControlType="bullet"/>
-                        </div>
-                    );
-
-                } else if (timeControlType === "blitz") {
-                    return (
-                        <div className="time-control-amount-container">
-                            <TimeControlSelection timeControlType="blitz"/>
-                        </div>
-                    );
-
-                } else if (timeControlType === "rapid") {
-                    return (
-                        <div className="time-control-amount-container">
-                            <TimeControlSelection timeControlType="rapid"/>
-                        </div>
-                    );
-                } else if (timeControlType === "classical") {
-                    return (
-                        <div className="time-control-amount-container">
-                            <TimeControlSelection timeControlType="classical"/>
-                        </div>
-                    );
-                }
+                return (
+                    <div className="time-control-amount-container">
+                        <TimeControlSelection timeControlType={timeControlType} />
+                    </div>
+                );
 
             case "startConfirmation":
                 <div className="start-confirmation-container"></div>;
