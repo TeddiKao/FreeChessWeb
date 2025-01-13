@@ -52,8 +52,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
             return;
         }
 
-        let moveIsLegal = null;
-
         const boardPlacementToValidate = parsedFENString["board_placement"];
         const squareInfoToValidate =
             boardPlacementToValidate[`${draggedSquare}`];
@@ -61,34 +59,13 @@ function Chessboard({ parsed_fen_string, orientation }) {
         const pieceTypeToValidate = squareInfoToValidate["piece_type"];
         const pieceColorToValidate = squareInfoToValidate["piece_color"];
 
-        try {
-            const response = await api
-                .post("/gameplay_api/validate-move/", {
-                    parsed_fen_string: parsedFENString,
-                    move_info: {
-                        piece_color: pieceColorToValidate,
-                        piece_type: pieceTypeToValidate,
-                        starting_square: `${draggedSquare}`,
-                        destination_square: `${droppedSquare}`,
-                    },
-                })
-                .catch(() => {
-                    setDraggedSquare(null);
-                    setDroppedSquare(null);
-
-                    return;
-                });
-
-            if (response.status === 200) {
-                moveIsLegal = response.data.is_valid;
-            }
-        } catch (error) {
-            console.log(error);
-            setDraggedSquare(null);
-            setDroppedSquare(null);
-
-            return;
-        }
+        const moveIsLegal = await fetchMoveIsValid(
+            parsedFENString,
+            pieceColorToValidate,
+            pieceTypeToValidate,
+            draggedSquare,
+            droppedSquare,
+        )
 
         if (!moveIsLegal) {
             setDraggedSquare(null);
@@ -169,8 +146,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
         const isMoveLegal = await fetchMoveIsValid(
             parsedFENString,
-            pieceTypeToValidate,
             pieceColorToValidate,
+            pieceTypeToValidate,
             previousClickedSquare,
             clickedSquare
         )

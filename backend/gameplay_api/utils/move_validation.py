@@ -329,6 +329,7 @@ def validate_move(current_fen, move_info):
 
 	elif move_info["piece_type"].lower() == "pawn":
 		legal_moves = get_pawn_legal_moves(current_fen["board_placement"], move_info)
+		print(f"Pawn legal moves: {legal_moves}")
 
 		move_is_valid = destination_square in legal_moves
 
