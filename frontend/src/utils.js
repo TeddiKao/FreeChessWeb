@@ -10,55 +10,68 @@ function clearSquaresStyling() {
 }
 
 function capitaliseFirstLetter(string) {
-	const firstLetter = string.charAt(0).toUpperCase();
-	const remainingLetters = string.slice(1);
+    const firstLetter = string.charAt(0).toUpperCase();
+    const remainingLetters = string.slice(1);
 
-	return `${firstLetter}${remainingLetters}`
+    return `${firstLetter}${remainingLetters}`;
 }
 
-async function fetchLegalMoves(parsedFENString, pieceType, pieceColor, startingSquare) {
-	let legalMoves = [];
-	
-	try {
-		const response = await api.post("/gameplay_api/show-legal-moves", {
-			parsed_fen_string: parsedFENString,
+function compareObjects(objectA, objectB) {
+    return _.iseEqual(objectA, objectB);
+}
+
+async function fetchLegalMoves(
+    parsedFENString,
+    pieceType,
+    pieceColor,
+    startingSquare
+) {
+    let legalMoves = [];
+
+    try {
+        const response = await api.post("/gameplay_api/show-legal-moves", {
+            parsed_fen_string: parsedFENString,
             move_info: {
                 piece_color: pieceColor,
                 piece_type: pieceType,
                 starting_square: startingSquare,
             },
-		})
+        });
 
-		if (response.status === 200) {
-			legalMoves = response.data;
-		}
+        if (response.status === 200) {
+            legalMoves = response.data;
+        }
+    } catch (error) {
+        console.log(error);
+    }
 
-	} catch (error) {
-		console.log(error);
-	}
-
-	return legalMoves;
+    return legalMoves;
 }
 
 async function fetchFen(rawFenString) {
     let parsedFen = null;
 
     try {
-		const response = await api.get("/gameplay_api/parse-fen/", {
-			params: {
-				raw_fen_string: rawFenString,
-			},
-		})
-		
-		parsedFen = response.data
-		console.log(parsedFen)
+        const response = await api.get("/gameplay_api/parse-fen/", {
+            params: {
+                raw_fen_string: rawFenString,
+            },
+        });
 
-	} catch (error) {
-		console.log(error);
-	}
+        parsedFen = response.data;
+        console.log(parsedFen);
+    } catch (error) {
+        console.log(error);
+    }
 
-	console.log(parsedFen)
-    return parsedFen
+    console.log(parsedFen);
+    return parsedFen;
 }
 
-export { clearSquaresStyling, fetchFen, fetchLegalMoves, capitaliseFirstLetter };
+export {
+    clearSquaresStyling,
+    fetchFen,
+    fetchLegalMoves,
+    capitaliseFirstLetter,
+    compareObjects,
+};
