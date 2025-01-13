@@ -9,6 +9,13 @@ function clearSquaresStyling() {
     }
 }
 
+function capitaliseFirstLetter(string) {
+	const firstLetter = string.charAt(0).toUpperCase();
+	const remainingLetters = string.slice(1);
+
+	return `${firstLetter}${remainingLetters}`
+}
+
 async function fetchLegalMoves(parsedFENString, pieceType, pieceColor, startingSquare) {
 	let legalMoves = [];
 	
@@ -54,4 +61,4 @@ async function fetchFen(rawFenString) {
     return parsedFen
 }
 
-export { clearSquaresStyling, fetchFen, fetchLegalMoves };
+export { clearSquaresStyling, fetchFen, fetchLegalMoves, capitaliseFirstLetter };

@@ -6,7 +6,7 @@ import Timer from "../../pageComponents/gameplay/Timer.jsx";
 
 import "../../styles/play.css";
 
-import { fetchFen } from "../../utils.js";
+import { capitaliseFirstLetter, fetchFen } from "../../utils.js";
 import {
     bulletTimeControls,
     blitzTimeControls,
@@ -98,7 +98,7 @@ function Play() {
                 const timeControlType = selectedTimeControlType.toLowerCase();
                 return (
                     <>
-                        <h1>{timeControlType}</h1>
+                        <h1>{capitaliseFirstLetter(timeControlType)}</h1>
                         <div className="time-control-amount-container">
                             <TimeControlSelection
                                 timeControlType={timeControlType}
