@@ -36,24 +36,33 @@ function TimeControlSelection({
 
     return (
         <div className="time-controls-container">
-            {timeControls.map((timeControlInfo) => {
+            {timeControls.map(({ id, baseTime, increment }) => {
                 return (
                     <div
                         key={timeControlInfo.id}
                         className={
-                            compareObjects(timeControlInfo, selectedTimeControl)
+                            compareObjects(
+                                {
+                                    baseTime: baseTime,
+                                    increment: increment,
+                                },
+                                selectedTimeControl
+                            )
                                 ? "selected-time-control-container"
                                 : "time-control-container"
                         }
                         onClick={() => {
-                            handleTimeControlClick(timeControlInfo);
+                            handleTimeControlClick({
+                                baseTime: baseTime,
+                                increment: increment,
+                            });
                         }}
                     >
                         <p>
-                            {convertTimeControlTime(timeControlInfo.baseTime)}
+                            {convertTimeControlTime(baseTime)}
                             {" min "}
-                            {timeControlInfo.increment > 0
-                                ? `| ${timeControlInfo.increment}`
+                            {increment > 0
+                                ? `| ${increment}`
                                 : null}
                         </p>
                     </div>
