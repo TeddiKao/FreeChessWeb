@@ -12,6 +12,8 @@ function Play() {
     const [timeControlSelectionStage, setTimeControlSelectionStage] =
         useState("typeSelection");
 
+    const [selectedTimeControlType, setSelectedTimeControlType] = useState("");
+
     useEffect(() => {
         getParsedFEN();
     }, []);
@@ -49,26 +51,36 @@ function Play() {
                         <TimeControlTypeContainer
                             timeControlName="Bullet"
                             timeControlDescription={bulletDescription}
+                            setSelectionStage={setTimeControlSelectionStage}
+                            setType={setSelectedTimeControlType}
                         />
 
                         <TimeControlTypeContainer
                             timeControlName="Blitz"
                             timeControlDescription={blitzDescription}
+                            setSelectionStage={setTimeControlSelectionStage}
+                            setType={setSelectedTimeControlType}
                         />
 
                         <TimeControlTypeContainer
                             timeControlName="Rapid"
                             timeControlDescription={classicalDescription}
+                            setSelectionStage={setTimeControlSelectionStage}
+                            setType={setSelectedTimeControlType}
                         />
 
                         <TimeControlTypeContainer
                             timeControlName="Classical"
                             timeControlDescription={classicalDescription}
+                            setSelectionStage={setTimeControlSelectionStage}
+                            setType={setSelectedTimeControlType}
                         />
 
                         <TimeControlTypeContainer
                             timeControlName="Custom"
                             timeControlDescription={customDescription}
+                            setSelectionStage={setTimeControlSelectionStage}
+                            setType={setSelectedTimeControlType}
                         />
                     </div>
                 );
