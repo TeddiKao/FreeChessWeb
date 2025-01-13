@@ -9,7 +9,7 @@ import Signup from "./pages/Signup.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 import Dashboard from "./pages/Protected/Dashboard.jsx";
-import Play from "./pages/Protected/Play.jsx";
+import SelectTimeControl from "./pages/Protected/SelectTimeControl.jsx";
 
 import "./styles/global.css";
 
@@ -61,7 +61,7 @@ function App() {
                             path="/select-time-control"
                             element={
                                 <ProtectedRoute>
-                                    <Play />
+                                    <SelectTimeControl />
                                 </ProtectedRoute>
                             }
                         />
