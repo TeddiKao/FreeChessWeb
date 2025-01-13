@@ -6,58 +6,114 @@ import {
 } from "../../constants/timeControls.js";
 
 function TimeControlSelection({ timeControlType }) {
-	function convertTimeControlTime(time) {
-		return time / 60
-	}
+    function convertTimeControlTime(time) {
+        return time / 60;
+    }
 
     switch (timeControlType) {
         case "bullet":
-            return bulletTimeControls.map((timeControlInfo) => (
-                <div key={timeControlInfo.id} className="bullet-time-control">
-                    <p>
-                        {convertTimeControlTime(timeControlInfo.baseTime)}{" "}
-                        {timeControlInfo.increment > 0 ? (
-                            <p>| {timeControlInfo.increment}</p>
-                        ) : null}
-                    </p>
+            return (
+                <div className="time-controls-container">
+                    {bulletTimeControls.map((timeControlInfo) => {
+						const timeControlElement = (
+                            <div
+                                key={timeControlInfo.id}
+                                className="time-control-container"
+                            >
+                                <p>
+                                    {convertTimeControlTime(
+                                        timeControlInfo.baseTime
+                                    )}
+                                    {" min "}
+                                    {timeControlInfo.increment > 0
+                                        ? `| ${timeControlInfo.increment}`
+                                        : null}
+                                </p>
+                            </div>
+                        );
+
+						return timeControlElement
+					})}
                 </div>
-            ));
+            );
 
         case "blitz":
-            return blitzTimeControls.map((timeControlInfo) => (
-                <div key={timeControlInfo.id} className="bullet-time-control">
-                    <p>
-                        {convertTimeControlTime(timeControlInfo.baseTime)}{" "}
-                        {timeControlInfo.increment > 0 ? (
-                            <p>| {timeControlInfo.increment}</p>
-                        ) : null}
-                    </p>
+            return (
+                <div className="time-controls-container">
+                    {blitzTimeControls.map((timeControlInfo) => {
+						const timeControlElement = (
+                            <div
+                                key={timeControlInfo.id}
+                                className="time-control-container"
+                            >
+                                <p>
+                                    {convertTimeControlTime(
+                                        timeControlInfo.baseTime
+                                    )}
+                                    {" min "}
+                                    {timeControlInfo.increment > 0
+                                        ? `| ${timeControlInfo.increment}`
+                                        : null}
+                                </p>
+                            </div>
+                        );
+
+						return timeControlElement
+					})}
                 </div>
-            ));
+            );
 
         case "rapid":
-            return rapidTimeControls.map((timeControlInfo) => (
-                <div key={timeControlInfo.id} className="bullet-time-control">
-                    <p>
-                        {convertTimeControlTime(timeControlInfo.baseTime)}{" "}
-                        {timeControlInfo.increment > 0 ? (
-                            <p>| {timeControlInfo.increment}</p>
-                        ) : null}
-                    </p>
+            return (
+                <div className="time-controls-container">
+                    {rapidTimeControls.map((timeControlInfo) => {
+                        const timeControlElement = (
+                            <div
+                                key={timeControlInfo.id}
+                                className="time-control-container"
+                            >
+                                <p>
+                                    {convertTimeControlTime(
+                                        timeControlInfo.baseTime
+                                    )}
+                                    {" min "}
+                                    {timeControlInfo.increment > 0
+                                        ? `| ${timeControlInfo.increment}`
+                                        : null}
+                                </p>
+                            </div>
+                        );
+
+						return timeControlElement;
+                    })}
                 </div>
-            ));
+            );
 
         case "classical":
-            return classicalTimeControls.map((timeControlInfo) => (
-                <div key={timeControlInfo.id} className="bullet-time-control">
-                    <p>
-                        {convertTimeControlTime(timeControlInfo.baseTime)}{" "}
-                        {timeControlInfo.increment > 0 ? (
-                            <p>| {timeControlInfo.increment}</p>
-                        ) : null}
-                    </p>
+            return (
+                <div className="time-controls-container">
+                    {classicalTimeControls.map((timeControlInfo) => {
+                        const timeControlElement = (
+                            <div
+                                key={timeControlInfo.id}
+                                className="time-control-container"
+                            >
+                                <p>
+                                    {convertTimeControlTime(
+                                        timeControlInfo.baseTime
+                                    )}
+                                    {" min "}
+                                    {timeControlInfo.increment > 0
+                                        ? `| ${timeControlInfo.increment}`
+                                        : null}
+                                </p>
+                            </div>
+                        );
+
+                        return timeControlElement;
+                    })}
                 </div>
-            ));
+            );
     }
 }
 

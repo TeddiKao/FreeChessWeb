@@ -97,9 +97,14 @@ function Play() {
             case "amountSelection":
                 const timeControlType = selectedTimeControlType.toLowerCase();
                 return (
-                    <div className="time-control-amount-container">
-                        <TimeControlSelection timeControlType={timeControlType} />
-                    </div>
+                    <>
+                        <h1>{timeControlType}</h1>
+                        <div className="time-control-amount-container">
+                            <TimeControlSelection
+                                timeControlType={timeControlType}
+                            />
+                        </div>
+                    </>
                 );
 
             case "startConfirmation":
