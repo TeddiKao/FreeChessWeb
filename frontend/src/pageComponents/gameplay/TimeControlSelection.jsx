@@ -4,7 +4,7 @@ import {
     classicalTimeControls,
     rapidTimeControls,
 } from "../../constants/timeControls.js";
-import { compareObjects } from "../../utils.js";
+import { compareObjects, displayTimeControl } from "../../utils.js";
 
 function TimeControlSelection({
     timeControlType,
@@ -23,7 +23,7 @@ function TimeControlSelection({
     }
 
     let timeControls = null;
-    console.log(timeControlType);
+
     if (timeControlType === "bullet") {
         timeControls = bulletTimeControls;
     } else if (timeControlType === "blitz") {
@@ -59,11 +59,10 @@ function TimeControlSelection({
                         }}
                     >
                         <p>
-                            {convertTimeControlTime(baseTime)}
-                            {" min "}
-                            {increment > 0
-                                ? `| ${increment}`
-                                : null}
+                            {displayTimeControl(
+                                convertTimeControlTime(baseTime),
+                                increment
+                            )}
                         </p>
                     </div>
                 );

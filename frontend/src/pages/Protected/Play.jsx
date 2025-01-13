@@ -106,7 +106,9 @@ function Play() {
                         </div>
 
                         {selectedTimeControl ? (
-                            <button className="continue-button">
+                            <button onClick={() => {
+                                setTimeControlSelectionStage("startConfirmation");
+                            }} className="continue-button">
                                 Continue
                             </button>
                         ) : null}
@@ -114,7 +116,9 @@ function Play() {
                 );
 
             case "startConfirmation":
-                <div className="start-confirmation-container"></div>;
+                <div className="start-confirmation-container">
+                    <p className="time-control"></p>
+                </div>;
         }
     }
 

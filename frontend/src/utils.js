@@ -22,6 +22,17 @@ function compareObjects(objectA, objectB) {
     return _.isEqual(objectA, objectB)
 }
 
+function convertTimeControlTime(time) {
+	return time / 60
+}
+
+function displayTimeControl(baseTime, increment) {
+	const baseTimeString = `${baseTime}`
+	const incrementString = increment > 0? `| ${increment}` : null
+
+	return `${baseTimeString} min ${incrementString}`
+}
+
 async function fetchLegalMoves(
     parsedFENString,
     pieceType,
@@ -76,4 +87,6 @@ export {
     fetchLegalMoves,
     capitaliseFirstLetter,
     compareObjects,
+	displayTimeControl,
+	convertTimeControlTime
 };
