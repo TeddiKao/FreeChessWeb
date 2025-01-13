@@ -13,6 +13,7 @@ import {
 } from "../../utils.js";
 
 import TimeControlSelection from "../../pageComponents/gameplay/TimeControlSelection.jsx";
+import { Link } from "react-router-dom";
 
 function SelectTimeControl() {
     const [parsedFEN, setParsedFEN] = useState("");
@@ -36,6 +37,10 @@ function SelectTimeControl() {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    function handleStartGame() {
+        <Link to="/play" state={selectedTimeControl}/>
     }
 
     function renderTimeControlSelectionPanel() {
@@ -139,7 +144,7 @@ function SelectTimeControl() {
     }
 
     return (
-        <div className="playing-interface-container">
+        <div className="time-control-selection-interface-container">
             <div className="display-chessboard-container">
                 <div className="top-timer-wrapper">
                     <Timer playerColor="black" position="top" />

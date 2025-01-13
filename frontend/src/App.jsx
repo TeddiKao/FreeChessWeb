@@ -15,6 +15,7 @@ import "./styles/global.css";
 
 import ProtectedRoute from "./globalComponents/ProtectedRoute.jsx";
 import AuthenticationRoute from "./globalComponents/AuthenticationRoute.jsx";
+import Play from "./pages/Protected/Play.jsx";
 
 function Logout() {
     localStorage.clear();
@@ -65,6 +66,12 @@ function App() {
                                 </ProtectedRoute>
                             }
                         />
+
+                        <Route path="/play" element={
+                            <ProtectedRoute>
+                                <Play/>
+                            </ProtectedRoute>
+                        }/>
 
                         <Route path="*" element={<NotFound />} />
                     </Routes>
