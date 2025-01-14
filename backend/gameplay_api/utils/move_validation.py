@@ -1,9 +1,8 @@
 import copy
 
 from .general import *
-from .get_king_is_in_check import is_king_in_check
-
 from .legal_move_helpers import *
+from .get_legal_moves import *
 
 def validate_move(current_fen, move_info):
 	board_placement = current_fen["board_placement"]
