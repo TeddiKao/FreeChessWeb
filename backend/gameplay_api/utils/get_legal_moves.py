@@ -1,10 +1,59 @@
 from .general import *
+from .legal_move_helpers import update_FEN
 
 piece_directions_mapping = {
     "rook": ["north", "south", "east", "west"],
     "bishop": ["northeast", "southeast", "northwest", "southwest"],
     "queen": ["north", "south", "east", "west", "northeast", "southeast", "northwest", "southwest"]
 }
+
+def get_legal_moves(move_info, current_fen):
+	
+	board_placement = current_fen["board_placement"]
+
+	sliding_pieces = ["queen", "rook", "bishop"]
+
+	if move_info["piece_type"].lower() == "king":
+		return get_king_legal_moves(board_placement, move_info)
+	
+	elif move_info["piece_type"].lower() in sliding_pieces:
+		return get_sliding_piece_legal_moves(board_placement, move_info)
+	
+	elif move_info["piece_type"].lower() == "knight":
+		return get_knight_legal_moves(board_placement, move_info)
+	
+	elif move_info["piece_type"].lower() == "pawn":
+		return get_pawn_legal_moves(board_placement, move_info)
+
+def is_king_in_check(current_fen, king_color, king_square):
+	attacked_squares = []
+
+	board_placement = current_fen["board_placement"]
+
+	for square in board_placement.keys():
+		piece_color = board_placement[square]["piece_color"]
+		piece_type = board_placement[square]["piece_type"]
+		current_square = square
+
+		if piece_color == king_color:
+			continue
+
+		if piece_type == "pawn":
+			attacked_squares += get_pawn_attacking_squares(current_square, piece_color)
+		else:
+			attacked_squares += get_legal_moves({
+				"piece_type": piece_type,
+				"piece_color": piece_color,
+				"starting_square": current_square
+			}, current_fen)
+
+	print(attacked_squares)
+	print(king_square)
+
+	if king_square in attacked_squares:
+		return True
+	else:
+		return False
 
 def get_legal_moves_in_direction(board_placement, start_square, directions, piece_color):
 	legal_squares = []

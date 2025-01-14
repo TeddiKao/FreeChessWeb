@@ -9,7 +9,7 @@ from django.db.models import Q
 from .models import ChessGame
 from .serializers import ChessGameSerializer
 from .utils import fen_parser, move_validation
-from .utils.common_functions import get_legal_moves
+from .utils.get_legal_moves import get_legal_moves
 
 # Create your views here.
 class ParseFENView(APIView):
