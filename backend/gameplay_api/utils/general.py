@@ -36,7 +36,7 @@ def get_pawn_attacking_squares(square, pawn_color):
 	else:
 		attacking_squares += [square + 9, square + 7]
 
-	cleaned_attacking_squares = copy.deepcopy(attacking_squares):
+	cleaned_attacking_squares = copy.deepcopy(attacking_squares)
 	for attacking_square in attacking_squares:
 		if abs(get_file(square) - get_file(attacking_square)) > 1:
 			cleaned_attacking_squares.remove(attacking_square)

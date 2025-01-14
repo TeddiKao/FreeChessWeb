@@ -47,6 +47,16 @@ class ValidateMoveView(APIView):
 		else:
 			return Response({"is_valid": False}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
+class GetIsKingInCheckView(APIView):
+	def post(self, request):
+		board_placement = request.data.get("board_placement")
+		king_color = request.data.get("king_color")
+		king_square = request.data.get("king_square")
+
+		is_king_in_check = move_validation.is_king_in_check(board_placement, king_color, king_square)
+		
+		return Response(is_king_in_check, status=status.HTTP_200_OK)
+
 class StartChessGameView(generics.CreateAPIView):
 	queryset = ChessGame.objects.all()
 	serializer_class = ChessGameSerializer

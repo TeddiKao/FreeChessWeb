@@ -130,7 +130,29 @@ async function fetchFen(rawFenString) {
     return parsedFen;
 }
 
+async function fetchKingIsInCheck(boardPlacement, kingColor, kingSquare) {
+    let isKingInCheck = false;
+
+    try {
+        const response = await api.post("/gameplay_api/get-king-is-in-check/", {
+            board_placement: boardPlacement,
+            king_color: kingColor,
+            king_square: kingSquare
+        })
+
+        if (response.status === 200) {
+            isKingInCheck = response.data
+        }
+
+    } catch {
+        console.log(error);
+    }
+
+    return isKingInCheck
+}
+
 export {
+    fetchKingIsInCheck,
     clearSquaresStyling,
     fetchFen,
     fetchLegalMoves,
