@@ -6,8 +6,11 @@ from .get_king_is_in_check import is_king_in_check
 from .legal_move_helpers import *
 
 def validate_move(current_fen, move_info):
-	print(f"Move info: {move_info}")
+	board_placement = current_fen["board_placement"]
+	piece_color = move_info["piece_color"]
+	piece_type = move_info["piece_type"]
 
+	starting_square = move_info["starting_square"]
 	destination_square = move_info["destination_square"]
 	sliding_pieces = ["queen", "rook", "bishop"]
 	
@@ -20,7 +23,7 @@ def validate_move(current_fen, move_info):
 
 	elif move_info["piece_type"].lower() == "pawn":
 		legal_moves = get_pawn_legal_moves(current_fen["board_placement"], move_info)
-		print(f"Pawn legal moves: {legal_moves}")
+		
 
 		move_is_valid = destination_square in legal_moves
 
@@ -34,7 +37,14 @@ def validate_move(current_fen, move_info):
 
 		move_is_valid = destination_square in legal_moves
 
-	# move_is_valid = not is_king_in_check(current_fen, move_info["piece_color"], get_king_position(current_fen["board_placement"], move_info["piece_color"]))
-	
+	updated_fen = copy.deepcopy(current_fen)
+	del updated_fen["board_placement"][starting_square]
+	updated_fen["board_placement"][destination_square] = {
+		"piece_type": piece_type,
+		"piece_color": piece_color
+	}
+
+	king_in_check = is_king_in_check(updated_fen, piece_color, get_king_position(updated_fen["board_placement"], piece_color))
+	move_is_valid = not king_in_check
 
 	return move_is_valid

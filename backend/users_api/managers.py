@@ -13,5 +13,5 @@ class CustomUserManager(BaseUserManager):
 		user.set_password(password)
 		user.save()
 
-		print("User has been saved")
+		
 		return user

@@ -43,7 +43,9 @@ def get_pawn_attacking_squares(square, pawn_color):
 
 def get_king_position(board_placement, king_color):
 	for square in board_placement.keys():
-		if board_placement[square]["piece_color"] == king_color:
-			if board_placement[square]["piece_type"] == "king":
+		if board_placement[square]["piece_color"].lower() == king_color.lower():
+			if board_placement[square]["piece_type"].lower() == "king":
 				return square
 
+def get_opposite_color(color):
+	return "Black" if color == "White" else "White"

@@ -28,7 +28,7 @@ class ShowLegalMoveView(APIView):
 		move_info = request.data.get("move_info")
 
 		legal_moves = show_legal_moves.get_legal_moves(move_info, current_fen)
-		print(f"Legal moves: {legal_moves}")
+		
 
 		return Response(legal_moves, status=status.HTTP_200_OK)
 
@@ -37,7 +37,7 @@ class ValidateMoveView(APIView):
 
 	def post(self, request):
 		move_info = request.data.get("move_info")
-		print(f"Sent move info {move_info}" )
+		
 		# The user must send a parsed FEN string and not the raw FEN string
 		parsed_fen_string = request.data.get("parsed_fen_string")
 		is_move_valid = not not move_validation.validate_move(parsed_fen_string, move_info)
@@ -67,6 +67,7 @@ class StartChessGameView(generics.CreateAPIView):
 			serializer.save()
 		else:
 			print(serializer.errors)
+			
 
 class UpdateChessGameView(generics.UpdateAPIView):
 	def get_queryset(self):

@@ -9,7 +9,7 @@ piece_directions_mapping = {
 }
 
 def get_legal_moves_in_direction(board_placement, start_square, directions, piece_color):
-	print(f"List of directions: {directions}")
+	
 	
 	legal_squares = []
 	
@@ -17,11 +17,11 @@ def get_legal_moves_in_direction(board_placement, start_square, directions, piec
 	piece_rank = get_row(start_square)
 
 	for direction in directions:
-		print(direction)
+		
 
 		if direction == "north":
 			for rank in range(piece_rank + 1, 8):
-				print(rank)
+				
 
 				square = f"{get_square(piece_file, rank)}"
 				if square == start_square:
@@ -37,10 +37,10 @@ def get_legal_moves_in_direction(board_placement, start_square, directions, piec
 				legal_squares.append(square)
 
 		elif direction == "south":
-			print(piece_rank)
+			
 
 			for rank in range(piece_rank - 1, -1, -1):
-				print(rank)
+				
 				square = f"{get_square(piece_file, rank)}"
 
 				if square in board_placement:
@@ -53,10 +53,10 @@ def get_legal_moves_in_direction(board_placement, start_square, directions, piec
 				legal_squares.append(square)
 
 		elif direction == "east":
-			print(f"File {piece_file}")
+			
 
 			for file in range(piece_file + 1, 8):
-				print(file)
+				
 				square = f"{get_square(file, piece_rank)}"
 
 				if square in board_placement:
@@ -190,7 +190,7 @@ def get_pawn_legal_moves(board_placement, move_info):
 	legal_squares = []
 
 	starting_square = move_info["starting_square"]
-	print(f"Starting square: {starting_square}")
+	
 
 	piece_color = move_info["piece_color"]
 
@@ -208,7 +208,7 @@ def get_pawn_legal_moves(board_placement, move_info):
 		
 		legal_squares.append(f"{int(starting_square) + 8}")
 
-		print(starting_square)
+		
 
 		if get_row(starting_square) == 1:
 			if f"{int(starting_square) + 16}" in board_placement:
@@ -260,7 +260,7 @@ def get_king_legal_moves(board_placement, move_info):
 				cleaned_legal_moves.remove(f"{legal_move}")
 
 	for legal_move in legal_moves:
-		print(legal_moves)
+		
 		if abs(get_file(f"{legal_move}") - get_file(starting_square)) > 1:
 			cleaned_legal_moves.remove(f"{legal_move}")
 			continue
@@ -286,24 +286,24 @@ def get_knight_legal_moves(board_placement, move_info):
 	]
 
 	cleaned_legal_moves = copy.deepcopy(legal_moves)
-	print(legal_moves, cleaned_legal_moves)
+	
 
 	for legal_move in legal_moves:
 		if f"{legal_move}" in board_placement:
-			print(board_placement[f"{legal_move}"]["piece_color"].lower())
-			print(move_info["piece_color"])
+			
+			
 			
 			if board_placement[f"{legal_move}"]["piece_color"].lower() == move_info["piece_color"].lower():
-				print(f"{legal_move}", cleaned_legal_moves)
-				print(f"{legal_move}" in cleaned_legal_moves)
+				
+				
 				cleaned_legal_moves.remove(f"{legal_move}")
 
 	for legal_move in legal_moves:
 		if abs(get_file(f"{legal_move}") - get_file(f"{starting_square}")) > 2:
 			if legal_move in cleaned_legal_moves:
-				print(f"{legal_move}")
+				
 			
-				print(f"Inside: {f"{legal_move}" in cleaned_legal_moves}")
+				
 				cleaned_legal_moves.remove(f"{legal_move}")
 				continue
 

@@ -15,13 +15,16 @@ def is_king_in_check(current_fen, king_color, king_square):
 			continue
 
 		if piece_type == "pawn":
-			attacked_squares += get_pawn_attacking_squares(square, piece_color)
+			attacked_squares += get_pawn_attacking_squares(current_square, piece_color)
 		else:
 			attacked_squares += get_legal_moves({
 				"piece_type": piece_type,
 				"piece_color": piece_color,
-				"starting_square": square
-			}, board_placement)
+				"starting_square": current_square
+			}, current_fen)
+
+	print(attacked_squares)
+	print(king_square)
 
 	if king_square in attacked_squares:
 		return True
