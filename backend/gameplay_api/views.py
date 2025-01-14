@@ -8,7 +8,7 @@ from django.db.models import Q
 
 from .models import ChessGame
 from .serializers import ChessGameSerializer
-from .utils import fen_parser, move_validation, show_legal_moves
+from .utils import fen_parser, move_validation, show_legal_moves, get_king_is_in_check
 
 # Create your views here.
 class ParseFENView(APIView):
@@ -53,7 +53,7 @@ class GetIsKingInCheckView(APIView):
 		king_color = request.data.get("king_color")
 		king_square = request.data.get("king_square")
 
-		is_king_in_check = move_validation.is_king_in_check(board_placement, king_color, king_square)
+		is_king_in_check = get_king_is_in_check.is_king_in_check(board_placement, king_color, king_square)
 		
 		return Response(is_king_in_check, status=status.HTTP_200_OK)
 
