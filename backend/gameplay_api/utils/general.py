@@ -1,4 +1,7 @@
 import math
+import copy
+
+from .show_legal_moves import get_legal_moves
 
 def get_row(square):
 	return math.ceil((int(square) + 1) / 8) - 1
@@ -24,3 +27,39 @@ def is_on_same_diagonal(square1, square2):
 	square2_rank = get_row(square2)
 
 	return abs(square1_file - square2_file) == abs(square1_rank - square2_rank)
+
+def get_pawn_attacking_squares(square, pawn_color):
+	attacking_squares = []
+
+	if pawn_color == "black":
+		attacking_squares += [square - 9, square - 7]
+	else:
+		attacking_squares += [square + 9, square + 7]
+
+	cleaned_attacking_squares = copy.deepcopy(attacking_squares):
+	for attacking_square in attacking_squares:
+		if abs(get_file(square) - get_file(attacking_square)) > 1:
+			cleaned_attacking_squares.remove(attacking_square)
+
+	return cleaned_attacking_squares
+
+def is_king_in_check(board_placement, king_color, king_square):
+	attacked_squares = [];
+
+	for square in board_placement.keys():
+		piece_color = board_placement[square]["piece_color"]
+		piece_type = board_placement[square]["piece_type"]
+		current_square = square
+
+		if not piece_color == king_color:
+			continue
+
+		if piece_type == "pawn":
+			attacked_squares += get_pawn_attacking_squares(square, piece_color)
+		else:
+			attacked_squares += get_legal_moves(current_square)	
+
+	if king_square in attacked_squares:
+		return True
+	else:
+		return False
