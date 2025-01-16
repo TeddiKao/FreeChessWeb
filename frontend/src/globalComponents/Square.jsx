@@ -34,14 +34,11 @@ function Square({
     }));
 
     function handleOnDrop(droppedSquare) {
-        console.log("Dropped")
-
         setDraggedSquare(startingSquare)
         setDroppedSquare(droppedSquare);
     }
 
     function handleOnDrag(squareDragged) {
-        console.log("Dragged")
         setDraggedSquare(squareDragged)
     }
 
@@ -61,7 +58,7 @@ function Square({
                         handleOnDrag(squareNumber);
                     }}
                     className="piece-image"
-                    src={`../../public/${pieceColor.toLowerCase()}${pieceType}.svg`}
+                    src={`/${pieceColor.toLowerCase()}${pieceType}.svg`}
                 />
             ) : null}
         </div>

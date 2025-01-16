@@ -37,7 +37,7 @@ function DisplayChessboard({ fenString, orientation }) {
 
 					squareElements.push(
 						<div id={square} className={`chessboard-square ${squareColor}`}>
-                            <img src={`../../public/${pieceColor}${pieceType}.svg`} className="piece-image"/>
+                            <img src={`/${pieceColor}${pieceType}.svg`} className="piece-image"/>
                         </div>
 					)
                 } else {
