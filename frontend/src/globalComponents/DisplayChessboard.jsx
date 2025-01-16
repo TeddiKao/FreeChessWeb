@@ -36,13 +36,13 @@ function DisplayChessboard({ fenString, orientation }) {
                     const pieceColor = boardPlacement[`${square - 1}`]["piece_color"].toLowerCase();
 
 					squareElements.push(
-						<div id={square} className={`chessboard-square ${squareColor}`}>
+						<div key={square} id={square} className={`chessboard-square ${squareColor}`}>
                             <img src={`/${pieceColor}${pieceType}.svg`} className="piece-image"/>
                         </div>
 					)
                 } else {
                     squareElements.push(
-                        <div id={square} className={`chessboard-square ${squareColor}`}></div>
+                        <div key={square} id={square} className={`chessboard-square ${squareColor}`}></div>
                     )
                 }
             }
