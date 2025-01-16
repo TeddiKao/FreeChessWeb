@@ -250,8 +250,11 @@ def get_pawn_legal_moves(board_placement, move_info):
 
 	return legal_squares
 
-def get_king_legal_moves(board_placement, move_info):
+def get_king_legal_moves(board_placement, castling_rights, move_info):
+	legal_moves = []
+
 	starting_square = move_info["starting_square"]
+	piece_color = move_info["piece_color"]
 
 	left_square = f"{int(starting_square) + 1}"
 	right_square = f"{int(starting_square) - 1}"
@@ -262,7 +265,31 @@ def get_king_legal_moves(board_placement, move_info):
 	down_left_square = f"{int(starting_square) - 7}"
 	down_right_square = f"{int(starting_square) - 9}"
 
-	legal_moves = [left_square, right_square, up_square, down_square, up_left_square, up_right_square, down_left_square, down_right_square]
+
+	castle_queenside_middle_square = f"{int(starting_square) - 1}"
+	castle_queenside_square = f"{int(starting_square) - 2}"
+
+	castle_kingside_middle_square = f"{int(starting_square) + 1}"
+	castle_kingside_square = f"{int(starting_square) + 2}"
+
+	if castling_rights[piece_color]["Queenside"]:
+		if castle_queenside_middle_square in board_placement:
+			castling_rights[piece_color]["Queenside"] = False
+
+		if castle_queenside_square in board_placement:
+			castling_rights[piece_color]["Queenside"] = False
+
+		legal_moves.append(castle_queenside_square)
+	else:
+		if castle_kingside_middle_square in board_placement:
+			castling_rights[piece_color]["Kingside"] = False
+
+		if castle_kingside_middle_square in board_placement:
+			castling_rights[piece_color]["Kingside"] = False
+
+		legal_moves.append(castle_kingside_square)
+
+	legal_moves += [left_square, right_square, up_square, down_square, up_left_square, up_right_square, down_left_square, down_right_square]
 
 	cleaned_legal_moves = copy.deepcopy(legal_moves)
 

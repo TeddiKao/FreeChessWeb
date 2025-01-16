@@ -5,9 +5,8 @@ from .legal_move_helpers import *
 from .get_legal_moves import *
 
 def validate_move(current_fen, move_info):
-	
-
 	board_placement = current_fen["board_placement"]
+	castling_rights = current_fen["castling_rights"]
 
 	piece_color = move_info["piece_color"]
 	piece_type = move_info["piece_type"]
