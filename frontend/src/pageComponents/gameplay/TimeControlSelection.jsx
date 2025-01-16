@@ -6,7 +6,7 @@ import {
 } from "../../constants/timeControls.js";
 
 import { compareObjects } from "../../utils/generalUtils.js";
-import { displayTimeControl } from "../../utils/timeControlUtils.js";
+import { displayTimeControl } from "../../utils/timeUtils.js";
 
 function TimeControlSelection({
     timeControlType,
