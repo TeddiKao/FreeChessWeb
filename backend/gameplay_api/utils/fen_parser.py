@@ -21,11 +21,11 @@ def parse_board_placement(board_placement_string: str):
 			piece_color = "White" if character.isupper() else "Black"
 			piece_type = letter_to_piece_mapping[character.lower()]
 
-			
 
 			piece_placements[f"{current_square}"] = {
 				"piece_color": piece_color,
-				"piece_type": piece_type
+				"piece_type": piece_type,
+				"starting_square": current_square
 			}
 
 			if current_file < 7:
