@@ -1,11 +1,11 @@
-import { Navigate, useLocation, useNavigate } from "react-router-dom"
+import { Navigate, useLocation } from "react-router-dom"
 
 import Chessboard from "../../globalComponents/Chessboard";
 import Timer from "../../pageComponents/gameplay/Timer.jsx";
 
 import "../../styles/play.css"
 
-import { fetchFen } from "../../utils.js";
+import { fetchFen } from "../../utils/apiUtils.js";
 
 import React, {useEffect, useState} from "react";
 

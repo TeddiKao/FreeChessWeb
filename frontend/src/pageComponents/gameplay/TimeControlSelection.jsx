@@ -4,17 +4,15 @@ import {
     classicalTimeControls,
     rapidTimeControls,
 } from "../../constants/timeControls.js";
-import { compareObjects, displayTimeControl } from "../../utils.js";
+
+import { compareObjects } from "../../utils/generalUtils.js";
+import { displayTimeControl } from "../../utils/timeControlUtils.js";
 
 function TimeControlSelection({
     timeControlType,
     selectedTimeControl,
     setTimeControl,
 }) {
-    function convertTimeControlTime(time) {
-        return time / 60;
-    }
-
     function handleTimeControlClick(timeControlInfo) {
         setTimeControl({
             baseTime: timeControlInfo.baseTime,

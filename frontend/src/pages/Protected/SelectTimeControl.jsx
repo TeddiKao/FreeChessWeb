@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 
 import DisplayChessboard from "../../globalComponents/DisplayChessboard.jsx";
+
 import TimeControlTypeContainer from "../../pageComponents/gameplay/TimeControlTypeContainer.jsx";
 import Timer from "../../pageComponents/gameplay/Timer.jsx";
+import TimeControlSelection from "../../pageComponents/gameplay/TimeControlSelection.jsx";
 
 import "../../styles/select-time-control.css";
 
-import {
-    capitaliseFirstLetter,
-    displayTimeControl,
-    fetchFen,
-} from "../../utils.js";
+import { capitaliseFirstLetter } from "../../utils/generalUtils.js";
+import { displayTimeControl } from "../../utils/timeUtils.js";
+import { fetchFen } from "../../utils/apiUtils.js";
 
-import TimeControlSelection from "../../pageComponents/gameplay/TimeControlSelection.jsx";
 import { Link } from "react-router-dom";
 
 function SelectTimeControl() {

@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 
-import api from "../api.js";
-
 import "../styles/chessboard.css";
 import Square from "./Square";
 
-import { clearSquaresStyling, fetchLegalMoves, fetchMoveIsValid } from "../utils.js";
+import { clearSquaresStyling } from "../utils/boardUtils.js";
+import { fetchLegalMoves, fetchMoveIsValid } from "../utils/apiUtils.js";
 
 function Chessboard({ parsed_fen_string, orientation }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
