@@ -28,11 +28,11 @@ def is_on_same_diagonal(square1, square2):
 
 def get_pawn_attacking_squares(square, pawn_color):
 	attacking_squares = []
-
-	if pawn_color == "black":
-		attacking_squares += [square - 9, square - 7]
+	
+	if pawn_color.lower() == "black":
+		attacking_squares += [f"{int(square) - 9}", f"{int(square) - 7}"]
 	else:
-		attacking_squares += [square + 9, square + 7]
+		attacking_squares += [f"{int(square) + 9}", f"{int(square) + 7}"]
 
 	cleaned_attacking_squares = copy.deepcopy(attacking_squares)
 	for attacking_square in attacking_squares:

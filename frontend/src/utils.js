@@ -87,7 +87,6 @@ async function fetchMoveIsValid(
     destination_square
 ) {
     let isMoveLegal = false;
-
     try {
         const response = await api.post("/gameplay_api/validate-move/", {
             parsed_fen_string: parsedFENString,

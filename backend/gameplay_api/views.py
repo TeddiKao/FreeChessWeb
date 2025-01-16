@@ -28,7 +28,9 @@ class ShowLegalMoveView(APIView):
 		current_fen = request.data.get("parsed_fen_string")
 		move_info = request.data.get("move_info")
 
-		legal_moves = get_legal_moves(move_info, current_fen)
+		
+
+		legal_moves = get_legal_moves(move_info, current_fen["board_placement"])
 		
 
 		return Response(legal_moves, status=status.HTTP_200_OK)
@@ -41,6 +43,7 @@ class ValidateMoveView(APIView):
 		
 		# The user must send a parsed FEN string and not the raw FEN string
 		parsed_fen_string = request.data.get("parsed_fen_string")
+		
 		is_move_valid = not not move_validation.validate_move(parsed_fen_string, move_info)
 		
 		if is_move_valid:

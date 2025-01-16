@@ -15,7 +15,9 @@ from datetime import timedelta
 from dotenv import load_dotenv
 
 import os
+import sys
 
+sys.setrecursionlimit(10000)
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
