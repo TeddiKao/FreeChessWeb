@@ -58,7 +58,6 @@ def get_legal_moves_in_direction(board_placement, start_square, directions, piec
 						break
 					else:
 						legal_squares.append(square)
-						
 						break
 
 				legal_squares.append(square)
