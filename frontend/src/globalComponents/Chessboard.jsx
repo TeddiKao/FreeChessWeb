@@ -5,6 +5,7 @@ import Square from "./Square";
 
 import { clearSquaresStyling } from "../utils/boardUtils.js";
 import { fetchLegalMoves, fetchMoveIsValid } from "../utils/apiUtils.js";
+import { capitaliseFirstLetter } from "../utils/generalUtils.js";
 
 function Chessboard({ parsed_fen_string, orientation }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
@@ -79,7 +80,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
             const pieceType = squareInfo["piece_type"];
             const pieceColor = squareInfo["piece_color"];
 
-            const newPiecePlacements = {
+            let newPiecePlacements = {
                 ...previousFENString,
                 board_placement: {
                     ...boardPlacement,
@@ -91,6 +92,19 @@ function Chessboard({ parsed_fen_string, orientation }) {
             };
 
             delete newPiecePlacements["board_placement"][`${draggedSquare}`];
+
+            if (pieceTypeToValidate.toLowerCase() === "king") {
+                newPiecePlacements = {
+                    ...newPiecePlacements,
+                    castling_rights: {
+                        ...newPiecePlacements[castling_rights],
+                        [capitaliseFirstLetter(pieceColorToValidate)]: {
+                            Kingside: false,
+                            Queenside: false,
+                        }
+                    }
+                }
+            }
 
             return newPiecePlacements;
         });
@@ -183,6 +197,10 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 `${previousClickedSquare}`
             ];
 
+            if (pieceTypeToValidate.toLowerCase() === "king") {
+                console.log("Do something with castling")
+            }
+
             return newBoardPlacements;
         });
 
@@ -192,7 +210,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
     async function displayLegalMoves(pieceType, pieceColor, startingSquare) {
         const legalMoves = await fetchLegalMoves(parsedFENString, pieceType, pieceColor, startingSquare);
-        console.log(legalMoves);
         if (!legalMoves) {
             return;
         }
