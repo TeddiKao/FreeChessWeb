@@ -8,6 +8,13 @@ piece_directions_mapping = {
     "queen": ["north", "south", "east", "west", "northeast", "southeast", "northwest", "southwest"]
 }
 
+direction_offset_mapping = {
+	"northwest": 7,
+	"northeast": 9,
+	"southwest": -9,
+	"southeast": -7,
+}
+
 def get_legal_moves(move_info, board_placement):
 	sliding_pieces = ["queen", "rook", "bishop"]
 
@@ -25,9 +32,47 @@ def get_legal_moves(move_info, board_placement):
 
 def is_king_in_check(board_placement, king_color, king_square):
 	attacked_squares = get_attacking_squares_of_color(get_opposite_color(king_color), board_placement)
-	
 
 	return king_square in attacked_squares
+
+def get_legal_moves_in_diagonal_direction(board_placement, move_info, piece_file, piece_rank, square_offset):
+	legal_squares = []
+	square = get_square(piece_file, piece_rank)
+
+	start_square = move_info["starting_square"]
+	piece_color = move_info["piece_color"]
+	
+	while True:
+		square += square_offset
+		if square < 0 or square > 63:
+			break
+
+		starting_square_info = {
+			"starting_square": start_square,
+			"piece_type": board_placement[start_square]["piece_type"],
+			"piece_color": board_placement[start_square]["piece_color"]
+		}
+
+		updated_board_placement = update_FEN(board_placement, starting_square_info, square)
+		king_position = get_king_position(board_placement, piece_color)
+		
+		if is_king_in_check(updated_board_placement, piece_color, king_position):
+			continue
+
+		if not is_on_same_diagonal(start_square, square):
+			break
+
+		legal_squares.append(f"{square}")
+
+		if f"{square}" in board_placement:
+			if board_placement[f"{square}"]["piece_color"] == piece_color:
+				legal_squares.remove(f"{square}")
+				break
+			else:
+				break
+
+		if is_square_on_edge(f"{square}"):
+			break
 
 def get_legal_moves_in_direction(board_placement, start_square, directions, piece_color):
 	legal_squares = []
@@ -128,142 +173,149 @@ def get_legal_moves_in_direction(board_placement, start_square, directions, piec
 
 				legal_squares.append(square)
 
-		elif direction == "northwest":
-			square = get_square(piece_file, piece_rank)
+		move_info = {
+			"piece_color": piece_color,
+			"starting_square": start_square
+		}
 
-			while True:
-				square += 7
+		square_offset = direction_offset_mapping[direction]
+		legal_squares += get_legal_moves_in_diagonal_direction(board_placement, move_info, piece_file, piece_rank, square_offset)
 
-				if square < 0 or square > 63:
-					break
+		# elif direction == "northwest":
+		# 	square = get_square(piece_file, piece_rank)
 
-				starting_square_info = {
-					"starting_square": start_square,
-					"piece_type": board_placement[start_square]["piece_type"],
-					"piece_color": board_placement[start_square]["piece_color"]
-				}
+		# 	while True:
+		# 		square += 7
+
+		# 		if square < 0 or square > 63:
+		# 			break
+
+		# 		starting_square_info = {
+		# 			"starting_square": start_square,
+		# 			"piece_type": board_placement[start_square]["piece_type"],
+		# 			"piece_color": board_placement[start_square]["piece_color"]
+		# 		}
+				
+
+		# 		if is_king_in_check(update_FEN(board_placement, starting_square_info, square), piece_color, king_position):
+		# 			continue
+
+		# 		if not is_on_same_diagonal(start_square, square):
+		# 			break
+
+		# 		legal_squares.append(f"{square}")
+
+		# 		if f"{square}" in board_placement:
+		# 			if board_placement[f"{square}"]["piece_color"] == piece_color:
+		# 				legal_squares.remove(f"{square}")
+		# 				break
+		# 			else:
+		# 				break
+
+		# 		if is_square_on_edge(f"{square}"):
+		# 			break
+
+		# elif direction == "southwest":
+		# 	square = get_square(piece_file, piece_rank)
+		# 	while True:
+		# 		square -= 9
+
+		# 		if square < 0 or square > 63:
+		# 			break
+
+		# 		starting_square_info = {
+		# 			"starting_square": start_square,
+		# 			"piece_type": board_placement[start_square]["piece_type"],
+		# 			"piece_color": board_placement[start_square]["piece_color"]
+		# 		}
 
 				
 
-				if is_king_in_check(update_FEN(board_placement, starting_square_info, square), piece_color, king_position):
-					continue
+		# 		if is_king_in_check(update_FEN(board_placement, starting_square_info, square), piece_color, king_position):
+		# 			continue
 
-				if not is_on_same_diagonal(start_square, square):
-					break
+		# 		if not is_on_same_diagonal(start_square, square):
+		# 			break
 
-				legal_squares.append(f"{square}")
+		# 		legal_squares.append(f"{square}")
 
-				if f"{square}" in board_placement:
-					if board_placement[f"{square}"]["piece_color"] == piece_color:
-						legal_squares.remove(f"{square}")
-						break
-					else:
-						break
+		# 		if f"{square}" in board_placement:
+		# 			if board_placement[f"{square}"]["piece_color"] == piece_color:
+		# 				legal_squares.remove(f"{square}")
+		# 				break
+		# 			else:
+		# 				break
 
-				if is_square_on_edge(f"{square}"):
-					break
+		# 		if is_square_on_edge(f"{square}"):
+		# 			break
 
-		elif direction == "southwest":
-			square = get_square(piece_file, piece_rank)
-			while True:
-				square -= 9
+		# elif direction == "northeast":
+		# 	square = get_square(piece_file, piece_rank)
+		# 	while True:
+		# 		square += 9
+		# 		if square < 0 or square > 63:
+		# 			break
 
-				if square < 0 or square > 63:
-					break
-
-				starting_square_info = {
-					"starting_square": start_square,
-					"piece_type": board_placement[start_square]["piece_type"],
-					"piece_color": board_placement[start_square]["piece_color"]
-				}
-
-				
-
-				if is_king_in_check(update_FEN(board_placement, starting_square_info, square), piece_color, king_position):
-					continue
-
-				if not is_on_same_diagonal(start_square, square):
-					break
-
-				legal_squares.append(f"{square}")
-
-				if f"{square}" in board_placement:
-					if board_placement[f"{square}"]["piece_color"] == piece_color:
-						legal_squares.remove(f"{square}")
-						break
-					else:
-						break
-
-				if is_square_on_edge(f"{square}"):
-					break
-
-		elif direction == "northeast":
-			square = get_square(piece_file, piece_rank)
-			while True:
-				square += 9
-				if square < 0 or square > 63:
-					break
-
-				starting_square_info = {
-					"starting_square": start_square,
-					"piece_type": board_placement[f"{start_square}"]["piece_type"],
-					"piece_color": board_placement[f"{start_square}"]["piece_color"]
-				}
+		# 		starting_square_info = {
+		# 			"starting_square": start_square,
+		# 			"piece_type": board_placement[f"{start_square}"]["piece_type"],
+		# 			"piece_color": board_placement[f"{start_square}"]["piece_color"]
+		# 		}
 
 				
 
-				if is_king_in_check(update_FEN(board_placement, starting_square_info, square), piece_color, king_position):
-					continue
+		# 		if is_king_in_check(update_FEN(board_placement, starting_square_info, square), piece_color, king_position):
+		# 			continue
 
-				if not is_on_same_diagonal(start_square, square):
-					break
+		# 		if not is_on_same_diagonal(start_square, square):
+		# 			break
 
-				legal_squares.append(f"{square}")
+		# 		legal_squares.append(f"{square}")
 
-				if f"{square}" in board_placement:
-					if board_placement[f"{square}"]["piece_color"] == piece_color:
-						legal_squares.remove(f"{square}")
-						break
-					else:
-						break
+		# 		if f"{square}" in board_placement:
+		# 			if board_placement[f"{square}"]["piece_color"] == piece_color:
+		# 				legal_squares.remove(f"{square}")
+		# 				break
+		# 			else:
+		# 				break
 
-				if is_square_on_edge(f"{square}"):
-					break
+		# 		if is_square_on_edge(f"{square}"):
+		# 			break
 
-		elif direction == "southeast":
-			square = get_square(piece_file, piece_rank)
-			while True:
-				square -= 7
+		# elif direction == "southeast":
+		# 	square = get_square(piece_file, piece_rank)
+		# 	while True:
+		# 		square -= 7
 
-				if square < 0 or square > 63:
-					break
+		# 		if square < 0 or square > 63:
+		# 			break
 
-				starting_square_info = {
-					"starting_square": start_square,
-					"piece_type": board_placement[f"{start_square}"]["piece_type"],
-					"piece_color": board_placement[f"{start_square}"]["piece_color"]
-				}
+		# 		starting_square_info = {
+		# 			"starting_square": start_square,
+		# 			"piece_type": board_placement[f"{start_square}"]["piece_type"],
+		# 			"piece_color": board_placement[f"{start_square}"]["piece_color"]
+		# 		}
 
-				if is_king_in_check(update_FEN(board_placement, starting_square_info, square), piece_color, king_position):
-					continue
+		# 		if is_king_in_check(update_FEN(board_placement, starting_square_info, square), piece_color, king_position):
+		# 			continue
 
-				if not is_on_same_diagonal(start_square, square):
-					break
+		# 		if not is_on_same_diagonal(start_square, square):
+		# 			break
 
-				if square < 0 or square > 63:
-					break
+		# 		if square < 0 or square > 63:
+		# 			break
 
-				legal_squares.append(f"{square}")
+		# 		legal_squares.append(f"{square}")
 
-				if f"{square}" in board_placement:
-					if board_placement[f"{square}"]["piece_color"] == piece_color:
-						legal_squares.remove(f"{square}")
-						break
-					else:
-						break
+		# 		if f"{square}" in board_placement:
+		# 			if board_placement[f"{square}"]["piece_color"] == piece_color:
+		# 				legal_squares.remove(f"{square}")
+		# 				break
+		# 			else:
+		# 				break
 
-				if is_square_on_edge(f"{square}"):
-					break
+		# 		if is_square_on_edge(f"{square}"):
+		# 			break
 
 	return legal_squares
 
