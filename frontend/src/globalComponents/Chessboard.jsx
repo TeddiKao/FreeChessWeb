@@ -347,8 +347,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     },
                 };
 
-                console.log(droppedSquare, whiteQueensideCastlingSquare);
-
                 if (
                     parseInt(clickedSquare) === whiteKingsideCastlingSquare ||
                     parseInt(clickedSquare) === blackKingsideCastlingSquare
@@ -476,6 +474,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             squareColor={squareColor}
                             pieceColor={pieceColor}
                             pieceType={pieceType}
+                            displayPromotionPopup={pieceType === "pawn"}
                             handleSquareClick={handleSquareClick}
                             setParsedFENString={setParsedFENString}
                             setDraggedSquare={setDraggedSquare}
@@ -488,6 +487,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             squareNumber={boardPlacementSquare}
                             squareColor={squareColor}
                             handleSquareClick={handleSquareClick}
+                            displayPromotionPopup={false}
                             setParsedFENString={setParsedFENString}
                             setDraggedSquare={setDraggedSquare}
                             setDroppedSquare={setDroppedSquare}

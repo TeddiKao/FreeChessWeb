@@ -2,12 +2,14 @@ import { useDrag, useDrop } from "react-dnd";
 import api from "../api.js";
 
 import "../styles/square.css";
+import PromotionPopup from "./PromotionPopup.jsx";
 
 function Square({
     squareNumber,
     squareColor,
     pieceColor,
     pieceType,
+    displayPromotionPopup,
     handleSquareClick,
     setDraggedSquare,
     setDroppedSquare,
@@ -34,12 +36,28 @@ function Square({
     }));
 
     function handleOnDrop(droppedSquare) {
-        setDraggedSquare(startingSquare)
+        setDraggedSquare(startingSquare);
         setDroppedSquare(droppedSquare);
     }
 
     function handleOnDrag(squareDragged) {
-        setDraggedSquare(squareDragged)
+        setDraggedSquare(squareDragged);
+    }
+
+    let squareHTML = null;
+    if (displayPromotionPopup) {
+        squareHTML = <PromotionPopup color={pieceColor} />;
+    } else {
+        squareHTML = (
+            <img
+                ref={drag}
+                onDrag={() => {
+                    handleOnDrag(squareNumber);
+                }}
+                className="piece-image"
+                src={`/${pieceColor.toLowerCase()}${pieceType}.svg`}
+            />
+        );
     }
 
     return (
@@ -51,16 +69,7 @@ function Square({
                 handleSquareClick(event, squareNumber);
             }}
         >
-            {pieceColor && pieceType ? (
-                <img
-                    ref={drag}
-                    onDrag={() => {
-                        handleOnDrag(squareNumber);
-                    }}
-                    className="piece-image"
-                    src={`/${pieceColor.toLowerCase()}${pieceType}.svg`}
-                />
-            ) : null}
+            {pieceColor && pieceType ? squareHTML : null}
         </div>
     );
 }
