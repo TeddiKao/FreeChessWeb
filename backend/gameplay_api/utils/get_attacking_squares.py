@@ -199,14 +199,15 @@ def get_king_attacking_squares(board_placement, move_info):
 				cleaned_attacking_squares.remove(f"{legal_move}")
 
 	for legal_move in attacking_squares:
-		
 		if abs(get_file(f"{legal_move}") - get_file(starting_square)) > 1:
-			cleaned_attacking_squares.remove(f"{legal_move}")
-			continue
+			if legal_move in cleaned_attacking_squares:
+				cleaned_attacking_squares.remove(f"{legal_move}")
+				continue
 
 		if abs(get_row(f"{legal_move}") - get_row(starting_square)) > 1:
-			cleaned_attacking_squares.remove(f"{legal_move}")
-			continue
+			if legal_move in cleaned_attacking_squares:
+				cleaned_attacking_squares.remove(f"{legal_move}")
+				continue
 
 	return cleaned_attacking_squares
 

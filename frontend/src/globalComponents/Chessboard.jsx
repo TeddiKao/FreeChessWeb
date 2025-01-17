@@ -139,6 +139,64 @@ function Chessboard({ parsed_fen_string, orientation }) {
             }
 
             if (pieceTypeToValidate.toLowerCase() === "king") {
+                console.log(newPiecePlacements);
+
+                const colorCastlingRights =
+                    newPiecePlacements["castling_rights"][
+                        capitaliseFirstLetter(pieceColorToValidate)
+                    ];
+
+                if (
+                    parseInt(droppedSquare) === whiteKingsideCastlingSquare ||
+                    parseInt(droppedSquare) === blackKingsideCastlingSquare
+                ) {
+                    if (colorCastlingRights["Kingside"]) {
+                        newPiecePlacements = {
+                            ...newPiecePlacements,
+                            board_placement: {
+                                ...newPiecePlacements["board_placement"],
+                                [`${parseInt(droppedSquare) - 1}`]: {
+                                    piece_type: "Rook",
+                                    piece_color: pieceColorToValidate,
+                                    starting_square: `${
+                                        parseInt(droppedSquare) + 1
+                                    }`,
+                                },
+                            },
+                        };
+
+                        console.log(newPiecePlacements["board_placement"]);
+                        delete newPiecePlacements["board_placement"][
+                            `${parseInt(droppedSquare) + 1}`
+                        ];
+                    }
+                }
+
+                if (
+                    parseInt(droppedSquare) === whiteQueensideCastlingSquare ||
+                    parseInt(droppedSquare) === blackQueensideCastlingSquare
+                ) {
+                    if (colorCastlingRights["Queenside"]) {
+                        newPiecePlacements = {
+                            ...newPiecePlacements,
+                            board_placement: {
+                                ...newPiecePlacements["board_placement"],
+                                [`${parseInt(droppedSquare) + 1}`]: {
+                                    piece_type: "Rook",
+                                    piece_color: pieceColorToValidate,
+                                    starting_square: `${
+                                        parseInt(droppedSquare) - 2
+                                    }`,
+                                },
+                            },
+                        };
+
+                        delete newPiecePlacements["board_placement"][
+                            `${parseInt(droppedSquare) - 2}`
+                        ];
+                    }
+                }
+
                 newPiecePlacements = {
                     ...newPiecePlacements,
                     castling_rights: {
@@ -149,55 +207,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
                         },
                     },
                 };
-
-                console.log(droppedSquare, whiteQueensideCastlingSquare);
-
-                if (
-                    parseInt(droppedSquare) === whiteKingsideCastlingSquare ||
-                    parseInt(droppedSquare) === blackKingsideCastlingSquare
-                ) {
-                    newPiecePlacements = {
-                        ...newPiecePlacements,
-                        board_placement: {
-                            ...newPiecePlacements["board_placement"],
-                            [`${parseInt(droppedSquare) - 1}`]: {
-                                piece_type: "Rook",
-                                piece_color: pieceColorToValidate,
-                                starting_square: `${
-                                    parseInt(droppedSquare) + 1
-                                }`,
-                            },
-                        },
-                    };
-
-                    console.log(newPiecePlacements["board_placement"]);
-                    delete newPiecePlacements["board_placement"][
-                        `${parseInt(droppedSquare) + 1}`
-                    ];
-                }
-
-                if (
-                    parseInt(droppedSquare) === whiteQueensideCastlingSquare ||
-                    parseInt(droppedSquare) === blackQueensideCastlingSquare
-                ) {
-                    newPiecePlacements = {
-                        ...newPiecePlacements,
-                        board_placement: {
-                            ...newPiecePlacements["board_placement"],
-                            [`${parseInt(droppedSquare) + 1}`]: {
-                                piece_type: "Rook",
-                                piece_color: pieceColorToValidate,
-                                starting_square: `${
-                                    parseInt(droppedSquare) - 2
-                                }`,
-                            },
-                        },
-                    };
-
-                    delete newPiecePlacements["board_placement"][
-                        `${parseInt(droppedSquare) - 2}`
-                    ];
-                }
             }
 
             return newPiecePlacements;
@@ -276,7 +285,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     "piece_color"
                 ];
 
-            let newBoardPlacements = {
+            let newPiecePlacements = {
                 ...previousFENString,
                 board_placement: {
                     ...previousFENString["board_placement"],
@@ -287,7 +296,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 },
             };
 
-            delete newBoardPlacements["board_placement"][
+            delete newPiecePlacements["board_placement"][
                 `${previousClickedSquare}`
             ];
 
@@ -341,18 +350,18 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 console.log(droppedSquare, whiteQueensideCastlingSquare);
 
                 if (
-                    parseInt(droppedSquare) === whiteKingsideCastlingSquare ||
-                    parseInt(droppedSquare) === blackKingsideCastlingSquare
+                    parseInt(clickedSquare) === whiteKingsideCastlingSquare ||
+                    parseInt(clickedSquare) === blackKingsideCastlingSquare
                 ) {
                     newPiecePlacements = {
                         ...newPiecePlacements,
                         board_placement: {
                             ...newPiecePlacements["board_placement"],
-                            [`${parseInt(droppedSquare) - 1}`]: {
+                            [`${parseInt(clickedSquare) - 1}`]: {
                                 piece_type: "Rook",
                                 piece_color: pieceColorToValidate,
                                 starting_square: `${
-                                    parseInt(droppedSquare) + 1
+                                    parseInt(clickedSquare) + 1
                                 }`,
                             },
                         },
@@ -360,35 +369,35 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
                     console.log(newPiecePlacements["board_placement"]);
                     delete newPiecePlacements["board_placement"][
-                        `${parseInt(droppedSquare) + 1}`
+                        `${parseInt(clickedSquare) + 1}`
                     ];
                 }
 
                 if (
-                    parseInt(droppedSquare) === whiteQueensideCastlingSquare ||
-                    parseInt(droppedSquare) === blackQueensideCastlingSquare
+                    parseInt(clickedSquare) === whiteQueensideCastlingSquare ||
+                    parseInt(clickedSquare) === blackQueensideCastlingSquare
                 ) {
                     newPiecePlacements = {
                         ...newPiecePlacements,
                         board_placement: {
                             ...newPiecePlacements["board_placement"],
-                            [`${parseInt(droppedSquare) + 1}`]: {
+                            [`${parseInt(clickedSquare) + 1}`]: {
                                 piece_type: "Rook",
                                 piece_color: pieceColorToValidate,
                                 starting_square: `${
-                                    parseInt(droppedSquare) - 2
+                                    parseInt(clickedSquare) - 2
                                 }`,
                             },
                         },
                     };
 
                     delete newPiecePlacements["board_placement"][
-                        `${parseInt(droppedSquare) - 2}`
+                        `${parseInt(clickedSquare) - 2}`
                     ];
                 }
             }
 
-            return newBoardPlacements;
+            return newPiecePlacements;
         });
 
         setPreviousClickedSquare(null);
