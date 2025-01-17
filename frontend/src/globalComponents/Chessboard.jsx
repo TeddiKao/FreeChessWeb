@@ -151,24 +151,28 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     parseInt(droppedSquare) === blackKingsideCastlingSquare
                 ) {
                     if (colorCastlingRights["Kingside"]) {
-                        newPiecePlacements = {
-                            ...newPiecePlacements,
-                            board_placement: {
-                                ...newPiecePlacements["board_placement"],
-                                [`${parseInt(droppedSquare) - 1}`]: {
-                                    piece_type: "Rook",
-                                    piece_color: pieceColorToValidate,
-                                    starting_square: `${
-                                        parseInt(droppedSquare) + 1
-                                    }`,
+                        if (
+                            parseInt(droppedSquare) - 2 ===
+                            parseInt(draggedSquare)
+                        ) {
+                            newPiecePlacements = {
+                                ...newPiecePlacements,
+                                board_placement: {
+                                    ...newPiecePlacements["board_placement"],
+                                    [`${parseInt(droppedSquare) - 1}`]: {
+                                        piece_type: "Rook",
+                                        piece_color: pieceColorToValidate,
+                                        starting_square: `${
+                                            parseInt(droppedSquare) + 1
+                                        }`,
+                                    },
                                 },
-                            },
-                        };
+                            };
 
-                        console.log(newPiecePlacements["board_placement"]);
-                        delete newPiecePlacements["board_placement"][
-                            `${parseInt(droppedSquare) + 1}`
-                        ];
+                            delete newPiecePlacements["board_placement"][
+                                `${parseInt(droppedSquare) + 1}`
+                            ];
+                        }
                     }
                 }
 
@@ -177,23 +181,28 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     parseInt(droppedSquare) === blackQueensideCastlingSquare
                 ) {
                     if (colorCastlingRights["Queenside"]) {
-                        newPiecePlacements = {
-                            ...newPiecePlacements,
-                            board_placement: {
-                                ...newPiecePlacements["board_placement"],
-                                [`${parseInt(droppedSquare) + 1}`]: {
-                                    piece_type: "Rook",
-                                    piece_color: pieceColorToValidate,
-                                    starting_square: `${
-                                        parseInt(droppedSquare) - 2
-                                    }`,
+                        if (
+                            parseInt(droppedSquare) + 2 ===
+                            parseInt(draggedSquare)
+                        ) {
+                            newPiecePlacements = {
+                                ...newPiecePlacements,
+                                board_placement: {
+                                    ...newPiecePlacements["board_placement"],
+                                    [`${parseInt(droppedSquare) + 1}`]: {
+                                        piece_type: "Rook",
+                                        piece_color: pieceColorToValidate,
+                                        starting_square: `${
+                                            parseInt(droppedSquare) - 2
+                                        }`,
+                                    },
                                 },
-                            },
-                        };
+                            };
 
-                        delete newPiecePlacements["board_placement"][
-                            `${parseInt(droppedSquare) - 2}`
-                        ];
+                            delete newPiecePlacements["board_placement"][
+                                `${parseInt(droppedSquare) - 2}`
+                            ];
+                        }
                     }
                 }
 

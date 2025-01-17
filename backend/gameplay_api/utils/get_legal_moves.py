@@ -55,18 +55,22 @@ def get_legal_moves_in_diagonal_direction(board_placement, move_info, piece_file
 
 		updated_board_placement = update_FEN(board_placement, starting_square_info, square)
 		king_position = get_king_position(board_placement, piece_color)
-		
+		king_in_check = False
+
 		if is_king_in_check(updated_board_placement, piece_color, king_position):
-			continue
+			king_in_check = True
+
+		if not king_in_check:
+			legal_squares.append(f"{square}")
 
 		if not is_on_same_diagonal(start_square, square):
 			break
 
-		legal_squares.append(f"{square}")
-
 		if f"{square}" in board_placement:
 			if board_placement[f"{square}"]["piece_color"] == piece_color:
-				legal_squares.remove(f"{square}")
+				if f"{square}" in legal_squares:
+					legal_squares.remove(f"{square}")
+				
 				break
 			else:
 				break
@@ -99,6 +103,8 @@ def get_legal_moves_in_straight_direction(board_placemeent, constant_value_str, 
 		else:
 			square = f"{get_square(piece_file, value)}"
 
+		print(square)
+
 		starting_square_info = {
 			"starting_square": start_square,
 			"piece_type": board_placemeent[start_square]["piece_type"],
@@ -107,18 +113,22 @@ def get_legal_moves_in_straight_direction(board_placemeent, constant_value_str, 
 
 		updated_FEN = update_FEN(board_placemeent, starting_square_info, square)
 		king_position = get_king_position(updated_FEN, piece_color)
+		king_in_check = False
 
 		if is_king_in_check(updated_FEN, piece_color, king_position):
-			continue
+			king_in_check = True
 
 		if f"{square}" in board_placemeent:
 			if board_placemeent[f"{square}"]["piece_color"] == piece_color:
 				break
 			else:
-				legal_squares.append(f"{square}")
+				if not king_in_check:
+					legal_squares.append(square)
+
 				break
 
-		legal_squares.append(square)
+		if not king_in_check:
+			legal_squares.append(square)
 		
 	return legal_squares
 
@@ -253,7 +263,7 @@ def get_pawn_legal_moves(board_placement, move_info):
 def get_king_legal_moves(board_placement, castling_rights, move_info):
 	legal_moves = []
 
-	print(move_info)
+	
 
 	starting_square = move_info["starting_square"]
 	piece_color = move_info["piece_color"]
@@ -319,15 +329,19 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 		updated_board_placement = update_FEN(board_placement, starting_square_info, legal_move)
 		king_position = get_king_position(updated_board_placement, move_info["piece_color"])
 
-		if abs(get_file(f"{legal_move}") - get_file(starting_square)) > 1:
+		file_distance = get_file(f"{legal_move}") - get_file(starting_square)
+		row_distance = get_row(f"{legal_move}") - get_row(starting_square)
+		
+		if abs(file_distance) > 1:
 			if legal_move == castle_kingside_square or legal_move == castle_queenside_square:
-				continue
+				if abs(file_distance) <= 2:
+					continue
 
 			if legal_move in cleaned_legal_moves:
 				cleaned_legal_moves.remove(f"{legal_move}")
 				continue
 
-		if abs(get_row(f"{legal_move}") - get_row(starting_square)) > 1:
+		if abs(row_distance) > 1:
 			if legal_move in cleaned_legal_moves:
 				cleaned_legal_moves.remove(f"{legal_move}")
 				continue

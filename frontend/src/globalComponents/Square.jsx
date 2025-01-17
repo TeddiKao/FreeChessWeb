@@ -14,6 +14,7 @@ function Square({
     setDraggedSquare,
     setDroppedSquare,
 }) {
+    console.log(pieceColor);
     let startingSquare = null;
 
     const [{ isDragging }, drag] = useDrag(() => {
@@ -44,20 +45,24 @@ function Square({
         setDraggedSquare(squareDragged);
     }
 
-    let squareHTML = null;
-    if (displayPromotionPopup) {
-        squareHTML = <PromotionPopup color={pieceColor} />;
-    } else {
-        squareHTML = (
-            <img
-                ref={drag}
-                onDrag={() => {
-                    handleOnDrag(squareNumber);
-                }}
-                className="piece-image"
-                src={`/${pieceColor.toLowerCase()}${pieceType}.svg`}
-            />
-        );
+    function generateSquareHTML() {
+        let squareHTML = null;
+        if (displayPromotionPopup) {
+            squareHTML = <PromotionPopup color={pieceColor} />;
+        } else {
+            squareHTML = (
+                <img
+                    ref={drag}
+                    onDrag={() => {
+                        handleOnDrag(squareNumber);
+                    }}
+                    className="piece-image"
+                    src={`/${pieceColor.toLowerCase()}${pieceType}.svg`}
+                />
+            );
+        }
+
+        return squareHTML;
     }
 
     return (
@@ -69,7 +74,7 @@ function Square({
                 handleSquareClick(event, squareNumber);
             }}
         >
-            {pieceColor && pieceType ? squareHTML : null}
+            {pieceColor && pieceType ? generateSquareHTML() : null}
         </div>
     );
 }
