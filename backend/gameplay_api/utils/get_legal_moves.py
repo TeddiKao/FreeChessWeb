@@ -267,14 +267,11 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 	down_left_square = f"{int(starting_square) - 7}"
 	down_right_square = f"{int(starting_square) - 9}"
 
-
 	castle_queenside_middle_square = f"{int(starting_square) - 1}"
 	castle_queenside_square = f"{int(starting_square) - 2}"
 
 	castle_kingside_middle_square = f"{int(starting_square) + 1}"
 	castle_kingside_square = f"{int(starting_square) + 2}"
-
-	print(castling_rights)
 
 	can_castle_queenside = True
 	can_castle_kingside = True
