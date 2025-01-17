@@ -86,9 +86,9 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
             const pieceType = squareInfo["piece_type"];
             const pieceColor = squareInfo["piece_color"];
-            const initialSquare = squareInfo["starting_square"]
+            const initialSquare = squareInfo["starting_square"];
 
-            console.log(initialSquare)
+            console.log(initialSquare);
 
             let newPiecePlacements = {
                 ...previousFENString,
@@ -106,17 +106,19 @@ function Chessboard({ parsed_fen_string, orientation }) {
             if (pieceTypeToValidate.toLowerCase() === "rook") {
                 const kingsideRookSquares = [7, 63];
                 const queensideRookSquares = [0, 56];
-                
+
                 if (kingsideRookSquares.includes(parseInt(initialSquare))) {
                     newPiecePlacements = {
                         ...newPiecePlacements,
                         castling_rights: {
                             ...newPiecePlacements["castling_rights"],
                             [capitaliseFirstLetter(pieceColorToValidate)]: {
-                                ...newPiecePlacements["castling_rights"][capitaliseFirstLetter(pieceColorToValidate)],
+                                ...newPiecePlacements["castling_rights"][
+                                    capitaliseFirstLetter(pieceColorToValidate)
+                                ],
                                 Kingside: false,
                             },
-                        }
+                        },
                     };
                 }
 
@@ -126,10 +128,12 @@ function Chessboard({ parsed_fen_string, orientation }) {
                         castling_rights: {
                             ...newPiecePlacements["castling_rights"],
                             [capitaliseFirstLetter(pieceColorToValidate)]: {
-                                ...newPiecePlacements["castling_rights"][capitaliseFirstLetter(pieceColorToValidate)],
+                                ...newPiecePlacements["castling_rights"][
+                                    capitaliseFirstLetter(pieceColorToValidate)
+                                ],
                                 Queenside: false,
                             },
-                        }
+                        },
                     };
                 }
             }
@@ -146,7 +150,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     },
                 };
 
-                console.log(droppedSquare, whiteQueensideCastlingSquare)
+                console.log(droppedSquare, whiteQueensideCastlingSquare);
 
                 if (
                     parseInt(droppedSquare) === whiteKingsideCastlingSquare ||
@@ -159,7 +163,9 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             [`${parseInt(droppedSquare) - 1}`]: {
                                 piece_type: "Rook",
                                 piece_color: pieceColorToValidate,
-                                starting_square: `${parseInt(droppedSquare) + 1}`,
+                                starting_square: `${
+                                    parseInt(droppedSquare) + 1
+                                }`,
                             },
                         },
                     };
@@ -181,16 +187,18 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             [`${parseInt(droppedSquare) + 1}`]: {
                                 piece_type: "Rook",
                                 piece_color: pieceColorToValidate,
-                                starting_square: `${parseInt(droppedSquare) - 2}`,
+                                starting_square: `${
+                                    parseInt(droppedSquare) - 2
+                                }`,
                             },
                         },
                     };
-    
+
                     delete newPiecePlacements["board_placement"][
                         `${parseInt(droppedSquare) - 2}`
                     ];
                 }
-            } 
+            }
 
             return newPiecePlacements;
         });
@@ -268,7 +276,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     "piece_color"
                 ];
 
-            const newBoardPlacements = {
+            let newBoardPlacements = {
                 ...previousFENString,
                 board_placement: {
                     ...previousFENString["board_placement"],
@@ -283,8 +291,101 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 `${previousClickedSquare}`
             ];
 
+            if (pieceTypeToValidate.toLowerCase() === "rook") {
+                const kingsideRookSquares = [7, 63];
+                const queensideRookSquares = [0, 56];
+
+                if (kingsideRookSquares.includes(parseInt(initialSquare))) {
+                    newPiecePlacements = {
+                        ...newPiecePlacements,
+                        castling_rights: {
+                            ...newPiecePlacements["castling_rights"],
+                            [capitaliseFirstLetter(pieceColorToValidate)]: {
+                                ...newPiecePlacements["castling_rights"][
+                                    capitaliseFirstLetter(pieceColorToValidate)
+                                ],
+                                Kingside: false,
+                            },
+                        },
+                    };
+                }
+
+                if (queensideRookSquares.includes(parseInt(initialSquare))) {
+                    newPiecePlacements = {
+                        ...newPiecePlacements,
+                        castling_rights: {
+                            ...newPiecePlacements["castling_rights"],
+                            [capitaliseFirstLetter(pieceColorToValidate)]: {
+                                ...newPiecePlacements["castling_rights"][
+                                    capitaliseFirstLetter(pieceColorToValidate)
+                                ],
+                                Queenside: false,
+                            },
+                        },
+                    };
+                }
+            }
+
             if (pieceTypeToValidate.toLowerCase() === "king") {
-                console.log("Do something with castling");
+                newPiecePlacements = {
+                    ...newPiecePlacements,
+                    castling_rights: {
+                        ...newPiecePlacements["castling_rights"],
+                        [capitaliseFirstLetter(pieceColorToValidate)]: {
+                            Kingside: false,
+                            Queenside: false,
+                        },
+                    },
+                };
+
+                console.log(droppedSquare, whiteQueensideCastlingSquare);
+
+                if (
+                    parseInt(droppedSquare) === whiteKingsideCastlingSquare ||
+                    parseInt(droppedSquare) === blackKingsideCastlingSquare
+                ) {
+                    newPiecePlacements = {
+                        ...newPiecePlacements,
+                        board_placement: {
+                            ...newPiecePlacements["board_placement"],
+                            [`${parseInt(droppedSquare) - 1}`]: {
+                                piece_type: "Rook",
+                                piece_color: pieceColorToValidate,
+                                starting_square: `${
+                                    parseInt(droppedSquare) + 1
+                                }`,
+                            },
+                        },
+                    };
+
+                    console.log(newPiecePlacements["board_placement"]);
+                    delete newPiecePlacements["board_placement"][
+                        `${parseInt(droppedSquare) + 1}`
+                    ];
+                }
+
+                if (
+                    parseInt(droppedSquare) === whiteQueensideCastlingSquare ||
+                    parseInt(droppedSquare) === blackQueensideCastlingSquare
+                ) {
+                    newPiecePlacements = {
+                        ...newPiecePlacements,
+                        board_placement: {
+                            ...newPiecePlacements["board_placement"],
+                            [`${parseInt(droppedSquare) + 1}`]: {
+                                piece_type: "Rook",
+                                piece_color: pieceColorToValidate,
+                                starting_square: `${
+                                    parseInt(droppedSquare) - 2
+                                }`,
+                            },
+                        },
+                    };
+
+                    delete newPiecePlacements["board_placement"][
+                        `${parseInt(droppedSquare) - 2}`
+                    ];
+                }
             }
 
             return newBoardPlacements;
