@@ -7,6 +7,13 @@ import { clearSquaresStyling } from "../utils/boardUtils.js";
 import { fetchLegalMoves, fetchMoveIsValid } from "../utils/apiUtils.js";
 import { capitaliseFirstLetter } from "../utils/generalUtils.js";
 
+import {
+    whiteKingsideCastlingSquare,
+    blackKingsideCastlingSquare,
+    whiteQueensideCastlingSquare,
+    blackQueensideCastlingSquare,
+} from "../constants/castlingSquares.js";
+
 function Chessboard({ parsed_fen_string, orientation }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
@@ -64,8 +71,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
             pieceColorToValidate,
             pieceTypeToValidate,
             draggedSquare,
-            droppedSquare,
-        )
+            droppedSquare
+        );
 
         if (!moveIsLegal) {
             setDraggedSquare(null);
@@ -97,13 +104,57 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 newPiecePlacements = {
                     ...newPiecePlacements,
                     castling_rights: {
-                        ...newPiecePlacements[castling_rights],
+                        ...newPiecePlacements["castling_rights"],
                         [capitaliseFirstLetter(pieceColorToValidate)]: {
                             Kingside: false,
                             Queenside: false,
-                        }
-                    }
+                        },
+                    },
+                };
+
+                console.log(droppedSquare, whiteQueensideCastlingSquare)
+
+                if (
+                    parseInt(droppedSquare) === whiteKingsideCastlingSquare ||
+                    parseInt(droppedSquare) === blackKingsideCastlingSquare
+                ) {
+                    newPiecePlacements = {
+                        ...newPiecePlacements,
+                        board_placement: {
+                            ...newPiecePlacements["board_placement"],
+                            [`${parseInt(droppedSquare) - 1}`]: {
+                                piece_type: "Rook",
+                                piece_color: pieceColorToValidate,
+                            },
+                        },
+                    };
+
+                    console.log(newPiecePlacements["board_placement"]);
+                    delete newPiecePlacements["board_placement"][
+                        `${parseInt(droppedSquare) + 1}`
+                    ];
                 }
+
+            } 
+            
+            if (
+                parseInt(droppedSquare) === whiteQueensideCastlingSquare ||
+                parseInt(droppedSquare) === blackQueensideCastlingSquare
+            ) {
+                newPiecePlacements = {
+                    ...newPiecePlacements,
+                    board_placement: {
+                        ...newPiecePlacements["board_placement"],
+                        [`${parseInt(droppedSquare) + 1}`]: {
+                            piece_type: "Rook",
+                            piece_color: pieceColorToValidate,
+                        },
+                    },
+                };
+
+                delete newPiecePlacements["board_placement"][
+                    `${parseInt(droppedSquare) - 2}`
+                ];
             }
 
             return newPiecePlacements;
@@ -163,7 +214,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
             pieceTypeToValidate,
             previousClickedSquare,
             clickedSquare
-        )
+        );
 
         if (!isMoveLegal) {
             return;
@@ -198,7 +249,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
             ];
 
             if (pieceTypeToValidate.toLowerCase() === "king") {
-                console.log("Do something with castling")
+                console.log("Do something with castling");
             }
 
             return newBoardPlacements;
@@ -209,7 +260,12 @@ function Chessboard({ parsed_fen_string, orientation }) {
     }
 
     async function displayLegalMoves(pieceType, pieceColor, startingSquare) {
-        const legalMoves = await fetchLegalMoves(parsedFENString, pieceType, pieceColor, startingSquare);
+        const legalMoves = await fetchLegalMoves(
+            parsedFENString,
+            pieceType,
+            pieceColor,
+            startingSquare
+        );
         if (!legalMoves) {
             return;
         }

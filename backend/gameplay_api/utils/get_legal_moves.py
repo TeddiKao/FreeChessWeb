@@ -15,11 +15,11 @@ direction_offset_mapping = {
 	"southeast": -7,
 }
 
-def get_legal_moves(move_info, board_placement):
+def get_legal_moves(move_info, board_placement, castling_rights = None):
 	sliding_pieces = ["queen", "rook", "bishop"]
 
 	if move_info["piece_type"].lower() == "king":
-		return get_king_legal_moves(board_placement, move_info)
+		return get_king_legal_moves(board_placement, castling_rights, move_info)
 	
 	elif move_info["piece_type"].lower() in sliding_pieces:
 		return get_sliding_piece_legal_moves(board_placement, move_info)
@@ -253,6 +253,8 @@ def get_pawn_legal_moves(board_placement, move_info):
 def get_king_legal_moves(board_placement, castling_rights, move_info):
 	legal_moves = []
 
+	print(move_info)
+
 	starting_square = move_info["starting_square"]
 	piece_color = move_info["piece_color"]
 
@@ -272,22 +274,34 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 	castle_kingside_middle_square = f"{int(starting_square) + 1}"
 	castle_kingside_square = f"{int(starting_square) + 2}"
 
+	print(castling_rights)
+
+	can_castle_queenside = True
+	can_castle_kingside = True
+
 	if castling_rights[piece_color]["Queenside"]:
 		if castle_queenside_middle_square in board_placement:
 			castling_rights[piece_color]["Queenside"] = False
+			can_castle_queenside = False
 
 		if castle_queenside_square in board_placement:
 			castling_rights[piece_color]["Queenside"] = False
+			can_castle_queenside = False
 
-		legal_moves.append(castle_queenside_square)
-	else:
+		if can_castle_queenside:
+			legal_moves.append(castle_queenside_square)
+
+	if castling_rights[piece_color]["Kingside"]:
 		if castle_kingside_middle_square in board_placement:
 			castling_rights[piece_color]["Kingside"] = False
+			can_castle_kingside = False
 
 		if castle_kingside_middle_square in board_placement:
 			castling_rights[piece_color]["Kingside"] = False
+			can_castle_kingside = False
 
-		legal_moves.append(castle_kingside_square)
+		if can_castle_kingside:
+			legal_moves.append(castle_kingside_square)
 
 	legal_moves += [left_square, right_square, up_square, down_square, up_left_square, up_right_square, down_left_square, down_right_square]
 
@@ -309,10 +323,12 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 		king_position = get_king_position(updated_board_placement, move_info["piece_color"])
 
 		if abs(get_file(f"{legal_move}") - get_file(starting_square)) > 1:
+			if legal_move == castle_kingside_square or legal_move == castle_queenside_square:
+				continue
+
 			if legal_move in cleaned_legal_moves:
 				cleaned_legal_moves.remove(f"{legal_move}")
 				continue
-
 
 		if abs(get_row(f"{legal_move}") - get_row(starting_square)) > 1:
 			if legal_move in cleaned_legal_moves:
@@ -325,6 +341,7 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 				cleaned_legal_moves.remove(f"{legal_move}")
 				continue
 
+	
 	return cleaned_legal_moves
 
 def get_knight_legal_moves(board_placement, move_info):
