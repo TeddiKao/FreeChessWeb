@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import "../styles/chessboard.css";
 import Square from "./Square";
 
-import { clearSquaresStyling } from "../utils/boardUtils.js";
+import { clearSquaresStyling, getRank } from "../utils/boardUtils.js";
 import { fetchLegalMoves, fetchMoveIsValid } from "../utils/apiUtils.js";
 import { capitaliseFirstLetter } from "../utils/generalUtils.js";
 
@@ -477,13 +477,16 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     const pieceType =
                         piecePlacements[boardPlacementSquare]["piece_type"];
 
+                    const promotionRank = pieceColor === "White" ? 7 : 0;
+                    const pieceRank = getRank(boardPlacementSquare)
+
                     squareElements.push(
                         <Square
                             squareNumber={boardPlacementSquare}
                             squareColor={squareColor}
                             pieceColor={pieceColor}
                             pieceType={pieceType}
-                            displayPromotionPopup={pieceType === "pawn"}
+                            displayPromotionPopup={pieceType === "Pawn" && promotionRank === pieceRank}
                             handleSquareClick={handleSquareClick}
                             setParsedFENString={setParsedFENString}
                             setDraggedSquare={setDraggedSquare}

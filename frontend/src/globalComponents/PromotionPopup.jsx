@@ -1,14 +1,31 @@
-import { capitaliseFirstLetter } from "../utils/generalUtils";
+import "../styles/promotion-popup.css";
 
 function PromotionPopup({ color }) {
-	return (
-		<div className="promotion-popup-container">
-			<img src={`${color}Queen`}/>
-			<img src={`${color}Rook`}/>
-			<img src={`${color}Knight`}/>
-			<img src={`${color}Bishop`}/>
-		</div>
-	)
+    const positionClass = color === "White" ? "top" : "bottom";
+
+    function generatePromotionPopup() {
+        if (color === "White") {
+            return (
+                <div className={`promotion-popup-container ${positionClass}`}>
+                    <img src={`/${color.toLowerCase()}Queen.svg`} />
+                    <img src={`/${color.toLowerCase()}Rook.svg`} />
+                    <img src={`/${color.toLowerCase()}Knight.svg`} />
+                    <img src={`/${color.toLowerCase()}Bishop.svg`} />
+                </div>
+            );
+        } else {
+            return (
+                <div className={`promotion-popup-container ${positionClass}`}>
+                    <img src={`/${color.toLowerCase()}Bishop.svg`} />
+                    <img src={`/${color.toLowerCase()}Knight.svg`} />
+                    <img src={`/${color.toLowerCase()}Rook.svg`} />
+                    <img src={`/${color.toLowerCase()}Queen.svg`} />
+                </div>
+            );
+        }
+    }
+
+    return generatePromotionPopup();
 }
 
 export default PromotionPopup;

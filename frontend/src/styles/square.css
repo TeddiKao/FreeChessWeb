@@ -1,5 +1,6 @@
 .chessboard-square {
 	height: 55px;
+	position: relative;
 }
 
 .piece-image {

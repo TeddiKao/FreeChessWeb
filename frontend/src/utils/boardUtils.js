@@ -7,4 +7,8 @@ function clearSquaresStyling() {
     }
 }
 
-export { clearSquaresStyling }
+function getRank(square) {
+    return Math.ceil(((parseInt(square) + 1) / 8) - 1);
+}
+
+export { clearSquaresStyling, getRank }
