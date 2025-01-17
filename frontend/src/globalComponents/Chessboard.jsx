@@ -86,6 +86,9 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
             const pieceType = squareInfo["piece_type"];
             const pieceColor = squareInfo["piece_color"];
+            const initialSquare = squareInfo["starting_square"]
+
+            console.log(initialSquare)
 
             let newPiecePlacements = {
                 ...previousFENString,
@@ -100,11 +103,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
             delete newPiecePlacements["board_placement"][`${draggedSquare}`];
 
-            if (pieceColorToValidate.toLowerCase() === "rook") {
+            if (pieceTypeToValidate.toLowerCase() === "rook") {
                 const kingsideRookSquares = [7, 63];
                 const queensideRookSquares = [0, 56];
                 
-                if (kingsideRookSquares.includes(parseInt(droppedSquare))) {
+                if (kingsideRookSquares.includes(parseInt(initialSquare))) {
                     newPiecePlacements = {
                         ...newPiecePlacements,
                         castling_rights: {
@@ -117,7 +120,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     };
                 }
 
-                if (queensideRookSquares.includes(parseInt(droppedSquare))) {
+                if (queensideRookSquares.includes(parseInt(initialSquare))) {
                     newPiecePlacements = {
                         ...newPiecePlacements,
                         castling_rights: {
@@ -156,6 +159,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             [`${parseInt(droppedSquare) - 1}`]: {
                                 piece_type: "Rook",
                                 piece_color: pieceColorToValidate,
+                                starting_square: `${parseInt(droppedSquare) + 1}`,
                             },
                         },
                     };
@@ -179,6 +183,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                         [`${parseInt(droppedSquare) + 1}`]: {
                             piece_type: "Rook",
                             piece_color: pieceColorToValidate,
+                            starting_square: `${parseInt(droppedSquare) - 2}`,
                         },
                     },
                 };
