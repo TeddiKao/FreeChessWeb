@@ -170,28 +170,27 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     ];
                 }
 
-            } 
-            
-            if (
-                parseInt(droppedSquare) === whiteQueensideCastlingSquare ||
-                parseInt(droppedSquare) === blackQueensideCastlingSquare
-            ) {
-                newPiecePlacements = {
-                    ...newPiecePlacements,
-                    board_placement: {
-                        ...newPiecePlacements["board_placement"],
-                        [`${parseInt(droppedSquare) + 1}`]: {
-                            piece_type: "Rook",
-                            piece_color: pieceColorToValidate,
-                            starting_square: `${parseInt(droppedSquare) - 2}`,
+                if (
+                    parseInt(droppedSquare) === whiteQueensideCastlingSquare ||
+                    parseInt(droppedSquare) === blackQueensideCastlingSquare
+                ) {
+                    newPiecePlacements = {
+                        ...newPiecePlacements,
+                        board_placement: {
+                            ...newPiecePlacements["board_placement"],
+                            [`${parseInt(droppedSquare) + 1}`]: {
+                                piece_type: "Rook",
+                                piece_color: pieceColorToValidate,
+                                starting_square: `${parseInt(droppedSquare) - 2}`,
+                            },
                         },
-                    },
-                };
-
-                delete newPiecePlacements["board_placement"][
-                    `${parseInt(droppedSquare) - 2}`
-                ];
-            }
+                    };
+    
+                    delete newPiecePlacements["board_placement"][
+                        `${parseInt(droppedSquare) - 2}`
+                    ];
+                }
+            } 
 
             return newPiecePlacements;
         });
