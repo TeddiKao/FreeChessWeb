@@ -100,6 +100,37 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
             delete newPiecePlacements["board_placement"][`${draggedSquare}`];
 
+            if (pieceColorToValidate.toLowerCase() === "rook") {
+                const kingsideRookSquares = [7, 63];
+                const queensideRookSquares = [0, 56];
+                
+                if (kingsideRookSquares.includes(parseInt(droppedSquare))) {
+                    newPiecePlacements = {
+                        ...newPiecePlacements,
+                        castling_rights: {
+                            ...newPiecePlacements["castling_rights"],
+                            [capitaliseFirstLetter(pieceColorToValidate)]: {
+                                ...newPiecePlacements["castling_rights"][capitaliseFirstLetter(pieceColorToValidate)],
+                                Kingside: false,
+                            },
+                        }
+                    };
+                }
+
+                if (queensideRookSquares.includes(parseInt(droppedSquare))) {
+                    newPiecePlacements = {
+                        ...newPiecePlacements,
+                        castling_rights: {
+                            ...newPiecePlacements["castling_rights"],
+                            [capitaliseFirstLetter(pieceColorToValidate)]: {
+                                ...newPiecePlacements["castling_rights"][capitaliseFirstLetter(pieceColorToValidate)],
+                                Queenside: false,
+                            },
+                        }
+                    };
+                }
+            }
+
             if (pieceTypeToValidate.toLowerCase() === "king") {
                 newPiecePlacements = {
                     ...newPiecePlacements,
@@ -266,6 +297,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
             pieceColor,
             startingSquare
         );
+
         if (!legalMoves) {
             return;
         }
