@@ -72,6 +72,7 @@ function PromotionPopup({
                         onClick={() => {
                             handlePieceClick("bishop");
                         }}
+                        
                         src={`/${color.toLowerCase()}Bishop.svg`}
                     />
                 </div>

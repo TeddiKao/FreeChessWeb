@@ -35,8 +35,12 @@ def is_king_in_check(board_placement, king_color, king_square):
 
 	return king_square in attacked_squares
 
-def get_legal_moves_in_diagonal_direction(board_placement, move_info, piece_file, piece_rank, square_offset):
+def get_legal_moves_in_diagonal_direction(board_placement, move_info, piece_location, square_offset):
 	legal_squares = []
+
+	piece_file = piece_location["piece_file"]
+	piece_rank = piece_location["piece_rank"]
+
 	square = get_square(piece_file, piece_rank)
 
 	start_square = move_info["starting_square"]
@@ -80,11 +84,14 @@ def get_legal_moves_in_diagonal_direction(board_placement, move_info, piece_file
 
 	return legal_squares
 
-def get_legal_moves_in_straight_direction(board_placemeent, constant_value_str, direction, move_info, piece_file, piece_rank):
+def get_legal_moves_in_straight_direction(board_placemeent, constant_value_str, direction, move_info, piece_location):
 	legal_squares = []
 	
 	start_square = move_info["starting_square"]
 	piece_color = move_info["piece_color"]
+
+	piece_file = piece_location["piece_file"]
+	piece_rank = piece_location["piece_rank"]
 
 	changing_value = piece_file if constant_value_str == "rank" else piece_rank
 	
@@ -147,10 +154,15 @@ def get_legal_moves_in_direction(board_placement, start_square, directions, piec
 		horizontal_directions = ["east", "west"]
 		vertical_directions = ["north", "south"]
 
+		piece_location = {
+			"piece_file": piece_file,
+			"piece_rank": piece_rank
+		}
+
 		if direction in horizontal_directions:
-			legal_squares += get_legal_moves_in_straight_direction(board_placement, "rank", direction, move_info, piece_file, piece_rank)
+			legal_squares += get_legal_moves_in_straight_direction(board_placement, "rank", direction, move_info, piece_location)
 		elif direction in vertical_directions:
-			legal_squares += get_legal_moves_in_straight_direction(board_placement, "file", direction, move_info, piece_file, piece_rank)
+			legal_squares += get_legal_moves_in_straight_direction(board_placement, "file", direction, move_info, piece_location)
 
 		square_offset = None
 		if direction in direction_offset_mapping:
