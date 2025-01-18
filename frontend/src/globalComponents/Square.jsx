@@ -64,8 +64,8 @@ function Square({
                     isOpen={popupIsOpen}
                     onClose={() => {
                         setPopupIsOpen(false);
-                        handlePromotionCancel(pieceColor);
                     }}
+                    handlePromotionCancel={handlePromotionCancel}
                 />
             );
         } else {

@@ -528,22 +528,36 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 previousDroppedSquare
             ];
 
+            console.log(previousFENString["board_placement"]);
+
             if (
                 Object.keys(previousFENString["board_placement"]).includes(
                     previousDroppedSquare
                 )
             ) {
-                updatedBoardPlacement = {
-                    ...updatedBoardPlacement,
-                    board_placement: {
-                        ...updatedBoardPlacement["board_placement"],
-                        [previousDroppedSquare]: promotionCapturedPiece,
-                    },
-                };
+                const squareInfo = previousFENString["board_placement"][previousDroppedSquare];
+                console.log(squareInfo, color)
+
+                if (!promotionCapturedPiece) {
+                    return updatedBoardPlacement;
+                }
+                
+                if (promotionCapturedPiece["piece_color"].toLowerCase() !== color.toLowerCase()) {
+                    updatedBoardPlacement = {
+                        ...updatedBoardPlacement,
+                        board_placement: {
+                            ...updatedBoardPlacement["board_placement"],
+                            [previousDroppedSquare]: promotionCapturedPiece,
+                        },
+                    };
+                }
             }
 
             return updatedBoardPlacement;
         });
+
+        setPromotionCapturedPiece(null);
+        console.log(parsedFENString);
     }
 
     function generateChessboard() {
@@ -570,6 +584,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 if (
                     Object.keys(piecePlacements).includes(boardPlacementSquare)
                 ) {
+                    console.log(piecePlacements, boardPlacementSquare);
+
                     const pieceColor =
                         piecePlacements[boardPlacementSquare]["piece_color"];
                     const pieceType =

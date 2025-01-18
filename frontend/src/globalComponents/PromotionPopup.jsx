@@ -2,13 +2,14 @@ import React, {useEffect, useRef} from "react";
 
 import "../styles/promotion-popup.css";
 
-function PromotionPopup({ color, isOpen, onClose }) {
+function PromotionPopup({ color, isOpen, onClose, handlePromotionCancel }) {
     const positionClass = color.toLowerCase() === "white" ? "top" : "bottom";
     const promotionMenu = useRef(null);
 
     function handleClickOutside(event) {
         if (promotionMenu.current && !promotionMenu.current.contains(event.target)) {
             onClose();
+            handlePromotionCancel(color);
         }
     }
 
