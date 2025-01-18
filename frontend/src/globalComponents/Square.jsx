@@ -15,6 +15,7 @@ function Square({
     setDraggedSquare,
     setDroppedSquare,
     handlePromotionCancel,
+    handlePawnPromotion,
 }) {
     let startingSquare = null;
 
@@ -66,6 +67,7 @@ function Square({
                         setPopupIsOpen(false);
                     }}
                     handlePromotionCancel={handlePromotionCancel}
+                    handlePawnPromotion={handlePawnPromotion}
                 />
             );
         } else {

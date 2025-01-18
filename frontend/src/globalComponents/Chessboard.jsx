@@ -564,6 +564,25 @@ function Chessboard({ parsed_fen_string, orientation }) {
         console.log(parsedFENString);
     }
 
+    function handlePawnPromotion(color, promotedPiece) {
+        setParsedFENString((previousFENString) => ({
+            ...previousFENString,
+            board_placement: {
+                ...previousFENString["board_placement"],
+                [previousDroppedSquare]: {
+                    piece_type: promotedPiece,
+                    piece_color: color,
+                },
+            }   
+        }))
+
+        setDraggedSquare(null);
+        setDroppedSquare(null);
+        setPreviousClickedSquare(null);
+        setClickedSquare(null);
+        setPromotionCapturedPiece(null);
+    }
+
     function generateChessboard() {
         const squareElements = [];
 
@@ -615,6 +634,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             setDraggedSquare={setDraggedSquare}
                             setDroppedSquare={setDroppedSquare}
                             handlePromotionCancel={handlePromotionCancel}
+                            handlePawnPromotion={handlePawnPromotion}
                         />
                     );
                 } else {
@@ -628,6 +648,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             setParsedFENString={setParsedFENString}
                             setDraggedSquare={setDraggedSquare}
                             setDroppedSquare={setDroppedSquare}
+                            handlePromotionCancel={handlePromotionCancel}
+                            handlePawnPromotion={handlePawnPromotion}
                         />
                     );
                 }
