@@ -25,7 +25,7 @@ function Play() {
 	const timeControlBaseTime = location.state.baseTime;
 	const timeControlIncrement = location.state.increment;
 
-	const startingPositionFEN = "8/3K4/8/2PP4/1P4p1/5k1p/1P1P4/8 w - - 0 1"
+	const startingPositionFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 	async function getParsedFEN() {
 		try {

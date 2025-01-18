@@ -22,6 +22,9 @@ function Chessboard({ parsed_fen_string, orientation }) {
     const [draggedSquare, setDraggedSquare] = useState(null);
     const [droppedSquare, setDroppedSquare] = useState(null);
 
+    const [previousDraggedSquare, setPreviousDraggedSquare] = useState(null);
+    const [previousDroppedSquare, setPreviousDroppedSquare] = useState(null);
+
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
     }, [parsed_fen_string]);
@@ -82,6 +85,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
         setParsedFENString((previousFENString) => {
             const boardPlacement = previousFENString["board_placement"];
+
+            if (!`${draggedSquare}` in boardPlacement) {
+                return previousFENString;
+            }
+
             const squareInfo = boardPlacement[`${draggedSquare}`];
 
             const pieceType = squareInfo["piece_type"];
@@ -221,6 +229,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
             return newPiecePlacements;
         });
 
+        setPreviousDraggedSquare(draggedSquare);
+        setPreviousDroppedSquare(droppedSquare);
         setDraggedSquare(null);
         setDroppedSquare(null);
     }
@@ -234,6 +244,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
             }
 
             const boardPlacement = parsedFENString["board_placement"];
+
+            if (!(`${previousClickedSquare}` in Object.keys(boardPlacement))) {
+                return;
+            }
+
             const squareInfo = boardPlacement[`${previousClickedSquare}`];
 
             const pieceType = squareInfo["piece_type"];
@@ -404,9 +419,13 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 }
             }
 
+            console.log(draggedSquare);
+
             return newPiecePlacements;
         });
 
+        setPreviousDraggedSquare(previousClickedSquare);
+        setPreviousDroppedSquare(clickedSquare);
         setPreviousClickedSquare(null);
         setClickedSquare(null);
     }
@@ -448,6 +467,28 @@ function Chessboard({ parsed_fen_string, orientation }) {
         }
     }
 
+    function handlePromotionCancel(color) {
+        console.log("Cancelling promotion");
+
+        setParsedFENString((previousFENString) => {
+            const updatedBoardPlacement = {
+                ...previousFENString,
+                board_placement: {
+                    ...previousFENString["board_placement"],
+                    [previousDraggedSquare]: {
+                        "piece_type": "Pawn",
+                        "piece_color": color,
+                    },
+                },
+            }
+
+            delete updatedBoardPlacement["board_placement"][previousDroppedSquare]
+            console.log(updatedBoardPlacement);
+
+            return updatedBoardPlacement;
+        });
+    }
+
     function generateChessboard() {
         const squareElements = [];
 
@@ -477,8 +518,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     const pieceType =
                         piecePlacements[boardPlacementSquare]["piece_type"];
 
-                    const promotionRank = pieceColor === "White" ? 7 : 0;
-                    const pieceRank = getRank(boardPlacementSquare)
+                    const promotionRank = pieceColor.toLowerCase() === "white" ? 7 : 0;
+                    const pieceRank = getRank(boardPlacementSquare);
+
+                    console.log(square, promotionRank === pieceRank, pieceType.toLowerCase() === "pawn")
+                    console.log(promotionRank, pieceRank)
 
                     squareElements.push(
                         <Square
@@ -486,11 +530,15 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             squareColor={squareColor}
                             pieceColor={pieceColor}
                             pieceType={pieceType}
-                            displayPromotionPopup={pieceType === "Pawn" && promotionRank === pieceRank}
+                            displayPromotionPopup={
+                                pieceType.toLowerCase() === "pawn" &&
+                                promotionRank === pieceRank
+                            }
                             handleSquareClick={handleSquareClick}
                             setParsedFENString={setParsedFENString}
                             setDraggedSquare={setDraggedSquare}
                             setDroppedSquare={setDroppedSquare}
+                            handlePromotionCancel={handlePromotionCancel}
                         />
                     );
                 } else {

@@ -3,6 +3,7 @@ import api from "../api.js";
 
 import "../styles/square.css";
 import PromotionPopup from "./PromotionPopup.jsx";
+import { useEffect, useState } from "react";
 
 function Square({
     squareNumber,
@@ -13,9 +14,15 @@ function Square({
     handleSquareClick,
     setDraggedSquare,
     setDroppedSquare,
+    handlePromotionCancel,
 }) {
-    console.log(pieceColor);
     let startingSquare = null;
+
+    const [popupIsOpen, setPopupIsOpen] = useState(displayPromotionPopup);
+
+    useEffect(() => {
+        setPopupIsOpen(displayPromotionPopup);
+    }, [displayPromotionPopup])
 
     const [{ isDragging }, drag] = useDrag(() => {
         return {
@@ -48,7 +55,16 @@ function Square({
     function generateSquareHTML() {
         let squareHTML = null;
         if (displayPromotionPopup) {
-            squareHTML = <PromotionPopup color={pieceColor} />;
+            squareHTML = (
+                <PromotionPopup
+                    color={pieceColor}
+                    isOpen={popupIsOpen}
+                    onClose={() => {
+                        setPopupIsOpen(false);
+                        handlePromotionCancel(pieceColor);
+                    }}
+                />
+            );
         } else {
             squareHTML = (
                 <img

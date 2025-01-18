@@ -6,11 +6,6 @@
 
 	position: absolute;
 
-	padding-left: 2px;
-	padding-right: 2px;
-
-	border-radius: 4px;
-
 	z-index: 1000;
 }
 
@@ -22,4 +17,8 @@
 .bottom {
 	bottom: 0;
 	left: 0;
+}
+
+.promotion-popup-container img:hover {
+	cursor: pointer;
 }

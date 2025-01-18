@@ -35,6 +35,8 @@ async function fetchMoveIsValid(
     starting_square,
     destination_square
 ) {
+    console.log(piece_color)
+
     let isMoveLegal = false;
     try {
         const response = await api.post("/gameplay_api/validate-move/", {

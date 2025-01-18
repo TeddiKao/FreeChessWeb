@@ -1,2 +1,2 @@
 const whitePromotionRank = 7;
-const blackPromotionRank = 0
+const blackPromotionRank = 0;
