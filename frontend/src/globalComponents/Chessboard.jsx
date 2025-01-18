@@ -535,14 +535,18 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     previousDroppedSquare
                 )
             ) {
-                const squareInfo = previousFENString["board_placement"][previousDroppedSquare];
-                console.log(squareInfo, color)
+                const squareInfo =
+                    previousFENString["board_placement"][previousDroppedSquare];
+                console.log(squareInfo, color);
 
                 if (!promotionCapturedPiece) {
                     return updatedBoardPlacement;
                 }
-                
-                if (promotionCapturedPiece["piece_color"].toLowerCase() !== color.toLowerCase()) {
+
+                if (
+                    promotionCapturedPiece["piece_color"].toLowerCase() !==
+                    color.toLowerCase()
+                ) {
                     updatedBoardPlacement = {
                         ...updatedBoardPlacement,
                         board_placement: {
@@ -597,6 +601,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
                     squareElements.push(
                         <Square
+                            key={boardPlacementSquare}
                             squareNumber={boardPlacementSquare}
                             squareColor={squareColor}
                             pieceColor={pieceColor}
@@ -615,6 +620,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 } else {
                     squareElements.push(
                         <Square
+                            key={boardPlacementSquare}
                             squareNumber={boardPlacementSquare}
                             squareColor={squareColor}
                             handleSquareClick={handleSquareClick}
