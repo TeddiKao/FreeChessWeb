@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import "../styles/chessboard.css";
 import Square from "./Square";
 
-import { clearSquaresStyling, getRank } from "../utils/boardUtils.js";
+import { clearSquaresStyling, getRank, getFile } from "../utils/boardUtils.js";
 import { fetchLegalMoves, fetchMoveIsValid } from "../utils/apiUtils.js";
 import { capitaliseFirstLetter } from "../utils/generalUtils.js";
 
@@ -24,6 +24,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
     const [previousDraggedSquare, setPreviousDraggedSquare] = useState(null);
     const [previousDroppedSquare, setPreviousDroppedSquare] = useState(null);
+    const [promotionCapturedPiece, setPromotionCapturedPiece] = useState(null);
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -83,6 +84,31 @@ function Chessboard({ parsed_fen_string, orientation }) {
             return;
         }
 
+        if (pieceTypeToValidate.toLowerCase() === "pawn") {
+            const rank = getRank(droppedSquare);
+            const draggedFile = getFile(draggedSquare);
+            const droppedFile = getFile(droppedSquare);
+            const fileDifference = Math.abs(draggedFile - droppedFile);
+
+            if (pieceColorToValidate.toLowerCase() === "white") {
+                if (rank === 7 && fileDifference === 1) {
+                    const boardPlacement = parsedFENString["board_placement"];
+                    const capturedPieceInfo = boardPlacement[`${droppedSquare}`]
+
+                    setPromotionCapturedPiece(capturedPieceInfo);
+                }
+            }
+
+            if (pieceColorToValidate.toLowerCase() === "black") {
+                if (rank === 0 && fileDifference === 1) {
+                    const boardPlacement = parsedFENString["board_placement"];
+                    const capturedPieceInfo = boardPlacement[`${droppedSquare}`]
+
+                    setPromotionCapturedPiece(capturedPieceInfo);
+                }
+            }
+        }
+
         setParsedFENString((previousFENString) => {
             const boardPlacement = previousFENString["board_placement"];
 
@@ -95,8 +121,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
             const pieceType = squareInfo["piece_type"];
             const pieceColor = squareInfo["piece_color"];
             const initialSquare = squareInfo["starting_square"];
-
-            console.log(initialSquare);
 
             let newPiecePlacements = {
                 ...previousFENString,
@@ -147,8 +171,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
             }
 
             if (pieceTypeToValidate.toLowerCase() === "king") {
-                console.log(newPiecePlacements);
-
                 const colorCastlingRights =
                     newPiecePlacements["castling_rights"][
                         capitaliseFirstLetter(pieceColorToValidate)
@@ -393,7 +415,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
                         },
                     };
 
-                    console.log(newPiecePlacements["board_placement"]);
                     delete newPiecePlacements["board_placement"][
                         `${parseInt(clickedSquare) + 1}`
                     ];
@@ -422,8 +443,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     ];
                 }
             }
-
-            console.log(draggedSquare);
 
             return newPiecePlacements;
         });
@@ -472,10 +491,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
     }
 
     function handlePromotionCancel(color) {
-        console.log("Cancelling promotion");
-
         setParsedFENString((previousFENString) => {
-            const updatedBoardPlacement = {
+            let updatedBoardPlacement = {
                 ...previousFENString,
                 board_placement: {
                     ...previousFENString["board_placement"],
@@ -489,7 +506,20 @@ function Chessboard({ parsed_fen_string, orientation }) {
             delete updatedBoardPlacement["board_placement"][
                 previousDroppedSquare
             ];
-            console.log(updatedBoardPlacement);
+
+            if (
+                Object.keys(previousFENString["board_placement"]).includes(
+                    previousDroppedSquare
+                )
+            ) {
+                updatedBoardPlacement = {
+                    ...updatedBoardPlacement,
+                    board_placement: {
+                        ...updatedBoardPlacement["board_placement"],
+                        [previousDroppedSquare]: promotionCapturedPiece,
+                    },
+                };
+            }
 
             return updatedBoardPlacement;
         });
@@ -527,13 +557,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     const promotionRank =
                         pieceColor.toLowerCase() === "white" ? 7 : 0;
                     const pieceRank = getRank(boardPlacementSquare);
-
-                    console.log(
-                        square,
-                        promotionRank === pieceRank,
-                        pieceType.toLowerCase() === "pawn"
-                    );
-                    console.log(promotionRank, pieceRank);
 
                     squareElements.push(
                         <Square

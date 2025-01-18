@@ -11,4 +11,8 @@ function getRank(square) {
     return Math.ceil(((parseInt(square) + 1) / 8) - 1);
 }
 
-export { clearSquaresStyling, getRank }
+function getFile(square) {
+    return (parseInt(square)) % 8;
+}
+
+export { clearSquaresStyling, getRank, getFile }

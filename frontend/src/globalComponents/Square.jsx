@@ -22,7 +22,7 @@ function Square({
 
     useEffect(() => {
         setPopupIsOpen(displayPromotionPopup);
-    }, [displayPromotionPopup])
+    }, [displayPromotionPopup]);
 
     const [{ isDragging }, drag] = useDrag(() => {
         return {
@@ -53,6 +53,9 @@ function Square({
     }
 
     function generateSquareHTML() {
+        if (squareNumber === "62") {
+        }
+
         let squareHTML = null;
         if (displayPromotionPopup) {
             squareHTML = (

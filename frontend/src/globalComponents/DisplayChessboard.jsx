@@ -1,9 +1,7 @@
-import "../styles/square.css"
-import "../styles/chessboard.css"
+import "../styles/square.css";
+import "../styles/chessboard.css";
 
 function DisplayChessboard({ fenString, orientation }) {
-    console.log(fenString);
-
     if (!fenString) {
         return null;
     }
@@ -32,18 +30,33 @@ function DisplayChessboard({ fenString, orientation }) {
                 const squareColor = squareIsLight ? "light" : "dark";
 
                 if (squaresArray.includes(`${square - 1}`)) {
-                    const pieceType = boardPlacement[`${square - 1}`]["piece_type"];
-                    const pieceColor = boardPlacement[`${square - 1}`]["piece_color"].toLowerCase();
+                    const pieceType =
+                        boardPlacement[`${square - 1}`]["piece_type"];
+                    const pieceColor =
+                        boardPlacement[`${square - 1}`][
+                            "piece_color"
+                        ].toLowerCase();
 
-					squareElements.push(
-						<div key={square} id={square} className={`chessboard-square ${squareColor}`}>
-                            <img src={`/${pieceColor}${pieceType}.svg`} className="piece-image"/>
+                    squareElements.push(
+                        <div
+                            key={square}
+                            id={square}
+                            className={`chessboard-square ${squareColor}`}
+                        >
+                            <img
+                                src={`/${pieceColor}${pieceType}.svg`}
+                                className="piece-image"
+                            />
                         </div>
-					)
+                    );
                 } else {
                     squareElements.push(
-                        <div key={square} id={square} className={`chessboard-square ${squareColor}`}></div>
-                    )
+                        <div
+                            key={square}
+                            id={square}
+                            className={`chessboard-square ${squareColor}`}
+                        ></div>
+                    );
                 }
             }
         }

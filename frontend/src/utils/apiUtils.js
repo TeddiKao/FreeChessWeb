@@ -35,8 +35,6 @@ async function fetchMoveIsValid(
     starting_square,
     destination_square
 ) {
-    console.log(piece_color)
-
     let isMoveLegal = false;
     try {
         const response = await api.post("/gameplay_api/validate-move/", {
@@ -52,7 +50,6 @@ async function fetchMoveIsValid(
         if (response.status === 200) {
             isMoveLegal = response.data.is_valid;
         }
-
     } catch (error) {
         console.log(error);
     }
@@ -71,12 +68,10 @@ async function fetchFen(rawFenString) {
         });
 
         parsedFen = response.data;
-        console.log(parsedFen);
     } catch (error) {
         console.log(error);
     }
 
-    console.log(parsedFen);
     return parsedFen;
 }
 
@@ -87,23 +82,17 @@ async function fetchKingIsInCheck(boardPlacement, kingColor, kingSquare) {
         const response = await api.post("/gameplay_api/get-king-is-in-check/", {
             board_placement: boardPlacement,
             king_color: kingColor,
-            king_square: kingSquare
-        })
+            king_square: kingSquare,
+        });
 
         if (response.status === 200) {
-            isKingInCheck = response.data
+            isKingInCheck = response.data;
         }
-
     } catch {
         console.log(error);
     }
 
-    return isKingInCheck
+    return isKingInCheck;
 }
 
-export {
-	fetchFen,
-	fetchKingIsInCheck,
-	fetchLegalMoves,
-	fetchMoveIsValid,
-}
+export { fetchFen, fetchKingIsInCheck, fetchLegalMoves, fetchMoveIsValid };
