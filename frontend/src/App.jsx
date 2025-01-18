@@ -13,8 +13,8 @@ import SelectTimeControl from "./pages/Protected/SelectTimeControl.jsx";
 
 import "./styles/global.css";
 
-import ProtectedRoute from "./globalComponents/ProtectedRoute.jsx";
-import AuthenticationRoute from "./globalComponents/AuthenticationRoute.jsx";
+import ProtectedRoute from "./globalComponents/routes/ProtectedRoute.jsx";
+import AuthenticationRoute from "./globalComponents/routes/AuthenticationRoute.jsx";
 import Play from "./pages/Protected/Play.jsx";
 
 function Logout() {
@@ -67,11 +67,14 @@ function App() {
                             }
                         />
 
-                        <Route path="/play" element={
-                            <ProtectedRoute>
-                                <Play/>
-                            </ProtectedRoute>
-                        }/>
+                        <Route
+                            path="/play"
+                            element={
+                                <ProtectedRoute>
+                                    <Play />
+                                </ProtectedRoute>
+                            }
+                        />
 
                         <Route path="*" element={<NotFound />} />
                     </Routes>
