@@ -1,4 +1,4 @@
-.chessboard-square {
+.chessboard-square, .previous-dropped-square, .previous-dragged-square {
 	height: 55px;
 	position: relative;
 }
@@ -16,6 +16,17 @@
 
 .dark {
 	background-color: var(--dark-square-color);
+	border: none;
+}
+
+.previous-dragged-square {
+	background-color: var(--last-dragged-square-color);
+	border: none;
+}
+
+.previous-dropped-square {
+	background-color: var(--last-dropped-square-color);
+	border: none;
 }
 
 .legal-square {

@@ -635,6 +635,9 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             setDroppedSquare={setDroppedSquare}
                             handlePromotionCancel={handlePromotionCancel}
                             handlePawnPromotion={handlePawnPromotion}
+
+                            previousDraggedSquare={previousDraggedSquare}
+                            previousDroppedSquare={previousDroppedSquare}
                         />
                     );
                 } else {
@@ -650,6 +653,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             setDroppedSquare={setDroppedSquare}
                             handlePromotionCancel={handlePromotionCancel}
                             handlePawnPromotion={handlePawnPromotion}
+                            previousDraggedSquare={previousDraggedSquare}
+                            previousDroppedSquare={previousDroppedSquare}
                         />
                     );
                 }

@@ -7,6 +7,9 @@
 
 	--light-square-color: hsl(32, 100%, 87%);
 	--dark-square-color: hsl(32, 100%, 35%);
+
+	--last-dragged-square-color: hsl(60, 100%, 50%);
+	--last-dropped-square-color: hsl(60, 100%, 40%);
 }
 
 body {

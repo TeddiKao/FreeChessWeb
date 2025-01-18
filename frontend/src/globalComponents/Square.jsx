@@ -16,10 +16,24 @@ function Square({
     setDroppedSquare,
     handlePromotionCancel,
     handlePawnPromotion,
+    previousDraggedSquare,
+    previousDroppedSquare,
 }) {
     let startingSquare = null;
 
     const [popupIsOpen, setPopupIsOpen] = useState(displayPromotionPopup);
+
+    function getSquareClass() {
+        console.log(squareNumber, previousDraggedSquare, previousDroppedSquare);
+
+        if (squareNumber === previousDraggedSquare) {
+            return "previous-dragged-square";
+        } else if (squareNumber === previousDroppedSquare) {
+            return "previous-dropped-square";
+        } else {
+            return `chessboard-square ${squareColor}`;
+        }
+    }
 
     useEffect(() => {
         setPopupIsOpen(displayPromotionPopup);
@@ -89,7 +103,7 @@ function Square({
     return (
         <div
             ref={drop}
-            className={`chessboard-square ${squareColor}`}
+            className={getSquareClass()}
             id={squareNumber}
             onClick={(event) => {
                 handleSquareClick(event, squareNumber);
