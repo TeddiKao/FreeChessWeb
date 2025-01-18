@@ -263,8 +263,6 @@ def get_pawn_legal_moves(board_placement, move_info):
 def get_king_legal_moves(board_placement, castling_rights, move_info):
 	legal_moves = []
 
-	
-
 	starting_square = move_info["starting_square"]
 	piece_color = move_info["piece_color"]
 
@@ -277,6 +275,9 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 	down_left_square = f"{int(starting_square) - 7}"
 	down_right_square = f"{int(starting_square) - 9}"
 
+	white_king_starting_square = 4
+	black_king_starting_square = 60
+
 	castle_queenside_middle_square = f"{int(starting_square) - 1}"
 	castle_queenside_square = f"{int(starting_square) - 2}"
 
@@ -285,6 +286,25 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 
 	can_castle_queenside = True
 	can_castle_kingside = True
+
+	king_position = int(get_king_position(board_placement, piece_color))
+
+	if piece_color.lower() == "white":
+		if king_position != white_king_starting_square:
+			castling_rights[piece_color]["Kingside"] = False
+			castling_rights[piece_color]["Queenside"] = False
+
+			can_castle_kingside = False
+			can_castle_queenside = False
+
+	else:
+		if king_position != black_king_starting_square:
+			castling_rights[piece_color]["Kingside"] = False
+			castling_rights[piece_color]["Queenside"] = False
+
+			can_castle_kingside = False
+			can_castle_queenside = False
+	
 
 	if castling_rights[piece_color]["Queenside"]:
 		if castle_queenside_middle_square in board_placement:
