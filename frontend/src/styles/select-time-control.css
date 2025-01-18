@@ -48,7 +48,7 @@
 .time-control-type-container div:hover {
     cursor: pointer;
     background-color: hsl(0, 0%, 70%);
-    transition: 0.1s ease;
+    transition: 0.25s ease;
 }
 
 .time-control-type-container div h1 {
@@ -93,6 +93,11 @@
 .selected-time-control-container p {
 	background-color: hsl(200, 100%, 50%);
 	color: white;
+}
+
+.time-control-container p:hover {
+    background-color: hsl(0, 0%, 70%);
+    transform: 0.25s ease;
 }
 
 .time-control-container p:hover,
