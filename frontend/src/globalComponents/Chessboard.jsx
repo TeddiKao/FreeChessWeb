@@ -93,7 +93,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
             if (pieceColorToValidate.toLowerCase() === "white") {
                 if (rank === 7 && fileDifference === 1) {
                     const boardPlacement = parsedFENString["board_placement"];
-                    const capturedPieceInfo = boardPlacement[`${droppedSquare}`]
+                    const capturedPieceInfo =
+                        boardPlacement[`${droppedSquare}`];
 
                     setPromotionCapturedPiece(capturedPieceInfo);
                 }
@@ -102,7 +103,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
             if (pieceColorToValidate.toLowerCase() === "black") {
                 if (rank === 0 && fileDifference === 1) {
                     const boardPlacement = parsedFENString["board_placement"];
-                    const capturedPieceInfo = boardPlacement[`${droppedSquare}`]
+                    const capturedPieceInfo =
+                        boardPlacement[`${droppedSquare}`];
 
                     setPromotionCapturedPiece(capturedPieceInfo);
                 }
@@ -305,6 +307,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
         }
 
         const boardPlacement = parsedFENString["board_placement"];
+        const initialSquare =
+            boardPlacement[`${previousClickedSquare}`]["initial_square"];
         const pieceTypeToValidate =
             boardPlacement[`${previousClickedSquare}`]["piece_type"];
         const pieceColorToValidate =
@@ -385,6 +389,9 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 }
             }
 
+            const colorCastlingRights =
+                previousFENString["castling_rights"][pieceColor];
+
             if (pieceTypeToValidate.toLowerCase() === "king") {
                 newPiecePlacements = {
                     ...newPiecePlacements,
@@ -401,46 +408,60 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     parseInt(clickedSquare) === whiteKingsideCastlingSquare ||
                     parseInt(clickedSquare) === blackKingsideCastlingSquare
                 ) {
-                    newPiecePlacements = {
-                        ...newPiecePlacements,
-                        board_placement: {
-                            ...newPiecePlacements["board_placement"],
-                            [`${parseInt(clickedSquare) - 1}`]: {
-                                piece_type: "Rook",
-                                piece_color: pieceColorToValidate,
-                                starting_square: `${
-                                    parseInt(clickedSquare) + 1
-                                }`,
-                            },
-                        },
-                    };
+                    if (colorCastlingRights["Kingside"]) {
+                        if (
+                            parseInt(clickedSquare) - 2 ===
+                            parseInt(previousClickedSquare)
+                        ) {
+                            newPiecePlacements = {
+                                ...newPiecePlacements,
+                                board_placement: {
+                                    ...newPiecePlacements["board_placement"],
+                                    [`${parseInt(clickedSquare) - 1}`]: {
+                                        piece_type: "Rook",
+                                        piece_color: pieceColorToValidate,
+                                        starting_square: `${
+                                            parseInt(clickedSquare) - 2
+                                        }`,
+                                    },
+                                },
+                            };
 
-                    delete newPiecePlacements["board_placement"][
-                        `${parseInt(clickedSquare) + 1}`
-                    ];
+                            delete newPiecePlacements["board_placement"][
+                                `${parseInt(clickedSquare) + 1}`
+                            ];
+                        }
+                    }
                 }
 
                 if (
                     parseInt(clickedSquare) === whiteQueensideCastlingSquare ||
                     parseInt(clickedSquare) === blackQueensideCastlingSquare
                 ) {
-                    newPiecePlacements = {
-                        ...newPiecePlacements,
-                        board_placement: {
-                            ...newPiecePlacements["board_placement"],
-                            [`${parseInt(clickedSquare) + 1}`]: {
-                                piece_type: "Rook",
-                                piece_color: pieceColorToValidate,
-                                starting_square: `${
-                                    parseInt(clickedSquare) - 2
-                                }`,
-                            },
-                        },
-                    };
+                    if (colorCastlingRights["Queenside"]) {
+                        if (
+                            parseInt(clickedSquare) + 2 ===
+                            parseInt(previousClickedSquare)
+                        ) {
+                            newPiecePlacements = {
+                                ...newPiecePlacements,
+                                board_placement: {
+                                    ...newPiecePlacements["board_placement"],
+                                    [`${parseInt(clickedSquare) + 1}`]: {
+                                        piece_type: "Rook",
+                                        piece_color: pieceColorToValidate,
+                                        starting_square: `${
+                                            parseInt(clickedSquare) - 2
+                                        }`,
+                                    },
+                                },
+                            };
 
-                    delete newPiecePlacements["board_placement"][
-                        `${parseInt(clickedSquare) - 2}`
-                    ];
+                            delete newPiecePlacements["board_placement"][
+                                `${parseInt(clickedSquare) - 2}`
+                            ];
+                        }
+                    }
                 }
             }
 
