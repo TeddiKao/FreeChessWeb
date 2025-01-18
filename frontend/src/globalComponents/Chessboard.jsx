@@ -86,7 +86,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
         setParsedFENString((previousFENString) => {
             const boardPlacement = previousFENString["board_placement"];
 
-            if (!`${draggedSquare}` in boardPlacement) {
+            if (!Object.keys(boardPlacement).includes(`${draggedSquare}`)) {
                 return previousFENString;
             }
 
@@ -245,7 +245,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
             const boardPlacement = parsedFENString["board_placement"];
 
-            if (!(`${previousClickedSquare}` in Object.keys(boardPlacement))) {
+            if (
+                !Object.keys(boardPlacement).includes(
+                    `${previousClickedSquare}`
+                )
+            ) {
                 return;
             }
 
@@ -476,13 +480,15 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 board_placement: {
                     ...previousFENString["board_placement"],
                     [previousDraggedSquare]: {
-                        "piece_type": "Pawn",
-                        "piece_color": color,
+                        piece_type: "Pawn",
+                        piece_color: color,
                     },
                 },
-            }
+            };
 
-            delete updatedBoardPlacement["board_placement"][previousDroppedSquare]
+            delete updatedBoardPlacement["board_placement"][
+                previousDroppedSquare
+            ];
             console.log(updatedBoardPlacement);
 
             return updatedBoardPlacement;
@@ -518,11 +524,16 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     const pieceType =
                         piecePlacements[boardPlacementSquare]["piece_type"];
 
-                    const promotionRank = pieceColor.toLowerCase() === "white" ? 7 : 0;
+                    const promotionRank =
+                        pieceColor.toLowerCase() === "white" ? 7 : 0;
                     const pieceRank = getRank(boardPlacementSquare);
 
-                    console.log(square, promotionRank === pieceRank, pieceType.toLowerCase() === "pawn")
-                    console.log(promotionRank, pieceRank)
+                    console.log(
+                        square,
+                        promotionRank === pieceRank,
+                        pieceType.toLowerCase() === "pawn"
+                    );
+                    console.log(promotionRank, pieceRank);
 
                     squareElements.push(
                         <Square
