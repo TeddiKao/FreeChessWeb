@@ -6,6 +6,7 @@ import Square from "./Square";
 import { clearSquaresStyling, getRank, getFile } from "../utils/boardUtils.js";
 import { fetchLegalMoves, fetchMoveIsValid } from "../utils/apiUtils.js";
 import { capitaliseFirstLetter } from "../utils/generalUtils.js";
+import { whitePromotionRank, blackPromotionRank } from "../constants/boardSquares.js";
 
 import {
     whiteKingsideCastlingSquare,

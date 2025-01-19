@@ -162,7 +162,7 @@ def get_legal_moves_in_straight_direction(board_placement, constant_value_str, d
 		else:
 			square = f"{get_square(piece_file, value)}"
 
-		print(square)
+		
 
 		starting_square_info = {
 			"starting_square": start_square,
@@ -371,11 +371,14 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 		file_distance = get_file(legal_move) - get_file(starting_square)
 		castling_squares = [f"{castle_kingside_square}", f"{castle_queenside_square}"]
 
+		print(abs(file_distance))
+
 		if abs(file_distance) <= 1:
 			continue
 
-		if legal_move not in castling_squares:
-			continue
+		if legal_move in castling_squares:
+			if abs(file_distance) <= 2:
+				continue
 
 		if abs(file_distance) <= 2:
 			continue
