@@ -6,7 +6,10 @@ import Square from "./Square";
 import { clearSquaresStyling, getRank, getFile } from "../utils/boardUtils.js";
 import { fetchLegalMoves, fetchMoveIsValid } from "../utils/apiUtils.js";
 import { capitaliseFirstLetter } from "../utils/generalUtils.js";
-import { whitePromotionRank, blackPromotionRank } from "../constants/boardSquares.js";
+import {
+    whitePromotionRank,
+    blackPromotionRank,
+} from "../constants/boardSquares.js";
 
 import {
     whiteKingsideCastlingSquare,
@@ -126,11 +129,19 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 const queensideRookSquares = [0, 56];
 
                 if (kingsideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, pieceColorToValidate, "Kingside")
+                    newPiecePlacements = modifyCastlingRights(
+                        newPiecePlacements,
+                        pieceColorToValidate,
+                        "Kingside"
+                    );
                 }
 
                 if (queensideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, pieceColorToValidate, "Queenside")
+                    newPiecePlacements = modifyCastlingRights(
+                        newPiecePlacements,
+                        pieceColorToValidate,
+                        "Queenside"
+                    );
                 }
             }
 
@@ -166,30 +177,36 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     parseInt(droppedSquare) === whiteQueensideCastlingSquare ||
                     parseInt(droppedSquare) === blackQueensideCastlingSquare
                 ) {
-                    if (colorCastlingRights["Queenside"]) {
-                        if (
-                            parseInt(droppedSquare) + 2 ===
-                            parseInt(draggedSquare)
-                        ) {
-                            newPiecePlacements = handleCastling(
-                                newPiecePlacements,
-                                "queenside",
-                                pieceColorToValidate
-                            );
-                        }
+                    if (!colorCastlingRights["Queenside"]) {
+                        newPiecePlacements = disableCastlingForColor(
+                            newPiecePlacements,
+                            pieceColorToValidate
+                        );
+                        return newPiecePlacements;
                     }
+
+                    if (
+                        parseInt(droppedSquare) + 2 !==
+                        parseInt(draggedSquare)
+                    ) {
+                        newPiecePlacements = disableCastlingForColor(
+                            newPiecePlacements,
+                            pieceColorToValidate
+                        );
+                        return newPiecePlacements;
+                    }
+
+                    newPiecePlacements = handleCastling(
+                        newPiecePlacements,
+                        "queenside",
+                        pieceColorToValidate
+                    );
                 }
 
-                newPiecePlacements = {
-                    ...newPiecePlacements,
-                    castling_rights: {
-                        ...newPiecePlacements["castling_rights"],
-                        [capitaliseFirstLetter(pieceColorToValidate)]: {
-                            Kingside: false,
-                            Queenside: false,
-                        },
-                    },
-                };
+                newPiecePlacements = disableCastlingForColor(
+                    newPiecePlacements,
+                    pieceColorToValidate
+                );
             }
 
             return newPiecePlacements;
@@ -309,11 +326,19 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 const queensideRookSquares = [0, 56];
 
                 if (kingsideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, pieceColorToValidate, "Kingside")
+                    newPiecePlacements = modifyCastlingRights(
+                        newPiecePlacements,
+                        pieceColorToValidate,
+                        "Kingside"
+                    );
                 }
 
                 if (queensideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, pieceColorToValidate, "Queenside")
+                    newPiecePlacements = modifyCastlingRights(
+                        newPiecePlacements,
+                        pieceColorToValidate,
+                        "Queenside"
+                    );
                 }
             }
 
@@ -343,31 +368,42 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     parseInt(clickedSquare) === whiteQueensideCastlingSquare ||
                     parseInt(clickedSquare) === blackQueensideCastlingSquare
                 ) {
-                    if (colorCastlingRights["Queenside"]) {
-                        if (
-                            parseInt(clickedSquare) + 2 ===
-                            parseInt(previousClickedSquare)
-                        ) {
-                            newPiecePlacements = handleCastling(
-                                newPiecePlacements,
-                                "queenside",
-                                pieceColorToValidate
-                            );
-                        }
+                    if (!colorCastlingRights["Queenside"]) {
+                        newPiecePlacements = disableCastlingForColor(
+                            newPiecePlacements,
+                            pieceColorToValidate
+                        );
+                        return newPiecePlacements;
                     }
+
+                    if (
+                        parseInt(droppedSquare) + 2 !==
+                        parseInt(draggedSquare)
+                    ) {
+                        newPiecePlacements = disableCastlingForColor(
+                            newPiecePlacements,
+                            pieceColorToValidate
+                        );
+                        return newPiecePlacements;
+                    }
+
+                    newPiecePlacements = handleCastling(
+                        newPiecePlacements,
+                        "queenside",
+                        pieceColorToValidate
+                    );
                 }
+
+                newPiecePlacements = disableCastlingForColor(
+                    newPiecePlacements,
+                    pieceColorToValidate
+                );
             }
 
-            newPiecePlacements = {
-                ...newPiecePlacements,
-                castling_rights: {
-                    ...newPiecePlacements["castling_rights"],
-                    [capitaliseFirstLetter(pieceColorToValidate)]: {
-                        Kingside: false,
-                        Queenside: false,
-                    },
-                },
-            };
+            newPiecePlacements = disableCastlingForColor(
+                newPiecePlacements,
+                pieceColorToValidate
+            );
 
             return newPiecePlacements;
         });
@@ -480,9 +516,9 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 [color]: {
                     ...originalFENString["castling_rights"][color],
                     [castlingSide]: false,
-                }
-            }
-        }
+                },
+            },
+        };
 
         return updatedFENString;
     }
@@ -522,6 +558,19 @@ function Chessboard({ parsed_fen_string, orientation }) {
         console.log(originalRookSquare);
 
         return newFENString;
+    }
+
+    function disableCastlingForColor(originalFENString, color) {
+        return {
+            ...originalFENString,
+            castling_rights: {
+                ...originalFENString["castling_rights"],
+                [color]: {
+                    Kingside: false,
+                    Queenside: false,
+                },
+            },
+        };
     }
 
     function handlePromotionCapture(
