@@ -439,7 +439,6 @@ def get_knight_legal_moves(board_placement, move_info):
 
 		cleaned_legal_moves.remove(f"{legal_move}")
 			
-
 	for legal_move in legal_moves:
 		starting_square_info = {
 			"starting_square": starting_square,

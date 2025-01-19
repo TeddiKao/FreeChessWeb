@@ -12,6 +12,8 @@ import {
     blackKingsideCastlingSquare,
     whiteQueensideCastlingSquare,
     blackQueensideCastlingSquare,
+    whiteKingStartingSquare,
+    blackKingStartingSquare,
 } from "../constants/castlingSquares.js";
 
 function Chessboard({ parsed_fen_string, orientation }) {
@@ -85,30 +87,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
         }
 
         if (pieceTypeToValidate.toLowerCase() === "pawn") {
-            const rank = getRank(droppedSquare);
-            const draggedFile = getFile(draggedSquare);
-            const droppedFile = getFile(droppedSquare);
-            const fileDifference = Math.abs(draggedFile - droppedFile);
-
-            if (pieceColorToValidate.toLowerCase() === "white") {
-                if (rank === 7 && fileDifference === 1) {
-                    const boardPlacement = parsedFENString["board_placement"];
-                    const capturedPieceInfo =
-                        boardPlacement[`${droppedSquare}`];
-
-                    setPromotionCapturedPiece(capturedPieceInfo);
-                }
-            }
-
-            if (pieceColorToValidate.toLowerCase() === "black") {
-                if (rank === 0 && fileDifference === 1) {
-                    const boardPlacement = parsedFENString["board_placement"];
-                    const capturedPieceInfo =
-                        boardPlacement[`${droppedSquare}`];
-
-                    setPromotionCapturedPiece(capturedPieceInfo);
-                }
-            }
+            handlePromotionCapture(
+                pieceColorToValidate,
+                draggedSquare,
+                droppedSquare
+            );
         }
 
         setParsedFENString((previousFENString) => {
@@ -187,19 +170,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             parseInt(droppedSquare) - 2 ===
                             parseInt(draggedSquare)
                         ) {
-                            newPiecePlacements = {
-                                ...newPiecePlacements,
-                                board_placement: {
-                                    ...newPiecePlacements["board_placement"],
-                                    [`${parseInt(droppedSquare) - 1}`]: {
-                                        piece_type: "Rook",
-                                        piece_color: pieceColorToValidate,
-                                        starting_square: `${
-                                            parseInt(droppedSquare) + 1
-                                        }`,
-                                    },
-                                },
-                            };
+                            newPiecePlacements = handleCastling(
+                                newPiecePlacements,
+                                "kingside",
+                                pieceColorToValidate
+                            );
 
                             delete newPiecePlacements["board_placement"][
                                 `${parseInt(droppedSquare) + 1}`
@@ -217,23 +192,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             parseInt(droppedSquare) + 2 ===
                             parseInt(draggedSquare)
                         ) {
-                            newPiecePlacements = {
-                                ...newPiecePlacements,
-                                board_placement: {
-                                    ...newPiecePlacements["board_placement"],
-                                    [`${parseInt(droppedSquare) + 1}`]: {
-                                        piece_type: "Rook",
-                                        piece_color: pieceColorToValidate,
-                                        starting_square: `${
-                                            parseInt(droppedSquare) - 2
-                                        }`,
-                                    },
-                                },
-                            };
-
-                            delete newPiecePlacements["board_placement"][
-                                `${parseInt(droppedSquare) - 2}`
-                            ];
+                            newPiecePlacements = handleCastling(
+                                newPiecePlacements,
+                                "queenside",
+                                pieceColorToValidate
+                            );
                         }
                     }
                 }
@@ -326,6 +289,14 @@ function Chessboard({ parsed_fen_string, orientation }) {
             return;
         }
 
+        if (pieceTypeToValidate.toLowerCase() === "pawn") {
+            handlePromotionCapture(
+                pieceColorToValidate,
+                previousClickedSquare,
+                clickedSquare
+            );
+        }
+
         setParsedFENString((previousFENString) => {
             const oringinalBoardPlacements =
                 previousFENString["board_placement"];
@@ -393,17 +364,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 previousFENString["castling_rights"][pieceColor];
 
             if (pieceTypeToValidate.toLowerCase() === "king") {
-                newPiecePlacements = {
-                    ...newPiecePlacements,
-                    castling_rights: {
-                        ...newPiecePlacements["castling_rights"],
-                        [capitaliseFirstLetter(pieceColorToValidate)]: {
-                            Kingside: false,
-                            Queenside: false,
-                        },
-                    },
-                };
-
                 if (
                     parseInt(clickedSquare) === whiteKingsideCastlingSquare ||
                     parseInt(clickedSquare) === blackKingsideCastlingSquare
@@ -413,23 +373,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             parseInt(clickedSquare) - 2 ===
                             parseInt(previousClickedSquare)
                         ) {
-                            newPiecePlacements = {
-                                ...newPiecePlacements,
-                                board_placement: {
-                                    ...newPiecePlacements["board_placement"],
-                                    [`${parseInt(clickedSquare) - 1}`]: {
-                                        piece_type: "Rook",
-                                        piece_color: pieceColorToValidate,
-                                        starting_square: `${
-                                            parseInt(clickedSquare) - 2
-                                        }`,
-                                    },
-                                },
-                            };
-
-                            delete newPiecePlacements["board_placement"][
-                                `${parseInt(clickedSquare) + 1}`
-                            ];
+                            newPiecePlacements = handleCastling(
+                                newPiecePlacements,
+                                "kingside",
+                                pieceColorToValidate
+                            );
                         }
                     }
                 }
@@ -443,27 +391,26 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             parseInt(clickedSquare) + 2 ===
                             parseInt(previousClickedSquare)
                         ) {
-                            newPiecePlacements = {
-                                ...newPiecePlacements,
-                                board_placement: {
-                                    ...newPiecePlacements["board_placement"],
-                                    [`${parseInt(clickedSquare) + 1}`]: {
-                                        piece_type: "Rook",
-                                        piece_color: pieceColorToValidate,
-                                        starting_square: `${
-                                            parseInt(clickedSquare) - 2
-                                        }`,
-                                    },
-                                },
-                            };
-
-                            delete newPiecePlacements["board_placement"][
-                                `${parseInt(clickedSquare) - 2}`
-                            ];
+                            newPiecePlacements = handleCastling(
+                                newPiecePlacements,
+                                "queenside",
+                                pieceColorToValidate
+                            );
                         }
                     }
                 }
             }
+
+            newPiecePlacements = {
+                ...newPiecePlacements,
+                castling_rights: {
+                    ...newPiecePlacements["castling_rights"],
+                    [capitaliseFirstLetter(pieceColorToValidate)]: {
+                        Kingside: false,
+                        Queenside: false,
+                    },
+                },
+            };
 
             return newPiecePlacements;
         });
@@ -564,6 +511,75 @@ function Chessboard({ parsed_fen_string, orientation }) {
         console.log(parsedFENString);
     }
 
+    function handleCastling(originalFENString, castlingSide, color) {
+        const castlingSquareOffset =
+            castlingSide.toLowerCase() === "queenside" ? -2 : 2;
+
+        const startingSquare =
+            color.toLowerCase() === "white"
+                ? whiteKingStartingSquare
+                : blackKingStartingSquare;
+
+        const originalRookSquare =
+            castlingSide.toLowerCase() === "queenside"
+                ? startingSquare - 4
+                : startingSquare + 3;
+
+        const castledRookSquare = castlingSide.toLowerCase() === "queenside" ? startingSquare - 1 : startingSquare + 1;
+
+        const newFENString = {
+            ...originalFENString,
+            board_placement: {
+                ...originalFENString["board_placement"],
+                [`${castledRookSquare}`]: {
+                    piece_type: "Rook",
+                    piece_color: color,
+                    starting_square: `${startingSquare}`,
+                },
+            },
+        };
+
+        delete newFENString["board_placement"][`${originalRookSquare}`];
+        console.log(originalRookSquare);
+
+        return newFENString;
+    }
+
+    function handlePromotionCapture(
+        pieceColor,
+        startSquare,
+        destinationSquare
+    ) {
+        const rank = getRank(destinationSquare);
+        const startFile = getFile(startSquare);
+        const endFile = getFile(destinationSquare);
+        const fileDifference = Math.abs(startFile - endFile);
+
+        if (pieceColor.toLowerCase() === "white") {
+            if (!(rank === 7) || !(fileDifference === 1)) {
+                return;
+            }
+
+            const boardPlacement = parsedFENString["board_placement"];
+            const capturedPieceInfo = boardPlacement[`${destinationSquare}`];
+
+            setPromotionCapturedPiece(capturedPieceInfo);
+
+            return;
+        }
+
+        if (pieceColor.toLowerCase() === "black") {
+            if (!(rank === 0) || fileDifference === 1) {
+                return;
+            }
+
+            const boardPlacement = parsedFENString["board_placement"];
+            const capturedPieceInfo = boardPlacement[`${destinationSquare}`];
+
+            setPromotionCapturedPiece(capturedPieceInfo);
+        }
+    }
+
     function handlePawnPromotion(color, promotedPiece) {
         setParsedFENString((previousFENString) => ({
             ...previousFENString,
@@ -573,8 +589,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     piece_type: promotedPiece,
                     piece_color: color,
                 },
-            }   
-        }))
+            },
+        }));
 
         setDraggedSquare(null);
         setDroppedSquare(null);
@@ -635,7 +651,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             setDroppedSquare={setDroppedSquare}
                             handlePromotionCancel={handlePromotionCancel}
                             handlePawnPromotion={handlePawnPromotion}
-
                             previousDraggedSquare={previousDraggedSquare}
                             previousDroppedSquare={previousDroppedSquare}
                         />
