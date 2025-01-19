@@ -145,67 +145,69 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 }
             }
 
-            if (pieceTypeToValidate.toLowerCase() === "king") {
-                const colorCastlingRights =
-                    newPiecePlacements["castling_rights"][
-                        capitaliseFirstLetter(pieceColorToValidate)
-                    ];
+            if (pieceColorToValidate.toLowerCase() !== "king") {
+                return newPiecePlacements;
+            }
 
-                if (
-                    parseInt(droppedSquare) === whiteKingsideCastlingSquare ||
-                    parseInt(droppedSquare) === blackKingsideCastlingSquare
-                ) {
-                    const moveInfo = {
-                        starting_square: draggedSquare,
-                        destination_square: droppedSquare,
-                    };
+            const colorCastlingRights =
+                newPiecePlacements["castling_rights"][
+                    capitaliseFirstLetter(pieceColorToValidate)
+                ];
 
-                    newPiecePlacements = handleKingsideCastling(
-                        newPiecePlacements,
-                        previousFENString["castling_rights"],
-                        pieceColor,
-                        moveInfo
-                    );
-                }
+            if (
+                parseInt(droppedSquare) === whiteKingsideCastlingSquare ||
+                parseInt(droppedSquare) === blackKingsideCastlingSquare
+            ) {
+                const moveInfo = {
+                    starting_square: draggedSquare,
+                    destination_square: droppedSquare,
+                };
 
-                if (
-                    parseInt(droppedSquare) !== whiteQueensideCastlingSquare &&
-                    parseInt(droppedSquare) !== blackQueensideCastlingSquare
-                ) {
-                    newPiecePlacements = disableCastlingForColor(
-                        newPiecePlacements,
-                        pieceColorToValidate
-                    );
-                    return newPiecePlacements;
-                }
-
-                if (!colorCastlingRights["Queenside"]) {
-                    newPiecePlacements = disableCastlingForColor(
-                        newPiecePlacements,
-                        pieceColorToValidate
-                    );
-                    return newPiecePlacements;
-                }
-
-                if (parseInt(droppedSquare) + 2 !== parseInt(draggedSquare)) {
-                    newPiecePlacements = disableCastlingForColor(
-                        newPiecePlacements,
-                        pieceColorToValidate
-                    );
-                    return newPiecePlacements;
-                }
-
-                newPiecePlacements = handleCastling(
+                newPiecePlacements = handleKingsideCastling(
                     newPiecePlacements,
-                    "queenside",
-                    pieceColorToValidate
+                    previousFENString["castling_rights"],
+                    pieceColor,
+                    moveInfo
                 );
+            }
 
+            if (
+                parseInt(droppedSquare) !== whiteQueensideCastlingSquare &&
+                parseInt(droppedSquare) !== blackQueensideCastlingSquare
+            ) {
                 newPiecePlacements = disableCastlingForColor(
                     newPiecePlacements,
                     pieceColorToValidate
                 );
+                return newPiecePlacements;
             }
+
+            if (!colorCastlingRights["Queenside"]) {
+                newPiecePlacements = disableCastlingForColor(
+                    newPiecePlacements,
+                    pieceColorToValidate
+                );
+                return newPiecePlacements;
+            }
+
+            if (parseInt(droppedSquare) + 2 !== parseInt(draggedSquare)) {
+                newPiecePlacements = disableCastlingForColor(
+                    newPiecePlacements,
+                    pieceColorToValidate
+                );
+                return newPiecePlacements;
+            }
+
+            newPiecePlacements = handleCastling(
+                newPiecePlacements,
+                "queenside",
+                pieceColorToValidate
+            );
+
+            newPiecePlacements = disableCastlingForColor(
+                newPiecePlacements,
+                pieceColorToValidate
+            );
 
             return newPiecePlacements;
         });
