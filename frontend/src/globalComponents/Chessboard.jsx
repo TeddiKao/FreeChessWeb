@@ -493,7 +493,10 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 return updatedBoardPlacement;
             }
 
-            if (promotionCapturedPiece["piece_color"].toLowerCase() === color.toLowerCase()) {
+            if (
+                promotionCapturedPiece["piece_color"].toLowerCase() ===
+                color.toLowerCase()
+            ) {
                 return updatedBoardPlacement;
             }
 
@@ -559,29 +562,19 @@ function Chessboard({ parsed_fen_string, orientation }) {
         const endFile = getFile(destinationSquare);
         const fileDifference = Math.abs(startFile - endFile);
 
-        if (pieceColor.toLowerCase() === "white") {
-            if (!(rank === 7) || !(fileDifference === 1)) {
-                return;
-            }
+        const promotionRank =
+            pieceColor.toLowerCase() === "white"
+                ? whitePromotionRank
+                : blackPromotionRank;
 
-            const boardPlacement = parsedFENString["board_placement"];
-            const capturedPieceInfo = boardPlacement[`${destinationSquare}`];
-
-            setPromotionCapturedPiece(capturedPieceInfo);
-
+        if (!(rank === promotionRank) || !(fileDifference === 1)) {
             return;
         }
 
-        if (pieceColor.toLowerCase() === "black") {
-            if (!(rank === 0) || fileDifference === 1) {
-                return;
-            }
+        const boardPlacement = parsedFENString["board_placement"];
+        const capturedPieceInfo = boardPlacement[`${destinationSquare}`];
 
-            const boardPlacement = parsedFENString["board_placement"];
-            const capturedPieceInfo = boardPlacement[`${destinationSquare}`];
-
-            setPromotionCapturedPiece(capturedPieceInfo);
-        }
+        setPromotionCapturedPiece(capturedPieceInfo);
     }
 
     function handlePawnPromotion(color, promotedPiece) {
