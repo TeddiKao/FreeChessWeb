@@ -155,22 +155,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     parseInt(droppedSquare) === whiteKingsideCastlingSquare ||
                     parseInt(droppedSquare) === blackKingsideCastlingSquare
                 ) {
-                    if (colorCastlingRights["Kingside"]) {
-                        if (
-                            parseInt(droppedSquare) - 2 ===
-                            parseInt(draggedSquare)
-                        ) {
-                            newPiecePlacements = handleCastling(
-                                newPiecePlacements,
-                                "kingside",
-                                pieceColorToValidate
-                            );
-
-                            delete newPiecePlacements["board_placement"][
-                                `${parseInt(droppedSquare) + 1}`
-                            ];
-                        }
-                    }
+                    newPiecePlacements = handleKingsideCastling(
+                        newPiecePlacements,
+                        previousFENString["castling_rights"],
+                        pieceColor
+                    );
                 }
 
                 if (
@@ -350,19 +339,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     parseInt(clickedSquare) === whiteKingsideCastlingSquare ||
                     parseInt(clickedSquare) === blackKingsideCastlingSquare
                 ) {
-                    if (colorCastlingRights["Kingside"]) {
-                        if (
-                            parseInt(clickedSquare) - 2 ===
-                            parseInt(previousClickedSquare)
-                        ) {
-                            newPiecePlacements = handleCastling(
-                                newPiecePlacements,
-                                "kingside",
-
-                                pieceColorToValidate
-                            );
-                        }
-                    }
+                    newPiecePlacements = handleKingsideCastling(
+                        newPiecePlacements,
+                        previousFENString["castling_rights"],
+                        pieceColor
+                    );
                 }
 
                 if (
@@ -512,6 +493,31 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
         setPromotionCapturedPiece(null);
         console.log(parsedFENString);
+    }
+
+    function handleKingsideCastling(
+        originalPiecePlacements,
+        castlingRights,
+        color
+    ) {
+        const colorCastlingRights = castlingRights[color];
+
+        if (!colorCastlingRights["Kingside"]) {
+            return originalPiecePlacements;
+        }
+
+        if (parseInt(clickedSquare) - 2 !== parseInt(previousClickedSquare)) {
+            return originalPiecePlacements;
+        }
+
+        const newPiecePlacements = handleCastling(
+            originalPiecePlacements,
+            "kingside",
+
+            pieceColorToValidate
+        );
+
+        return newPiecePlacements;
     }
 
     function modifyCastlingRights(originalFENString, color, castlingSide) {
