@@ -358,6 +358,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                             newPiecePlacements = handleCastling(
                                 newPiecePlacements,
                                 "kingside",
+
                                 pieceColorToValidate
                             );
                         }
@@ -365,34 +366,39 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 }
 
                 if (
-                    parseInt(clickedSquare) === whiteQueensideCastlingSquare ||
-                    parseInt(clickedSquare) === blackQueensideCastlingSquare
+                    parseInt(clickedSquare) !== whiteQueensideCastlingSquare &&
+                    parseInt(clickedSquare) !== blackQueensideCastlingSquare
                 ) {
-                    if (!colorCastlingRights["Queenside"]) {
-                        newPiecePlacements = disableCastlingForColor(
-                            newPiecePlacements,
-                            pieceColorToValidate
-                        );
-                        return newPiecePlacements;
-                    }
-
-                    if (
-                        parseInt(droppedSquare) + 2 !==
-                        parseInt(draggedSquare)
-                    ) {
-                        newPiecePlacements = disableCastlingForColor(
-                            newPiecePlacements,
-                            pieceColorToValidate
-                        );
-                        return newPiecePlacements;
-                    }
-
-                    newPiecePlacements = handleCastling(
+                    newPiecePlacements = disableCastlingForColor(
                         newPiecePlacements,
-                        "queenside",
                         pieceColorToValidate
                     );
+
+                    return newPiecePlacements;
                 }
+
+                if (!colorCastlingRights["Queenside"]) {
+                    newPiecePlacements = disableCastlingForColor(
+                        newPiecePlacements,
+                        pieceColorToValidate
+                    );
+                    return newPiecePlacements;
+                }
+
+                if (parseInt(droppedSquare) + 2 !== parseInt(draggedSquare)) {
+                    newPiecePlacements = disableCastlingForColor(
+                        newPiecePlacements,
+                        pieceColorToValidate
+                    );
+
+                    return newPiecePlacements;
+                }
+
+                newPiecePlacements = handleCastling(
+                    newPiecePlacements,
+                    "queenside",
+                    pieceColorToValidate
+                );
 
                 newPiecePlacements = disableCastlingForColor(
                     newPiecePlacements,
