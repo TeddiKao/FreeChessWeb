@@ -250,77 +250,71 @@ def get_pawn_legal_moves(board_placement, move_info):
 		"piece_type": board_placement[f"{starting_square}"]["piece_type"]
 	}
 
+	pawn_attacking_squares = get_pawn_attacking_squares(starting_square, piece_color)
+
+	for attacking_square in pawn_attacking_squares:
+		if attacking_square not in board_placement:
+			continue
+
+		pawn_color = board_placement[attacking_square]["piece_color"]
+		if pawn_color == piece_color:
+			continue
+
+		square_up_updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) + 7}")
+		king_position = get_king_position(square_up_updated_FEN, piece_color)
+		
+		if is_king_in_check(square_up_updated_FEN, piece_color, king_position):
+			continue
+
+		legal_squares.append(attacking_square)
+
 	if piece_color.lower() == "white":
-		if f"{int(starting_square) + 7}" in board_placement:
-			if board_placement[f"{int(starting_square) + 7}"]["piece_color"] != move_info["piece_color"]:
-				updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) + 7}")
-				king_position = get_king_position(updated_FEN, piece_color)
-				
-				if not is_king_in_check(updated_FEN, piece_color, king_position):
-					legal_squares.append(f"{int(starting_square) + 7}")
-
-		if f"{int(starting_square) + 9}" in board_placement:
-			if board_placement[f"{int(starting_square) + 9}"]["piece_color"] != move_info["piece_color"]:
-				updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) + 9}")
-				king_position = get_king_position(updated_FEN, piece_color)
-				
-				if not is_king_in_check(updated_FEN, piece_color, king_position):
-					legal_squares.append(f"{int(starting_square) + 9}")
-
 		if f"{int(starting_square) + 8}" in board_placement:
 			return legal_squares
 		
-		updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) + 8}")
-		king_position = get_king_position(updated_FEN, piece_color)
+		square_up_updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) + 8}")
+		square_up_king_position = get_king_position(square_up_updated_FEN, piece_color)
 		
-		if not is_king_in_check(updated_FEN, piece_color, king_position):
+		if not is_king_in_check(square_up_updated_FEN, piece_color, square_up_king_position):
 			legal_squares.append(f"{int(starting_square) + 8}")
 
-		if get_row(starting_square) == 1:
-			if f"{int(starting_square) + 16}" in board_placement:
-				return legal_squares
-			
-			updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) + 16}")
-			king_position = get_king_position(updated_FEN, piece_color)
-
-			if not is_king_in_check(updated_FEN, piece_color, king_position):
-				legal_squares.append(f"{int(starting_square) + 16}")
-
-	else:
-		if f"{int(starting_square) - 7}" in board_placement:
-			if board_placement[f"{int(starting_square) - 7}"]["piece_color"] != move_info["piece_color"]:
-				updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) - 7}")
-				king_position = get_king_position(updated_FEN, piece_color)
-				
-				if not is_king_in_check(updated_FEN, piece_color, king_position):
-					legal_squares.append(f"{int(starting_square) - 7}")
-
-		if f"{int(starting_square) - 9}" in board_placement:
-			if board_placement[f"{int(starting_square) - 9}"]["piece_color"] != move_info["piece_color"]:
-				updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) - 9}")
-				king_position = get_king_position(updated_FEN, piece_color)
-
-				if not is_king_in_check(updated_FEN, piece_color, king_position):
-					legal_squares.append(f"{int(starting_square) - 9}")
-
-		updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) - 8}")
-		king_position = get_king_position(updated_FEN, piece_color)
-
-		if f"{int(starting_square) - 8}" in board_placement:
+		if get_row(starting_square) != 1:
 			return legal_squares
 
-		if not is_king_in_check(updated_FEN, piece_color, king_position):
+		if f"{int(starting_square) + 16}" in board_placement:
+			return legal_squares
+		
+		double_square_updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) + 16}")
+		double_square_king_position = get_king_position(double_square_updated_FEN, piece_color)
+
+		if is_king_in_check(double_square_updated_FEN, piece_color, double_square_king_position):
+			return legal_squares
+		
+		legal_squares.append(f"{int(starting_square) + 16}")
+			
+	else:
+		if f"{int(starting_square) - 8}" in board_placement:
+			return legal_squares
+		
+		square_up_updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) + 8}")
+		square_up_king_position = get_king_position(square_up_updated_FEN, piece_color)
+
+		if not is_king_in_check(square_up_updated_FEN, piece_color, square_up_king_position):
 			legal_squares.append(f"{int(starting_square) - 8}")
 
-		if get_row(starting_square) == 6:
-			if f"{int(starting_square) - 16}" in board_placement:
-				return legal_squares
+		if get_row(starting_square) != 6:
+			return legal_squares
+		
+		if f"{int(starting_square) - 16}" in board_placement:
+			return legal_squares
 
-			updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) - 16}")
-			king_position = get_king_position(updated_FEN, piece_color)
+		double_square_updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) - 16}")
+		double_square_king_position = get_king_position(double_square_updated_FEN, piece_color)
 
-			if not is_king_in_check(updated_FEN, piece_color, get_king_position(board_placement, piece_color)):
-				legal_squares.append(f"{int(starting_square) - 16}")
+		if is_king_in_check(double_square_updated_FEN, piece_color, double_square_king_position):
+			return legal_squares
+		
+		legal_squares.append(f"{int(starting_square) - 16}")
 
 	return legal_squares
 

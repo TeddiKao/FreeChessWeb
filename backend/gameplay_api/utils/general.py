@@ -26,17 +26,17 @@ def is_on_same_diagonal(square1, square2):
 
 	return abs(square1_file - square2_file) == abs(square1_rank - square2_rank)
 
-def get_pawn_attacking_squares(square, pawn_color):
+def get_pawn_attacking_squares(pawn_square, pawn_color):
 	attacking_squares = []
 	
 	if pawn_color.lower() == "black":
-		attacking_squares += [f"{int(square) - 9}", f"{int(square) - 7}"]
+		attacking_squares += [f"{int(pawn_square) - 9}", f"{int(pawn_square) - 7}"]
 	else:
-		attacking_squares += [f"{int(square) + 9}", f"{int(square) + 7}"]
+		attacking_squares += [f"{int(pawn_square) + 9}", f"{int(pawn_square) + 7}"]
 
 	cleaned_attacking_squares = copy.deepcopy(attacking_squares)
 	for attacking_square in attacking_squares:
-		if abs(get_file(square) - get_file(attacking_square)) > 1:
+		if abs(get_file(pawn_square) - get_file(attacking_square)) > 1:
 			cleaned_attacking_squares.remove(attacking_square)
 
 	return cleaned_attacking_squares
