@@ -372,34 +372,51 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 			continue
 
 		cleaned_legal_moves.remove(f"{legal_move}")
+
+	for legal_move in legal_moves:
+		file_distance = get_file(legal_move) - get_file(starting_square)
+		castling_squares = [f"{castle_kingside_square}", f"{castle_queenside_square}"]
+
+		if abs(file_distance) <= 1:
+			continue
+
+		if legal_move not in castling_squares:
+			continue
+
+		if abs(file_distance) <= 2:
+			continue
+
+		if legal_move not in cleaned_legal_moves:
+			continue
+
+		cleaned_legal_moves.remove(f"{legal_move}")		
 			
 
 	for legal_move in legal_moves:
 		updated_board_placement = update_FEN(board_placement, starting_square_info, legal_move)
 		king_position = get_king_position(updated_board_placement, move_info["piece_color"])
 
-		file_distance = get_file(f"{legal_move}") - get_file(starting_square)
 		row_distance = get_row(f"{legal_move}") - get_row(starting_square)
+
+		if abs(row_distance) <= 1:
+			continue
+
+		if legal_move not in cleaned_legal_moves:
+			continue
+
+		cleaned_legal_moves.remove(f"{legal_move}")
+
+	for legal_move in legal_moves:
+		updated_board_placement = update_FEN(board_placement, starting_square_info, legal_move)
+		king_position = get_king_position(updated_board_placement, move_info["piece_color"])
 		
-		if abs(file_distance) > 1:
-			if legal_move == f"{castle_kingside_square}" or legal_move == f"{castle_queenside_square}":
-				if abs(file_distance) <= 2:
-					continue
+		if not is_king_in_check(updated_board_placement, move_info["piece_color"], king_position):
+			continue
 
-			if legal_move in cleaned_legal_moves:
-				cleaned_legal_moves.remove(f"{legal_move}")
-				continue
+		if legal_move not in cleaned_legal_moves:
+			continue
 
-		if abs(row_distance) > 1:
-			if legal_move in cleaned_legal_moves:
-				cleaned_legal_moves.remove(f"{legal_move}")
-				continue
-
-
-		if is_king_in_check(updated_board_placement, move_info["piece_color"], king_position):
-			if legal_move in cleaned_legal_moves:
-				cleaned_legal_moves.remove(f"{legal_move}")
-				continue
+		cleaned_legal_moves.remove(f"{legal_move}")
 
 	return cleaned_legal_moves
 
