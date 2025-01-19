@@ -126,33 +126,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 const queensideRookSquares = [0, 56];
 
                 if (kingsideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = {
-                        ...newPiecePlacements,
-                        castling_rights: {
-                            ...newPiecePlacements["castling_rights"],
-                            [capitaliseFirstLetter(pieceColorToValidate)]: {
-                                ...newPiecePlacements["castling_rights"][
-                                    capitaliseFirstLetter(pieceColorToValidate)
-                                ],
-                                Kingside: false,
-                            },
-                        },
-                    };
+                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, "Kingside")
                 }
 
                 if (queensideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = {
-                        ...newPiecePlacements,
-                        castling_rights: {
-                            ...newPiecePlacements["castling_rights"],
-                            [capitaliseFirstLetter(pieceColorToValidate)]: {
-                                ...newPiecePlacements["castling_rights"][
-                                    capitaliseFirstLetter(pieceColorToValidate)
-                                ],
-                                Queenside: false,
-                            },
-                        },
-                    };
+                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, "Kingside")
                 }
             }
 
@@ -331,33 +309,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 const queensideRookSquares = [0, 56];
 
                 if (kingsideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = {
-                        ...newPiecePlacements,
-                        castling_rights: {
-                            ...newPiecePlacements["castling_rights"],
-                            [capitaliseFirstLetter(pieceColorToValidate)]: {
-                                ...newPiecePlacements["castling_rights"][
-                                    capitaliseFirstLetter(pieceColorToValidate)
-                                ],
-                                Kingside: false,
-                            },
-                        },
-                    };
+                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, "Kingside")
                 }
 
                 if (queensideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = {
-                        ...newPiecePlacements,
-                        castling_rights: {
-                            ...newPiecePlacements["castling_rights"],
-                            [capitaliseFirstLetter(pieceColorToValidate)]: {
-                                ...newPiecePlacements["castling_rights"][
-                                    capitaliseFirstLetter(pieceColorToValidate)
-                                ],
-                                Queenside: false,
-                            },
-                        },
-                    };
+                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, "Kingside")
                 }
             }
 
@@ -514,6 +470,21 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
         setPromotionCapturedPiece(null);
         console.log(parsedFENString);
+    }
+
+    function modifyCastlingRights(originalFENString, castlingSide) {
+        const updatedFENString = {
+            ...originalFENString,
+            castling_rights: {
+                ...originalFENString["castling_rights"],
+                [color]: {
+                    ...originalFENString["castling_rights"][color],
+                    [castlingSide]: false,
+                }
+            }
+        }
+
+        return updatedFENString;
     }
 
     function handleCastling(originalFENString, castlingSide, color) {
