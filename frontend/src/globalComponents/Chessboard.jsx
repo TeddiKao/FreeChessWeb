@@ -145,7 +145,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 }
             }
 
-            if (pieceColorToValidate.toLowerCase() !== "king") {
+            if (pieceTypeToValidate.toLowerCase() !== "king") {
                 return newPiecePlacements;
             }
 
