@@ -71,12 +71,12 @@ def get_legal_moves_in_diagonal_direction(board_placement, move_info, piece_loca
 			break
 
 		if f"{square}" in board_placement:
-			if board_placement[f"{square}"]["piece_color"] == piece_color:
-				if f"{square}" in legal_squares:
-					legal_squares.remove(f"{square}")
-				
+			if board_placement[f"{square}"]["piece_color"] != piece_color:
 				break
-			else:
+
+			if f"{square}" in legal_squares:
+				legal_squares.remove(f"{square}")
+				
 				break
 
 		if is_square_on_edge(f"{square}"):
@@ -84,7 +84,7 @@ def get_legal_moves_in_diagonal_direction(board_placement, move_info, piece_loca
 
 	return legal_squares
 
-def get_legal_moves_in_straight_direction(board_placemeent, constant_value_str, direction, move_info, piece_location):
+def get_legal_moves_in_straight_direction(board_placement, constant_value_str, direction, move_info, piece_location):
 	legal_squares = []
 	
 	start_square = move_info["starting_square"]
@@ -114,19 +114,19 @@ def get_legal_moves_in_straight_direction(board_placemeent, constant_value_str, 
 
 		starting_square_info = {
 			"starting_square": start_square,
-			"piece_type": board_placemeent[start_square]["piece_type"],
-			"piece_color": board_placemeent[start_square]["piece_color"]
+			"piece_type": board_placement[start_square]["piece_type"],
+			"piece_color": board_placement[start_square]["piece_color"]
 		}
 
-		updated_FEN = update_FEN(board_placemeent, starting_square_info, square)
+		updated_FEN = update_FEN(board_placement, starting_square_info, square)
 		king_position = get_king_position(updated_FEN, piece_color)
 		king_in_check = False
 
 		if is_king_in_check(updated_FEN, piece_color, king_position):
 			king_in_check = True
 
-		if f"{square}" in board_placemeent:
-			if board_placemeent[f"{square}"]["piece_color"] == piece_color:
+		if f"{square}" in board_placement:
+			if board_placement[f"{square}"]["piece_color"] == piece_color:
 				break
 			else:
 				if not king_in_check:
