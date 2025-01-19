@@ -126,11 +126,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 const queensideRookSquares = [0, 56];
 
                 if (kingsideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, "Kingside")
+                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, pieceColorToValidate, "Kingside")
                 }
 
                 if (queensideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, "Kingside")
+                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, pieceColorToValidate, "Queenside")
                 }
             }
 
@@ -309,11 +309,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 const queensideRookSquares = [0, 56];
 
                 if (kingsideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, "Kingside")
+                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, pieceColorToValidate, "Kingside")
                 }
 
                 if (queensideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, "Kingside")
+                    newPiecePlacements = modifyCastlingRights(newPiecePlacements, pieceColorToValidate, "Queenside")
                 }
             }
 
@@ -472,7 +472,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
         console.log(parsedFENString);
     }
 
-    function modifyCastlingRights(originalFENString, castlingSide) {
+    function modifyCastlingRights(originalFENString, color, castlingSide) {
         const updatedFENString = {
             ...originalFENString,
             castling_rights: {
