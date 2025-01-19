@@ -478,31 +478,32 @@ function Chessboard({ parsed_fen_string, orientation }) {
             console.log(previousFENString["board_placement"]);
 
             if (
-                Object.keys(previousFENString["board_placement"]).includes(
+                !Object.keys(previousFENString["board_placement"]).includes(
                     previousDroppedSquare
                 )
             ) {
-                const squareInfo =
-                    previousFENString["board_placement"][previousDroppedSquare];
-                console.log(squareInfo, color);
-
-                if (!promotionCapturedPiece) {
-                    return updatedBoardPlacement;
-                }
-
-                if (
-                    promotionCapturedPiece["piece_color"].toLowerCase() !==
-                    color.toLowerCase()
-                ) {
-                    updatedBoardPlacement = {
-                        ...updatedBoardPlacement,
-                        board_placement: {
-                            ...updatedBoardPlacement["board_placement"],
-                            [previousDroppedSquare]: promotionCapturedPiece,
-                        },
-                    };
-                }
+                return updatedBoardPlacement;
             }
+
+            const squareInfo =
+                previousFENString["board_placement"][previousDroppedSquare];
+            console.log(squareInfo, color);
+
+            if (!promotionCapturedPiece) {
+                return updatedBoardPlacement;
+            }
+
+            if (promotionCapturedPiece["piece_color"].toLowerCase() === color.toLowerCase()) {
+                return updatedBoardPlacement;
+            }
+
+            updatedBoardPlacement = {
+                ...updatedBoardPlacement,
+                board_placement: {
+                    ...updatedBoardPlacement["board_placement"],
+                    [previousDroppedSquare]: promotionCapturedPiece,
+                },
+            };
 
             return updatedBoardPlacement;
         });
@@ -525,7 +526,10 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 ? startingSquare - 4
                 : startingSquare + 3;
 
-        const castledRookSquare = castlingSide.toLowerCase() === "queenside" ? startingSquare - 1 : startingSquare + 1;
+        const castledRookSquare =
+            castlingSide.toLowerCase() === "queenside"
+                ? startingSquare - 1
+                : startingSquare + 1;
 
         const newFENString = {
             ...originalFENString,
