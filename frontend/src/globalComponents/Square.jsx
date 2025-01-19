@@ -24,8 +24,6 @@ function Square({
     const [popupIsOpen, setPopupIsOpen] = useState(displayPromotionPopup);
 
     function getSquareClass() {
-        console.log(squareNumber, previousDraggedSquare, previousDroppedSquare);
-
         if (squareNumber === previousDraggedSquare) {
             return "previous-dragged-square";
         } else if (squareNumber === previousDroppedSquare) {
@@ -68,9 +66,6 @@ function Square({
     }
 
     function generateSquareHTML() {
-        if (squareNumber === "62") {
-        }
-
         let squareHTML = null;
         if (displayPromotionPopup) {
             squareHTML = (

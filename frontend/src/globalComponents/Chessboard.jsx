@@ -155,10 +155,16 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     parseInt(droppedSquare) === whiteKingsideCastlingSquare ||
                     parseInt(droppedSquare) === blackKingsideCastlingSquare
                 ) {
+                    const moveInfo = {
+                        starting_square: draggedSquare,
+                        destination_square: droppedSquare
+                    }
+
                     newPiecePlacements = handleKingsideCastling(
                         newPiecePlacements,
                         previousFENString["castling_rights"],
-                        pieceColor
+                        pieceColor,
+                        moveInfo
                     );
                 }
 
@@ -339,10 +345,16 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     parseInt(clickedSquare) === whiteKingsideCastlingSquare ||
                     parseInt(clickedSquare) === blackKingsideCastlingSquare
                 ) {
+                    const moveInfo = {
+                        starting_square: previousClickedSquare,
+                        destination_square: clickedSquare
+                    }
+
                     newPiecePlacements = handleKingsideCastling(
                         newPiecePlacements,
                         previousFENString["castling_rights"],
-                        pieceColor
+                        pieceColor,
+                        moveInfo
                     );
                 }
 
@@ -498,23 +510,29 @@ function Chessboard({ parsed_fen_string, orientation }) {
     function handleKingsideCastling(
         originalPiecePlacements,
         castlingRights,
-        color
+        color,
+        moveInfo
     ) {
+        console.log(castlingRights);
+
         const colorCastlingRights = castlingRights[color];
+        const startingSquare = moveInfo["starting_square"];
+        const destinationSquare = moveInfo["destination_square"];
 
         if (!colorCastlingRights["Kingside"]) {
             return originalPiecePlacements;
         }
 
-        if (parseInt(clickedSquare) - 2 !== parseInt(previousClickedSquare)) {
+        if (parseInt(startingSquare) + 2 !== parseInt(destinationSquare)) {
             return originalPiecePlacements;
         }
+
+        console.log("Changing piece placements")
 
         const newPiecePlacements = handleCastling(
             originalPiecePlacements,
             "kingside",
-
-            pieceColorToValidate
+            color,
         );
 
         return newPiecePlacements;
