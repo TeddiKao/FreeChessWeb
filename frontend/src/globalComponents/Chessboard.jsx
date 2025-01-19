@@ -157,8 +157,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 ) {
                     const moveInfo = {
                         starting_square: draggedSquare,
-                        destination_square: droppedSquare
-                    }
+                        destination_square: droppedSquare,
+                    };
 
                     newPiecePlacements = handleKingsideCastling(
                         newPiecePlacements,
@@ -169,34 +169,37 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 }
 
                 if (
-                    parseInt(droppedSquare) === whiteQueensideCastlingSquare ||
-                    parseInt(droppedSquare) === blackQueensideCastlingSquare
+                    parseInt(droppedSquare) !== whiteQueensideCastlingSquare &&
+                    parseInt(droppedSquare) !== blackQueensideCastlingSquare
                 ) {
-                    if (!colorCastlingRights["Queenside"]) {
-                        newPiecePlacements = disableCastlingForColor(
-                            newPiecePlacements,
-                            pieceColorToValidate
-                        );
-                        return newPiecePlacements;
-                    }
-
-                    if (
-                        parseInt(droppedSquare) + 2 !==
-                        parseInt(draggedSquare)
-                    ) {
-                        newPiecePlacements = disableCastlingForColor(
-                            newPiecePlacements,
-                            pieceColorToValidate
-                        );
-                        return newPiecePlacements;
-                    }
-
-                    newPiecePlacements = handleCastling(
+                    newPiecePlacements = disableCastlingForColor(
                         newPiecePlacements,
-                        "queenside",
                         pieceColorToValidate
                     );
+                    return newPiecePlacements;
                 }
+
+                if (!colorCastlingRights["Queenside"]) {
+                    newPiecePlacements = disableCastlingForColor(
+                        newPiecePlacements,
+                        pieceColorToValidate
+                    );
+                    return newPiecePlacements;
+                }
+
+                if (parseInt(droppedSquare) + 2 !== parseInt(draggedSquare)) {
+                    newPiecePlacements = disableCastlingForColor(
+                        newPiecePlacements,
+                        pieceColorToValidate
+                    );
+                    return newPiecePlacements;
+                }
+
+                newPiecePlacements = handleCastling(
+                    newPiecePlacements,
+                    "queenside",
+                    pieceColorToValidate
+                );
 
                 newPiecePlacements = disableCastlingForColor(
                     newPiecePlacements,
@@ -340,64 +343,61 @@ function Chessboard({ parsed_fen_string, orientation }) {
             const colorCastlingRights =
                 previousFENString["castling_rights"][pieceColor];
 
-            if (pieceTypeToValidate.toLowerCase() === "king") {
-                if (
-                    parseInt(clickedSquare) === whiteKingsideCastlingSquare ||
-                    parseInt(clickedSquare) === blackKingsideCastlingSquare
-                ) {
-                    const moveInfo = {
-                        starting_square: previousClickedSquare,
-                        destination_square: clickedSquare
-                    }
+            if (pieceTypeToValidate.toLowerCase() !== "king") {
+                return newPiecePlacements;
+            }
 
-                    newPiecePlacements = handleKingsideCastling(
-                        newPiecePlacements,
-                        previousFENString["castling_rights"],
-                        pieceColor,
-                        moveInfo
-                    );
-                }
+            if (
+                parseInt(clickedSquare) === whiteKingsideCastlingSquare ||
+                parseInt(clickedSquare) === blackKingsideCastlingSquare
+            ) {
+                const moveInfo = {
+                    starting_square: previousClickedSquare,
+                    destination_square: clickedSquare,
+                };
 
-                if (
-                    parseInt(clickedSquare) !== whiteQueensideCastlingSquare &&
-                    parseInt(clickedSquare) !== blackQueensideCastlingSquare
-                ) {
-                    newPiecePlacements = disableCastlingForColor(
-                        newPiecePlacements,
-                        pieceColorToValidate
-                    );
-
-                    return newPiecePlacements;
-                }
-
-                if (!colorCastlingRights["Queenside"]) {
-                    newPiecePlacements = disableCastlingForColor(
-                        newPiecePlacements,
-                        pieceColorToValidate
-                    );
-                    return newPiecePlacements;
-                }
-
-                if (parseInt(droppedSquare) + 2 !== parseInt(draggedSquare)) {
-                    newPiecePlacements = disableCastlingForColor(
-                        newPiecePlacements,
-                        pieceColorToValidate
-                    );
-
-                    return newPiecePlacements;
-                }
-
-                newPiecePlacements = handleCastling(
+                newPiecePlacements = handleKingsideCastling(
                     newPiecePlacements,
-                    "queenside",
-                    pieceColorToValidate
+                    previousFENString["castling_rights"],
+                    pieceColor,
+                    moveInfo
                 );
+            }
 
+            if (
+                parseInt(clickedSquare) !== whiteQueensideCastlingSquare &&
+                parseInt(clickedSquare) !== blackQueensideCastlingSquare
+            ) {
                 newPiecePlacements = disableCastlingForColor(
                     newPiecePlacements,
                     pieceColorToValidate
                 );
+
+                return newPiecePlacements;
             }
+
+            if (!colorCastlingRights["Queenside"]) {
+                newPiecePlacements = disableCastlingForColor(
+                    newPiecePlacements,
+                    pieceColorToValidate
+                );
+                return newPiecePlacements;
+            }
+
+            if (parseInt(droppedSquare) + 2 !== parseInt(draggedSquare)) {
+                newPiecePlacements = disableCastlingForColor(
+                    newPiecePlacements,
+                    pieceColorToValidate
+                );
+
+                return newPiecePlacements;
+            }
+
+            newPiecePlacements = handleCastling(
+                newPiecePlacements,
+                "queenside",
+                pieceColorToValidate
+            );
 
             newPiecePlacements = disableCastlingForColor(
                 newPiecePlacements,
@@ -527,12 +527,12 @@ function Chessboard({ parsed_fen_string, orientation }) {
             return originalPiecePlacements;
         }
 
-        console.log("Changing piece placements")
+        console.log("Changing piece placements");
 
         const newPiecePlacements = handleCastling(
             originalPiecePlacements,
             "kingside",
-            color,
+            color
         );
 
         return newPiecePlacements;
