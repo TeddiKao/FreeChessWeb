@@ -6,7 +6,7 @@ from rest_framework.serializers import ModelSerializer
 
 class ChessGameSerializer(ModelSerializer):
 	def validate(self, data):
-		user = self._context["request"].user
+		user = self.context["request"].user
 
 		white_player_filter = Q(white_player=user)
 		black_player_filter = Q(black_player=user)
