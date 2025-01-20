@@ -67,7 +67,6 @@ class GetOngoingGameView(generics.ListAPIView):
 		game_is_ongoing_filter = Q(game_status="Ongoing")
 
 		return ChessGame.objects.filter((white_player_filter | black_player_filter) & game_is_ongoing_filter)
-			
 
 class UpdateChessGameView(generics.UpdateAPIView):
 	def get_queryset(self):
