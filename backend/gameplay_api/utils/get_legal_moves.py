@@ -260,10 +260,10 @@ def get_pawn_legal_moves(board_placement, move_info):
 		if pawn_color == piece_color:
 			continue
 
-		square_up_updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) + 7}")
-		king_position = get_king_position(square_up_updated_FEN, piece_color)
+		updated_FEN = update_FEN(board_placement, starting_square_info, attacking_square)
+		king_position = get_king_position(updated_FEN, piece_color)
 		
-		if is_king_in_check(square_up_updated_FEN, piece_color, king_position):
+		if is_king_in_check(updated_FEN, piece_color, king_position):
 			continue
 
 		legal_squares.append(attacking_square)
@@ -296,7 +296,7 @@ def get_pawn_legal_moves(board_placement, move_info):
 		if f"{int(starting_square) - 8}" in board_placement:
 			return legal_squares
 		
-		square_up_updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) + 8}")
+		square_up_updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) - 8}")
 		square_up_king_position = get_king_position(square_up_updated_FEN, piece_color)
 
 		if not is_king_in_check(square_up_updated_FEN, piece_color, square_up_king_position):

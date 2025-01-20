@@ -10,7 +10,7 @@ import "../../styles/select-time-control.css";
 
 import { capitaliseFirstLetter } from "../../utils/generalUtils.js";
 import { displayTimeControl } from "../../utils/timeUtils.js";
-import { fetchFen } from "../../utils/apiUtils.js";
+import { fetchFen, startGame } from "../../utils/apiUtils.js";
 
 import { Link } from "react-router-dom";
 
@@ -25,6 +25,14 @@ function SelectTimeControl() {
     useEffect(() => {
         getParsedFEN();
     }, []);
+ 
+    async function handleGameStart(timeControlInfo) {
+        try {
+            const response = await startGame()
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const startingPositionFEN =
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -133,6 +141,9 @@ function SelectTimeControl() {
                             to="/play"
                             state={selectedTimeControl}
                             className="start-game-button"
+                            onClick={() => {
+                                console.log("Game started")
+                            }}
                         >
                             Start game
                         </Link>

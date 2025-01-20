@@ -95,9 +95,14 @@ async function fetchKingIsInCheck(boardPlacement, kingColor, kingSquare) {
     return isKingInCheck;
 }
 
-async function startGame() {
+async function startGame(gameInfo) {
+    const timeControlBaseTime = gameInfo["timeControl"]["baseTime"]
+    const timeControlIncrement = gameInfo["timeControl"]["increment"]
+
     try {
-        const response = await api.post("/gameplay_api/start-game/");
+        const response = await api.post("/gameplay_api/start-game/", {
+            game_info: gameInfo,
+        });
         if (response.status === 201) {
             console.log("Game created successfully");
         }

@@ -5,13 +5,13 @@ class ChessGame(models.Model):
 	white_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="white_player")
 	black_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="black_player")
 	
-	game_status = models.CharField(max_length=50)
-	game_result = models.CharField(max_length=50)
+	game_status = models.CharField(max_length=50, default="Ongoing")
+	game_result = models.CharField(max_length=50, default="Ongoing")
 
-	current_move = models.IntegerField()
-	current_player_turn = models.CharField(max_length=30)
+	current_move = models.IntegerField(default=1)
+	current_player_turn = models.CharField(max_length=30, default="white")
 
-	halfmove_clock = models.IntegerField() # 50 move rule detection
+	halfmove_clock = models.IntegerField(default=0) # 50 move rule detection
 
 	white_player_clock = models.DecimalField(max_digits=6, decimal_places=1) # In seconds
 	black_player_clock = models.DecimalField(max_digits=6, decimal_places=1) # In seconds
