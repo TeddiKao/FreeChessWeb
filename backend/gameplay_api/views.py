@@ -59,6 +59,14 @@ class StartChessGameView(generics.CreateAPIView):
 			serializer.save()
 		else:
 			print(serializer.errors)
+
+class GetOngoingGameView(generics.ListAPIView):
+	def get_queryset(self):
+		white_player_filter = Q(white_player=self.request.user)
+		black_player_filter = Q(black_player=self.request.user)
+		game_is_ongoing_filter = Q(game_status="Ongoing")
+
+		return ChessGame.objects.filter((white_player_filter | black_player_filter) & game_is_ongoing_filter)
 			
 
 class UpdateChessGameView(generics.UpdateAPIView):
