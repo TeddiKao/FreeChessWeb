@@ -109,7 +109,7 @@ async function startGame() {
 async function getOngoingGames() {
     let ongoingGames = [];
 
-    api.get("gameplay_api/get-ongoing-chess-game/")
+    await api.get("gameplay_api/get-ongoing-chess-game/")
         .then((response) => response.data)
         .then((data) => ongoingGames = data)
         .catch((error) => console.log(error))
