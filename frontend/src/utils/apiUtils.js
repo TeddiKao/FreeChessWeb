@@ -95,4 +95,16 @@ async function fetchKingIsInCheck(boardPlacement, kingColor, kingSquare) {
     return isKingInCheck;
 }
 
-export { fetchFen, fetchKingIsInCheck, fetchLegalMoves, fetchMoveIsValid };
+async function startGame() {
+    try {
+        const response = await api.post("/gameplay_api/start-game/");
+        if (response.status === 201) {
+            console.log("Game created successfully");
+        }
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export { fetchFen, fetchKingIsInCheck, fetchLegalMoves, fetchMoveIsValid, startGame };
