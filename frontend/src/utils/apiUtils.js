@@ -101,10 +101,27 @@ async function startGame() {
         if (response.status === 201) {
             console.log("Game created successfully");
         }
-        
     } catch (error) {
         console.log(error);
     }
 }
 
-export { fetchFen, fetchKingIsInCheck, fetchLegalMoves, fetchMoveIsValid, startGame };
+async function getOngoingGames() {
+    let ongoingGames = [];
+
+    api.get("gameplay_api/get-ongoing-chess-game/")
+        .then((response) => response.data)
+        .then((data) => ongoingGames = data)
+        .catch((error) => console.log(error))
+
+    return ongoingGames;
+}
+
+export {
+    fetchFen,
+    fetchKingIsInCheck,
+    fetchLegalMoves,
+    fetchMoveIsValid,
+    startGame,
+    getOngoingGames
+};
