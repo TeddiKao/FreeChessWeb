@@ -109,6 +109,12 @@ DATABASES = {
     }
 }
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
+
 AUTH_USER_MODEL = "users_api.UserAuthModel"
 
 # Password validation
