@@ -122,11 +122,53 @@ async function getOngoingGames() {
     return ongoingGames;
 }
 
+async function getIsStalemated(boardPlacement, castlingRights, kingColor) {
+    let isStalemated = false;
+    try {
+        const response = await api.post("/gameplay_api/get-is-stalemated/", {
+            board_placement: boardPlacement,
+            castling_rights: castlingRights,
+            king_color: kingColor,
+        })
+
+        if (response.status === 200) {
+            isStalemated = response.data;
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+
+    return isStalemated;
+}
+
+async function getIsCheckmated(boardPlacement, castlingRights, kingColor) {
+    let isCheckmated = false;
+    try {
+        const response = await api.post("/gameplay_api/get-is-checkmated/", {
+            board_placement: boardPlacement,
+            castling_rights: castlingRights,
+            king_color: kingColor,
+        })
+
+        if (response.status === 200) {
+            isCheckmated = response.data;
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+
+    return isCheckmated;
+}
+
 export {
     fetchFen,
     fetchKingIsInCheck,
     fetchLegalMoves,
     fetchMoveIsValid,
     startGame,
-    getOngoingGames
+    getOngoingGames,
+    getIsCheckmated,
+    getIsStalemated
 };
