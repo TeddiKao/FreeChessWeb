@@ -1,7 +1,10 @@
-from get_legal_moves import is_king_in_check, get_legal_moves
+from .get_legal_moves import is_king_in_check, get_legal_moves
+from .general import get_king_position
 
-def is_stalemated(board_placement: dict, castling_rights: dict, king_color: str, king_position: int) -> bool: 
+def is_stalemated(board_placement: dict, castling_rights: dict, king_color: str) -> bool: 
 	all_legal_moves = []
+	
+	king_position = get_king_position(board_placement, king_color)
 	king_in_check = is_king_in_check(board_placement, king_color, king_position)
 	
 	for square in board_placement.keys():
@@ -23,8 +26,10 @@ def is_stalemated(board_placement: dict, castling_rights: dict, king_color: str,
 		
 	return False
 
-def is_checkmate(board_placement: dict, castling_rights: dict, king_color: str, king_position: int) -> bool:
+def is_checkmated(board_placement: dict, castling_rights: dict, king_color: str) -> bool:
 	all_legal_moves = []
+	
+	king_position = get_king_position(board_placement, king_color)
 	king_in_check = is_king_in_check(board_placement, king_color, king_position)
 	
 	for square in board_placement.keys():

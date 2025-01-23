@@ -10,6 +10,7 @@ from .models import ChessGame
 from .serializers import ChessGameSerializer
 from .utils import fen_parser, move_validation
 from .utils.get_legal_moves import get_legal_moves
+from .utils import game_results
 
 # Create your views here.
 class ParseFENView(APIView):
@@ -78,3 +79,21 @@ class UpdateChessGameView(generics.UpdateAPIView):
 	
 	serializer_class = ChessGameSerializer
 	permission_classes = [IsAuthenticated]
+
+class GetIsCheckmatedView(APIView):
+	def post(self, request):
+		board_placement = request.data.get("board_placement")
+		castling_rights = self.request.data.get("castling_rights")
+		king_color = self.request.data.get("king_color")
+
+		is_checkmated = game_results.is_checkmated(board_placement, castling_rights, king_color)
+		return Response(is_checkmated, status=status.HTTP_200_OK)
+	
+class GetIsStalematedView(APIView):
+	def post(self, request):
+		board_placement = request.data.get("board_placement")
+		castling_rights = self.request.data.get("castling_rights")
+		king_color = self.request.data.get("king_color")
+
+		is_stalemated = game_results.is_stalemated(board_placement, castling_rights, king_color)
+		return Response(is_stalemated, status=status.HTTP_200_OK)
