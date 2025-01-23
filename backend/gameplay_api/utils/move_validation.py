@@ -38,4 +38,6 @@ def validate_move(current_fen, move_info):
 
 		move_is_valid = destination_square in legal_moves
 
+	updated_FEN = update_FEN(board_placement, starting_square, destination_square)
+
 	return move_is_valid
