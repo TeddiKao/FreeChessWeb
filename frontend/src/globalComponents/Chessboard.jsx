@@ -24,6 +24,7 @@ import {
     whiteKingStartingSquare,
     blackKingStartingSquare,
 } from "../constants/castlingSquares.js";
+import GameOverModal from "./modals/GameOverModal.jsx";
 
 function Chessboard({ parsed_fen_string, orientation }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
@@ -228,10 +229,18 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     kingColor
                 );
 
-                if (isCheckmated) {
-                }
+                if (isCheckmated || isStalemated) {
+                    setGameEnded(true);
 
-                if (isStalemated) {
+                    const gameEndedCause = isCheckmated
+                        ? "checkmate"
+                        : "stalemate";
+                    const gameWinner = isCheckmated
+                        ? pieceColorToValidate
+                        : null;
+
+                    setGameEndedCause(gameEndedCause);
+                    setGameWinner(gameWinner);
                 }
             })();
 
@@ -444,10 +453,18 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     kingColor
                 );
 
-                if (isCheckmated) {
-                }
+                if (isCheckmated || isStalemated) {
+                    setGameEnded(true);
 
-                if (isStalemated) {
+                    const gameEndedCause = isCheckmated
+                        ? "checkmate"
+                        : "stalemate";
+                    const gameWinner = isCheckmated
+                        ? pieceColorToValidate
+                        : null;
+
+                    setGameEndedCause(gameEndedCause);
+                    setGameWinner(gameWinner);
                 }
             })();
 
@@ -791,7 +808,12 @@ function Chessboard({ parsed_fen_string, orientation }) {
         return squareElements;
     }
 
-    return <div className="chessboard-container">{generateChessboard()}</div>;
+    return (
+        <>
+            <div className="chessboard-container">{generateChessboard()}</div>
+            <GameOverModal visible={gameEnded} gameEndCause={gameEndedCause} gameWinner={gameWinner}/>
+        </>
+    );
 }
 
 export default Chessboard;
