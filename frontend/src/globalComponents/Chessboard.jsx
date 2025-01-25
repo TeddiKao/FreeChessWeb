@@ -431,18 +431,39 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     newPiecePlacements,
                     pieceColorToValidate
                 );
+            }
 
+            (async () => {
+                const boardPlacement = newPiecePlacements["board_placement"];
+                const castlingRights = newPiecePlacements["castling_rights"];
                 const kingColor =
                     pieceColorToValidate.toLowerCase() === "white"
                         ? "black"
                         : "white";
 
-                const isCheckmated = checkIsCheckmated(
-                    newPiecePlacements["board_placement"],
-                    newPiecePlacements["castling_rights"],
+                const isCheckmated = await checkIsCheckmated(
+                    boardPlacement,
+                    castlingRights,
                     kingColor
                 );
-            }
+
+                const isStalemated = await checkIsStalemated(
+                    boardPlacement,
+                    castlingRights,
+                    kingColor
+                );
+
+                console.log(isCheckmated);
+                console.log(isStalemated);
+
+                if (isCheckmated) {
+                    console.log("Checkmate!");
+                }
+
+                if (isStalemated) {
+                    console.log("Stalemate!");
+                }
+            })();
 
             return newPiecePlacements;
         });
