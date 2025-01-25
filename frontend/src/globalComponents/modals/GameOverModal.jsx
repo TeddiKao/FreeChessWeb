@@ -13,6 +13,10 @@ function GameOverModal({ visible, gameEndCause, gameWinner }) {
 		<div className="game-over-modal-container">
 			<h1 className="game-result">{gameResultText}</h1>
 			<p className="game-end-cause">by {gameEndCauseText}</p>
+			<div className="buttons-container">
+				<button className="new-game-button">New game</button>
+				<button className="rematch-button">Rematch</button>
+			</div>
 		</div>
 	)
 }
