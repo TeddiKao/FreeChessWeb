@@ -423,9 +423,6 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 
 		cleaned_legal_moves.remove(f"{legal_move}")
 
-	print(cleaned_legal_moves)
-
-
 	return cleaned_legal_moves
 
 def get_knight_legal_moves(board_placement, move_info):

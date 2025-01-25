@@ -86,7 +86,7 @@ class GetIsCheckmatedView(APIView):
 		castling_rights = self.request.data.get("castling_rights")
 		king_color = self.request.data.get("king_color")
 
-		is_checkmated = game_results.is_checkmated(board_placement, castling_rights, king_color)
+		is_checkmated = game_results.get_is_checkmated(board_placement, castling_rights, king_color)
 		return Response(is_checkmated, status=status.HTTP_200_OK)
 	
 class GetIsStalematedView(APIView):
@@ -95,5 +95,5 @@ class GetIsStalematedView(APIView):
 		castling_rights = self.request.data.get("castling_rights")
 		king_color = self.request.data.get("king_color")
 
-		is_stalemated = game_results.is_stalemated(board_placement, castling_rights, king_color)
+		is_stalemated = game_results.get_is_stalemated(board_placement, castling_rights, king_color)
 		return Response(is_stalemated, status=status.HTTP_200_OK)

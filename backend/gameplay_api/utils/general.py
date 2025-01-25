@@ -48,4 +48,4 @@ def get_king_position(board_placement, king_color):
 				return square
 
 def get_opposite_color(color):
-	return "Black" if color == "White" else "White"
+	return "Black" if color.lower() == "white" else "White"

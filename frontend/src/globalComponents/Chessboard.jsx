@@ -216,7 +216,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     pieceColorToValidate.toLowerCase() === "white"
                         ? "black"
                         : "white";
-
+                        
                 const isCheckmated = await checkIsCheckmated(
                     boardPlacement,
                     castlingRights,
