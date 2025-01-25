@@ -225,6 +225,10 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     castlingRights,
                     kingColor
                 );
+
+                if (isCheckmated) {
+                    console.log("Checkmate!")
+                }
             }
 
             return newPiecePlacements;
@@ -620,11 +624,13 @@ function Chessboard({ parsed_fen_string, orientation }) {
         castlingRights,
         kingColor
     ) {
-        const isCheckmated = await getIsCheckmated(
-            boardPlacement,
-            castlingRights,
-            kingColor
-        );
+        let isCheckmated = false;
+
+        try {
+            isCheckmated = await getIsCheckmated(boardPlacement, castlingRights, kingColor)
+        } catch (error) {
+            console.log(error);
+        }
 
         return isCheckmated;
     }
@@ -634,11 +640,13 @@ function Chessboard({ parsed_fen_string, orientation }) {
         castlingRights,
         kingColor
     ) {
-        const isStalemated = await getIsStalemated(
-            boardPlacement,
-            castlingRights,
-            kingColor
-        );
+        let isStalemated = false;
+
+        try {
+            isStalemated = await getIsStalemated(boardPlacement, castlingRights, kingColor)
+        } catch (error) {
+            console.log(error);
+        }
 
         return isStalemated;
     }
