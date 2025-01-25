@@ -131,8 +131,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
             delete newPiecePlacements["board_placement"][`${draggedSquare}`];
 
-            console.log("Board has been updated!");
-
             if (pieceTypeToValidate.toLowerCase() === "rook") {
                 const kingsideRookSquares = [7, 63];
                 const queensideRookSquares = [0, 56];
@@ -186,8 +184,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     }
                 }
 
-                console.log("Checked queenside");
-
                 if (
                     parseInt(droppedSquare) === whiteQueensideCastlingSquare &&
                     parseInt(droppedSquare) === blackQueensideCastlingSquare
@@ -232,15 +228,10 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     kingColor
                 );
 
-                console.log(isCheckmated);
-                console.log(isStalemated);
-
                 if (isCheckmated) {
-                    console.log("Checkmate!");
                 }
 
                 if (isStalemated) {
-                    console.log("Stalemate!");
                 }
             })();
 
@@ -453,15 +444,10 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     kingColor
                 );
 
-                console.log(isCheckmated);
-                console.log(isStalemated);
-
                 if (isCheckmated) {
-                    console.log("Checkmate!");
                 }
 
                 if (isStalemated) {
-                    console.log("Stalemate!");
                 }
             })();
 
@@ -528,8 +514,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 previousDroppedSquare
             ];
 
-            console.log(previousFENString["board_placement"]);
-
             if (
                 !Object.keys(previousFENString["board_placement"]).includes(
                     previousDroppedSquare
@@ -540,7 +524,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
             const squareInfo =
                 previousFENString["board_placement"][previousDroppedSquare];
-            console.log(squareInfo, color);
 
             if (!promotionCapturedPiece) {
                 return updatedBoardPlacement;
@@ -565,7 +548,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
         });
 
         setPromotionCapturedPiece(null);
-        console.log(parsedFENString);
     }
 
     function handleKingsideCastling(
@@ -574,8 +556,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
         color,
         moveInfo
     ) {
-        console.log(castlingRights);
-
         const colorCastlingRights = castlingRights[color];
         const startingSquare = moveInfo["starting_square"];
         const destinationSquare = moveInfo["destination_square"];
@@ -587,8 +567,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
         if (parseInt(startingSquare) + 2 !== parseInt(destinationSquare)) {
             return originalPiecePlacements;
         }
-
-        console.log("Changing piece placements");
 
         const newPiecePlacements = handleCastling(
             originalPiecePlacements,
@@ -646,7 +624,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
         };
 
         delete newFENString["board_placement"][`${originalRookSquare}`];
-        console.log(originalRookSquare);
 
         return newFENString;
     }

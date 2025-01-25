@@ -96,15 +96,14 @@ async function fetchKingIsInCheck(boardPlacement, kingColor, kingSquare) {
 }
 
 async function startGame(gameInfo) {
-    const timeControlBaseTime = gameInfo["timeControl"]["baseTime"]
-    const timeControlIncrement = gameInfo["timeControl"]["increment"]
+    const timeControlBaseTime = gameInfo["timeControl"]["baseTime"];
+    const timeControlIncrement = gameInfo["timeControl"]["increment"];
 
     try {
         const response = await api.post("/gameplay_api/start-game/", {
             game_info: gameInfo,
         });
         if (response.status === 201) {
-            console.log("Game created successfully");
         }
     } catch (error) {
         console.log(error);
@@ -114,10 +113,11 @@ async function startGame(gameInfo) {
 async function getOngoingGames() {
     let ongoingGames = [];
 
-    await api.get("gameplay_api/get-ongoing-chess-game/")
+    await api
+        .get("gameplay_api/get-ongoing-chess-game/")
         .then((response) => response.data)
-        .then((data) => ongoingGames = data)
-        .catch((error) => console.log(error))
+        .then((data) => (ongoingGames = data))
+        .catch((error) => console.log(error));
 
     return ongoingGames;
 }
@@ -129,14 +129,11 @@ async function getIsStalemated(boardPlacement, castlingRights, kingColor) {
             board_placement: boardPlacement,
             castling_rights: castlingRights,
             king_color: kingColor,
-        })
-
-        console.log(response.data)
+        });
 
         if (response.status === 200) {
             isStalemated = response.data;
         }
-
     } catch (error) {
         console.log(error);
     }
@@ -146,21 +143,17 @@ async function getIsStalemated(boardPlacement, castlingRights, kingColor) {
 
 async function getIsCheckmated(boardPlacement, castlingRights, kingColor) {
     let isCheckmated = false;
-    console.log("Checking for checkmate!")
 
     try {
         const response = await api.post("/gameplay_api/get-is-checkmated/", {
             board_placement: boardPlacement,
             castling_rights: castlingRights,
             king_color: kingColor,
-        })
-
-        console.log(response.status)
+        });
 
         if (response.status === 200) {
             isCheckmated = response.data;
         }
-
     } catch (error) {
         console.log(error);
     }
@@ -176,5 +169,5 @@ export {
     startGame,
     getOngoingGames,
     getIsCheckmated,
-    getIsStalemated
+    getIsStalemated,
 };

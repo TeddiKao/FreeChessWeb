@@ -25,10 +25,10 @@ function SelectTimeControl() {
     useEffect(() => {
         getParsedFEN();
     }, []);
- 
+
     async function handleGameStart(timeControlInfo) {
         try {
-            const response = await startGame()
+            const response = await startGame();
         } catch (error) {
             console.log(error);
         }
@@ -141,9 +141,7 @@ function SelectTimeControl() {
                             to="/play"
                             state={selectedTimeControl}
                             className="start-game-button"
-                            onClick={() => {
-                                console.log("Game started")
-                            }}
+                            onClick={() => {}}
                         >
                             Start game
                         </Link>

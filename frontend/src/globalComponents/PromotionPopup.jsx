@@ -24,7 +24,6 @@ function PromotionPopup({
     }
 
     function handlePieceClick(pieceType) {
-        console.log(handlePawnPromotion);
         handlePawnPromotion(color, capitaliseFirstLetter(pieceType));
     }
 
@@ -72,7 +71,6 @@ function PromotionPopup({
                         onClick={() => {
                             handlePieceClick("bishop");
                         }}
-                        
                         src={`/${color.toLowerCase()}Bishop.svg`}
                     />
                 </div>
