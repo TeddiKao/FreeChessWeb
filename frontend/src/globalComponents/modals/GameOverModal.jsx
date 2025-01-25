@@ -10,7 +10,7 @@ function GameOverModal({ visible, gameEndCause, gameWinner }) {
 	const gameEndCauseText = capitaliseFirstLetter(gameEndCause)
 
 	return (
-		<div className="game-over-modal">
+		<div className="game-over-modal-container">
 			<h1 className="game-result">{gameResultText}</h1>
 			<p className="game-end-cause">by {gameEndCauseText}</p>
 		</div>
