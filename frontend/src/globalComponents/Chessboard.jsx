@@ -4,7 +4,12 @@ import "../styles/chessboard.css";
 import Square from "./Square";
 
 import { clearSquaresStyling, getRank, getFile } from "../utils/boardUtils.js";
-import { fetchLegalMoves, fetchMoveIsValid } from "../utils/apiUtils.js";
+import {
+    fetchLegalMoves,
+    fetchMoveIsValid,
+    getIsCheckmated,
+    getIsStalemated,
+} from "../utils/apiUtils.js";
 import { capitaliseFirstLetter } from "../utils/generalUtils.js";
 import {
     whitePromotionRank,
@@ -31,6 +36,12 @@ function Chessboard({ parsed_fen_string, orientation }) {
     const [previousDraggedSquare, setPreviousDraggedSquare] = useState(null);
     const [previousDroppedSquare, setPreviousDroppedSquare] = useState(null);
     const [promotionCapturedPiece, setPromotionCapturedPiece] = useState(null);
+
+    const [gameEnded, setGameEnded] = useState(false);
+    const [gameEndedCause, setGameEndedCause] = useState(null);
+    const [gameWinner, setGameWinner] = useState(null);
+
+    const [boardOrientation, setBoardOrientation] = useState(orientation);
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -99,30 +110,32 @@ function Chessboard({ parsed_fen_string, orientation }) {
         }
 
         setParsedFENString((previousFENString) => {
-            const boardPlacement = previousFENString["board_placement"];
+            const oringinalBoardPlacements =
+                previousFENString["board_placement"];
 
-            if (!Object.keys(boardPlacement).includes(`${draggedSquare}`)) {
-                return previousFENString;
-            }
-
-            const squareInfo = boardPlacement[`${draggedSquare}`];
-
-            const pieceType = squareInfo["piece_type"];
-            const pieceColor = squareInfo["piece_color"];
-            const initialSquare = squareInfo["starting_square"];
+            const pieceType =
+                oringinalBoardPlacements[`${draggedSquare}`][
+                    "piece_type"
+                ];
+            const pieceColor =
+                oringinalBoardPlacements[`${droppedSquare}`][
+                    "piece_color"
+                ];
 
             let newPiecePlacements = {
                 ...previousFENString,
                 board_placement: {
-                    ...boardPlacement,
-                    [`${droppedSquare}`]: {
+                    ...previousFENString["board_placement"],
+                    [`${draggedSquare}`]: {
                         piece_type: pieceType,
                         piece_color: pieceColor,
                     },
                 },
             };
 
-            delete newPiecePlacements["board_placement"][`${draggedSquare}`];
+            delete newPiecePlacements["board_placement"][
+                `${draggedSquare}`
+            ];
 
             if (pieceTypeToValidate.toLowerCase() === "rook") {
                 const kingsideRookSquares = [7, 63];
@@ -145,69 +158,74 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 }
             }
 
-            if (pieceTypeToValidate.toLowerCase() !== "king") {
-                return newPiecePlacements;
-            }
-
             const colorCastlingRights =
-                newPiecePlacements["castling_rights"][
-                    capitaliseFirstLetter(pieceColorToValidate)
-                ];
+                previousFENString["castling_rights"][pieceColor];
 
-            if (
-                parseInt(droppedSquare) === whiteKingsideCastlingSquare ||
-                parseInt(droppedSquare) === blackKingsideCastlingSquare
-            ) {
-                const moveInfo = {
-                    starting_square: draggedSquare,
-                    destination_square: droppedSquare,
-                };
+            const queensideColorCastlingRights =
+                colorCastlingRights["Queenside"];
+            const kingsideColorCastlingRights = colorCastlingRights["Kingside"];
 
-                newPiecePlacements = handleKingsideCastling(
-                    newPiecePlacements,
-                    previousFENString["castling_rights"],
-                    pieceColor,
-                    moveInfo
-                );
-            }
+            if (pieceTypeToValidate.toLowerCase() === "king") {
+                if (
+                    parseInt(droppedSquare) === whiteKingsideCastlingSquare ||
+                    parseInt(droppedSquare) === blackKingsideCastlingSquare
+                ) {
+                    if (kingsideColorCastlingRights) {
+                        if (
+                            parseInt(droppedSquare) - 2 ===
+                            parseInt(draggedSquare)
+                        ) {
+                            const moveInfo = {
+                                starting_square: draggedSquare,
+                                destination_square: droppedSquare,
+                            };
 
-            if (
-                parseInt(droppedSquare) !== whiteQueensideCastlingSquare &&
-                parseInt(droppedSquare) !== blackQueensideCastlingSquare
-            ) {
+                            newPiecePlacements = handleKingsideCastling(
+                                newPiecePlacements,
+                                previousFENString["castling_rights"],
+                                pieceColor,
+                                moveInfo
+                            );
+                        }
+                    }
+                }
+
+                if (
+                    parseInt(droppedSquare) === whiteQueensideCastlingSquare &&
+                    parseInt(droppedSquare) === blackQueensideCastlingSquare
+                ) {
+                    if (queensideColorCastlingRights) {
+                        if (
+                            parseInt(droppedSquare) + 2 ===
+                            parseInt(draggedSquare)
+                        ) {
+                            newPiecePlacements = handleCastling(
+                                newPiecePlacements,
+                                "queenside",
+                                pieceColorToValidate
+                            );
+                        }
+                    }
+                }
+
                 newPiecePlacements = disableCastlingForColor(
                     newPiecePlacements,
                     pieceColorToValidate
                 );
-                return newPiecePlacements;
-            }
 
-            if (!colorCastlingRights["Queenside"]) {
-                newPiecePlacements = disableCastlingForColor(
-                    newPiecePlacements,
-                    pieceColorToValidate
+                const boardPlacement = newPiecePlacements["board_placement"];
+                const castlingRights = newPiecePlacements["castling_rights"];
+                const kingColor =
+                    pieceColorToValidate.toLowerCase() === "white"
+                        ? "black"
+                        : "white";
+
+                const isCheckmated = checkIsCheckmated(
+                    boardPlacement,
+                    castlingRights,
+                    kingColor
                 );
-                return newPiecePlacements;
             }
-
-            if (parseInt(droppedSquare) + 2 !== parseInt(draggedSquare)) {
-                newPiecePlacements = disableCastlingForColor(
-                    newPiecePlacements,
-                    pieceColorToValidate
-                );
-                return newPiecePlacements;
-            }
-
-            newPiecePlacements = handleCastling(
-                newPiecePlacements,
-                "queenside",
-                pieceColorToValidate
-            );
-
-            newPiecePlacements = disableCastlingForColor(
-                newPiecePlacements,
-                pieceColorToValidate
-            );
 
             return newPiecePlacements;
         });
@@ -345,66 +363,71 @@ function Chessboard({ parsed_fen_string, orientation }) {
             const colorCastlingRights =
                 previousFENString["castling_rights"][pieceColor];
 
-            if (pieceTypeToValidate.toLowerCase() !== "king") {
-                return newPiecePlacements;
-            }
+            const queensideColorCastlingRights =
+                colorCastlingRights["Queenside"];
+            const kingsideColorCastlingRights = colorCastlingRights["Kingside"];
 
-            if (
-                parseInt(clickedSquare) === whiteKingsideCastlingSquare ||
-                parseInt(clickedSquare) === blackKingsideCastlingSquare
-            ) {
-                const moveInfo = {
-                    starting_square: previousClickedSquare,
-                    destination_square: clickedSquare,
-                };
+            if (pieceTypeToValidate.toLowerCase() === "king") {
+                if (
+                    parseInt(clickedSquare) === whiteKingsideCastlingSquare ||
+                    parseInt(clickedSquare) === blackKingsideCastlingSquare
+                ) {
+                    if (kingsideColorCastlingRights) {
+                        if (
+                            parseInt(clickedSquare) - 2 ===
+                            parseInt(previousClickedSquare)
+                        ) {
+                            const moveInfo = {
+                                starting_square: previousClickedSquare,
+                                destination_square: clickedSquare,
+                            };
 
-                newPiecePlacements = handleKingsideCastling(
-                    newPiecePlacements,
-                    previousFENString["castling_rights"],
-                    pieceColor,
-                    moveInfo
-                );
-            }
+                            newPiecePlacements = handleKingsideCastling(
+                                newPiecePlacements,
+                                previousFENString["castling_rights"],
+                                pieceColor,
+                                moveInfo
+                            );
+                        }
+                    }
+                }
 
-            if (
-                parseInt(clickedSquare) !== whiteQueensideCastlingSquare &&
-                parseInt(clickedSquare) !== blackQueensideCastlingSquare
-            ) {
+                if (
+                    parseInt(clickedSquare) === whiteQueensideCastlingSquare &&
+                    parseInt(clickedSquare) === blackQueensideCastlingSquare
+                ) {
+                    if (queensideColorCastlingRights) {
+                        if (
+                            parseInt(clickedSquare) + 2 ===
+                            parseInt(previousClickedSquare)
+                        ) {
+                            newPiecePlacements = handleCastling(
+                                newPiecePlacements,
+                                "queenside",
+                                pieceColorToValidate
+                            );
+                        }
+                    }
+                }
+
                 newPiecePlacements = disableCastlingForColor(
                     newPiecePlacements,
                     pieceColorToValidate
                 );
 
-                return newPiecePlacements;
-            }
+                const boardPlacement = newPiecePlacements["board_placement"];
+                const castlingRights = newPiecePlacements["castling_rights"];
+                const kingColor =
+                    pieceColorToValidate.toLowerCase() === "white"
+                        ? "black"
+                        : "white";
 
-            if (!colorCastlingRights["Queenside"]) {
-                newPiecePlacements = disableCastlingForColor(
-                    newPiecePlacements,
-                    pieceColorToValidate
+                const isCheckmated = checkIsCheckmated(
+                    boardPlacement,
+                    castlingRights,
+                    kingColor
                 );
-                return newPiecePlacements;
             }
-
-            if (parseInt(droppedSquare) + 2 !== parseInt(draggedSquare)) {
-                newPiecePlacements = disableCastlingForColor(
-                    newPiecePlacements,
-                    pieceColorToValidate
-                );
-
-                return newPiecePlacements;
-            }
-
-            newPiecePlacements = handleCastling(
-                newPiecePlacements,
-                "queenside",
-                pieceColorToValidate
-            );
-
-            newPiecePlacements = disableCastlingForColor(
-                newPiecePlacements,
-                pieceColorToValidate
-            );
 
             return newPiecePlacements;
         });
@@ -590,6 +613,34 @@ function Chessboard({ parsed_fen_string, orientation }) {
         console.log(originalRookSquare);
 
         return newFENString;
+    }
+
+    async function checkIsCheckmated(
+        boardPlacement,
+        castlingRights,
+        kingColor
+    ) {
+        const isCheckmated = await getIsCheckmated(
+            boardPlacement,
+            castlingRights,
+            kingColor
+        );
+
+        return isCheckmated;
+    }
+
+    async function checkIsStalemated(
+        boardPlacement,
+        castlingRights,
+        kingColor
+    ) {
+        const isStalemated = await getIsStalemated(
+            boardPlacement,
+            castlingRights,
+            kingColor
+        );
+
+        return isStalemated;
     }
 
     function disableCastlingForColor(originalFENString, color) {
