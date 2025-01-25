@@ -131,6 +131,8 @@ async function getIsStalemated(boardPlacement, castlingRights, kingColor) {
             king_color: kingColor,
         })
 
+        console.log(response.data)
+
         if (response.status === 200) {
             isStalemated = response.data;
         }
@@ -144,12 +146,16 @@ async function getIsStalemated(boardPlacement, castlingRights, kingColor) {
 
 async function getIsCheckmated(boardPlacement, castlingRights, kingColor) {
     let isCheckmated = false;
+    console.log("Checking for checkmate!")
+
     try {
         const response = await api.post("/gameplay_api/get-is-checkmated/", {
             board_placement: boardPlacement,
             castling_rights: castlingRights,
             king_color: kingColor,
         })
+
+        console.log(response.status)
 
         if (response.status === 200) {
             isCheckmated = response.data;

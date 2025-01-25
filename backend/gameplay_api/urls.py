@@ -8,4 +8,5 @@ urlpatterns = [
 	path("show-legal-moves/", ShowLegalMoveView.as_view(), name="show_legal_moves"),
 	path("get-ongoing-chess-game/", GetOngoingGameView.as_view(), name="get_ongoing_chess_game"),
 	path("get-is-checkmated/", GetIsCheckmatedView.as_view(), name="get_is_checkmated"),
+	path("get-is-stalemated/", GetIsStalematedView.as_view(), name="get_is_stalemated")
 ]

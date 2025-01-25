@@ -114,28 +114,24 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 previousFENString["board_placement"];
 
             const pieceType =
-                oringinalBoardPlacements[`${draggedSquare}`][
-                    "piece_type"
-                ];
+                oringinalBoardPlacements[`${draggedSquare}`]["piece_type"];
             const pieceColor =
-                oringinalBoardPlacements[`${droppedSquare}`][
-                    "piece_color"
-                ];
+                oringinalBoardPlacements[`${draggedSquare}`]["piece_color"];
 
             let newPiecePlacements = {
                 ...previousFENString,
                 board_placement: {
                     ...previousFENString["board_placement"],
-                    [`${draggedSquare}`]: {
+                    [`${droppedSquare}`]: {
                         piece_type: pieceType,
                         piece_color: pieceColor,
                     },
                 },
             };
 
-            delete newPiecePlacements["board_placement"][
-                `${draggedSquare}`
-            ];
+            delete newPiecePlacements["board_placement"][`${draggedSquare}`];
+
+            console.log("Board has been updated!");
 
             if (pieceTypeToValidate.toLowerCase() === "rook") {
                 const kingsideRookSquares = [7, 63];
@@ -190,6 +186,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     }
                 }
 
+                console.log("Checked queenside");
+
                 if (
                     parseInt(droppedSquare) === whiteQueensideCastlingSquare &&
                     parseInt(droppedSquare) === blackQueensideCastlingSquare
@@ -212,7 +210,9 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     newPiecePlacements,
                     pieceColorToValidate
                 );
+            }
 
+            (async () => {
                 const boardPlacement = newPiecePlacements["board_placement"];
                 const castlingRights = newPiecePlacements["castling_rights"];
                 const kingColor =
@@ -220,16 +220,29 @@ function Chessboard({ parsed_fen_string, orientation }) {
                         ? "black"
                         : "white";
 
-                const isCheckmated = checkIsCheckmated(
-                    boardPlacement,
-                    castlingRights,
+                const isCheckmated = await checkIsCheckmated(
+                    newPiecePlacements["board_placement"],
+                    newPiecePlacements["castling_rights"],
                     kingColor
                 );
 
+                const isStalemated = await checkIsStalemated(
+                    newPiecePlacements["board_placement"],
+                    newPiecePlacements["castling_rights"],
+                    kingColor
+                );
+
+                console.log(isCheckmated);
+                console.log(isStalemated);
+
                 if (isCheckmated) {
-                    console.log("Checkmate!")
+                    console.log("Checkmate!");
                 }
-            }
+
+                if (isStalemated) {
+                    console.log("Stalemate!");
+                }
+            })();
 
             return newPiecePlacements;
         });
@@ -419,16 +432,14 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     pieceColorToValidate
                 );
 
-                const boardPlacement = newPiecePlacements["board_placement"];
-                const castlingRights = newPiecePlacements["castling_rights"];
                 const kingColor =
                     pieceColorToValidate.toLowerCase() === "white"
                         ? "black"
                         : "white";
 
                 const isCheckmated = checkIsCheckmated(
-                    boardPlacement,
-                    castlingRights,
+                    newPiecePlacements["board_placement"],
+                    newPiecePlacements["castling_rights"],
                     kingColor
                 );
             }
@@ -624,13 +635,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
         castlingRights,
         kingColor
     ) {
-        let isCheckmated = false;
-
-        try {
-            isCheckmated = await getIsCheckmated(boardPlacement, castlingRights, kingColor)
-        } catch (error) {
-            console.log(error);
-        }
+        const isCheckmated = await getIsCheckmated(
+            boardPlacement,
+            castlingRights,
+            kingColor
+        );
 
         return isCheckmated;
     }
@@ -640,13 +649,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
         castlingRights,
         kingColor
     ) {
-        let isStalemated = false;
-
-        try {
-            isStalemated = await getIsStalemated(boardPlacement, castlingRights, kingColor)
-        } catch (error) {
-            console.log(error);
-        }
+        const isStalemated = await getIsStalemated(
+            boardPlacement,
+            castlingRights,
+            kingColor
+        );
 
         return isStalemated;
     }
@@ -732,8 +739,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 if (
                     Object.keys(piecePlacements).includes(boardPlacementSquare)
                 ) {
-                    console.log(piecePlacements, boardPlacementSquare);
-
                     const pieceColor =
                         piecePlacements[boardPlacementSquare]["piece_color"];
                     const pieceType =

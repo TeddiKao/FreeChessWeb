@@ -8,8 +8,11 @@ def is_stalemated(board_placement: dict, castling_rights: dict, king_color: str)
 	king_in_check = is_king_in_check(board_placement, king_color, king_position)
 	
 	for square in board_placement.keys():
-		piece_color = board_placement[square]["piece_color"]
-		piece_type = board_placement[square]["piece_type"]
+		piece_color: str = board_placement[square]["piece_color"]
+		piece_type: str = board_placement[square]["piece_type"]
+
+		if piece_color.lower() != king_color.lower():
+			continue
 
 		move_info = {
 			"piece_color": piece_color,
@@ -22,6 +25,7 @@ def is_stalemated(board_placement: dict, castling_rights: dict, king_color: str)
 	legal_moves_num = len(all_legal_moves)
 	if legal_moves_num == 0:
 		if not king_in_check:
+			print("the king is stalemated")
 			return True
 		
 	return False
@@ -29,12 +33,17 @@ def is_stalemated(board_placement: dict, castling_rights: dict, king_color: str)
 def is_checkmated(board_placement: dict, castling_rights: dict, king_color: str) -> bool:
 	all_legal_moves = []
 	
-	king_position = get_king_position(board_placement, king_color)
-	king_in_check = is_king_in_check(board_placement, king_color, king_position)
+	king_position = get_king_position(board_placement, king_color.lower())
+	king_in_check = is_king_in_check(board_placement, king_color.lower(), king_position)
 	
 	for square in board_placement.keys():
-		piece_color = board_placement[square]["piece_color"]
-		piece_type = board_placement[square]["piece_type"]
+		piece_color: str = board_placement[square]["piece_color"]
+		piece_type: str = board_placement[square]["piece_type"]
+
+		if piece_color.lower() != king_color.lower():
+			continue
+
+		print(piece_type)
 
 		move_info = {
 			"piece_color": piece_color,
@@ -44,9 +53,13 @@ def is_checkmated(board_placement: dict, castling_rights: dict, king_color: str)
 
 		all_legal_moves += get_legal_moves(move_info, board_placement, castling_rights)
 
+	print(all_legal_moves)
 	legal_moves_num = len(all_legal_moves)
+	print(legal_moves_num, king_in_check)
+
 	if legal_moves_num == 0:
 		if king_in_check:
+			print("Checkmate!")
 			return True
 		
 	return False

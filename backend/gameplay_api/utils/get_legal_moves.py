@@ -371,8 +371,6 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 		file_distance = get_file(legal_move) - get_file(starting_square)
 		castling_squares = [f"{castle_kingside_square}", f"{castle_queenside_square}"]
 
-		
-
 		if abs(file_distance) <= 1:
 			continue
 
@@ -404,6 +402,16 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 		cleaned_legal_moves.remove(f"{legal_move}")
 
 	for legal_move in legal_moves:
+		if int(legal_move) >= 0 and int(legal_move) <= 63:
+			continue
+
+		if f"{legal_move}" not in cleaned_legal_moves:
+			continue
+
+		cleaned_legal_moves.remove(f"{legal_move}")
+
+
+	for legal_move in legal_moves:
 		updated_board_placement = update_FEN(board_placement, starting_square_info, legal_move)
 		king_position = get_king_position(updated_board_placement, move_info["piece_color"])
 		
@@ -414,6 +422,9 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 			continue
 
 		cleaned_legal_moves.remove(f"{legal_move}")
+
+	print(cleaned_legal_moves)
+
 
 	return cleaned_legal_moves
 
@@ -466,5 +477,14 @@ def get_knight_legal_moves(board_placement, move_info):
 			if legal_move in cleaned_legal_moves:
 				cleaned_legal_moves.remove(f"{legal_move}")
 				continue
+
+	for legal_move in legal_moves:
+		if int(legal_move) >= 0 and int(legal_move) <= 63:
+			continue
+
+		if f"{legal_move}" not in cleaned_legal_moves:
+			continue
+
+		cleaned_legal_moves.remove(f"{legal_move}")
 
 	return cleaned_legal_moves
