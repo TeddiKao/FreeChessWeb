@@ -221,14 +221,14 @@ function Chessboard({ parsed_fen_string, orientation }) {
                         : "white";
 
                 const isCheckmated = await checkIsCheckmated(
-                    newPiecePlacements["board_placement"],
-                    newPiecePlacements["castling_rights"],
+                    boardPlacement,
+                    castlingRights,
                     kingColor
                 );
 
                 const isStalemated = await checkIsStalemated(
-                    newPiecePlacements["board_placement"],
-                    newPiecePlacements["castling_rights"],
+                    boardPlacement,
+                    castlingRights,
                     kingColor
                 );
 
