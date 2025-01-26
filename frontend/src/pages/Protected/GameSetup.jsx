@@ -12,10 +12,15 @@ import { capitaliseFirstLetter } from "../../utils/generalUtils.js";
 import { displayTimeControl } from "../../utils/timeUtils.js";
 import { fetchFen, startGame } from "../../utils/apiUtils.js";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import MatchmakingScreen from "../../pageComponents/gameplay/MatchmakingScreen.jsx";
 
 function GameSetup() {
     const [parsedFEN, setParsedFEN] = useState("");
+
+    const [gameSetupStage, setGameSetupStage] = useState(
+        "timeControlSelection"
+    );
     const [timeControlSelectionStage, setTimeControlSelectionStage] =
         useState("typeSelection");
 
@@ -26,12 +31,8 @@ function GameSetup() {
         getParsedFEN();
     }, []);
 
-    async function handleGameStart(timeControlInfo) {
-        try {
-            const response = await startGame();
-        } catch (error) {
-            console.log(error);
-        }
+    async function handleStartClick() {
+        setGameSetupStage("matchmaking");
     }
 
     const startingPositionFEN =
@@ -43,6 +44,23 @@ function GameSetup() {
             setParsedFEN(parsedFEN);
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    function renderGameSetupPanel() {
+        switch (gameSetupStage) {
+            case "timeControlSelection":
+                return (
+                    <div className="time-control-selection-container">
+                        {renderTimeControlSelectionPanel()}
+                    </div>
+                );
+
+            case "matchmaking":
+                return <MatchmakingScreen timeControlInfo={{
+                    baseTime: selectedTimeControl.baseTime,
+                    increment: selectedTimeControl.increment,
+                }}/>;
         }
     }
 
@@ -137,14 +155,12 @@ function GameSetup() {
                         <p className="time-control">
                             {displayTimeControl(selectedTimeControl)}
                         </p>
-                        <Link
-                            to="/play"
-                            state={selectedTimeControl}
+                        <button
                             className="start-game-button"
-                            onClick={() => {}}
-                        >
-                            Start game
-                        </Link>
+                            onClick={() => {
+                                handleStartClick();
+                            }}
+                        >Start game</button>
                     </div>
                 );
         }
@@ -172,9 +188,7 @@ function GameSetup() {
                 </div>
             </div>
 
-            <div className="time-control-selection-container">
-                {renderTimeControlSelectionPanel()}
-            </div>
+            {renderGameSetupPanel()}
         </div>
     );
 }
