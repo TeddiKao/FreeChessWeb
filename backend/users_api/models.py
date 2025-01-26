@@ -18,3 +18,4 @@ class UserAuthModel(AbstractBaseUser):
 class UserProfile(models.Model):
 	user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
 	is_online = models.BooleanField(default=False)
+	is_matchmaking = models.BooleanField(default=False)
