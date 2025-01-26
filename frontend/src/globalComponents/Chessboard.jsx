@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import "../styles/chessboard.css";
 import Square from "./Square";
@@ -10,7 +10,7 @@ import {
     getIsCheckmated,
     getIsStalemated,
 } from "../utils/apiUtils.js";
-import { capitaliseFirstLetter } from "../utils/generalUtils.js";
+
 import {
     whitePromotionRank,
     blackPromotionRank,
@@ -24,7 +24,12 @@ import {
     whiteKingStartingSquare,
     blackKingStartingSquare,
 } from "../constants/castlingSquares.js";
-import GameOverModal from "./modals/GameOverModal.jsx";
+
+import {
+    GameEndedSetterContext,
+    GameEndedCauseSetterContext,
+    GameWinnerSetterContext,
+} from "../contexts/chessboardContexts.js";
 
 function Chessboard({ parsed_fen_string, orientation }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
@@ -38,11 +43,11 @@ function Chessboard({ parsed_fen_string, orientation }) {
     const [previousDroppedSquare, setPreviousDroppedSquare] = useState(null);
     const [promotionCapturedPiece, setPromotionCapturedPiece] = useState(null);
 
-    const [gameEnded, setGameEnded] = useState(false);
-    const [gameEndedCause, setGameEndedCause] = useState(null);
-    const [gameWinner, setGameWinner] = useState(null);
-
     const [boardOrientation, setBoardOrientation] = useState(orientation);
+
+    const setGameEnded = useContext(GameEndedSetterContext)
+    const setGameEndedCause = useContext(GameEndedCauseSetterContext)
+    const setGameWinner = useContext(GameWinnerSetterContext)
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -216,7 +221,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     pieceColorToValidate.toLowerCase() === "white"
                         ? "black"
                         : "white";
-                        
+
                 const isCheckmated = await checkIsCheckmated(
                     boardPlacement,
                     castlingRights,
@@ -230,6 +235,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 );
 
                 if (isCheckmated || isStalemated) {
+                    console.log("Checkmate!")
+
                     setGameEnded(true);
 
                     const gameEndedCause = isCheckmated
@@ -241,6 +248,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
                     setGameEndedCause(gameEndedCause);
                     setGameWinner(gameWinner);
+
+                    console.log("Set!")
                 }
             })();
 
@@ -811,7 +820,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
     return (
         <>
             <div className="chessboard-container">{generateChessboard()}</div>
-            <GameOverModal visible={gameEnded} gameEndCause={gameEndedCause} gameWinner={gameWinner}/>
         </>
     );
 }
