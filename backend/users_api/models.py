@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth import get_user_model
 from .managers import CustomUserManager
 
 # Create your models here.
@@ -13,3 +14,7 @@ class UserAuthModel(AbstractBaseUser):
 	USERNAME_FIELD = "email"
 
 	objects = CustomUserManager()
+
+class UserProfile(models.Model):
+	user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+	is_online = models.BooleanField(default=False)
