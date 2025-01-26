@@ -11,6 +11,10 @@ class MatchmakingView(APIView):
 	def post(self, request):
 		player = request.user
 		waiting_player = WaitingPlayer.objects.first()
+		player_in_queue = WaitingPlayer.objects.get(user=player)
+
+		if player_in_queue:
+			waiting_player = WaitingPlayer.objects.exclude(user=player).first()
 
 		if waiting_player:
 			opponent = waiting_player.user
