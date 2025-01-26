@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import api from "../../api.js";
 import { displayTimeControl } from "../../utils/timeUtils";
 
+import "../../styles/matchmaking-screen.css"
+
 function MatchmakingScreen({ timeControlInfo: { baseTime, increment } }) {
     const [matchmakingStatus, setMatchmakingStatus] = useState("Finding match");
 
@@ -9,7 +11,7 @@ function MatchmakingScreen({ timeControlInfo: { baseTime, increment } }) {
         async function findMatch() {
             try {
                 const response = await api.post(
-                    "/matchmaking-api/match-player/"
+                    "/matchmaking_api/match-player/"
                 );
                 if (response.data["player_found"]) {
                     setMatchmakingStatus("Found player");
@@ -32,8 +34,8 @@ function MatchmakingScreen({ timeControlInfo: { baseTime, increment } }) {
 
     return (
         <div className="matchmaking-screen-container">
-            <h1>{matchmakingStatus}</h1>
-            <p className="time-control">
+            <h1 className="matchmaking-heading">{matchmakingStatus}</h1>
+            <p className="matchmaking-time-control">
                 {displayTimeControl({ baseTime, increment })}
             </p>
 			<button className="cancel-matchmaking">Cancel</button>
