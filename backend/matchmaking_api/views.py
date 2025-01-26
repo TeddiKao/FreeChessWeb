@@ -43,7 +43,7 @@ class MatchmakingView(APIView):
 				white_player = opponent
 				black_player = player
 
-			ChessGame.objects.create(white_player=white_player, black_player=black_player)
+			ChessGame.objects.create(white_player=white_player, black_player=black_player, white_player_clock=180, black_player_clock=180)
 
 			response_data = {
 				"matchmaking_status": "Found player",
