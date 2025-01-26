@@ -52,6 +52,9 @@ SIMPLE_JWT = {
 # Application definition
 
 INSTALLED_APPS = [
+    "channels",
+	"daphne",
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,12 +63,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 	"rest_framework",
 	"corsheaders",
-	"channels",
 
 	"users_api",
 	"gameplay_api",
 	"matchmaking_api"
 ]
+
+ASGI_APPLICATION = "backend.asgi.application"
 
 MIDDLEWARE = [
 	"corsheaders.middleware.CorsMiddleware",
