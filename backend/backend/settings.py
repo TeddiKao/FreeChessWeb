@@ -64,7 +64,7 @@ INSTALLED_APPS = [
 
 	"users_api",
 	"gameplay_api",
-	"matchmaking_api",
+	"matchmaking_api"
 ]
 
 MIDDLEWARE = [
