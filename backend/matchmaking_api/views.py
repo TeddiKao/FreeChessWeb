@@ -11,14 +11,30 @@ class MatchmakingView(APIView):
 	def post(self, request):
 		player = request.user
 		waiting_player = WaitingPlayer.objects.first()
-		player_in_queue = WaitingPlayer.objects.get(user=player)
+		
+		try:
+			player_in_queue = WaitingPlayer.objects.get(user=player)
+		except WaitingPlayer.DoesNotExist:
+			player_in_queue = None
 
 		if player_in_queue:
 			waiting_player = WaitingPlayer.objects.exclude(user=player).first()
 
+			if not waiting_player:
+				response_data = {
+					"matchmaking_status": "Waiting",
+					"player_found": None
+				}
+
+				return Response(response_data, status=status.HTTP_202_ACCEPTED)
+
 		if waiting_player:
+			print("Match found!")
+
 			opponent = waiting_player.user
 			waiting_player.delete()
+
+			print(player, opponent)
 
 			if random.choice([True, False]):
 				white_player = player
