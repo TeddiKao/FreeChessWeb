@@ -9,7 +9,7 @@ import Signup from "./pages/Signup.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 import Dashboard from "./pages/Protected/Dashboard.jsx";
-import SelectTimeControl from "./pages/Protected/SelectTimeControl.jsx";
+import GameSetup from "./pages/Protected/GameSetup.jsx";
 
 import "./styles/global.css";
 
@@ -62,7 +62,7 @@ function App() {
                             path="/select-time-control"
                             element={
                                 <ProtectedRoute>
-                                    <SelectTimeControl />
+                                    <GameSetup />
                                 </ProtectedRoute>
                             }
                         />

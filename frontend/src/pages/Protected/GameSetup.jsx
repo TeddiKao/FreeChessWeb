@@ -14,7 +14,7 @@ import { fetchFen, startGame } from "../../utils/apiUtils.js";
 
 import { Link } from "react-router-dom";
 
-function SelectTimeControl() {
+function GameSetup() {
     const [parsedFEN, setParsedFEN] = useState("");
     const [timeControlSelectionStage, setTimeControlSelectionStage] =
         useState("typeSelection");
@@ -179,4 +179,4 @@ function SelectTimeControl() {
     );
 }
 
-export default SelectTimeControl;
+export default GameSetup;
