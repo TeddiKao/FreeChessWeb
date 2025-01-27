@@ -2,19 +2,25 @@ import { useEffect, useState } from "react";
 import api from "../../api.js";
 import { displayTimeControl } from "../../utils/timeUtils";
 
-import "../../styles/matchmaking-screen.css"
+import "../../styles/matchmaking-screen.css";
+import { useNavigate } from "react-router-dom";
 
-function MatchmakingScreen({ timeControlInfo: { baseTime, increment }, setGameSetupStage }) {
+function MatchmakingScreen({
+    timeControlInfo: { baseTime, increment },
+    setGameSetupStage,
+}) {
     const [matchmakingStatus, setMatchmakingStatus] = useState("Finding match");
     const [isMatchmaking, setIsMatchmaking] = useState(true);
 
+    const navigate = useNavigate();
+
     async function findMatch() {
         try {
-            const response = await api.post(
-                "/matchmaking_api/match-player/"
-            );
+            const response = await api.post("/matchmaking_api/match-player/");
             if (response.data["player_found"]) {
                 setMatchmakingStatus("Found player");
+                setIsMatchmaking(false);
+                navigate("/play", { state: { baseTime, increment } });
             }
         } catch (error) {
             console.log(error);
@@ -26,10 +32,11 @@ function MatchmakingScreen({ timeControlInfo: { baseTime, increment }, setGameSe
 
         if (isMatchmaking) {
             findMatchInterval = setInterval(() => {
+                console.log("Finding match");
 
                 findMatch().catch((error) => {
                     console.log(error);
-                    clearInterval(findMatchInterval)
+                    clearInterval(findMatchInterval);
                 });
             }, 1000);
         } else {
@@ -45,7 +52,7 @@ function MatchmakingScreen({ timeControlInfo: { baseTime, increment }, setGameSe
 
     function handleMatchmakingCancel() {
         setIsMatchmaking(false);
-        setGameSetupStage("timeControlSelection")
+        setGameSetupStage("timeControlSelection");
     }
 
     return (
@@ -54,7 +61,12 @@ function MatchmakingScreen({ timeControlInfo: { baseTime, increment }, setGameSe
             <p className="matchmaking-time-control">
                 {displayTimeControl({ baseTime, increment })}
             </p>
-			<button onClick={handleMatchmakingCancel} className="cancel-matchmaking">Cancel</button>
+            <button
+                onClick={handleMatchmakingCancel}
+                className="cancel-matchmaking"
+            >
+                Cancel
+            </button>
         </div>
     );
 }
