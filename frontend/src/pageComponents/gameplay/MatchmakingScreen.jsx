@@ -4,7 +4,7 @@ import { displayTimeControl } from "../../utils/timeUtils";
 
 import "../../styles/matchmaking-screen.css"
 
-function MatchmakingScreen({ timeControlInfo: { baseTime, increment } }) {
+function MatchmakingScreen({ timeControlInfo: { baseTime, increment }, setGameSetupStage }) {
     const [matchmakingStatus, setMatchmakingStatus] = useState("Finding match");
     const [isMatchmaking, setIsMatchmaking] = useState(true);
 
@@ -45,6 +45,7 @@ function MatchmakingScreen({ timeControlInfo: { baseTime, increment } }) {
 
     function handleMatchmakingCancel() {
         setIsMatchmaking(false);
+        setGameSetupStage("timeControlSelection")
     }
 
     return (

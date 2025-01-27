@@ -57,10 +57,16 @@ function GameSetup() {
                 );
 
             case "matchmaking":
-                return <MatchmakingScreen timeControlInfo={{
-                    baseTime: selectedTimeControl.baseTime,
-                    increment: selectedTimeControl.increment,
-                }}/>;
+                return (
+                    <MatchmakingScreen
+                        timeControlInfo={{
+                            baseTime: selectedTimeControl.baseTime,
+                            increment: selectedTimeControl.increment,
+                        }}
+
+                        setGameSetupStage={setGameSetupStage}
+                    />
+                );
         }
     }
 
@@ -160,7 +166,9 @@ function GameSetup() {
                             onClick={() => {
                                 handleStartClick();
                             }}
-                        >Start game</button>
+                        >
+                            Start game
+                        </button>
                     </div>
                 );
         }
