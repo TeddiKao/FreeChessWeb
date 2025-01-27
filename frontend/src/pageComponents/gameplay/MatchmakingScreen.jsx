@@ -6,31 +6,45 @@ import "../../styles/matchmaking-screen.css"
 
 function MatchmakingScreen({ timeControlInfo: { baseTime, increment } }) {
     const [matchmakingStatus, setMatchmakingStatus] = useState("Finding match");
+    const [isMatchmaking, setIsMatchmaking] = useState(false);
+
+    async function findMatch() {
+        try {
+            const response = await api.post(
+                "/matchmaking_api/match-player/"
+            );
+            if (response.data["player_found"]) {
+                setMatchmakingStatus("Found player");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(() => {
-        async function findMatch() {
-            try {
-                const response = await api.post(
-                    "/matchmaking_api/match-player/"
-                );
-                if (response.data["player_found"]) {
-                    setMatchmakingStatus("Found player");
-                }
-            } catch (error) {
-                console.log(error);
+        let findMatchInterval = null;
+
+        if (isMatchmaking) {
+            findMatchInterval = setInterval(() => {
+                findMatch().catch((error) => {
+                    console.log(error);
+                    clearInterval(findMatchInterval)
+                });
+            }, 1000);
+        } else {
+            if (findMatchInterval) {
+                clearInterval(findMatchInterval);
             }
         }
-
-        const findMatchInterval = setInterval(() => {
-            findMatch().catch((error) => {
-                console.log(error);
-            });
-        }, 1000);
 
         return () => {
             clearInterval(findMatchInterval);
         };
-    }, []);
+    }, [isMatchmaking]);
+
+    function handleMatchmakingCancel() {
+        setIsMatchmaking(false);
+    }
 
     return (
         <div className="matchmaking-screen-container">
@@ -38,7 +52,7 @@ function MatchmakingScreen({ timeControlInfo: { baseTime, increment } }) {
             <p className="matchmaking-time-control">
                 {displayTimeControl({ baseTime, increment })}
             </p>
-			<button className="cancel-matchmaking">Cancel</button>
+			<button onClick={handleMatchmakingCancel} className="cancel-matchmaking">Cancel</button>
         </div>
     );
 }
