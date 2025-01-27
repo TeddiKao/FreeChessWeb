@@ -54,7 +54,8 @@ class MatchmakingView(APIView):
 			opponent = waiting_player.user
 			waiting_player.delete()
 
-			print(player, opponent)
+			if player_in_queue:
+				player_in_queue.delete()
 
 			if random.choice([True, False]):
 				white_player = player
