@@ -6,7 +6,7 @@ import "../../styles/matchmaking-screen.css"
 
 function MatchmakingScreen({ timeControlInfo: { baseTime, increment } }) {
     const [matchmakingStatus, setMatchmakingStatus] = useState("Finding match");
-    const [isMatchmaking, setIsMatchmaking] = useState(false);
+    const [isMatchmaking, setIsMatchmaking] = useState(true);
 
     async function findMatch() {
         try {
@@ -26,6 +26,7 @@ function MatchmakingScreen({ timeControlInfo: { baseTime, increment } }) {
 
         if (isMatchmaking) {
             findMatchInterval = setInterval(() => {
+
                 findMatch().catch((error) => {
                     console.log(error);
                     clearInterval(findMatchInterval)
