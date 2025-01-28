@@ -10,3 +10,6 @@ class UserStatusConsumer(WebsocketConsumer):
 			"type": "connection_established",
 			"message": "Connection established"
 		}))
+
+	def disconnect(self, code):
+		pass
