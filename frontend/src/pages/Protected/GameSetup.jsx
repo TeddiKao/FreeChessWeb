@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import DisplayChessboard from "../../globalComponents/DisplayChessboard.jsx";
+import DisplayChessboard from "../../globalComponents/chessboards/DisplayChessboard.jsx";
 
 import TimeControlTypeContainer from "../../pageComponents/gameplay/TimeControlTypeContainer.jsx";
 import Timer from "../../pageComponents/gameplay/Timer.jsx";
@@ -63,7 +63,6 @@ function GameSetup() {
                             baseTime: selectedTimeControl.baseTime,
                             increment: selectedTimeControl.increment,
                         }}
-
                         setGameSetupStage={setGameSetupStage}
                     />
                 );

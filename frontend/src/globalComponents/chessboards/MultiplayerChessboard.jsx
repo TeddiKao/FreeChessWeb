@@ -1,20 +1,24 @@
 import { useState, useEffect, useContext } from "react";
 
 import "../styles/chessboard.css";
-import Square from "./Square";
+import Square from "../Square.jsx";
 
-import { clearSquaresStyling, getRank, getFile } from "../utils/boardUtils.js";
+import {
+    clearSquaresStyling,
+    getRank,
+    getFile,
+} from "../../utils/boardUtils.js";
 import {
     fetchLegalMoves,
     fetchMoveIsValid,
     getIsCheckmated,
     getIsStalemated,
-} from "../utils/apiUtils.js";
+} from "../../utils/apiUtils.js";
 
 import {
     whitePromotionRank,
     blackPromotionRank,
-} from "../constants/boardSquares.js";
+} from "../../constants/boardSquares.js";
 
 import {
     whiteKingsideCastlingSquare,
@@ -23,15 +27,15 @@ import {
     blackQueensideCastlingSquare,
     whiteKingStartingSquare,
     blackKingStartingSquare,
-} from "../constants/castlingSquares.js";
+} from "../../constants/castlingSquares.js";
 
 import {
     GameEndedSetterContext,
     GameEndedCauseSetterContext,
     GameWinnerSetterContext,
-} from "../contexts/chessboardContexts.js";
+} from "../../contexts/chessboardContexts.js";
 
-function Chessboard({ parsed_fen_string, orientation }) {
+function MultiplayeChessboard({ parsed_fen_string, orientation }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
     const [parsedFENString, setParsedFENString] = useState(parsed_fen_string);
@@ -45,9 +49,9 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
     const [boardOrientation, setBoardOrientation] = useState(orientation);
 
-    const setGameEnded = useContext(GameEndedSetterContext)
-    const setGameEndedCause = useContext(GameEndedCauseSetterContext)
-    const setGameWinner = useContext(GameWinnerSetterContext)
+    const setGameEnded = useContext(GameEndedSetterContext);
+    const setGameEndedCause = useContext(GameEndedCauseSetterContext);
+    const setGameWinner = useContext(GameWinnerSetterContext);
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -235,7 +239,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 );
 
                 if (isCheckmated || isStalemated) {
-                    console.log("Checkmate!")
+                    console.log("Checkmate!");
 
                     setGameEnded(true);
 
@@ -249,7 +253,7 @@ function Chessboard({ parsed_fen_string, orientation }) {
                     setGameEndedCause(gameEndedCause);
                     setGameWinner(gameWinner);
 
-                    console.log("Set!")
+                    console.log("Set!");
                 }
             })();
 
@@ -824,4 +828,4 @@ function Chessboard({ parsed_fen_string, orientation }) {
     );
 }
 
-export default Chessboard;
+export default MultiplayeChessboard;

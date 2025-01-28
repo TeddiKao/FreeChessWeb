@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 
-import Chessboard from "../../globalComponents/Chessboard";
+import Chessboard from "../../globalComponents/chessboards/Chessboard.jsx";
 import Timer from "../../pageComponents/gameplay/Timer.jsx";
 
 import {
@@ -25,9 +25,9 @@ function Play() {
     const [gameWinner, setGameWinner] = useState(null);
 
     useEffect(() => {
-        console.log("Game status changed")
-        console.log(gameEnded, gameEndedCause, gameWinner)
-    }, [gameEnded, gameEnded, gameWinner])
+        console.log("Game status changed");
+        console.log(gameEnded, gameEndedCause, gameWinner);
+    }, [gameEnded, gameEnded, gameWinner]);
 
     useEffect(() => {
         getParsedFEN();
