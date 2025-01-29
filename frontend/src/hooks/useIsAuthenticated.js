@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import api from "../api.js";
 
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants/tokens.js";
+import { getAccessToken, getRefreshToken } from "../utils/tokenUtils.js";
 
 function useIsAuthenticated() {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -14,7 +15,7 @@ function useIsAuthenticated() {
     }, []);
 
     async function refreshUserToken() {
-        const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+        const refreshToken = getRefreshToken();
         if (!refreshToken) {
             return;
         }
@@ -37,7 +38,7 @@ function useIsAuthenticated() {
     }
 
     async function auth() {
-        const userAccessToken = localStorage.getItem(ACCESS_TOKEN);
+        const userAccessToken = getAccessToken();
 
         if (!userAccessToken) {
             setIsAuthenticated(false);
