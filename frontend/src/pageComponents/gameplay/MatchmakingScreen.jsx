@@ -6,6 +6,7 @@ import useWebSocket from "../../hooks/useWebsocket.js";
 
 import "../../styles/matchmaking-screen.css";
 import { useNavigate } from "react-router-dom";
+import { getAccessToken } from "../../utils/tokenUtils.js";
 
 function MatchmakingScreen({
     timeControlInfo: { baseTime, increment },
@@ -15,19 +16,20 @@ function MatchmakingScreen({
     const [isMatchmaking, setIsMatchmaking] = useState(true);
     const [websocketConnected, setWebsocketConnected] = useState(false);
 
-    const websocketURL = "ws://localhost:8000/ws/matchmaking-server/"
-    const matchmakingWebsocket = useWebSocket(websocketURL, onMessage, onError)
+    const websocketURL = `ws://localhost:8000/ws/matchmaking-server/?token=${getAccessToken()}`;
+    const matchmakingWebsocket = useWebSocket(websocketURL, onMessage, onError);
 
-    const [websocket, setWebsocket] = useState(matchmakingWebsocket)
+    const [websocket, setWebsocket] = useState(matchmakingWebsocket);
 
-    function onMessage (event)  {
-        console.log(event.data)
+    function onMessage(event) {
+        console.log(event.data);
         console.log("Websocket messaged");
-    };
+    }
 
-    function onError (event)  {
+    function onError(event) {
+        console.log(event);
         console.log("Error!");
-    };
+    }
 
     const navigate = useNavigate();
 
@@ -51,9 +53,14 @@ function MatchmakingScreen({
     useEffect(() => {
         let findMatchInterval = null;
 
+        console.log(isMatchmaking);
+
         if (isMatchmaking) {
             if (!websocketConnected) {
+                console.log("Connection initiated");
+
                 initiateWebsocketConnection();
+                setWebsocketConnected(true);
             }
         } else {
             // if (findMatchInterval) {
@@ -62,9 +69,15 @@ function MatchmakingScreen({
         }
 
         return () => {
-            clearInterval(findMatchInterval);
+            if (websocket.readyState === WebSocket.OPEN) {
+                websocket.close();
+            }
+
+            if (findMatchInterval) {
+                clearInterval(findMatchInterval);
+            }
         };
-    }, [isMatchmaking]);
+    }, []);
 
     function handleMatchmakingCancel() {
         setIsMatchmaking(false);
