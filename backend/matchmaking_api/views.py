@@ -49,7 +49,7 @@ class MatchmakingView(APIView):
 				return Response(response_data, status=status.HTTP_202_ACCEPTED)
 
 		if waiting_player:
-			print("Match found!")
+			
 
 			opponent = waiting_player.user
 			waiting_player.delete()

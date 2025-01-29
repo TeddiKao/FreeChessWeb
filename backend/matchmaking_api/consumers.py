@@ -6,11 +6,11 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
 		user = self.scope["user"]
 
-		print("Connected!")
+		
 
 		await self.accept()
 
-		print("Connection accepted!")
+		
 
 		await self.send(json.dumps({
 			"type": "connection_established",
@@ -18,7 +18,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 			"user": getattr(user, "email")
 		}))
 
-		print("Sent message!")
+		
 
 	async def disconnect(self, code):
-		print("Disconnected!")
+		pass
