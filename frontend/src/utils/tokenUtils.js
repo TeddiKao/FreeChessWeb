@@ -1,4 +1,4 @@
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants/tokens"
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants/tokens.js"
 
 function getAccessToken() {
 	return localStorage.getItem(ACCESS_TOKEN);
