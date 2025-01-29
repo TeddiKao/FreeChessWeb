@@ -14,10 +14,8 @@ from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
 
-import os
-import sys
+import secrets
 
-sys.setrecursionlimit(10000)
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -61,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	
 	"rest_framework",
 	"corsheaders",
 
@@ -101,7 +100,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
