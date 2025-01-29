@@ -1,10 +1,30 @@
+let websocket = null;
+
 function useWebSocket(url, onMessage, onError, protocolField) {
-	const websocket = new WebSocket(url, protocolField);
+    if (websocket) {
+        if (websocket.readyState !== WebSocket.CLOSED) {
+			return websocket;
+		}
+    }
 
-	websocket.onmessage = onMessage
-	websocket.onerror = onError;
+    websocket = new WebSocket(url, protocolField);
 
-	return websocket;
+    console.log("Websocket created successfully");
+    console.log(`Protocol field: ${protocolField}`);
+	console.log(`Websocket ready state ${websocket.readyState}`)
+
+	websocket.onopen = () => {
+		console.log("Websockt opened!")
+	}
+
+    websocket.onmessage = onMessage;
+    websocket.onerror = onError;
+    websocket.onclose = (event) => {
+        console.log("Connection closed");
+        console.log(event.code);
+    };
+
+    return websocket;
 }
 
-export default useWebSocket
+export default useWebSocket;
