@@ -8,5 +8,5 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
 		await self.send(json.dumps({
 			"type": "connection_established",
-			"message": "Connection established"
+			"message": "Connection established",
 		}))
