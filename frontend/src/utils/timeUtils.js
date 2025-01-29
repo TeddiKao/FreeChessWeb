@@ -14,7 +14,8 @@ function formatTime(timeInSeconds) {
 	const minutesString = hours > 0 ? `${padZero(minutes)}` : `${minutes}`;
 	const secondsString = `${padZero(seconds)}`;
 
-	const leadingColon = hours > 0 ? ":" : "";
+	const hasLeadingColon = hours > 0
+	const leadingColon = hasLeadingColon ? ":" : "";
 
 	const trimmedTimeString = `${hoursString}${leadingColon}${minutesString}:${secondsString}`.trim();
 	
@@ -26,7 +27,7 @@ function displayTimeControl({ baseTime, increment }) {
 	const incrementString = increment > 0 ? `| ${increment}` : "";
 
 	const timeControlString = `${baseTimeString} min ${incrementString}`;
-	
+
 	return timeControlString;
 }
 
