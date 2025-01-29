@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import api from "../../api.js";
 import { displayTimeControl } from "../../utils/timeUtils";
 
+import useWebSocket from "../../hooks/useWebsocket.js";
+
 import "../../styles/matchmaking-screen.css";
 import { useNavigate } from "react-router-dom";
 
@@ -11,8 +13,27 @@ function MatchmakingScreen({
 }) {
     const [matchmakingStatus, setMatchmakingStatus] = useState("Finding match");
     const [isMatchmaking, setIsMatchmaking] = useState(true);
+    const [websocketConnected, setWebsocketConnected] = useState(false);
+
+    const websocketURL = "ws://localhost:8000/ws/matchmaking-server/"
+    const matchmakingWebsocket = useWebSocket(websocketURL, onMessage, onError)
+
+    const [websocket, setWebsocket] = useState(matchmakingWebsocket)
+
+    function onMessage (event)  {
+        console.log(event.data)
+        console.log("Websocket messaged");
+    };
+
+    function onError (event)  {
+        console.log("Error!");
+    };
 
     const navigate = useNavigate();
+
+    function initiateWebsocketConnection() {
+        setWebsocket(websocket);
+    }
 
     async function findMatch() {
         try {
@@ -31,18 +52,13 @@ function MatchmakingScreen({
         let findMatchInterval = null;
 
         if (isMatchmaking) {
-            findMatchInterval = setInterval(() => {
-                console.log("Finding match");
-
-                findMatch().catch((error) => {
-                    console.log(error);
-                    clearInterval(findMatchInterval);
-                });
-            }, 1000);
-        } else {
-            if (findMatchInterval) {
-                clearInterval(findMatchInterval);
+            if (!websocketConnected) {
+                initiateWebsocketConnection();
             }
+        } else {
+            // if (findMatchInterval) {
+            //     clearInterval(findMatchInterval);
+            // }
         }
 
         return () => {

@@ -6,3 +6,5 @@ function useWebSocket(url, onMessage, onError) {
 
 	return websocket;
 }
+
+export default useWebSocket

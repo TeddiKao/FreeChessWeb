@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 
-import "../styles/chessboard.css";
+import "../../styles/chessboard.css";
 import Square from "../Square.jsx";
 
 import {

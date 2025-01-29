@@ -3,10 +3,10 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 class MatchmakingConsumer(AsyncWebsocketConsumer):
-	def connect(self):
-		self.accept()
+	async def connect(self):
+		await self.accept()
 
-		self.send(json.dumps({
+		await self.send(json.dumps({
 			"type": "connection_established",
 			"message": "Connection established"
 		}))
