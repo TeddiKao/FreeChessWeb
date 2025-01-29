@@ -25,7 +25,9 @@ function displayTimeControl({ baseTime, increment }) {
 	const baseTimeString = `${convertTimeControlTime(baseTime)}`;
 	const incrementString = increment > 0 ? `| ${increment}` : "";
 
-	return `${baseTimeString} min ${incrementString}`;
+	const timeControlString = `${baseTimeString} min ${incrementString}`;
+	
+	return timeControlString;
 }
 
 export { formatTime, displayTimeControl }
