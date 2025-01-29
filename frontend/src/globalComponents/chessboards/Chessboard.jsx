@@ -239,8 +239,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 );
 
                 if (isCheckmated || isStalemated) {
-                    console.log("Checkmate!");
-
                     setGameEnded(true);
 
                     const gameEndedCause = isCheckmated
@@ -252,8 +250,6 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
                     setGameEndedCause(gameEndedCause);
                     setGameWinner(gameWinner);
-
-                    console.log("Set!");
                 }
             })();
 

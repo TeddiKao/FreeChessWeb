@@ -24,10 +24,7 @@ function Play() {
     const [gameEndedCause, setGameEndedCause] = useState(null);
     const [gameWinner, setGameWinner] = useState(null);
 
-    useEffect(() => {
-        console.log("Game status changed");
-        console.log(gameEnded, gameEndedCause, gameWinner);
-    }, [gameEnded, gameEnded, gameWinner]);
+    useEffect(() => {}, [gameEnded, gameEnded, gameWinner]);
 
     useEffect(() => {
         getParsedFEN();

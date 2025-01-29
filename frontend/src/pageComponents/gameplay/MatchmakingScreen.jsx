@@ -21,15 +21,9 @@ function MatchmakingScreen({
 
     const [websocket, setWebsocket] = useState(matchmakingWebsocket);
 
-    function onMessage(event) {
-        console.log(event.data);
-        console.log("Websocket messaged");
-    }
+    function onMessage(event) {}
 
-    function onError(event) {
-        console.log(event);
-        console.log("Error!");
-    }
+    function onError(event) {}
 
     const navigate = useNavigate();
 
@@ -53,12 +47,8 @@ function MatchmakingScreen({
     useEffect(() => {
         let findMatchInterval = null;
 
-        console.log(isMatchmaking);
-
         if (isMatchmaking) {
             if (!websocketConnected) {
-                console.log("Connection initiated");
-
                 initiateWebsocketConnection();
                 setWebsocketConnected(true);
             }

@@ -142,8 +142,6 @@ async function getIsStalemated(boardPlacement, castlingRights, kingColor) {
 }
 
 async function getIsCheckmated(boardPlacement, castlingRights, kingColor) {
-    console.log("Getting checkmate")
-    
     let isCheckmated = false;
 
     try {
