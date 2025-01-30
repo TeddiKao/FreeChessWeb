@@ -3,7 +3,7 @@ import time
 import random
 
 from channels.generic.websocket import AsyncWebsocketConsumer
-from asgiref.sync import async_to_sync
+from channels.db import database_sync_to_async
 
 from .models import WaitingPlayer
 
@@ -14,38 +14,96 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 		else:
 			return "black", "white"
 		
+	@database_sync_to_async
+	def remove_player_from_queue(self, player_object):
+		player_object.delete()
+		
+	@database_sync_to_async
+	def get_player_in_queue(self, player):
+		try:
+			player_in_queue = WaitingPlayer.objects.get(user=player)
+		except WaitingPlayer.DoesNotExist:
+			player_in_queue = None
+
+		return player_in_queue
+	
+	@database_sync_to_async
+	def create_waiting_player(self, user_model):
+		WaitingPlayer.objects.create(user=user_model)
+
+	@database_sync_to_async
+	def set_matched_player(self, player_to_set, matched_player):
+		player_to_set.matched_user = matched_player
+		player_to_set.save()
+
+	@database_sync_to_async
+	def is_player_matched(self, player_to_check):
+		return getattr(player_to_check, "matched_user")
+
+	@database_sync_to_async
+	def get_first_matching_player(self):
+		return WaitingPlayer.objects.exclude(user=self.scope["user"]).first()
+		
+	@database_sync_to_async
+	def get_matched_user(self, user_to_check):
+		try:
+			return WaitingPlayer.objects.get(matched_user=user_to_check)
+		except WaitingPlayer.DoesNotExist:
+			return None
+			
 	async def match_player(self):
 		player_to_match = self.scope["user"]
 		match_found = False
+
+		print(player_to_match)
 		
 		while not match_found:
-			try:
-				player_in_queue = WaitingPlayer.objects.get(user=player_to_match)
-			except WaitingPlayer.DoesNotExist:
-				player_in_queue = None
+			print("Looking for match")
+			print(self.scope["user"])
+			player_in_queue = await self.get_player_in_queue(player_to_match)
+			matched_user = await self.get_matched_user(player_to_match)
+			
+			if matched_user:
+				print(f"A player has been found for {player_to_match}")
+
+				matched_player_color, player_to_match_color = await self.decide_player_color() 
+
+				white_player = matched_user if matched_player_color == "white" else player_to_match
+				black_player = matched_user if matched_player_color == "black" else player_to_match
+
+				await self.channel_layer.group_send(
+					self.room_group_name,
+					{
+						"type": "player_matched",
+						"match_found": True,
+						"white_player": white_player,
+						"black_player": black_player
+					}
+				)
+
+				await self.remove_player_from_queue(matched_user)
+
+				match_found = True
+				break
 
 			if not player_in_queue:
-				matched_player = WaitingPlayer.objects.first()
-				if matched_player:
-					matched_player_color, player_to_match_color = self.decide_player_color() 
+				matched_player = await self.get_first_matching_player()
 
-				white_player = matched_player if matched_player_color == "white" else player_to_match
-				black_player = matched_player if matched_player_color == "black" else player_to_match
+				await self.create_waiting_player(player_to_match)
 
 				if matched_player:
-					await self.channel_layer.group_send(
-						self.room_group_name,
-						{
-							"type": "player_matched",
-							"match_found": True,
-							"white_player": white_player,
-							"black_player": black_player
-						}
-					)
+					print(await matched_player.get_username())
 
-					return
+					waiting_player_to_match = await self.get_player_in_queue(player_to_match)
+
+					await self.set_matched_player(matched_player, player_to_match)
+					await self.set_matched_player(waiting_player_to_match, matched_player.user)
+
+					# await self.remove_player_from_queue(matched_player)
+					print(f"Removed player {await matched_player.get_username()}")
+
 				else:
-					WaitingPlayer.objects.create(user=player_to_match)
+					print("Sending")
 
 					await self.send(json.dumps({
 						"type": "finding_match",
@@ -53,6 +111,13 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 						"white_player": None,
 						"black_player": None
 					}))
+			else:
+				await self.send(json.dumps({
+					"type": "finding_match",
+					"match_found": False,
+					"white_player": None,
+					"black_player": None
+				}))
 
 
 			time.sleep(1)
@@ -74,6 +139,8 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 			"message": "Connection established",
 			"user": getattr(user, "email")
 		}))
+
+		await self.match_player()
 
 	async def disconnect(self, code):
 		pass
