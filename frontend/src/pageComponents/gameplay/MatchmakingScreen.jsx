@@ -21,29 +21,28 @@ function MatchmakingScreen({
 
     const [websocket, setWebsocket] = useState(matchmakingWebsocket);
 
+    const navigate = useNavigate();
+
     function onMessage(event) {
-        console.log(event.data)
+
+        if (event.data["match_found"]) {
+            setMatchmakingStatus("Match found");
+            websocket.close();
+            setWebsocketConnected(false);
+            setIsMatchmaking(false);
+
+            navigate("/play", {
+                state: { baseTime, increment },
+            });
+        } else {
+            console.log(event.data)
+        }
     }
 
     function onError(event) {}
 
-    const navigate = useNavigate();
-
     function initiateWebsocketConnection() {
         setWebsocket(websocket);
-    }
-
-    async function findMatch() {
-        try {
-            const response = await api.post("/matchmaking_api/match-player/");
-            if (response.data["player_found"]) {
-                setMatchmakingStatus("Found player");
-                setIsMatchmaking(false);
-                navigate("/play", { state: { baseTime, increment } });
-            }
-        } catch (error) {
-            console.log(error);
-        }
     }
 
     useEffect(() => {
