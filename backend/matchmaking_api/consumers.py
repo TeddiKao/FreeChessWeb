@@ -32,7 +32,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 				black_player = matched_player if matched_player_color == "black" else player_to_match
 
 				if matched_player:
-					async_to_sync(self.channel_layer.group_send)(
+					await self.channel_layer.group_send(
 						self.room_group_name,
 						{
 							"type": "player_matched",
