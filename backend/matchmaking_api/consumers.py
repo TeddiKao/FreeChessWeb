@@ -26,7 +26,8 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
 			if not player_in_queue:
 				matched_player = WaitingPlayer.objects.first()
-				matched_player_color, player_to_match_color = self.decide_player_color() 
+				if matched_player:
+					matched_player_color, player_to_match_color = self.decide_player_color() 
 
 				white_player = matched_player if matched_player_color == "white" else player_to_match
 				black_player = matched_player if matched_player_color == "black" else player_to_match
@@ -36,12 +37,23 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 						self.room_group_name,
 						{
 							"type": "player_matched",
+							"match_found": True,
 							"white_player": white_player,
 							"black_player": black_player
 						}
 					)
 
 					return
+				else:
+					WaitingPlayer.objects.create(user=player_to_match)
+
+					await self.send(json.dumps({
+						"type": "finding_match",
+						"match_found": False,
+						"white_player": None,
+						"black_player": None
+					}))
+
 
 			time.sleep(1)
 

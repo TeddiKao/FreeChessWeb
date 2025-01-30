@@ -21,7 +21,9 @@ function MatchmakingScreen({
 
     const [websocket, setWebsocket] = useState(matchmakingWebsocket);
 
-    function onMessage(event) {}
+    function onMessage(event) {
+        console.log(event.data)
+    }
 
     function onError(event) {}
 
