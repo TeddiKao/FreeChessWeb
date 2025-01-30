@@ -55,8 +55,6 @@ class JWTAuthenticationMiddleware:
 
 			return 
 		
-		
-		
 		scope["user"] = authenticated_user
 		
 
