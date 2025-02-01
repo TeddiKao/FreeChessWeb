@@ -94,6 +94,8 @@ function Chessboard({ parsed_fen_string, orientation }) {
         const squareInfoToValidate =
             boardPlacementToValidate[`${draggedSquare}`];
 
+        const initialSquare = squareInfoToValidate["starting_square"]
+
         const pieceTypeToValidate = squareInfoToValidate["piece_type"];
         const pieceColorToValidate = squareInfoToValidate["piece_color"];
 
@@ -145,7 +147,12 @@ function Chessboard({ parsed_fen_string, orientation }) {
                 const kingsideRookSquares = [7, 63];
                 const queensideRookSquares = [0, 56];
 
+                console.log(initialSquare);
+                console.log(boardPlacementToValidate[`${draggedSquare}`])
+
                 if (kingsideRookSquares.includes(parseInt(initialSquare))) {
+                    console.log("Disabling castling rights")
+                    
                     newPiecePlacements = modifyCastlingRights(
                         newPiecePlacements,
                         pieceColorToValidate,
