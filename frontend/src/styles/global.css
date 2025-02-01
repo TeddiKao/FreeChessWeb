@@ -1,6 +1,7 @@
 :root {
 	--default-font: "Segoe UI";
 	--accent-color: hsl(30, 100%, 45%);
+	--hovered-accent-color: hsl(30, 100%, 40%);
 
 	--input-font-size: 1rem;
 	--button-font-size: 1rem;
@@ -14,6 +15,7 @@
 
 body {
 	font-family: var(--default-font);
+	margin: 0;
 }
 
 input, button {
