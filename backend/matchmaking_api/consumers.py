@@ -6,6 +6,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
 from .models import WaitingPlayer
+from gameplay_api.models import ChessGame
 
 class MatchmakingConsumer(AsyncWebsocketConsumer):
 	async def decide_player_color(self):
@@ -54,6 +55,10 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 	@database_sync_to_async
 	def get_user_model_from_waiting_player(self, waiting_player: WaitingPlayer):
 		return waiting_player.user
+	
+	@database_sync_to_async
+	def create_chess_game(white_player, black_player):
+		ChessGame.objects.create(white_player=white_player, black_player=black_player, white_player_clock=180, black_player_clock=180)
 			
 	async def match_player(self):
 		player_to_match = self.scope["user"]
@@ -86,6 +91,8 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 						"black_player": black_player.username
 					}
 				)
+
+				await self.create_chess_game(white_player, black_player)
 				await self.remove_player_from_queue(matched_user)
 
 				match_found = True
