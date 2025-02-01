@@ -1,19 +1,18 @@
 let websocket = null;
 
-function useWebSocket(url, onMessage, onError, protocolField) {
+function useWebSocket(url, onMessage, onError) {
     if (websocket) {
         if (websocket.readyState !== WebSocket.CLOSED) {
             return websocket;
         }
     }
 
-    websocket = new WebSocket(url, protocolField);
+    websocket = new WebSocket(url);
 
     websocket.onopen = () => {};
 
     websocket.onmessage = onMessage;
     websocket.onerror = onError;
-    websocket.onclose = (event) => {};
 
     return websocket;
 }
