@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import api from "../../api.js";
 import { displayTimeControl } from "../../utils/timeUtils";
 
@@ -15,6 +15,9 @@ function MatchmakingScreen({
     const [matchmakingStatus, setMatchmakingStatus] = useState("Finding match");
     const [isMatchmaking, setIsMatchmaking] = useState(true);
     const [websocketConnected, setWebsocketConnected] = useState(false);
+    const [matchFound, setMatchFound] = useState(false);
+
+    const matchFoundRef = useRef(null);
 
     const websocketURL = `ws://localhost:8000/ws/matchmaking-server/?token=${getAccessToken()}`;
     const matchmakingWebsocket = useWebSocket(websocketURL, onMessage, onError);
@@ -23,52 +26,54 @@ function MatchmakingScreen({
 
     const navigate = useNavigate();
 
-    function onMessage(event) {
-
-        if (event.data["match_found"]) {
-            setMatchmakingStatus("Match found");
-            websocket.close();
-            setWebsocketConnected(false);
-            setIsMatchmaking(false);
-
+    useEffect(() => {
+        if (matchFound) {
             navigate("/play", {
                 state: { baseTime, increment },
             });
-        } else {
-            console.log(event.data)
         }
-    }
-
-    function onError(event) {}
-
-    function initiateWebsocketConnection() {
-        setWebsocket(websocket);
-    }
+    }, [matchFound, setMatchFound, navigate]);
 
     useEffect(() => {
-        let findMatchInterval = null;
-
         if (isMatchmaking) {
             if (!websocketConnected) {
-                initiateWebsocketConnection();
                 setWebsocketConnected(true);
             }
-        } else {
-            // if (findMatchInterval) {
-            //     clearInterval(findMatchInterval);
-            // }
         }
 
         return () => {
             if (websocket.readyState === WebSocket.OPEN) {
                 websocket.close();
             }
-
-            if (findMatchInterval) {
-                clearInterval(findMatchInterval);
-            }
         };
     }, []);
+
+    function onMessage(event) {
+        const parsedEventData = JSON.parse(event.data);
+
+        if (parsedEventData["match_found"]) {
+            handleMatchFound();
+        }
+    }
+
+    function handleMatchFound() {
+        websocket.close();
+
+        setMatchmakingStatus("Match found");
+
+        setWebsocketConnected(() => false);
+        setIsMatchmaking(() => false);
+
+        matchFoundRef.current = true;
+
+        setTimeout(() => {
+            setMatchFound(true);
+        }, 50);
+    }
+
+    function onError(event) {
+        console.log("Error!");
+    }
 
     function handleMatchmakingCancel() {
         setIsMatchmaking(false);
