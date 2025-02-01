@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { fetchFen } from "../../utils/apiUtils.js";
 
-import "../../globalComponents/chessboards/Chessboard.jsx";
-import "../../globalComponents/modals/GameOverModal.jsx"
+import {
+    GameEndedSetterContext,
+    GameEndedCauseSetterContext,
+    GameWinnerSetterContext,
+} from "../../contexts/chessboardContexts.js";
+
+import "../../styles/pass-and-play.css"
+
+import Chessboard from "../../globalComponents/chessboards/Chessboard.jsx";
+import GameOverModal from "../../globalComponents/modals/GameOverModal.jsx";
 
 function PassAndPlay() {
     const [parsedFEN, setParsedFEN] = useState(null);
@@ -32,10 +40,14 @@ function PassAndPlay() {
             <GameEndedCauseSetterContext.Provider value={setGameEndedCause}>
                 <GameWinnerSetterContext.Provider value={setGameWinner}>
                     <div className="playing-interface-container">
-                        <Chessboard
-                            parsed_fen_string={parsedFEN}
-                            orientation="White"
-                        />
+                        <div className="chessboard-wrapper">
+                            <Chessboard
+                                parsed_fen_string={parsedFEN}
+                                orientation="White"
+                                flipOnMove={true}
+                            />
+                        </div>
+
                         <GameOverModal
                             visible={gameEnded}
                             gameEndCause={gameEndedCause}

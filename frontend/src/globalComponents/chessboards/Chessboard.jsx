@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 
 import "../../styles/chessboard.css";
 import Square from "../Square.jsx";
@@ -35,7 +35,9 @@ import {
     GameWinnerSetterContext,
 } from "../../contexts/chessboardContexts.js";
 
-function Chessboard({ parsed_fen_string, orientation }) {
+function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
+    console.log(parsed_fen_string, orientation, flipOnMove);
+
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
     const [parsedFENString, setParsedFENString] = useState(parsed_fen_string);
@@ -48,10 +50,13 @@ function Chessboard({ parsed_fen_string, orientation }) {
     const [promotionCapturedPiece, setPromotionCapturedPiece] = useState(null);
 
     const [boardOrientation, setBoardOrientation] = useState(orientation);
+    const [sideToMove, setSideToMove] = useState("white")
 
     const setGameEnded = useContext(GameEndedSetterContext);
     const setGameEndedCause = useContext(GameEndedCauseSetterContext);
     const setGameWinner = useContext(GameWinnerSetterContext);
+
+    const isFirstRender = useRef(false)
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -64,6 +69,22 @@ function Chessboard({ parsed_fen_string, orientation }) {
     useEffect(() => {
         handleOnDrop();
     }, [draggedSquare, droppedSquare]);
+
+    useEffect(() => {
+        console.log("Triggered effect hook!")
+
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
+        console.log(flipOnMove)
+
+        if (flipOnMove) {
+            console.log("Setting orientation!")
+            setBoardOrientation(sideToMove.toLowerCase());
+        }
+    }, [sideToMove])
 
     async function handleOnDrop() {
         clearSquaresStyling();
@@ -257,6 +278,10 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
             return newPiecePlacements;
         });
+
+        const newSideToMove = sideToMove.toLowerCase() === "white"? "black" : "white"
+
+        setSideToMove(newSideToMove);
 
         setPreviousDraggedSquare(draggedSquare);
         setPreviousDroppedSquare(droppedSquare);
@@ -481,6 +506,10 @@ function Chessboard({ parsed_fen_string, orientation }) {
 
             return newPiecePlacements;
         });
+
+        const newSideToMove = sideToMove.toLowerCase() === "white"? "black" : "white"
+
+        setSideToMove(newSideToMove)
 
         setPreviousDraggedSquare(previousClickedSquare);
         setPreviousDroppedSquare(clickedSquare);
@@ -744,19 +773,29 @@ function Chessboard({ parsed_fen_string, orientation }) {
     function generateChessboard() {
         const squareElements = [];
 
-        const startingRow = orientation === "White" ? 8 : 1;
-        const endingRow = orientation === "White" ? 1 : 8;
+        const startingRow = boardOrientation.toLowerCase() === "white" ? 8 : 1;
+        const endingRow = boardOrientation.toLowerCase() === "white" ? 1 : 8;
 
         for (
             let row = startingRow;
-            orientation === "White" ? row >= endingRow : row <= endingRow;
-            orientation === "White" ? row-- : row++
+            boardOrientation.toLowerCase() === "white" ? row >= endingRow : row <= endingRow;
+            boardOrientation.toLowerCase() === "white" ? row-- : row++
         ) {
-            const startingIndex = (row - 1) * 8 + 1;
-            const endingIndex = row * 8;
+            const whiteOrientationStartingIndex = (row - 1) * 8 + 1
+            const whiteOrientationEndingIndex = row * 8;
 
-            for (let square = startingIndex; square <= endingIndex; square++) {
-                const file = square - startingIndex + 1;
+            const blackOrientationStartingIndex = row * 8
+            const blackOrientationEndingIndex = (row - 1) * 8 + 1;
+
+            const startingIndex = boardOrientation.toLowerCase() === "white" ? whiteOrientationStartingIndex : blackOrientationStartingIndex
+            const endingIndex = boardOrientation.toLowerCase() === "white" ? whiteOrientationEndingIndex : blackOrientationEndingIndex
+
+            for (
+                let square = startingIndex; 
+                boardOrientation.toLowerCase() === "white" ? square <= endingIndex : square >= endingIndex; 
+                boardOrientation.toLowerCase() === "white" ? square ++ : square --
+            ) {
+                const file = getFile(square)
 
                 const squareIsLight = (file + row) % 2 !== 0;
                 const squareColor = squareIsLight ? "light" : "dark";
