@@ -16,6 +16,7 @@ import "./styles/global.css";
 import ProtectedRoute from "./globalComponents/routes/ProtectedRoute.jsx";
 import AuthenticationRoute from "./globalComponents/routes/AuthenticationRoute.jsx";
 import Play from "./pages/Protected/Play.jsx";
+import PassAndPlay from "./pages/Protected/PassAndPlay.jsx";
 
 function Logout() {
     localStorage.clear();
@@ -72,6 +73,15 @@ function App() {
                             element={
                                 <ProtectedRoute>
                                     <Play />
+                                </ProtectedRoute>
+                            }
+                        />
+
+                        <Route
+                            path="/pass-and-play"
+                            element={
+                                <ProtectedRoute>
+                                    <PassAndPlay />
                                 </ProtectedRoute>
                             }
                         />
