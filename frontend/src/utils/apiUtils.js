@@ -9,14 +9,17 @@ async function fetchLegalMoves(
     let legalMoves = [];
 
     try {
-        const response = await api.post("/gameplay_api/show-legal-moves/", {
-            parsed_fen_string: parsedFENString,
-            move_info: {
-                piece_color: pieceColor,
-                piece_type: pieceType,
-                starting_square: startingSquare,
-            },
-        });
+        const response = await api.post(
+            "/move_validation_api/show-legal-moves/",
+            {
+                parsed_fen_string: parsedFENString,
+                move_info: {
+                    piece_color: pieceColor,
+                    piece_type: pieceType,
+                    starting_square: startingSquare,
+                },
+            }
+        );
 
         if (response.status === 200) {
             legalMoves = response.data;
@@ -37,7 +40,7 @@ async function fetchMoveIsValid(
 ) {
     let isMoveLegal = false;
     try {
-        const response = await api.post("/gameplay_api/validate-move/", {
+        const response = await api.post("/move_validation_api/validate-move/", {
             parsed_fen_string: parsedFENString,
             move_info: {
                 piece_color: piece_color,
@@ -79,11 +82,14 @@ async function fetchKingIsInCheck(boardPlacement, kingColor, kingSquare) {
     let isKingInCheck = false;
 
     try {
-        const response = await api.post("/gameplay_api/get-king-is-in-check/", {
-            board_placement: boardPlacement,
-            king_color: kingColor,
-            king_square: kingSquare,
-        });
+        const response = await api.post(
+            "/move_validation_api/get-king-is-in-check/",
+            {
+                board_placement: boardPlacement,
+                king_color: kingColor,
+                king_square: kingSquare,
+            }
+        );
 
         if (response.status === 200) {
             isKingInCheck = response.data;
@@ -125,11 +131,14 @@ async function getOngoingGames() {
 async function getIsStalemated(boardPlacement, castlingRights, kingColor) {
     let isStalemated = false;
     try {
-        const response = await api.post("/gameplay_api/get-is-stalemated/", {
-            board_placement: boardPlacement,
-            castling_rights: castlingRights,
-            king_color: kingColor,
-        });
+        const response = await api.post(
+            "/move_validation_api/get-is-stalemated/",
+            {
+                board_placement: boardPlacement,
+                castling_rights: castlingRights,
+                king_color: kingColor,
+            }
+        );
 
         if (response.status === 200) {
             isStalemated = response.data;
@@ -145,11 +154,14 @@ async function getIsCheckmated(boardPlacement, castlingRights, kingColor) {
     let isCheckmated = false;
 
     try {
-        const response = await api.post("/gameplay_api/get-is-checkmated/", {
-            board_placement: boardPlacement,
-            castling_rights: castlingRights,
-            king_color: kingColor,
-        });
+        const response = await api.post(
+            "/move_validation_api/get-is-checkmated/",
+            {
+                board_placement: boardPlacement,
+                castling_rights: castlingRights,
+                king_color: kingColor,
+            }
+        );
 
         if (response.status === 200) {
             isCheckmated = response.data;
