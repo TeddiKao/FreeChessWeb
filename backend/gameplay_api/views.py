@@ -14,7 +14,6 @@ from .utils import fen_parser
 # Create your views here.
 class ParseFENView(APIView):
 	permission_classes = [IsAuthenticated]
-
 	def get(self, request, *args, **kwargs):
 		raw_fen_string = request.query_params.get("raw_fen_string")
 		parsed_fen = fen_parser.parse_fen(raw_fen_string)
@@ -41,13 +40,11 @@ class GetOngoingGameView(generics.ListAPIView):
 
 		return ChessGame.objects.filter((white_player_filter | black_player_filter) & game_is_ongoing_filter)
 
-class UpdateChessGameView(generics.UpdateAPIView):
+class MakeMoveView(generics.UpdateAPIView):
 	def get_queryset(self):
 		white_player_filter = Q(white_player=self.request.user)
 		black_player_filter = Q(black_player=self.request.user)
 		game_is_ongoing_filter = Q(game_status="Ongoing")
 
 		return ChessGame.objects.filter((white_player_filter | black_player_filter) & game_is_ongoing_filter)
-	
-	serializer_class = ChessGameSerializer
-	permission_classes = [IsAuthenticated]
+		
