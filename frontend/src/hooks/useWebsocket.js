@@ -9,8 +9,6 @@ function useWebSocket(url, onMessage, onError) {
 
     websocket = new WebSocket(url);
 
-    websocket.onopen = () => {};
-
     websocket.onmessage = onMessage;
     websocket.onerror = onError;
 
