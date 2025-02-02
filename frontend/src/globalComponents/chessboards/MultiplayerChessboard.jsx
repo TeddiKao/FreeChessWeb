@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 
-import "../styles/chessboard.css";
+import "../../styles/chessboard.css";
 import Square from "../Square.jsx";
 
 import {
@@ -35,6 +35,10 @@ import {
     GameWinnerSetterContext,
 } from "../../contexts/chessboardContexts.js";
 
+import { websocketBaseURL } from "../../constants/urls.js";
+import useWebSocket from "../../hooks/useWebsocket.js";
+import { getAccessToken } from "../../utils/tokenUtils.js";
+
 function MultiplayeChessboard({ parsed_fen_string, orientation }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
@@ -53,6 +57,10 @@ function MultiplayeChessboard({ parsed_fen_string, orientation }) {
     const setGameEndedCause = useContext(GameEndedCauseSetterContext);
     const setGameWinner = useContext(GameWinnerSetterContext);
 
+    const [gameWebsocketConnected, setGameWebsocketConnected] = useState(true);
+    const gameWebsocketURL = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}`
+    const gameWebsocket = useWebSocket(gameWebsocketURL, handleOnMessage, onError);
+
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
     }, [parsed_fen_string]);
@@ -64,6 +72,22 @@ function MultiplayeChessboard({ parsed_fen_string, orientation }) {
     useEffect(() => {
         handleOnDrop();
     }, [draggedSquare, droppedSquare]);
+
+    useEffect(() => {
+        if (!gameWebsocketConnected) {
+            if (gameWebsocket) {
+                gameWebsocket.close();
+            }
+        }
+    }, [gameWebsocketConnected])
+
+    function handleOnMessage(event) {
+        console.log(JSON.parse(event.data))
+    }
+
+    function onError() {
+        console.log("Error!")
+    }
 
     async function handleOnDrop() {
         clearSquaresStyling();
