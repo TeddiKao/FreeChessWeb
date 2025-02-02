@@ -21,4 +21,4 @@ class ChessGame(models.Model):
 
 	parsed_board_placement = models.JSONField(default=dict)
 	castling_rights = models.JSONField(default=dict)
-	en_passant_target_square = models.IntegerField(max_length=2)
+	en_passant_target_square = models.IntegerField(null=True, blank=True)
