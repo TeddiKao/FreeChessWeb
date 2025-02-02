@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 
-import Chessboard from "../../globalComponents/chessboards/Chessboard.jsx";
+import MultiplayeChessboard from "../../globalComponents/chessboards/MultiplayerChessboard.jsx";
 import Timer from "../../pageComponents/gameplay/Timer.jsx";
 
 import {
@@ -62,7 +62,7 @@ function Play() {
                             />
                         </div>
 
-                        <Chessboard
+                        <MultiplayeChessboard
                             parsed_fen_string={parsedFEN}
                             orientation="White"
                         />
