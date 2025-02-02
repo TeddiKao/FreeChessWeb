@@ -247,9 +247,9 @@ function MultiplayeChessboard({ parsed_fen_string, orientation, gameId }) {
             if (gameWebsocket.readyState === WebSocket.OPEN) {
                 gameWebsocket.send(JSON.stringify({
                     piece_color: pieceColorToValidate,
-                    pieceType: pieceTypeToValidate,
+                    piece_type: pieceTypeToValidate,
                     starting_square: draggedSquare,
-                    destination_square: draggedSquare,
+                    destination_square: droppedSquare,
         
                     move_type: "regular", // Change for castling, en passant and promotion
                 }))    
