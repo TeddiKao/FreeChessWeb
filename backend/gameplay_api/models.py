@@ -19,4 +19,6 @@ class ChessGame(models.Model):
 	captured_white_material = models.JSONField(default=dict)
 	captured_black_material = models.JSONField(default=dict)
 
-	current_position = models.CharField(max_length=92)
+	parsed_board_placement = models.JSONField(default=dict)
+	castling_rights = models.JSONField(default=dict)
+	en_passant_target_square = models.IntegerField(max_length=2)
