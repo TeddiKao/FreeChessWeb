@@ -18,6 +18,7 @@ function MatchmakingScreen({
     const [matchFound, setMatchFound] = useState(false);
 
     const matchFoundRef = useRef(null);
+    const gameIdRef = useRef(null);
 
     const websocketURL = `ws://localhost:8000/ws/matchmaking-server/?token=${getAccessToken()}`;
     const matchmakingWebsocket = useWebSocket(websocketURL, onMessage, onError);
@@ -29,7 +30,7 @@ function MatchmakingScreen({
     useEffect(() => {
         if (matchFound) {
             navigate("/play", {
-                state: { baseTime, increment },
+                state: { baseTime, increment, gameId: gameIdRef.current },
             });
         }
     }, [matchFound, setMatchFound, navigate]);
@@ -52,11 +53,11 @@ function MatchmakingScreen({
         const parsedEventData = JSON.parse(event.data);
 
         if (parsedEventData["match_found"]) {
-            handleMatchFound();
+            handleMatchFound(parsedEventData);
         }
     }
 
-    function handleMatchFound() {
+    function handleMatchFound(parsedEventData) {
         websocket.close();
 
         setMatchmakingStatus("Match found");
@@ -65,6 +66,7 @@ function MatchmakingScreen({
         setIsMatchmaking(() => false);
 
         matchFoundRef.current = true;
+        gameIdRef.current = parsedEventData["game_id"]
 
         setTimeout(() => {
             setMatchFound(true);

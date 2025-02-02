@@ -36,6 +36,7 @@ function Play() {
 
     const timeControlBaseTime = location.state.baseTime;
     const timeControlIncrement = location.state.increment;
+    const gameId = location.state.gameId;
 
     const startingPositionFEN =
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -65,7 +66,9 @@ function Play() {
                         <MultiplayeChessboard
                             parsed_fen_string={parsedFEN}
                             orientation="White"
+                            gameId={gameId}
                         />
+
                         <GameOverModal
                             visible={gameEnded}
                             gameEndCause={gameEndedCause}

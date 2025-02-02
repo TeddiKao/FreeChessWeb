@@ -39,7 +39,7 @@ import { websocketBaseURL } from "../../constants/urls.js";
 import useWebSocket from "../../hooks/useWebsocket.js";
 import { getAccessToken } from "../../utils/tokenUtils.js";
 
-function MultiplayeChessboard({ parsed_fen_string, orientation }) {
+function MultiplayeChessboard({ parsed_fen_string, orientation, gameId }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
     const [parsedFENString, setParsedFENString] = useState(parsed_fen_string);
@@ -58,7 +58,7 @@ function MultiplayeChessboard({ parsed_fen_string, orientation }) {
     const setGameWinner = useContext(GameWinnerSetterContext);
 
     const [gameWebsocketConnected, setGameWebsocketConnected] = useState(true);
-    const gameWebsocketURL = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}`
+    const gameWebsocketURL = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`
     const gameWebsocket = useWebSocket(gameWebsocketURL, handleOnMessage, onError);
 
     useEffect(() => {

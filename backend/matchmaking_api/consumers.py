@@ -58,7 +58,10 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 	
 	@database_sync_to_async
 	def create_chess_game(self, white_player, black_player):
-		ChessGame.objects.create(white_player=white_player, black_player=black_player, white_player_clock=180, black_player_clock=180)
+		chess_game = ChessGame.objects.create(white_player=white_player, black_player=black_player, white_player_clock=180, black_player_clock=180)
+		chess_game.save()
+
+		return chess_game.id
 			
 	async def match_player(self):
 		player_to_match = self.scope["user"]
@@ -82,17 +85,19 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
 				print(type(white_player), type(black_player))
 
+				game_id = await self.create_chess_game(white_player, black_player)
+
 				await self.channel_layer.group_send(
 					self.room_group_name,
 					{
 						"type": "player_matched",
 						"match_found": True,
 						"white_player": white_player.username,
-						"black_player": black_player.username
+						"black_player": black_player.username,
+						"game_id": game_id,
 					}
 				)
 
-				await self.create_chess_game(white_player, black_player)
 				await self.remove_player_from_queue(matched_user)
 
 				match_found = True
@@ -162,7 +167,8 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 			"type": "match_found",
 			"match_found": event["match_found"],
 			"white_player": event["white_player"],
-			"black_player": event["black_player"]
+			"black_player": event["black_player"],
+			"game_id": event["game_id"]
 		}))
 
 		print("Sent message to players")
