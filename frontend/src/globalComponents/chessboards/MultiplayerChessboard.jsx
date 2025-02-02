@@ -242,6 +242,21 @@ function MultiplayeChessboard({ parsed_fen_string, orientation }) {
                 );
             }
 
+            console.log(gameWebsocket.readyState ,WebSocket.OPEN)
+
+            if (gameWebsocket.readyState === WebSocket.OPEN) {
+                gameWebsocket.send(JSON.stringify({
+                    piece_color: pieceColorToValidate,
+                    pieceType: pieceTypeToValidate,
+                    starting_square: draggedSquare,
+                    destination_square: draggedSquare,
+        
+                    move_type: "regular", // Change for castling, en passant and promotion
+                }))    
+
+                console.log("Sent")
+            }
+
             (async () => {
                 const boardPlacement = newPiecePlacements["board_placement"];
                 const castlingRights = newPiecePlacements["castling_rights"];
