@@ -64,7 +64,6 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
     const gameWebsocket = useRef(null);
 
     useEffect(() => {
-        console.log(parsed_fen_string);
         setParsedFENString(parsed_fen_string);
     }, [parsed_fen_string]);
 
@@ -80,7 +79,7 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
             onError
         );
 
-        gameWebsocket.current = websocket;        
+        gameWebsocket.current = websocket;
 
         return () => {
             if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
@@ -109,22 +108,11 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
 
     function makeMove(eventData) {
         setParsedFENString((prevState) => {
-            console.log(`Previous state: ${prevState}`);
-            console.log("Inside the state setterfunction !!!");
-
-            console.log({
-                ...prevState,
-                ...eventData["new_parsed_fen"],
-            });
-
             return {
                 ...prevState,
                 ...eventData["new_parsed_fen"],
             };
         });
-
-        console.log(eventData);
-        
 
         const startingSquare = eventData["move_data"]["starting_square"];
         const destinationSquare = eventData["move_data"]["destination_square"];
@@ -191,11 +179,7 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
             );
         }
 
-        console.log(gameWebsocket);
-
         if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
-            console.log("Sending");
-
             gameWebsocket.current?.send(
                 JSON.stringify({
                     piece_color: pieceColorToValidate,
@@ -206,8 +190,6 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
                     move_type: "regular", // Change for castling, en passant and promotion
                 })
             );
-
-            console.log("Sent");
         }
 
         setPreviousDraggedSquare(draggedSquare);
