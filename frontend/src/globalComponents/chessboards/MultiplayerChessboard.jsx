@@ -190,7 +190,7 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
                 starting_square: draggedSquare,
                 destination_square: droppedSquare,
 
-                move_type: "regular",
+                special_move: null
             };
 
             gameWebsocket.current?.send(
