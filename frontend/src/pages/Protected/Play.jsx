@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 
-import MultiplayeChessboard from "../../globalComponents/chessboards/MultiplayerChessboard.jsx";
+import MultiplayerChessboard from "../../globalComponents/chessboards/MultiplayerChessboard.jsx";
 import Timer from "../../pageComponents/gameplay/Timer.jsx";
 
 import {
@@ -24,7 +24,8 @@ function Play() {
     const [gameEndedCause, setGameEndedCause] = useState(null);
     const [gameWinner, setGameWinner] = useState(null);
 
-    useEffect(() => {}, [gameEnded, gameEnded, gameWinner]);
+    const startingPositionFEN =
+        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     useEffect(() => {
         getParsedFEN();
@@ -37,9 +38,6 @@ function Play() {
     const timeControlBaseTime = location.state.baseTime;
     const timeControlIncrement = location.state.increment;
     const gameId = location.state.gameId;
-
-    const startingPositionFEN =
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     async function getParsedFEN() {
         try {
@@ -63,7 +61,7 @@ function Play() {
                             />
                         </div>
 
-                        <MultiplayeChessboard
+                        <MultiplayerChessboard
                             parsed_fen_string={parsedFEN}
                             orientation="White"
                             gameId={gameId}
