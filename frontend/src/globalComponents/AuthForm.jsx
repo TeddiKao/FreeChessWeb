@@ -94,7 +94,7 @@ function AuthForm({ method }) {
     }
 
     const formTitle = method === "Login" ? "Login" : "Sign up";
-    const shouldRenderUsername = method === "Signup";
+    const shouldRenderUsernameField = method === "Signup";
 
     return (
         <div className="auth-form-container">
@@ -109,7 +109,7 @@ function AuthForm({ method }) {
                 />
                 <br />
 
-                {shouldRenderUsername ? (
+                {shouldRenderUsernameField ? (
                     <>
                         <input
                             type="text"
