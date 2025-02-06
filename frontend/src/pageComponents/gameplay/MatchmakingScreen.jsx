@@ -7,6 +7,7 @@ import useWebSocket from "../../hooks/useWebsocket.js";
 import "../../styles/matchmaking-screen.css";
 import { useNavigate } from "react-router-dom";
 import { getAccessToken } from "../../utils/tokenUtils.js";
+import { getUsername } from "../../utils/apiUtils.js";
 
 function MatchmakingScreen({
     timeControlInfo: { baseTime, increment },
@@ -19,32 +20,49 @@ function MatchmakingScreen({
 
     const matchFoundRef = useRef(null);
     const gameIdRef = useRef(null);
+    const whitePlayerRef = useRef(null);
+    const blackPlayerRef = useRef(null);
 
-    const websocketURL = `ws://localhost:8000/ws/matchmaking-server/?token=${getAccessToken()}`;
-    const matchmakingWebsocket = useWebSocket(websocketURL, onMessage, onError);
-
-    const [websocket, setWebsocket] = useState(matchmakingWebsocket);
+    const matchmakingWebsocketRef = useRef(null);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (matchFound) {
-            navigate("/play", {
-                state: { baseTime, increment, gameId: gameIdRef.current },
-            });
+        async function onMatchFound() {
+            if (matchFound) {
+                navigate("/play", {
+                    state: {
+                        baseTime,
+                        increment,
+                        gameId: gameIdRef.current,
+                        assignedColor: await getAssignedColor(),
+                    },
+                });
+            }
         }
+
+        onMatchFound();
     }, [matchFound, setMatchFound, navigate]);
 
     useEffect(() => {
         if (isMatchmaking) {
             if (!websocketConnected) {
-                setWebsocketConnected(true);
+                const websocketURL = `ws://localhost:8000/ws/matchmaking-server/?token=${getAccessToken()}`;
+                const matchmakingWebsocket = useWebSocket(
+                    websocketURL,
+                    onMessage,
+                    onError
+                );
+
+                matchmakingWebsocketRef.current = matchmakingWebsocket;
             }
         }
 
         return () => {
-            if (websocket.readyState === WebSocket.OPEN) {
-                websocket.close();
+            if (
+                matchmakingWebsocketRef.current?.readyState === WebSocket.OPEN
+            ) {
+                matchmakingWebsocketRef.current.close();
             }
         };
     }, []);
@@ -57,8 +75,15 @@ function MatchmakingScreen({
         }
     }
 
+    async function getAssignedColor() {
+        const username = await getUsername();
+        const assignedColor = username === whitePlayerRef.current ? "White" : "Black";
+
+        return assignedColor;
+    }
+
     function handleMatchFound(parsedEventData) {
-        websocket.close();
+        matchmakingWebsocketRef.current?.close();
 
         setMatchmakingStatus("Match found");
 
@@ -66,7 +91,13 @@ function MatchmakingScreen({
         setIsMatchmaking(() => false);
 
         matchFoundRef.current = true;
-        gameIdRef.current = parsedEventData["game_id"]
+        gameIdRef.current = parsedEventData["game_id"];
+
+        const whitePlayer = parsedEventData["white_player"];
+        const blackPlayer = parsedEventData["black_player"];
+
+        whitePlayerRef.current = whitePlayer;
+        blackPlayerRef.current = blackPlayer;
 
         setTimeout(() => {
             setMatchFound(true);

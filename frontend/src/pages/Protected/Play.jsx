@@ -38,6 +38,7 @@ function Play() {
     const timeControlBaseTime = location.state.baseTime;
     const timeControlIncrement = location.state.increment;
     const gameId = location.state.gameId;
+    const assignedColor = location.state.assignedColor;
 
     async function getParsedFEN() {
         try {
@@ -63,7 +64,7 @@ function Play() {
 
                         <MultiplayerChessboard
                             parsed_fen_string={parsedFEN}
-                            orientation="White"
+                            orientation={assignedColor}
                             gameId={gameId}
                         />
 

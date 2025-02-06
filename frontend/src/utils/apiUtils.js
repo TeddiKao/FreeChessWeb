@@ -1,4 +1,5 @@
 import api from "../api.js";
+import { getAccessToken } from "./tokenUtils.js";
 
 async function fetchLegalMoves(
     parsedFENString,
@@ -173,6 +174,18 @@ async function getIsCheckmated(boardPlacement, castlingRights, kingColor) {
     return isCheckmated;
 }
 
+async function getUsername() {
+    let username = null;
+    try {
+        const response = await api.get("/users_api/get-username/");
+        username = response.data;
+    } catch (error) {
+        console.log(error);
+    }
+
+    return username;
+}
+
 export {
     fetchFen,
     fetchKingIsInCheck,
@@ -182,4 +195,5 @@ export {
     getOngoingGames,
     getIsCheckmated,
     getIsStalemated,
+    getUsername
 };

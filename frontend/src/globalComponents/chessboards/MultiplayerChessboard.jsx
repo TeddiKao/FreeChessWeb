@@ -535,19 +535,39 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
     function generateChessboard() {
         const squareElements = [];
 
-        const startingRow = orientation === "White" ? 8 : 1;
-        const endingRow = orientation === "White" ? 1 : 8;
+        const startingRow = boardOrientation.toLowerCase() === "white" ? 8 : 1;
+        const endingRow = boardOrientation.toLowerCase() === "white" ? 1 : 8;
 
         for (
             let row = startingRow;
-            orientation === "White" ? row >= endingRow : row <= endingRow;
-            orientation === "White" ? row-- : row++
+            boardOrientation.toLowerCase() === "white"
+                ? row >= endingRow
+                : row <= endingRow;
+            boardOrientation.toLowerCase() === "white" ? row-- : row++
         ) {
-            const startingIndex = (row - 1) * 8 + 1;
-            const endingIndex = row * 8;
+            const whiteOrientationStartingIndex = (row - 1) * 8 + 1;
+            const whiteOrientationEndingIndex = row * 8;
 
-            for (let square = startingIndex; square <= endingIndex; square++) {
-                const file = square - startingIndex + 1;
+            const blackOrientationStartingIndex = row * 8;
+            const blackOrientationEndingIndex = (row - 1) * 8 + 1;
+
+            const startingIndex =
+                boardOrientation.toLowerCase() === "white"
+                    ? whiteOrientationStartingIndex
+                    : blackOrientationStartingIndex;
+            const endingIndex =
+                boardOrientation.toLowerCase() === "white"
+                    ? whiteOrientationEndingIndex
+                    : blackOrientationEndingIndex;
+
+            for (
+                let square = startingIndex;
+                boardOrientation.toLowerCase() === "white"
+                    ? square <= endingIndex
+                    : square >= endingIndex;
+                boardOrientation.toLowerCase() === "white" ? square++ : square--
+            ) {
+                const file = getFile(square);
 
                 const squareIsLight = (file + row) % 2 !== 0;
                 const squareColor = squareIsLight ? "light" : "dark";
@@ -577,6 +597,7 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
                                 promotionRank === pieceRank
                             }
                             handleSquareClick={handleSquareClick}
+                            setParsedFENString={setParsedFENString}
                             setDraggedSquare={setDraggedSquare}
                             setDroppedSquare={setDroppedSquare}
                             handlePromotionCancel={handlePromotionCancel}
@@ -593,6 +614,7 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
                             squareColor={squareColor}
                             handleSquareClick={handleSquareClick}
                             displayPromotionPopup={false}
+                            setParsedFENString={setParsedFENString}
                             setDraggedSquare={setDraggedSquare}
                             setDroppedSquare={setDroppedSquare}
                             handlePromotionCancel={handlePromotionCancel}
