@@ -192,7 +192,7 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
 
                 move_type: "regular",
             };
-            
+
             gameWebsocket.current?.send(
                 JSON.stringify(moveDetails)
             );
@@ -276,6 +276,21 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
                 pieceColorToValidate,
                 previousClickedSquare,
                 clickedSquare
+            );
+        }
+
+        if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
+            const moveDetails = {
+                piece_color: pieceColorToValidate,
+                piece_type: pieceTypeToValidate,
+                starting_square: previousClickedSquare,
+                destination_square: clickedSquare,
+
+                move_type: "regular",
+            };
+            
+            gameWebsocket.current?.send(
+                JSON.stringify(moveDetails)
             );
         }
 
