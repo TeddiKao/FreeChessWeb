@@ -41,8 +41,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 		
 		starting_square = move_info["starting_square"]
 		destination_square = move_info["destination_square"]
-		piece_color = move_info["piece_color"]
-		piece_type = move_info["piece_type"]
+		piece_color: str = move_info["piece_color"]
+		piece_type: str = move_info["piece_type"]
 
 		del new_board_placement[f"{starting_square}"]
 		new_board_placement[f"{destination_square}"] = {
@@ -69,6 +69,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.channel_name
 		)
 
+		print("User has connected!")
+
 		await self.send(json.dumps({
 			"type": "game_started",
 			"user": self.scope["user"].username,
@@ -79,6 +81,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		pass
 
 	async def receive(self, text_data):
+		print("Received message")
 		print(text_data)
 
 		await self.channel_layer.group_send(
@@ -93,6 +96,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 	async def move_received(self, event):
 		print(json.loads(event["move_data"]))
 		move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
+		print(move_is_valid)
+		
 		chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
 		
 		parsed_move_data = json.loads(event["move_data"])
@@ -107,5 +112,5 @@ class GameConsumer(AsyncWebsocketConsumer):
 			"move_data": parsed_move_data,
 			"move_made_by": event["move_made_by"],
 			"move_is_valid": move_is_valid,
-			"new_position": chess_game_model.parsed_board_placement
+			"new_parsed_fen": await chess_game_model.get_full_parsed_fen()
 		}))
