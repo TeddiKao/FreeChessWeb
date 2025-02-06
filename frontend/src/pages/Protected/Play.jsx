@@ -10,6 +10,7 @@ import {
 } from "../../contexts/chessboardContexts.js";
 
 import "../../styles/play.css";
+import "../../styles/board-actions.css";
 
 import { fetchFen } from "../../utils/apiUtils.js";
 
@@ -23,6 +24,10 @@ function Play() {
     const [gameEnded, setGameEnded] = useState(false);
     const [gameEndedCause, setGameEndedCause] = useState(null);
     const [gameWinner, setGameWinner] = useState(null);
+
+    const [boardOrientation, setBoardOrientation] = useState(location.state?.assignedColor || "White");
+
+    console.log(boardOrientation);
 
     const startingPositionFEN =
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -49,36 +54,55 @@ function Play() {
         }
     }
 
+    function handleBoardFlip() {
+        console.log("Flipping the board")
+        
+        const newOrientation = boardOrientation.toLowerCase() === "white" ? "Black" : "White";
+        setBoardOrientation(newOrientation);
+    }
+
     return (
         <GameEndedSetterContext.Provider value={setGameEnded}>
             <GameEndedCauseSetterContext.Provider value={setGameEndedCause}>
                 <GameWinnerSetterContext.Provider value={setGameWinner}>
                     <div className="playing-interface-container">
-                        <div className="top-timer-wrapper">
-                            <Timer
-                                playerColor="black"
-                                position="top"
-                                timeInSeconds={timeControlBaseTime}
+                        <div className="main-chessboard">
+                            <div className="top-timer-wrapper">
+                                <Timer
+                                    playerColor="black"
+                                    position="top"
+                                    timeInSeconds={timeControlBaseTime}
+                                />
+                            </div>
+
+                            <div className="chessboard-info">
+                                <MultiplayerChessboard
+                                    parsed_fen_string={parsedFEN}
+                                    orientation={boardOrientation}
+                                    gameId={gameId}
+                                />
+                            </div>
+
+                            <GameOverModal
+                                visible={gameEnded}
+                                gameEndCause={gameEndedCause}
+                                gameWinner={gameWinner}
                             />
+
+                            <div className="bottom-timer-wrapper">
+                                <Timer
+                                    playerColor="white"
+                                    position="bottom"
+                                    timeInSeconds={timeControlBaseTime}
+                                />
+                            </div>
                         </div>
 
-                        <MultiplayerChessboard
-                            parsed_fen_string={parsedFEN}
-                            orientation={assignedColor}
-                            gameId={gameId}
-                        />
-
-                        <GameOverModal
-                            visible={gameEnded}
-                            gameEndCause={gameEndedCause}
-                            gameWinner={gameWinner}
-                        />
-
-                        <div className="bottom-timer-wrapper">
-                            <Timer
-                                playerColor="white"
-                                position="bottom"
-                                timeInSeconds={timeControlBaseTime}
+                        <div className="board-actions">
+                            <img
+                                onClick={handleBoardFlip}
+                                className="flip-board-icon"
+                                src="/flip-board-icon.png"
                             />
                         </div>
                     </div>

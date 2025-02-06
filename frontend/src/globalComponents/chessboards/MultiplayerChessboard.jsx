@@ -68,6 +68,10 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
     }, [parsed_fen_string]);
 
     useEffect(() => {
+        setBoardOrientation(orientation);
+    }, [orientation])
+
+    useEffect(() => {
         handleClickToMove();
     }, [previousClickedSquare, clickedSquare]);
 

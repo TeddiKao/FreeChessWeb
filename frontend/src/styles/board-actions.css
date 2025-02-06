@@ -1,0 +1,11 @@
+.board-actions {
+	display: flex;
+	flex-direction: column;
+
+	margin-left: 12px;
+	margin-top: 44px;
+}
+
+.board-actions:hover {
+	cursor: pointer;
+}
