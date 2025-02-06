@@ -30,13 +30,15 @@ function MatchmakingScreen({
     useEffect(() => {
         async function onMatchFound() {
             if (matchFound) {
+                const gameSetupInfo = {
+                    baseTime,
+                    increment,
+                    gameId: gameIdRef.current,
+                    assignedColor: await getAssignedColor(),
+                };
+                
                 navigate("/play", {
-                    state: {
-                        baseTime,
-                        increment,
-                        gameId: gameIdRef.current,
-                        assignedColor: await getAssignedColor(),
-                    },
+                    state: gameSetupInfo,
                 });
             }
         }

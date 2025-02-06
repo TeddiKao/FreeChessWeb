@@ -25,7 +25,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 		chess_game: ChessGame = await self.get_chess_game(game_id)
 		full_parsed_fen: dict = await chess_game.get_full_parsed_fen()
 
-		print("full_parsed_fen", full_parsed_fen)
 
 		if validate_move(full_parsed_fen, move_info):
 			return True
@@ -94,13 +93,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 		)
 
 	async def move_received(self, event):
-		print(json.loads(event["move_data"]))
 		move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
-		print(move_is_valid)
-		
 		chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
 		
-		parsed_move_data = json.loads(event["move_data"])
+		parsed_move_data: dict = json.loads(event["move_data"])
 
 		if move_is_valid:
 			await self.update_position(chess_game_model, parsed_move_data)
