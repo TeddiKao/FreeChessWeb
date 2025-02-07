@@ -69,7 +69,7 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
 
     useEffect(() => {
         setBoardOrientation(orientation);
-    }, [orientation])
+    }, [orientation]);
 
     useEffect(() => {
         handleClickToMove();
@@ -111,6 +111,8 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
     }
 
     function makeMove(eventData) {
+        console.log(eventData["new_parsed_fen"],)
+
         setParsedFENString((prevState) => {
             return {
                 ...prevState,
@@ -158,6 +160,8 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
         const squareInfoToValidate =
             boardPlacementToValidate[`${draggedSquare}`];
 
+        const initialSquare = squareInfoToValidate["starting_square"];
+
         const pieceTypeToValidate = squareInfoToValidate["piece_type"];
         const pieceColorToValidate = squareInfoToValidate["piece_color"];
 
@@ -188,14 +192,13 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
                 piece_color: pieceColorToValidate,
                 piece_type: pieceTypeToValidate,
                 starting_square: draggedSquare,
+                initial_square: initialSquare,
                 destination_square: droppedSquare,
 
-                special_move: null
+                additional_info: {},
             };
 
-            gameWebsocket.current?.send(
-                JSON.stringify(moveDetails)
-            );
+            gameWebsocket.current?.send(JSON.stringify(moveDetails));
         }
 
         setPreviousDraggedSquare(draggedSquare);
@@ -288,10 +291,8 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
 
                 move_type: "regular",
             };
-            
-            gameWebsocket.current?.send(
-                JSON.stringify(moveDetails)
-            );
+
+            gameWebsocket.current?.send(JSON.stringify(moveDetails));
         }
 
         setPreviousDraggedSquare(previousClickedSquare);

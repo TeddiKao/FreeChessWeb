@@ -369,7 +369,7 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 
 	for legal_move in legal_moves:
 		file_distance = get_file(legal_move) - get_file(starting_square)
-		castling_squares = [f"{castle_kingside_square}", f"{castle_queenside_square}"]
+		castling_squares = [str(castle_kingside_square), str(castle_queenside_square)]
 
 		if abs(file_distance) <= 1:
 			continue
