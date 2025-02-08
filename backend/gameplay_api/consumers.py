@@ -91,8 +91,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await self.modify_castling_rights(chess_game_model, castling_side, piece_color)
 			
 		elif piece_type.lower() == "pawn":
-			print("Pawn move made!")
-
 			if "promoted_piece" in move_info["additional_info"].keys():
 				promoted_piece = move_info["additional_info"]["promoted_piece"]
 
