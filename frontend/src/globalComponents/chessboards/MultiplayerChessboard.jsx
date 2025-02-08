@@ -482,8 +482,6 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
 
         gameWebsocket?.current?.send(JSON.stringify(moveDetails))
 
-        console.log("Sent message!")
-
         setDraggedSquare(null);
         setDroppedSquare(null);
         setPreviousClickedSquare(null);
