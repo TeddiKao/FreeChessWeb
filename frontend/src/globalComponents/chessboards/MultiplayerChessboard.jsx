@@ -39,7 +39,7 @@ import { websocketBaseURL } from "../../constants/urls.js";
 import useWebSocket from "../../hooks/useWebsocket.js";
 import { getAccessToken } from "../../utils/tokenUtils.js";
 
-import _ from "lodash";
+import _, { drop } from "lodash";
 
 function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
@@ -111,7 +111,7 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
     }
 
     function makeMove(eventData) {
-        console.log(eventData["new_parsed_fen"],)
+        console.log(eventData["new_parsed_fen"]);
 
         setParsedFENString((prevState) => {
             return {
@@ -180,11 +180,45 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
         }
 
         if (pieceTypeToValidate.toLowerCase() === "pawn") {
-            handlePromotionCapture(
+            console.log("Trying to handle promotion");
+
+            const isPromotion = handlePromotionCapture(
                 pieceColorToValidate,
                 draggedSquare,
                 droppedSquare
             );
+
+            console.log(isPromotion);
+
+            if (isPromotion) {
+                setParsedFENString((prevFENString) => {
+                    let newPiecePlacements = structuredClone(prevFENString);
+
+                    newPiecePlacements = {
+                        ...newPiecePlacements,
+                        board_placement: {
+                            ...newPiecePlacements["board_placement"],
+                            [`${droppedSquare}`]: {
+                                piece_type: "Pawn",
+                                piece_color: pieceColorToValidate,
+                            },
+                        },
+                    };
+
+                    delete newPiecePlacements["board_placement"][
+                        `${draggedSquare}`
+                    ];
+
+                    return newPiecePlacements;
+                });
+
+                setPreviousDraggedSquare(draggedSquare);
+                setPreviousDroppedSquare(droppedSquare);
+                setDraggedSquare(null);
+                setDroppedSquare(null);
+
+                return;
+            }
         }
 
         if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
@@ -275,11 +309,19 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
         }
 
         if (pieceTypeToValidate.toLowerCase() === "pawn") {
-            handlePromotionCapture(
+            console.log("Trying to handle promotion");
+
+            const isPromotion = handlePromotionCapture(
                 pieceColorToValidate,
                 previousClickedSquare,
                 clickedSquare
             );
+
+            console.log(isPromotion);
+
+            if (isPromotion) {
+                return;
+            }
         }
 
         if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
@@ -391,125 +433,6 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
         setPromotionCapturedPiece(null);
     }
 
-    function handleKingsideCastling(
-        originalPiecePlacements,
-        castlingRights,
-        color,
-        moveInfo
-    ) {
-        const colorCastlingRights = castlingRights[color];
-        const startingSquare = moveInfo["starting_square"];
-        const destinationSquare = moveInfo["destination_square"];
-
-        if (!colorCastlingRights["Kingside"]) {
-            return originalPiecePlacements;
-        }
-
-        if (parseInt(startingSquare) + 2 !== parseInt(destinationSquare)) {
-            return originalPiecePlacements;
-        }
-
-        const newPiecePlacements = handleCastling(
-            originalPiecePlacements,
-            "kingside",
-            color
-        );
-
-        return newPiecePlacements;
-    }
-
-    function modifyCastlingRights(originalFENString, color, castlingSide) {
-        const updatedFENString = {
-            ...originalFENString,
-            castling_rights: {
-                ...originalFENString["castling_rights"],
-                [color]: {
-                    ...originalFENString["castling_rights"][color],
-                    [castlingSide]: false,
-                },
-            },
-        };
-
-        return updatedFENString;
-    }
-
-    function handleCastling(originalFENString, castlingSide, color) {
-        const castlingSquareOffset =
-            castlingSide.toLowerCase() === "queenside" ? -2 : 2;
-
-        const startingSquare =
-            color.toLowerCase() === "white"
-                ? whiteKingStartingSquare
-                : blackKingStartingSquare;
-
-        const originalRookSquare =
-            castlingSide.toLowerCase() === "queenside"
-                ? startingSquare - 4
-                : startingSquare + 3;
-
-        const castledRookSquare =
-            castlingSide.toLowerCase() === "queenside"
-                ? startingSquare - 1
-                : startingSquare + 1;
-
-        const newFENString = {
-            ...originalFENString,
-            board_placement: {
-                ...originalFENString["board_placement"],
-                [`${castledRookSquare}`]: {
-                    piece_type: "Rook",
-                    piece_color: color,
-                    starting_square: `${startingSquare}`,
-                },
-            },
-        };
-
-        delete newFENString["board_placement"][`${originalRookSquare}`];
-
-        return newFENString;
-    }
-
-    async function checkIsCheckmated(
-        boardPlacement,
-        castlingRights,
-        kingColor
-    ) {
-        const isCheckmated = await getIsCheckmated(
-            boardPlacement,
-            castlingRights,
-            kingColor
-        );
-
-        return isCheckmated;
-    }
-
-    async function checkIsStalemated(
-        boardPlacement,
-        castlingRights,
-        kingColor
-    ) {
-        const isStalemated = await getIsStalemated(
-            boardPlacement,
-            castlingRights,
-            kingColor
-        );
-
-        return isStalemated;
-    }
-
-    function disableCastlingForColor(originalFENString, color) {
-        return {
-            ...originalFENString,
-            castling_rights: {
-                ...originalFENString["castling_rights"],
-                [color]: {
-                    Kingside: false,
-                    Queenside: false,
-                },
-            },
-        };
-    }
-
     function handlePromotionCapture(
         pieceColor,
         startSquare,
@@ -520,12 +443,18 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
         const endFile = getFile(destinationSquare);
         const fileDifference = Math.abs(startFile - endFile);
 
+        console.log(`File difference: ${fileDifference}`);
+
         const promotionRank =
             pieceColor.toLowerCase() === "white"
                 ? whitePromotionRank
                 : blackPromotionRank;
 
         if (!(rank === promotionRank) || !(fileDifference === 1)) {
+            if (rank === promotionRank && fileDifference === 0) {
+                return true;
+            }
+
             return;
         }
 
@@ -533,19 +462,27 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
         const capturedPieceInfo = boardPlacement[`${destinationSquare}`];
 
         setPromotionCapturedPiece(capturedPieceInfo);
+
+        return true;
     }
 
     function handlePawnPromotion(color, promotedPiece) {
-        setParsedFENString((previousFENString) => ({
-            ...previousFENString,
-            board_placement: {
-                ...previousFENString["board_placement"],
-                [previousDroppedSquare]: {
-                    piece_type: promotedPiece,
-                    piece_color: color,
-                },
-            },
-        }));
+        console.log(previousDraggedSquare, previousDroppedSquare);
+
+        const moveDetails = {
+            piece_color: color,
+            piece_type: "Pawn",
+            starting_square: previousDraggedSquare,
+            destination_square: previousDroppedSquare,
+
+            additional_info: {
+                promoted_piece: promotedPiece,
+            }
+        };
+
+        gameWebsocket?.current?.send(JSON.stringify(moveDetails))
+
+        console.log("Sent message!")
 
         setDraggedSquare(null);
         setDroppedSquare(null);

@@ -45,16 +45,15 @@ class GameConsumer(AsyncWebsocketConsumer):
 		
 		await self.save_chess_game_model(chess_game_model)
 
-	async def update_position(self, chess_game_model: ChessGame, move_info):
+	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
 		new_board_placement = copy.deepcopy(chess_game_model.parsed_board_placement)
 
 		starting_square = move_info["starting_square"]
 		destination_square = move_info["destination_square"]
-		initial_square = move_info["initial_square"]
+		initial_square = move_info["initial_square"] if "initial_square" in move_info.keys() else None
 		piece_color: str = move_info["piece_color"]
 		piece_type: str = move_info["piece_type"]
-
-		
+		additonal_info: dict = move_info["additional_info"]
 
 		del new_board_placement[str(starting_square)]
 
@@ -69,7 +68,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 					new_board_placement[str(int(destination_square) + 1)] = {
 						"piece_type": "Rook",
 						"piece_color": piece_color,
-						"starting_square": str(int(destination_square) - 2)
+						"starting_square": initial_square,
 					}
 
 					del new_board_placement[str(int(destination_square) - 2)]
@@ -87,16 +86,28 @@ class GameConsumer(AsyncWebsocketConsumer):
 			kingside_rook_starting_squares = [7, 63]
 			queenside_rook_starting_squares = [0, 56]
 			
-
 			castling_side = "Kingside" if int(initial_square) in kingside_rook_starting_squares else "Queenside"
 
 			await self.modify_castling_rights(chess_game_model, castling_side, piece_color)
 			
-		new_board_placement[str(destination_square)] = {
-			"piece_type": piece_type,
-			"piece_color": piece_color,
-			"starting_square": initial_square
-		}
+		elif piece_type.lower() == "pawn":
+			print("Pawn move made!")
+
+			if "promoted_piece" in move_info["additional_info"].keys():
+				promoted_piece = move_info["additional_info"]["promoted_piece"]
+
+				new_board_placement[str(destination_square)] = {
+					"piece_type": promoted_piece,
+					"piece_color": piece_color,
+                    "starting_square": initial_square
+				}
+
+		if not "promoted_piece" in move_info["additional_info"].keys():
+			new_board_placement[str(destination_square)] = {
+				"piece_type": piece_type,
+				"piece_color": piece_color,
+				"starting_square": initial_square
+			}
 
 		chess_game_model.parsed_board_placement = new_board_placement
 		await self.save_chess_game_model(chess_game_model)
@@ -116,9 +127,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.room_group_name,
 			self.channel_name
 		)
-
 		
-
 		await self.send(json.dumps({
 			"type": "game_started",
 			"user": self.scope["user"].username,
