@@ -1,3 +1,5 @@
+import "../styles/navigation-dropdown.css"
+
 function NavigationDropdown({ navigationLinks, isVisible }) {
 	if (!isVisible) {
 		return null;
