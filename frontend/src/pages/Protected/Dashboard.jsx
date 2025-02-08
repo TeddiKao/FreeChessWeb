@@ -1,16 +1,10 @@
-import "../../styles/dashboard/dashboard-navbar.css"
+import DashboardNavbar from "../../pageComponents/dashboard/DashboardNavbar";
 
 function Dashboard() {
     return (
-        <div className="dashboard-navbar">
-            <div className="navigation-links">
-                <a href="/play" className="play-link">Play</a>
-            </div>
-
-            <div className="account-links">
-                <a href="/logout" className="logout-link">Logout</a>
-            </div>
-        </div>
+        <>
+            <DashboardNavbar />
+        </>
     )    
 }
 
