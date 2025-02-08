@@ -12,6 +12,9 @@
 	align-items: center;
 
 	margin-left: 12px;
+
+	padding-top: 16px;
+	padding-bottom: 16px;
 }
 
 .account-links {
@@ -23,27 +26,22 @@
 	left: 85%;
 }
 
-.navigation-links div {
-	position: relative;
-}
-
-.navigation-links div a {
+.main-link {
 	padding-top: 16px;
 	padding-bottom: 16px;
-	padding-left: 12px;
-	padding-right: 12px;
-	
+	padding-left: 20px;
+	padding-right: 20px;
+
 	margin: 0;
 }
 
-.navigation-links div a:hover {
+.main-link:hover {
 	background-color: hsl(0, 0%, 80%);
 	transition: 0.25s ease;
 }
 
-.play-navigation-dropdown {
-	position: absolute;
-	top: 20%;
+.play-links-container {
+	position: relative;
 }
 
 .logout-link {

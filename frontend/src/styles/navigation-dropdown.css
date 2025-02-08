@@ -1,11 +1,29 @@
 .navigation-dropdown-container {
 	display: flex;
 	flex-direction: column;
+	position: absolute;
+	top: 35px;
+
+	background-color: hsl(0, 0%, 90%);
+
+	box-shadow: 5px 5px 5px hsl(0, 0%, 60%);
+
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
 }
 
 .navigation-dropdown-link {
-	padding-top: 8px;
-	padding-bottom: 8px;
-	padding-left: 4px;
-	padding-right: 4px;
+	padding-top: 16px;
+	padding-bottom: 16px;
+	padding-left: 20px;
+
+	width: 150px;
+}
+
+.navigation-dropdown-link:hover {
+	background-color: hsl(200, 100%, 50%);
+	color: white;
+
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
 }

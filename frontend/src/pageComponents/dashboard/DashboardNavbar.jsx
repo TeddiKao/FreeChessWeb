@@ -1,22 +1,56 @@
 import "../../styles/dashboard/dashboard-navbar.css";
 
+import NavigationDropdown from "../../globalComponents/NavigationDropdown.jsx";
+import { useEffect, useRef, useState } from "react";
+
 function DashboardNavbar() {
+    const playLinkRef = useRef(null);
+    const navDropdownRef = useRef(null);
+
+    const [playNavigationDropdownVisible, setPlayNavigationDropdownVisible] = useState(false);
+
     const playLinks = [
         {
             linkName: "Pass and play",
             linkPath: "/pass-and-play",
         },
+
+        {
+            linkName: "Play vs human",
+            linkPath: "/select-time-control"
+        }
     ];
+
+    function handleMouseHover(event) {
+        const hoveringOverPlayLink = (playLinkRef.current) && (playLinkRef.current.contains(event.target));
+        const hoveringOverPlayDropdown = (navDropdownRef.current) && (navDropdownRef.current.contains(event.target))
+
+        console.log(navDropdownRef.current)
+
+        if (hoveringOverPlayLink || hoveringOverPlayDropdown) {
+            setPlayNavigationDropdownVisible(true);
+        } else {
+            setPlayNavigationDropdownVisible(false);
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener("mouseover", handleMouseHover);
+
+        return () => {
+            document.removeEventListener("mouseover", handleMouseHover);
+        }
+    }, []);
 
     return (
         <div className="dashboard-navbar">
             <div className="navigation-links">
                 <div className="play-links-container">
-                    <a href="/play" className="play-link">
+                    <a ref={playLinkRef} href="/play" className="play-link main-link">
                         Play
                     </a>
 
-                    <NavigationDropdown navigationLinks={playLinks} className="play-navigation-dropdown"/>
+                    <NavigationDropdown dropdownRef={navDropdownRef} isVisible={playNavigationDropdownVisible} navigationLinks={playLinks} className="play-navigation-dropdown"/>
                 </div>
             </div>
 

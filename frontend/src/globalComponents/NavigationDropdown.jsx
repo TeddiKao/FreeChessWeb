@@ -1,8 +1,8 @@
 import "../styles/navigation-dropdown.css"
 
-function NavigationDropdown({ navigationLinks, isVisible }) {
-	if (!isVisible) {
-		return null;
+function NavigationDropdown({ navigationLinks, isVisible, dropdownRef }) {
+    if (!isVisible) {
+        return;
     }
 
     function generateLinks() {
@@ -20,6 +20,8 @@ function NavigationDropdown({ navigationLinks, isVisible }) {
     }
 
     return (
-        <div className="navigation-dropdown-container">{generateLinks()}</div>
+        <div ref={dropdownRef} className="navigation-dropdown-container">{generateLinks()}</div>
     );
 }
+
+export default NavigationDropdown;
