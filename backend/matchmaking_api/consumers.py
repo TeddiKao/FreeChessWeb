@@ -62,28 +62,20 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 		chess_game.save()
 
 		return chess_game.id
-			
+
 	async def match_player(self):
 		player_to_match = self.scope["user"]
 		match_found = False
-
-		
 		
 		while not match_found:
-			
-			
 			player_in_queue = await self.get_player_in_queue(player_to_match)
 			matched_user = await self.get_matched_user(player_to_match)
 
 			if matched_user:
-				
-
 				matched_player_color, player_to_match_color = await self.decide_player_color() 
 
 				white_player = await self.get_user_model_from_waiting_player(matched_user) if matched_player_color == "white" else player_to_match
 				black_player = await self.get_user_model_from_waiting_player(matched_user) if matched_player_color == "black" else player_to_match
-
-				
 
 				game_id = await self.create_chess_game(white_player, black_player)
 
@@ -110,19 +102,12 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 				await self.create_waiting_player(player_to_match)
 
 				if matched_player:
-					
-
 					waiting_player_to_match = await self.get_player_in_queue(player_to_match)
 
 					await self.set_matched_player(matched_player, player_to_match)
-					await self.set_matched_player(waiting_player_to_match, matched_player.user)
-
-					# await self.remove_player_from_queue(matched_player)
-					
+					await self.set_matched_player(waiting_player_to_match, await self.get_user_model_from_waiting_player(matched_player))
 
 				else:
-					
-
 					await self.send(json.dumps({
 						"type": "finding_match",
 						"match_found": False,
