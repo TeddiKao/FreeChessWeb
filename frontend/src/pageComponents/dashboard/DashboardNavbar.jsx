@@ -1,17 +1,32 @@
-import "../../styles/dashboard/dashboard-navbar.css"
+import "../../styles/dashboard/dashboard-navbar.css";
 
 function DashboardNavbar() {
-	return (
-		<div className="dashboard-navbar">
+    const playLinks = [
+        {
+            linkName: "Pass and play",
+            linkPath: "/pass-and-play",
+        },
+    ];
+
+    return (
+        <div className="dashboard-navbar">
             <div className="navigation-links">
-                <a href="/play" className="play-link">Play</a>
+                <div className="play-links-container">
+                    <a href="/play" className="play-link">
+                        Play
+                    </a>
+
+                    <NavigationDropdown navigationLinks={playLinks} className="play-navigation-dropdown"/>
+                </div>
             </div>
 
             <div className="account-links">
-                <a href="/logout" className="logout-link">Logout</a>
+                <a href="/logout" className="logout-link">
+                    Logout
+                </a>
             </div>
         </div>
-	)
+    );
 }
 
-export default DashboardNavbar
+export default DashboardNavbar;

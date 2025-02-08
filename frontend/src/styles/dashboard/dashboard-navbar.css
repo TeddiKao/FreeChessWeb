@@ -23,7 +23,11 @@
 	left: 85%;
 }
 
-.navigation-links a {
+.navigation-links div {
+	position: relative;
+}
+
+.navigation-links div a {
 	padding-top: 16px;
 	padding-bottom: 16px;
 	padding-left: 12px;
@@ -32,9 +36,14 @@
 	margin: 0;
 }
 
-.navigation-links a:hover {
+.navigation-links div a:hover {
 	background-color: hsl(0, 0%, 80%);
 	transition: 0.25s ease;
+}
+
+.play-navigation-dropdown {
+	position: absolute;
+	top: 20%;
 }
 
 .logout-link {
