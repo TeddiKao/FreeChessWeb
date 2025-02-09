@@ -44,10 +44,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 		
 		await self.save_chess_game_model(chess_game_model)
 
-	async def handle_castling(self, chess_game_model: ChessGame, move_info: dict):
-		new_board_placement = copy.deepcopy(chess_game_model.parsed_board_placement)
+	async def handle_castling(self, chess_game_model: ChessGame, move_info: dict, original_board_placement: dict):
+		new_board_placement = copy.deepcopy(original_board_placement)
 		
-		starting_square = move_info["starting_square"]
 		destination_square = move_info["destination_square"]
 		initial_square = move_info["initial_square"] if "initial_square" in move_info.keys() else None
 		piece_color: str = move_info["piece_color"]
@@ -74,8 +73,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 			del new_board_placement[str(int(destination_square) + 1)]
 
-		chess_game_model.parsed_board_placement = new_board_placement
-
+		return new_board_placement
 
 	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
 		new_board_placement = copy.deepcopy(chess_game_model.parsed_board_placement)
@@ -93,7 +91,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		if piece_type.lower() == "king":
 			if file_diff == 2:
-				await self.handle_castling(chess_game_model, move_info)
+				new_board_placement = await self.handle_castling(chess_game_model, move_info, new_board_placement)
 
 		elif piece_type.lower() == "rook":
 			kingside_rook_starting_squares = [7, 63]
@@ -104,8 +102,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await self.modify_castling_rights(chess_game_model, castling_side, piece_color)
 			
 		elif piece_type.lower() == "pawn":
-			if "promoted_piece" in move_info["additional_info"].keys():
-				promoted_piece = move_info["additional_info"]["promoted_piece"]
+			if "promoted_piece" in additonal_info.keys():
+				promoted_piece = additonal_info["promoted_piece"]
 
 				new_board_placement[str(destination_square)] = {
 					"piece_type": promoted_piece,
@@ -113,7 +111,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                     "starting_square": initial_square
 				}
 
-		if not "promoted_piece" in move_info["additional_info"].keys():
+		if not "promoted_piece" in additonal_info.keys():
 			new_board_placement[str(destination_square)] = {
 				"piece_type": piece_type,
 				"piece_color": piece_color,
