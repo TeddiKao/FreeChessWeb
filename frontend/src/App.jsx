@@ -11,7 +11,7 @@ import NotFound from "./pages/NotFound.jsx";
 import Dashboard from "./pages/Protected/Dashboard.jsx";
 import GameSetup from "./pages/Protected/GameSetup.jsx";
 
-import "./styles/global.css";
+import "./styles/global/global.css";
 
 import ProtectedRoute from "./globalComponents/routes/ProtectedRoute.jsx";
 import AuthenticationRoute from "./globalComponents/routes/AuthenticationRoute.jsx";

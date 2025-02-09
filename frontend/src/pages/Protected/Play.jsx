@@ -9,8 +9,8 @@ import {
     GameWinnerSetterContext,
 } from "../../contexts/chessboardContexts.js";
 
-import "../../styles/play.css";
-import "../../styles/board-actions.css";
+import "../../styles/multiplayer/play.css";
+import "../../styles/chessboard/board-actions.css"
 
 import { fetchFen } from "../../utils/apiUtils.js";
 

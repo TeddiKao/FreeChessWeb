@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-import "../styles/promotion-popup.css";
+import "../styles/chessboard/promotion-popup.css";
 import { capitaliseFirstLetter } from "../utils/generalUtils";
 
 function PromotionPopup({

@@ -6,7 +6,7 @@ import TimeControlTypeContainer from "../../pageComponents/gameplay/TimeControlT
 import Timer from "../../pageComponents/gameplay/Timer.jsx";
 import TimeControlSelection from "../../pageComponents/gameplay/TimeControlSelection.jsx";
 
-import "../../styles/select-time-control.css";
+import "../../styles/matchmaking/select-time-control.css";
 
 import { capitaliseFirstLetter } from "../../utils/generalUtils.js";
 import { displayTimeControl } from "../../utils/timeUtils.js";

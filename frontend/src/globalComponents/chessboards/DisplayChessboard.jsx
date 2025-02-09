@@ -1,4 +1,4 @@
-import "../../styles/chessboard.css";
+import "../../styles/chessboard/chessboard.css";
 
 function DisplayChessboard({ fenString, orientation }) {
     if (!fenString) {

@@ -1,7 +1,6 @@
 import { useDrag, useDrop } from "react-dnd";
-import api from "../api.js";
 
-import "../styles/square.css";
+import "../styles/chessboard/square.css"
 import PromotionPopup from "./PromotionPopup.jsx";
 import { useEffect, useState } from "react";
 
