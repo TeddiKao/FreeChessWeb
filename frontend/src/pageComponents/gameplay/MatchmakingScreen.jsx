@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import api from "../../api.js";
 import { displayTimeControl } from "../../utils/timeUtils";
 
 import useWebSocket from "../../hooks/useWebsocket.js";
