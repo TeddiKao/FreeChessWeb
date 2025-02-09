@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .utils.get_legal_moves import get_legal_moves
 from .utils.move_validation import validate_move
+from .utils.get_move_type import get_move_type
 from .utils.game_results import get_is_checkmated, get_is_stalemated
 
 class ShowLegalMoveView(APIView):
@@ -32,7 +33,12 @@ class ValidateMoveView(APIView):
 		is_move_valid = not not validate_move(parsed_fen_string, move_info)
 		
 		if is_move_valid:
-			return Response({"is_valid": True}, status=status.HTTP_200_OK)
+			move_type = get_move_type(parsed_fen_string["board_placement"], move_info)
+
+			return Response({
+				"is_valid": True,
+				"move_type": move_type,
+			}, status=status.HTTP_200_OK)
 		else:
 			return Response({"is_valid": False}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 

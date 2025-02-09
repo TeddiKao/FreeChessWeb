@@ -34,6 +34,7 @@ import {
     GameEndedCauseSetterContext,
     GameWinnerSetterContext,
 } from "../../contexts/chessboardContexts.js";
+import useAudio from "../../hooks/useAudio.js";
 
 function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
@@ -53,6 +54,12 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
     const setGameEnded = useContext(GameEndedSetterContext);
     const setGameEndedCause = useContext(GameEndedCauseSetterContext);
     const setGameWinner = useContext(GameWinnerSetterContext);
+
+    const moveAudio = useAudio("/move-self.mp3")
+    const captureAudio = useAudio("/capture.mp3");
+    const checkAudio = useAudio("/move-check.mp3");
+    const promoteAudio = useAudio("/promote.mp3");
+    const castlingAudio = useAudio("/castle.mp3")
 
     const isFirstRender = useRef(false);
 
@@ -113,7 +120,7 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
         const pieceTypeToValidate = squareInfoToValidate["piece_type"];
         const pieceColorToValidate = squareInfoToValidate["piece_color"];
 
-        const moveIsLegal = await fetchMoveIsValid(
+        const [moveIsLegal, moveType] = await fetchMoveIsValid(
             parsedFENString,
             pieceColorToValidate,
             pieceTypeToValidate,
@@ -272,10 +279,13 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
             return newPiecePlacements;
         });
 
+        
+
         const newSideToMove =
             sideToMove.toLowerCase() === "white" ? "black" : "white";
 
         setSideToMove(newSideToMove);
+        playAudio(moveType);
 
         setPreviousDraggedSquare(draggedSquare);
         setPreviousDroppedSquare(droppedSquare);
@@ -763,6 +773,33 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
         setPreviousClickedSquare(null);
         setClickedSquare(null);
         setPromotionCapturedPiece(null);
+    }
+
+    function playAudio(moveType) {
+        switch (moveType.toLowerCase()) {
+            case "move":
+                moveAudio.play();
+                break;
+
+            case "capture":
+                captureAudio.play();
+                break;
+
+            case "castling":
+                castlingAudio.play();
+                break;
+
+            case "promotion":
+                promoteAudio.play();
+                break;
+
+            case "check":
+                checkAudio.play();
+                break;
+
+            default:
+                console.error(`Invalid move type: ${moveType}`);
+        }
     }
 
     function generateChessboard() {

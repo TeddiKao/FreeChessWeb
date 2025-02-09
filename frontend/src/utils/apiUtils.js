@@ -40,6 +40,8 @@ async function fetchMoveIsValid(
     destination_square
 ) {
     let isMoveLegal = false;
+    let moveType = null;
+
     try {
         const response = await api.post("/move_validation_api/validate-move/", {
             parsed_fen_string: parsedFENString,
@@ -53,12 +55,15 @@ async function fetchMoveIsValid(
 
         if (response.status === 200) {
             isMoveLegal = response.data.is_valid;
+            moveType = response.data.move_type;
         }
     } catch (error) {
         console.log(error);
     }
 
-    return isMoveLegal;
+    console.log(moveType);
+
+    return [isMoveLegal, moveType];
 }
 
 async function fetchFen(rawFenString) {
