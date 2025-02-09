@@ -324,14 +324,16 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 	starting_square = move_info["starting_square"]
 	piece_color = move_info["piece_color"]
 
-	left_square = f"{int(starting_square) + 1}"
-	right_square = f"{int(starting_square) - 1}"
-	up_square = f"{int(starting_square) + 8}"
-	down_square = f"{int(starting_square) - 8}"
-	up_left_square = f"{int(starting_square) + 7}"
-	up_right_square = f"{int(starting_square) + 9}"
-	down_left_square = f"{int(starting_square) - 7}"
-	down_right_square = f"{int(starting_square) - 9}"
+	adjacent_squares = [
+		f"{int(starting_square) + 1}",  # left_square
+		f"{int(starting_square) - 1}",  # right_square
+		f"{int(starting_square) + 8}",  # up_square
+		f"{int(starting_square) - 8}",  # down_square
+		f"{int(starting_square) + 7}",  # up_left_square
+		f"{int(starting_square) + 9}",  # up_right_square
+		f"{int(starting_square) - 7}",  # down_left_square
+		f"{int(starting_square) - 9}",  # down_right_square
+	]
 
 	queenside_castling_info = validate_castling(board_placement, castling_rights, piece_color, "queenside")
 	kingside_castling_info = validate_castling(board_placement, castling_rights, piece_color, "kingside")
@@ -348,7 +350,7 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 	if can_castle_kingside:
 		legal_moves.append(f"{castle_kingside_square}")
 
-	legal_moves += [left_square, right_square, up_square, down_square, up_left_square, up_right_square, down_left_square, down_right_square]
+	legal_moves += adjacent_squares
 
 	cleaned_legal_moves = copy.deepcopy(legal_moves)
 
