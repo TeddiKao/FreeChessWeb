@@ -27,11 +27,7 @@ function DashboardNavbar() {
 
         console.log(navDropdownRef.current)
 
-        if (hoveringOverPlayLink || hoveringOverPlayDropdown) {
-            setPlayNavigationDropdownVisible(true);
-        } else {
-            setPlayNavigationDropdownVisible(false);
-        }
+        setPlayNavigationDropdownVisible(hoveringOverPlayLink || hoveringOverPlayDropdown);
     }
 
     useEffect(() => {
