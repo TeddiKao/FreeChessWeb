@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef, useCallback } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 
 import "../../styles/chessboard.css";
 import Square from "../Square.jsx";
@@ -11,23 +11,12 @@ import {
 import {
     fetchLegalMoves,
     fetchMoveIsValid,
-    getIsCheckmated,
-    getIsStalemated,
 } from "../../utils/apiUtils.js";
 
 import {
     whitePromotionRank,
     blackPromotionRank,
 } from "../../constants/boardSquares.js";
-
-import {
-    whiteKingsideCastlingSquare,
-    blackKingsideCastlingSquare,
-    whiteQueensideCastlingSquare,
-    blackQueensideCastlingSquare,
-    whiteKingStartingSquare,
-    blackKingStartingSquare,
-} from "../../constants/castlingSquares.js";
 
 import {
     GameEndedSetterContext,
@@ -39,7 +28,7 @@ import { websocketBaseURL } from "../../constants/urls.js";
 import useWebSocket from "../../hooks/useWebsocket.js";
 import { getAccessToken } from "../../utils/tokenUtils.js";
 
-import _, { drop } from "lodash";
+import _ from "lodash";
 
 function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
@@ -561,6 +550,7 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
                             handlePawnPromotion={handlePawnPromotion}
                             previousDraggedSquare={previousDraggedSquare}
                             previousDroppedSquare={previousDroppedSquare}
+                            orientation={boardOrientation}
                         />
                     );
                 } else {
@@ -578,6 +568,7 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
                             handlePawnPromotion={handlePawnPromotion}
                             previousDraggedSquare={previousDraggedSquare}
                             previousDroppedSquare={previousDroppedSquare}
+                            orientation={boardOrientation}
                         />
                     );
                 }

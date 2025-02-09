@@ -18,6 +18,7 @@ function Square({
     handlePawnPromotion,
     previousDraggedSquare,
     previousDroppedSquare,
+    orientation,
 }) {
     let startingSquare = null;
 
@@ -77,6 +78,7 @@ function Square({
                     }}
                     handlePromotionCancel={handlePromotionCancel}
                     handlePawnPromotion={handlePawnPromotion}
+                    boardOrientation={orientation}
                 />
             );
         } else {

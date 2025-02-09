@@ -9,8 +9,9 @@ function PromotionPopup({
     onClose,
     handlePromotionCancel,
     handlePawnPromotion,
+    boardOrientation
 }) {
-    const positionClass = color.toLowerCase() === "white" ? "top" : "bottom";
+    const positionClass = boardOrientation.toLowerCase() === color.toLowerCase() ? "top" : "bottom"
     const promotionMenu = useRef(null);
 
     function handleClickOutside(event) {
@@ -40,7 +41,7 @@ function PromotionPopup({
     }
 
     function generatePromotionPopup() {
-        if (color.toLowerCase() === "white") {
+        if (positionClass.toLowerCase() === "top") {
             return (
                 <div
                     ref={promotionMenu}
