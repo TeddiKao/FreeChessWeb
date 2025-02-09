@@ -33,3 +33,11 @@
 	background-color: hsl(215, 100%, 50%);
 	opacity: 0.75;
 }
+
+.highlighted-square-light {
+	background-color: hsl(342, 100%, 50%);
+}
+
+.highlighted-square-dark {
+	background-color: hsl(342, 100%, 40%);
+}

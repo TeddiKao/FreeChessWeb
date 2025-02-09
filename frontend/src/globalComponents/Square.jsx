@@ -3,6 +3,7 @@ import { useDrag, useDrop } from "react-dnd";
 import "../styles/chessboard/square.css"
 import PromotionPopup from "./PromotionPopup.jsx";
 import { useEffect, useState } from "react";
+import { getFile, getRank } from "../utils/boardUtils.js";
 
 function Square({
     squareNumber,
@@ -56,6 +57,35 @@ function Square({
         },
     }));
 
+    function clearAllHighlightedSquares() {
+        for (let square = 0; square <= 63; square++) {
+            const squareElement = document.getElementById(`${square}`);
+            if (squareElement) {
+                const squareFile = getFile(square);
+                const squareRank = getRank(square);
+
+                const isSquareLight = (squareFile + squareRank) % 2 !== 0;
+                const highlightedClassName = isSquareLight ? "highlighted-square-light" : "highlighted-square-dark";
+
+                squareElement.classList.remove(highlightedClassName);
+            }
+        }
+    }
+
+    function handleSquareHiglight(event) {
+        event.preventDefault(); 
+
+        const squareId = event.target.id;
+        
+        const squareFile = getFile(squareId);
+        const squareRank = getRank(squareId);
+
+        const isSquareLight = (squareFile + squareRank) % 2 !== 0;
+        const highlightedClassName = isSquareLight ? "highlighted-square-light" : "highlighted-square-dark";
+
+        event.target.classList.add(highlightedClassName);
+    }
+
     function handleOnDrop(droppedSquare) {
         setDraggedSquare(startingSquare);
         setDroppedSquare(droppedSquare);
@@ -103,7 +133,10 @@ function Square({
             id={squareNumber}
             onClick={(event) => {
                 handleSquareClick(event, squareNumber);
+                clearAllHighlightedSquares();
             }}
+
+            onContextMenu={handleSquareHiglight}
         >
             {pieceColor && pieceType ? generateSquareHTML() : null}
         </div>
