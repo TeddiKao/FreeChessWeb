@@ -21,7 +21,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 		return getattr(chess_game_model, attribute_name)
 
 	async def check_move_validation(self, move_info):
-		
 		game_id = self.game_id
 		
 		chess_game: ChessGame = await self.get_chess_game(game_id)
@@ -45,6 +44,39 @@ class GameConsumer(AsyncWebsocketConsumer):
 		
 		await self.save_chess_game_model(chess_game_model)
 
+	async def handle_castling(self, chess_game_model: ChessGame, move_info: dict):
+		new_board_placement = copy.deepcopy(chess_game_model.parsed_board_placement)
+		
+		starting_square = move_info["starting_square"]
+		destination_square = move_info["destination_square"]
+		initial_square = move_info["initial_square"] if "initial_square" in move_info.keys() else None
+		piece_color: str = move_info["piece_color"]
+		piece_type: str = move_info["piece_type"]
+
+		kingside_castling_squares = [6, 62]
+		queenside_castling_squares = [2, 58]
+
+		if int(destination_square) in queenside_castling_squares:
+			new_board_placement[str(int(destination_square) + 1)] = {
+				"piece_type": "Rook",
+				"piece_color": piece_color,
+				"starting_square": initial_square,
+			}
+
+			del new_board_placement[str(int(destination_square) - 2)]
+
+		elif int(destination_square) in kingside_castling_squares:
+			new_board_placement[str(int(destination_square) - 1)] = {
+				"piece_type": "Rook",
+				"piece_color": piece_color,
+				"starting_square": str(int(destination_square) + 1)
+			}
+
+			del new_board_placement[str(int(destination_square) + 1)]
+
+		chess_game_model.parsed_board_placement = new_board_placement
+
+
 	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
 		new_board_placement = copy.deepcopy(chess_game_model.parsed_board_placement)
 
@@ -59,28 +91,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		file_diff = abs(get_file(starting_square) - get_file(destination_square))
 
-		kingside_castling_squares = [6, 62]
-		queenside_castling_squares = [2, 58]
-
 		if piece_type.lower() == "king":
 			if file_diff == 2:
-				if int(destination_square) in queenside_castling_squares:
-					new_board_placement[str(int(destination_square) + 1)] = {
-						"piece_type": "Rook",
-						"piece_color": piece_color,
-						"starting_square": initial_square,
-					}
-
-					del new_board_placement[str(int(destination_square) - 2)]
-
-				elif int(destination_square) in kingside_castling_squares:
-					new_board_placement[str(int(destination_square) - 1)] = {
-						"piece_type": "Rook",
-						"piece_color": piece_color,
-						"starting_square": str(int(destination_square) + 1)
-					}
-
-					del new_board_placement[str(int(destination_square) + 1)]
+				await self.handle_castling(chess_game_model, move_info)
 
 		elif piece_type.lower() == "rook":
 			kingside_rook_starting_squares = [7, 63]
