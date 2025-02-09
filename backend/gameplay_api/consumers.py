@@ -50,29 +50,54 @@ class GameConsumer(AsyncWebsocketConsumer):
 		destination_square = move_info["destination_square"]
 		initial_square = move_info["initial_square"] if "initial_square" in move_info.keys() else None
 		piece_color: str = move_info["piece_color"]
-		piece_type: str = move_info["piece_type"]
+
+		# Piece type is not decalared as it will always be a king
 
 		kingside_castling_squares = [6, 62]
 		queenside_castling_squares = [2, 58]
 
 		if int(destination_square) in queenside_castling_squares:
-			new_board_placement[str(int(destination_square) + 1)] = {
+			original_queenside_rook_square = str(int(destination_square) - 2)
+			castled_queenside_rook_square = str(int(destination_square) + 1)
+
+			new_board_placement[castled_queenside_rook_square] = {
 				"piece_type": "Rook",
 				"piece_color": piece_color,
-				"starting_square": initial_square,
+				"starting_square": original_queenside_rook_square,
 			}
 
-			del new_board_placement[str(int(destination_square) - 2)]
+			del new_board_placement[original_queenside_rook_square]
 
 		elif int(destination_square) in kingside_castling_squares:
-			new_board_placement[str(int(destination_square) - 1)] = {
+			original_kingside_roook_square = str(int(destination_square) + 1)
+			castled_kingside_rook_square = str(int(destination_square) - 1)
+
+			new_board_placement[castled_kingside_rook_square] = {
 				"piece_type": "Rook",
 				"piece_color": piece_color,
-				"starting_square": str(int(destination_square) + 1)
+				"starting_square": original_queenside_rook_square
 			}
 
-			del new_board_placement[str(int(destination_square) + 1)]
+			del new_board_placement[original_kingside_roook_square]
 
+		return new_board_placement
+	
+	async def handle_pawn_promotion(self, move_info: dict, original_board_placement: dict):
+		destination_square = move_info["destination_square"]
+		initial_square = move_info["initial_square"] if "initial_square" in move_info.keys() else None
+		piece_color: str = move_info["piece_color"]
+		additional_info: dict = move_info["additional_info"]
+
+		new_board_placement = copy.deepcopy(original_board_placement)
+
+		promoted_piece = additional_info["promoted_piece"]
+
+		new_board_placement[str(destination_square)] = {
+			"piece_type": promoted_piece,
+			"piece_color": piece_color,
+			"starting_square": initial_square
+		}
+			
 		return new_board_placement
 
 	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
@@ -103,13 +128,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			
 		elif piece_type.lower() == "pawn":
 			if "promoted_piece" in additonal_info.keys():
-				promoted_piece = additonal_info["promoted_piece"]
-
-				new_board_placement[str(destination_square)] = {
-					"piece_type": promoted_piece,
-					"piece_color": piece_color,
-                    "starting_square": initial_square
-				}
+				new_board_placement = await self.handle_pawn_promotion(move_info, new_board_placement)
 
 		if not "promoted_piece" in additonal_info.keys():
 			new_board_placement[str(destination_square)] = {
