@@ -7,7 +7,10 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.db.models import Q
 
 from .models import ChessGame
+from .models import UserGameplaySettings
+
 from .serializers import ChessGameSerializer
+from .serializers import GameplaySettingsSerializer
 
 from .utils import fen_parser
 
@@ -48,3 +51,9 @@ class MakeMoveView(generics.UpdateAPIView):
 
 		return ChessGame.objects.filter((white_player_filter | black_player_filter) & game_is_ongoing_filter)
 		
+class GetGameplaySettingsView(generics.ListAPIView):
+	permission_classes = [IsAuthenticated]
+	serializer_class = GameplaySettingsSerializer
+
+	def get_queryset(self):
+		return UserGameplaySettings.objects.filter(user=self.request.user)

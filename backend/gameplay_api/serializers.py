@@ -1,4 +1,6 @@
 from .models import ChessGame
+from .models import UserGameplaySettings
+
 from django.db.models import Q
 
 from rest_framework import serializers
@@ -18,4 +20,9 @@ class ChessGameSerializer(ModelSerializer):
 		
 	class Meta:
 		model = ChessGame
+		fields = "__all__"
+
+class GameplaySettingsSerializer(ModelSerializer):
+	class Meta:
+		model = UserGameplaySettings
 		fields = "__all__"
