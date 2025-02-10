@@ -5,15 +5,13 @@ function useGameplaySettings() {
 	const [gameplaySettings, setGameplaySettings] = useState(null);
 
 	useEffect(() => {
+		fetchGameplaySettings();
+	}, [])
 
-	})
-
-	async function fetchGameplaySettings() {
-		try {
-
-		} catch (error) {
-			console.log(error);
-		}
+	function fetchGameplaySettings() {
+		api.get("/gameplay_api/get-gameplay-settings/")
+		.then((response) => response.data)
+		.then((data) => setNotes(data));
 	}
 
 	return gameplaySettings;
