@@ -34,7 +34,7 @@ def get_is_check(board_placement: dict, move_info: dict) -> bool:
 
 	return king_in_check
 
-def get_is_capture(board_placement: dict, move_info: dict):
+def get_is_capture(board_placement: dict, move_info: dict) -> bool:
 	piece_color = move_info["piece_color"]
 	destination_square = move_info["destination_square"]
 
@@ -49,7 +49,7 @@ def get_is_capture(board_placement: dict, move_info: dict):
 	
 	return True
 
-def get_is_promotion(move_info):
+def get_is_promotion(move_info) -> bool:
 	piece_color: str = move_info["piece_color"]
 	piece_type: str = move_info["piece_type"]
 	destination_square: str = move_info["destination_square"]

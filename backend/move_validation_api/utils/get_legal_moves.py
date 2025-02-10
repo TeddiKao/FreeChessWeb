@@ -427,7 +427,7 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 
 	return cleaned_legal_moves
 
-def get_knight_legal_moves(board_placement, move_info):
+def get_knight_legal_moves(board_placement: dict, move_info: dict) -> list:
 	starting_square = move_info["starting_square"]
 
 	legal_moves = [

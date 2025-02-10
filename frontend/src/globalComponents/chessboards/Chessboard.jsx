@@ -63,6 +63,7 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
     const castlingAudio = useAudio("/castle.mp3");
 
     const isFirstRender = useRef(false);
+    const selectingPromotionRef = useRef(false);
     const unpromotedBoardPlacementRef = useRef(null);
 
     useEffect(() => {
@@ -284,7 +285,10 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
         const newSideToMove =
             sideToMove.toLowerCase() === "white" ? "black" : "white";
 
-        setSideToMove(newSideToMove);
+        if (!selectingPromotionRef.current) {
+            setSideToMove(newSideToMove);
+        }
+
         playAudio(moveType);
 
         setPreviousDraggedSquare(draggedSquare);
@@ -610,6 +614,7 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
         });
 
         setPromotionCapturedPiece(null);
+        selectingPromotionRef.current = false;
     }
 
     function handleKingsideCastling(
@@ -747,6 +752,7 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
                 : blackPromotionRank;
 
         unpromotedBoardPlacementRef.current = parsedFENString
+        selectingPromotionRef.current = true;
 
         if (!(rank === promotionRank) || !(fileDifference === 1)) {
             return;
@@ -788,6 +794,11 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
         }));
 
         playAudio(moveType);
+        selectingPromotionRef.current = false;
+
+        const newSideToMove = sideToMove.toLowerCase() === "white" ? "black" : "white"
+
+        setSideToMove(newSideToMove);
 
         setDraggedSquare(null);
         setDroppedSquare(null);

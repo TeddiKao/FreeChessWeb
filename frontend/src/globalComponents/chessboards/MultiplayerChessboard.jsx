@@ -120,8 +120,6 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
         const startingSquare = eventData["move_data"]["starting_square"];
         const destinationSquare = eventData["move_data"]["destination_square"];
 
-
-        console.log(eventData["move_type"])
         playSound(eventData["move_type"])
 
         setPreviousDraggedSquare(startingSquare);
