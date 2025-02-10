@@ -16,9 +16,8 @@ class ShowLegalMoveView(APIView):
 		current_fen = request.data.get("parsed_fen_string")
 		move_info = request.data.get("move_info")
 
-		legal_moves = get_legal_moves(move_info, current_fen["board_placement"], current_fen["castling_rights"])
+		legal_moves = get_legal_moves(move_info, current_fen["board_placement"], current_fen["en_passant_target_square"], current_fen["castling_rights"])
 		
-
 		return Response(legal_moves, status=status.HTTP_200_OK)
 
 class ValidateMoveView(APIView):
@@ -45,18 +44,18 @@ class ValidateMoveView(APIView):
 
 class GetIsCheckmatedView(APIView):
 	def post(self, request):
-		board_placement = request.data.get("board_placement")
-		castling_rights = self.request.data.get("castling_rights")
+		current_fen = request.data.get("current_fen")
 		king_color = self.request.data.get("king_color")
 
-		is_checkmated = get_is_checkmated(board_placement, castling_rights, king_color)
+		is_checkmated = get_is_checkmated(current_fen, king_color)
 		return Response(is_checkmated, status=status.HTTP_200_OK)
 	
 class GetIsStalematedView(APIView):
 	def post(self, request):
-		board_placement = request.data.get("board_placement")
-		castling_rights = self.request.data.get("castling_rights")
+		current_fen = request.data.get("current_fen")
 		king_color = self.request.data.get("king_color")
 
-		is_stalemated = get_is_stalemated(board_placement, castling_rights, king_color)
+		print(current_fen)
+
+		is_stalemated = get_is_stalemated(current_fen, king_color)
 		return Response(is_stalemated, status=status.HTTP_200_OK)

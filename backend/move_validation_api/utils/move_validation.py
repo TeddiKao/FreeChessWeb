@@ -5,10 +5,9 @@ from .legal_move_helpers import *
 from .get_legal_moves import *
 
 def validate_move(current_fen, move_info):
-	print(move_info)
-
 	board_placement = current_fen["board_placement"]
 	castling_rights = current_fen["castling_rights"]
+	en_passant_target_square = current_fen["en_passant_target_square"]
 
 	piece_type = move_info["piece_type"]
 
@@ -23,7 +22,7 @@ def validate_move(current_fen, move_info):
 		move_is_valid = destination_square in legal_moves
 
 	elif piece_type.lower() == "pawn":
-		legal_moves = get_pawn_legal_moves(board_placement, move_info)
+		legal_moves = get_pawn_legal_moves(board_placement, en_passant_target_square, move_info)
 
 		move_is_valid = destination_square in legal_moves
 

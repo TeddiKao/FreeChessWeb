@@ -15,7 +15,7 @@ direction_offset_mapping = {
 	"southeast": -7,
 }
 
-def get_legal_moves(move_info, board_placement, castling_rights = None):
+def get_legal_moves(move_info, board_placement, en_passant_target_square, castling_rights = None):
 	sliding_pieces = ["queen", "rook", "bishop"]
 
 	if move_info["piece_type"].lower() == "king":
@@ -28,7 +28,7 @@ def get_legal_moves(move_info, board_placement, castling_rights = None):
 		return get_knight_legal_moves(board_placement, move_info)
 	
 	elif move_info["piece_type"].lower() == "pawn":
-		return get_pawn_legal_moves(board_placement, move_info)
+		return get_pawn_legal_moves(board_placement, en_passant_target_square, move_info)
 
 def is_king_in_check(board_placement, king_color, king_square):
 	attacked_squares = get_attacking_squares_of_color(get_opposite_color(king_color), board_placement)
@@ -238,7 +238,7 @@ def get_sliding_piece_legal_moves(board_placement, move_info):
 
 	return legal_squares
 
-def get_pawn_legal_moves(board_placement, move_info):
+def get_pawn_legal_moves(board_placement, en_passant_target_square, move_info):
 	legal_squares = []
 
 	starting_square = move_info["starting_square"]
@@ -254,7 +254,13 @@ def get_pawn_legal_moves(board_placement, move_info):
 
 	for attacking_square in pawn_attacking_squares:
 		if attacking_square not in board_placement:
-			continue
+			if not en_passant_target_square:
+				continue
+
+			print(attacking_square, en_passant_target_square)
+
+			if int(attacking_square) == int(en_passant_target_square):
+				legal_squares.append(attacking_square)
 
 		pawn_color = board_placement[attacking_square]["piece_color"]
 		if pawn_color == piece_color:
@@ -287,10 +293,8 @@ def get_pawn_legal_moves(board_placement, move_info):
 		double_square_updated_FEN = update_FEN(board_placement, starting_square_info, f"{int(starting_square) + 16}")
 		double_square_king_position = get_king_position(double_square_updated_FEN, piece_color)
 
-		if is_king_in_check(double_square_updated_FEN, piece_color, double_square_king_position):
-			return legal_squares
-		
-		legal_squares.append(f"{int(starting_square) + 16}")
+		if not is_king_in_check(double_square_updated_FEN, piece_color, double_square_king_position):
+			legal_squares.append(f"{int(starting_square) + 16}")
 			
 	else:
 		if f"{int(starting_square) - 8}" in board_placement:
