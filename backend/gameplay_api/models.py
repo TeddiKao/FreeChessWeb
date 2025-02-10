@@ -55,3 +55,8 @@ class ChessGame(models.Model):
 			"halfmove_clock": self.halfmove_clock,
 			"fullmove_number": self.current_move
 		}
+	
+class UserGameplaySettings(models.Model):
+	user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+	auto_queen = models.BooleanField(default=False, blank=False, null=False)
+	show_legal_moves = models.BooleanField(default=True, blank=False, null=False)

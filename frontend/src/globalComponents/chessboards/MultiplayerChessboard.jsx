@@ -314,8 +314,6 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
                 clickedSquare
             );
 
-            console.log(isPromotion);
-
             if (isPromotion) {
                 return;
             }
