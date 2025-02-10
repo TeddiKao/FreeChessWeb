@@ -93,8 +93,3 @@ def get_move_type(board_placement, en_passant_target_square, move_info) -> str:
 		return "capture"
 
 	return "move"
-
-
-
-
-	

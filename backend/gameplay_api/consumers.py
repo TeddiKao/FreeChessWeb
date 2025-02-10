@@ -100,6 +100,32 @@ class GameConsumer(AsyncWebsocketConsumer):
 		}
 			
 		return new_board_placement
+	
+	async def update_en_passant_target_square(self, chess_game_model: ChessGame, move_info: dict):
+		piece_color: str = move_info["piece_color"]
+		piece_type: str = move_info["piece_type"]
+		starting_square = move_info["starting_square"]
+		destination_square = move_info["destination_square"]
+
+		if piece_type.lower() != "pawn":
+			chess_game_model.en_passant_target_square = None
+			await self.save_chess_game_model(chess_game_model)
+
+			return
+		
+		rank_diff = abs(get_row(starting_square) - get_row(destination_square))
+		if rank_diff != 2:
+			chess_game_model.en_passant_target_square = None
+			await self.save_chess_game_model(chess_game_model)
+
+			return
+		
+		target_square_offset = -8 if piece_color.lower() == "white" else 8
+		en_passant_target_square = int(destination_square) + target_square_offset
+
+		chess_game_model.en_passant_target_square = en_passant_target_square
+		await self.save_chess_game_model(chess_game_model)
+
 
 	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
 		new_board_placement = copy.deepcopy(chess_game_model.parsed_board_placement)
@@ -137,6 +163,14 @@ class GameConsumer(AsyncWebsocketConsumer):
 				"piece_color": piece_color,
 				"starting_square": initial_square
 			}
+
+			if int(destination_square) == int(chess_game_model.en_passant_target_square):
+				captured_pawn_offset = -8 if piece_color.lower() == "white" else 8
+				captured_pawn_square = int(destination_square) + captured_pawn_offset
+
+				del new_board_placement[str(captured_pawn_square)]
+
+		await self.update_en_passant_target_square(chess_game_model, move_info)
 
 		chess_game_model.parsed_board_placement = new_board_placement
 		await self.save_chess_game_model(chess_game_model)
