@@ -100,6 +100,8 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
     }, [gameWebsocketConnected]);
 
     function handleOnMessage(event) {
+        console.log("message received")
+
         const parsedEventData = JSON.parse(event.data);
 
         if (parsedEventData["type"] === "move_made") {
@@ -114,8 +116,6 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
                 ...eventData["new_parsed_fen"],
             };
         });
-
-
 
         const startingSquare = eventData["move_data"]["starting_square"];
         const destinationSquare = eventData["move_data"]["destination_square"];
@@ -234,8 +234,6 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
             gameWebsocket.current?.send(JSON.stringify(moveDetails));
         }
 
-        setPreviousDraggedSquare(draggedSquare);
-        setPreviousDroppedSquare(droppedSquare);
         setDraggedSquare(null);
         setDroppedSquare(null);
     }

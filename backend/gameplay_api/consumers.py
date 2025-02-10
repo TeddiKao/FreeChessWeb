@@ -222,11 +222,11 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if move_is_valid:
 			await self.update_position(chess_game_model, parsed_move_data)
 
-		await self.send(json.dumps({
-			"type": "move_made",
-			"move_data": parsed_move_data,
-			"move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
-			"move_made_by": event["move_made_by"],
-			"move_is_valid": move_is_valid,
-			"new_parsed_fen": await chess_game_model.get_full_parsed_fen()
-		}))
+			await self.send(json.dumps({
+				"type": "move_made",
+				"move_data": parsed_move_data,
+				"move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
+				"move_made_by": event["move_made_by"],
+				"move_is_valid": move_is_valid,
+				"new_parsed_fen": await chess_game_model.get_full_parsed_fen()
+			}))
