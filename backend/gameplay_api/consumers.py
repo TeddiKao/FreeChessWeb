@@ -70,16 +70,16 @@ class GameConsumer(AsyncWebsocketConsumer):
 			del new_board_placement[original_queenside_rook_square]
 
 		elif int(destination_square) in kingside_castling_squares:
-			original_kingside_roook_square = str(int(destination_square) + 1)
+			original_kingside_rook_square = str(int(destination_square) + 1)
 			castled_kingside_rook_square = str(int(destination_square) - 1)
 
 			new_board_placement[castled_kingside_rook_square] = {
 				"piece_type": "Rook",
 				"piece_color": piece_color,
-				"starting_square": original_queenside_rook_square
+				"starting_square": original_kingside_rook_square
 			}
 
-			del new_board_placement[original_kingside_roook_square]
+			del new_board_placement[original_kingside_rook_square]
 
 		return new_board_placement
 	
