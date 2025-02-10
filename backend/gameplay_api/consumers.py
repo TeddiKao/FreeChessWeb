@@ -214,7 +214,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 	async def move_received(self, event):
 		move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
 		chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
-		previous_position = copy.deepcopy(chess_game_model.parsed_board_placement)
+		previous_position: dict = copy.deepcopy(chess_game_model.parsed_board_placement)
 		en_passant_target_square = chess_game_model.en_passant_target_square
 
 		parsed_move_data: dict = json.loads(event["move_data"])
