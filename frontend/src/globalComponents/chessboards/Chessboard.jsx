@@ -34,6 +34,7 @@ import {
     GameEndedCauseSetterContext,
     GameWinnerSetterContext,
 } from "../../contexts/chessboardContexts.js";
+
 import useAudio from "../../hooks/useAudio.js";
 
 function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
@@ -55,13 +56,14 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
     const setGameEndedCause = useContext(GameEndedCauseSetterContext);
     const setGameWinner = useContext(GameWinnerSetterContext);
 
-    const moveAudio = useAudio("/move-self.mp3")
+    const moveAudio = useAudio("/move-self.mp3");
     const captureAudio = useAudio("/capture.mp3");
     const checkAudio = useAudio("/move-check.mp3");
     const promoteAudio = useAudio("/promote.mp3");
-    const castlingAudio = useAudio("/castle.mp3")
+    const castlingAudio = useAudio("/castle.mp3");
 
     const isFirstRender = useRef(false);
+    const unpromotedBoardPlacementRef = useRef(null);
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -278,8 +280,6 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
 
             return newPiecePlacements;
         });
-
-        
 
         const newSideToMove =
             sideToMove.toLowerCase() === "white" ? "black" : "white";
@@ -746,6 +746,8 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
                 ? whitePromotionRank
                 : blackPromotionRank;
 
+        unpromotedBoardPlacementRef.current = parsedFENString
+
         if (!(rank === promotionRank) || !(fileDifference === 1)) {
             return;
         }
@@ -756,7 +758,24 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
         setPromotionCapturedPiece(capturedPieceInfo);
     }
 
-    function handlePawnPromotion(color, promotedPiece) {
+    async function handlePawnPromotion(color, promotedPiece) {
+        console.log(parsedFENString);
+
+        const [moveIsValid, moveType] = await fetchMoveIsValid(
+            unpromotedBoardPlacementRef.current,
+            color,
+            "Pawn",
+            previousDraggedSquare,
+            previousDroppedSquare,
+            {
+                promoted_piece: promotedPiece,
+            }
+        );
+
+        if (!moveIsValid) {
+            return;
+        }
+
         setParsedFENString((previousFENString) => ({
             ...previousFENString,
             board_placement: {
@@ -767,6 +786,8 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
                 },
             },
         }));
+
+        playAudio(moveType);
 
         setDraggedSquare(null);
         setDroppedSquare(null);
@@ -795,6 +816,9 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
 
             case "check":
                 checkAudio.play();
+                break;
+
+            case "no sound":
                 break;
 
             default:
@@ -866,6 +890,7 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
                                 pieceType.toLowerCase() === "pawn" &&
                                 promotionRank === pieceRank
                             }
+                            orientation={boardOrientation}
                             handleSquareClick={handleSquareClick}
                             setParsedFENString={setParsedFENString}
                             setDraggedSquare={setDraggedSquare}
@@ -882,6 +907,7 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
                             key={boardPlacementSquare}
                             squareNumber={boardPlacementSquare}
                             squareColor={squareColor}
+                            orientation={boardOrientation}
                             handleSquareClick={handleSquareClick}
                             displayPromotionPopup={false}
                             setParsedFENString={setParsedFENString}

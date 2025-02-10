@@ -28,6 +28,8 @@ import { websocketBaseURL } from "../../constants/urls.js";
 import useWebSocket from "../../hooks/useWebsocket.js";
 import { getAccessToken } from "../../utils/tokenUtils.js";
 
+import useAudio from "../../hooks/useAudio.js";
+
 import _ from "lodash";
 
 function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
@@ -51,6 +53,12 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
     const [gameWebsocketConnected, setGameWebsocketConnected] = useState(true);
 
     const gameWebsocket = useRef(null);
+
+    const moveAudio = useAudio("/move-self.mp3");
+    const captureAudio = useAudio("/capture.mp3");
+    const checkAudio = useAudio("/move-check.mp3");
+    const promoteAudio = useAudio("/promote.mp3");
+    const castlingAudio = useAudio("/castle.mp3");
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -100,8 +108,6 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
     }
 
     function makeMove(eventData) {
-        console.log(eventData["new_parsed_fen"]);
-
         setParsedFENString((prevState) => {
             return {
                 ...prevState,
@@ -109,8 +115,14 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
             };
         });
 
+
+
         const startingSquare = eventData["move_data"]["starting_square"];
         const destinationSquare = eventData["move_data"]["destination_square"];
+
+
+        console.log(eventData["move_type"])
+        playSound(eventData["move_type"])
 
         setPreviousDraggedSquare(startingSquare);
         setPreviousDroppedSquare(destinationSquare);
@@ -420,6 +432,36 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
         });
 
         setPromotionCapturedPiece(null);
+    }
+
+    function playSound(moveType) {
+        switch (moveType.toLowerCase()) {
+            case "move":
+                moveAudio.play()
+                break;
+
+            case "capture":
+                captureAudio.play()
+                break;
+
+            case "castling":
+                castlingAudio.play()
+                break;
+
+            case "promotion":
+                promoteAudio.play()
+                break;
+
+            case "check":
+                checkAudio.play()
+                break;
+
+            case "no sound":
+                break;
+
+            default:
+                console.error(`Invalid move type: ${moveType}`);
+        }
     }
 
     function handlePromotionCapture(

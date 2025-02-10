@@ -24,7 +24,7 @@ function PassAndPlay() {
     }, []);
 
     const startingPositionFEN =
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        "5r1k/4P3/8/8/6K1/8/8/8 w - - 0 1"
 
     async function getParsedFEN() {
         try {

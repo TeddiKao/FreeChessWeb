@@ -27,7 +27,7 @@ def get_is_check(board_placement: dict, move_info: dict) -> bool:
 		"piece_type": piece_type,
 		"piece_color": piece_color,
 		"starting_square": starting_square
-	}, destination_square)
+	}, destination_square, move_info["additional_info"])
 
 	king_position = get_king_position(board_placement, get_opposite_color(piece_color))
 	king_in_check = is_king_in_check(updated_board_placement, get_opposite_color(piece_color), king_position)
@@ -53,6 +53,7 @@ def get_is_promotion(move_info):
 	piece_color: str = move_info["piece_color"]
 	piece_type: str = move_info["piece_type"]
 	destination_square: str = move_info["destination_square"]
+	additional_info: dict = move_info["additional_info"]
 
 	promotion_rank = 7 if piece_color.lower() == "white" else 0
 	destination_rank = get_row(str(destination_square))
@@ -60,6 +61,10 @@ def get_is_promotion(move_info):
 	if piece_type.lower() != "pawn":
 		return False
 	
+	if "promoted_piece" not in additional_info:
+		if int(destination_rank) == int(promotion_rank):
+			return "No sound"
+
 	return int(destination_rank) == int(promotion_rank)
 
 def get_move_type(board_placement, move_info) -> str:
@@ -76,7 +81,7 @@ def get_move_type(board_placement, move_info) -> str:
 		return "castling"
 
 	if is_promotion:
-		return "promotion"
+		return "promotion" if is_promotion != "No sound" else "No sound"
 	
 	if is_capture:
 		return "capture"

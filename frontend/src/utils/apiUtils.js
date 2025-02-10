@@ -37,7 +37,8 @@ async function fetchMoveIsValid(
     piece_color,
     piece_type,
     starting_square,
-    destination_square
+    destination_square,
+    additional_info = {}
 ) {
     let isMoveLegal = false;
     let moveType = null;
@@ -50,6 +51,7 @@ async function fetchMoveIsValid(
                 piece_type: piece_type,
                 starting_square: starting_square,
                 destination_square: destination_square,
+                additional_info: additional_info,
             },
         });
 
