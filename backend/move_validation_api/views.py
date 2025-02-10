@@ -28,11 +28,14 @@ class ValidateMoveView(APIView):
 		
 		# The user must send a parsed FEN string and not the raw FEN string
 		parsed_fen_string = request.data.get("parsed_fen_string")
-		
+
+		board_placement = parsed_fen_string["board_placement"]
+		en_passant_target_square = parsed_fen_string["en_passant_target_square"]
+
 		is_move_valid = not not validate_move(parsed_fen_string, move_info)
 		
 		if is_move_valid:
-			move_type = get_move_type(parsed_fen_string["board_placement"], move_info)
+			move_type = get_move_type(board_placement, en_passant_target_square, move_info)
 
 			return Response({
 				"is_valid": True,
@@ -54,8 +57,6 @@ class GetIsStalematedView(APIView):
 	def post(self, request):
 		current_fen = request.data.get("current_fen")
 		king_color = self.request.data.get("king_color")
-
-		print(current_fen)
 
 		is_stalemated = get_is_stalemated(current_fen, king_color)
 		return Response(is_stalemated, status=status.HTTP_200_OK)

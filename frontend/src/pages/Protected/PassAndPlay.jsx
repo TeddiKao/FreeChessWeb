@@ -24,7 +24,7 @@ function PassAndPlay() {
     }, []);
 
     const startingPositionFEN =
-        "5r1k/4P3/8/8/6K1/8/8/8 w - - 0 1"
+        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 11"
 
     async function getParsedFEN() {
         try {
@@ -44,7 +44,7 @@ function PassAndPlay() {
                             <Chessboard
                                 parsed_fen_string={parsedFEN}
                                 orientation="White"
-                                flipOnMove={true}
+                                flipOnMove={false}
                             />
                         </div>
 

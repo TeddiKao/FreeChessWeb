@@ -136,14 +136,13 @@ async function getOngoingGames() {
     return ongoingGames;
 }
 
-async function getIsStalemated(boardPlacement, castlingRights, kingColor) {
+async function getIsStalemated(currentFEN, kingColor) {
     let isStalemated = false;
     try {
         const response = await api.post(
             "/move_validation_api/get-is-stalemated/",
             {
-                board_placement: boardPlacement,
-                castling_rights: castlingRights,
+                current_fen: currentFEN,
                 king_color: kingColor,
             }
         );
@@ -158,15 +157,16 @@ async function getIsStalemated(boardPlacement, castlingRights, kingColor) {
     return isStalemated;
 }
 
-async function getIsCheckmated(boardPlacement, castlingRights, kingColor) {
+async function getIsCheckmated(currentFEN, kingColor) {
     let isCheckmated = false;
+
+    console.log(currentFEN);
 
     try {
         const response = await api.post(
             "/move_validation_api/get-is-checkmated/",
             {
-                board_placement: boardPlacement,
-                castling_rights: castlingRights,
+                current_fen: currentFEN,
                 king_color: kingColor,
             }
         );

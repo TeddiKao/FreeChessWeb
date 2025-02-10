@@ -167,6 +167,26 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
 
             delete newPiecePlacements["board_placement"][`${draggedSquare}`];
 
+            if (pieceTypeToValidate.toLowerCase() === "pawn") {
+                const enPassantTargetSquare = newPiecePlacements["en_passant_target_square"];
+                if (parseInt(droppedSquare) === enPassantTargetSquare) {
+                    const pawnLocationOffset = pieceColorToValidate.toLowerCase() === "white" ? -8 : 8;
+                    const capturedPawnSquare = parseInt(droppedSquare) + pawnLocationOffset;
+
+                    delete newPiecePlacements["board_placement"][`${capturedPawnSquare}`];
+                }
+            }
+
+            newPiecePlacements = updateEnPassantTargetSquare(
+                newPiecePlacements,
+                {
+                    starting_square: draggedSquare,
+                    destination_square: droppedSquare,
+                    piece_type: pieceTypeToValidate,
+                    piece_color: pieceColorToValidate,
+                }
+            );
+
             if (pieceTypeToValidate.toLowerCase() === "rook") {
                 const kingsideRookSquares = [7, 63];
                 const queensideRookSquares = [0, 56];
@@ -253,14 +273,12 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
                         : "white";
 
                 const isCheckmated = await checkIsCheckmated(
-                    boardPlacement,
-                    castlingRights,
+                    newPiecePlacements,
                     kingColor
                 );
 
                 const isStalemated = await checkIsStalemated(
-                    boardPlacement,
-                    castlingRights,
+                    newPiecePlacements,
                     kingColor
                 );
 
@@ -563,6 +581,41 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
         }
     }
 
+    function updateEnPassantTargetSquare(fenString, moveInfo) {
+        const pieceType = moveInfo["piece_type"];
+        const pieceColor = moveInfo["piece_color"].toLowerCase();
+        const startingSquare = moveInfo["starting_square"];
+        const destinationSquare = moveInfo["destination_square"];
+
+        if (pieceType.toLowerCase() !== "pawn") {
+            return {
+                ...fenString,
+                en_passant_target_square: null,
+            };
+        }
+
+        const startingRank = getRank(startingSquare);
+        const endingRank = getRank(destinationSquare);
+
+        if (Math.abs(startingRank - endingRank) !== 2) {
+            return {
+                ...fenString,
+                en_passant_target_square: null,
+            };
+        }
+
+        const targetSquareOffset =
+            pieceColor.toLowerCase() === "white" ? -8 : 8;
+        const targetSquare = parseInt(destinationSquare) + targetSquareOffset;
+
+        console.log(`Target square ${targetSquare}`)
+
+        return {
+            ...fenString,
+            en_passant_target_square: targetSquare,
+        };
+    }
+
     function handlePromotionCancel(color) {
         setParsedFENString((previousFENString) => {
             let updatedBoardPlacement = {
@@ -695,30 +748,14 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
         return newFENString;
     }
 
-    async function checkIsCheckmated(
-        boardPlacement,
-        castlingRights,
-        kingColor
-    ) {
-        const isCheckmated = await getIsCheckmated(
-            boardPlacement,
-            castlingRights,
-            kingColor
-        );
+    async function checkIsCheckmated(currentFEN, kingColor) {
+        const isCheckmated = await getIsCheckmated(currentFEN, kingColor);
 
         return isCheckmated;
     }
 
-    async function checkIsStalemated(
-        boardPlacement,
-        castlingRights,
-        kingColor
-    ) {
-        const isStalemated = await getIsStalemated(
-            boardPlacement,
-            castlingRights,
-            kingColor
-        );
+    async function checkIsStalemated(currentFEN, kingColor) {
+        const isStalemated = await getIsStalemated(currentFEN, kingColor);
 
         return isStalemated;
     }
@@ -751,15 +788,20 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
                 ? whitePromotionRank
                 : blackPromotionRank;
 
-        unpromotedBoardPlacementRef.current = parsedFENString
-        selectingPromotionRef.current = true;
+        unpromotedBoardPlacementRef.current = parsedFENString;
 
         if (!(rank === promotionRank) || !(fileDifference === 1)) {
+            if (rank === promotionRank) {
+                selectingPromotionRef.current = true;
+            }
+
             return;
         }
 
         const boardPlacement = parsedFENString["board_placement"];
         const capturedPieceInfo = boardPlacement[`${destinationSquare}`];
+
+        selectingPromotionRef.current = true;
 
         setPromotionCapturedPiece(capturedPieceInfo);
     }
@@ -796,7 +838,8 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
         playAudio(moveType);
         selectingPromotionRef.current = false;
 
-        const newSideToMove = sideToMove.toLowerCase() === "white" ? "black" : "white"
+        const newSideToMove =
+            sideToMove.toLowerCase() === "white" ? "black" : "white";
 
         setSideToMove(newSideToMove);
 

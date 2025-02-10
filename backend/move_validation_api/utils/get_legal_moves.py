@@ -262,6 +262,8 @@ def get_pawn_legal_moves(board_placement, en_passant_target_square, move_info):
 			if int(attacking_square) == int(en_passant_target_square):
 				legal_squares.append(attacking_square)
 
+			continue
+
 		pawn_color = board_placement[attacking_square]["piece_color"]
 		if pawn_color == piece_color:
 			continue

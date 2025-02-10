@@ -34,9 +34,15 @@ def get_is_check(board_placement: dict, move_info: dict) -> bool:
 
 	return king_in_check
 
-def get_is_capture(board_placement: dict, move_info: dict) -> bool:
+def get_is_capture(board_placement: dict, en_passant_target_square, move_info: dict) -> bool:
 	piece_color = move_info["piece_color"]
+	piece_type: str = move_info["piece_type"]
 	destination_square = move_info["destination_square"]
+
+	if en_passant_target_square:
+		if piece_type.lower() == "pawn" and int(destination_square) == int(en_passant_target_square):
+			return True
+
 
 	if destination_square not in board_placement.keys():
 		return False
@@ -67,14 +73,14 @@ def get_is_promotion(move_info) -> bool:
 
 	return int(destination_rank) == int(promotion_rank)
 
-def get_move_type(board_placement, move_info) -> str:
+def get_move_type(board_placement, en_passant_target_square, move_info) -> str:
 	is_check = get_is_check(board_placement, move_info)
 	
 	if is_check:
 		return "check"
 	
 	is_castling = get_is_castling(move_info)
-	is_capture = get_is_capture(board_placement, move_info)
+	is_capture = get_is_capture(board_placement, en_passant_target_square, move_info)
 	is_promotion = get_is_promotion(move_info)
 
 	if is_castling:
