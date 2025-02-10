@@ -164,11 +164,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 				"starting_square": initial_square
 			}
 
-			if int(destination_square) == int(chess_game_model.en_passant_target_square):
-				captured_pawn_offset = -8 if piece_color.lower() == "white" else 8
-				captured_pawn_square = int(destination_square) + captured_pawn_offset
+			if chess_game_model.en_passant_target_square:
+				if int(destination_square) == int(chess_game_model.en_passant_target_square):
+					captured_pawn_offset = -8 if piece_color.lower() == "white" else 8
+					captured_pawn_square = int(destination_square) + captured_pawn_offset
 
-				del new_board_placement[str(captured_pawn_square)]
+					del new_board_placement[str(captured_pawn_square)]
 
 		await self.update_en_passant_target_square(chess_game_model, move_info)
 
@@ -214,6 +215,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
 		chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
 		previous_position = copy.deepcopy(chess_game_model.parsed_board_placement)
+		en_passant_target_square = chess_game_model.en_passant_target_square
 
 		parsed_move_data: dict = json.loads(event["move_data"])
 
@@ -223,7 +225,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.send(json.dumps({
 			"type": "move_made",
 			"move_data": parsed_move_data,
-			"move_type": get_move_type(previous_position, parsed_move_data),
+			"move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
 			"move_made_by": event["move_made_by"],
 			"move_is_valid": move_is_valid,
 			"new_parsed_fen": await chess_game_model.get_full_parsed_fen()
