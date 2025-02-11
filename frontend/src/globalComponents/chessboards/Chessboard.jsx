@@ -265,8 +265,6 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
             }
 
             (async () => {
-                const boardPlacement = newPiecePlacements["board_placement"];
-                const castlingRights = newPiecePlacements["castling_rights"];
                 const kingColor =
                     pieceColorToValidate.toLowerCase() === "white"
                         ? "black"
