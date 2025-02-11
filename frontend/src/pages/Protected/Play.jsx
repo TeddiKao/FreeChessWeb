@@ -16,7 +16,7 @@ import { fetchFen } from "../../utils/apiUtils.js";
 
 import React, { useEffect, useState } from "react";
 import GameOverModal from "../../globalComponents/modals/GameOverModal.jsx";
-
+import GameplaySettings from "../../globalComponents/modals/GameplaySettings.jsx";
 function Play() {
     const [parsedFEN, setParsedFEN] = useState(null);
     const location = useLocation();
@@ -88,6 +88,8 @@ function Play() {
                                 gameEndCause={gameEndedCause}
                                 gameWinner={gameWinner}
                             />
+
+                            <GameplaySettings />
 
                             <div className="bottom-timer-wrapper">
                                 <Timer

@@ -1,20 +1,45 @@
-import React, {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import api from "../api.js";
 
 function useGameplaySettings() {
-	const [gameplaySettings, setGameplaySettings] = useState(null);
+    console.log("Hook called!")
 
-	useEffect(() => {
-		fetchGameplaySettings();
-	}, [])
+    const [gameplaySettings, setGameplaySettings] = useState(null);
+    
+    useEffect(() => {
+        console.log("Effect has run!")
 
-	function fetchGameplaySettings() {
-		api.get("/gameplay_api/get-gameplay-settings/")
-		.then((response) => response.data)
-		.then((data) => setNotes(data));
-	}
+        async function modifyGameplaySettings() {
+            const newGameplaySettings = await fetchGameplaySettings(gameplaySettings);
+            console.log(newGameplaySettings);
+            setGameplaySettings(newGameplaySettings);
+        }
 
-	return gameplaySettings;
+		modifyGameplaySettings();
+    }, []);
+
+    async function fetchGameplaySettings() {
+        let gameplaySettings = null;
+
+        try {
+            const response = await api.post(
+                "/gameplay_api/get-gameplay-settings/"
+            );
+
+            console.log(response.data);
+            console.log(response.status);
+
+            if (response.status === 200 || response.status === 201) {
+                gameplaySettings = response.data;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        return gameplaySettings;
+    }
+
+    return gameplaySettings;
 }
 
 export default useGameplaySettings;

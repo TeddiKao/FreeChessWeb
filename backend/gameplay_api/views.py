@@ -51,9 +51,12 @@ class MakeMoveView(generics.UpdateAPIView):
 
 		return ChessGame.objects.filter((white_player_filter | black_player_filter) & game_is_ongoing_filter)
 		
-class GetGameplaySettingsView(generics.ListAPIView):
-	permission_classes = [IsAuthenticated]
-	serializer_class = GameplaySettingsSerializer
+class GetGameplaySettingsView(APIView):
+	def post(self, request):
+		user = self.request.user
+		user_gameplay_settings, created = UserGameplaySettings.objects.get_or_create(user=user)
 
-	def get_queryset(self):
-		return UserGameplaySettings.objects.filter(user=self.request.user)
+		return Response({
+			"auto_queen": user_gameplay_settings.auto_queen,
+			"show_legal_moves": user_gameplay_settings.show_legal_moves
+		}, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
