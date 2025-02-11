@@ -1,7 +1,13 @@
 import useGameplaySettings from "../../hooks/useGameplaySettings";
 import Setting from "../settings/Setting.jsx";
 
-function GameplaySettings() {
+import "../../styles/modals/gameplay-settings.css";
+
+function GameplaySettings({ visible }) {
+    if (!visible) {
+        return null;
+    }
+
     const gameplaySettings = useGameplaySettings();
     if (!gameplaySettings) {
         return null;
