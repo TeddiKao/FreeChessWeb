@@ -15,3 +15,8 @@
 	padding-left: 20px;
 	padding-right: 20px;
 }
+
+.setting-container {
+	display: flex;
+	flex-direction: row;
+}

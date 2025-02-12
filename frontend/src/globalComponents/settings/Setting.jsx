@@ -1,7 +1,5 @@
 import SettingsSwitch from "./SettingsSwitch"
 
-import "../../styles/settings/setting-component.css"
-
 function Setting({ settingName, settingType, settingValue }) {
 	function getSettingInput() {
 		switch (settingType) {
