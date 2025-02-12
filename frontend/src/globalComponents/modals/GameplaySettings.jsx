@@ -4,10 +4,6 @@ import Setting from "../settings/Setting.jsx";
 import "../../styles/modals/gameplay-settings.css";
 
 function GameplaySettings({ visible }) {
-    if (!visible) {
-        return null;
-    }
-
     const gameplaySettings = useGameplaySettings();
     if (!gameplaySettings) {
         return null;
@@ -17,6 +13,7 @@ function GameplaySettings({ visible }) {
 
     return (
         <div className="gameplay-settings-container">
+            <h1 className="gameplay-settings-heading">Settings</h1>
             <Setting
                 settingName="Auto queen"
                 settingValue={autoQueen}

@@ -1,0 +1,35 @@
+.settings-switch {
+	margin-left: 8px;
+
+	position: relative;
+	display: inline-block;
+
+	height: 30px;
+	width: 50px;
+}
+
+.switch-slider {
+	position: absolute;
+	width: 40%;
+	height: 80%;
+	background-color: white;
+	top: 3px;
+	left: 4px;
+	transition: transform 0.4s;
+}
+
+.switch-slider:hover {
+	cursor: pointer;
+}
+
+.on {
+	background-color: green;
+}
+
+.on .switch-slider {
+	transform: translateX(22px);
+}
+
+.off {
+	background-color: hsl(0, 0%, 70%);
+}
