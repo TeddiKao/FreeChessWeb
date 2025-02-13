@@ -55,8 +55,6 @@ function Play() {
     }
 
     function handleBoardFlip() {
-        console.log("Flipping the board")
-        
         const newOrientation = boardOrientation.toLowerCase() === "white" ? "Black" : "White";
         setBoardOrientation(newOrientation);
     }

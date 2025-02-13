@@ -10,22 +10,27 @@
 	background-color: white;
 	z-index: 1000;
 
-	padding-top: 12px;
-	padding-bottom: 12px;
-	padding-left: 20px;
-	padding-right: 20px;
+	border-radius: 12px;
+
+	width: 20vw;
+	height: 40vh
 }
 
 .gameplay-settings-heading {
 	margin-top: 8px;
 	margin-bottom: 8px;
+
+	text-align: center;
 }
 
 .setting-container {
 	display: flex;
 	flex-direction: row;
+	align-items: center;
+
+	margin-left: 16px;
 }
 
 .setting-container p {
-	margin-top: 4px;
+	margin-top: 12px;
 }

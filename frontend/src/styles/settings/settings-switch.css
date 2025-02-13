@@ -4,17 +4,19 @@
 	position: relative;
 	display: inline-block;
 
-	height: 30px;
+	height: 26px;
 	width: 50px;
 }
 
 .switch-slider {
 	position: absolute;
 	width: 40%;
-	height: 80%;
+	height: 75%;
 	background-color: white;
 	top: 3px;
 	left: 4px;
+	
+
 	transition: transform 0.4s;
 }
 
