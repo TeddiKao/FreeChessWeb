@@ -10,7 +10,7 @@ import {
 } from "../../contexts/chessboardContexts.js";
 
 import "../../styles/multiplayer/play.css";
-import "../../styles/chessboard/board-actions.css"
+import "../../styles/chessboard/board-actions.css";
 
 import { fetchFen } from "../../utils/apiUtils.js";
 
@@ -25,7 +25,10 @@ function Play() {
     const [gameEndedCause, setGameEndedCause] = useState(null);
     const [gameWinner, setGameWinner] = useState(null);
 
-    const [boardOrientation, setBoardOrientation] = useState(location.state?.assignedColor || "White");
+    const [boardOrientation, setBoardOrientation] = useState(
+        location.state?.assignedColor || "White"
+    );
+    const [settingsVisible, setSettingsVisible] = useState(false);
 
     console.log(boardOrientation);
 
@@ -54,8 +57,14 @@ function Play() {
         }
     }
 
-    function handleBoardFlip() {
-        const newOrientation = boardOrientation.toLowerCase() === "white" ? "Black" : "White";
+    function handleSettingsDisplay() {
+        setSettingsVisible(true);
+    }
+
+    function toggleBoardOrientation() {
+        const isWhite = boardOrientation.toLowerCase() === "white";
+        const newOrientation = isWhite ? "Black" : "White";
+        
         setBoardOrientation(newOrientation);
     }
 
@@ -100,9 +109,13 @@ function Play() {
 
                         <div className="board-actions">
                             <img
-                                onClick={handleBoardFlip}
+                                onClick={toggleBoardOrientation}
                                 className="flip-board-icon"
                                 src="/flip-board-icon.png"
+                            />
+                            <img
+                                className="settings-icon"
+                                onClick={handleSettingsDisplay}
                             />
                         </div>
                     </div>
