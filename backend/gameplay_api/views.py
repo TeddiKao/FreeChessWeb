@@ -52,6 +52,8 @@ class MakeMoveView(generics.UpdateAPIView):
 		return ChessGame.objects.filter((white_player_filter | black_player_filter) & game_is_ongoing_filter)
 		
 class GetGameplaySettingsView(APIView):
+	permission_classes = [IsAuthenticated]
+	
 	def post(self, request):
 		user = self.request.user
 		user_gameplay_settings, created = UserGameplaySettings.objects.get_or_create(user=user)
@@ -62,11 +64,16 @@ class GetGameplaySettingsView(APIView):
 		}, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
 	
 class UpdateSettingsView(APIView):
+	permission_classes = [IsAuthenticated]
+	
 	def post(self, request):
 		user = self.request.user
 		setting_to_update = request.data.get("setting_to_update")
 		updated_value = request.data.get("updated_value")
 
 		user_gameplay_settings: UserGameplaySettings = UserGameplaySettings.objects.get(user=user)
-		user_gameplay_settings[setting_to_update] = updated_value
+		setattr(user_gameplay_settings, setting_to_update, updated_value)
+
 		user_gameplay_settings.save()
+
+		return Response(user_gameplay_settings._meta.get_fields(), status=status.HTTP_200_OK)

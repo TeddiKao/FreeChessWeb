@@ -27,7 +27,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 		chess_game: ChessGame = await self.get_chess_game(game_id)
 		full_parsed_fen: dict = await chess_game.get_full_parsed_fen()
 
-
 		if validate_move(full_parsed_fen, move_info):
 			return True
 		else:

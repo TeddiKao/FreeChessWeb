@@ -1,12 +1,10 @@
-import { useState } from "react";
 import "../../styles/settings/settings-switch.css"
 
-function SettingsSwitch({ switchState }) {
-    const [settingSwitchState, setSettingSwitchState] = useState(switchState);
-    const switchClassname = settingSwitchState ? "on" : "off";
+function SettingsSwitch({ switchState, setSwitchState }) {
+    const switchClassname = switchState ? "on" : "off";
 
     function handleSwitchToggle() {
-        setSettingSwitchState(!settingSwitchState);
+        setSwitchState(!switchState);
     }
 
     return (

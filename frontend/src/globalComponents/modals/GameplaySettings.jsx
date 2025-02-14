@@ -9,6 +9,10 @@ function GameplaySettings({ visible }) {
         return null;
     }
 
+    // if (!visible) {
+    //     return null;
+    // }
+
     const autoQueen = gameplaySettings["auto_queen"];
     const showLegalMoves = gameplaySettings["show_legal_moves"];
 
@@ -17,6 +21,7 @@ function GameplaySettings({ visible }) {
             <h1 className="gameplay-settings-heading">Settings</h1>
             <Setting
                 settingName="Auto queen"
+                settingId="auto_queen"
                 settingValue={autoQueen}
                 settingType="switch"
             />
@@ -24,6 +29,7 @@ function GameplaySettings({ visible }) {
             <Setting
                 settingName="Show legal moves"
                 settingType="switch"
+                settingId="show_legal_moves"
                 settingValue={showLegalMoves}
             />
         </div>
