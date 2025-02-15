@@ -36,8 +36,9 @@ import {
 } from "../../contexts/chessboardContexts.js";
 
 import useAudio from "../../hooks/useAudio.js";
+import useGameplaySettings from "../../hooks/useGameplaySettings.js";
 
-function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
+function Chessboard({ parsed_fen_string, boardOrientation, setBoardOrientation, flipOnMove }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
     const [parsedFENString, setParsedFENString] = useState(parsed_fen_string);
@@ -49,7 +50,6 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
     const [previousDroppedSquare, setPreviousDroppedSquare] = useState(null);
     const [promotionCapturedPiece, setPromotionCapturedPiece] = useState(null);
 
-    const [boardOrientation, setBoardOrientation] = useState(orientation);
     const [sideToMove, setSideToMove] = useState("white");
 
     const setGameEnded = useContext(GameEndedSetterContext);
@@ -61,6 +61,8 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
     const checkAudio = useAudio("/move-check.mp3");
     const promoteAudio = useAudio("/promote.mp3");
     const castlingAudio = useAudio("/castle.mp3");
+
+    const gameplaySettings = useGameplaySettings();
 
     const isFirstRender = useRef(false);
     const selectingPromotionRef = useRef(false);
@@ -563,6 +565,10 @@ function Chessboard({ parsed_fen_string, orientation, flipOnMove }) {
     }
 
     if (!parsedFENString) {
+        return null;
+    }
+
+    if (!gameplaySettings) {
         return null;
     }
 
