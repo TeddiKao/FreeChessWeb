@@ -2,16 +2,11 @@ import { useEffect, useState } from "react";
 import api from "../api.js";
 
 function useGameplaySettings() {
-    console.log("Hook called!")
-
     const [gameplaySettings, setGameplaySettings] = useState(null);
     
     useEffect(() => {
-        console.log("Effect has run!")
-
         async function modifyGameplaySettings() {
             const newGameplaySettings = await fetchGameplaySettings(gameplaySettings);
-            console.log(newGameplaySettings);
             setGameplaySettings(newGameplaySettings);
         }
 

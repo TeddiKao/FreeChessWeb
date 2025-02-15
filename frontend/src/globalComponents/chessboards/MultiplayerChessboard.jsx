@@ -100,8 +100,6 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
     }, [gameWebsocketConnected]);
 
     function handleOnMessage(event) {
-        console.log("message received")
-
         const parsedEventData = JSON.parse(event.data);
 
         if (parsedEventData["type"] === "move_made") {

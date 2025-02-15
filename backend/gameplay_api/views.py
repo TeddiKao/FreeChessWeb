@@ -10,7 +10,7 @@ from .models import ChessGame
 from .models import UserGameplaySettings
 
 from .serializers import ChessGameSerializer
-from .serializers import GameplaySettingsSerializer
+from core.utils import to_dict
 
 from .utils import fen_parser
 
@@ -76,4 +76,6 @@ class UpdateSettingsView(APIView):
 
 		user_gameplay_settings.save()
 
-		return Response(user_gameplay_settings._meta.get_fields(), status=status.HTTP_200_OK)
+		serialized_settings = to_dict(user_gameplay_settings, ["id", "user"])
+
+		return Response(serialized_settings, status=status.HTTP_200_OK)

@@ -7,7 +7,7 @@ def to_dict(model_instance: Model, exclude_fields: list[str] = None):
 	model_data: dict = {}
 
 	for field in model_fields:
-		if field in exclude_fields:
+		if field.name in exclude_fields:
 			continue
 
 		field_name = field.name

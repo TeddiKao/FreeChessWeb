@@ -13,11 +13,11 @@ function Setting({ settingName, settingId, settingType, initialSettingValue }) {
 	async function updateSettings() {
 		let newSettings = null;
 
-        if (!settingValue) {
+        if (settingValue === undefined || settingValue === null) {
             return null;
         }
 
-        console.log(settingValue);
+        console.log(settingValue, settingId);
 
 		try {
 			const response = await api.post("/gameplay_api/update-gameplay-settings/", {

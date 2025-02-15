@@ -28,9 +28,8 @@ function Play() {
     const [boardOrientation, setBoardOrientation] = useState(
         location.state?.assignedColor || "White"
     );
+    
     const [settingsVisible, setSettingsVisible] = useState(false);
-
-    console.log(boardOrientation);
 
     const startingPositionFEN =
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
