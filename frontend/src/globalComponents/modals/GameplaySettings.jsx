@@ -16,6 +16,7 @@ function GameplaySettings({ visible }) {
 
     const autoQueen = gameplaySettings["auto_queen"];
     const showLegalMoves = gameplaySettings["show_legal_moves"];
+
     return (
         <ModalWrapper>
             <div className="gameplay-settings-container">

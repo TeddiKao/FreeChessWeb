@@ -12,8 +12,8 @@
 
 	border-radius: 12px;
 
-	width: 20vw;
-	height: 40vh
+	width: 30vw;
+	height: 60vh
 }
 
 .gameplay-settings-heading {
@@ -32,5 +32,6 @@
 }
 
 .setting-container p {
-	margin-top: 12px;
+	margin-top: 6px;
+	margin-bottom: 6px;
 }

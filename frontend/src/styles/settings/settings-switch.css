@@ -1,11 +1,13 @@
 .settings-switch {
 	margin-left: 8px;
 
-	position: relative;
+	position: absolute;
 	display: inline-block;
 
 	height: 26px;
 	width: 50px;
+
+	left: 80%;
 }
 
 .switch-slider {
