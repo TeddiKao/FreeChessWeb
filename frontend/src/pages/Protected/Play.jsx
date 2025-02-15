@@ -17,6 +17,7 @@ import { fetchFen } from "../../utils/apiUtils.js";
 import React, { useEffect, useState } from "react";
 import GameOverModal from "../../globalComponents/modals/GameOverModal.jsx";
 import GameplaySettings from "../../globalComponents/modals/GameplaySettings.jsx";
+import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.jsx";
 function Play() {
     const [parsedFEN, setParsedFEN] = useState(null);
     const location = useLocation();
@@ -28,7 +29,7 @@ function Play() {
     const [boardOrientation, setBoardOrientation] = useState(
         location.state?.assignedColor || "White"
     );
-    
+
     const [settingsVisible, setSettingsVisible] = useState(false);
 
     const startingPositionFEN =
@@ -45,7 +46,6 @@ function Play() {
     const timeControlBaseTime = location.state.baseTime;
     const timeControlIncrement = location.state.increment;
     const gameId = location.state.gameId;
-    const assignedColor = location.state.assignedColor;
 
     async function getParsedFEN() {
         try {
@@ -63,8 +63,12 @@ function Play() {
     function toggleBoardOrientation() {
         const isWhite = boardOrientation.toLowerCase() === "white";
         const newOrientation = isWhite ? "Black" : "White";
-        
+
         setBoardOrientation(newOrientation);
+    }
+
+    function handleSettingsClose() {
+        setSettingsVisible(false);
     }
 
     return (
@@ -95,7 +99,9 @@ function Play() {
                                 gameWinner={gameWinner}
                             />
 
-                            <GameplaySettings />
+                            <ModalWrapper visible={settingsVisible}>
+                                <GameplaySettings onClose={handleSettingsClose} />
+                            </ModalWrapper>
 
                             <div className="bottom-timer-wrapper">
                                 <Timer
@@ -114,6 +120,7 @@ function Play() {
                             />
                             <img
                                 className="settings-icon"
+                                src="/settings.svg"
                                 onClick={handleSettingsDisplay}
                             />
                         </div>

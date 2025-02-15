@@ -35,3 +35,21 @@
 	margin-top: 6px;
 	margin-bottom: 6px;
 }
+
+.close-button {
+	position: absolute;
+	bottom: 8%;
+	right: 8%;
+
+	padding-top: 8px;
+	padding-bottom: 8px;
+	padding-left: 20px;
+	padding-right: 20px;
+
+	background-color: var(--accent-color);
+	color: white;
+
+	border: none;
+	border-radius: 4px;
+	box-shadow: 3px 3px 5px hsl(0, 0%, 60%);
+}
