@@ -68,7 +68,6 @@ INSTALLED_APPS = [
 	"gameplay_api",
 	"matchmaking_api",
 	"move_validation_api",
-	"core"
 ]
 
 ASGI_APPLICATION = "backend.asgi.application"
