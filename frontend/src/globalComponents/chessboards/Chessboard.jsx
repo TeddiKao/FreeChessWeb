@@ -26,7 +26,7 @@ import {
     isCastling,
 } from "../../utils/gameLogic/castling.js";
 
-import { updateEnPassantTargetSquare } from "../../utils/gameLogic/enPassant.js";
+import { handleEnPassant, updateEnPassantTargetSquare } from "../../utils/gameLogic/enPassant.js";
 
 import {
     GameEndedSetterContext,
@@ -175,18 +175,7 @@ function Chessboard({
             delete newPiecePlacements["board_placement"][`${draggedSquare}`];
 
             if (pieceTypeToValidate.toLowerCase() === "pawn") {
-                const enPassantTargetSquare =
-                    newPiecePlacements["en_passant_target_square"];
-                if (parseInt(droppedSquare) === enPassantTargetSquare) {
-                    const pawnLocationOffset =
-                        pieceColorToValidate.toLowerCase() === "white" ? -8 : 8;
-                    const capturedPawnSquare =
-                        parseInt(droppedSquare) + pawnLocationOffset;
-
-                    delete newPiecePlacements["board_placement"][
-                        `${capturedPawnSquare}`
-                    ];
-                }
+                newPiecePlacements = handleEnPassant(newPiecePlacements, droppedSquare);
             }
 
             const enPassantMoveInfo = {
