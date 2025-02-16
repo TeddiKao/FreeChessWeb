@@ -26,6 +26,8 @@ import {
     isCastling,
 } from "../../utils/gameLogic/castling.js";
 
+import { updateEnPassantTargetSquare } from "../../utils/gameLogic/enPassant.js";
+
 import {
     GameEndedSetterContext,
     GameEndedCauseSetterContext,
@@ -187,14 +189,16 @@ function Chessboard({
                 }
             }
 
+            const enPassantMoveInfo = {
+                startingSquare: draggedSquare,
+                destinationSquare: droppedSquare,
+                pieceType: pieceTypeToValidate,
+                pieceColor: pieceColorToValidate,
+            };
+
             newPiecePlacements = updateEnPassantTargetSquare(
                 newPiecePlacements,
-                {
-                    starting_square: draggedSquare,
-                    destination_square: droppedSquare,
-                    piece_type: pieceTypeToValidate,
-                    piece_color: pieceColorToValidate,
-                }
+                enPassantMoveInfo
             );
 
             if (pieceTypeToValidate.toLowerCase() === "rook") {
@@ -536,39 +540,6 @@ function Chessboard({
         } else {
             setClickedSquare(event.target.id);
         }
-    }
-
-    function updateEnPassantTargetSquare(fenString, moveInfo) {
-        const pieceType = moveInfo["piece_type"];
-        const pieceColor = moveInfo["piece_color"].toLowerCase();
-        const startingSquare = moveInfo["starting_square"];
-        const destinationSquare = moveInfo["destination_square"];
-
-        if (pieceType.toLowerCase() !== "pawn") {
-            return {
-                ...fenString,
-                en_passant_target_square: null,
-            };
-        }
-
-        const startingRank = getRank(startingSquare);
-        const endingRank = getRank(destinationSquare);
-
-        if (Math.abs(startingRank - endingRank) !== 2) {
-            return {
-                ...fenString,
-                en_passant_target_square: null,
-            };
-        }
-
-        const targetSquareOffset =
-            pieceColor.toLowerCase() === "white" ? -8 : 8;
-        const targetSquare = parseInt(destinationSquare) + targetSquareOffset;
-
-        return {
-            ...fenString,
-            en_passant_target_square: targetSquare,
-        };
     }
 
     function handlePromotionCancel(color) {
