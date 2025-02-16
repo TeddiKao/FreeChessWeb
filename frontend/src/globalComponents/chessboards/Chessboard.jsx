@@ -8,6 +8,9 @@ import {
     getRank,
     getFile,
 } from "../../utils/boardUtils.js";
+
+import { playAudio } from "../../utils/audioUtils.js";
+
 import {
     fetchLegalMoves,
     fetchMoveIsValid,
@@ -59,12 +62,6 @@ function Chessboard({
     const setGameEnded = useContext(GameEndedSetterContext);
     const setGameEndedCause = useContext(GameEndedCauseSetterContext);
     const setGameWinner = useContext(GameWinnerSetterContext);
-
-    const moveAudio = useAudio("/move-self.mp3");
-    const captureAudio = useAudio("/capture.mp3");
-    const checkAudio = useAudio("/move-check.mp3");
-    const promoteAudio = useAudio("/promote.mp3");
-    const castlingAudio = useAudio("/castle.mp3");
 
     const isFirstRender = useRef(false);
     const selectingPromotionRef = useRef(false);
@@ -716,35 +713,7 @@ function Chessboard({
         setPromotionCapturedPiece(null);
     }
 
-    function playAudio(moveType) {
-        switch (moveType.toLowerCase()) {
-            case "move":
-                moveAudio.play();
-                break;
-
-            case "capture":
-                captureAudio.play();
-                break;
-
-            case "castling":
-                castlingAudio.play();
-                break;
-
-            case "promotion":
-                promoteAudio.play();
-                break;
-
-            case "check":
-                checkAudio.play();
-                break;
-
-            case "no sound":
-                break;
-
-            default:
-                console.error(`Invalid move type: ${moveType}`);
-        }
-    }
+    
 
     function getBoardStartingIndex(row) {
         const whiteOrientationStartingIndex = (row - 1) * 8 + 1;
