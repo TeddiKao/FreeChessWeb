@@ -38,7 +38,14 @@ import {
 import useAudio from "../../hooks/useAudio.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.js";
 
-function Chessboard({ parsed_fen_string, boardOrientation, setBoardOrientation, flipOnMove }) {
+function Chessboard({
+    parsed_fen_string,
+    boardOrientation,
+    setBoardOrientation,
+    flipOnMove,
+    gameplaySettings,
+}) {
+    console.log(gameplaySettings);
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
     const [parsedFENString, setParsedFENString] = useState(parsed_fen_string);
@@ -61,8 +68,6 @@ function Chessboard({ parsed_fen_string, boardOrientation, setBoardOrientation, 
     const checkAudio = useAudio("/move-check.mp3");
     const promoteAudio = useAudio("/promote.mp3");
     const castlingAudio = useAudio("/castle.mp3");
-
-    const gameplaySettings = useGameplaySettings();
 
     const isFirstRender = useRef(false);
     const selectingPromotionRef = useRef(false);
@@ -170,12 +175,17 @@ function Chessboard({ parsed_fen_string, boardOrientation, setBoardOrientation, 
             delete newPiecePlacements["board_placement"][`${draggedSquare}`];
 
             if (pieceTypeToValidate.toLowerCase() === "pawn") {
-                const enPassantTargetSquare = newPiecePlacements["en_passant_target_square"];
+                const enPassantTargetSquare =
+                    newPiecePlacements["en_passant_target_square"];
                 if (parseInt(droppedSquare) === enPassantTargetSquare) {
-                    const pawnLocationOffset = pieceColorToValidate.toLowerCase() === "white" ? -8 : 8;
-                    const capturedPawnSquare = parseInt(droppedSquare) + pawnLocationOffset;
+                    const pawnLocationOffset =
+                        pieceColorToValidate.toLowerCase() === "white" ? -8 : 8;
+                    const capturedPawnSquare =
+                        parseInt(droppedSquare) + pawnLocationOffset;
 
-                    delete newPiecePlacements["board_placement"][`${capturedPawnSquare}`];
+                    delete newPiecePlacements["board_placement"][
+                        `${capturedPawnSquare}`
+                    ];
                 }
             }
 
@@ -572,6 +582,9 @@ function Chessboard({ parsed_fen_string, boardOrientation, setBoardOrientation, 
         return null;
     }
 
+    const autoQueen = gameplaySettings["auto_queen"];
+    const showLegalMoves = gameplaySettings["show_legal_moves"];
+
     const piecePlacements = parsedFENString["board_placement"];
 
     function handleSquareClick(event, square) {
@@ -612,7 +625,7 @@ function Chessboard({ parsed_fen_string, boardOrientation, setBoardOrientation, 
             pieceColor.toLowerCase() === "white" ? -8 : 8;
         const targetSquare = parseInt(destinationSquare) + targetSquareOffset;
 
-        console.log(`Target square ${targetSquare}`)
+        console.log(`Target square ${targetSquare}`);
 
         return {
             ...fenString,
@@ -792,11 +805,21 @@ function Chessboard({ parsed_fen_string, boardOrientation, setBoardOrientation, 
                 ? whitePromotionRank
                 : blackPromotionRank;
 
+        console.log(rank, promotionRank);
+
         unpromotedBoardPlacementRef.current = parsedFENString;
 
         if (!(rank === promotionRank) || !(fileDifference === 1)) {
             if (rank === promotionRank) {
+                if (autoQueen) {
+                    handlePawnPromotion(pieceColor, "Queen", true);
+
+                    return;
+                }
+
                 selectingPromotionRef.current = true;
+
+                return;
             }
 
             return;
@@ -805,20 +828,30 @@ function Chessboard({ parsed_fen_string, boardOrientation, setBoardOrientation, 
         const boardPlacement = parsedFENString["board_placement"];
         const capturedPieceInfo = boardPlacement[`${destinationSquare}`];
 
+        if (autoQueen) {
+            console.log("Queen automatically")
+            handlePawnPromotion(pieceColor, "Queen", true);
+
+            return
+        }
+
         selectingPromotionRef.current = true;
 
         setPromotionCapturedPiece(capturedPieceInfo);
     }
 
-    async function handlePawnPromotion(color, promotedPiece) {
-        console.log(parsedFENString);
+    async function handlePawnPromotion(color, promotedPiece, autoQueen) {
+        autoQueen = autoQueen || false;
+
+        const promotionStartingSquare = autoQueen ? draggedSquare : previousDraggedSquare
+        const promotionEndingSquare = autoQueen ? droppedSquare : previousDroppedSquare;
 
         const [moveIsValid, moveType] = await fetchMoveIsValid(
             unpromotedBoardPlacementRef.current,
             color,
             "Pawn",
-            previousDraggedSquare,
-            previousDroppedSquare,
+            promotionStartingSquare,
+            promotionEndingSquare,
             {
                 promoted_piece: promotedPiece,
             }
@@ -832,7 +865,7 @@ function Chessboard({ parsed_fen_string, boardOrientation, setBoardOrientation, 
             ...previousFENString,
             board_placement: {
                 ...previousFENString["board_placement"],
-                [previousDroppedSquare]: {
+                [promotionEndingSquare]: {
                     piece_type: promotedPiece,
                     piece_color: color,
                 },
@@ -946,7 +979,8 @@ function Chessboard({ parsed_fen_string, boardOrientation, setBoardOrientation, 
                             pieceType={pieceType}
                             displayPromotionPopup={
                                 pieceType.toLowerCase() === "pawn" &&
-                                promotionRank === pieceRank
+                                promotionRank === pieceRank &&
+                                !autoQueen
                             }
                             orientation={boardOrientation}
                             handleSquareClick={handleSquareClick}

@@ -4,7 +4,7 @@ import Setting from "../settings/Setting.jsx";
 import "../../styles/modals/gameplay-settings.css";
 import ModalWrapper from "../wrappers/ModalWrapper.jsx";
 
-function GameplaySettings({ onClose }) {
+function GameplaySettings({ onClose, setGameplaySettings }) {
     const gameplaySettings = useGameplaySettings();
     if (!gameplaySettings) {
         return null;
@@ -21,6 +21,7 @@ function GameplaySettings({ onClose }) {
                 settingId="auto_queen"
                 initialSettingValue={autoQueen}
                 settingType="switch"
+                setGameplaySettingvs={setGameplaySettings}
             />
 
             <Setting
@@ -28,6 +29,7 @@ function GameplaySettings({ onClose }) {
                 settingType="switch"
                 settingId="show_legal_moves"
                 initialSettingValue={showLegalMoves}
+                setGameplaySettingvs={setGameplaySettings}
             />
 
             <button onClick={onClose} className="close-button">Close</button>

@@ -8,12 +8,13 @@ import {
 } from "../../contexts/chessboardContexts.js";
 
 import "../../styles/pass-and-play.css";
-import "../../styles/chessboard/board-actions.css"
+import "../../styles/chessboard/board-actions.css";
 
 import Chessboard from "../../globalComponents/chessboards/Chessboard.jsx";
 import GameOverModal from "../../globalComponents/modals/GameOverModal.jsx";
 import GameplaySettings from "../../globalComponents/modals/GameplaySettings.jsx";
 import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.jsx";
+import useGameplaySettings from "../../hooks/useGameplaySettings.js";
 
 function PassAndPlay() {
     const [parsedFEN, setParsedFEN] = useState(null);
@@ -21,6 +22,12 @@ function PassAndPlay() {
     const [gameEnded, setGameEnded] = useState(false);
     const [gameEndedCause, setGameEndedCause] = useState(null);
     const [gameWinner, setGameWinner] = useState(null);
+
+    const initialGameplaySettings = useGameplaySettings();
+    const [gameplaySettings, setGameplaySettings] = useState(
+        initialGameplaySettings
+    );
+    console.log(gameplaySettings);
 
     const [gameplaySettingsVisible, setGameplaySettingsVisible] =
         useState(false);
@@ -30,6 +37,14 @@ function PassAndPlay() {
     useEffect(() => {
         getParsedFEN();
     }, []);
+
+    useEffect(() => {
+        setGameplaySettings(initialGameplaySettings);
+    }, [initialGameplaySettings]);
+
+    if (!initialGameplaySettings) {
+        return null;
+    }
 
     function handleSettingsClose() {
         setGameplaySettingsVisible(false);
@@ -46,10 +61,10 @@ function PassAndPlay() {
         setBoardOrientation(newOrientation);
     }
 
-    const startingPositionFEN =
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 11";
-
     async function getParsedFEN() {
+        const startingPositionFEN =
+            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 11";
+
         try {
             const fetchedFEN = await fetchFen(startingPositionFEN);
             setParsedFEN(fetchedFEN);
@@ -70,12 +85,14 @@ function PassAndPlay() {
                                     boardOrientation={boardOrientation}
                                     setBoardOrientation={setBoardOrientation}
                                     flipOnMove={false}
+                                    gameplaySettings={gameplaySettings}
                                 />
                             </div>
 
                             <ModalWrapper visible={gameplaySettingsVisible}>
                                 <GameplaySettings
                                     onClose={handleSettingsClose}
+                                    setGameplaySettings={setGameplaySettings}
                                 />
                             </ModalWrapper>
 

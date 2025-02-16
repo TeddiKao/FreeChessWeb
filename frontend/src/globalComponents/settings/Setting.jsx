@@ -3,7 +3,7 @@ import SettingsSwitch from "./SettingsSwitch.jsx";
 import api from "../../api.js";
 
 
-function Setting({ settingName, settingId, settingType, initialSettingValue }) {
+function Setting({ settingName, settingId, settingType, initialSettingValue, setGameplaySettingvs }) {
     const [settingValue, setSettingValue] = useState(initialSettingValue);
 
 	useEffect(() => {
@@ -31,8 +31,9 @@ function Setting({ settingName, settingId, settingType, initialSettingValue }) {
 				newSettings = response.data;
 				
 				const newSettingValue = newSettings[settingId];
-                console.log(newSettings);
+
 				setSettingValue(newSettingValue);
+                setGameplaySettingvs(newSettings);
 			}
 		} catch (error) {
 			console.error(error);
