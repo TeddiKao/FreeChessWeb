@@ -27,7 +27,6 @@ function PassAndPlay() {
     const [gameplaySettings, setGameplaySettings] = useState(
         initialGameplaySettings
     );
-    console.log(gameplaySettings);
 
     const [gameplaySettingsVisible, setGameplaySettingsVisible] =
         useState(false);

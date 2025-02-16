@@ -72,7 +72,9 @@ def validate_castling(board_placement, castling_rights, king_color: str, castlin
 	if king_starting_square_mapping[king_color.lower()] != int(king_position):
 		return False, None
 	
-	if not castling_rights[king_color][castling_side.capitalize()]:
+	print(castling_rights)
+	
+	if not castling_rights[king_color.capitalize()][castling_side.capitalize()]:
 		return False, None
 	
 	middle_square = castle_middle_square_mapping[king_color.lower()][castling_side.lower()]
@@ -361,9 +363,9 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 	cleaned_legal_moves = copy.deepcopy(legal_moves)
 
 	starting_square_info = {
-		"starting_square": starting_square,
-		"piece_type": board_placement[starting_square]["piece_type"],
-		"piece_color": board_placement[starting_square]["piece_color"]
+		"starting_square": str(starting_square),
+		"piece_type": board_placement[str(starting_square)]["piece_type"],
+		"piece_color": board_placement[str(starting_square)]["piece_color"]
 	}
 
 	for legal_move in legal_moves:

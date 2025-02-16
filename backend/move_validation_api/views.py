@@ -34,6 +34,8 @@ class ValidateMoveView(APIView):
 
 		is_move_valid = not not validate_move(parsed_fen_string, move_info)
 		
+		print(type(move_info["starting_square"]), type(move_info["destination_square"]))
+
 		if is_move_valid:
 			move_type = get_move_type(board_placement, en_passant_target_square, move_info)
 
@@ -48,7 +50,7 @@ class ValidateMoveView(APIView):
 class GetIsCheckmatedView(APIView):
 	def post(self, request):
 		current_fen = request.data.get("current_fen")
-		king_color = self.request.data.get("king_color")
+		king_color = request.data.get("king_color")
 
 		is_checkmated = get_is_checkmated(current_fen, king_color)
 		return Response(is_checkmated, status=status.HTTP_200_OK)
@@ -56,7 +58,7 @@ class GetIsCheckmatedView(APIView):
 class GetIsStalematedView(APIView):
 	def post(self, request):
 		current_fen = request.data.get("current_fen")
-		king_color = self.request.data.get("king_color")
+		king_color = request.data.get("king_color")
 
 		is_stalemated = get_is_stalemated(current_fen, king_color)
 		return Response(is_stalemated, status=status.HTTP_200_OK)

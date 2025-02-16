@@ -29,11 +29,12 @@ def validate_move(current_fen, move_info):
 	elif piece_type.lower() == "king":
 		legal_moves = get_king_legal_moves(board_placement, castling_rights, move_info)
 
+
 		move_is_valid = destination_square in legal_moves
 
 	elif piece_type.lower() == "knight":
 		legal_moves = get_knight_legal_moves(board_placement, move_info)
-
+	
 		move_is_valid = destination_square in legal_moves
 
 	return move_is_valid

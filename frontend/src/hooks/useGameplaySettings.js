@@ -3,14 +3,16 @@ import api from "../api.js";
 
 function useGameplaySettings() {
     const [gameplaySettings, setGameplaySettings] = useState(null);
-    
+
     useEffect(() => {
         async function modifyGameplaySettings() {
-            const newGameplaySettings = await fetchGameplaySettings(gameplaySettings);
+            const newGameplaySettings = await fetchGameplaySettings(
+                gameplaySettings
+            );
             setGameplaySettings(newGameplaySettings);
         }
 
-		modifyGameplaySettings();
+        modifyGameplaySettings();
     }, []);
 
     async function fetchGameplaySettings() {
@@ -20,9 +22,6 @@ function useGameplaySettings() {
             const response = await api.post(
                 "/gameplay_api/get-gameplay-settings/"
             );
-
-            console.log(response.data);
-            console.log(response.status);
 
             if (response.status === 200 || response.status === 201) {
                 gameplaySettings = response.data;

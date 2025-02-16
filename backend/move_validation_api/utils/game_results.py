@@ -2,6 +2,8 @@ from .get_legal_moves import is_king_in_check, get_legal_moves
 from .general import get_king_position
 
 def get_is_stalemated(current_fen: dict, king_color: str) -> bool: 
+	print(current_fen.keys())
+
 	board_placement = current_fen["board_placement"]
 	castling_rights = current_fen["castling_rights"]
 	en_passant_target_square = current_fen["en_passant_target_square"]

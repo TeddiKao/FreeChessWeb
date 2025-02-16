@@ -21,13 +21,10 @@ import {
 } from "../../constants/boardSquares.js";
 
 import {
-    whiteKingsideCastlingSquare,
-    blackKingsideCastlingSquare,
-    whiteQueensideCastlingSquare,
-    blackQueensideCastlingSquare,
-    whiteKingStartingSquare,
-    blackKingStartingSquare,
-} from "../../constants/castlingSquares.js";
+    disableCastling,
+    handleCastling,
+    isCastling,
+} from "../../utils/gameLogic/castling.js";
 
 import {
     GameEndedSetterContext,
@@ -36,7 +33,6 @@ import {
 } from "../../contexts/chessboardContexts.js";
 
 import useAudio from "../../hooks/useAudio.js";
-import useGameplaySettings from "../../hooks/useGameplaySettings.js";
 
 function Chessboard({
     parsed_fen_string,
@@ -45,7 +41,6 @@ function Chessboard({
     flipOnMove,
     gameplaySettings,
 }) {
-    console.log(gameplaySettings);
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
     const [parsedFENString, setParsedFENString] = useState(parsed_fen_string);
@@ -161,6 +156,8 @@ function Chessboard({
             const pieceColor =
                 oringinalBoardPlacements[`${draggedSquare}`]["piece_color"];
 
+            const initialSquare = oringinalBoardPlacements[`${draggedSquare}`]["starting_square"]
+
             let newPiecePlacements = {
                 ...previousFENString,
                 board_placement: {
@@ -168,6 +165,7 @@ function Chessboard({
                     [`${droppedSquare}`]: {
                         piece_type: pieceType,
                         piece_color: pieceColor,
+                        starting_square: initialSquare,
                     },
                 },
             };
@@ -203,77 +201,40 @@ function Chessboard({
                 const kingsideRookSquares = [7, 63];
                 const queensideRookSquares = [0, 56];
 
-                if (kingsideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = modifyCastlingRights(
-                        newPiecePlacements,
-                        pieceColorToValidate,
-                        "Kingside"
-                    );
-                }
+                const kingsideRookMoved = kingsideRookSquares.includes(parseInt(initialSquare));
+                const sideToDisable = kingsideRookMoved ? "Kingside" : "Queenside"
 
-                if (queensideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = modifyCastlingRights(
-                        newPiecePlacements,
-                        pieceColorToValidate,
-                        "Queenside"
-                    );
-                }
+                newPiecePlacements["castling_rights"] = disableCastling(
+                    pieceColorToValidate,
+                    newPiecePlacements["castling_rights"],
+                    [sideToDisable]
+                )
             }
 
-            const colorCastlingRights =
-                previousFENString["castling_rights"][pieceColor];
-
-            const queensideColorCastlingRights =
-                colorCastlingRights["Queenside"];
-            const kingsideColorCastlingRights = colorCastlingRights["Kingside"];
-
             if (pieceTypeToValidate.toLowerCase() === "king") {
-                if (
-                    parseInt(droppedSquare) === whiteKingsideCastlingSquare ||
-                    parseInt(droppedSquare) === blackKingsideCastlingSquare
-                ) {
-                    if (kingsideColorCastlingRights) {
-                        if (
-                            parseInt(droppedSquare) - 2 ===
-                            parseInt(draggedSquare)
-                        ) {
-                            const moveInfo = {
-                                starting_square: draggedSquare,
-                                destination_square: droppedSquare,
-                            };
+                if (isCastling(draggedSquare, droppedSquare)) {
+                    const isKingside =
+                        Number(draggedSquare) - Number(droppedSquare) === -2;
+                    const castlingSide = isKingside ? "Kingside" : "Queenside";
 
-                            newPiecePlacements = handleKingsideCastling(
-                                newPiecePlacements,
-                                previousFENString["castling_rights"],
-                                pieceColor,
-                                moveInfo
-                            );
-                        }
-                    }
+                    newPiecePlacements = handleCastling(
+                        previousFENString,
+                        pieceColorToValidate,
+                        castlingSide
+                    );
                 }
 
-                if (
-                    parseInt(droppedSquare) === whiteQueensideCastlingSquare &&
-                    parseInt(droppedSquare) === blackQueensideCastlingSquare
-                ) {
-                    if (queensideColorCastlingRights) {
-                        if (
-                            parseInt(droppedSquare) + 2 ===
-                            parseInt(draggedSquare)
-                        ) {
-                            newPiecePlacements = handleCastling(
-                                newPiecePlacements,
-                                "queenside",
-                                pieceColorToValidate
-                            );
-                        }
-                    }
-                }
-
-                newPiecePlacements = disableCastlingForColor(
-                    newPiecePlacements,
-                    pieceColorToValidate
+                const originalCastlingRights = structuredClone(
+                    newPiecePlacements["castling_rights"]
                 );
+
+                const newCastlingRights = disableCastling(
+                    pieceColorToValidate,
+                    originalCastlingRights,
+                    ["Kingside", "Queenside"]
+                );
+
+                newPiecePlacements["castling_rights"] = newCastlingRights;
             }
 
             (async () => {
@@ -306,6 +267,8 @@ function Chessboard({
                     setGameWinner(gameWinner);
                 }
             })();
+
+            console.log(newPiecePlacements);
 
             return newPiecePlacements;
         });
@@ -380,7 +343,7 @@ function Chessboard({
         const pieceColorToValidate =
             boardPlacement[`${previousClickedSquare}`]["piece_color"];
 
-        const isMoveLegal = await fetchMoveIsValid(
+        const [isMoveLegal, moveType] = await fetchMoveIsValid(
             parsedFENString,
             pieceColorToValidate,
             pieceTypeToValidate,
@@ -457,52 +420,29 @@ function Chessboard({
             const kingsideColorCastlingRights = colorCastlingRights["Kingside"];
 
             if (pieceTypeToValidate.toLowerCase() === "king") {
-                if (
-                    parseInt(clickedSquare) === whiteKingsideCastlingSquare ||
-                    parseInt(clickedSquare) === blackKingsideCastlingSquare
-                ) {
-                    if (kingsideColorCastlingRights) {
-                        if (
-                            parseInt(clickedSquare) - 2 ===
-                            parseInt(previousClickedSquare)
-                        ) {
-                            const moveInfo = {
-                                starting_square: previousClickedSquare,
-                                destination_square: clickedSquare,
-                            };
+                if (isCastling(previousClickedSquare, clickedSquare)) {
+                    const isKingside =
+                        Number(previousClickedSquare) - Number(clickedSquare) === -2;
+                    const castlingSide = isKingside ? "Kingside" : "Queenside";
 
-                            newPiecePlacements = handleKingsideCastling(
-                                newPiecePlacements,
-                                previousFENString["castling_rights"],
-                                pieceColor,
-                                moveInfo
-                            );
-                        }
-                    }
+                    newPiecePlacements = handleCastling(
+                        previousFENString,
+                        pieceColorToValidate,
+                        castlingSide
+                    );
                 }
 
-                if (
-                    parseInt(clickedSquare) === whiteQueensideCastlingSquare &&
-                    parseInt(clickedSquare) === blackQueensideCastlingSquare
-                ) {
-                    if (queensideColorCastlingRights) {
-                        if (
-                            parseInt(clickedSquare) + 2 ===
-                            parseInt(previousClickedSquare)
-                        ) {
-                            newPiecePlacements = handleCastling(
-                                newPiecePlacements,
-                                "queenside",
-                                pieceColorToValidate
-                            );
-                        }
-                    }
-                }
-
-                newPiecePlacements = disableCastlingForColor(
-                    newPiecePlacements,
-                    pieceColorToValidate
+                const originalCastlingRights = structuredClone(
+                    newPiecePlacements["castling_rights"]
                 );
+
+                const newCastlingRights = disableCastling(
+                    pieceColorToValidate,
+                    originalCastlingRights,
+                    ["Kingside", "Queenside"]
+                );
+
+                newPiecePlacements["castling_rights"] = newCastlingRights;
             }
 
             (async () => {
@@ -514,14 +454,12 @@ function Chessboard({
                         : "white";
 
                 const isCheckmated = await checkIsCheckmated(
-                    boardPlacement,
-                    castlingRights,
+                    newPiecePlacements,
                     kingColor
                 );
 
                 const isStalemated = await checkIsStalemated(
-                    boardPlacement,
-                    castlingRights,
+                    newPiecePlacements,
                     kingColor
                 );
 
@@ -547,6 +485,8 @@ function Chessboard({
             sideToMove.toLowerCase() === "white" ? "black" : "white";
 
         setSideToMove(newSideToMove);
+
+        playAudio(moveType);
 
         setPreviousDraggedSquare(previousClickedSquare);
         setPreviousDroppedSquare(clickedSquare);
@@ -625,8 +565,6 @@ function Chessboard({
             pieceColor.toLowerCase() === "white" ? -8 : 8;
         const targetSquare = parseInt(destinationSquare) + targetSquareOffset;
 
-        console.log(`Target square ${targetSquare}`);
-
         return {
             ...fenString,
             en_passant_target_square: targetSquare,
@@ -687,33 +625,6 @@ function Chessboard({
         selectingPromotionRef.current = false;
     }
 
-    function handleKingsideCastling(
-        originalPiecePlacements,
-        castlingRights,
-        color,
-        moveInfo
-    ) {
-        const colorCastlingRights = castlingRights[color];
-        const startingSquare = moveInfo["starting_square"];
-        const destinationSquare = moveInfo["destination_square"];
-
-        if (!colorCastlingRights["Kingside"]) {
-            return originalPiecePlacements;
-        }
-
-        if (parseInt(startingSquare) + 2 !== parseInt(destinationSquare)) {
-            return originalPiecePlacements;
-        }
-
-        const newPiecePlacements = handleCastling(
-            originalPiecePlacements,
-            "kingside",
-            color
-        );
-
-        return newPiecePlacements;
-    }
-
     function modifyCastlingRights(originalFENString, color, castlingSide) {
         const updatedFENString = {
             ...originalFENString,
@@ -729,42 +640,6 @@ function Chessboard({
         return updatedFENString;
     }
 
-    function handleCastling(originalFENString, castlingSide, color) {
-        const castlingSquareOffset =
-            castlingSide.toLowerCase() === "queenside" ? -2 : 2;
-
-        const startingSquare =
-            color.toLowerCase() === "white"
-                ? whiteKingStartingSquare
-                : blackKingStartingSquare;
-
-        const originalRookSquare =
-            castlingSide.toLowerCase() === "queenside"
-                ? startingSquare - 4
-                : startingSquare + 3;
-
-        const castledRookSquare =
-            castlingSide.toLowerCase() === "queenside"
-                ? startingSquare - 1
-                : startingSquare + 1;
-
-        const newFENString = {
-            ...originalFENString,
-            board_placement: {
-                ...originalFENString["board_placement"],
-                [`${castledRookSquare}`]: {
-                    piece_type: "Rook",
-                    piece_color: color,
-                    starting_square: `${startingSquare}`,
-                },
-            },
-        };
-
-        delete newFENString["board_placement"][`${originalRookSquare}`];
-
-        return newFENString;
-    }
-
     async function checkIsCheckmated(currentFEN, kingColor) {
         const isCheckmated = await getIsCheckmated(currentFEN, kingColor);
 
@@ -775,19 +650,6 @@ function Chessboard({
         const isStalemated = await getIsStalemated(currentFEN, kingColor);
 
         return isStalemated;
-    }
-
-    function disableCastlingForColor(originalFENString, color) {
-        return {
-            ...originalFENString,
-            castling_rights: {
-                ...originalFENString["castling_rights"],
-                [color]: {
-                    Kingside: false,
-                    Queenside: false,
-                },
-            },
-        };
     }
 
     function handlePromotionCapture(
@@ -804,8 +666,6 @@ function Chessboard({
             pieceColor.toLowerCase() === "white"
                 ? whitePromotionRank
                 : blackPromotionRank;
-
-        console.log(rank, promotionRank);
 
         unpromotedBoardPlacementRef.current = parsedFENString;
 
@@ -829,10 +689,9 @@ function Chessboard({
         const capturedPieceInfo = boardPlacement[`${destinationSquare}`];
 
         if (autoQueen) {
-            console.log("Queen automatically")
             handlePawnPromotion(pieceColor, "Queen", true);
 
-            return
+            return;
         }
 
         selectingPromotionRef.current = true;
@@ -840,11 +699,21 @@ function Chessboard({
         setPromotionCapturedPiece(capturedPieceInfo);
     }
 
+    function getPromotionStartingSquare(autoQueen) {
+        return autoQueen ? draggedSquare : previousDraggedSquare;
+    }
+
+    function getPromotionEndingSquare(autoQueen) {
+        return autoQueen ? droppedSquare : previousDroppedSquare;
+    }
+
     async function handlePawnPromotion(color, promotedPiece, autoQueen) {
+        console.log("Promoted pawn!")
+        
         autoQueen = autoQueen || false;
 
-        const promotionStartingSquare = autoQueen ? draggedSquare : previousDraggedSquare
-        const promotionEndingSquare = autoQueen ? droppedSquare : previousDroppedSquare;
+        const promotionStartingSquare = getPromotionStartingSquare(autoQueen);
+        const promotionEndingSquare = getPromotionEndingSquare(autoQueen);
 
         const [moveIsValid, moveType] = await fetchMoveIsValid(
             unpromotedBoardPlacementRef.current,
@@ -917,6 +786,28 @@ function Chessboard({
         }
     }
 
+    function getBoardStartingIndex(row) {
+        const whiteOrientationStartingIndex = (row - 1) * 8 + 1;
+        const blackOrientationStartingIndex = row * 8;
+
+        const isWhite = boardOrientation.toLowerCase() === "white";
+
+        return isWhite
+            ? whiteOrientationStartingIndex
+            : blackOrientationStartingIndex;
+    }
+
+    function getBoardEndingIndex(row) {
+        const whiteOrientationEndingIndex = row * 8;
+        const blackOrientationEndingIndex = (row - 1) * 8 + 1;
+
+        const isWhite = boardOrientation.toLowerCase() === "white";
+
+        return isWhite
+            ? whiteOrientationEndingIndex
+            : blackOrientationEndingIndex;
+    }
+
     function generateChessboard() {
         const squareElements = [];
 
@@ -930,20 +821,8 @@ function Chessboard({
                 : row <= endingRow;
             boardOrientation.toLowerCase() === "white" ? row-- : row++
         ) {
-            const whiteOrientationStartingIndex = (row - 1) * 8 + 1;
-            const whiteOrientationEndingIndex = row * 8;
-
-            const blackOrientationStartingIndex = row * 8;
-            const blackOrientationEndingIndex = (row - 1) * 8 + 1;
-
-            const startingIndex =
-                boardOrientation.toLowerCase() === "white"
-                    ? whiteOrientationStartingIndex
-                    : blackOrientationStartingIndex;
-            const endingIndex =
-                boardOrientation.toLowerCase() === "white"
-                    ? whiteOrientationEndingIndex
-                    : blackOrientationEndingIndex;
+            const startingIndex = getBoardStartingIndex(row);
+            const endingIndex = getBoardEndingIndex(row);
 
             for (
                 let square = startingIndex;
@@ -958,6 +837,7 @@ function Chessboard({
                 const squareColor = squareIsLight ? "light" : "dark";
 
                 const boardPlacementSquare = `${square - 1}`;
+
                 if (
                     Object.keys(piecePlacements).includes(boardPlacementSquare)
                 ) {
