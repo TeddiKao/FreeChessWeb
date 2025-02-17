@@ -3,6 +3,13 @@ from general import *
 from enums import PieceType
 
 files_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
+piece_notation_mapping = {
+	PieceType.ROOK.value: "r",
+    PieceType.BISHOP.value: "b",
+    PieceType.KNIGHT.value: "n",
+    PieceType.KING.value: "k",
+    PieceType.QUEEN.value: "q"
+}
 
 class MoveInfo(TypedDict):
 	starting_square: str | int
@@ -21,10 +28,12 @@ def handle_pawn_move(move_info: MoveInfo):
 
 	return f"{file_letter}{end_rank}"
 
-def handle_rook_move(move_info: MoveInfo):
+def handle_piece_move(move_info: MoveInfo):
 	destination_square = move_info["destination_square"]
+	piece_type = move_info["piece_type"]
+	piece_notation = piece_notation_mapping[piece_type.lower()]
 
-	return f"R{convert_to_algebraic_notation(destination_square)}"
+	return f"{piece_notation.upper()}{convert_to_algebraic_notation(destination_square)}"
 
 def parse_algebraic_notation(board_placement: dict, move_info: MoveInfo) -> str:
 	piece_type = move_info["piece_type"].lower()
@@ -32,15 +41,14 @@ def parse_algebraic_notation(board_placement: dict, move_info: MoveInfo) -> str:
 	if piece_type == PieceType.PAWN.value:
 		return handle_pawn_move(move_info)
 
-	elif piece_type == PieceType.ROOK.value:
-		return handle_rook_move(move_info)
-
+	else:
+		return handle_piece_move(move_info)
 	
 	
 parsed_rook_notation = parse_algebraic_notation({}, {
 	"starting_square": 12,
 	"destination_square": 44,
-	"piece_type": "rook",
+	"piece_type": "Queen",
     "piece_color": "white"
 })
 
