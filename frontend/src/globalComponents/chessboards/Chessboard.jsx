@@ -19,11 +19,6 @@ import {
 } from "../../utils/apiUtils.js";
 
 import {
-    whitePromotionRank,
-    blackPromotionRank,
-} from "../../constants/boardSquares.js";
-
-import {
     disableCastling,
     handleCastling,
     isCastling,
@@ -40,9 +35,12 @@ import {
     GameWinnerSetterContext,
 } from "../../contexts/chessboardContexts.js";
 
-import useAudio from "../../hooks/useAudio.js";
 import { PieceColor, PieceType } from "../../enums/pieces.js";
-import { cancelPromotion } from "../../utils/gameLogic/promotion.js";
+import {
+    cancelPromotion,
+    handlePromotionCaptureStorage,
+    updatePromotedBoardPlacment,
+} from "../../utils/gameLogic/promotion.js";
 
 function Chessboard({
     parsed_fen_string,
@@ -142,11 +140,17 @@ function Chessboard({
         }
 
         if (pieceTypeToValidate.toLowerCase() === PieceType.PAWN) {
-            handlePromotionCapture(
+            handlePromotionCaptureStorage(
+                parsedFENString,
                 pieceColorToValidate,
                 draggedSquare,
-                droppedSquare
-            );
+                droppedSquare,
+                setPromotionCapturedPiece,
+                selectingPromotionRef,
+                unpromotedBoardPlacementRef,
+                handlePawnPromotion,
+                gameplaySettings
+            )
         }
 
         setParsedFENString((previousFENString) => {
@@ -422,7 +426,7 @@ function Chessboard({
                 );
 
                 console.log(kingsideRookMoved);
-                console.log(initialSquare)
+                console.log(initialSquare);
 
                 const sideToDisable = kingsideRookMoved
                     ? "Kingside"
@@ -464,8 +468,6 @@ function Chessboard({
             }
 
             (async () => {
-                const boardPlacement = newPiecePlacements["board_placement"];
-                const castlingRights = newPiecePlacements["castling_rights"];
                 const kingColor =
                     pieceColorToValidate.toLowerCase() === "white"
                         ? "black"
@@ -585,53 +587,6 @@ function Chessboard({
         return isStalemated;
     }
 
-    function handlePromotionCapture(
-        pieceColor,
-        startSquare,
-        destinationSquare
-    ) {
-        const rank = getRank(destinationSquare);
-        const startFile = getFile(startSquare);
-        const endFile = getFile(destinationSquare);
-        const fileDifference = Math.abs(startFile - endFile);
-
-        const promotionRank =
-            pieceColor.toLowerCase() === "white"
-                ? whitePromotionRank
-                : blackPromotionRank;
-
-        unpromotedBoardPlacementRef.current = parsedFENString;
-
-        if (!(rank === promotionRank) || !(fileDifference === 1)) {
-            if (rank === promotionRank) {
-                if (autoQueen) {
-                    handlePawnPromotion(pieceColor, "Queen", true);
-
-                    return;
-                }
-
-                selectingPromotionRef.current = true;
-
-                return;
-            }
-
-            return;
-        }
-
-        const boardPlacement = parsedFENString["board_placement"];
-        const capturedPieceInfo = boardPlacement[`${destinationSquare}`];
-
-        if (autoQueen) {
-            handlePawnPromotion(pieceColor, "Queen", true);
-
-            return;
-        }
-
-        selectingPromotionRef.current = true;
-
-        setPromotionCapturedPiece(capturedPieceInfo);
-    }
-
     function getPromotionStartingSquare(autoQueen) {
         return autoQueen ? draggedSquare : previousDraggedSquare;
     }
@@ -648,31 +603,17 @@ function Chessboard({
         const promotionStartingSquare = getPromotionStartingSquare(autoQueen);
         const promotionEndingSquare = getPromotionEndingSquare(autoQueen);
 
-        const [moveIsValid, moveType] = await fetchMoveIsValid(
-            unpromotedBoardPlacementRef.current,
+        const [updatedBoardPlacement, moveType] = await updatePromotedBoardPlacment(
+            parsedFENString,
             color,
-            "Pawn",
+            promotedPiece,
+            autoQueen,
             promotionStartingSquare,
             promotionEndingSquare,
-            {
-                promoted_piece: promotedPiece,
-            }
-        );
+            unpromotedBoardPlacementRef
+        )
 
-        if (!moveIsValid) {
-            return;
-        }
-
-        setParsedFENString((previousFENString) => ({
-            ...previousFENString,
-            board_placement: {
-                ...previousFENString["board_placement"],
-                [promotionEndingSquare]: {
-                    piece_type: promotedPiece,
-                    piece_color: color,
-                },
-            },
-        }));
+        setParsedFENString(updatedBoardPlacement);
 
         playAudio(moveType);
         selectingPromotionRef.current = false;
