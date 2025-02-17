@@ -106,6 +106,10 @@ function Chessboard({
             const pieceType = squareInfo["piece_type"];
             const pieceColor = squareInfo["piece_color"];
 
+            if (!showLegalMoves) {
+                return;
+            }
+
             displayLegalMoves(pieceType, pieceColor, draggedSquare);
 
             return;
@@ -318,6 +322,10 @@ function Chessboard({
             const pieceType = squareInfo["piece_type"];
             const pieceColor = squareInfo["piece_color"];
             const currentSquare = `${previousClickedSquare}`;
+
+            if (!showLegalMoves) {
+                return;
+            }
 
             displayLegalMoves(pieceType, pieceColor, currentSquare);
 
