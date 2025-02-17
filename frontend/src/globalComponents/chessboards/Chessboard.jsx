@@ -140,7 +140,7 @@ function Chessboard({
             return;
         }
 
-        if (pieceTypeToValidate.toLowerCase() === "pawn") {
+        if (pieceTypeToValidate.toLowerCase() === PieceType.PAWN) {
             handlePromotionCapture(
                 pieceColorToValidate,
                 draggedSquare,
@@ -292,7 +292,8 @@ function Chessboard({
     async function handleClickToMove() {
         clearSquaresStyling();
 
-        if (!(previousClickedSquare && clickedSquare)) {
+        const shouldMove = previousClickedSquare && clickedSquare;
+        if (!shouldMove) {
             if (!previousClickedSquare) {
                 return;
             }
@@ -338,7 +339,7 @@ function Chessboard({
 
         const boardPlacement = parsedFENString["board_placement"];
         const initialSquare =
-            boardPlacement[`${previousClickedSquare}`]["initial_square"];
+            boardPlacement[`${previousClickedSquare}`]["starting_square"];
         const pieceTypeToValidate =
             boardPlacement[`${previousClickedSquare}`]["piece_type"];
         const pieceColorToValidate =
@@ -356,7 +357,7 @@ function Chessboard({
             return;
         }
 
-        if (pieceTypeToValidate.toLowerCase() === "pawn") {
+        if (pieceTypeToValidate.toLowerCase() === PieceType.PAWN) {
             handlePromotionCapture(
                 pieceColorToValidate,
                 previousClickedSquare,
@@ -384,6 +385,7 @@ function Chessboard({
                     [`${clickedSquare}`]: {
                         piece_type: pieceType,
                         piece_color: pieceColor,
+                        starting_square: initialSquare,
                     },
                 },
             };
@@ -411,25 +413,25 @@ function Chessboard({
                 enPassantMoveInfo
             );
 
-            if (pieceTypeToValidate.toLowerCase() === "rook") {
+            if (pieceTypeToValidate.toLowerCase() === PieceType.ROOK) {
                 const kingsideRookSquares = [7, 63];
-                const queensideRookSquares = [0, 56];
 
-                if (kingsideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = modifyCastlingRights(
-                        newPiecePlacements,
-                        pieceColorToValidate,
-                        "Kingside"
-                    );
-                }
+                const kingsideRookMoved = kingsideRookSquares.includes(
+                    parseInt(initialSquare)
+                );
 
-                if (queensideRookSquares.includes(parseInt(initialSquare))) {
-                    newPiecePlacements = modifyCastlingRights(
-                        newPiecePlacements,
-                        pieceColorToValidate,
-                        "Queenside"
-                    );
-                }
+                console.log(kingsideRookMoved);
+                console.log(initialSquare)
+
+                const sideToDisable = kingsideRookMoved
+                    ? "Kingside"
+                    : "Queenside";
+
+                newPiecePlacements["castling_rights"] = disableCastling(
+                    pieceColorToValidate,
+                    newPiecePlacements["castling_rights"],
+                    [sideToDisable]
+                );
             }
 
             if (pieceTypeToValidate.toLowerCase() === "king") {
@@ -605,21 +607,6 @@ function Chessboard({
 
         setPromotionCapturedPiece(null);
         selectingPromotionRef.current = false;
-    }
-
-    function modifyCastlingRights(originalFENString, color, castlingSide) {
-        const updatedFENString = {
-            ...originalFENString,
-            castling_rights: {
-                ...originalFENString["castling_rights"],
-                [color]: {
-                    ...originalFENString["castling_rights"][color],
-                    [castlingSide]: false,
-                },
-            },
-        };
-
-        return updatedFENString;
     }
 
     async function checkIsCheckmated(currentFEN, kingColor) {
