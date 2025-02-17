@@ -42,6 +42,7 @@ import {
 
 import useAudio from "../../hooks/useAudio.js";
 import { PieceColor, PieceType } from "../../enums/pieces.js";
+import { cancelPromotion } from "../../utils/gameLogic/promotion.js";
 
 function Chessboard({
     parsed_fen_string,
@@ -556,51 +557,14 @@ function Chessboard({
     }
 
     function handlePromotionCancel(color) {
-        setParsedFENString((previousFENString) => {
-            let updatedBoardPlacement = {
-                ...previousFENString,
-                board_placement: {
-                    ...previousFENString["board_placement"],
-                    [previousDraggedSquare]: {
-                        piece_type: "Pawn",
-                        piece_color: color,
-                    },
-                },
-            };
-
-            delete updatedBoardPlacement["board_placement"][
-                previousDroppedSquare
-            ];
-
-            if (
-                !Object.keys(previousFENString["board_placement"]).includes(
-                    previousDroppedSquare
-                )
-            ) {
-                return updatedBoardPlacement;
-            }
-
-            const squareInfo =
-                previousFENString["board_placement"][previousDroppedSquare];
-
-            if (!promotionCapturedPiece) {
-                return updatedBoardPlacement;
-            }
-
-            if (
-                promotionCapturedPiece["piece_color"].toLowerCase() ===
-                color.toLowerCase()
-            ) {
-                return updatedBoardPlacement;
-            }
-
-            updatedBoardPlacement = {
-                ...updatedBoardPlacement,
-                board_placement: {
-                    ...updatedBoardPlacement["board_placement"],
-                    [previousDroppedSquare]: promotionCapturedPiece,
-                },
-            };
+        setParsedFENString((prevFENString) => {
+            const updatedBoardPlacement = cancelPromotion(
+                prevFENString,
+                color,
+                previousDraggedSquare,
+                previousDroppedSquare,
+                promotionCapturedPiece
+            );
 
             return updatedBoardPlacement;
         });
