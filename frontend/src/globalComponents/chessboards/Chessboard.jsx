@@ -41,7 +41,7 @@ import {
     handlePromotionCaptureStorage,
     updatePromotedBoardPlacment,
 } from "../../utils/gameLogic/promotion.js";
-
+import { addPieceToDestinationSquare, clearStartingSquare } from "../../utils/gameLogic/basicMovement.js";
 function Chessboard({
     parsed_fen_string,
     boardOrientation,
@@ -169,19 +169,13 @@ function Chessboard({
             const initialSquare =
                 oringinalBoardPlacements[`${draggedSquare}`]["starting_square"];
 
-            let newPiecePlacements = {
-                ...previousFENString,
-                board_placement: {
-                    ...previousFENString["board_placement"],
-                    [`${droppedSquare}`]: {
-                        piece_type: pieceType,
-                        piece_color: pieceColor,
-                        starting_square: initialSquare,
-                    },
-                },
-            };
+            let newPiecePlacements = addPieceToDestinationSquare(previousFENString, droppedSquare, {
+                piece_type: pieceType,
+                piece_color: pieceColor,
+                starting_square: initialSquare,
+            })
 
-            delete newPiecePlacements["board_placement"][`${draggedSquare}`];
+            newPiecePlacements = clearStartingSquare(newPiecePlacements, draggedSquare);
 
             if (pieceTypeToValidate.toLowerCase() === PieceType.PAWN) {
                 newPiecePlacements = handleEnPassant(
@@ -371,11 +365,17 @@ function Chessboard({
         }
 
         if (pieceTypeToValidate.toLowerCase() === PieceType.PAWN) {
-            handlePromotionCapture(
+            handlePromotionCaptureStorage(
+                parsedFENString,
                 pieceColorToValidate,
                 previousClickedSquare,
-                clickedSquare
-            );
+                clickedSquare,
+                setPromotionCapturedPiece,
+                selectingPromotionRef,
+                unpromotedBoardPlacementRef,
+                handlePawnPromotion,
+                gameplaySettings
+            )
         }
 
         setParsedFENString((previousFENString) => {
@@ -391,21 +391,13 @@ function Chessboard({
                     "piece_color"
                 ];
 
-            let newPiecePlacements = {
-                ...previousFENString,
-                board_placement: {
-                    ...previousFENString["board_placement"],
-                    [`${clickedSquare}`]: {
-                        piece_type: pieceType,
-                        piece_color: pieceColor,
-                        starting_square: initialSquare,
-                    },
-                },
-            };
+            let newPiecePlacements = addPieceToDestinationSquare(previousFENString, clickedSquare, {
+                piece_type: pieceType,
+                piece_color: pieceColor,
+                starting_square: initialSquare,
+            })
 
-            delete newPiecePlacements["board_placement"][
-                `${previousClickedSquare}`
-            ];
+            newPiecePlacements = clearStartingSquare(newPiecePlacements, previousClickedSquare)
 
             if (pieceTypeToValidate.toLowerCase() === PieceType.PAWN) {
                 newPiecePlacements = handleEnPassant(

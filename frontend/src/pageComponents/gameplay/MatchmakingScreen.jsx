@@ -48,7 +48,7 @@ function MatchmakingScreen({
     useEffect(() => {
         if (isMatchmaking) {
             if (!websocketConnected) {
-                const websocketURL = `ws://localhost:8000/ws/matchmaking-server/?token=${getAccessToken()}`;
+                const websocketURL = `ws://localhost:8000/ws/matchmaking-server/?token=${getAccessToken()}&baseTime=${baseTime}&increment=${increment}`;
                 const matchmakingWebsocket = useWebSocket(
                     websocketURL,
                     onMessage,
