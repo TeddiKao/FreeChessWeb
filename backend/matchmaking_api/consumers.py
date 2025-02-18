@@ -8,6 +8,8 @@ from channels.db import database_sync_to_async
 from .models import WaitingPlayer
 from gameplay_api.models import ChessGame
 
+from urllib.parse import parse_qs
+
 class MatchmakingConsumer(AsyncWebsocketConsumer):
 	async def decide_player_color(self):
 		if random.choice([True, False]):
@@ -30,7 +32,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 	
 	@database_sync_to_async
 	def create_waiting_player(self, user_model):
-		WaitingPlayer.objects.create(user=user_model)
+		WaitingPlayer.objects.create(user=user_model, base_time=self.base_time, increment_time=self.increment)
 
 	@database_sync_to_async
 	def set_matched_player(self, player_to_set, matched_player):
@@ -43,7 +45,9 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
 	@database_sync_to_async
 	def get_first_matching_player(self):
-		return WaitingPlayer.objects.exclude(user=self.scope["user"]).first()
+		same_time_control_users = WaitingPlayer.objects.filter(base_time=self.base_time, increment_time=self.increment)
+
+		return same_time_control_users.exclude(user=self.scope["user"]).first()
 		
 	@database_sync_to_async
 	def get_matched_user(self, user_to_check):
@@ -128,6 +132,16 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
 	async def connect(self):
 		user = self.scope["user"]
+
+		query_string: bytes = self.scope.get("query_string", b"")
+		decoded_query_string: str = query_string.decode()
+		parsed_query_string = parse_qs(decoded_query_string)
+
+		base_time = parsed_query_string["baseTime"][0]
+		increment = parsed_query_string["increment"][0]
+
+		self.base_time = int(base_time)
+		self.increment = int(increment)
 
 		self.room_group_name = "test"
 		await self.channel_layer.group_add(
