@@ -7,6 +7,9 @@ import {
     clearSquaresStyling,
     getRank,
     getFile,
+    getBoardStartingIndex,
+    getBoardEndingIndex,
+    isSquareLight
 } from "../../utils/boardUtils.js";
 
 import { playAudio } from "../../utils/audioUtils.js";
@@ -630,28 +633,6 @@ function Chessboard({
         setPromotionCapturedPiece(null);
     }
 
-    function getBoardStartingIndex(row) {
-        const whiteOrientationStartingIndex = (row - 1) * 8 + 1;
-        const blackOrientationStartingIndex = row * 8;
-
-        const isWhite = boardOrientation.toLowerCase() === "white";
-
-        return isWhite
-            ? whiteOrientationStartingIndex
-            : blackOrientationStartingIndex;
-    }
-
-    function getBoardEndingIndex(row) {
-        const whiteOrientationEndingIndex = row * 8;
-        const blackOrientationEndingIndex = (row - 1) * 8 + 1;
-
-        const isWhite = boardOrientation.toLowerCase() === "white";
-
-        return isWhite
-            ? whiteOrientationEndingIndex
-            : blackOrientationEndingIndex;
-    }
-
     function generateChessboard() {
         const squareElements = [];
 
@@ -665,8 +646,8 @@ function Chessboard({
                 : row <= endingRow;
             boardOrientation.toLowerCase() === "white" ? row-- : row++
         ) {
-            const startingIndex = getBoardStartingIndex(row);
-            const endingIndex = getBoardEndingIndex(row);
+            const startingIndex = getBoardStartingIndex(row, boardOrientation);
+            const endingIndex = getBoardEndingIndex(row, boardOrientation);
 
             for (
                 let square = startingIndex;
@@ -675,9 +656,7 @@ function Chessboard({
                     : square >= endingIndex;
                 boardOrientation.toLowerCase() === "white" ? square++ : square--
             ) {
-                const file = getFile(square);
-
-                const squareIsLight = (file + row) % 2 !== 0;
+                const squareIsLight = isSquareLight(square - 1);
                 const squareColor = squareIsLight ? "light" : "dark";
 
                 const boardPlacementSquare = `${square - 1}`;

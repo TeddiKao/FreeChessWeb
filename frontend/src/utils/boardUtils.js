@@ -8,11 +8,45 @@ function clearSquaresStyling() {
 }
 
 function getRank(square) {
-    return Math.ceil(((parseInt(square) + 1) / 8) - 1);
+    return Math.ceil((parseInt(square) + 1) / 8 - 1);
 }
 
 function getFile(square) {
-    return (parseInt(square)) % 8;
+    return parseInt(square) % 8;
 }
 
-export { clearSquaresStyling, getRank, getFile }
+function getBoardStartingIndex(row, boardOrientation) {
+    const whiteOrientationStartingIndex = (row - 1) * 8 + 1;
+    const blackOrientationStartingIndex = row * 8;
+
+    const isWhite = boardOrientation.toLowerCase() === "white";
+
+    return isWhite
+        ? whiteOrientationStartingIndex
+        : blackOrientationStartingIndex;
+}
+
+function getBoardEndingIndex(row, boardOrientation) {
+    const whiteOrientationEndingIndex = row * 8;
+    const blackOrientationEndingIndex = (row - 1) * 8 + 1;
+
+    const isWhite = boardOrientation.toLowerCase() === "white";
+
+    return isWhite ? whiteOrientationEndingIndex : blackOrientationEndingIndex;
+}
+
+function isSquareLight(square) {
+    const squareFile = getFile(square);
+    const squareRank = getRank(square);
+
+    return (squareFile + squareRank) % 2 !== 0;
+}
+
+export {
+    clearSquaresStyling,
+    getRank,
+    getFile,
+    getBoardStartingIndex,
+    getBoardEndingIndex,
+    isSquareLight
+};
