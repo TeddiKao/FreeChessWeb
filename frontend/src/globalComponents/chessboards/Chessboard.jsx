@@ -569,8 +569,6 @@ function Chessboard({
     }
 
     async function handlePawnPromotion(color, promotedPiece, autoQueen) {
-        console.log("Promoted pawn!");
-
         autoQueen = autoQueen || false;
 
         const promotionStartingSquare = getPromotionStartingSquare(autoQueen);

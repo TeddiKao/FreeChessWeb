@@ -1,5 +1,5 @@
 :root {
-	--default-font: "Segoe UI";
+	--default-font: "Inter";
 	--accent-color: hsl(30, 100%, 45%);
 	--hovered-accent-color: hsl(30, 100%, 40%);
 
@@ -20,7 +20,6 @@ body {
 
 input, button {
 	font-family: var(--default-font);
-	
 }
 
 input {

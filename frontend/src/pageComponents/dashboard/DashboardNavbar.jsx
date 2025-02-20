@@ -25,7 +25,9 @@ function DashboardNavbar() {
         const hoveringOverPlayLink = (playLinkRef.current) && (playLinkRef.current.contains(event.target));
         const hoveringOverPlayDropdown = (navDropdownRef.current) && (navDropdownRef.current.contains(event.target))
 
-        setPlayNavigationDropdownVisible(hoveringOverPlayLink || hoveringOverPlayDropdown);
+        const shouldDisplayDropdown = hoveringOverPlayLink || hoveringOverPlayDropdown;
+        
+        setPlayNavigationDropdownVisible(shouldDisplayDropdown);
     }
 
     useEffect(() => {
