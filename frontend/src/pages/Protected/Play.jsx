@@ -115,6 +115,8 @@ function Play() {
                                     parsed_fen_string={parsedFEN}
                                     orientation={boardOrientation}
                                     gameId={gameId}
+                                    setWhiteTimer={setWhitePlayerTimer}
+                                    setBlackTimer={setBlackPlayerTimer}
                                 />
                             </div>
 

@@ -31,8 +31,9 @@ import { getAccessToken } from "../../utils/tokenUtils.js";
 import { playAudio } from "../../utils/audioUtils.js";
 
 import _ from "lodash";
+import { PieceColor } from "../../enums/pieces.js";
 
-function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
+function MultiplayerChessboard({ parsed_fen_string, orientation, gameId, setWhiteTimer, setBlackTimer }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
     const [parsedFENString, setParsedFENString] = useState(parsed_fen_string);
@@ -45,10 +46,6 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
     const [promotionCapturedPiece, setPromotionCapturedPiece] = useState(null);
 
     const [boardOrientation, setBoardOrientation] = useState(orientation);
-
-    const setGameEnded = useContext(GameEndedSetterContext);
-    const setGameEndedCause = useContext(GameEndedCauseSetterContext);
-    const setGameWinner = useContext(GameWinnerSetterContext);
 
     const [gameWebsocketConnected, setGameWebsocketConnected] = useState(true);
 
@@ -98,6 +95,10 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId }) {
 
         if (parsedEventData["type"] === "move_made") {
             makeMove(parsedEventData);
+        } else if (parsedEventData["type"] === "timer_decremented") {
+            console.log("Timer decremented")
+            setWhiteTimer(Math.ceil(parsedEventData["white_player_clock"]));
+            setBlackTimer(Math.ceil(parsedEventData["black_player_clock"]));
         }
     }
 
