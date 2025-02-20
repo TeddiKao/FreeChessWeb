@@ -10,164 +10,171 @@ from gameplay_api.models import ChessGame
 
 from urllib.parse import parse_qs
 
+
 class MatchmakingConsumer(AsyncWebsocketConsumer):
-	async def decide_player_color(self):
-		if random.choice([True, False]):
-			return "white", "black"
-		else:
-			return "black", "white"
-		
-	@database_sync_to_async
-	def remove_player_from_queue(self, player_object):
-		player_object.delete()
-		
-	@database_sync_to_async
-	def get_player_in_queue(self, player):
-		try:
-			player_in_queue = WaitingPlayer.objects.get(user=player)
-		except WaitingPlayer.DoesNotExist:
-			player_in_queue = None
+    async def decide_player_color(self):
+        if random.choice([True, False]):
+            return "white", "black"
+        else:
+            return "black", "white"
 
-		return player_in_queue
-	
-	@database_sync_to_async
-	def create_waiting_player(self, user_model):
-		WaitingPlayer.objects.create(user=user_model, base_time=self.base_time, increment_time=self.increment)
+    @database_sync_to_async
+    def remove_player_from_queue(self, player_object):
+        player_object.delete()
 
-	@database_sync_to_async
-	def set_matched_player(self, player_to_set, matched_player):
-		player_to_set.matched_user = matched_player
-		player_to_set.save()
+    @database_sync_to_async
+    def get_player_in_queue(self, player):
+        try:
+            player_in_queue = WaitingPlayer.objects.get(user=player)
+        except WaitingPlayer.DoesNotExist:
+            player_in_queue = None
 
-	@database_sync_to_async
-	def is_player_matched(self, player_to_check):
-		return getattr(player_to_check, "matched_user")
+        return player_in_queue
 
-	@database_sync_to_async
-	def get_first_matching_player(self):
-		same_time_control_users = WaitingPlayer.objects.filter(base_time=self.base_time, increment_time=self.increment)
+    @database_sync_to_async
+    def create_waiting_player(self, user_model):
+        WaitingPlayer.objects.create(
+            user=user_model, base_time=self.base_time, increment_time=self.increment)
 
-		return same_time_control_users.exclude(user=self.scope["user"]).first()
-		
-	@database_sync_to_async
-	def get_matched_user(self, user_to_check):
-		try:
-			return WaitingPlayer.objects.get(matched_user=user_to_check)
-		except WaitingPlayer.DoesNotExist:
-			return None
-		
-	@database_sync_to_async
-	def get_user_model_from_waiting_player(self, waiting_player: WaitingPlayer):
-		return waiting_player.user
-	
-	@database_sync_to_async
-	def create_chess_game(self, white_player, black_player):
-		chess_game = ChessGame.objects.create(white_player=white_player, black_player=black_player, white_player_clock=self.base_time, black_player_clock=self.base_time)
-		chess_game.save()
+    @database_sync_to_async
+    def set_matched_player(self, player_to_set, matched_player):
+        player_to_set.matched_user = matched_player
+        player_to_set.save()
 
-		return chess_game.id
+    @database_sync_to_async
+    def is_player_matched(self, player_to_check):
+        return getattr(player_to_check, "matched_user")
 
-	async def match_player(self):
-		player_to_match = self.scope["user"]
-		match_found = False
-		
-		while not match_found:
-			player_in_queue = await self.get_player_in_queue(player_to_match)
-			matched_user = await self.get_matched_user(player_to_match)
+    @database_sync_to_async
+    def get_first_matching_player(self):
+        same_time_control_users = WaitingPlayer.objects.filter(
+            base_time=self.base_time, increment_time=self.increment)
 
-			if matched_user:
-				matched_player_color, player_to_match_color = await self.decide_player_color() 
+        return same_time_control_users.exclude(user=self.scope["user"]).first()
 
-				white_player = await self.get_user_model_from_waiting_player(matched_user) if matched_player_color == "white" else player_to_match
-				black_player = await self.get_user_model_from_waiting_player(matched_user) if matched_player_color == "black" else player_to_match
+    @database_sync_to_async
+    def get_matched_user(self, user_to_check):
+        try:
+            return WaitingPlayer.objects.get(matched_user=user_to_check)
+        except WaitingPlayer.DoesNotExist:
+            return None
 
-				game_id = await self.create_chess_game(white_player, black_player)
+    @database_sync_to_async
+    def get_user_model_from_waiting_player(self, waiting_player: WaitingPlayer):
+        return waiting_player.user
 
-				await self.channel_layer.group_send(
-					self.room_group_name,
-					{
-						"type": "player_matched",
-						"match_found": True,
-						"white_player": white_player.username,
-						"black_player": black_player.username,
-						"game_id": game_id,
-					}
-				)
+    @database_sync_to_async
+    def create_chess_game(self, white_player, black_player):
+        chess_game = ChessGame.objects.create(
+            white_player=white_player,
+            black_player=black_player,
+            white_player_clock=self.base_time,
+            black_player_clock=self.base_time,
+            white_player_increment=self.increment,
+            black_player_increment=self.increment
+        )
 
-				await self.remove_player_from_queue(matched_user)
+        chess_game.save()
 
-				match_found = True
+        return chess_game.id
 
-				break
+    async def match_player(self):
+        player_to_match = self.scope["user"]
+        match_found = False
 
-			if not player_in_queue:
-				matched_player = await self.get_first_matching_player()
+        while not match_found:
+            player_in_queue = await self.get_player_in_queue(player_to_match)
+            matched_user = await self.get_matched_user(player_to_match)
 
-				await self.create_waiting_player(player_to_match)
+            if matched_user:
+                matched_player_color, player_to_match_color = await self.decide_player_color()
 
-				if matched_player:
-					waiting_player_to_match = await self.get_player_in_queue(player_to_match)
+                white_player = await self.get_user_model_from_waiting_player(matched_user) if matched_player_color == "white" else player_to_match
+                black_player = await self.get_user_model_from_waiting_player(matched_user) if matched_player_color == "black" else player_to_match
 
-					await self.set_matched_player(matched_player, player_to_match)
-					await self.set_matched_player(waiting_player_to_match, await self.get_user_model_from_waiting_player(matched_player))
+                game_id = await self.create_chess_game(white_player, black_player)
 
-				else:
-					await self.send(json.dumps({
-						"type": "finding_match",
-						"match_found": False,
-						"white_player": None,
-						"black_player": None
-					}))
-			else:
-				await self.send(json.dumps({
-					"type": "finding_match",
-					"match_found": False,
-					"white_player": None,
-					"black_player": None
-				}))
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        "type": "player_matched",
+                        "match_found": True,
+                                "white_player": white_player.username,
+                                "black_player": black_player.username,
+                                "game_id": game_id,
+                    }
+                )
 
+                await self.remove_player_from_queue(matched_user)
 
-			time.sleep(1)
+                match_found = True
 
+                break
 
-	async def connect(self):
-		user = self.scope["user"]
+            if not player_in_queue:
+                matched_player = await self.get_first_matching_player()
 
-		query_string: bytes = self.scope.get("query_string", b"")
-		decoded_query_string: str = query_string.decode()
-		parsed_query_string = parse_qs(decoded_query_string)
+                await self.create_waiting_player(player_to_match)
 
-		base_time = parsed_query_string["baseTime"][0]
-		increment = parsed_query_string["increment"][0]
+                if matched_player:
+                    waiting_player_to_match = await self.get_player_in_queue(player_to_match)
 
-		self.base_time = int(base_time)
-		self.increment = int(increment)
+                    await self.set_matched_player(matched_player, player_to_match)
+                    await self.set_matched_player(waiting_player_to_match, await self.get_user_model_from_waiting_player(matched_player))
 
-		self.room_group_name = "test"
-		await self.channel_layer.group_add(
-			self.room_group_name,
-			self.channel_name
-		)
-		
-		await self.accept()
+                else:
+                    await self.send(json.dumps({
+                        "type": "finding_match",
+                        "match_found": False,
+                        "white_player": None,
+                        "black_player": None
+                    }))
+            else:
+                await self.send(json.dumps({
+                    "type": "finding_match",
+                    "match_found": False,
+                    "white_player": None,
+                    "black_player": None
+                }))
 
-		await self.send(json.dumps({
-			"type": "connection_established",
-			"message": "Connection established",
-		}))
+            time.sleep(1)
 
-		await self.match_player()
+    async def connect(self):
+        user = self.scope["user"]
 
-	async def disconnect(self, code):
-		pass
+        query_string: bytes = self.scope.get("query_string", b"")
+        decoded_query_string: str = query_string.decode()
+        parsed_query_string = parse_qs(decoded_query_string)
 
-	async def player_matched(self, event):
-		await self.send(json.dumps({
-			"type": "match_found",
-			"match_found": event["match_found"],
-			"white_player": event["white_player"],
-			"black_player": event["black_player"],
-			"game_id": event["game_id"]
-		}))
+        base_time = parsed_query_string["baseTime"][0]
+        increment = parsed_query_string["increment"][0]
 
-		
+        self.base_time = int(base_time)
+        self.increment = int(increment)
+
+        self.room_group_name = "test"
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+
+        await self.accept()
+
+        await self.send(json.dumps({
+            "type": "connection_established",
+            "message": "Connection established",
+        }))
+
+        await self.match_player()
+
+    async def disconnect(self, code):
+        pass
+
+    async def player_matched(self, event):
+        await self.send(json.dumps({
+            "type": "match_found",
+            "match_found": event["match_found"],
+            "white_player": event["white_player"],
+            "black_player": event["black_player"],
+            "game_id": event["game_id"]
+        }))
