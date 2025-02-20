@@ -4,6 +4,7 @@ import {
     classicalTimeControls,
     rapidTimeControls,
 } from "../../constants/timeControls.js";
+import { TimeControlTypes } from "../../enums/gameSetup.js";
 
 import { compareObjects } from "../../utils/generalUtils.js";
 import { displayTimeControl } from "../../utils/timeUtils.js";
@@ -20,17 +21,26 @@ function TimeControlSelection({
         });
     }
 
-    let timeControls = null;
+    function getTimeControlsList() {
+        switch (timeControlType.toLowerCase()) {
+            case TimeControlTypes.BULLET:
+                return bulletTimeControls;
+            
+            case TimeControlTypes.BLITZ:
+                return blitzTimeControls;
 
-    if (timeControlType === "bullet") {
-        timeControls = bulletTimeControls;
-    } else if (timeControlType === "blitz") {
-        timeControls = blitzTimeControls;
-    } else if (timeControlType === "rapid") {
-        timeControls = rapidTimeControls;
-    } else if (timeControlType === "classical") {
-        timeControls = classicalTimeControls;
+            case TimeControlTypes.RAPID:
+                return rapidTimeControls;
+            
+            case TimeControlTypes.CLASSICAL:
+                return classicalTimeControls;
+            
+            default:
+                console.error(`Invalid time control type: ${timeControlType}`);
+        }
     }
+
+    const timeControls = getTimeControlsList();
 
     return (
         <div className="time-controls-container">
