@@ -65,14 +65,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 			side_to_move = await self.get_game_attribute(chess_game, "current_player_turn")
 
 			if side_to_move.lower() == "white":
-				await self.decrement_white_player_timer(chess_game, 0.1)
+				await self.decrement_white_player_timer(chess_game, 1)
 			elif side_to_move.lower() == "black":
-				await self.decrement_black_player_timer(chess_game, 0.1)
+				await self.decrement_black_player_timer(chess_game, 1)
 
 			white_player_clock = await self.get_game_attribute(chess_game, "white_player_clock")
 			black_player_clock = await self.get_game_attribute(chess_game, "black_player_clock")
-
-			print(self.room_group_name)
 
 			await self.channel_layer.group_send(
 				self.room_group_name,
@@ -84,7 +82,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 				}
 			)
 
-			await asyncio.sleep(0.1)
+			await asyncio.sleep(1)
 
 	async def modify_castling_rights(self, chess_game_model: ChessGame, castling_side: str, color: str, new_value: bool = False):
 		new_castling_rights = copy.deepcopy(chess_game_model.castling_rights)
@@ -184,7 +182,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
 		new_board_placement = copy.deepcopy(
-			chess_game_model.parsed_board_placement)
+			await self.get_game_attribute(chess_game_model, "parsed_board_placement"))
 
 		starting_square = move_info["starting_square"]
 		destination_square = move_info["destination_square"]
@@ -232,11 +230,11 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 					del new_board_placement[str(captured_pawn_square)]
 
+		new_side_to_move = "black" if piece_color.lower() == "white" else "white"
+
 		await self.update_en_passant_target_square(chess_game_model, move_info)
-
-		chess_game_model.parsed_board_placement = new_board_placement
-		chess_game_model.current_player_turn = "black" if piece_color.lower() == "white" else "white"
-
+		await self.update_game_attribute(chess_game_model, "parsed_board_placement", new_board_placement)
+		await self.update_game_attribute(chess_game_model, "current_player_turn", new_side_to_move)
 		await self.save_chess_game_model(chess_game_model)
 
 	async def connect(self):
@@ -249,6 +247,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		self.room_group_name = f"game_{game_id}"
 		self.game_id = game_id
+		self.timer_task = asyncio.create_task(self.handle_timer_decrement())
 
 		await self.channel_layer.group_add(
 			self.room_group_name,
@@ -261,8 +260,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 			"game_id": int(game_id),
 		}))
 
-		asyncio.create_task(self.handle_timer_decrement())
-
 	async def disconnect(self, code):
 		pass
 
@@ -274,15 +271,17 @@ class GameConsumer(AsyncWebsocketConsumer):
 			{
 				"type": "move_received",
 				"move_data": text_data,
-						"move_made_by": self.scope["user"].username
+				"move_made_by": self.scope["user"].username
 			}
 		)
 
 	async def move_received(self, event):
+		self.timer_task.cancel()
+
 		move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
 		chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
 		previous_position: dict = copy.deepcopy(
-			chess_game_model.parsed_board_placement)
+			await self.get_game_attribute(chess_game_model, "parsed_board_placement"))
 		en_passant_target_square = chess_game_model.en_passant_target_square
 
 		parsed_move_data: dict = json.loads(event["move_data"])
@@ -298,6 +297,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 				"move_is_valid": move_is_valid,
 				"new_parsed_fen": await chess_game_model.get_full_parsed_fen()
 			}))
+
+		self.timer_task = asyncio.create_task(self.handle_timer_decrement())
 
 	async def timer_decremented(self, event):
 		await self.send(json.dumps({

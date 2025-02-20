@@ -96,9 +96,11 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId, setWhit
         if (parsedEventData["type"] === "move_made") {
             makeMove(parsedEventData);
         } else if (parsedEventData["type"] === "timer_decremented") {
-            console.log("Timer decremented")
-            setWhiteTimer(Math.ceil(parsedEventData["white_player_clock"]));
-            setBlackTimer(Math.ceil(parsedEventData["black_player_clock"]));
+            const newWhitePlayerClock = parsedEventData["white_player_clock"];
+            const newBlackPlayerClock = parsedEventData["black_player_clock"];
+            
+            setWhiteTimer(Math.ceil(newWhitePlayerClock));
+            setBlackTimer(Math.ceil(newBlackPlayerClock));
         }
     }
 
