@@ -50,6 +50,7 @@ import {
     clearStartingSquare,
 } from "../../utils/gameLogic/basicMovement.js";
 import { MoveMethods } from "../../enums/gameLogic.js";
+import { getOppositeColor } from "../../utils/gameLogic/general.js";
 function Chessboard({
     parsed_fen_string,
     boardOrientation,
@@ -245,46 +246,12 @@ function Chessboard({
                 newPiecePlacements["castling_rights"] = newCastlingRights;
             }
 
-            (async () => {
-                const kingColor =
-                    pieceColorToValidate.toLowerCase() === "white"
-                        ? "black"
-                        : "white";
-
-                const isCheckmated = await checkIsCheckmated(
-                    newPiecePlacements,
-                    kingColor
-                );
-
-                const isStalemated = await checkIsStalemated(
-                    newPiecePlacements,
-                    kingColor
-                );
-
-                if (isCheckmated || isStalemated) {
-                    setGameEnded(true);
-
-                    const gameEndedCause = isCheckmated
-                        ? "checkmate"
-                        : "stalemate";
-                    const gameWinner = isCheckmated
-                        ? pieceColorToValidate
-                        : null;
-
-                    setGameEndedCause(gameEndedCause);
-                    setGameWinner(gameWinner);
-                }
-            })();
-
-            console.log(newPiecePlacements);
+            handleGameEndDetection(newPiecePlacements, pieceColorToValidate)
 
             return newPiecePlacements;
         });
 
-        const newSideToMove =
-            sideToMove.toLowerCase() === PieceColor.WHITE
-                ? PieceColor.BLACK
-                : PieceColor.WHITE;
+        const newSideToMove = getOppositeColor(pieceColorToValidate);
 
         if (!selectingPromotionRef.current) {
             setSideToMove(newSideToMove);
@@ -449,42 +416,12 @@ function Chessboard({
                 newPiecePlacements["castling_rights"] = newCastlingRights;
             }
 
-            (async () => {
-                const kingColor =
-                    pieceColorToValidate.toLowerCase() === "white"
-                        ? "black"
-                        : "white";
-
-                const isCheckmated = await checkIsCheckmated(
-                    newPiecePlacements,
-                    kingColor
-                );
-
-                const isStalemated = await checkIsStalemated(
-                    newPiecePlacements,
-                    kingColor
-                );
-
-                if (isCheckmated || isStalemated) {
-                    setGameEnded(true);
-
-                    const gameEndedCause = isCheckmated
-                        ? "checkmate"
-                        : "stalemate";
-                    const gameWinner = isCheckmated
-                        ? pieceColorToValidate
-                        : null;
-
-                    setGameEndedCause(gameEndedCause);
-                    setGameWinner(gameWinner);
-                }
-            })();
+            handleGameEndDetection(newPiecePlacements, pieceColorToValidate)
 
             return newPiecePlacements;
         });
 
-        const newSideToMove =
-            sideToMove.toLowerCase() === "white" ? "black" : "white";
+        const newSideToMove = getOppositeColor(pieceColorToValidate);
 
         setSideToMove(newSideToMove);
 
@@ -575,6 +512,23 @@ function Chessboard({
 
         setPromotionCapturedPiece(null);
         selectingPromotionRef.current = false;
+    }
+
+    async function handleGameEndDetection(fenString, color) {
+        const kingColor = getOppositeColor(color);
+
+        const isCheckmated = await checkIsCheckmated(fenString, kingColor);
+        const isStalemated = await checkIsStalemated(fenString, kingColor);
+
+        if (isCheckmated || isStalemated) {
+            setGameEnded(true);
+
+            const gameEndedCause = isCheckmated ? "checkmate" : "stalemate";
+            const gameWinner = isCheckmated ? color : null;
+
+            setGameEndedCause(gameEndedCause);
+            setGameWinner(gameWinner);
+        }
     }
 
     async function checkIsCheckmated(currentFEN, kingColor) {
