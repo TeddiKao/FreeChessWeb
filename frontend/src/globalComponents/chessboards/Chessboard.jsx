@@ -246,7 +246,7 @@ function Chessboard({
                 newPiecePlacements["castling_rights"] = newCastlingRights;
             }
 
-            handleGameEndDetection(newPiecePlacements, pieceColorToValidate)
+            handleGameEndDetection(newPiecePlacements, pieceColorToValidate);
 
             return newPiecePlacements;
         });
@@ -416,7 +416,7 @@ function Chessboard({
                 newPiecePlacements["castling_rights"] = newCastlingRights;
             }
 
-            handleGameEndDetection(newPiecePlacements, pieceColorToValidate)
+            handleGameEndDetection(newPiecePlacements, pieceColorToValidate);
 
             return newPiecePlacements;
         });
@@ -520,15 +520,20 @@ function Chessboard({
         const isCheckmated = await checkIsCheckmated(fenString, kingColor);
         const isStalemated = await checkIsStalemated(fenString, kingColor);
 
-        if (isCheckmated || isStalemated) {
-            setGameEnded(true);
-
-            const gameEndedCause = isCheckmated ? "checkmate" : "stalemate";
-            const gameWinner = isCheckmated ? color : null;
-
-            setGameEndedCause(gameEndedCause);
-            setGameWinner(gameWinner);
+        const gameEnded = isCheckmated || isStalemated;
+        if (gameEnded) {
+            handleGameEnded(isCheckmated, color);
         }
+    }
+
+    function handleGameEnded(isCheckmated, color) {
+        setGameEnded(true);
+
+        const gameEndedCause = isCheckmated ? "checkmate" : "stalemate";
+        const gameWinner = isCheckmated ? color : null;
+
+        setGameEndedCause(gameEndedCause);
+        setGameWinner(gameWinner);
     }
 
     async function checkIsCheckmated(currentFEN, kingColor) {
@@ -543,12 +548,24 @@ function Chessboard({
         return isStalemated;
     }
 
-    function getPromotionStartingSquare(autoQueen) {
-        return autoQueen ? draggedSquare : previousDraggedSquare;
+    function getPromotionStartingSquare(autoQueen, moveMethod) {
+        moveMethod = moveMethod.toLowerCase();
+
+        if (moveMethod === MoveMethods.CLICK) {
+            return autoQueen ? previousClickedSquare : previousDraggedSquare;
+        } else if (moveMethod === MoveMethods.DRAG) {
+            return autoQueen ? draggedSquare : previousDraggedSquare;
+        }
     }
 
-    function getPromotionEndingSquare(autoQueen) {
-        return autoQueen ? droppedSquare : previousDroppedSquare;
+    function getPromotionEndingSquare(autoQueen, moveMethod) {
+        moveMethod = moveMethod.toLowerCase();
+
+        if (moveMethod === MoveMethods.CLICK) {
+            return autoQueen ? clickedSquare: previousDroppedSquare;
+        } else if (moveMethod === MoveMethods.DRAG) {
+            return autoQueen ? droppedSquare : previousDroppedSquare;
+        }
     }
 
     async function handlePawnPromotion(color, promotedPiece, autoQueen) {
