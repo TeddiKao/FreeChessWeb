@@ -137,12 +137,7 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId, setWhit
                 return;
             }
 
-            const boardPlacement = parsedFENString["board_placement"];
-            const squareInfo = boardPlacement[`${draggedSquare}`];
-            const pieceType = squareInfo["piece_type"];
-            const pieceColor = squareInfo["piece_color"];
-
-            displayLegalMoves(pieceType, pieceColor, draggedSquare);
+            handleLegalMoveDisplay();
 
             return;
         }
@@ -235,6 +230,15 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId, setWhit
 
         setDraggedSquare(null);
         setDroppedSquare(null);
+    }
+
+    function handleLegalMoveDisplay() {
+        const boardPlacement = parsedFENString["board_placement"];
+        const squareInfo = boardPlacement[`${draggedSquare}`];
+        const pieceType = squareInfo["piece_type"];
+        const pieceColor = squareInfo["piece_color"];
+
+        displayLegalMoves(pieceType, pieceColor, draggedSquare);
     }
 
     async function handleClickToMove() {
