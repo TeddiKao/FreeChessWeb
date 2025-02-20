@@ -62,7 +62,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 	
 	@database_sync_to_async
 	def create_chess_game(self, white_player, black_player):
-		chess_game = ChessGame.objects.create(white_player=white_player, black_player=black_player, white_player_clock=180, black_player_clock=180)
+		chess_game = ChessGame.objects.create(white_player=white_player, black_player=black_player, white_player_clock=self.base_time, black_player_clock=self.base_time)
 		chess_game.save()
 
 		return chess_game.id

@@ -38,6 +38,8 @@ class ChessGame(models.Model):
 
 	white_player_clock = models.DecimalField(max_digits=6, decimal_places=1) # In seconds
 	black_player_clock = models.DecimalField(max_digits=6, decimal_places=1) # In seconds
+	white_player_increment = models.IntegerField(blank=False, null=False, default=0)
+	black_player_increment = models.IntegerField(blank=False, null=False, default=0)
 
 	captured_white_material = models.JSONField(default=dict)
 	captured_black_material = models.JSONField(default=dict)
