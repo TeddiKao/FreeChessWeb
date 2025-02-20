@@ -42,11 +42,16 @@ function isSquareLight(square) {
     return (squareFile + squareRank) % 2 !== 0;
 }
 
+function getSquareExists(square, boardPlacement) {
+    return Object.keys(boardPlacement).includes(square);
+}
+
 export {
     clearSquaresStyling,
     getRank,
     getFile,
     getBoardStartingIndex,
     getBoardEndingIndex,
-    isSquareLight
+    isSquareLight,
+    getSquareExists,
 };

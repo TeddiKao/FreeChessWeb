@@ -9,7 +9,8 @@ import {
     getFile,
     getBoardStartingIndex,
     getBoardEndingIndex,
-    isSquareLight
+    isSquareLight,
+    getSquareExists,
 } from "../../utils/boardUtils.js";
 
 import { playAudio } from "../../utils/audioUtils.js";
@@ -44,7 +45,11 @@ import {
     handlePromotionCaptureStorage,
     updatePromotedBoardPlacment,
 } from "../../utils/gameLogic/promotion.js";
-import { addPieceToDestinationSquare, clearStartingSquare } from "../../utils/gameLogic/basicMovement.js";
+import {
+    addPieceToDestinationSquare,
+    clearStartingSquare,
+} from "../../utils/gameLogic/basicMovement.js";
+import { MoveMethods } from "../../enums/gameLogic.js";
 function Chessboard({
     parsed_fen_string,
     boardOrientation,
@@ -104,16 +109,7 @@ function Chessboard({
                 return;
             }
 
-            const boardPlacement = parsedFENString["board_placement"];
-            const squareInfo = boardPlacement[`${draggedSquare}`];
-            const pieceType = squareInfo["piece_type"];
-            const pieceColor = squareInfo["piece_color"];
-
-            if (!showLegalMoves) {
-                return;
-            }
-
-            displayLegalMoves(pieceType, pieceColor, draggedSquare);
+            handleLegalMoveDisplay("drag");
 
             return;
         }
@@ -157,7 +153,7 @@ function Chessboard({
                 unpromotedBoardPlacementRef,
                 handlePawnPromotion,
                 gameplaySettings
-            )
+            );
         }
 
         setParsedFENString((previousFENString) => {
@@ -172,13 +168,20 @@ function Chessboard({
             const initialSquare =
                 oringinalBoardPlacements[`${draggedSquare}`]["starting_square"];
 
-            let newPiecePlacements = addPieceToDestinationSquare(previousFENString, droppedSquare, {
-                piece_type: pieceType,
-                piece_color: pieceColor,
-                starting_square: initialSquare,
-            })
+            let newPiecePlacements = addPieceToDestinationSquare(
+                previousFENString,
+                droppedSquare,
+                {
+                    piece_type: pieceType,
+                    piece_color: pieceColor,
+                    starting_square: initialSquare,
+                }
+            );
 
-            newPiecePlacements = clearStartingSquare(newPiecePlacements, draggedSquare);
+            newPiecePlacements = clearStartingSquare(
+                newPiecePlacements,
+                draggedSquare
+            );
 
             if (pieceTypeToValidate.toLowerCase() === PieceType.PAWN) {
                 newPiecePlacements = handleEnPassant(
@@ -296,35 +299,19 @@ function Chessboard({
     }
 
     async function handleClickToMove() {
+        const boardPlacement = parsedFENString["board_placement"];
+
         clearSquaresStyling();
+
+        if (!getSquareExists(previousClickedSquare, boardPlacement)) {
+            return;
+        }
 
         const shouldMove = previousClickedSquare && clickedSquare;
         if (!shouldMove) {
-            if (!previousClickedSquare) {
-                return;
+            if (previousClickedSquare) {
+                handleLegalMoveDisplay("click");
             }
-
-            const boardPlacement = parsedFENString["board_placement"];
-
-            if (
-                !Object.keys(boardPlacement).includes(
-                    `${previousClickedSquare}`
-                )
-            ) {
-                return;
-            }
-
-            const squareInfo = boardPlacement[`${previousClickedSquare}`];
-
-            const pieceType = squareInfo["piece_type"];
-            const pieceColor = squareInfo["piece_color"];
-            const currentSquare = `${previousClickedSquare}`;
-
-            if (!showLegalMoves) {
-                return;
-            }
-
-            displayLegalMoves(pieceType, pieceColor, currentSquare);
 
             return;
         }
@@ -336,18 +323,6 @@ function Chessboard({
             return;
         }
 
-        if (
-            !Object.keys(parsedFENString["board_placement"]).includes(
-                previousClickedSquare
-            )
-        ) {
-            setPreviousClickedSquare(null);
-            setClickedSquare(null);
-
-            return;
-        }
-
-        const boardPlacement = parsedFENString["board_placement"];
         const initialSquare =
             boardPlacement[`${previousClickedSquare}`]["starting_square"];
         const pieceTypeToValidate =
@@ -378,7 +353,7 @@ function Chessboard({
                 unpromotedBoardPlacementRef,
                 handlePawnPromotion,
                 gameplaySettings
-            )
+            );
         }
 
         setParsedFENString((previousFENString) => {
@@ -394,13 +369,20 @@ function Chessboard({
                     "piece_color"
                 ];
 
-            let newPiecePlacements = addPieceToDestinationSquare(previousFENString, clickedSquare, {
-                piece_type: pieceType,
-                piece_color: pieceColor,
-                starting_square: initialSquare,
-            })
+            let newPiecePlacements = addPieceToDestinationSquare(
+                previousFENString,
+                clickedSquare,
+                {
+                    piece_type: pieceType,
+                    piece_color: pieceColor,
+                    starting_square: initialSquare,
+                }
+            );
 
-            newPiecePlacements = clearStartingSquare(newPiecePlacements, previousClickedSquare)
+            newPiecePlacements = clearStartingSquare(
+                newPiecePlacements,
+                previousClickedSquare
+            );
 
             if (pieceTypeToValidate.toLowerCase() === PieceType.PAWN) {
                 newPiecePlacements = handleEnPassant(
@@ -427,9 +409,6 @@ function Chessboard({
                 const kingsideRookMoved = kingsideRookSquares.includes(
                     parseInt(initialSquare)
                 );
-
-                console.log(kingsideRookMoved);
-                console.log(initialSquare);
 
                 const sideToDisable = kingsideRookMoved
                     ? "Kingside"
@@ -561,6 +540,26 @@ function Chessboard({
         }
     }
 
+    function handleLegalMoveDisplay(moveMethod) {
+        moveMethod = moveMethod.toLowerCase();
+
+        const usingDrag = moveMethod === MoveMethods.DRAG;
+        const startingSquare = usingDrag
+            ? draggedSquare
+            : previousClickedSquare;
+
+        const boardPlacement = parsedFENString["board_placement"];
+        const squareInfo = boardPlacement[`${startingSquare}`];
+        const pieceType = squareInfo["piece_type"];
+        const pieceColor = squareInfo["piece_color"];
+
+        if (!showLegalMoves) {
+            return;
+        }
+
+        displayLegalMoves(pieceType, pieceColor, draggedSquare);
+    }
+
     function handlePromotionCancel(color) {
         setParsedFENString((prevFENString) => {
             const updatedBoardPlacement = cancelPromotion(
@@ -606,15 +605,16 @@ function Chessboard({
         const promotionStartingSquare = getPromotionStartingSquare(autoQueen);
         const promotionEndingSquare = getPromotionEndingSquare(autoQueen);
 
-        const [updatedBoardPlacement, moveType] = await updatePromotedBoardPlacment(
-            parsedFENString,
-            color,
-            promotedPiece,
-            autoQueen,
-            promotionStartingSquare,
-            promotionEndingSquare,
-            unpromotedBoardPlacementRef
-        )
+        const [updatedBoardPlacement, moveType] =
+            await updatePromotedBoardPlacment(
+                parsedFENString,
+                color,
+                promotedPiece,
+                autoQueen,
+                promotionStartingSquare,
+                promotionEndingSquare,
+                unpromotedBoardPlacementRef
+            );
 
         setParsedFENString(updatedBoardPlacement);
 
