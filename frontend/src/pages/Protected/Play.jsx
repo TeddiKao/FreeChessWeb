@@ -26,6 +26,9 @@ function Play() {
     const [gameEndedCause, setGameEndedCause] = useState(null);
     const [gameWinner, setGameWinner] = useState(null);
 
+    const [whitePlayerTimer, setWhitePlayerTimer] = useState(location.state?.baseTime);
+    const [blackPlayerTimer, setBlackPlayerTimer] = useState(location.state?.baseTime);
+
     const [boardOrientation, setBoardOrientation] = useState(
         location.state?.assignedColor || "White"
     );
@@ -46,6 +49,9 @@ function Play() {
     const timeControlBaseTime = location.state.baseTime;
     const timeControlIncrement = location.state.increment;
     const gameId = location.state.gameId;
+
+    const topTimerColor = getTimerColor("top");
+    const bottomTimerColor = getTimerColor("bottom");
 
     async function getParsedFEN() {
         try {
@@ -71,6 +77,25 @@ function Play() {
         setSettingsVisible(false);
     }
 
+    function getTimerColor(timerPosition) {
+        const boardSide = boardOrientation.toLowerCase() === "white" ? "bottom" : "top";
+        const position = timerPosition.toLowerCase();
+
+        if (boardSide === "bottom") {
+            return position === "top" ? "black" : "white";
+        } else {
+            return position === "top" ? "white" : "black";
+        }
+    }
+
+    function getTimeAmount(color) {
+        if (color.toLowerCase() === "white") {
+            return whitePlayerTimer;
+        } else {
+            return blackPlayerTimer;
+        }
+    }
+
     return (
         <GameEndedSetterContext.Provider value={setGameEnded}>
             <GameEndedCauseSetterContext.Provider value={setGameEndedCause}>
@@ -79,9 +104,9 @@ function Play() {
                         <div className="main-chessboard">
                             <div className="top-timer-wrapper">
                                 <Timer
-                                    playerColor="black"
+                                    playerColor={topTimerColor}
                                     position="top"
-                                    timeInSeconds={timeControlBaseTime}
+                                    timeInSeconds={getTimeAmount(topTimerColor)}
                                 />
                             </div>
 
@@ -105,9 +130,9 @@ function Play() {
 
                             <div className="bottom-timer-wrapper">
                                 <Timer
-                                    playerColor="white"
+                                    playerColor={bottomTimerColor}
                                     position="bottom"
-                                    timeInSeconds={timeControlBaseTime}
+                                    timeInSeconds={getTimeAmount(bottomTimerColor)}
                                 />
                             </div>
                         </div>

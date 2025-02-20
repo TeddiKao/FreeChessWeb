@@ -5,4 +5,10 @@ const TimeControlTypes = Object.freeze({
     "CLASSICAL": "classical",
 })
 
-export { TimeControlTypes }
+const GameSetupStages = Object.freeze({
+	"TYPE_SELECTION": "typeSelection",
+	"AMOUNT_SELECTION": "amountSelection",
+	"START_CONFIRMATION": "startConfirmation",
+})
+
+export { TimeControlTypes, GameSetupStages }
