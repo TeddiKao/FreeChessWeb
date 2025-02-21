@@ -6,7 +6,6 @@ import Square from "../Square.jsx";
 import {
     clearSquaresStyling,
     getRank,
-    getFile,
     getBoardStartingIndex,
     getBoardEndingIndex,
     isSquareLight,

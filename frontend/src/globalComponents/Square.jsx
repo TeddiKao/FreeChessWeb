@@ -3,7 +3,7 @@ import { useDrag, useDrop } from "react-dnd";
 import "../styles/chessboard/square.css"
 import PromotionPopup from "./PromotionPopup.jsx";
 import { useEffect, useState } from "react";
-import { getFile, getRank } from "../utils/boardUtils.js";
+import { getFile, getRank, isSquareLight } from "../utils/boardUtils.js";
 
 function Square({
     squareNumber,
@@ -61,11 +61,7 @@ function Square({
         for (let square = 0; square <= 63; square++) {
             const squareElement = document.getElementById(`${square}`);
             if (squareElement) {
-                const squareFile = getFile(square);
-                const squareRank = getRank(square);
-
-                const isSquareLight = (squareFile + squareRank) % 2 !== 0;
-                const highlightedClassName = isSquareLight ? "highlighted-square-light" : "highlighted-square-dark";
+                const highlightedClassName = isSquareLight(square) ? "highlighted-square-light" : "highlighted-square-dark";
 
                 squareElement.classList.remove(highlightedClassName);
             }
