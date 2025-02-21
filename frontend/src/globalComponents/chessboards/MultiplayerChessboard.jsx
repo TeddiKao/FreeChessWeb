@@ -18,12 +18,6 @@ import {
     blackPromotionRank,
 } from "../../constants/boardSquares.js";
 
-import {
-    GameEndedSetterContext,
-    GameEndedCauseSetterContext,
-    GameWinnerSetterContext,
-} from "../../contexts/chessboardContexts.js";
-
 import { websocketBaseURL } from "../../constants/urls.js";
 import useWebSocket from "../../hooks/useWebsocket.js";
 import { getAccessToken } from "../../utils/tokenUtils.js";
@@ -32,6 +26,7 @@ import { playAudio } from "../../utils/audioUtils.js";
 
 import _ from "lodash";
 import { PieceColor } from "../../enums/pieces.js";
+import { MoveMethods } from "../../enums/gameLogic.js";
 
 function MultiplayerChessboard({ parsed_fen_string, orientation, gameId, setWhiteTimer, setBlackTimer }) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
@@ -136,8 +131,9 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId, setWhit
             if (!draggedSquare) {
                 return;
             }
+        
 
-            handleLegalMoveDisplay();
+            handleLegalMoveDisplay("drag");
 
             return;
         }
@@ -232,7 +228,12 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId, setWhit
         setDroppedSquare(null);
     }
 
-    function handleLegalMoveDisplay() {
+    function handleLegalMoveDisplay(moveMethod) {
+        moveMethod = moveMethod.toLowerCase();
+
+        const usingDrag = moveMethod === MoveMethods.DRAG;
+        const startingSquare = usingDrag ? draggedSquare : previousClickedSquare;
+
         const boardPlacement = parsedFENString["board_placement"];
         const squareInfo = boardPlacement[`${draggedSquare}`];
         const pieceType = squareInfo["piece_type"];
@@ -259,13 +260,7 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId, setWhit
                 return;
             }
 
-            const squareInfo = boardPlacement[`${previousClickedSquare}`];
-
-            const pieceType = squareInfo["piece_type"];
-            const pieceColor = squareInfo["piece_color"];
-            const currentSquare = `${previousClickedSquare}`;
-
-            displayLegalMoves(pieceType, pieceColor, currentSquare);
+            handleLegalMoveDisplay("click");
 
             return;
         }
