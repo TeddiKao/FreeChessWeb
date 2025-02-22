@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { displayTimeControl } from "../../utils/timeUtils.ts";
 
-import useWebSocket from "../../hooks/useWebsocket.js";
+import useWebSocket from "../../hooks/useWebsocket.ts";
 
 import "../../styles/matchmaking/matchmaking-screen.css";
 import { useNavigate } from "react-router-dom";

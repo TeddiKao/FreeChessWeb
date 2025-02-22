@@ -16,7 +16,7 @@ import {
 } from "../../constants/boardSquares.js";
 
 import { websocketBaseURL } from "../../constants/urls.js";
-import useWebSocket from "../../hooks/useWebsocket.js";
+import useWebSocket from "../../hooks/useWebsocket.ts";
 import { getAccessToken } from "../../utils/tokenUtils.ts";
 
 import { playAudio } from "../../utils/audioUtils.ts";

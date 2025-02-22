@@ -14,7 +14,7 @@ import Chessboard from "../../globalComponents/chessboards/Chessboard.jsx";
 import GameOverModal from "../../globalComponents/modals/GameOverModal.jsx";
 import GameplaySettings from "../../globalComponents/modals/GameplaySettings.jsx";
 import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.jsx";
-import useGameplaySettings from "../../hooks/useGameplaySettings.js";
+import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
 
 function PassAndPlay() {
     const [parsedFEN, setParsedFEN] = useState(null);

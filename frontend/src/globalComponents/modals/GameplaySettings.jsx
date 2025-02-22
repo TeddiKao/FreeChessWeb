@@ -1,4 +1,4 @@
-import useGameplaySettings from "../../hooks/useGameplaySettings.js";
+import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
 import Setting from "../settings/Setting.jsx";
 
 import "../../styles/modals/gameplay-settings.css";
