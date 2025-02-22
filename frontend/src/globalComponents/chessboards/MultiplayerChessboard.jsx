@@ -8,10 +8,7 @@ import {
     getRank,
     getFile,
 } from "../../utils/boardUtils.js";
-import {
-    fetchLegalMoves,
-    fetchMoveIsValid,
-} from "../../utils/apiUtils.js";
+import { fetchLegalMoves, fetchMoveIsValid } from "../../utils/apiUtils.js";
 
 import {
     whitePromotionRank,
@@ -28,7 +25,13 @@ import _ from "lodash";
 import { PieceColor } from "../../enums/pieces.js";
 import { MoveMethods } from "../../enums/gameLogic.js";
 
-function MultiplayerChessboard({ parsed_fen_string, orientation, gameId, setWhiteTimer, setBlackTimer }) {
+function MultiplayerChessboard({
+    parsed_fen_string,
+    orientation,
+    gameId,
+    setWhiteTimer,
+    setBlackTimer,
+}) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
     const [parsedFENString, setParsedFENString] = useState(parsed_fen_string);
@@ -114,7 +117,7 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId, setWhit
         const startingSquare = eventData["move_data"]["starting_square"];
         const destinationSquare = eventData["move_data"]["destination_square"];
 
-        playAudio(eventData["move_type"])
+        playAudio(eventData["move_type"]);
 
         setPreviousDraggedSquare(startingSquare);
         setPreviousDroppedSquare(destinationSquare);
@@ -131,7 +134,6 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId, setWhit
             if (!draggedSquare) {
                 return;
             }
-        
 
             handleLegalMoveDisplay("drag");
 
@@ -232,7 +234,9 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId, setWhit
         moveMethod = moveMethod.toLowerCase();
 
         const usingDrag = moveMethod === MoveMethods.DRAG;
-        const startingSquare = usingDrag ? draggedSquare : previousClickedSquare;
+        const startingSquare = usingDrag
+            ? draggedSquare
+            : previousClickedSquare;
 
         const boardPlacement = parsedFENString["board_placement"];
         const squareInfo = boardPlacement[`${draggedSquare}`];
@@ -470,10 +474,10 @@ function MultiplayerChessboard({ parsed_fen_string, orientation, gameId, setWhit
 
             additional_info: {
                 promoted_piece: promotedPiece,
-            }
+            },
         };
 
-        gameWebsocket?.current?.send(JSON.stringify(moveDetails))
+        gameWebsocket?.current?.send(JSON.stringify(moveDetails));
 
         setDraggedSquare(null);
         setDroppedSquare(null);

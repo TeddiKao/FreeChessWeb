@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"target": "ES5",
+		"module": "ESNext",
+		"strict": true,
+		"jsx": "react-jsx",
+		"baseUrl": "./frontend/src",
+		"paths": {
+			"@utils": ["utils/"],
+			"@pages": ["pages/"],
+			"@styles": ["styles/"],
+			"@hooks": ["hooks/"]
+		}
+	},
+	"include": ["src"],
+	"exclude": ["node_modules"]
+}
