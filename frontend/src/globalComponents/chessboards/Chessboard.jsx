@@ -25,12 +25,12 @@ import {
     disableCastling,
     handleCastling,
     isCastling,
-} from "../../utils/gameLogic/castling.js";
+} from "../../utils/gameLogic/castling.ts";
 
 import {
     handleEnPassant,
     updateEnPassantTargetSquare,
-} from "../../utils/gameLogic/enPassant.js";
+} from "../../utils/gameLogic/enPassant.ts";
 
 import {
     GameEndedSetterContext,
@@ -43,13 +43,13 @@ import {
     cancelPromotion,
     handlePromotionCaptureStorage,
     updatePromotedBoardPlacment,
-} from "../../utils/gameLogic/promotion.js";
+} from "../../utils/gameLogic/promotion.ts";
 import {
     addPieceToDestinationSquare,
     clearStartingSquare,
-} from "../../utils/gameLogic/basicMovement.js";
+} from "../../utils/gameLogic/basicMovement.ts";
 import { MoveMethods } from "../../enums/gameLogic.js";
-import { getOppositeColor } from "../../utils/gameLogic/general.js";
+import { getOppositeColor } from "../../utils/gameLogic/general.ts";
 function Chessboard({
     parsed_fen_string,
     boardOrientation,
