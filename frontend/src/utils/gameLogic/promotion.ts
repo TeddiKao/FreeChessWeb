@@ -1,9 +1,8 @@
 import { PieceColor, PieceType } from "../../enums/pieces.js";
 import { fetchMoveIsValid } from "../apiUtils.ts";
 import { getFile, getRank } from "../boardUtils.ts";
-import api from "../../api.js";
 
-function clearUnpromotedPawn(boardPlacement, previousDroppedSquare) {
+function clearUnpromotedPawn(boardPlacement: object, previousDroppedSquare: string | number) {
     const updatedBoardPlacement = structuredClone(boardPlacement);
 
     delete updatedBoardPlacement[`${previousDroppedSquare}`];
@@ -13,23 +12,23 @@ function clearUnpromotedPawn(boardPlacement, previousDroppedSquare) {
 
 
 function restoreCapturedPiece(
-    boardPlacement,
-    capturedPieceInfo,
-    capturedPieceLocation
-) {
-    const updatedBoardPlacement = structuredClone(boardPlacement);
+    boardPlacement: object,
+    capturedPieceInfo: object,
+    capturedPieceLocation: string | number
+): object {
+    const updatedBoardPlacement: object = structuredClone(boardPlacement);
     updatedBoardPlacement[`${capturedPieceLocation}`] = capturedPieceInfo;
 
     return updatedBoardPlacement;
 }
 
 function cancelPromotion(
-    fenString,
-    color,
-    previousDraggedSquare,
-    previousDroppedSquare,
-    promotionCapturedPiece
-) {
+    fenString: object,
+    color: string,
+    previousDraggedSquare: string | number,
+    previousDroppedSquare: string | number,
+    promotionCapturedPiece: object
+): object {
     const updatedFENString = structuredClone(fenString);
     let updatedBoardPlacement = structuredClone(
         updatedFENString["board_placement"]
@@ -58,44 +57,44 @@ function cancelPromotion(
     return updatedFENString;
 }
 
-function getPromotionRank(color) {
+function getPromotionRank(color: string): number {
     color = color.toLowerCase();
 
-    const isWhite = color === PieceColor.WHITE;
-    const promotionRank = isWhite ? 7 : 0;
+    const isWhite: boolean = color === PieceColor.WHITE;
+    const promotionRank: number = isWhite ? 7 : 0;
 
     return promotionRank;
 }
 
-function isCapture(startFile, endFile) {
+function isCapture(startFile: number, endFile: number): boolean {
     return Math.abs(startFile - endFile) === 1;
 }
 
-function isPawnPromotion(color, destinationRank) {
+function isPawnPromotion(color: string, destinationRank: number): boolean {
     return destinationRank === getPromotionRank(color);
 }
 
 function handlePromotionCaptureStorage(
-    fenString,
-    pieceColor,
-    startingSquare,
-    destinationSquare,
-    setPromotionCapturedPiece,
-    selectingPromotionRef,
-    unpromotedBoardPlacementRef,
-	handlePawnPromotion,
-	gameplaySettings
-) {
-	const autoQueen = gameplaySettings["auto_queen"]
+    fenString: object,
+    pieceColor: string,
+    startingSquare: string | number,
+    destinationSquare: string | number,
+    setPromotionCapturedPiece: any,
+    selectingPromotionRef: any,
+    unpromotedBoardPlacementRef: any,
+	handlePawnPromotion: any,
+	gameplaySettings: object
+): void {
+	const autoQueen: boolean = gameplaySettings["auto_queen"]
 
-    const updatedFENString = structuredClone(fenString);
-    const updatedBoardPlacement = structuredClone(
+    const updatedFENString: object = structuredClone(fenString);
+    const updatedBoardPlacement: object = structuredClone(
         updatedFENString["board_placement"]
     );
 
-    const startFile = getFile(startingSquare);
-    const destinationFile = getFile(destinationSquare);
-    const destinationRank = getRank(destinationSquare);
+    const startFile: number = getFile(startingSquare);
+    const destinationFile: number = getFile(destinationSquare);
+    const destinationRank: number = getRank(destinationSquare);
 
     if (!isPawnPromotion(pieceColor, destinationRank)) {
         return;
@@ -122,14 +121,14 @@ function handlePromotionCaptureStorage(
 }
 
 async function updatePromotedBoardPlacment(
-    fenString,
-    color,
-    promotedPiece,
-    autoQueen,
-    originalPawnSquare,
-    promotionSquare,
-    unpromotedBoardPlacementRef
-) {
+    fenString: object,
+    color: string,
+    promotedPiece: string,
+    autoQueen: boolean,
+    originalPawnSquare: string | number,
+    promotionSquare: string | number,
+    unpromotedBoardPlacementRef: any
+): Promise<object> {
     autoQueen = autoQueen || false;
 
     const updatedFENString = structuredClone(fenString);

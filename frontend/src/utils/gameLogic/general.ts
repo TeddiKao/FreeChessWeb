@@ -1,6 +1,6 @@
 import { PieceColor } from "../../enums/pieces";
 
-function getOppositeColor(color) {
+function getOppositeColor(color: string): string {
     color = color.toLowerCase();
 
     if (color === PieceColor.WHITE) {

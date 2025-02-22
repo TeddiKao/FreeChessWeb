@@ -5,70 +5,77 @@ import {
 } from "../../constants/castlingSquares.js";
 import { capitaliseFirstLetter } from "../generalUtils.ts";
 
-function getKingStartingSquare(color) {
-    if (color.toLowerCase() === "white") {
+function getKingStartingSquare(color: string): number {
+    color = color.toLowerCase();
+
+    if (color === "white") {
         return whiteKingStartingSquare;
     } else {
         return blackKingStartingSquare;
     }
 }
 
-function getKingCastledSquare(color, castlingSide) {
+function getKingCastledSquare(color: string, castlingSide: string): number {
     castlingSide = castlingSide.toLowerCase();
 
-    const startingSquare = getKingStartingSquare(color);
-    const isCastlingKinsgside = castlingSide === "kingside";
+    const startingSquare: number = getKingStartingSquare(color);
+    const isCastlingKinsgside: boolean = castlingSide === "kingside";
 
     // Offset from original king square
-    const squareOffset = isCastlingKinsgside ? 2 : -2;
+    const squareOffset: number = isCastlingKinsgside ? 2 : -2;
 
     return startingSquare + squareOffset;
 }
 
-function getCastledRookSquare(color, castlingSide) {
+function getCastledRookSquare(color: string, castlingSide: string): number {
     color = color.toLowerCase();
     castlingSide = castlingSide.toLowerCase();
 
-    const rookStartingSquare = getRookStartingSquare(color, castlingSide);
-    const isCastlingKinsgside = castlingSide === "kingside";
+    const rookStartingSquare: number = getRookStartingSquare(
+        color,
+        castlingSide
+    );
+    const isCastlingKinsgside: boolean = castlingSide === "kingside";
 
     // Offset from original rook square
-    const squareOffset = isCastlingKinsgside ? -2 : 3;
+    const squareOffset: number = isCastlingKinsgside ? -2 : 3;
 
     return rookStartingSquare + squareOffset;
 }
 
-function getRookStartingSquare(color, castlingSide) {
+function getRookStartingSquare(color: string, castlingSide: string): number {
     color = color.toLowerCase();
     castlingSide = castlingSide.toLowerCase();
 
     return rookStartingSquares[color][castlingSide];
 }
 
-function disableCastling(color, castlingRights, castlingSides) {
-    const updatedCastlingRights = structuredClone(castlingRights);
+function disableCastling(
+    color: string,
+    castlingRights: object,
+    castlingSides: Array<String>
+): object {
+    const updatedCastlingRights: object = structuredClone(castlingRights);
 
     color = color.toLowerCase();
-    console.log(color);
 
     for (const castlingSide of castlingSides) {
-        updatedCastlingRights[capitaliseFirstLetter(color)][
-            castlingSide
-        ] = false;
+        updatedCastlingRights[capitaliseFirstLetter(color)][castlingSide] =
+            false;
     }
 
     return updatedCastlingRights;
 }
 
-function canCastleKingside(color, castlingRights) {
+function canCastleKingside(color: string, castlingRights: object): boolean {
     return castlingRights[capitaliseFirstLetter(color)]["Kingside"];
 }
 
-function canCastleQueenside(color, castlingRights) {
+function canCastleQueenside(color: string, castlingRights: object): boolean {
     return castlingRights[capitaliseFirstLetter(color)]["Queenside"];
 }
 
-function canCastle(color, castlingSide, castlingRights) {
+function canCastle(color: string, castlingSide: string, castlingRights: object) {
     color = color.toLowerCase();
     castlingSide = castlingSide.toLowerCase();
 
@@ -79,7 +86,7 @@ function canCastle(color, castlingSide, castlingRights) {
     }
 }
 
-function handleCastling(fenString, color, castlingSide) {
+function handleCastling(fenString: object, color: string, castlingSide: string): object | null {
     color = color.toLowerCase();
     castlingSide = castlingSide.toLowerCase();
 
@@ -132,7 +139,7 @@ function handleCastling(fenString, color, castlingSide) {
     return updatedFEN;
 }
 
-function isCastling(startingSquare, destinationSquare) {
+function isCastling(startingSquare: string | number, destinationSquare: string | number): boolean {
     startingSquare = Number(startingSquare);
     destinationSquare = Number(destinationSquare);
 

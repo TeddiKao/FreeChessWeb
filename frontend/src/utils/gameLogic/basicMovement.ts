@@ -1,21 +1,32 @@
-function clearStartingSquare(fenString, startingSquare) {
-	const updatedFEN = structuredClone(fenString);
-	const updatedBoardPlacement = structuredClone(updatedFEN["board_placement"]);
+function clearStartingSquare(
+    fenString: object,
+    startingSquare: number | string
+): object {
+    const updatedFEN: object = structuredClone(fenString);
+    const updatedBoardPlacement: object = structuredClone(
+        updatedFEN["board_placement"]
+    );
 
-	delete updatedBoardPlacement[`${startingSquare}`];
+    delete updatedBoardPlacement[`${startingSquare}`];
 
-	updatedFEN["board_placement"] = updatedBoardPlacement;
+    updatedFEN["board_placement"] = updatedBoardPlacement;
 
-	return updatedFEN;
+    return updatedFEN;
 }
 
-function addPieceToDestinationSquare(fenString, destinationSquare, pieceInfo) {
-	const updatedFEN = structuredClone(fenString);
-	const updatedBoardPlacement = structuredClone(updatedFEN["board_placement"]);
+function addPieceToDestinationSquare(
+    fenString: object,
+    destinationSquare: string | number,
+    pieceInfo: object
+): object {
+    const updatedFEN: object = structuredClone(fenString);
+    const updatedBoardPlacement: object = structuredClone(
+        updatedFEN["board_placement"]
+    );
 
-	updatedBoardPlacement[`${destinationSquare}`] = pieceInfo;
-	updatedFEN["board_placement"] = updatedBoardPlacement;
-	return updatedFEN;
+    updatedBoardPlacement[`${destinationSquare}`] = pieceInfo;
+    updatedFEN["board_placement"] = updatedBoardPlacement;
+    return updatedFEN;
 }
 
 export { clearStartingSquare, addPieceToDestinationSquare };
