@@ -1,5 +1,4 @@
 import axios from "axios";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "./constants/tokens";
 import { getAccessToken } from "./utils/tokenUtils";
 
 const api = axios.create({

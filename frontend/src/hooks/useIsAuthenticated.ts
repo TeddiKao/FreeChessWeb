@@ -6,7 +6,9 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants/tokens.js";
 import { getAccessToken, getRefreshToken } from "../utils/tokenUtils.ts";
 
 function useIsAuthenticated() {
-    const [isAuthenticated, setIsAuthenticated] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(
+        null
+    );
 
     useEffect(() => {
         auth().catch(() => {
@@ -14,7 +16,7 @@ function useIsAuthenticated() {
         });
     }, []);
 
-    async function refreshUserToken() {
+    async function refreshUserToken(): Promise<void> {
         const refreshToken = getRefreshToken();
         if (!refreshToken) {
             return;
@@ -37,7 +39,7 @@ function useIsAuthenticated() {
         }
     }
 
-    async function auth() {
+    async function auth(): Promise<void> {
         const userAccessToken = getAccessToken();
 
         if (!userAccessToken) {
@@ -45,11 +47,11 @@ function useIsAuthenticated() {
             return;
         }
 
-        const decodedAccessToken = jwtDecode(userAccessToken);
+        const decodedAccessToken: any = jwtDecode(userAccessToken);
 
-        const accessTokenExpiry = decodedAccessToken.exp;
+        const accessTokenExpiry: any = decodedAccessToken.exp;
 
-        const now = Date.now() / 1000;
+        const now: number = Date.now() / 1000;
 
         if (accessTokenExpiry < now) {
             await refreshUserToken();
