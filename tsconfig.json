@@ -10,8 +10,16 @@
 			"@pages": ["pages/"],
 			"@styles": ["styles/"],
 			"@hooks": ["hooks/"]
-		}
+		},
+
+		"noImplicitReturns": true,
+		"noImplicitAny": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"alwaysStrict": true,
 	},
-	"include": ["src"],
+
+	"include": ["frontend/src/**/*"],
 	"exclude": ["node_modules"]
 }
