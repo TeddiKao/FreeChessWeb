@@ -1,4 +1,4 @@
-import { PieceColor, PieceType } from "../../enums/pieces";
+import { PieceColor, PieceType } from "../../enums/pieces.js";
 import { fetchMoveIsValid } from "../apiUtils.ts";
 import { getFile, getRank } from "../boardUtils.ts";
 import api from "../../api.js";
