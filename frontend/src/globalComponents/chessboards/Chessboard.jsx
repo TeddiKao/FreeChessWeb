@@ -157,16 +157,15 @@ function Chessboard({
         }
 
         setParsedFENString((previousFENString) => {
-            const oringinalBoardPlacements =
+            const originalBoardPlacements =
                 previousFENString["board_placement"];
 
-            const pieceType =
-                oringinalBoardPlacements[`${draggedSquare}`]["piece_type"];
-            const pieceColor =
-                oringinalBoardPlacements[`${draggedSquare}`]["piece_color"];
+            const draggedSquareInfo =
+                originalBoardPlacements[`${draggedSquare}`];
+            const pieceType = draggedSquareInfo["piece_type"];
+            const pieceColor = draggedSquareInfo["piece_color"];
 
-            const initialSquare =
-                oringinalBoardPlacements[`${draggedSquare}`]["starting_square"];
+            const initialSquare = draggedSquareInfo["starting_square"];
 
             let newPiecePlacements = addPieceToDestinationSquare(
                 previousFENString,
@@ -561,7 +560,7 @@ function Chessboard({
         moveMethod = moveMethod.toLowerCase();
 
         if (moveMethod === MoveMethods.CLICK) {
-            return autoQueen ? clickedSquare: previousDroppedSquare;
+            return autoQueen ? clickedSquare : previousDroppedSquare;
         } else if (moveMethod === MoveMethods.DRAG) {
             return autoQueen ? droppedSquare : previousDroppedSquare;
         }
