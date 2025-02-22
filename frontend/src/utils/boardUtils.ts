@@ -1,4 +1,4 @@
-function clearSquaresStyling() {
+function clearSquaresStyling(): void {
     for (let square = 0; square <= 63; square++) {
         const squareElement = document.getElementById(`${square}`);
         if (squareElement) {
@@ -7,15 +7,15 @@ function clearSquaresStyling() {
     }
 }
 
-function getRank(square) {
-    return Math.ceil((parseInt(square) + 1) / 8 - 1);
+function getRank(square: number | string): number {
+    return Math.ceil((Number(square) + 1) / 8 - 1);
 }
 
-function getFile(square) {
-    return parseInt(square) % 8;
+function getFile(square: number | string): number {
+    return Number(square) % 8;
 }
 
-function getBoardStartingIndex(row, boardOrientation) {
+function getBoardStartingIndex(row: number, boardOrientation: string): number {
     const whiteOrientationStartingIndex = (row - 1) * 8 + 1;
     const blackOrientationStartingIndex = row * 8;
 
@@ -26,7 +26,7 @@ function getBoardStartingIndex(row, boardOrientation) {
         : blackOrientationStartingIndex;
 }
 
-function getBoardEndingIndex(row, boardOrientation) {
+function getBoardEndingIndex(row: number, boardOrientation: string): number {
     const whiteOrientationEndingIndex = row * 8;
     const blackOrientationEndingIndex = (row - 1) * 8 + 1;
 
@@ -35,15 +35,15 @@ function getBoardEndingIndex(row, boardOrientation) {
     return isWhite ? whiteOrientationEndingIndex : blackOrientationEndingIndex;
 }
 
-function isSquareLight(square) {
+function isSquareLight(square: number | string) {
     const squareFile = getFile(square);
     const squareRank = getRank(square);
 
     return (squareFile + squareRank) % 2 !== 0;
 }
 
-function getSquareExists(square, boardPlacement) {
-    return Object.keys(boardPlacement).includes(square);
+function getSquareExists(square: number | string, boardPlacement: object) {
+    return Object.keys(boardPlacement).includes(`${square}`);
 }
 
 export {

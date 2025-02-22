@@ -1,5 +1,4 @@
 import api from "../api.js";
-import { getAccessToken } from "./tokenUtils.js";
 
 async function fetchLegalMoves(
     parsedFENString,
@@ -33,12 +32,12 @@ async function fetchLegalMoves(
 }
 
 async function fetchMoveIsValid(
-    parsedFENString,
-    piece_color,
-    piece_type,
-    starting_square,
-    destination_square,
-    additional_info = {}
+    parsedFENString: object,
+    piece_color: string,
+    piece_type: string,
+    starting_square: number | string,
+    destination_square: number | string,
+    additional_info: object = {}
 ) {
     let isMoveLegal = false;
     let moveType = null;
@@ -68,7 +67,7 @@ async function fetchMoveIsValid(
     return [isMoveLegal, moveType];
 }
 
-async function fetchFen(rawFenString) {
+async function fetchFen(rawFenString: object) {
     let parsedFen = null;
 
     try {
@@ -86,7 +85,11 @@ async function fetchFen(rawFenString) {
     return parsedFen;
 }
 
-async function fetchKingIsInCheck(boardPlacement, kingColor, kingSquare) {
+async function fetchKingIsInCheck(
+    boardPlacement: object,
+    kingColor: string,
+    kingSquare: string | number
+) {
     let isKingInCheck = false;
 
     try {
@@ -102,38 +105,11 @@ async function fetchKingIsInCheck(boardPlacement, kingColor, kingSquare) {
         if (response.status === 200) {
             isKingInCheck = response.data;
         }
-    } catch {
+    } catch (error) {
         console.log(error);
     }
 
     return isKingInCheck;
-}
-
-async function startGame(gameInfo) {
-    const timeControlBaseTime = gameInfo["timeControl"]["baseTime"];
-    const timeControlIncrement = gameInfo["timeControl"]["increment"];
-
-    try {
-        const response = await api.post("/gameplay_api/start-game/", {
-            game_info: gameInfo,
-        });
-        if (response.status === 201) {
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function getOngoingGames() {
-    let ongoingGames = [];
-
-    await api
-        .get("gameplay_api/get-ongoing-chess-game/")
-        .then((response) => response.data)
-        .then((data) => (ongoingGames = data))
-        .catch((error) => console.log(error));
-
-    return ongoingGames;
 }
 
 async function getIsStalemated(currentFEN, kingColor) {
@@ -157,7 +133,7 @@ async function getIsStalemated(currentFEN, kingColor) {
     return isStalemated;
 }
 
-async function getIsCheckmated(currentFEN, kingColor) {
+async function getIsCheckmated(currentFEN: object, kingColor: string) {
     let isCheckmated = false;
 
     try {
@@ -196,9 +172,7 @@ export {
     fetchKingIsInCheck,
     fetchLegalMoves,
     fetchMoveIsValid,
-    startGame,
-    getOngoingGames,
     getIsCheckmated,
     getIsStalemated,
-    getUsername
+    getUsername,
 };

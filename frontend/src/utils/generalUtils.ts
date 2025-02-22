@@ -1,17 +1,17 @@
 import { isEqual } from "lodash";
 
-function capitaliseFirstLetter(string) {
+function capitaliseFirstLetter(string: string): string {
 	const firstLetter = string.charAt(0).toUpperCase();
 	const remainingLetters = string.slice(1);
 
 	return `${firstLetter}${remainingLetters}`;
 }
 
-function compareObjects(objectA, objectB) {
+function compareObjects(objectA: object, objectB: object): boolean {
 	return isEqual(objectA, objectB);
 }
 
-function padZero(value) {
+function padZero(value: number): string | number {
     if (value >= 10) {
 		return value;
 	} else {
