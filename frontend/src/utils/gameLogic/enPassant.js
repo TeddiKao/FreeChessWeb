@@ -1,5 +1,5 @@
 import { PieceColor, PieceType } from "../../enums/pieces.js";
-import { getRank } from "../boardUtils.js";
+import { getRank } from "../boardUtils.ts";
 
 function resetEnPassantTargetSquare(fenString) {
     const updatedFENString = structuredClone(fenString);

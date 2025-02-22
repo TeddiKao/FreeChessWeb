@@ -1,5 +1,5 @@
 import "../../styles/multiplayer/timer.css"
-import { formatTime } from "../../utils/timeUtils.js"
+import { formatTime } from "../../utils/timeUtils.ts"
 
 function Timer({ playerColor, timeInSeconds }) {
 	return (

@@ -1,8 +1,7 @@
-import useGameplaySettings from "../../hooks/useGameplaySettings";
+import useGameplaySettings from "../../hooks/useGameplaySettings.js";
 import Setting from "../settings/Setting.jsx";
 
 import "../../styles/modals/gameplay-settings.css";
-import ModalWrapper from "../wrappers/ModalWrapper.jsx";
 
 function GameplaySettings({ onClose, setGameplaySettings }) {
     const gameplaySettings = useGameplaySettings();

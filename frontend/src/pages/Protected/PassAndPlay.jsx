@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchFen } from "../../utils/apiUtils.js";
+import { fetchFen } from "../../utils/apiUtils.ts";
 
 import {
     GameEndedSetterContext,

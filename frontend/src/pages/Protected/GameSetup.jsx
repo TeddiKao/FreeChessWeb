@@ -8,11 +8,10 @@ import TimeControlSelection from "../../pageComponents/gameplay/TimeControlSelec
 
 import "../../styles/matchmaking/select-time-control.css";
 
-import { capitaliseFirstLetter } from "../../utils/generalUtils.js";
-import { displayTimeControl } from "../../utils/timeUtils.js";
-import { fetchFen, startGame } from "../../utils/apiUtils.js";
+import { capitaliseFirstLetter } from "../../utils/generalUtils.ts";
+import { displayTimeControl } from "../../utils/timeUtils.ts";
+import { fetchFen } from "../../utils/apiUtils.ts";
 
-import { Link, useNavigate } from "react-router-dom";
 import MatchmakingScreen from "../../pageComponents/gameplay/MatchmakingScreen.jsx";
 import { GameSetupStages } from "../../enums/gameSetup.js";
 

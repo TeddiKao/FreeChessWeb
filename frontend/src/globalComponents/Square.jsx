@@ -3,7 +3,7 @@ import { useDrag, useDrop } from "react-dnd";
 import "../styles/chessboard/square.css"
 import PromotionPopup from "./PromotionPopup.jsx";
 import { useEffect, useState } from "react";
-import { getFile, getRank, isSquareLight } from "../utils/boardUtils.js";
+import { getFile, getRank, isSquareLight } from "../utils/boardUtils.ts";
 
 function Square({
     squareNumber,

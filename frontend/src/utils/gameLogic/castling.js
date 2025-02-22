@@ -3,8 +3,7 @@ import {
     blackKingStartingSquare,
     rookStartingSquares,
 } from "../../constants/castlingSquares.js";
-import { fetchMoveIsValid } from "../apiUtils.js";
-import { capitaliseFirstLetter } from "../generalUtils.js";
+import { capitaliseFirstLetter } from "../generalUtils.ts";
 
 function getKingStartingSquare(color) {
     if (color.toLowerCase() === "white") {

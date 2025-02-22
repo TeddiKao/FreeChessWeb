@@ -10,16 +10,16 @@ import {
     getBoardEndingIndex,
     isSquareLight,
     getSquareExists,
-} from "../../utils/boardUtils.js";
+} from "../../utils/boardUtils.ts";
 
-import { playAudio } from "../../utils/audioUtils.js";
+import { playAudio } from "../../utils/audioUtils.ts";
 
 import {
     fetchLegalMoves,
     fetchMoveIsValid,
     getIsCheckmated,
     getIsStalemated,
-} from "../../utils/apiUtils.js";
+} from "../../utils/apiUtils.ts";
 
 import {
     disableCastling,

@@ -1,5 +1,5 @@
 import "../../styles/modals/game-over-modal.css"
-import { capitaliseFirstLetter } from "../../utils/generalUtils";
+import { capitaliseFirstLetter } from "../../utils/generalUtils.ts";
 
 function GameOverModal({ visible, gameEndCause, gameWinner }) {
 	if (!visible) {

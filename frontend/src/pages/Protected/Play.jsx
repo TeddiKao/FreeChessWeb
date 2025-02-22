@@ -1,4 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
 import MultiplayerChessboard from "../../globalComponents/chessboards/MultiplayerChessboard.jsx";
 import Timer from "../../pageComponents/gameplay/Timer.jsx";
@@ -12,9 +13,8 @@ import {
 import "../../styles/multiplayer/play.css";
 import "../../styles/chessboard/board-actions.css";
 
-import { fetchFen } from "../../utils/apiUtils.js";
+import { fetchFen } from "../../utils/apiUtils.ts";
 
-import React, { useEffect, useState } from "react";
 import GameOverModal from "../../globalComponents/modals/GameOverModal.jsx";
 import GameplaySettings from "../../globalComponents/modals/GameplaySettings.jsx";
 import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.jsx";

@@ -7,8 +7,8 @@ import {
     clearSquaresStyling,
     getRank,
     getFile,
-} from "../../utils/boardUtils.js";
-import { fetchLegalMoves, fetchMoveIsValid } from "../../utils/apiUtils.js";
+} from "../../utils/boardUtils.ts";
+import { fetchLegalMoves, fetchMoveIsValid } from "../../utils/apiUtils.ts";
 
 import {
     whitePromotionRank,
@@ -17,12 +17,11 @@ import {
 
 import { websocketBaseURL } from "../../constants/urls.js";
 import useWebSocket from "../../hooks/useWebsocket.js";
-import { getAccessToken } from "../../utils/tokenUtils.js";
+import { getAccessToken } from "../../utils/tokenUtils.ts";
 
-import { playAudio } from "../../utils/audioUtils.js";
+import { playAudio } from "../../utils/audioUtils.ts";
 
 import _ from "lodash";
-import { PieceColor } from "../../enums/pieces.js";
 import { MoveMethods } from "../../enums/gameLogic.js";
 
 function MultiplayerChessboard({

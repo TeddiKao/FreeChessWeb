@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef } from "react";
-import { displayTimeControl } from "../../utils/timeUtils";
+import { displayTimeControl } from "../../utils/timeUtils.ts";
 
 import useWebSocket from "../../hooks/useWebsocket.js";
 
 import "../../styles/matchmaking/matchmaking-screen.css";
 import { useNavigate } from "react-router-dom";
-import { getAccessToken } from "../../utils/tokenUtils.js";
-import { getUsername } from "../../utils/apiUtils.js";
+import { getAccessToken } from "../../utils/tokenUtils.ts";
+import { getUsername } from "../../utils/apiUtils.ts";
 
 function MatchmakingScreen({
     timeControlInfo: { baseTime, increment },

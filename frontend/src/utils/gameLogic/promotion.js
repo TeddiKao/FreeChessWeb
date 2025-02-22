@@ -1,7 +1,7 @@
 import { PieceColor, PieceType } from "../../enums/pieces";
-import useGameplaySettings from "../../hooks/useGameplaySettings";
-import { fetchMoveIsValid } from "../apiUtils";
-import { getFile, getRank } from "../boardUtils";
+import { fetchMoveIsValid } from "../apiUtils.ts";
+import { getFile, getRank } from "../boardUtils.ts";
+import api from "../../api.js";
 
 function clearUnpromotedPawn(boardPlacement, previousDroppedSquare) {
     const updatedBoardPlacement = structuredClone(boardPlacement);
@@ -10,6 +10,7 @@ function clearUnpromotedPawn(boardPlacement, previousDroppedSquare) {
 
     return updatedBoardPlacement;
 }
+
 
 function restoreCapturedPiece(
     boardPlacement,

@@ -6,8 +6,8 @@ import {
 } from "../../constants/timeControls.js";
 import { TimeControlTypes } from "../../enums/gameSetup.js";
 
-import { compareObjects } from "../../utils/generalUtils.js";
-import { displayTimeControl } from "../../utils/timeUtils.js";
+import { compareObjects } from "../../utils/generalUtils.ts";
+import { displayTimeControl } from "../../utils/timeUtils.ts";
 
 function TimeControlSelection({
     timeControlType,
