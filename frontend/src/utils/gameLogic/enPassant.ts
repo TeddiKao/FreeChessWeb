@@ -1,21 +1,23 @@
 import { PieceColor, PieceType } from "../../enums/pieces.js";
+import { BoardPlacement, ParsedFENString } from "../../types/gameLogic.ts";
+import { ChessboardSquareIndex, OptionalValue } from "../../types/general.ts";
 import { getRank } from "../boardUtils.ts";
 
-function resetEnPassantTargetSquare(fenString: object): object {
-    const updatedFENString: object = structuredClone(fenString);
+function resetEnPassantTargetSquare(fenString: ParsedFENString): ParsedFENString {
+    const updatedFENString: ParsedFENString = structuredClone(fenString);
     updatedFENString["en_passant_target_square"] = null;
 
     return updatedFENString;
 }
 
 function updateEnPassantTargetSquare(
-    fenString: object,
-    { startingSquare, destinationSquare, pieceType, pieceColor }
-): object {
+    fenString: ParsedFENString,
+    { startingSquare, destinationSquare, pieceType, pieceColor }: any
+): ParsedFENString {
     pieceType = pieceType.toLowerCase();
     pieceColor = pieceColor.toLowerCase();
 
-    const updatedFEN: object = structuredClone(fenString);
+    const updatedFEN: ParsedFENString = structuredClone(fenString);
 
     if (pieceType !== PieceType.PAWN) {
         return resetEnPassantTargetSquare(updatedFEN);
@@ -39,7 +41,7 @@ function updateEnPassantTargetSquare(
     return updatedFEN;
 }
 
-function isEnPassant(destinationSquare: string | number, enPassantTargetSquare: number): boolean {
+function isEnPassant(destinationSquare: ChessboardSquareIndex, enPassantTargetSquare: OptionalValue<ChessboardSquareIndex>): boolean {
     return Number(destinationSquare) === Number(enPassantTargetSquare);
 }
 
@@ -51,17 +53,20 @@ function getEnPassantPawnLocation(enPassantSquare: number): number {
 }
 
 function handleEnPassant(
-    fenString: object,
-    destinationSquare: number | string
-): object {
-    const enPassantSquare: number = fenString["en_passant_target_square"];
+    fenString: ParsedFENString,
+    destinationSquare: ChessboardSquareIndex
+): ParsedFENString {
+    const enPassantSquare: OptionalValue<number> = fenString["en_passant_target_square"];
+    if (!enPassantSquare) {
+        return fenString
+    }
 
     if (!isEnPassant(destinationSquare, enPassantSquare)) {
         return fenString;
     }
 
-    const updatedFEN: object = structuredClone(fenString);
-    const updatedBoardPlacement: object = structuredClone(
+    const updatedFEN: ParsedFENString = structuredClone(fenString);
+    const updatedBoardPlacement: BoardPlacement = structuredClone(
         fenString["board_placement"]
     );
 
