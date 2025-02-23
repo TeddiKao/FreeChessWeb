@@ -21,7 +21,7 @@ type CastlingRights = {
 type ParsedFENString = {
 	board_placement: BoardPlacement,
 	castling_rights: CastlingRights,
-	en_passant_target_square: ChessboardSquareIndex | null,
+	en_passant_target_square: number | null,
 	halfmove_clock: number,
 	fullmove_number: number
 }
