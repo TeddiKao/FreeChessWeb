@@ -130,6 +130,8 @@ function MultiplayerChessboard({
         const newWhitePlayerClock = parsedEventData["white_player_clock"];
         const newBlackPlayerClock = parsedEventData["black_player_clock"];
 
+        console.log(newWhitePlayerClock, newBlackPlayerClock);
+
         setWhiteTimer(Math.ceil(newWhitePlayerClock));
         setBlackTimer(Math.ceil(newBlackPlayerClock));
     }
@@ -578,6 +580,8 @@ function MultiplayerChessboard({
     }
 
     function generateChessboard() {
+        console.log("Generating Chessboard")
+
         const squareElements = [];
 
         const startingRow = boardOrientation.toLowerCase() === "white" ? 8 : 1;

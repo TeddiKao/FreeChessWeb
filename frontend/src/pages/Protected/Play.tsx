@@ -54,8 +54,16 @@ function Play() {
         getParsedFEN();
     }, []);
 
+    useEffect(() => {
+        setGameplaySettings(initialGameplaySettings);
+    }, [initialGameplaySettings])
+
     if (!location.state) {
         return <Navigate to={"/select-time-control"} />;
+    }
+
+    if (!gameplaySettings) {
+        return null;
     }
 
     const gameId = location.state.gameId;
@@ -123,7 +131,7 @@ function Play() {
                             <div className="top-timer-wrapper">
                                 <Timer
                                     playerColor={topTimerColor}
-                                    timeInSeconds={bottomTimerAmount}
+                                    timeInSeconds={topTimerAmount}
                                 />
                             </div>
 
@@ -154,7 +162,7 @@ function Play() {
                             <div className="bottom-timer-wrapper">
                                 <Timer
                                     playerColor={bottomTimerColor}
-                                    timeInSeconds={topTimerAmount}
+                                    timeInSeconds={bottomTimerAmount}
                                 />
                             </div>
                         </div>
