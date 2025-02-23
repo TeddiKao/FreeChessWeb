@@ -1,4 +1,9 @@
-import { ChessboardSquareIndex, StateSetterFunction } from "../types/general.ts";
+import React from "react";
+import {
+    ChessboardSquareIndex,
+    OptionalValue,
+    StateSetterFunction,
+} from "../types/general.ts";
 
 interface DisplayChessboardProps {
     parsed_fen_string: any;
@@ -21,15 +26,21 @@ interface EmptySquareProps {
     squareNumber: string | number;
     squareColor: string;
     orientation: string;
-    handleSquareClick: (event: MouseEvent, square: ChessboardSquareIndex) => void;
+    handleSquareClick: (
+        event: React.MouseEvent,
+        square: ChessboardSquareIndex
+    ) => void;
     displayPromotionPopup: boolean;
     setParsedFENString: StateSetterFunction<any>;
-    setDraggedSquare: StateSetterFunction<string | number | null>;
-    setDroppedSquare: StateSetterFunction<string | number | null>;
+    setDraggedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
+    setDroppedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
     handlePromotionCancel: (color: string) => void;
-    handlePawnPromotion: (color: string, promotedPiece: string) => Promise<void>;
-    previousDraggedSquare: string | number | null;
-    previousDroppedSquare: string | number | null;
+    handlePawnPromotion: (
+        color: string,
+        promotedPiece: string
+    ) => Promise<void>;
+    previousDraggedSquare: OptionalValue<ChessboardSquareIndex>;
+    previousDroppedSquare: OptionalValue<ChessboardSquareIndex>;
 }
 
 interface FilledSquareProps {
@@ -43,5 +54,5 @@ export type {
     DisplayChessboardProps,
     ChessboardProps,
     MultiplayerChessboardProps,
-    SquareProps
+    SquareProps,
 };

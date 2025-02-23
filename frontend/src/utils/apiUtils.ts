@@ -1,10 +1,11 @@
 import api from "../api.js";
+import { ParsedFENString } from "../types/gameLogic.js";
 
 async function fetchLegalMoves(
-    parsedFENString,
-    pieceType,
-    pieceColor,
-    startingSquare
+    parsedFENString: object,
+    pieceType: string,
+    pieceColor: string,
+    startingSquare: string | number
 ) {
     let legalMoves = [];
 
@@ -67,7 +68,7 @@ async function fetchMoveIsValid(
     return [isMoveLegal, moveType];
 }
 
-async function fetchFen(rawFenString: object) {
+async function fetchFen(rawFenString: string): Promise<any> {
     let parsedFen = null;
 
     try {
@@ -112,7 +113,7 @@ async function fetchKingIsInCheck(
     return isKingInCheck;
 }
 
-async function getIsStalemated(currentFEN, kingColor) {
+async function getIsStalemated(currentFEN: ParsedFENString, kingColor: string) {
     let isStalemated = false;
     try {
         const response = await api.post(
