@@ -1,4 +1,6 @@
-const bulletTimeControls = [
+import { TimeControl } from "../types/gameSetup.ts";
+
+const bulletTimeControls: Array<TimeControl> = [
     {
         id: 1,
         baseTime: 60,
@@ -24,7 +26,7 @@ const bulletTimeControls = [
     },
 ];
 
-const blitzTimeControls = [
+const blitzTimeControls: Array<TimeControl> = [
     {
         id: 5,
         baseTime: 180,
@@ -44,7 +46,7 @@ const blitzTimeControls = [
     },
 ];
 
-const rapidTimeControls = [
+const rapidTimeControls: Array<TimeControl> = [
     {
         id: 8,
         baseTime: 600,
@@ -70,7 +72,7 @@ const rapidTimeControls = [
     },
 ];
 
-const classicalTimeControls = [
+const classicalTimeControls: Array<TimeControl> = [
     {
         id: 12,
         baseTime: 90 * 60,
