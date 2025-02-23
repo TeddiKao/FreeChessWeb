@@ -1,12 +1,12 @@
 import { useDrag, useDrop } from "react-dnd";
 
 import "../styles/chessboard/square.css";
-import PromotionPopup from "./PromotionPopup.js";
+import PromotionPopup from "./PromotionPopup.tsx";
 import React, { useEffect, useState } from "react";
 import { getFile, getRank, isSquareLight } from "../utils/boardUtils";
-import { SquareProps } from "../interfaces/chessboard.js";
-import { OptionalValue } from "../types/general.js";
-
+import { SquareProps } from "../interfaces/chessboard.ts";
+import { OptionalValue } from "../types/general.ts";
+import { capitaliseFirstLetter } from "../utils/generalUtils.ts";
 
 function Square({
     squareNumber,
@@ -22,6 +22,7 @@ function Square({
     previousDraggedSquare,
     previousDroppedSquare,
     orientation,
+    moveMethod
 }: SquareProps) {
     let startingSquare: OptionalValue<string> = null;
 
@@ -103,7 +104,7 @@ function Square({
     }
 
     function generateSquareHTML() {
-        if (!pieceColor) {
+        if (!pieceColor || !pieceType) {
             return null;
         }
 
@@ -119,6 +120,7 @@ function Square({
                     handlePromotionCancel={handlePromotionCancel}
                     handlePawnPromotion={handlePawnPromotion}
                     boardOrientation={orientation}
+                    moveMethod={moveMethod}
                 />
             );
         } else {
@@ -129,7 +131,7 @@ function Square({
                         handleOnDrag(squareNumber);
                     }}
                     className="piece-image"
-                    src={`/${pieceColor.toLowerCase()}${pieceType}.svg`}
+                    src={`/${pieceColor.toLowerCase()}${capitaliseFirstLetter(pieceType)}.svg`}
                 />
             );
         }

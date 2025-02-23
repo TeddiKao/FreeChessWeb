@@ -8,17 +8,17 @@ import TimeControlSelection from "../../pageComponents/gameplay/TimeControlSelec
 
 import "../../styles/matchmaking/select-time-control.css";
 
-import { capitaliseFirstLetter } from "../../utils/generalUtils.js";
-import { displayTimeControl } from "../../utils/timeUtils.js";
-import { fetchFen } from "../../utils/apiUtils.js";
+import { capitaliseFirstLetter } from "../../utils/generalUtils.ts";
+import { displayTimeControl } from "../../utils/timeUtils.ts";
+import { fetchFen } from "../../utils/apiUtils.ts";
 
 import MatchmakingScreen from "../../pageComponents/gameplay/MatchmakingScreen.js";
 import { GameSetupStages } from "../../enums/gameSetup.js";
 
 type TimeControlInfo = {
-    baseTime: number,
-    increment: number,
-}
+    baseTime: number;
+    increment: number;
+};
 
 function GameSetup() {
     const [parsedFEN, setParsedFEN] = useState<object | null>(null);
@@ -26,12 +26,14 @@ function GameSetup() {
     const [gameSetupStage, setGameSetupStage] = useState<string | null>(
         "timeControlSelection"
     );
-    const [timeControlSelectionStage, setTimeControlSelectionStage] = useState<
-        string | null
-    >("typeSelection");
+    const [timeControlSelectionStage, setTimeControlSelectionStage] =
+        useState<string>("typeSelection");
 
-    const [selectedTimeControlType, setSelectedTimeControlType] = useState<object | null>(null);
-    const [selectedTimeControl, setSelectedTimeControl] = useState<TimeControlInfo | null>(null);
+    const [selectedTimeControlType, setSelectedTimeControlType] = useState<
+        string | null
+    >(null);
+    const [selectedTimeControl, setSelectedTimeControl] =
+        useState<TimeControlInfo | null>(null);
 
     useEffect(() => {
         getParsedFEN();
@@ -91,6 +93,10 @@ function GameSetup() {
 
     function handleGoBack() {
         const stageToRedirect = getPreviousTimeControlSelectionStage();
+        if (!stageToRedirect) {
+            return;
+        }
+
         setTimeControlSelectionStage(stageToRedirect);
     }
 
@@ -147,6 +153,10 @@ function GameSetup() {
     }
 
     function showTimeControlAmounts() {
+        if (!selectedTimeControlType || !selectedTimeControl) {
+            return null;
+        }
+
         const timeControlType = selectedTimeControlType.toLowerCase();
         return (
             <div className="time-control-amount-selection-container">
@@ -180,6 +190,10 @@ function GameSetup() {
     }
 
     function showStartConfirmationScreen() {
+        if (!selectedTimeControl) {
+            return null;
+        }
+
         return (
             <div className="start-confirmation-container">
                 <p className="time-control">
@@ -219,17 +233,15 @@ function GameSetup() {
                 <div className="top-timer-wrapper">
                     <Timer
                         playerColor="black"
-                        position="top"
                         timeInSeconds={3600}
                     />
                 </div>
 
-                <DisplayChessboard fenString={parsedFEN} orientation="White" />
+                <DisplayChessboard parsed_fen_string={parsedFEN} orientation="White" />
 
                 <div className="bottom-timer-wrapper">
                     <Timer
                         playerColor="white"
-                        position="bottom"
                         timeInSeconds={3600}
                     />
                 </div>

@@ -43,8 +43,6 @@ async function fetchMoveIsValid(
     let isMoveLegal = false;
     let moveType = null;
 
-    console.log(parsedFENString);
-
     try {
         const response = await api.post("/move_validation_api/validate-move/", {
             parsed_fen_string: parsedFENString,

@@ -1,5 +1,4 @@
-import { PieceColor, PieceType } from "../../enums/pieces.js";
-import { BoardPlacement, ParsedFENString } from "../../types/gameLogic.ts";
+import { BoardPlacement, MoveInfo, ParsedFENString, PieceColor } from "../../types/gameLogic.ts";
 import { ChessboardSquareIndex, OptionalValue } from "../../types/general.ts";
 import { getRank } from "../boardUtils.ts";
 
@@ -12,29 +11,29 @@ function resetEnPassantTargetSquare(fenString: ParsedFENString): ParsedFENString
 
 function updateEnPassantTargetSquare(
     fenString: ParsedFENString,
-    { startingSquare, destinationSquare, pieceType, pieceColor }: any
+    { starting_square, destination_square, piece_type, piece_color }: MoveInfo
 ): ParsedFENString {
-    pieceType = pieceType.toLowerCase();
-    pieceColor = pieceColor.toLowerCase();
+    piece_type = piece_type.toLowerCase();
+    piece_color = piece_color.toLowerCase() as PieceColor;
 
     const updatedFEN: ParsedFENString = structuredClone(fenString);
 
-    if (pieceType !== PieceType.PAWN) {
+    if (piece_type !== "pawn") {
         return resetEnPassantTargetSquare(updatedFEN);
     }
 
-    const startingRank: number = getRank(startingSquare);
-    const destinationRank: number = getRank(destinationSquare);
+    const startingRank: number = getRank(starting_square);
+    const destinationRank: number = getRank(destination_square);
 
     if (Math.abs(startingRank - destinationRank) !== 2) {
         return resetEnPassantTargetSquare(updatedFEN);
     }
 
-    const isPawnWhite: boolean = pieceColor === PieceColor.WHITE;
+    const isPawnWhite: boolean = piece_color === "white";
     const enPassantSquareOffsetFromDestination: number = isPawnWhite ? -8 : 8;
 
     const enPassantSquare: number =
-        Number(destinationSquare) + enPassantSquareOffsetFromDestination;
+        Number(destination_square) + enPassantSquareOffsetFromDestination;
 
     updatedFEN["en_passant_target_square"] = enPassantSquare;
 

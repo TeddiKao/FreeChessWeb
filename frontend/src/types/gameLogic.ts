@@ -1,9 +1,9 @@
 import { ChessboardSquareIndex } from "./general";
 
 type SquareInfo = {
-    piece_color: string;
-    piece_type: string;
-    starting_square?: ChessboardSquareIndex;
+    piece_color: PieceColor;
+    piece_type: PieceType;
+	starting_square?: ChessboardSquareIndex;
 };
 
 type BoardPlacement = {
@@ -27,12 +27,22 @@ type ParsedFENString = {
 };
 
 type PieceInfo = {
-    piece_color: string;
-    piece_type: string;
+    piece_color: PieceColor;
+    piece_type: PieceType;
+	starting_square?: ChessboardSquareIndex;
 };
 
 type PieceColor = "white" | "black";
+type PieceType = "pawn" | "rook" | "bishop" | "king" | "knight" | "queen"
+
 type CastlingSide = "queenside" | "kingside"
+
+type MoveInfo = {
+	piece_color: PieceColor;
+	piece_type: PieceType;
+	starting_square: ChessboardSquareIndex;
+	destination_square: ChessboardSquareIndex;
+}
 
 export type {
     ParsedFENString,
@@ -40,5 +50,8 @@ export type {
     BoardPlacement,
     CastlingRights,
     PieceColor,
-	CastlingSide
+	CastlingSide,
+	MoveInfo,
+    PieceType,
+    SquareInfo
 };

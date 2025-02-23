@@ -4,6 +4,7 @@ import {
     OptionalValue,
     StateSetterFunction,
 } from "../types/general.ts";
+import { PieceColor, PieceType } from "../types/gameLogic.ts";
 
 interface DisplayChessboardProps {
     parsed_fen_string: any;
@@ -18,8 +19,9 @@ interface ChessboardProps extends DisplayChessboardProps {
 
 interface MultiplayerChessboardProps extends DisplayChessboardProps {
     gameId: number | string;
-    setWhiteTimer: StateSetterFunction<number>;
-    setBlackTimer: StateSetterFunction<number>;
+    setWhiteTimer: StateSetterFunction<OptionalValue<number>>;
+    setBlackTimer: StateSetterFunction<OptionalValue<number>>;
+    gameplaySettings: any;
 }
 
 interface EmptySquareProps {
@@ -27,25 +29,28 @@ interface EmptySquareProps {
     squareColor: string;
     orientation: string;
     handleSquareClick: (
-        event: React.MouseEvent,
+        event: React.MouseEvent<HTMLElement>,
         square: ChessboardSquareIndex
     ) => void;
     displayPromotionPopup: boolean;
     setParsedFENString: StateSetterFunction<any>;
     setDraggedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
     setDroppedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
-    handlePromotionCancel: (color: string) => void;
+    handlePromotionCancel: (color: PieceColor) => void;
     handlePawnPromotion: (
-        color: string,
-        promotedPiece: string
-    ) => Promise<void>;
+        color: PieceColor,
+        promotedPiece: PieceType,
+        moveMethod: string,
+        autoQueen?: boolean
+    ) => (Promise<void> | void) ;
     previousDraggedSquare: OptionalValue<ChessboardSquareIndex>;
     previousDroppedSquare: OptionalValue<ChessboardSquareIndex>;
+    moveMethod: OptionalValue<string>;
 }
 
 interface FilledSquareProps {
-    pieceColor?: string;
-    pieceType?: string;
+    pieceColor?: PieceColor;
+    pieceType?: PieceType;
 }
 
 interface SquareProps extends EmptySquareProps, FilledSquareProps {}

@@ -1,12 +1,12 @@
-import { PieceColor } from "../../enums/pieces";
+import { PieceColor } from "../../types/gameLogic";
 
-function getOppositeColor(color: string): string {
-    color = color.toLowerCase();
+function getOppositeColor(color: PieceColor): PieceColor {
+    color = (color.toLowerCase()) as PieceColor;
 
-    if (color === PieceColor.WHITE) {
-        return PieceColor.BLACK;
+    if (color === "white") {
+        return "black"
     } else {
-        return PieceColor.WHITE;
+        return "white"
     }
 }
 

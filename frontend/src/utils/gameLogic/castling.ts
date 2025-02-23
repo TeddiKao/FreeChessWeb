@@ -9,6 +9,7 @@ import {
     CastlingSide,
     ParsedFENString,
     PieceColor,
+    SquareInfo,
 } from "../../types/gameLogic.ts";
 import { capitaliseFirstLetter } from "../generalUtils.ts";
 
@@ -22,7 +23,10 @@ function getKingStartingSquare(color: string): number {
     }
 }
 
-function getKingCastledSquare(color: PieceColor, castlingSide: CastlingSide): number {
+function getKingCastledSquare(
+    color: PieceColor,
+    castlingSide: CastlingSide
+): number {
     castlingSide = castlingSide.toLowerCase() as CastlingSide;
 
     const startingSquare: number = getKingStartingSquare(color);
@@ -34,7 +38,10 @@ function getKingCastledSquare(color: PieceColor, castlingSide: CastlingSide): nu
     return startingSquare + squareOffset;
 }
 
-function getCastledRookSquare(color: PieceColor, castlingSide: CastlingSide): number {
+function getCastledRookSquare(
+    color: PieceColor,
+    castlingSide: CastlingSide
+): number {
     color = color.toLowerCase() as PieceColor;
     castlingSide = castlingSide.toLowerCase() as CastlingSide;
 
@@ -111,11 +118,9 @@ function handleCastling(
     fenString: ParsedFENString,
     color: PieceColor,
     castlingSide: CastlingSide
-): object | null {
+): ParsedFENString {
     color = color.toLowerCase() as PieceColor;
     castlingSide = castlingSide.toLowerCase() as CastlingSide;
-
-    console.log(fenString);
 
     const updatedFEN: ParsedFENString = structuredClone(fenString);
     const boardPlacement: BoardPlacement = structuredClone(
@@ -135,22 +140,19 @@ function handleCastling(
     const rookStartingSquare = getRookStartingSquare(color, castlingSide);
     const rookCastledSquare = getCastledRookSquare(color, castlingSide);
 
-    console.log(kingStartingSquare, kingCastledSquare);
-    console.log(rookStartingSquare, kingStartingSquare);
-
     if (!canCastle(color, castlingSide, castlingRights)) {
-        return null;
+        return updatedFEN;
     }
 
-    const castledKingSquareInfo = {
-        piece_type: "King",
-        piece_color: capitaliseFirstLetter(color),
+    const castledKingSquareInfo: SquareInfo = {
+        piece_type: "king",
+        piece_color: color,
         starting_square: kingStartingSquare,
     };
 
-    const castledRookSquareInfo = {
-        piece_type: "Rook",
-        piece_color: capitaliseFirstLetter(color),
+    const castledRookSquareInfo: SquareInfo = {
+        piece_type: "rook",
+        piece_color: color,
         starting_square: rookStartingSquare,
     };
 
@@ -162,8 +164,6 @@ function handleCastling(
 
     updatedFEN["board_placement"] = boardPlacement;
     updatedFEN["castling_rights"] = disabledCastlingRights;
-
-    console.log(updatedFEN);
 
     return updatedFEN;
 }

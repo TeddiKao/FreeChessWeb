@@ -4,7 +4,7 @@ type TimeControlTypeContainerProps = {
     timeControlName: string;
     timeControlDescription: string;
     setSelectionStage: (stage: string) => void;
-    setType: Dispatch<SetStateAction<string>>
+    setType: Dispatch<SetStateAction<string | null>>
 };
 
 function TimeControlTypeContainer({

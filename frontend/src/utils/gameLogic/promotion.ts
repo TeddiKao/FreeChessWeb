@@ -1,8 +1,9 @@
-import { PieceColor, PieceType } from "../../enums/pieces.js";
 import {
     BoardPlacement,
     ParsedFENString,
+    PieceColor,
     PieceInfo,
+    PieceType,
 } from "../../types/gameLogic.ts";
 import {
     ChessboardSquareIndex,
@@ -28,7 +29,7 @@ function clearUnpromotedPawn(
 function restoreCapturedPiece(
     boardPlacement: BoardPlacement,
     capturedPieceInfo: PieceInfo,
-    capturedPieceLocation: string | number
+    capturedPieceLocation: ChessboardSquareIndex
 ): BoardPlacement {
     const updatedBoardPlacement: BoardPlacement =
         structuredClone(boardPlacement);
@@ -39,11 +40,11 @@ function restoreCapturedPiece(
 
 function cancelPromotion(
     fenString: ParsedFENString,
-    color: string,
+    color: PieceColor,
     previousDraggedSquare: ChessboardSquareIndex,
     previousDroppedSquare: ChessboardSquareIndex,
     promotionCapturedPiece: PieceInfo
-): object {
+): ParsedFENString {
     const updatedFENString: ParsedFENString = structuredClone(fenString);
     let updatedBoardPlacement = structuredClone(
         updatedFENString["board_placement"]
@@ -56,7 +57,7 @@ function cancelPromotion(
     );
 
     updatedBoardPlacement[`${previousDraggedSquare}`] = {
-        piece_type: "Pawn",
+        piece_type: "pawn",
         piece_color: color,
     };
 
@@ -72,10 +73,10 @@ function cancelPromotion(
     return updatedFENString;
 }
 
-function getPromotionRank(color: string): number {
-    color = color.toLowerCase();
+function getPromotionRank(color: PieceColor): number {
+    color = color.toLowerCase() as PieceColor;
 
-    const isWhite: boolean = color === PieceColor.WHITE;
+    const isWhite: boolean = color === "white";
     const promotionRank: number = isWhite ? 7 : 0;
 
     return promotionRank;
@@ -85,24 +86,27 @@ function isCapture(startFile: number, endFile: number): boolean {
     return Math.abs(startFile - endFile) === 1;
 }
 
-function isPawnPromotion(color: string, destinationRank: number): boolean {
+function isPawnPromotion(color: PieceColor, destinationRank: number): boolean {
     return destinationRank === getPromotionRank(color);
 }
 
 function handlePromotionCaptureStorage(
     fenString: ParsedFENString,
-    pieceColor: string,
+    pieceColor: PieceColor,
     startingSquare: ChessboardSquareIndex,
     destinationSquare: ChessboardSquareIndex,
     setPromotionCapturedPiece: StateSetterFunction<OptionalValue<PieceInfo>>,
     selectingPromotionRef: RefObject<boolean>,
     unpromotedBoardPlacementRef: RefObject<OptionalValue<ParsedFENString>>,
     handlePawnPromotion: (
-        color: string,
-        promotedPiece: string,
+        color: PieceColor,
+        promotedPiece: PieceType,
+        moveMethod: string,
         autoQueen?: boolean
     ) => Promise<void>,
-    gameplaySettings: any
+
+    gameplaySettings: any,
+    moveMethod: string
 ): void {
     const autoQueen: boolean = gameplaySettings["auto_queen"];
 
@@ -115,6 +119,8 @@ function handlePromotionCaptureStorage(
     const destinationFile: number = getFile(destinationSquare);
     const destinationRank: number = getRank(destinationSquare);
 
+    console.log(destinationRank, pieceColor);
+
     if (!isPawnPromotion(pieceColor, destinationRank)) {
         return;
     }
@@ -122,16 +128,18 @@ function handlePromotionCaptureStorage(
     selectingPromotionRef.current = true;
     unpromotedBoardPlacementRef.current = updatedFENString;
 
+    console.log("Updated unpromoted board placement");
+
     if (!isCapture(startFile, destinationFile)) {
         if (autoQueen) {
-            handlePawnPromotion(pieceColor, "Queen", true);
+            handlePawnPromotion(pieceColor, "queen", moveMethod, true);
         }
 
         return;
     }
 
     if (autoQueen) {
-        handlePawnPromotion(pieceColor, "Queen", true);
+        handlePawnPromotion(pieceColor, "queen", moveMethod, true);
         return;
     }
 
@@ -140,14 +148,18 @@ function handlePromotionCaptureStorage(
 }
 
 async function updatePromotedBoardPlacment(
-    fenString: object,
+    fenString: ParsedFENString,
     color: string,
     promotedPiece: string,
     autoQueen: boolean,
     originalPawnSquare: string | number,
     promotionSquare: string | number,
-    unpromotedBoardPlacementRef: any
+    unpromotedBoardPlacementRef: RefObject<OptionalValue<ParsedFENString>>
 ): Promise<object> {
+    if (!unpromotedBoardPlacementRef.current) {
+        return fenString;
+    }
+
     autoQueen = autoQueen || false;
 
     const updatedFENString: any = structuredClone(fenString);
@@ -158,15 +170,13 @@ async function updatePromotedBoardPlacment(
     const [isMoveValid, moveType] = await fetchMoveIsValid(
         unpromotedBoardPlacementRef.current,
         color,
-        PieceType.PAWN,
+        "pawn",
         originalPawnSquare,
         promotionSquare,
         {
             promoted_piece: promotedPiece,
         }
     );
-
-    console.log(`Move valid: ${isMoveValid}`);
 
     if (!isMoveValid) {
         return updatedFENString;
@@ -182,7 +192,6 @@ async function updatePromotedBoardPlacment(
     }
 
     updatedFENString["board_placement"] = updatedBoardPlacement;
-    console.log(updatedFENString, moveType);
 
     return [updatedFENString, moveType];
 }

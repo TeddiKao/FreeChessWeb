@@ -2,43 +2,47 @@ import { useEffect, useState } from "react";
 import SettingsSwitch from "./SettingsSwitch.js";
 import api from "../../api.js";
 
-
-function Setting({ settingName, settingId, settingType, initialSettingValue, setGameplaySettingvs }) {
+function Setting({
+    settingName,
+    settingId,
+    settingType,
+    initialSettingValue,
+    setGameplaySettingvs,
+}) {
     const [settingValue, setSettingValue] = useState(initialSettingValue);
 
-	useEffect(() => {
-		updateSettings();
-	}, [settingValue])
+    useEffect(() => {
+        updateSettings();
+    }, [settingValue]);
 
-	async function updateSettings() {
-		let newSettings = null;
+    async function updateSettings() {
+        let newSettings = null;
 
         if (settingValue === undefined || settingValue === null) {
             return null;
         }
 
-        console.log(settingValue, settingId);
+        try {
+            const response = await api.post(
+                "/gameplay_api/update-gameplay-settings/",
+                {
+                    setting_to_update: settingId,
+                    updated_value: settingValue,
+                }
+            );
 
-		try {
-			const response = await api.post("/gameplay_api/update-gameplay-settings/", {
-                "setting_to_update": settingId,
-                "updated_value": settingValue
-            })
+            if (response.status === 200) {
+                newSettings = response.data;
 
-            console.log(response);
+                const newSettingValue = newSettings[settingId];
 
-			if (response.status === 200) {
-				newSettings = response.data;
-				
-				const newSettingValue = newSettings[settingId];
-
-				setSettingValue(newSettingValue);
+                setSettingValue(newSettingValue);
                 setGameplaySettingvs(newSettings);
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	}
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     function getSettingInput() {
         switch (settingType) {

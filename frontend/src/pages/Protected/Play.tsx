@@ -2,7 +2,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import MultiplayerChessboard from "../../globalComponents/chessboards/MultiplayerChessboard.js";
-import Timer from "../../pageComponents/gameplay/Ti"
+import Timer from "../../pageComponents/gameplay/Timer.tsx";
 
 import {
     GameEndedSetterContext,
@@ -18,18 +18,23 @@ import { fetchFen } from "../../utils/apiUtils.js";
 import GameOverModal from "../../globalComponents/modals/GameOverModal.js";
 import GameplaySettings from "../../globalComponents/modals/GameplaySettings.js";
 import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.js";
+import { OptionalValue } from "../../types/general.js";
+import { ParsedFENString, PieceColor } from "../../types/gameLogic.js";
+import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
 function Play() {
-    const [parsedFEN, setParsedFEN] = useState(null);
+    const [parsedFEN, setParsedFEN] =
+        useState<OptionalValue<ParsedFENString>>(null);
     const location = useLocation();
 
-    const [gameEnded, setGameEnded] = useState(false);
-    const [gameEndedCause, setGameEndedCause] = useState(null);
-    const [gameWinner, setGameWinner] = useState(null);
+    const [gameEnded, setGameEnded] = useState<boolean>(false);
+    const [gameEndedCause, setGameEndedCause] =
+        useState<OptionalValue<string>>(null);
+    const [gameWinner, setGameWinner] = useState<OptionalValue<string>>(null);
 
-    const [whitePlayerTimer, setWhitePlayerTimer] = useState(
+    const [whitePlayerTimer, setWhitePlayerTimer] = useState<OptionalValue<number>>(
         location.state?.baseTime
     );
-    const [blackPlayerTimer, setBlackPlayerTimer] = useState(
+    const [blackPlayerTimer, setBlackPlayerTimer] = useState<OptionalValue<number>>(
         location.state?.baseTime
     );
 
@@ -38,6 +43,9 @@ function Play() {
     );
 
     const [settingsVisible, setSettingsVisible] = useState(false);
+
+    const initialGameplaySettings = useGameplaySettings();
+    const [gameplaySettings, setGameplaySettings] = useState(initialGameplaySettings);
 
     const startingPositionFEN =
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -50,8 +58,6 @@ function Play() {
         return <Navigate to={"/select-time-control"} />;
     }
 
-    const timeControlBaseTime = location.state.baseTime;
-    const timeControlIncrement = location.state.increment;
     const gameId = location.state.gameId;
 
     const topTimerColor = getTimerColor("top");
@@ -81,7 +87,7 @@ function Play() {
         setSettingsVisible(false);
     }
 
-    function getTimerColor(timerPosition) {
+    function getTimerColor(timerPosition: string) {
         const boardSide =
             boardOrientation.toLowerCase() === "white" ? "bottom" : "top";
         const position = timerPosition.toLowerCase();
@@ -93,12 +99,19 @@ function Play() {
         }
     }
 
-    function getTimeAmount(color) {
-        if (color.toLowerCase() === "white") {
+    function getTimeAmount(color: PieceColor) {
+        if (color === "white") {
             return whitePlayerTimer;
         } else {
             return blackPlayerTimer;
         }
+    }
+
+    const topTimerAmount = getTimeAmount(topTimerColor);
+    const bottomTimerAmount = getTimeAmount(bottomTimerColor);
+
+    if (!topTimerAmount || !bottomTimerAmount) {
+        return <Navigate to="/select-time-control"/>
     }
 
     return (
@@ -110,8 +123,7 @@ function Play() {
                             <div className="top-timer-wrapper">
                                 <Timer
                                     playerColor={topTimerColor}
-                                    position="top"
-                                    timeInSeconds={getTimeAmount(topTimerColor)}
+                                    timeInSeconds={bottomTimerAmount}
                                 />
                             </div>
 
@@ -122,6 +134,7 @@ function Play() {
                                     gameId={gameId}
                                     setWhiteTimer={setWhitePlayerTimer}
                                     setBlackTimer={setBlackPlayerTimer}
+                                    gameplaySettings={gameplaySettings}
                                 />
                             </div>
 
@@ -134,16 +147,14 @@ function Play() {
                             <ModalWrapper visible={settingsVisible}>
                                 <GameplaySettings
                                     onClose={handleSettingsClose}
+                                    setGameplaySettings={setGameplaySettings}
                                 />
                             </ModalWrapper>
 
                             <div className="bottom-timer-wrapper">
                                 <Timer
                                     playerColor={bottomTimerColor}
-                                    position="bottom"
-                                    timeInSeconds={getTimeAmount(
-                                        bottomTimerColor
-                                    )}
+                                    timeInSeconds={topTimerAmount}
                                 />
                             </div>
                         </div>
