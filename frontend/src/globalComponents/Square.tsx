@@ -2,9 +2,10 @@ import { useDrag, useDrop } from "react-dnd";
 
 import "../styles/chessboard/square.css";
 import PromotionPopup from "./PromotionPopup.js";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getFile, getRank, isSquareLight } from "../utils/boardUtils";
 import { SquareProps } from "../interfaces/chessboard.js";
+import { OptionalValue } from "../types/general.js";
 
 
 function Square({
@@ -22,9 +23,9 @@ function Square({
     previousDroppedSquare,
     orientation,
 }: SquareProps) {
-    let startingSquare: string | null = null;
+    let startingSquare: OptionalValue<string> = null;
 
-    const [popupIsOpen, setPopupIsOpen] = useState(displayPromotionPopup);
+    const [popupIsOpen, setPopupIsOpen] = useState<boolean>(displayPromotionPopup);
 
     function getSquareClass() {
         if (squareNumber === previousDraggedSquare) {
@@ -102,6 +103,10 @@ function Square({
     }
 
     function generateSquareHTML() {
+        if (!pieceColor) {
+            return null;
+        }
+
         let squareHTML = null;
         if (displayPromotionPopup) {
             squareHTML = (
@@ -136,7 +141,7 @@ function Square({
         <div
             ref={drop}
             className={getSquareClass()}
-            id={squareNumber}
+            id={`${squareNumber}`}
             onClick={(event) => {
                 handleSquareClick(event, squareNumber);
                 clearAllHighlightedSquares();
