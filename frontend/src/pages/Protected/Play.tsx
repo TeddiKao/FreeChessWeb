@@ -31,12 +31,12 @@ function Play() {
         useState<OptionalValue<string>>(null);
     const [gameWinner, setGameWinner] = useState<OptionalValue<string>>(null);
 
-    const [whitePlayerTimer, setWhitePlayerTimer] = useState<OptionalValue<number>>(
-        location.state?.baseTime
-    );
-    const [blackPlayerTimer, setBlackPlayerTimer] = useState<OptionalValue<number>>(
-        location.state?.baseTime
-    );
+    const [whitePlayerTimer, setWhitePlayerTimer] = useState<
+        OptionalValue<number>
+    >(location.state?.baseTime);
+    const [blackPlayerTimer, setBlackPlayerTimer] = useState<
+        OptionalValue<number>
+    >(location.state?.baseTime);
 
     const [boardOrientation, setBoardOrientation] = useState(
         location.state?.assignedColor || "White"
@@ -45,7 +45,9 @@ function Play() {
     const [settingsVisible, setSettingsVisible] = useState(false);
 
     const initialGameplaySettings = useGameplaySettings();
-    const [gameplaySettings, setGameplaySettings] = useState(initialGameplaySettings);
+    const [gameplaySettings, setGameplaySettings] = useState(
+        initialGameplaySettings
+    );
 
     const startingPositionFEN =
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -56,7 +58,7 @@ function Play() {
 
     useEffect(() => {
         setGameplaySettings(initialGameplaySettings);
-    }, [initialGameplaySettings])
+    }, [initialGameplaySettings]);
 
     if (!location.state) {
         return <Navigate to={"/select-time-control"} />;
@@ -119,7 +121,7 @@ function Play() {
     const bottomTimerAmount = getTimeAmount(bottomTimerColor);
 
     if (!topTimerAmount || !bottomTimerAmount) {
-        return <Navigate to="/select-time-control"/>
+        return <Navigate to="/select-time-control" />;
     }
 
     return (
