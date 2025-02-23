@@ -259,10 +259,15 @@ def get_pawn_legal_moves(board_placement, en_passant_target_square, move_info):
 			if not en_passant_target_square:
 				continue
 
-			print(attacking_square, en_passant_target_square)
-
 			if int(attacking_square) == int(en_passant_target_square):
-				legal_squares.append(attacking_square)
+				target_row = get_row(int(en_passant_target_square))
+
+				target_pawn_color = "white" if target_row == 2 else "black"
+
+				if target_pawn_color.lower() == piece_color.lower():
+					continue
+
+				legal_squares.append(str(en_passant_target_square))
 
 			continue
 
