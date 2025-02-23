@@ -1,4 +1,4 @@
-import { BoardPlacement, MoveInfo, ParsedFENString, PieceColor } from "../../types/gameLogic.ts";
+import { BoardPlacement, MoveInfo, ParsedFENString, PieceColor, PieceType } from "../../types/gameLogic.ts";
 import { ChessboardSquareIndex, OptionalValue } from "../../types/general.ts";
 import { getRank } from "../boardUtils.ts";
 
@@ -13,7 +13,7 @@ function updateEnPassantTargetSquare(
     fenString: ParsedFENString,
     { starting_square, destination_square, piece_type, piece_color }: MoveInfo
 ): ParsedFENString {
-    piece_type = piece_type.toLowerCase();
+    piece_type = piece_type.toLowerCase() as PieceType;
     piece_color = piece_color.toLowerCase() as PieceColor;
 
     const updatedFEN: ParsedFENString = structuredClone(fenString);
@@ -56,8 +56,10 @@ function handleEnPassant(
     destinationSquare: ChessboardSquareIndex
 ): ParsedFENString {
     const enPassantSquare: OptionalValue<number> = fenString["en_passant_target_square"];
+    console.log(`EnPassant: ${enPassantSquare}`)
+    
     if (!enPassantSquare) {
-        return fenString
+        return fenString;
     }
 
     if (!isEnPassant(destinationSquare, enPassantSquare)) {
@@ -71,6 +73,8 @@ function handleEnPassant(
 
     const pawnToCaptureLocation: number =
         getEnPassantPawnLocation(enPassantSquare);
+
+    console.log(`Pawn location: ${pawnToCaptureLocation}`);
 
     delete updatedBoardPlacement[`${pawnToCaptureLocation}`];
 

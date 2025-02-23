@@ -153,11 +153,12 @@ function GameSetup() {
     }
 
     function showTimeControlAmounts() {
-        if (!selectedTimeControlType || !selectedTimeControl) {
+        if (!selectedTimeControlType) {
             return null;
         }
 
         const timeControlType = selectedTimeControlType.toLowerCase();
+
         return (
             <div className="time-control-amount-selection-container">
                 <h1 className="time-control-type-header">
@@ -215,6 +216,8 @@ function GameSetup() {
     }
 
     function renderTimeControlSelectionPanel() {
+        console.log(timeControlSelectionStage);
+
         switch (timeControlSelectionStage) {
             case GameSetupStages.TYPE_SELECTION:
                 return showTimeControlTypes();

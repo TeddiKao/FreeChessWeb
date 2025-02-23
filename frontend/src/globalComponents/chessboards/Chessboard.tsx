@@ -224,7 +224,7 @@ function Chessboard({
                     draggedSquare
                 );
 
-                if (pieceTypeToValidate === "pawn") {
+                if (pieceTypeToValidate.toLowerCase() === "pawn") {
                     newPiecePlacements = handleEnPassant(
                         newPiecePlacements,
                         droppedSquare
@@ -415,7 +415,7 @@ function Chessboard({
                     previousClickedSquare
                 );
 
-                if (pieceTypeToValidate === "pawn") {
+                if (pieceTypeToValidate.toLowerCase() === "pawn") {
                     newPiecePlacements = handleEnPassant(
                         newPiecePlacements,
                         clickedSquare

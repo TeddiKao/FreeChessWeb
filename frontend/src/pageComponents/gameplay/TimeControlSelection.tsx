@@ -18,7 +18,7 @@ type setTimeControl = (value: TimeControlInfo) => void;
 
 type TimeControlSelectionProps = {
     timeControlType: string,
-    selectedTimeControl: TimeControlInfo,
+    selectedTimeControl: TimeControlInfo | null,
     setTimeControl: setTimeControl
 }
 

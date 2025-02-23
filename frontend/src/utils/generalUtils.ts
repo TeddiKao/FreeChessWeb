@@ -7,7 +7,7 @@ function capitaliseFirstLetter(string: string): string {
 	return `${firstLetter}${remainingLetters}`;
 }
 
-function compareObjects(objectA: object, objectB: object): boolean {
+function compareObjects(objectA: object | null, objectB: object | null): boolean {
 	return isEqual(objectA, objectB);
 }
 
