@@ -8,21 +8,35 @@ import { useNavigate } from "react-router-dom";
 import { getAccessToken } from "../../utils/tokenUtils.ts";
 import { getUsername } from "../../utils/apiUtils.ts";
 
+type timeControlInfo = {
+    baseTime: number;
+    increment: number;
+};
+
+type gameSetupStageFunction = (stage: string) => void;
+
+type MatchmakingScreenProps = {
+    timeControlInfo: timeControlInfo;
+    setGameSetupStage: gameSetupStageFunction;
+};
+
 function MatchmakingScreen({
     timeControlInfo: { baseTime, increment },
     setGameSetupStage,
-}) {
-    const [matchmakingStatus, setMatchmakingStatus] = useState("Finding match");
-    const [isMatchmaking, setIsMatchmaking] = useState(true);
-    const [websocketConnected, setWebsocketConnected] = useState(false);
-    const [matchFound, setMatchFound] = useState(false);
+}: MatchmakingScreenProps) {
+    const [matchmakingStatus, setMatchmakingStatus] =
+        useState<string>("Finding match");
+    const [isMatchmaking, setIsMatchmaking] = useState<boolean>(true);
+    const [websocketConnected, setWebsocketConnected] =
+        useState<boolean>(false);
+    const [matchFound, setMatchFound] = useState<boolean>(false);
 
-    const matchFoundRef = useRef(null);
-    const gameIdRef = useRef(null);
-    const whitePlayerRef = useRef(null);
-    const blackPlayerRef = useRef(null);
+    const matchFoundRef = useRef<boolean | null>(null);
+    const gameIdRef = useRef<string | number | null>(null);
+    const whitePlayerRef = useRef<string | null>(null);
+    const blackPlayerRef = useRef<string | null>(null);
 
-    const matchmakingWebsocketRef = useRef(null);
+    const matchmakingWebsocketRef = useRef<WebSocket | null>(null);
 
     const navigate = useNavigate();
 
@@ -35,7 +49,7 @@ function MatchmakingScreen({
                     gameId: gameIdRef.current,
                     assignedColor: await getAssignedColor(),
                 };
-                
+
                 navigate("/play", {
                     state: gameSetupInfo,
                 });
@@ -68,7 +82,7 @@ function MatchmakingScreen({
         };
     }, []);
 
-    function onMessage(event) {
+    function onMessage(event: any): void {
         const parsedEventData = JSON.parse(event.data);
 
         if (parsedEventData["match_found"]) {
@@ -76,14 +90,15 @@ function MatchmakingScreen({
         }
     }
 
-    async function getAssignedColor() {
-        const username = await getUsername();
-        const assignedColor = username === whitePlayerRef.current ? "White" : "Black";
+    async function getAssignedColor(): Promise<string> {
+        const username: string = await getUsername();
+        const assignedColor: string =
+            username === whitePlayerRef.current ? "White" : "Black";
 
         return assignedColor;
     }
 
-    function handleMatchFound(parsedEventData) {
+    function handleMatchFound(parsedEventData: any) {
         matchmakingWebsocketRef.current?.close();
 
         setMatchmakingStatus("Match found");
@@ -105,11 +120,11 @@ function MatchmakingScreen({
         }, 50);
     }
 
-    function onError(event) {
+    function onError() {
         console.log("Error!");
     }
 
-    function handleMatchmakingCancel() {
+    function handleMatchmakingCancel(): void {
         setIsMatchmaking(false);
         setGameSetupStage("timeControlSelection");
     }

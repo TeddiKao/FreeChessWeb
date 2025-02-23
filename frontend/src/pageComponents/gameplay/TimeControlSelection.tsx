@@ -9,19 +9,33 @@ import { TimeControlTypes } from "../../enums/gameSetup.js";
 import { compareObjects } from "../../utils/generalUtils.ts";
 import { displayTimeControl } from "../../utils/timeUtils.ts";
 
+interface TimeControlInfo {
+    id?: number,
+    baseTime: number,
+    increment: number
+}
+
+type setTimeControl = (value: TimeControlInfo) => void;
+
+type TimeControlSelectionProps = {
+    timeControlType: string,
+    selectedTimeControl: TimeControlInfo,
+    setTimeControl: setTimeControl
+}
+
 function TimeControlSelection({
     timeControlType,
     selectedTimeControl,
     setTimeControl,
-}) {
-    function handleTimeControlClick(timeControlInfo) {
+}: TimeControlSelectionProps) {
+    function handleTimeControlClick(timeControlInfo: TimeControlInfo) {
         setTimeControl({
             baseTime: timeControlInfo.baseTime,
             increment: timeControlInfo.increment,
         });
     }
 
-    function getTimeControlsList() {
+    function getTimeControlsList(): Array<TimeControlInfo> | undefined {
         switch (timeControlType.toLowerCase()) {
             case TimeControlTypes.BULLET:
                 return bulletTimeControls;
@@ -40,11 +54,15 @@ function TimeControlSelection({
         }
     }
 
-    const timeControls = getTimeControlsList();
+    const timeControls: Array<TimeControlInfo> | undefined = getTimeControlsList();
+    if (!timeControls) {
+        return null;
+    }
+
 
     return (
         <div className="time-controls-container">
-            {timeControls.map(({ id, baseTime, increment }) => {
+            {timeControls.map(({ id, baseTime, increment }: TimeControlInfo) => {
                 return (
                     <div
                         key={id}

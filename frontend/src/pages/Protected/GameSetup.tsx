@@ -1,31 +1,37 @@
 import React, { useEffect, useState } from "react";
 
-import DisplayChessboard from "../../globalComponents/chessboards/DisplayChessboard.jsx";
+import DisplayChessboard from "../../globalComponents/chessboards/DisplayChessboard.js";
 
-import TimeControlTypeContainer from "../../pageComponents/gameplay/TimeControlTypeContainer.jsx";
-import Timer from "../../pageComponents/gameplay/Timer.jsx";
-import TimeControlSelection from "../../pageComponents/gameplay/TimeControlSelection.jsx";
+import TimeControlTypeContainer from "../../pageComponents/gameplay/TimeControlTypeContainer.js";
+import Timer from "../../pageComponents/gameplay/Timer.js";
+import TimeControlSelection from "../../pageComponents/gameplay/TimeControlSelection.js";
 
 import "../../styles/matchmaking/select-time-control.css";
 
-import { capitaliseFirstLetter } from "../../utils/generalUtils.ts";
-import { displayTimeControl } from "../../utils/timeUtils.ts";
-import { fetchFen } from "../../utils/apiUtils.ts";
+import { capitaliseFirstLetter } from "../../utils/generalUtils.js";
+import { displayTimeControl } from "../../utils/timeUtils.js";
+import { fetchFen } from "../../utils/apiUtils.js";
 
-import MatchmakingScreen from "../../pageComponents/gameplay/MatchmakingScreen.jsx";
+import MatchmakingScreen from "../../pageComponents/gameplay/MatchmakingScreen.js";
 import { GameSetupStages } from "../../enums/gameSetup.js";
 
-function GameSetup() {
-    const [parsedFEN, setParsedFEN] = useState("");
+type TimeControlInfo = {
+    baseTime: number,
+    increment: number,
+}
 
-    const [gameSetupStage, setGameSetupStage] = useState(
+function GameSetup() {
+    const [parsedFEN, setParsedFEN] = useState<object | null>(null);
+
+    const [gameSetupStage, setGameSetupStage] = useState<string | null>(
         "timeControlSelection"
     );
-    const [timeControlSelectionStage, setTimeControlSelectionStage] =
-        useState("typeSelection");
+    const [timeControlSelectionStage, setTimeControlSelectionStage] = useState<
+        string | null
+    >("typeSelection");
 
-    const [selectedTimeControlType, setSelectedTimeControlType] = useState("");
-    const [selectedTimeControl, setSelectedTimeControl] = useState("");
+    const [selectedTimeControlType, setSelectedTimeControlType] = useState<object | null>(null);
+    const [selectedTimeControl, setSelectedTimeControl] = useState<TimeControlInfo | null>(null);
 
     useEffect(() => {
         getParsedFEN();
@@ -57,6 +63,10 @@ function GameSetup() {
                 );
 
             case "matchmaking":
+                if (!selectedTimeControl) {
+                    return null;
+                }
+
                 return (
                     <MatchmakingScreen
                         timeControlInfo={{
@@ -81,7 +91,6 @@ function GameSetup() {
 
     function handleGoBack() {
         const stageToRedirect = getPreviousTimeControlSelectionStage();
-        console.log(stageToRedirect)
         setTimeControlSelectionStage(stageToRedirect);
     }
 

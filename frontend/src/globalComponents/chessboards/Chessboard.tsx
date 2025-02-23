@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext, useRef } from "react";
 
 import "../../styles/chessboard/chessboard.css";
-import Square from "../Square.jsx";
+import Square from "../Square.js";
 
 import {
     clearSquaresStyling,
@@ -10,27 +10,27 @@ import {
     getBoardEndingIndex,
     isSquareLight,
     getSquareExists,
-} from "../../utils/boardUtils.ts";
+} from "../../utils/boardUtils";
 
-import { playAudio } from "../../utils/audioUtils.ts";
+import { playAudio } from "../../utils/audioUtils";
 
 import {
     fetchLegalMoves,
     fetchMoveIsValid,
     getIsCheckmated,
     getIsStalemated,
-} from "../../utils/apiUtils.ts";
+} from "../../utils/apiUtils";
 
 import {
     disableCastling,
     handleCastling,
     isCastling,
-} from "../../utils/gameLogic/castling.ts";
+} from "../../utils/gameLogic/castling";
 
 import {
     handleEnPassant,
     updateEnPassantTargetSquare,
-} from "../../utils/gameLogic/enPassant.ts";
+} from "../../utils/gameLogic/enPassant";
 
 import {
     GameEndedSetterContext,
@@ -39,44 +39,59 @@ import {
 } from "../../contexts/chessboardContexts.js";
 
 import { PieceColor, PieceType } from "../../enums/pieces.js";
+
 import {
     cancelPromotion,
     handlePromotionCaptureStorage,
     updatePromotedBoardPlacment,
-} from "../../utils/gameLogic/promotion.ts";
+} from "../../utils/gameLogic/promotion";
+
 import {
     addPieceToDestinationSquare,
     clearStartingSquare,
-} from "../../utils/gameLogic/basicMovement.ts";
+} from "../../utils/gameLogic/basicMovement";
+
 import { MoveMethods } from "../../enums/gameLogic.js";
-import { getOppositeColor } from "../../utils/gameLogic/general.ts";
+import { getOppositeColor } from "../../utils/gameLogic/general";
+import { ChessboardProps } from "../../interfaces/chessboard.js";
+import { ChessboardSquareIndex, OptionalValue } from "../../types/general.js";
+import { ParsedFENString, PieceInfo } from "../../types/gameLogic.js";
+
 function Chessboard({
     parsed_fen_string,
-    boardOrientation,
+    orientation,
     setBoardOrientation,
     flipOnMove,
     gameplaySettings,
-}) {
-    const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
-    const [clickedSquare, setClickedSquare] = useState(null);
-    const [parsedFENString, setParsedFENString] = useState(parsed_fen_string);
+}: ChessboardProps) {
+    const [previousClickedSquare, setPreviousClickedSquare] =
+        useState<OptionalValue<ChessboardSquareIndex>>(null);
+    const [clickedSquare, setClickedSquare] =
+        useState<OptionalValue<ChessboardSquareIndex>>(null);
+    const [parsedFENString, setParsedFENString] = 
+        useState<OptionalValue<ParsedFENString>>(parsed_fen_string);
 
-    const [draggedSquare, setDraggedSquare] = useState(null);
+    const [draggedSquare, setDraggedSquare] =
+        useState<OptionalValue<ChessboardSquareIndex>>(null);
     const [droppedSquare, setDroppedSquare] = useState(null);
 
-    const [previousDraggedSquare, setPreviousDraggedSquare] = useState(null);
-    const [previousDroppedSquare, setPreviousDroppedSquare] = useState(null);
-    const [promotionCapturedPiece, setPromotionCapturedPiece] = useState(null);
+    const [previousDraggedSquare, setPreviousDraggedSquare] =
+        useState<OptionalValue<ChessboardSquareIndex>>(null);
+    const [previousDroppedSquare, setPreviousDroppedSquare] =
+        useState<OptionalValue<ChessboardSquareIndex>>(null);
+    const [promotionCapturedPiece, setPromotionCapturedPiece] =
+        useState<OptionalValue<PieceInfo>>(null);
 
-    const [sideToMove, setSideToMove] = useState("white");
+    const [sideToMove, setSideToMove] = useState<string>("white");
 
     const setGameEnded = useContext(GameEndedSetterContext);
     const setGameEndedCause = useContext(GameEndedCauseSetterContext);
     const setGameWinner = useContext(GameWinnerSetterContext);
 
-    const isFirstRender = useRef(false);
-    const selectingPromotionRef = useRef(false);
-    const unpromotedBoardPlacementRef = useRef(null);
+    const isFirstRender = useRef<boolean>(false);
+    const selectingPromotionRef = useRef<boolean>(false);
+    const unpromotedBoardPlacementRef =
+        useRef<OptionalValue<ParsedFENString>>(null);
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -156,7 +171,7 @@ function Chessboard({
             );
         }
 
-        setParsedFENString((previousFENString) => {
+        setParsedFENString((previousFENString: any) => {
             const originalBoardPlacements =
                 previousFENString["board_placement"];
 
@@ -264,6 +279,14 @@ function Chessboard({
     }
 
     async function handleClickToMove() {
+        if (!parsedFENString) {
+            return;
+        }
+
+        if (!previousClickedSquare) {
+            return;
+        }
+
         const boardPlacement = parsedFENString["board_placement"];
 
         clearSquaresStyling();
@@ -274,9 +297,7 @@ function Chessboard({
 
         const shouldMove = previousClickedSquare && clickedSquare;
         if (!shouldMove) {
-            if (previousClickedSquare) {
-                handleLegalMoveDisplay("click");
-            }
+            handleLegalMoveDisplay("click");
 
             return;
         }
@@ -334,7 +355,7 @@ function Chessboard({
                     "piece_color"
                 ];
 
-            let newPiecePlacements = addPieceToDestinationSquare(
+            let newPiecePlacements: ParsedFENString = addPieceToDestinationSquare(
                 previousFENString,
                 clickedSquare,
                 {
@@ -431,7 +452,15 @@ function Chessboard({
         setClickedSquare(null);
     }
 
-    async function displayLegalMoves(pieceType, pieceColor, startingSquare) {
+    async function displayLegalMoves(
+        pieceType: string,
+        pieceColor: string,
+        startingSquare: ChessboardSquareIndex
+    ) {
+        if (!parsedFENString) {
+            return 
+        }
+
         const legalMoves = await fetchLegalMoves(
             parsedFENString,
             pieceType,
@@ -464,18 +493,15 @@ function Chessboard({
 
     const piecePlacements = parsedFENString["board_placement"];
 
-    function handleSquareClick(event, square) {
-        const container = document.getElementById(square);
-        event.target = container;
-
+    function handleSquareClick(event: React.MouseEvent<HTMLElement>) {
         if (!previousClickedSquare && !clickedSquare) {
-            setPreviousClickedSquare(event.target.id);
+            setPreviousClickedSquare(event.currentTarget.id);
         } else {
-            setClickedSquare(event.target.id);
+            setClickedSquare(event.currentTarget.id);
         }
     }
 
-    function handleLegalMoveDisplay(moveMethod) {
+    function handleLegalMoveDisplay(moveMethod: string) {
         moveMethod = moveMethod.toLowerCase();
 
         const usingDrag = moveMethod === MoveMethods.DRAG;
@@ -495,8 +521,16 @@ function Chessboard({
         displayLegalMoves(pieceType, pieceColor, draggedSquare);
     }
 
-    function handlePromotionCancel(color) {
-        setParsedFENString((prevFENString) => {
+    function handlePromotionCancel(color: string) {
+        if (
+            !previousDraggedSquare ||
+            !previousDroppedSquare ||
+            !promotionCapturedPiece
+        ) {
+            return;
+        }
+
+        setParsedFENString((prevFENString: any) => {
             const updatedBoardPlacement = cancelPromotion(
                 prevFENString,
                 color,
@@ -512,7 +546,10 @@ function Chessboard({
         selectingPromotionRef.current = false;
     }
 
-    async function handleGameEndDetection(fenString, color) {
+    async function handleGameEndDetection(
+        fenString,
+        color: string
+    ): Promise<void> {
         const kingColor = getOppositeColor(color);
 
         const isCheckmated = await checkIsCheckmated(fenString, kingColor);
@@ -524,7 +561,7 @@ function Chessboard({
         }
     }
 
-    function handleGameEnded(isCheckmated, color) {
+    function handleGameEnded(isCheckmated: boolean, color: string) {
         setGameEnded(true);
 
         const gameEndedCause = isCheckmated ? "checkmate" : "stalemate";
@@ -534,7 +571,7 @@ function Chessboard({
         setGameWinner(gameWinner);
     }
 
-    async function checkIsCheckmated(currentFEN, kingColor) {
+    async function checkIsCheckmated(currentFEN, kingColor: string) {
         const isCheckmated = await getIsCheckmated(currentFEN, kingColor);
 
         return isCheckmated;
@@ -546,7 +583,10 @@ function Chessboard({
         return isStalemated;
     }
 
-    function getPromotionStartingSquare(autoQueen, moveMethod) {
+    function getPromotionStartingSquare(
+        autoQueen: boolean,
+        moveMethod: string
+    ) {
         moveMethod = moveMethod.toLowerCase();
 
         if (moveMethod === MoveMethods.CLICK) {
@@ -556,7 +596,7 @@ function Chessboard({
         }
     }
 
-    function getPromotionEndingSquare(autoQueen, moveMethod) {
+    function getPromotionEndingSquare(autoQueen: boolean, moveMethod: string) {
         moveMethod = moveMethod.toLowerCase();
 
         if (moveMethod === MoveMethods.CLICK) {
@@ -566,13 +606,15 @@ function Chessboard({
         }
     }
 
-    async function handlePawnPromotion(color, promotedPiece, autoQueen) {
-        autoQueen = autoQueen || false;
-
+    async function handlePawnPromotion(
+        color: string,
+        promotedPiece: string,
+        autoQueen: boolean = false
+    ) {
         const promotionStartingSquare = getPromotionStartingSquare(autoQueen);
         const promotionEndingSquare = getPromotionEndingSquare(autoQueen);
 
-        const [updatedBoardPlacement, moveType] =
+        const [updatedBoardPlacement, moveType]: any =
             await updatePromotedBoardPlacment(
                 parsedFENString,
                 color,
@@ -603,25 +645,25 @@ function Chessboard({
     function generateChessboard() {
         const squareElements = [];
 
-        const startingRow = boardOrientation.toLowerCase() === "white" ? 8 : 1;
-        const endingRow = boardOrientation.toLowerCase() === "white" ? 1 : 8;
+        const startingRow = orientation.toLowerCase() === "white" ? 8 : 1;
+        const endingRow = orientation.toLowerCase() === "white" ? 1 : 8;
 
         for (
             let row = startingRow;
-            boardOrientation.toLowerCase() === "white"
+            orientation.toLowerCase() === "white"
                 ? row >= endingRow
                 : row <= endingRow;
-            boardOrientation.toLowerCase() === "white" ? row-- : row++
+            orientation.toLowerCase() === "white" ? row-- : row++
         ) {
-            const startingIndex = getBoardStartingIndex(row, boardOrientation);
-            const endingIndex = getBoardEndingIndex(row, boardOrientation);
+            const startingIndex = getBoardStartingIndex(row, orientation);
+            const endingIndex = getBoardEndingIndex(row, orientation);
 
             for (
                 let square = startingIndex;
-                boardOrientation.toLowerCase() === "white"
+                orientation.toLowerCase() === "white"
                     ? square <= endingIndex
                     : square >= endingIndex;
-                boardOrientation.toLowerCase() === "white" ? square++ : square--
+                orientation.toLowerCase() === "white" ? square++ : square--
             ) {
                 const squareIsLight = isSquareLight(square - 1);
                 const squareColor = squareIsLight ? "light" : "dark";
@@ -652,7 +694,7 @@ function Chessboard({
                                 promotionRank === pieceRank &&
                                 !autoQueen
                             }
-                            orientation={boardOrientation}
+                            orientation={orientation}
                             handleSquareClick={handleSquareClick}
                             setParsedFENString={setParsedFENString}
                             setDraggedSquare={setDraggedSquare}
@@ -669,7 +711,7 @@ function Chessboard({
                             key={boardPlacementSquare}
                             squareNumber={boardPlacementSquare}
                             squareColor={squareColor}
-                            orientation={boardOrientation}
+                            orientation={orientation}
                             handleSquareClick={handleSquareClick}
                             displayPromotionPopup={false}
                             setParsedFENString={setParsedFENString}

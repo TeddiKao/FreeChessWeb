@@ -1,16 +1,20 @@
-import { useState } from "react";
+import React, { ReactElement, useState } from "react";
 
 import api from "../api.js";
 import "../styles/auth-form.css";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants/tokens.js";
 import { useNavigate } from "react-router-dom";
 
-function AuthForm({ method }) {
-    const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+type AuthFormProps = {
+    method: string;
+}
 
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+function AuthForm({ method }: AuthFormProps) {
+    const [email, setEmail] = useState<string>("");
+    const [username, setUsername] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+
+    const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
@@ -35,12 +39,12 @@ function AuthForm({ method }) {
 
     const url = method === "Login" ? loginUrl : signupUrl;
 
-    function logUserIn(accessToken, refreshToken) {
+    function logUserIn(accessToken: string, refreshToken: string) {
         localStorage.setItem(ACCESS_TOKEN, accessToken);
         localStorage.setItem(REFRESH_TOKEN, refreshToken);
     }
 
-    async function handleFormSubmit(event) {
+    async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         try {
@@ -78,7 +82,7 @@ function AuthForm({ method }) {
         }
     }
 
-    let formSubtitleHTML = null;
+    let formSubtitleHTML: ReactElement | null = null;
     if (method === "Login") {
         formSubtitleHTML = (
             <p className="form-subtitle">
@@ -93,8 +97,8 @@ function AuthForm({ method }) {
         );
     }
 
-    const formTitle = method === "Login" ? "Login" : "Sign up";
-    const shouldRenderUsernameField = method === "Signup";
+    const formTitle: string = method === "Login" ? "Login" : "Sign up";
+    const shouldRenderUsernameField: boolean = method === "Signup";
 
     return (
         <div className="auth-form-container">

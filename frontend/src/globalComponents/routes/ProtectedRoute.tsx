@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 
-import useIsAuthenticated from "../../hooks/useIsAuthenticated.ts";
+import useIsAuthenticated from "../../hooks/useIsAuthenticated.js";
 
 function ProtectedRoute({ children }) {
     const isAuthenticated = useIsAuthenticated();

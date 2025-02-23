@@ -1,14 +1,10 @@
 import { useState, useEffect, useContext, useRef } from "react";
 
 import "../../styles/chessboard/chessboard.css";
-import Square from "../Square.jsx";
+import Square from "../Square.js";
 
-import {
-    clearSquaresStyling,
-    getRank,
-    getFile,
-} from "../../utils/boardUtils.ts";
-import { fetchLegalMoves, fetchMoveIsValid } from "../../utils/apiUtils.ts";
+import { clearSquaresStyling, getRank, getFile } from "../../utils/boardUtils";
+import { fetchLegalMoves, fetchMoveIsValid } from "../../utils/apiUtils";
 
 import {
     whitePromotionRank,
@@ -16,13 +12,14 @@ import {
 } from "../../constants/boardSquares.js";
 
 import { websocketBaseURL } from "../../constants/urls.js";
-import useWebSocket from "../../hooks/useWebsocket.ts";
-import { getAccessToken } from "../../utils/tokenUtils.ts";
+import useWebSocket from "../../hooks/useWebsocket";
+import { getAccessToken } from "../../utils/tokenUtils";
 
-import { playAudio } from "../../utils/audioUtils.ts";
+import { playAudio } from "../../utils/audioUtils";
 
 import _ from "lodash";
 import { MoveMethods } from "../../enums/gameLogic.js";
+import { MultiplayerChessboardProps } from "../../interfaces/chessboard.js";
 
 function MultiplayerChessboard({
     parsed_fen_string,
@@ -30,7 +27,7 @@ function MultiplayerChessboard({
     gameId,
     setWhiteTimer,
     setBlackTimer,
-}) {
+}: MultiplayerChessboardProps) {
     const [previousClickedSquare, setPreviousClickedSquare] = useState(null);
     const [clickedSquare, setClickedSquare] = useState(null);
     const [parsedFENString, setParsedFENString] = useState(parsed_fen_string);

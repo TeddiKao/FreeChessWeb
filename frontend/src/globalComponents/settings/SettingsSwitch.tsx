@@ -1,6 +1,11 @@
 import "../../styles/settings/settings-switch.css"
 
-function SettingsSwitch({ switchState, setSwitchState }) {
+interface SettingsSwitchProps {
+    switchState: boolean;
+    setSwitchState: (state: boolean) => void;
+}
+
+function SettingsSwitch({ switchState, setSwitchState }: SettingsSwitchProps) {
     const switchClassname = switchState ? "on" : "off";
 
     function handleSwitchToggle() {

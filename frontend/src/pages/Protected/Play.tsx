@@ -1,8 +1,8 @@
 import { Navigate, useLocation } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import MultiplayerChessboard from "../../globalComponents/chessboards/MultiplayerChessboard.jsx";
-import Timer from "../../pageComponents/gameplay/Timer.jsx";
+import MultiplayerChessboard from "../../globalComponents/chessboards/MultiplayerChessboard.js";
+import Timer from "../../pageComponents/gameplay/Ti"
 
 import {
     GameEndedSetterContext,
@@ -13,11 +13,11 @@ import {
 import "../../styles/multiplayer/play.css";
 import "../../styles/chessboard/board-actions.css";
 
-import { fetchFen } from "../../utils/apiUtils.ts";
+import { fetchFen } from "../../utils/apiUtils.js";
 
-import GameOverModal from "../../globalComponents/modals/GameOverModal.jsx";
-import GameplaySettings from "../../globalComponents/modals/GameplaySettings.jsx";
-import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.jsx";
+import GameOverModal from "../../globalComponents/modals/GameOverModal.js";
+import GameplaySettings from "../../globalComponents/modals/GameplaySettings.js";
+import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.js";
 function Play() {
     const [parsedFEN, setParsedFEN] = useState(null);
     const location = useLocation();
@@ -26,8 +26,12 @@ function Play() {
     const [gameEndedCause, setGameEndedCause] = useState(null);
     const [gameWinner, setGameWinner] = useState(null);
 
-    const [whitePlayerTimer, setWhitePlayerTimer] = useState(location.state?.baseTime);
-    const [blackPlayerTimer, setBlackPlayerTimer] = useState(location.state?.baseTime);
+    const [whitePlayerTimer, setWhitePlayerTimer] = useState(
+        location.state?.baseTime
+    );
+    const [blackPlayerTimer, setBlackPlayerTimer] = useState(
+        location.state?.baseTime
+    );
 
     const [boardOrientation, setBoardOrientation] = useState(
         location.state?.assignedColor || "White"
@@ -78,7 +82,8 @@ function Play() {
     }
 
     function getTimerColor(timerPosition) {
-        const boardSide = boardOrientation.toLowerCase() === "white" ? "bottom" : "top";
+        const boardSide =
+            boardOrientation.toLowerCase() === "white" ? "bottom" : "top";
         const position = timerPosition.toLowerCase();
 
         if (boardSide === "bottom") {
@@ -127,14 +132,18 @@ function Play() {
                             />
 
                             <ModalWrapper visible={settingsVisible}>
-                                <GameplaySettings onClose={handleSettingsClose} />
+                                <GameplaySettings
+                                    onClose={handleSettingsClose}
+                                />
                             </ModalWrapper>
 
                             <div className="bottom-timer-wrapper">
                                 <Timer
                                     playerColor={bottomTimerColor}
                                     position="bottom"
-                                    timeInSeconds={getTimeAmount(bottomTimerColor)}
+                                    timeInSeconds={getTimeAmount(
+                                        bottomTimerColor
+                                    )}
                                 />
                             </div>
                         </div>

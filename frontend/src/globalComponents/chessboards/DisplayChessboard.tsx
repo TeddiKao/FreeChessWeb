@@ -1,7 +1,10 @@
+import { DisplayChessboardProps } from "../../interfaces/chessboard";
 import "../../styles/chessboard/chessboard.css";
 
-function DisplayChessboard({ fenString, orientation }) {
-    if (!fenString) {
+
+
+function DisplayChessboard({ parsed_fen_string, orientation }: DisplayChessboardProps) {
+    if (!parsed_fen_string) {
         return null;
     }
 
@@ -20,7 +23,7 @@ function DisplayChessboard({ fenString, orientation }) {
             const endingIndex = row * 8;
 
             for (let square = startingIndex; square <= endingIndex; square++) {
-                const boardPlacement = fenString["board_placement"];
+                const boardPlacement = parsed_fen_string["board_placement"];
                 const squaresArray = Object.keys(boardPlacement);
 
                 const file = square - startingIndex + 1;
@@ -39,7 +42,7 @@ function DisplayChessboard({ fenString, orientation }) {
                     squareElements.push(
                         <div
                             key={square}
-                            id={square}
+                            id={`${square}`}
                             className={`chessboard-square ${squareColor}`}
                         >
                             <img
@@ -52,7 +55,7 @@ function DisplayChessboard({ fenString, orientation }) {
                     squareElements.push(
                         <div
                             key={square}
-                            id={square}
+                            id={`${square}`}
                             className={`chessboard-square ${squareColor}`}
                         ></div>
                     );

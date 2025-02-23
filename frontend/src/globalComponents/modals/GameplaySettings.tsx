@@ -1,5 +1,5 @@
-import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
-import Setting from "../settings/Setting.jsx";
+import useGameplaySettings from "../../hooks/useGameplaySettings.js";
+import Setting from "../settings/Setting.js";
 
 import "../../styles/modals/gameplay-settings.css";
 
@@ -31,7 +31,9 @@ function GameplaySettings({ onClose, setGameplaySettings }) {
                 setGameplaySettingvs={setGameplaySettings}
             />
 
-            <button onClick={onClose} className="close-button">Close</button>
+            <button onClick={onClose} className="close-button">
+                Close
+            </button>
         </div>
     );
 }

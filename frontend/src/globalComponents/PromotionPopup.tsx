@@ -1,7 +1,25 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import "../styles/chessboard/promotion-popup.css";
-import { capitaliseFirstLetter } from "../utils/generalUtils.ts";
+import { capitaliseFirstLetter } from "../utils/generalUtils";
+
+type PromotionCancelFunction = (
+    color: string
+) => void;
+
+type PawnPromotionFunction = (
+    color: string,
+    promotedPiece: string
+) => void
+
+type PromotionPopupProps = {
+    color: string;
+    isOpen: boolean;
+    onClose: () => void;
+    handlePromotionCancel: PromotionCancelFunction, 
+    handlePawnPromotion: PawnPromotionFunction,
+    boardOrientation: string
+};
 
 function PromotionPopup({
     color,
@@ -9,12 +27,15 @@ function PromotionPopup({
     onClose,
     handlePromotionCancel,
     handlePawnPromotion,
-    boardOrientation
-}) {
-    const positionClass = boardOrientation.toLowerCase() === color.toLowerCase() ? "top" : "bottom"
-    const promotionMenu = useRef(null);
+    boardOrientation,
+}: PromotionPopupProps) {
+    const positionClass: string =
+        boardOrientation.toLowerCase() === color.toLowerCase()
+            ? "top"
+            : "bottom";
+    const promotionMenu: any = useRef(null);
 
-    function handleClickOutside(event) {
+    function handleClickOutside(event: any) {
         if (
             promotionMenu.current &&
             !promotionMenu.current.contains(event.target)
@@ -24,7 +45,7 @@ function PromotionPopup({
         }
     }
 
-    function handlePieceClick(pieceType) {
+    function handlePieceClick(pieceType: string) {
         handlePawnPromotion(color, capitaliseFirstLetter(pieceType));
     }
 

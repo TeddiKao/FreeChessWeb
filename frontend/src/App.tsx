@@ -3,20 +3,20 @@ import { Navigate, BrowserRouter, Routes, Route } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-import GuestHomePage from "./pages/GuestHomePage.jsx";
-import Login from "./pages/Login.jsx";
-import Signup from "./pages/Signup.jsx";
-import NotFound from "./pages/NotFound.jsx";
+import GuestHomePage from "./pages/GuestHomePage.js";
+import Login from "./pages/Login.js";
+import Signup from "./pages/Signup.js";
+import NotFound from "./pages/NotFound.js";
 
-import Dashboard from "./pages/Protected/Dashboard.jsx";
-import GameSetup from "./pages/Protected/GameSetup.jsx";
+import Dashboard from "./pages/Protected/Dashboard.js";
+import GameSetup from "./pages/Protected/GameSetup.js";
 
 import "./styles/global/global.css";
 
-import ProtectedRoute from "./globalComponents/routes/ProtectedRoute.jsx";
-import AuthenticationRoute from "./globalComponents/routes/AuthenticationRoute.jsx";
-import Play from "./pages/Protected/Play.jsx";
-import PassAndPlay from "./pages/Protected/PassAndPlay.jsx";
+import ProtectedRoute from "./globalComponents/routes/ProtectedRoute.js";
+import AuthenticationRoute from "./globalComponents/routes/AuthenticationRoute.js";
+import Play from "./pages/Protected/Play.js";
+import PassAndPlay from "./pages/Protected/PassAndPlay.js";
 
 function Logout() {
     localStorage.clear();

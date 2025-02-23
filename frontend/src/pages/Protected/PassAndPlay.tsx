@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchFen } from "../../utils/apiUtils.ts";
+import { fetchFen } from "../../utils/apiUtils.js";
 
 import {
     GameEndedSetterContext,
@@ -10,11 +10,11 @@ import {
 import "../../styles/pass-and-play.css";
 import "../../styles/chessboard/board-actions.css";
 
-import Chessboard from "../../globalComponents/chessboards/Chessboard.jsx";
-import GameOverModal from "../../globalComponents/modals/GameOverModal.jsx";
-import GameplaySettings from "../../globalComponents/modals/GameplaySettings.jsx";
-import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.jsx";
-import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
+import Chessboard from "../../globalComponents/chessboards/Chessboard.js";
+import GameOverModal from "../../globalComponents/modals/GameOverModal.js";
+import GameplaySettings from "../../globalComponents/modals/GameplaySettings.js";
+import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.js";
+import useGameplaySettings from "../../hooks/useGameplaySettings.js";
 
 function PassAndPlay() {
     const [parsedFEN, setParsedFEN] = useState(null);
