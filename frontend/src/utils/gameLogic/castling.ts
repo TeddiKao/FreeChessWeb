@@ -3,6 +3,7 @@ import {
     blackKingStartingSquare,
     rookStartingSquares,
 } from "../../constants/castlingSquares.js";
+import { BoardPlacement, CastlingRights, ParsedFENString } from "../../types/gameLogic.ts";
 import { capitaliseFirstLetter } from "../generalUtils.ts";
 
 function getKingStartingSquare(color: string): number {
@@ -52,10 +53,10 @@ function getRookStartingSquare(color: string, castlingSide: string): number {
 
 function disableCastling(
     color: string,
-    castlingRights: object,
-    castlingSides: Array<String>
-): object {
-    const updatedCastlingRights: object = structuredClone(castlingRights);
+    castlingRights: CastlingRights,
+    castlingSides: Array<string>
+): CastlingRights {
+    const updatedCastlingRights: CastlingRights = structuredClone(castlingRights);
 
     color = color.toLowerCase();
 
@@ -67,15 +68,15 @@ function disableCastling(
     return updatedCastlingRights;
 }
 
-function canCastleKingside(color: string, castlingRights: object): boolean {
+function canCastleKingside(color: string, castlingRights: CastlingRights): boolean {
     return castlingRights[capitaliseFirstLetter(color)]["Kingside"];
 }
 
-function canCastleQueenside(color: string, castlingRights: object): boolean {
+function canCastleQueenside(color: string, castlingRights: CastlingRights): boolean {
     return castlingRights[capitaliseFirstLetter(color)]["Queenside"];
 }
 
-function canCastle(color: string, castlingSide: string, castlingRights: object) {
+function canCastle(color: string, castlingSide: string, castlingRights: CastlingRights) {
     color = color.toLowerCase();
     castlingSide = castlingSide.toLowerCase();
 
@@ -86,15 +87,15 @@ function canCastle(color: string, castlingSide: string, castlingRights: object) 
     }
 }
 
-function handleCastling(fenString: object, color: string, castlingSide: string): object | null {
+function handleCastling(fenString: ParsedFENString, color: string, castlingSide: string): object | null {
     color = color.toLowerCase();
     castlingSide = castlingSide.toLowerCase();
 
     console.log(fenString);
 
-    const updatedFEN = structuredClone(fenString);
-    const boardPlacement = structuredClone(updatedFEN["board_placement"]);
-    const castlingRights = structuredClone(updatedFEN["castling_rights"]);
+    const updatedFEN: ParsedFENString = structuredClone(fenString);
+    const boardPlacement: BoardPlacement = structuredClone(updatedFEN["board_placement"]);
+    const castlingRights: CastlingRights = structuredClone(updatedFEN["castling_rights"]);
 
     const disabledCastlingRights = disableCastling(color, castlingRights, [
         "Kingside",
