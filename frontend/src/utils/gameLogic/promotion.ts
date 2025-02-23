@@ -1,35 +1,50 @@
 import { PieceColor, PieceType } from "../../enums/pieces.js";
+import {
+    BoardPlacement,
+    ParsedFENString,
+    PieceInfo,
+} from "../../types/gameLogic.ts";
+import {
+    ChessboardSquareIndex,
+    OptionalValue,
+    RefObject,
+    StateSetterFunction,
+} from "../../types/general.ts";
 import { fetchMoveIsValid } from "../apiUtils.ts";
 import { getFile, getRank } from "../boardUtils.ts";
 
-function clearUnpromotedPawn(boardPlacement: object, previousDroppedSquare: string | number) {
-    const updatedBoardPlacement = structuredClone(boardPlacement);
+function clearUnpromotedPawn(
+    boardPlacement: BoardPlacement,
+    previousDroppedSquare: ChessboardSquareIndex
+) {
+    const updatedBoardPlacement: BoardPlacement =
+        structuredClone(boardPlacement);
 
     delete updatedBoardPlacement[`${previousDroppedSquare}`];
 
     return updatedBoardPlacement;
 }
 
-
 function restoreCapturedPiece(
-    boardPlacement: object,
-    capturedPieceInfo: object,
+    boardPlacement: BoardPlacement,
+    capturedPieceInfo: PieceInfo,
     capturedPieceLocation: string | number
-): object {
-    const updatedBoardPlacement: object = structuredClone(boardPlacement);
+): BoardPlacement {
+    const updatedBoardPlacement: BoardPlacement =
+        structuredClone(boardPlacement);
     updatedBoardPlacement[`${capturedPieceLocation}`] = capturedPieceInfo;
 
     return updatedBoardPlacement;
 }
 
 function cancelPromotion(
-    fenString: object,
+    fenString: ParsedFENString,
     color: string,
-    previousDraggedSquare: string | number,
-    previousDroppedSquare: string | number,
-    promotionCapturedPiece: object
+    previousDraggedSquare: ChessboardSquareIndex,
+    previousDroppedSquare: ChessboardSquareIndex,
+    promotionCapturedPiece: PieceInfo
 ): object {
-    const updatedFENString = structuredClone(fenString);
+    const updatedFENString: ParsedFENString = structuredClone(fenString);
     let updatedBoardPlacement = structuredClone(
         updatedFENString["board_placement"]
     );
@@ -75,20 +90,24 @@ function isPawnPromotion(color: string, destinationRank: number): boolean {
 }
 
 function handlePromotionCaptureStorage(
-    fenString: object,
+    fenString: ParsedFENString,
     pieceColor: string,
-    startingSquare: string | number,
-    destinationSquare: string | number,
-    setPromotionCapturedPiece: any,
-    selectingPromotionRef: any,
-    unpromotedBoardPlacementRef: any,
-	handlePawnPromotion: any,
-	gameplaySettings: object
+    startingSquare: ChessboardSquareIndex,
+    destinationSquare: ChessboardSquareIndex,
+    setPromotionCapturedPiece: StateSetterFunction<OptionalValue<PieceInfo>>,
+    selectingPromotionRef: RefObject<boolean>,
+    unpromotedBoardPlacementRef: RefObject<OptionalValue<ParsedFENString>>,
+    handlePawnPromotion: (
+        color: string,
+        promotedPiece: string,
+        autoQueen?: boolean
+    ) => Promise<void>,
+    gameplaySettings: any
 ): void {
-	const autoQueen: boolean = gameplaySettings["auto_queen"]
+    const autoQueen: boolean = gameplaySettings["auto_queen"];
 
-    const updatedFENString: object = structuredClone(fenString);
-    const updatedBoardPlacement: object = structuredClone(
+    const updatedFENString: ParsedFENString = structuredClone(fenString);
+    const updatedBoardPlacement: BoardPlacement = structuredClone(
         updatedFENString["board_placement"]
     );
 
@@ -104,17 +123,17 @@ function handlePromotionCaptureStorage(
     unpromotedBoardPlacementRef.current = updatedFENString;
 
     if (!isCapture(startFile, destinationFile)) {
-		if (autoQueen) {
-			handlePawnPromotion(pieceColor, "Queen", true);
-		}
+        if (autoQueen) {
+            handlePawnPromotion(pieceColor, "Queen", true);
+        }
 
-		return;
+        return;
     }
 
-	if (autoQueen) {
-		handlePawnPromotion(pieceColor, "Queen", true);
-		return;
-	}
+    if (autoQueen) {
+        handlePawnPromotion(pieceColor, "Queen", true);
+        return;
+    }
 
     const capturedPieceInfo = updatedBoardPlacement[`${destinationSquare}`];
     setPromotionCapturedPiece(capturedPieceInfo);
@@ -131,8 +150,8 @@ async function updatePromotedBoardPlacment(
 ): Promise<object> {
     autoQueen = autoQueen || false;
 
-    const updatedFENString = structuredClone(fenString);
-    const updatedBoardPlacement = structuredClone(
+    const updatedFENString: any = structuredClone(fenString);
+    const updatedBoardPlacement: any = structuredClone(
         updatedFENString["board_placement"]
     );
 
@@ -147,7 +166,7 @@ async function updatePromotedBoardPlacment(
         }
     );
 
-	console.log(`Move valid: ${isMoveValid}`)
+    console.log(`Move valid: ${isMoveValid}`);
 
     if (!isMoveValid) {
         return updatedFENString;
@@ -158,14 +177,14 @@ async function updatePromotedBoardPlacment(
         piece_color: color,
     };
 
-	if (autoQueen) {
-		delete updatedBoardPlacement[`${originalPawnSquare}`]
-	}
+    if (autoQueen) {
+        delete updatedBoardPlacement[`${originalPawnSquare}`];
+    }
 
-	updatedFENString["board_placement"] = updatedBoardPlacement;
-	console.log(updatedFENString, moveType)
+    updatedFENString["board_placement"] = updatedBoardPlacement;
+    console.log(updatedFENString, moveType);
 
-	return [updatedFENString, moveType];
+    return [updatedFENString, moveType];
 }
 
 export {
