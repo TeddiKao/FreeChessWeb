@@ -33,8 +33,6 @@ class ValidateMoveView(APIView):
 		en_passant_target_square = parsed_fen_string["en_passant_target_square"]
 
 		is_move_valid = not not validate_move(parsed_fen_string, move_info)
-		
-		print(type(move_info["starting_square"]), type(move_info["destination_square"]))
 
 		if is_move_valid:
 			move_type = get_move_type(board_placement, en_passant_target_square, move_info)
