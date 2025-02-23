@@ -2,8 +2,14 @@ import {
     whiteKingStartingSquare,
     blackKingStartingSquare,
     rookStartingSquares,
-} from "../../constants/castlingSquares.js";
-import { BoardPlacement, CastlingRights, ParsedFENString } from "../../types/gameLogic.ts";
+} from "../../constants/castlingSquares.ts";
+import {
+    BoardPlacement,
+    CastlingRights,
+    CastlingSide,
+    ParsedFENString,
+    PieceColor,
+} from "../../types/gameLogic.ts";
 import { capitaliseFirstLetter } from "../generalUtils.ts";
 
 function getKingStartingSquare(color: string): number {
@@ -16,8 +22,8 @@ function getKingStartingSquare(color: string): number {
     }
 }
 
-function getKingCastledSquare(color: string, castlingSide: string): number {
-    castlingSide = castlingSide.toLowerCase();
+function getKingCastledSquare(color: PieceColor, castlingSide: CastlingSide): number {
+    castlingSide = castlingSide.toLowerCase() as CastlingSide;
 
     const startingSquare: number = getKingStartingSquare(color);
     const isCastlingKinsgside: boolean = castlingSide === "kingside";
@@ -28,9 +34,9 @@ function getKingCastledSquare(color: string, castlingSide: string): number {
     return startingSquare + squareOffset;
 }
 
-function getCastledRookSquare(color: string, castlingSide: string): number {
-    color = color.toLowerCase();
-    castlingSide = castlingSide.toLowerCase();
+function getCastledRookSquare(color: PieceColor, castlingSide: CastlingSide): number {
+    color = color.toLowerCase() as PieceColor;
+    castlingSide = castlingSide.toLowerCase() as CastlingSide;
 
     const rookStartingSquare: number = getRookStartingSquare(
         color,
@@ -44,9 +50,12 @@ function getCastledRookSquare(color: string, castlingSide: string): number {
     return rookStartingSquare + squareOffset;
 }
 
-function getRookStartingSquare(color: string, castlingSide: string): number {
-    color = color.toLowerCase();
-    castlingSide = castlingSide.toLowerCase();
+function getRookStartingSquare(
+    color: PieceColor,
+    castlingSide: CastlingSide
+): number {
+    color = color.toLowerCase() as PieceColor;
+    castlingSide = castlingSide.toLowerCase() as CastlingSide;
 
     return rookStartingSquares[color][castlingSide];
 }
@@ -54,9 +63,10 @@ function getRookStartingSquare(color: string, castlingSide: string): number {
 function disableCastling(
     color: string,
     castlingRights: CastlingRights,
-    castlingSides: Array<string>
+    castlingSides: Array<CastlingSide>
 ): CastlingRights {
-    const updatedCastlingRights: CastlingRights = structuredClone(castlingRights);
+    const updatedCastlingRights: CastlingRights =
+        structuredClone(castlingRights);
 
     color = color.toLowerCase();
 
@@ -68,15 +78,25 @@ function disableCastling(
     return updatedCastlingRights;
 }
 
-function canCastleKingside(color: string, castlingRights: CastlingRights): boolean {
+function canCastleKingside(
+    color: string,
+    castlingRights: CastlingRights
+): boolean {
     return castlingRights[capitaliseFirstLetter(color)]["Kingside"];
 }
 
-function canCastleQueenside(color: string, castlingRights: CastlingRights): boolean {
+function canCastleQueenside(
+    color: string,
+    castlingRights: CastlingRights
+): boolean {
     return castlingRights[capitaliseFirstLetter(color)]["Queenside"];
 }
 
-function canCastle(color: string, castlingSide: string, castlingRights: CastlingRights) {
+function canCastle(
+    color: string,
+    castlingSide: string,
+    castlingRights: CastlingRights
+) {
     color = color.toLowerCase();
     castlingSide = castlingSide.toLowerCase();
 
@@ -87,19 +107,27 @@ function canCastle(color: string, castlingSide: string, castlingRights: Castling
     }
 }
 
-function handleCastling(fenString: ParsedFENString, color: string, castlingSide: string): object | null {
-    color = color.toLowerCase();
-    castlingSide = castlingSide.toLowerCase();
+function handleCastling(
+    fenString: ParsedFENString,
+    color: PieceColor,
+    castlingSide: CastlingSide
+): object | null {
+    color = color.toLowerCase() as PieceColor;
+    castlingSide = castlingSide.toLowerCase() as CastlingSide;
 
     console.log(fenString);
 
     const updatedFEN: ParsedFENString = structuredClone(fenString);
-    const boardPlacement: BoardPlacement = structuredClone(updatedFEN["board_placement"]);
-    const castlingRights: CastlingRights = structuredClone(updatedFEN["castling_rights"]);
+    const boardPlacement: BoardPlacement = structuredClone(
+        updatedFEN["board_placement"]
+    );
+    const castlingRights: CastlingRights = structuredClone(
+        updatedFEN["castling_rights"]
+    );
 
     const disabledCastlingRights = disableCastling(color, castlingRights, [
-        "Kingside",
-        "Queenside",
+        "kingside",
+        "queenside",
     ]);
 
     const kingStartingSquare = getKingStartingSquare(color);
@@ -140,7 +168,10 @@ function handleCastling(fenString: ParsedFENString, color: string, castlingSide:
     return updatedFEN;
 }
 
-function isCastling(startingSquare: string | number, destinationSquare: string | number): boolean {
+function isCastling(
+    startingSquare: string | number,
+    destinationSquare: string | number
+): boolean {
     startingSquare = Number(startingSquare);
     destinationSquare = Number(destinationSquare);
 
