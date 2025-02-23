@@ -1,9 +1,11 @@
+import { BoardPlacement, ParsedFENString, PieceInfo } from "../../types/gameLogic";
+
 function clearStartingSquare(
-    fenString: object,
+    fenString: ParsedFENString,
     startingSquare: number | string
-): object {
-    const updatedFEN: object = structuredClone(fenString);
-    const updatedBoardPlacement: object = structuredClone(
+): ParsedFENString {
+    const updatedFEN: ParsedFENString = structuredClone(fenString);
+    const updatedBoardPlacement: BoardPlacement = structuredClone(
         updatedFEN["board_placement"]
     );
 
@@ -15,12 +17,12 @@ function clearStartingSquare(
 }
 
 function addPieceToDestinationSquare(
-    fenString: object,
+    fenString: ParsedFENString,
     destinationSquare: string | number,
-    pieceInfo: object
-): object {
-    const updatedFEN: object = structuredClone(fenString);
-    const updatedBoardPlacement: object = structuredClone(
+    pieceInfo: PieceInfo
+): ParsedFENString {
+    const updatedFEN: ParsedFENString = structuredClone(fenString);
+    const updatedBoardPlacement: BoardPlacement = structuredClone(
         updatedFEN["board_placement"]
     );
 
