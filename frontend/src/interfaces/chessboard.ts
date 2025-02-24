@@ -4,10 +4,10 @@ import {
     OptionalValue,
     StateSetterFunction,
 } from "../types/general.ts";
-import { PieceColor, PieceType } from "../types/gameLogic.ts";
+import { ParsedFENString, PieceColor, PieceType } from "../types/gameLogic.ts";
 
 interface DisplayChessboardProps {
-    parsed_fen_string: any;
+    parsed_fen_string: ParsedFENString;
     orientation: string;
 }
 

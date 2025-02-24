@@ -124,6 +124,10 @@ function Play() {
         return <Navigate to="/select-time-control" />;
     }
 
+    if (!parsedFEN) {
+        return null;
+    }
+
     return (
         <GameEndedSetterContext.Provider value={setGameEnded}>
             <GameEndedCauseSetterContext.Provider value={setGameEndedCause}>

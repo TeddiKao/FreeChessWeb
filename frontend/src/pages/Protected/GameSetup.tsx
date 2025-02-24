@@ -14,6 +14,7 @@ import { fetchFen } from "../../utils/apiUtils.ts";
 
 import MatchmakingScreen from "../../pageComponents/gameplay/MatchmakingScreen.js";
 import { GameSetupStages } from "../../enums/gameSetup.js";
+import { ParsedFENString } from "../../types/gameLogic.ts";
 
 type TimeControlInfo = {
     baseTime: number;
@@ -21,7 +22,7 @@ type TimeControlInfo = {
 };
 
 function GameSetup() {
-    const [parsedFEN, setParsedFEN] = useState<object | null>(null);
+    const [parsedFEN, setParsedFEN] = useState<ParsedFENString | null>(null);
 
     const [gameSetupStage, setGameSetupStage] = useState<string | null>(
         "timeControlSelection"
@@ -53,6 +54,10 @@ function GameSetup() {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    if (!parsedFEN) {
+        return null;
     }
 
     function renderGameSetupPanel() {
@@ -152,6 +157,8 @@ function GameSetup() {
         );
     }
 
+    console.log(selectedTimeControl)
+
     function showTimeControlAmounts() {
         if (!selectedTimeControlType) {
             return null;
@@ -245,7 +252,7 @@ function GameSetup() {
                 <div className="bottom-timer-wrapper">
                     <Timer
                         playerColor="white"
-                        timeInSeconds={3600}
+                        timeInSeconds={selectedTimeControl?.baseTime || 3600}
                     />
                 </div>
             </div>
