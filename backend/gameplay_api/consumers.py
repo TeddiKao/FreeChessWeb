@@ -203,7 +203,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         elif piece_type.lower() == "rook":
             kingside_rook_starting_squares = [7, 63]
-            queenside_rook_starting_squares = [0, 56]
 
             castling_side = "Kingside" if int(
                 initial_square) in kingside_rook_starting_squares else "Queenside"

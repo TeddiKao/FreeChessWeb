@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ChangeEvent, ReactElement, useState } from "react";
 
 import api from "../api.js";
 import "../styles/auth-form.css";
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 type AuthFormProps = {
     method: string;
-}
+};
 
 function AuthForm({ method }: AuthFormProps) {
     const [email, setEmail] = useState<string>("");
@@ -18,19 +18,50 @@ function AuthForm({ method }: AuthFormProps) {
 
     const navigate = useNavigate();
 
-    function handleEmailChange(event) {
+    function UsernameField() {
+        return (
+            <>
+                <input
+                    type="text"
+                    className="username-input"
+                    value={username}
+                    onChange={handleUsernameChange}
+                    placeholder="Username"
+                />
+                <br />
+            </>
+        );
+    }
+
+    function FormSubtitle() {
+        const loginPageSubititle = (
+            <p className="form-subtitle">
+                Don't have an account yet? <a href="/signup">Sign up</a>
+            </p>
+        );
+
+        const signupPageSubititle = (
+            <p className="form-subtitle">
+                Already have an account? <a href="/login">Login</a>
+            </p>
+        );
+
+        return method === "Login" ? loginPageSubititle : signupPageSubititle;
+    }
+
+    function handleEmailChange(event: ChangeEvent<HTMLInputElement>) {
         setEmail(event.target.value);
     }
 
-    function handleUsernameChange(event) {
+    function handleUsernameChange(event: ChangeEvent<HTMLInputElement>) {
         setUsername(event.target.value);
     }
 
-    function handlePasswordChange(event) {
+    function handlePasswordChange(event: ChangeEvent<HTMLInputElement>) {
         setPassword(event.target.value);
     }
 
-    function handlePasswordVisibleChange(event) {
+    function handlePasswordVisibleChange(event: ChangeEvent<HTMLInputElement>) {
         setIsPasswordVisible(event.target.checked);
     }
 
@@ -38,6 +69,11 @@ function AuthForm({ method }: AuthFormProps) {
     const signupUrl = "/users_api/create-user/";
 
     const url = method === "Login" ? loginUrl : signupUrl;
+
+    function handleLogin(accessToken: string, refreshToken: string) {
+        logUserIn(accessToken, refreshToken);
+        navigate("/home");
+    }
 
     function logUserIn(accessToken: string, refreshToken: string) {
         localStorage.setItem(ACCESS_TOKEN, accessToken);
@@ -56,9 +92,7 @@ function AuthForm({ method }: AuthFormProps) {
             const response = await api.post(url, userCredentials);
 
             if (method === "login") {
-                logUserIn(response.data.access, response.data.refresh);
-
-                navigate("/home");
+                handleLogin(response.data.access, response.data.refresh);
             } else {
                 // Log the user in
 
@@ -68,11 +102,10 @@ function AuthForm({ method }: AuthFormProps) {
                         password,
                     });
 
-                    logUserIn(
+                    handleLogin(
                         loginResponse.data.access,
                         loginResponse.data.refresh
                     );
-                    navigate("/home");
                 } catch (error) {
                     console.log(error);
                 }
@@ -80,21 +113,6 @@ function AuthForm({ method }: AuthFormProps) {
         } catch (error) {
             console.log(error);
         }
-    }
-
-    let formSubtitleHTML: ReactElement | null = null;
-    if (method === "Login") {
-        formSubtitleHTML = (
-            <p className="form-subtitle">
-                Don't have an account yet? <a href="/signup">Sign up</a>
-            </p>
-        );
-    } else {
-        formSubtitleHTML = (
-            <p className="form-subtitle">
-                Already have an account? <a href="/login">Login</a>
-            </p>
-        );
     }
 
     const formTitle: string = method === "Login" ? "Login" : "Sign up";
@@ -113,18 +131,7 @@ function AuthForm({ method }: AuthFormProps) {
                 />
                 <br />
 
-                {shouldRenderUsernameField ? (
-                    <>
-                        <input
-                            type="text"
-                            className="username-input"
-                            value={username}
-                            onChange={handleUsernameChange}
-                            placeholder="Username"
-                        />
-                        <br />
-                    </>
-                ) : null}
+                {shouldRenderUsernameField ? <UsernameField /> : null}
 
                 <input
                     type={isPasswordVisible ? "text" : "password"}
@@ -144,7 +151,7 @@ function AuthForm({ method }: AuthFormProps) {
                     <p>Show password</p>
                 </div>
 
-                {formSubtitleHTML}
+                <FormSubtitle />
 
                 <button type="submit" className="auth-form-submit">
                     {formTitle}

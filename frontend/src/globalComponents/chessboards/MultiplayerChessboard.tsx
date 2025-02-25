@@ -23,7 +23,6 @@ import { MultiplayerChessboardProps } from "../../interfaces/chessboard.js";
 import {
     ChessboardSquareIndex,
     OptionalValue,
-    RefObject,
 } from "../../types/general.ts";
 import {
     BoardPlacement,
@@ -64,7 +63,7 @@ function MultiplayerChessboard({
 
     const [boardOrientation, setBoardOrientation] = useState(orientation);
 
-    const [gameWebsocketConnected, setGameWebsocketConnected] = useState(true);
+    const [gameWebsocketConnected, _] = useState(true);
 
     const gameWebsocket = useRef<OptionalValue<WebSocket>>(null);
 
@@ -435,7 +434,6 @@ function MultiplayerChessboard({
 
     function handleSquareClick(
         event: React.MouseEvent<HTMLElement>,
-        square: ChessboardSquareIndex
     ) {
         if (!previousClickedSquare && !clickedSquare) {
             setPreviousClickedSquare(event.currentTarget.id);
@@ -476,9 +474,6 @@ function MultiplayerChessboard({
             ) {
                 return updatedBoardPlacement;
             }
-
-            const squareInfo =
-                prevFENString["board_placement"][previousDroppedSquare];
 
             if (!promotionCapturedPiece) {
                 return updatedBoardPlacement;
