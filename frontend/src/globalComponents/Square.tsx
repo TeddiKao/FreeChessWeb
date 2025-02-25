@@ -77,7 +77,7 @@ function Square({
     function handleSquareHiglight(event: React.MouseEvent<HTMLDivElement>) {
         event.preventDefault();
 
-        const squareId = (event.target as HTMLElement).id;
+        const squareId = (event.currentTarget as HTMLElement).id;
 
         const squareFile: number = getFile(squareId);
         const squareRank: number = getRank(squareId);
@@ -87,7 +87,7 @@ function Square({
             ? "highlighted-square-light"
             : "highlighted-square-dark";
 
-        (event.target as HTMLElement).classList.add(highlightedClassName);
+        (event.currentTarget as HTMLElement).classList.add(highlightedClassName);
     }
 
     function handleOnDrop(droppedSquare: string | number) {

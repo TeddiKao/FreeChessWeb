@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactElement, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 import api from "../api.js";
 import "../styles/auth-form.css";
