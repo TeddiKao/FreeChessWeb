@@ -237,13 +237,14 @@ function GameSetup() {
         }
     }
 
+    const baseTime = selectedTimeControl?.baseTime;
     return (
         <div className="time-control-selection-interface-container">
             <div className="display-chessboard-container">
                 <div className="top-timer-wrapper">
                     <Timer
                         playerColor="black"
-                        timeInSeconds={3600}
+                        timeInSeconds={baseTime || 3600}
                     />
                 </div>
 
@@ -252,7 +253,7 @@ function GameSetup() {
                 <div className="bottom-timer-wrapper">
                     <Timer
                         playerColor="white"
-                        timeInSeconds={selectedTimeControl?.baseTime || 3600}
+                        timeInSeconds={baseTime || 3600}
                     />
                 </div>
             </div>

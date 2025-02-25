@@ -1,4 +1,4 @@
-import DashboardNavbar from "../../pageComponents/dashboard/DashboardNavbar";
+import DashboardNavbar from "../../pageComponents/dashboard/DashboardNavbar.tsx";
 
 function Dashboard() {
     return (
