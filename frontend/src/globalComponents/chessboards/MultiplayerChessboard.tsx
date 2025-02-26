@@ -18,7 +18,7 @@ import { getAccessToken } from "../../utils/tokenUtils";
 import { playAudio } from "../../utils/audioUtils";
 
 import _ from "lodash";
-import { MoveMethods } from "../../enums/gameLogic.ts";
+import { MoveMethods, WebSocketEventTypes } from "../../enums/gameLogic.ts";
 import { MultiplayerChessboardProps } from "../../interfaces/chessboard.js";
 import {
     ChessboardSquareIndex,
@@ -111,6 +111,10 @@ function MultiplayerChessboard({
     }, []);
 
     useEffect(() => {
+        fetchCurrentPosition();
+    }, []);
+
+    useEffect(() => {
         handleOnDrop();
     }, [draggedSquare, droppedSquare]);
 
@@ -124,12 +128,24 @@ function MultiplayerChessboard({
 
     function handleOnMessage(event: MessageEvent) {
         const parsedEventData = JSON.parse(event.data);
+        const eventType = parsedEventData["type"];
+        
+        switch (eventType) {
+            case WebSocketEventTypes.MOVE_MADE:
+                makeMove(parsedEventData);
+                break;
 
-        if (parsedEventData["type"] === "move_made") {
-            makeMove(parsedEventData);
-        } else if (parsedEventData["type"] === "timer_decremented") {
-            handleTimerDecrement(parsedEventData);
+            case WebSocketEventTypes.TIMER_DECREMENTED:
+                handleTimerDecrement(parsedEventData);
+                break;
+
+            default:
+                break;
         }
+    }
+
+    async function fetchCurrentPosition(): Promise<void> {
+
     }
 
     function handleTimerDecrement(parsedEventData: any) {

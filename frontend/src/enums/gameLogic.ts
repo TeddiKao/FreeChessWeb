@@ -3,4 +3,9 @@ enum MoveMethods {
 	"DRAG" = "drag",
 }
 
-export { MoveMethods }
+enum WebSocketEventTypes {
+	"MOVE_MADE" = "move_made",
+	"TIMER_DECREMENTED" = "timer_decremented",
+}
+
+export { MoveMethods, WebSocketEventTypes }
