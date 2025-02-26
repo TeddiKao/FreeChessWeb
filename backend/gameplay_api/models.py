@@ -48,6 +48,8 @@ class ChessGame(models.Model):
 	castling_rights = models.JSONField(default=get_default_castling_rights)
 	en_passant_target_square = models.IntegerField(null=True, blank=True)
 
+	is_timer_running = models.BooleanField(default=False, null=False, blank=False)
+
 	@database_sync_to_async
 	def get_full_parsed_fen(self):
 		return {

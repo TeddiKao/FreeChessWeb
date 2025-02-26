@@ -112,7 +112,6 @@ function MultiplayerChessboard({
 
     useEffect(() => {
         updateCurrentPosition();
-        updatePlayerTimers();
     }, []);
 
     useEffect(() => {
@@ -151,13 +150,6 @@ function MultiplayerChessboard({
         setParsedFENString(currentPosition);
     }
 
-    async function updatePlayerTimers(): Promise<void> {
-        const whitePlayerTimer = await fetchTimer(Number(gameId), "white");
-        const blackPlayerTimer = await fetchTimer(Number(gameId), "black");
-
-        setWhiteTimer(whitePlayerTimer);
-        setBlackTimer(blackPlayerTimer);
-    }
 
     function handleTimerDecrement(parsedEventData: any) {
         const newWhitePlayerClock = parsedEventData["white_player_clock"];
@@ -168,6 +160,7 @@ function MultiplayerChessboard({
         setWhiteTimer(Math.ceil(newWhitePlayerClock));
         setBlackTimer(Math.ceil(newBlackPlayerClock));
     }
+
 
     function makeMove(eventData: any) {
         setParsedFENString((prevState: any) => {

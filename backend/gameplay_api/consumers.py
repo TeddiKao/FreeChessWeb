@@ -1,7 +1,9 @@
 import json
 import copy
 import asyncio
+
 from decimal import Decimal
+from asyncio import Lock
 
 from urllib.parse import parse_qs
 
@@ -42,7 +44,6 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.update_game_attribute(chess_game_model, "black_player_clock", new_time)
 
     async def check_move_validation(self, move_info):
-
         game_id = self.game_id
 
         chess_game: ChessGame = await self.get_chess_game(game_id)
@@ -61,25 +62,26 @@ class GameConsumer(AsyncWebsocketConsumer):
         chess_game = await self.get_chess_game(self.game_id)
 
         while await self.get_game_attribute(chess_game, "game_status") == "Ongoing":
-            side_to_move = await self.get_game_attribute(chess_game, "current_player_turn")
+            async with self.timer_lock:
+                side_to_move = await self.get_game_attribute(chess_game, "current_player_turn")
 
-            if side_to_move.lower() == "white":
-                await self.decrement_white_player_timer(chess_game, 1)
-            elif side_to_move.lower() == "black":
-                await self.decrement_black_player_timer(chess_game, 1)
+                if side_to_move.lower() == "white":
+                    await self.decrement_white_player_timer(chess_game, 1)
+                elif side_to_move.lower() == "black":
+                    await self.decrement_black_player_timer(chess_game, 1)
 
-            white_player_clock = await self.get_game_attribute(chess_game, "white_player_clock")
-            black_player_clock = await self.get_game_attribute(chess_game, "black_player_clock")
+                white_player_clock = await self.get_game_attribute(chess_game, "white_player_clock")
+                black_player_clock = await self.get_game_attribute(chess_game, "black_player_clock")
 
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    "type": "timer_decremented",
-                    "white_player_clock": white_player_clock,
-                            "black_player_clock": black_player_clock,
-                            "side_to_move": side_to_move.lower(),
-                }
-            )
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        "type": "timer_decremented",
+                        "white_player_clock": white_player_clock,
+                                "black_player_clock": black_player_clock,
+                                "side_to_move": side_to_move.lower(),
+                    }
+                )
 
             await asyncio.sleep(1)
 
@@ -245,7 +247,16 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         self.room_group_name = f"game_{game_id}"
         self.game_id = game_id
-        self.timer_task = asyncio.create_task(self.handle_timer_decrement())
+        self.chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
+        
+        is_timer_running = await self.get_game_attribute(self.chess_game_model, "is_timer_running")
+        if not is_timer_running:
+            self.timer_task = asyncio.create_task(self.handle_timer_decrement())
+            await self.update_game_attribute(self.chess_game_model, "is_timer_running", True)
+        else:
+            self.timer_task = None
+
+        self.timer_lock = Lock()
 
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -259,7 +270,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         }))
 
     async def disconnect(self, code):
-        pass
+        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     async def receive(self, text_data):
 
@@ -273,7 +284,8 @@ class GameConsumer(AsyncWebsocketConsumer):
         )
 
     async def move_received(self, event):
-        self.timer_task.cancel()
+        if self.timer_task:
+            self.timer_task.cancel()
 
         move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
         chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
@@ -295,7 +307,8 @@ class GameConsumer(AsyncWebsocketConsumer):
                 "new_parsed_fen": await chess_game_model.get_full_parsed_fen()
             }))
 
-        self.timer_task = asyncio.create_task(self.handle_timer_decrement())
+        if self.timer_task:
+            self.timer_task = asyncio.create_task(self.handle_timer_decrement())
 
     async def timer_decremented(self, event):
         await self.send(json.dumps({

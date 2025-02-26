@@ -13,7 +13,7 @@ import {
 import "../../styles/multiplayer/play.css";
 import "../../styles/chessboard/board-actions.css";
 
-import { fetchFen } from "../../utils/apiUtils.js";
+import { fetchFen, fetchTimer } from "../../utils/apiUtils.ts";
 
 import GameOverModal from "../../globalComponents/modals/GameOverModal.js";
 import GameplaySettings from "../../globalComponents/modals/GameplaySettings.js";
@@ -21,6 +21,7 @@ import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.js";
 import { OptionalValue } from "../../types/general.js";
 import { ParsedFENString, PieceColor } from "../../types/gameLogic.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
+
 function Play() {
     const [parsedFEN, setParsedFEN] =
         useState<OptionalValue<ParsedFENString>>(null);
@@ -57,6 +58,10 @@ function Play() {
     }, []);
 
     useEffect(() => {
+        updatePlayerTimers();
+    }, []);
+
+    useEffect(() => {
         setGameplaySettings(initialGameplaySettings);
     }, [initialGameplaySettings]);
 
@@ -84,6 +89,16 @@ function Play() {
 
     function handleSettingsDisplay() {
         setSettingsVisible(true);
+    }
+
+    async function updatePlayerTimers(): Promise<void> {
+        const whitePlayerTimer = await fetchTimer(Number(location.state.gameId), "white");
+        const blackPlayerTimer = await fetchTimer(Number(location.state.gameId), "black");
+
+        console.log(whitePlayerTimer, blackPlayerTimer);
+
+        setWhitePlayerTimer(whitePlayerTimer);
+        setBlackPlayerTimer(blackPlayerTimer);
     }
 
     function toggleBoardOrientation() {
