@@ -24,33 +24,6 @@ class ParseFENView(APIView):
 		return Response(parsed_fen, status=status.HTTP_200_OK)
 
 
-class StartChessGameView(generics.CreateAPIView):
-	queryset = ChessGame.objects.all()
-	serializer_class = ChessGameSerializer
-	permission_classes = [IsAuthenticated]
-
-	def perform_create(self, serializer):
-		if serializer.is_valid():
-			serializer.save()
-		else:
-			print(serializer.errors)
-
-class GetOngoingGameView(generics.ListAPIView):
-	def get_queryset(self):
-		white_player_filter = Q(white_player=self.request.user)
-		black_player_filter = Q(black_player=self.request.user)
-		game_is_ongoing_filter = Q(game_status="Ongoing")
-
-		return ChessGame.objects.filter((white_player_filter | black_player_filter) & game_is_ongoing_filter)
-
-class MakeMoveView(generics.UpdateAPIView):
-	def get_queryset(self):
-		white_player_filter = Q(white_player=self.request.user)
-		black_player_filter = Q(black_player=self.request.user)
-		game_is_ongoing_filter = Q(game_status="Ongoing")
-
-		return ChessGame.objects.filter((white_player_filter | black_player_filter) & game_is_ongoing_filter)
-		
 class GetGameplaySettingsView(APIView):
 	permission_classes = [IsAuthenticated]
 	
@@ -79,3 +52,12 @@ class UpdateSettingsView(APIView):
 		serialized_settings = to_dict(user_gameplay_settings, ["id", "user"])
 
 		return Response(serialized_settings, status=status.HTTP_200_OK)
+
+class GetCurrentPositionView(APIView):
+	permission_classes = [IsAuthenticated]
+	def post(self, request):
+		game_id = request.data.get("game_id")
+		chess_game_model: ChessGame = ChessGame.objects.get(id=game_id)
+
+		full_parsed_fen = chess_game_model.sync_get_full_parsed_fen()
+		return Response(full_parsed_fen, status=status.HTTP_200_OK)

@@ -1,5 +1,23 @@
-import api from "../api.js";
+import api from "../api.ts";
 import { ParsedFENString } from "../types/gameLogic.js";
+
+async function fetchCurrentPosition(gameId: number): Promise<ParsedFENString> {
+    let currentPosition = null;
+
+    try {
+        const response = await api.post("gameplay_api/get-current-position/", {
+            game_id: gameId,
+        })
+
+        if (response.status === 200) {
+            currentPosition = response.data;
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+    return currentPosition;
+}
 
 async function fetchLegalMoves(
     parsedFENString: object,
@@ -174,4 +192,5 @@ export {
     getIsCheckmated,
     getIsStalemated,
     getUsername,
+    fetchCurrentPosition
 };

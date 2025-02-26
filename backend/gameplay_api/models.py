@@ -57,6 +57,15 @@ class ChessGame(models.Model):
 			"halfmove_clock": self.halfmove_clock,
 			"fullmove_number": self.current_move
 		}
+
+	def sync_get_full_parsed_fen(self):
+		return {
+			"board_placement": self.parsed_board_placement,
+            "castling_rights": self.castling_rights,
+            "en_passant_target_square": self.en_passant_target_square,
+            "halfmove_clock": self.halfmove_clock,
+            "fullmove_number": self.current_move
+		}
 	
 class UserGameplaySettings(models.Model):
 	user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)

@@ -4,7 +4,7 @@ import "../../styles/chessboard/chessboard.css";
 import Square from "../Square.js";
 
 import { clearSquaresStyling, getRank, getFile } from "../../utils/boardUtils";
-import { fetchLegalMoves, fetchMoveIsValid } from "../../utils/apiUtils";
+import { fetchCurrentPosition, fetchLegalMoves, fetchMoveIsValid } from "../../utils/apiUtils";
 
 import {
     whitePromotionRank,
@@ -111,7 +111,7 @@ function MultiplayerChessboard({
     }, []);
 
     useEffect(() => {
-        fetchCurrentPosition();
+        updateCurrentPosition();
     }, []);
 
     useEffect(() => {
@@ -144,8 +144,10 @@ function MultiplayerChessboard({
         }
     }
 
-    async function fetchCurrentPosition(): Promise<void> {
+    async function updateCurrentPosition(): Promise<void> {
+        const currentPosition = await fetchCurrentPosition(Number(gameId));
 
+        setParsedFENString(currentPosition);
     }
 
     function handleTimerDecrement(parsedEventData: any) {
