@@ -61,3 +61,14 @@ class GetCurrentPositionView(APIView):
 
 		full_parsed_fen = chess_game_model.sync_get_full_parsed_fen()
 		return Response(full_parsed_fen, status=status.HTTP_200_OK)
+
+class GetPlayerTimerView(APIView):
+	def post(self, request):
+		game_id = request.data.get("game_id")
+		player_color = request.data.get("player_color")
+
+		chess_game_model: ChessGame = ChessGame.objects.get(id=game_id)
+		player_timer_attr = f"{player_color}_player_clock"
+		player_timer = getattr(chess_game_model, player_timer_attr)
+
+		return Response(player_timer, status=status.HTTP_200_OK)

@@ -1,5 +1,5 @@
 import api from "../api.ts";
-import { ParsedFENString } from "../types/gameLogic.js";
+import { ParsedFENString, PieceColor } from "../types/gameLogic.js";
 
 async function fetchCurrentPosition(gameId: number): Promise<ParsedFENString> {
     let currentPosition = null;
@@ -17,6 +17,24 @@ async function fetchCurrentPosition(gameId: number): Promise<ParsedFENString> {
     }
 
     return currentPosition;
+}
+
+async function fetchTimer(gameId: number, playerColor: PieceColor) {
+    let timer = null;
+    try {
+        const response = await api.post("gameplay_api/get-player-timer/", {
+            game_id: gameId,
+            player_color: playerColor,
+        })
+
+        if (response.status === 200) {
+            timer = response.data;
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+    return timer;
 }
 
 async function fetchLegalMoves(
@@ -192,5 +210,6 @@ export {
     getIsCheckmated,
     getIsStalemated,
     getUsername,
-    fetchCurrentPosition
+    fetchCurrentPosition,
+    fetchTimer
 };
