@@ -3,7 +3,7 @@ import { useDrag, useDrop } from "react-dnd";
 import "../styles/chessboard/square.css";
 import PromotionPopup from "./PromotionPopup.tsx";
 import React, { useEffect, useState } from "react";
-import { getFile, getRank, isSquareLight } from "../utils/boardUtils";
+import { isSquareLight } from "../utils/boardUtils";
 import { SquareProps } from "../interfaces/chessboard.ts";
 import { OptionalValue } from "../types/general.ts";
 import { capitaliseFirstLetter } from "../utils/generalUtils.ts";
@@ -42,7 +42,7 @@ function Square({
         setPopupIsOpen(displayPromotionPopup);
     }, [displayPromotionPopup]);
 
-    const [{ isDragging }, drag] = useDrag(() => {
+    const [, drag] = useDrag(() => {
         return {
             type: "square",
             item: { id: squareNumber },
@@ -52,7 +52,7 @@ function Square({
         };
     });
 
-    const [{ isOver }, drop]: any = useDrop(() => ({
+    const [, drop]: any = useDrop(() => ({
         accept: "square",
         drop: (item: any, _) => {
             startingSquare = item.id;
@@ -79,11 +79,8 @@ function Square({
 
         const squareId = (event.currentTarget as HTMLElement).id;
 
-        const squareFile: number = getFile(squareId);
-        const squareRank: number = getRank(squareId);
-
-        const isSquareLight: boolean = (squareFile + squareRank) % 2 !== 0;
-        const highlightedClassName: string = isSquareLight
+        const squareIsLight: boolean = isSquareLight(squareId);
+        const highlightedClassName: string = squareIsLight
             ? "highlighted-square-light"
             : "highlighted-square-dark";
 
