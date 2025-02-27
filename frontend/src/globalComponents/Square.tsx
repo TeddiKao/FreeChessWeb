@@ -22,11 +22,14 @@ function Square({
     previousDraggedSquare,
     previousDroppedSquare,
     orientation,
-    moveMethod
+    moveMethod,
 }: SquareProps) {
     let startingSquare: OptionalValue<string> = null;
 
-    const [popupIsOpen, setPopupIsOpen] = useState<boolean>(displayPromotionPopup);
+    const [popupIsOpen, setPopupIsOpen] = useState<boolean>(
+        displayPromotionPopup
+    );
+    const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
 
     function getSquareClass() {
         if (squareNumber === previousDraggedSquare) {
@@ -41,6 +44,26 @@ function Square({
     useEffect(() => {
         setPopupIsOpen(displayPromotionPopup);
     }, [displayPromotionPopup]);
+
+    useEffect(() => {
+        const highlightedClassName = isSquareLight(squareNumber)
+            ? "highlighted-square-light"
+            : "highlighted-square-dark";
+
+        const squareElement: HTMLElement | null = document.getElementById(
+            `${squareNumber}`
+        );
+
+        if (!squareElement) {
+            return;
+        }
+
+        if (isHighlighted) {
+            squareElement.classList.add(highlightedClassName);
+        } else {
+            squareElement.classList.remove(highlightedClassName);
+        }
+    }, [isHighlighted]);
 
     const [, drag] = useDrag(() => {
         return {
@@ -77,14 +100,7 @@ function Square({
     function handleSquareHiglight(event: React.MouseEvent<HTMLDivElement>) {
         event.preventDefault();
 
-        const squareId = (event.currentTarget as HTMLElement).id;
-
-        const squareIsLight: boolean = isSquareLight(squareId);
-        const highlightedClassName: string = squareIsLight
-            ? "highlighted-square-light"
-            : "highlighted-square-dark";
-
-        (event.currentTarget as HTMLElement).classList.add(highlightedClassName);
+        setIsHighlighted((prevHighlighted: boolean) => !prevHighlighted)
     }
 
     function handleOnDrop(droppedSquare: string | number) {
@@ -128,7 +144,9 @@ function Square({
                         handleOnDrag(squareNumber);
                     }}
                     className="piece-image"
-                    src={`/${pieceColor.toLowerCase()}${capitaliseFirstLetter(pieceType)}.svg`}
+                    src={`/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
+                        pieceType
+                    )}.svg`}
                 />
             );
         }
