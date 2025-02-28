@@ -130,16 +130,17 @@ function MultiplayerChessboard({
         const parsedEventData = JSON.parse(event.data);
         const eventType = parsedEventData["type"];
         
+        const timerChangeEvents = [
+            WebSocketEventTypes.TIMER_DECREMENTED,
+            WebSocketEventTypes.TIMER_INCREMENTED,
+        ]
+
         switch (eventType) {
             case WebSocketEventTypes.MOVE_MADE:
                 makeMove(parsedEventData);
                 break;
 
-            case WebSocketEventTypes.TIMER_DECREMENTED:
-                handleTimerChange(parsedEventData);
-                break;
-
-            case WebSocketEventTypes.TIMER_INCREMENTED:
+            case timerChangeEvents.includes(eventType):
                 handleTimerChange(parsedEventData);
                 break;
 

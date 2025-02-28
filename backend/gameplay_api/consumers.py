@@ -37,25 +37,25 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         await self.update_game_attribute(chess_game_model, "white_player_clock", new_time)
 
-    async def increment_white_player_timer(self, increment_amount: float | int):
+    async def increment_white_player_timer(self, chess_game_model: ChessGame, increment_amount: float | int):
         if (increment_amount < 0):
             return
-        
-        current_time = await self.get_game_attribute(self.chess_game_model, "white_player_clock")
+
+        current_time = await self.get_game_attribute(chess_game_model, "white_player_clock")
 
         new_time = current_time + Decimal(increment_amount)
-        await self.update_game_attribute(self.chess_game_model, "white_player_clock", new_time)
-        await self.save_chess_game_model(self.chess_game_model)
+        await self.update_game_attribute(chess_game_model, "white_player_clock", new_time)
+        await self.save_chess_game_model(chess_game_model)
 
-    async def increment_white_player_timer(self, increment_amount: float | int):
+    async def increment_black_player_timer(self, chess_game_model: ChessGame, increment_amount: float | int):
         if (increment_amount < 0):
             return
-        
-        current_time = await self.get_game_attribute(self.chess_game_model, "black_player_clock")
+
+        current_time = await self.get_game_attribute(chess_game_model, "black_player_clock")
         new_time = current_time + Decimal(increment_amount)
 
-        await self.update_game_attribute(self.chess_game_model, "black_player_clock", new_time)
-        await self.save_chess_game_model(self.chess_game_model)
+        await self.update_game_attribute(chess_game_model, "black_player_clock", new_time)
+        await self.save_chess_game_model(chess_game_model)
 
     async def decrement_black_player_timer(self, chess_game_model: ChessGame, decrement_amount: float | int):
         current_time = await self.get_game_attribute(chess_game_model, "black_player_clock")
@@ -268,12 +268,13 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.room_group_name = f"game_{game_id}"
         self.game_id = game_id
         self.chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
-        self.white_player_user = self.chess_game_model.white_player
-        self.black_player_user = self.chess_game_model.black_player
+        self.white_player_user = await self.get_game_attribute(self.chess_game_model, "white_player")
+        self.black_player_user = await self.get_game_attribute(self.chess_game_model, "black_player")
 
         is_timer_running = await self.get_game_attribute(self.chess_game_model, "is_timer_running")
         if not is_timer_running:
-            self.timer_task = asyncio.create_task(self.handle_timer_decrement())
+            self.timer_task = asyncio.create_task(
+                self.handle_timer_decrement())
             await self.update_game_attribute(self.chess_game_model, "is_timer_running", True)
         else:
             self.timer_task = None
@@ -309,6 +310,8 @@ class GameConsumer(AsyncWebsocketConsumer):
         if self.timer_task:
             self.timer_task.cancel()
 
+        chess_game_model = await self.get_chess_game(self.game_id)
+
         move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
         chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
         previous_position: dict = copy.deepcopy(
@@ -317,19 +320,24 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         parsed_move_data: dict = json.loads(event["move_data"])
 
-        white_player_username = self.white_player_user.username
-        black_player_username = self.black_player_user.username
+        white_player_username = await self.white_player_user.async_get_player_username()
+        black_player_username = await self.black_player_user.async_get_player_username()
 
-        white_player_increment = await self.get_game_attribute(self.chess_game_model, "white_player_increment")
-        black_player_increment = await self.get_game_attribute(self.chess_game_model, "black_player_increment")
+        white_player_increment = await self.get_game_attribute(chess_game_model, "white_player_increment")
+        black_player_increment = await self.get_game_attribute(chess_game_model, "black_player_increment")
 
         if white_player_username == event["move_made_by"]:
-            await self.increment_white_player_timer(white_player_increment)
-        elif black_player_username == event["move_made_by"]:
-            await self.increment_black_player_timer(black_player_increment)
+            print("Incrementing white player timer")
+            print(white_player_increment)
 
-        new_white_player_clock = self.get_game_attribute(self.chess_game_model, "white_player_clock")
-        new_black_player_clock = self.get_game_attribute(self.chess_game_model, "black_player_clock")
+            await self.increment_white_player_timer(chess_game_model, white_player_increment)
+        elif black_player_username == event["move_made_by"]:
+            await self.increment_black_player_timer(chess_game_model, black_player_increment)
+
+        new_white_player_clock = await self.get_game_attribute(chess_game_model, "white_player_clock")
+        new_black_player_clock = await self.get_game_attribute(chess_game_model, "black_player_clock")
+
+        print(new_white_player_clock)
 
         if move_is_valid:
             await self.update_position(chess_game_model, parsed_move_data)
@@ -343,14 +351,16 @@ class GameConsumer(AsyncWebsocketConsumer):
                 "new_parsed_fen": await chess_game_model.get_full_parsed_fen()
             }))
 
-            await self.send(json.dumps({
-                "type": "timer_incremented",
-                "white_player_clock": float(new_white_player_clock),
-                "black_player_clock": float(new_black_player_clock)
-            }))
+            if self.timer_task:
+                await self.send(json.dumps({
+                    "type": "timer_incremented",
+                    "white_player_clock": float(new_white_player_clock),
+                    "black_player_clock": float(new_black_player_clock)
+                }))
 
         if self.timer_task:
-            self.timer_task = asyncio.create_task(self.handle_timer_decrement())
+            self.timer_task = asyncio.create_task(
+                self.handle_timer_decrement())
 
     async def timer_decremented(self, event):
         await self.send(json.dumps({

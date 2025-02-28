@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth import get_user_model
 from .managers import CustomUserManager
 
+from channels.db import database_sync_to_async
+
 # Create your models here.
 class UserAuthModel(AbstractBaseUser):
 	username = models.CharField(max_length=80, blank=False, unique=True)
@@ -14,6 +16,13 @@ class UserAuthModel(AbstractBaseUser):
 	USERNAME_FIELD = "email"
 
 	objects = CustomUserManager()
+
+	@database_sync_to_async	
+	def async_get_player_username(self):
+		return self.username
+	
+	def sync_get_player_username(self):
+		return self.username
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
