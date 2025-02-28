@@ -66,7 +66,7 @@ function Play() {
     }, [initialGameplaySettings]);
 
     if (!location.state) {
-        return <Navigate to={"/select-time-control"} />;
+        return <Navigate to={"/game-setup"} />;
     }
 
     if (!gameplaySettings) {
@@ -92,8 +92,14 @@ function Play() {
     }
 
     async function updatePlayerTimers(): Promise<void> {
-        const whitePlayerTimer = await fetchTimer(Number(location.state.gameId), "white");
-        const blackPlayerTimer = await fetchTimer(Number(location.state.gameId), "black");
+        const whitePlayerTimer = await fetchTimer(
+            Number(location.state.gameId),
+            "white"
+        );
+        const blackPlayerTimer = await fetchTimer(
+            Number(location.state.gameId),
+            "black"
+        );
 
         console.log(whitePlayerTimer, blackPlayerTimer);
 
@@ -136,7 +142,7 @@ function Play() {
     const bottomTimerAmount = getTimeAmount(bottomTimerColor);
 
     if (!topTimerAmount || !bottomTimerAmount) {
-        return <Navigate to="/select-time-control" />;
+        return <Navigate to="/game-setup" />;
     }
 
     if (!parsedFEN) {

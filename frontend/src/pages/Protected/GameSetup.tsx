@@ -6,7 +6,7 @@ import TimeControlTypeContainer from "../../pageComponents/gameplay/TimeControlT
 import Timer from "../../pageComponents/gameplay/Timer.js";
 import TimeControlSelection from "../../pageComponents/gameplay/TimeControlSelection.js";
 
-import "../../styles/matchmaking/select-time-control.css";
+import "../../styles/matchmaking/game-setup.css";
 
 import { capitaliseFirstLetter } from "../../utils/generalUtils.ts";
 import { displayTimeControl } from "../../utils/timeUtils.ts";
@@ -157,7 +157,7 @@ function GameSetup() {
         );
     }
 
-    console.log(selectedTimeControl)
+    console.log(selectedTimeControl);
 
     function showTimeControlAmounts() {
         if (!selectedTimeControlType) {
@@ -248,7 +248,10 @@ function GameSetup() {
                     />
                 </div>
 
-                <DisplayChessboard parsed_fen_string={parsedFEN} orientation="White" />
+                <DisplayChessboard
+                    parsed_fen_string={parsedFEN}
+                    orientation="White"
+                />
 
                 <div className="bottom-timer-wrapper">
                     <Timer

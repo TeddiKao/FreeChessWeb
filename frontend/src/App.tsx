@@ -60,7 +60,7 @@ function App() {
                         />
 
                         <Route
-                            path="/select-time-control"
+                            path="/game-setup"
                             element={
                                 <ProtectedRoute>
                                     <GameSetup />

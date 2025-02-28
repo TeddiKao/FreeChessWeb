@@ -18,7 +18,7 @@ function DashboardNavbar() {
 
         {
             linkName: "Play vs human",
-            linkPath: "/select-time-control",
+            linkPath: "/game-setup",
         },
     ];
 

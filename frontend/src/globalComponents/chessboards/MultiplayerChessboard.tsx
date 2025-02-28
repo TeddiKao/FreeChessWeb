@@ -31,6 +31,7 @@ import {
     PieceInfo,
     PieceType,
 } from "../../types/gameLogic.ts";
+import { MoveMadeEventData, TimerChangedEventData } from "../../interfaces/gameLogic.ts";
 
 function MultiplayerChessboard({
     parsed_fen_string,
@@ -156,18 +157,16 @@ function MultiplayerChessboard({
     }
 
 
-    function handleTimerChange(parsedEventData: any) {
+    function handleTimerChange(parsedEventData: TimerChangedEventData) {
         const newWhitePlayerClock = parsedEventData["white_player_clock"];
         const newBlackPlayerClock = parsedEventData["black_player_clock"];
-
-        console.log(newWhitePlayerClock, newBlackPlayerClock);
 
         setWhiteTimer(Math.ceil(newWhitePlayerClock));
         setBlackTimer(Math.ceil(newBlackPlayerClock));
     }
 
 
-    function makeMove(eventData: any) {
+    function makeMove(eventData: MoveMadeEventData) {
         setParsedFENString((prevState: any) => {
             return {
                 ...prevState,
