@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -23,6 +25,11 @@ def get_default_castling_rights():
 			"Kingside": True
 		}
 	}
+
+class TimerTask(models.Model):
+	timer_task_id = models.UUIDField(default=uuid4, unique=True, primary_key=True)
+	status = models.CharField(max_length=20)
+
 
 class ChessGame(models.Model):
 	white_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="white_player")
@@ -50,6 +57,7 @@ class ChessGame(models.Model):
 
 	is_timer_running = models.BooleanField(default=False, null=False, blank=False)
 	timer_initiator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="timer_initiator", null=True, blank=True)
+	timer_task = models.OneToOneField(TimerTask, on_delete=models.CASCADE, related_name="timer_task", null=True, blank=True)
 
 	@database_sync_to_async
 	def get_full_parsed_fen(self):

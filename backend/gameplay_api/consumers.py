@@ -14,8 +14,10 @@ from move_validation_api.utils.move_validation import validate_move, validate_ca
 from move_validation_api.utils.get_move_type import get_move_type
 from move_validation_api.utils.general import *
 
-from .models import ChessGame
+from users_api.models import UserAuthModel
+from .models import ChessGame, TimerTask
 
+timer_tasks_info = {}
 
 class GameConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
@@ -274,14 +276,22 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.black_player_user = await self.get_game_attribute(self.chess_game_model, "black_player")
 
         is_timer_running = await self.get_game_attribute(self.chess_game_model, "is_timer_running")
+        room_group_exists = timer_tasks_info.get(self.room_group_name)
+        timer_task_exists = None
+        if room_group_exists:
+            timer_task_exists = timer_tasks_info[self.room_group_name].get("timer_task")
 
-        if not is_timer_running:
-            self.timer_task = asyncio.create_task(
-                self.handle_timer_decrement())
+        if not is_timer_running and not timer_task_exists:
+            timer_task = asyncio.create_task(self.handle_timer_decrement())
+            print("Timer task created")
+
+            if self.room_group_name not in timer_tasks_info.keys():
+                timer_tasks_info[self.room_group_name] = {
+                    "timer_task": timer_task
+                }
 
             await self.update_game_attribute(self.chess_game_model, "is_timer_running", True)
-        else:
-            self.timer_task = None
+            await self.update_game_attribute(self.chess_game_model, "timer_initiator", self.scope["user"])
 
         self.timer_lock = Lock()
 
@@ -310,14 +320,18 @@ class GameConsumer(AsyncWebsocketConsumer):
             }
         )
 
-    async def move_received(self, event):
-        if self.timer_task:
-            self.timer_task.cancel()
-        else:
-            # TODO: Send message to timer initiator to pause the timer
-            pass
 
+    async def move_received(self, event):
         chess_game_model = await self.get_chess_game(self.game_id)
+        
+        timer_task = None
+
+        if timer_tasks_info[self.room_group_name].get("timer_task"):
+            timer_task = timer_tasks_info[self.room_group_name]["timer_task"]
+            timer_task.cancel()
+            print(timer_task)
+            print(timer_tasks_info[self.room_group_name])
+            del timer_tasks_info[self.room_group_name]["timer_task"]
 
         move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
         chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
@@ -354,16 +368,18 @@ class GameConsumer(AsyncWebsocketConsumer):
                 "new_parsed_fen": await chess_game_model.get_full_parsed_fen()
             }))
 
-            if self.timer_task:
+            if timer_task:
                 await self.send(json.dumps({
                     "type": "timer_incremented",
                     "white_player_clock": float(new_white_player_clock),
                     "black_player_clock": float(new_black_player_clock)
                 }))
 
-        if self.timer_task:
-            self.timer_task = asyncio.create_task(
-                self.handle_timer_decrement())
+        new_timer_task_exists = timer_tasks_info[self.room_group_name].get("timer_task")
+        if not new_timer_task_exists:
+            new_timer_task = asyncio.create_task(self.handle_timer_decrement())
+            timer_tasks_info[self.room_group_name]["timer_task"] = new_timer_task
+
 
     async def timer_decremented(self, event):
         if self.channel_name:
@@ -372,3 +388,6 @@ class GameConsumer(AsyncWebsocketConsumer):
                 "white_player_clock": float(event["white_player_clock"]),
                 "black_player_clock": float(event["black_player_clock"]),
             }))
+
+    async def resume_timer(self, event):
+        asyncio.create_task(self.handle_timer_decrement())
