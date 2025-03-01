@@ -4,4 +4,10 @@ type TimeControl = {
 	id?: number;
 }
 
-export type { TimeControl }
+type TimeDuration = {
+	hours: number;
+	minutes: number;
+	seconds: number;
+}
+
+export type { TimeControl , TimeDuration }
