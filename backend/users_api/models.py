@@ -21,8 +21,15 @@ class UserAuthModel(AbstractBaseUser):
 	def async_get_player_username(self):
 		return self.username
 	
+	@database_sync_to_async
+	def async_get_player_id(self):
+		return self.pk
+	
 	def sync_get_player_username(self):
 		return self.username
+	
+	def sync_get_player_id(self):
+		return self.pk
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
