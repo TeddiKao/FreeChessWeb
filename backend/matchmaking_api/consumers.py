@@ -199,15 +199,19 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
         parsed_data = json.loads(text_data)
 
         if parsed_data["type"] == "cancel_matchmaking":
-            waiting_player_model = await self.get_waiting_player_model_from_user(self.scope["user"])
+            try:
+                waiting_player_model = await self.get_waiting_player_model_from_user(self.scope["user"])
+            except WaitingPlayer.DoesNotExist:
+                pass
+            else:
+                await self.remove_player_from_queue(waiting_player_model)
+            
+            self.match_player_task.cancel()
 
-            await self.remove_player_from_queue(waiting_player_model)
             await self.send(json.dumps({
                 "type": "matchmaking_cancelled_successfully",
                 "message": "Matchmaking cancelled successfully"
             }))
-
-            self.match_player_task.cancel()
 
             await self.channel_layer.group_discard(
                 self.room_group_name,
