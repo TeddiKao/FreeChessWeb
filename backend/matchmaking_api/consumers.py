@@ -202,6 +202,8 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                 "message": "Matchmaking cancelled successfully"
             }))
 
+            await self.close()
+
     async def player_matched(self, event):
         await self.send(json.dumps({
             "type": "match_found",
