@@ -5,6 +5,11 @@ enum GameSetupStages {
 	CONFIRM_START = "startConfirmation"
 }
 
+enum MatchmakingEvents {
+	MATCH_FOUND = "match_found",
+	CANCELLED_SUCCESSFULLY = "matchmaking_cancelled_successfully",
+}
+
 enum TimeControls {
 	BULLET = "bullet",
 	BLITZ = "blitz",
@@ -12,4 +17,4 @@ enum TimeControls {
 	CLASSICAL = "classical"
 }
 
-export { GameSetupStages, TimeControls }
+export { GameSetupStages, TimeControls, MatchmakingEvents }

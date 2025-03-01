@@ -89,8 +89,10 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
             if matched_user:
                 matched_player_color, player_to_match_color = await self.decide_player_color()
 
-                white_player = await self.get_user_model_from_waiting_player(matched_user) if matched_player_color == "white" else player_to_match
-                black_player = await self.get_user_model_from_waiting_player(matched_user) if matched_player_color == "black" else player_to_match
+                matched_player_user_model = await self.get_user_model_from_waiting_player(matched_user)
+
+                white_player = matched_player_user_model if matched_player_color == "white" else player_to_match
+                black_player = matched_player_user_model if matched_player_color == "black" else player_to_match
 
                 game_id = await self.create_chess_game(white_player, black_player)
 
@@ -99,13 +101,28 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                     {
                         "type": "player_matched",
                         "match_found": True,
-                                "white_player": white_player.username,
-                                "black_player": black_player.username,
-                                "game_id": game_id,
+                        "white_player": white_player.username,
+                        "black_player": black_player.username,
+                        "game_id": game_id,
+                    }
+                )
+
+                await self.channel_layer.group_send(
+                    f"user_{matched_player_user_model.id}",
+                    {
+                        "type": "player_matched",
+                        "match_found": True,
+                        "white_player": white_player.username,
+                        "black_player": black_player.username,
+                        "game_id": game_id,
                     }
                 )
 
                 await self.remove_player_from_queue(matched_user)
+                await self.channel_layer.group_discard(
+                    f"user_{matched_player_user_model.id}",
+                    self.channel_name
+                )
 
                 match_found = True
 
@@ -152,7 +169,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
         self.base_time = int(base_time)
         self.increment = int(increment)
 
-        self.room_group_name = "test"
+        self.room_group_name = f"user_{self.scope["user"].id}"
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
@@ -169,6 +186,21 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, code):
         pass
+
+    async def receive(self, text_data=None, bytes_data=None):
+        parsed_data = json.loads(text_data)
+
+        if parsed_data["type"] == "cancel_matchmaking":
+            await self.remove_player_from_queue(self.scope["user"])
+            await self.channel_layer.group_discard(
+                self.room_group_name,
+                self.channel_name
+            )
+
+            await self.send(json.dumps({
+                "type": "matchmaking_cancelled_successfully",
+                "message": "Matchmaking cancelled successfully"
+            }))
 
     async def player_matched(self, event):
         await self.send(json.dumps({

@@ -7,6 +7,7 @@ import "../../styles/matchmaking/matchmaking-screen.css";
 import { useNavigate } from "react-router-dom";
 import { getAccessToken } from "../../utils/tokenUtils.ts";
 import { getUsername } from "../../utils/apiUtils.ts";
+import { MatchmakingEvents } from "../../enums/gameSetup.ts";
 
 type timeControlInfo = {
     baseTime: number;
@@ -82,11 +83,19 @@ function MatchmakingScreen({
         };
     }, []);
 
-    function onMessage(event: any): void {
+    function onMessage(event: MessageEvent): void {
         const parsedEventData = JSON.parse(event.data);
 
-        if (parsedEventData["match_found"]) {
-            handleMatchFound(parsedEventData);
+        if (parsedEventData["type"] === MatchmakingEvents.MATCH_FOUND) {
+            if (parsedEventData["match_found"]) {
+                handleMatchFound(parsedEventData);
+            }
+
+            return;
+        }
+
+        if (parsedEventData["type"] === MatchmakingEvents.CANCELLED_SUCCESSFULLY) {
+            handleMatchmakingCancelSuccess();
         }
     }
 
@@ -124,9 +133,19 @@ function MatchmakingScreen({
         console.log("Error!");
     }
 
-    function handleMatchmakingCancel(): void {
+    function handleMatchmakingCancelSuccess(): void {
         setIsMatchmaking(false);
         setGameSetupStage("timeControlSelection");
+    }
+
+    function handleMatchmakingCancel() {
+        const cancellationDetails = {
+            type: "cancel_matchmaking"
+        }
+
+        const stringfiedData = JSON.stringify(cancellationDetails);
+
+        matchmakingWebsocketRef.current?.send(stringfiedData);
     }
 
     return (
