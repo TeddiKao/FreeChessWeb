@@ -192,7 +192,20 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
         }))
 
     async def disconnect(self, code):
-        pass
+        try:
+            wating_player_model = await self.get_waiting_player_model_from_user(self.scope["user"])
+        except WaitingPlayer.DoesNotExist:
+            pass
+        else:
+            await self.remove_player_from_queue(wating_player_model)
+        
+        if self.match_player_task:
+            self.match_player_task.cancel()
+
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
 
     async def receive(self, text_data=None, bytes_data=None):
         print("Request received form client!")
@@ -207,6 +220,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                 await self.remove_player_from_queue(waiting_player_model)
             
             self.match_player_task.cancel()
+            self.match_player_task = None
 
             await self.send(json.dumps({
                 "type": "matchmaking_cancelled_successfully",
