@@ -1,6 +1,6 @@
 import { floor } from "lodash";
 import { padZero } from "./generalUtils.ts";
-import { TimeDuration } from "../types/gameSetup.ts";
+import { TimeDuration, TimeControl } from "../types/gameSetup.ts";
 
 function convertTimeControlTime(time: number) {
 	return time / 60;
@@ -45,4 +45,4 @@ function displayTimeControl({ baseTime, increment }: TimeControl): string {
 	return timeControlString;
 }
 
-export { formatTime, displayTimeControl }
+export { formatTime, displayTimeControl, convertTimeControlToSeconds }
