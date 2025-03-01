@@ -1,7 +1,15 @@
 enum GameSetupStages {
-	TYPE_SELECTION = "typeSelection",
-	AMOUNT_SELECTION = "amountSelection",
-	START_CONFIRMATION = "startConfirmation"
+	TYPE_SELECT = "typeSelection",
+	AMOUNT_SELECT = "amountSelection",
+	CUSTOM_TIME_CREATE = "customTimeControlCreation",
+	CONFIRM_START = "startConfirmation"
 }
 
-export { GameSetupStages }
+enum TimeControls {
+	BULLET = "bullet",
+	BLITZ = "blitz",
+	RAPID = "rapid",
+	CLASSICAL = "classical"
+}
+
+export { GameSetupStages, TimeControls }

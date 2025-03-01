@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { GameSetupStages } from "../../enums/gameSetup";
 
 type TimeControlTypeContainerProps = {
     timeControlName: string;
@@ -14,12 +15,12 @@ function TimeControlTypeContainer({
     setType,
 }: TimeControlTypeContainerProps) {
     function handleRegularTimeControlClick(): void {
-        setSelectionStage("amountSelection");
+        setSelectionStage(GameSetupStages.AMOUNT_SELECT);
         setType(timeControlName);
     }
 
     function handleCustomTimeControlClick(): void {
-        setSelectionStage("amountSelection");
+        setSelectionStage(GameSetupStages.CUSTOM_TIME_CREATE);
         setType(timeControlName);
     }
 

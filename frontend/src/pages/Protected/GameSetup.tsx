@@ -6,7 +6,7 @@ import TimeControlTypeContainer from "../../pageComponents/gameplay/TimeControlT
 import Timer from "../../pageComponents/gameplay/Timer.js";
 import TimeControlSelection from "../../pageComponents/gameplay/TimeControlSelection.js";
 
-import "../../styles/matchmaking/game-setup.css";
+import "../../styles/matchmaking/select-time-control.css";
 
 import { capitaliseFirstLetter } from "../../utils/generalUtils.ts";
 import { displayTimeControl } from "../../utils/timeUtils.ts";
@@ -15,6 +15,7 @@ import { fetchFen } from "../../utils/apiUtils.ts";
 import MatchmakingScreen from "../../pageComponents/gameplay/MatchmakingScreen.js";
 import { GameSetupStages } from "../../enums/gameSetup.js";
 import { ParsedFENString } from "../../types/gameLogic.ts";
+import CustomTimeControlScreen from "../../pageComponents/gameplay/CustomTimeControlScreen.tsx";
 
 type TimeControlInfo = {
     baseTime: number;
@@ -88,11 +89,11 @@ function GameSetup() {
 
     function getPreviousTimeControlSelectionStage() {
         switch (timeControlSelectionStage) {
-            case GameSetupStages.START_CONFIRMATION:
-                return GameSetupStages.AMOUNT_SELECTION;
+            case GameSetupStages.CONFIRM_START:
+                return GameSetupStages.AMOUNT_SELECT;
 
-            case GameSetupStages.AMOUNT_SELECTION:
-                return GameSetupStages.TYPE_SELECTION;
+            case GameSetupStages.AMOUNT_SELECT:
+                return GameSetupStages.TYPE_SELECT;
         }
     }
 
@@ -226,13 +227,16 @@ function GameSetup() {
         console.log(timeControlSelectionStage);
 
         switch (timeControlSelectionStage) {
-            case GameSetupStages.TYPE_SELECTION:
+            case GameSetupStages.TYPE_SELECT:
                 return showTimeControlTypes();
 
-            case GameSetupStages.AMOUNT_SELECTION:
+            case GameSetupStages.AMOUNT_SELECT:
                 return showTimeControlAmounts();
 
-            case GameSetupStages.START_CONFIRMATION:
+            case GameSetupStages.CUSTOM_TIME_CREATE:
+                return <CustomTimeControlScreen />
+
+            case GameSetupStages.CONFIRM_START:
                 return showStartConfirmationScreen();
         }
     }

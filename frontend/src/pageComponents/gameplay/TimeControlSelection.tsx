@@ -4,6 +4,7 @@ import {
     classicalTimeControls,
     rapidTimeControls,
 } from "../../constants/timeControls.js";
+import { TimeControls } from "../../enums/gameSetup.ts";
 
 import { compareObjects } from "../../utils/generalUtils.ts";
 import { displayTimeControl } from "../../utils/timeUtils.ts";
@@ -36,16 +37,16 @@ function TimeControlSelection({
 
     function getTimeControlsList(): Array<TimeControlInfo> | undefined {
         switch (timeControlType.toLowerCase()) {
-            case "bullet":
+            case TimeControls.BULLET:
                 return bulletTimeControls;
             
-            case "blitz":
+            case TimeControls.BLITZ:
                 return blitzTimeControls;
 
-            case "rapid":
+            case TimeControls.RAPID:
                 return rapidTimeControls;
             
-            case "classical":
+            case TimeControls.CLASSICAL:
                 return classicalTimeControls;
             
             default:
