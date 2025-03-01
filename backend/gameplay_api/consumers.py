@@ -16,7 +16,6 @@ from move_validation_api.utils.general import *
 
 from .models import ChessGame
 
-
 class GameConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_chess_game(self, chess_game_id) -> ChessGame:

@@ -2,6 +2,8 @@ import json
 import time
 import random
 
+from asyncio import create_task, sleep
+
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
@@ -62,6 +64,12 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_user_model_from_waiting_player(self, waiting_player: WaitingPlayer):
         return waiting_player.user
+    
+    @database_sync_to_async
+    def get_waiting_player_model_from_user(self, user_model):
+        waiting_player_model = WaitingPlayer.objects.get(user=user_model)
+
+        return waiting_player_model
 
     @database_sync_to_async
     def create_chess_game(self, white_player, black_player):
@@ -154,7 +162,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                     "black_player": None
                 }))
 
-            time.sleep(1)
+            await sleep(1)
 
     async def connect(self):
         user = self.scope["user"]
@@ -168,6 +176,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
         self.base_time = int(base_time)
         self.increment = int(increment)
+        self.match_player_task = create_task(self.match_player())
 
         self.room_group_name = f"user_{self.scope["user"].id}"
         await self.channel_layer.group_add(
@@ -182,25 +191,28 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
             "message": "Connection established",
         }))
 
-        await self.match_player()
-
     async def disconnect(self, code):
         pass
 
     async def receive(self, text_data=None, bytes_data=None):
+        print("Request received form client!")
         parsed_data = json.loads(text_data)
 
         if parsed_data["type"] == "cancel_matchmaking":
-            await self.remove_player_from_queue(self.scope["user"])
-            await self.channel_layer.group_discard(
-                self.room_group_name,
-                self.channel_name
-            )
+            waiting_player_model = await self.get_waiting_player_model_from_user(self.scope["user"])
 
+            await self.remove_player_from_queue(waiting_player_model)
             await self.send(json.dumps({
                 "type": "matchmaking_cancelled_successfully",
                 "message": "Matchmaking cancelled successfully"
             }))
+
+            self.match_player_task.cancel()
+
+            await self.channel_layer.group_discard(
+                self.room_group_name,
+                self.channel_name
+            )
 
             await self.close()
 

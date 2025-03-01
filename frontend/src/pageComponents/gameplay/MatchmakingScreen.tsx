@@ -85,6 +85,7 @@ function MatchmakingScreen({
 
     function onMessage(event: MessageEvent): void {
         const parsedEventData = JSON.parse(event.data);
+        console.log(parsedEventData["type"]);
 
         if (parsedEventData["type"] === MatchmakingEvents.MATCH_FOUND) {
             if (parsedEventData["match_found"]) {
@@ -139,6 +140,8 @@ function MatchmakingScreen({
     }
 
     function handleMatchmakingCancel() {
+        console.log("Cancelling matchmaking!");
+
         const cancellationDetails = {
             type: "cancel_matchmaking"
         }

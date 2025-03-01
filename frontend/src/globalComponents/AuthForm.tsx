@@ -9,6 +9,26 @@ type AuthFormProps = {
     method: string;
 };
 
+type UsernameFieldProps = {
+    username: string;
+    handleUsernameChange: (event: ChangeEvent<HTMLInputElement>) => void;
+}
+
+function UsernameField({ username, handleUsernameChange }: UsernameFieldProps) {
+    return (
+        <>
+            <input
+                type="text"
+                className="username-input"
+                value={username}
+                onChange={handleUsernameChange}
+                placeholder="Username"
+            />
+            <br />
+        </>
+    );
+}
+
 function AuthForm({ method }: AuthFormProps) {
     const [email, setEmail] = useState<string>("");
     const [username, setUsername] = useState<string>("");
@@ -17,21 +37,6 @@ function AuthForm({ method }: AuthFormProps) {
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
     const navigate = useNavigate();
-
-    function UsernameField() {
-        return (
-            <>
-                <input
-                    type="text"
-                    className="username-input"
-                    value={username}
-                    onChange={handleUsernameChange}
-                    placeholder="Username"
-                />
-                <br />
-            </>
-        );
-    }
 
     function FormSubtitle() {
         const loginPageSubititle = (
@@ -131,7 +136,7 @@ function AuthForm({ method }: AuthFormProps) {
                 />
                 <br />
 
-                {shouldRenderUsernameField ? <UsernameField /> : null}
+                {shouldRenderUsernameField ? <UsernameField username={username} handleUsernameChange={handleUsernameChange} /> : null}
 
                 <input
                     type={isPasswordVisible ? "text" : "password"}
