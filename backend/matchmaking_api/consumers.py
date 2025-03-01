@@ -64,7 +64,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_user_model_from_waiting_player(self, waiting_player: WaitingPlayer):
         return waiting_player.user
-    
+
     @database_sync_to_async
     def get_waiting_player_model_from_user(self, user_model):
         waiting_player_model = WaitingPlayer.objects.get(user=user_model)
@@ -73,6 +73,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def create_chess_game(self, white_player, black_player):
+
         chess_game = ChessGame.objects.create(
             white_player=white_player,
             black_player=black_player,
@@ -95,6 +96,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
             matched_user = await self.get_matched_user(player_to_match)
 
             if matched_user:
+
                 matched_player_color, player_to_match_color = await self.decide_player_color()
 
                 matched_player_user_model = await self.get_user_model_from_waiting_player(matched_user)
@@ -192,13 +194,14 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
         }))
 
     async def disconnect(self, code):
+
         try:
             wating_player_model = await self.get_waiting_player_model_from_user(self.scope["user"])
         except WaitingPlayer.DoesNotExist:
             pass
         else:
             await self.remove_player_from_queue(wating_player_model)
-        
+
         if self.match_player_task:
             self.match_player_task.cancel()
 
@@ -208,7 +211,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
         )
 
     async def receive(self, text_data=None, bytes_data=None):
-        print("Request received form client!")
+
         parsed_data = json.loads(text_data)
 
         if parsed_data["type"] == "cancel_matchmaking":
@@ -218,7 +221,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                 pass
             else:
                 await self.remove_player_from_queue(waiting_player_model)
-            
+
             self.match_player_task.cancel()
             self.match_player_task = None
 
@@ -235,6 +238,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
             await self.close()
 
     async def player_matched(self, event):
+
         await self.send(json.dumps({
             "type": "match_found",
             "match_found": event["match_found"],
