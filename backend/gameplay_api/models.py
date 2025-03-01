@@ -49,6 +49,7 @@ class ChessGame(models.Model):
 	en_passant_target_square = models.IntegerField(null=True, blank=True)
 
 	is_timer_running = models.BooleanField(default=False, null=False, blank=False)
+	timer_initiator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="timer_initiator", null=True, blank=True)
 
 	@database_sync_to_async
 	def get_full_parsed_fen(self):
