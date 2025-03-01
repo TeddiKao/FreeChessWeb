@@ -1,9 +1,22 @@
 import { floor } from "lodash";
 import { padZero } from "./generalUtils.ts";
-import { TimeControl } from "../types/gameSetup.ts";
+import { TimeDuration } from "../types/gameSetup.ts";
 
 function convertTimeControlTime(time: number) {
 	return time / 60;
+}
+
+function convertTimeControlToSeconds(timeControl: TimeDuration): number {
+    const timeControlHours = timeControl.hours
+	const timeControlMinutes = timeControl.minutes
+	const timeControlSeconds = timeControl.seconds
+
+	const hoursInSeconds = timeControlHours * 60 * 60;
+	const minutesInSeconds = timeControlMinutes * 60;
+
+	const totalSeconds = hoursInSeconds + minutesInSeconds + timeControlSeconds
+
+	return totalSeconds;
 }
 
 function formatTime(timeInSeconds: number): string {
