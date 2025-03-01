@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import "../../styles/matchmaking/custom-time-control-screen.css";
 import { StateSetterFunction } from "../../types/general";
+import { convertTimeControlToSeconds } from "../../utils/timeUtils";
+import { TimeControl, TimeDuration } from "../../types/gameSetup";
 
 type CustomTimeControlScreenProps = {
     setSelectionStage: StateSetterFunction<string>;
+	setSelectedTimeControl: StateSetterFunction<TimeControl | null>
 };
 
 function CustomTimeControlScreen({
     setSelectionStage,
+	setSelectedTimeControl,
 }: CustomTimeControlScreenProps) {
     const [baseTimeHours, setBaseTimeHours] = useState<number | string>("");
     const [baseTimeMinutes, setBaseTimeMinutes] = useState<number | string>("");
@@ -22,7 +26,25 @@ function CustomTimeControlScreen({
     );
 
     function handleContinue() {
-		
+		const baseTimeDuration: TimeDuration = {
+			hours: Number(baseTimeHours),
+			minutes: Number(baseTimeMinutes),
+            seconds: Number(baseTimeSeconds),
+		}
+
+		const incrementDuration: TimeDuration = {
+            hours: Number(incrementHours),
+            minutes: Number(incrementMinutes),
+            seconds: Number(incrementSeconds),
+        }
+
+		const baseTimeInSeconds = convertTimeControlToSeconds(baseTimeDuration);
+		const incrementTimeInSeconds = convertTimeControlToSeconds(incrementDuration);
+
+		setSelectedTimeControl({
+			baseTime: baseTimeInSeconds,
+			increment: incrementTimeInSeconds
+		})
 
         setSelectionStage("startConfirmation");
     }

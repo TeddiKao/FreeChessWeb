@@ -93,15 +93,17 @@ class GameConsumer(AsyncWebsocketConsumer):
                 white_player_clock = await self.get_game_attribute(chess_game, "white_player_clock")
                 black_player_clock = await self.get_game_attribute(chess_game, "black_player_clock")
 
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        "type": "timer_decremented",
-                        "white_player_clock": white_player_clock,
-                                "black_player_clock": black_player_clock,
-                                "side_to_move": side_to_move.lower(),
-                    }
-                )
+                if self.channel_name:
+                    print("Timer has been decremented!")
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            "type": "timer_decremented",
+                            "white_player_clock": white_player_clock,
+                            "black_player_clock": black_player_clock,
+                            "side_to_move": side_to_move.lower(),
+                        }
+                    )
 
             await asyncio.sleep(1)
 
@@ -272,9 +274,11 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.black_player_user = await self.get_game_attribute(self.chess_game_model, "black_player")
 
         is_timer_running = await self.get_game_attribute(self.chess_game_model, "is_timer_running")
+        print(is_timer_running)
         if not is_timer_running:
             self.timer_task = asyncio.create_task(
                 self.handle_timer_decrement())
+            print("Running task!")
             await self.update_game_attribute(self.chess_game_model, "is_timer_running", True)
         else:
             self.timer_task = None
@@ -296,7 +300,8 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     async def receive(self, text_data):
-
+        print("Something has been received!")
+        print(text_data)
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -363,8 +368,9 @@ class GameConsumer(AsyncWebsocketConsumer):
                 self.handle_timer_decrement())
 
     async def timer_decremented(self, event):
-        await self.send(json.dumps({
-            "type": "timer_decremented",
-            "white_player_clock": float(event["white_player_clock"]),
-            "black_player_clock": float(event["black_player_clock"]),
-        }))
+        if self.channel_name:
+            await self.send(json.dumps({
+                "type": "timer_decremented",
+                "white_player_clock": float(event["white_player_clock"]),
+                "black_player_clock": float(event["black_player_clock"]),
+            }))

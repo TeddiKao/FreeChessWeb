@@ -141,7 +141,11 @@ function MultiplayerChessboard({
                 makeMove(parsedEventData);
                 break;
 
-            case timerChangeEvents.includes(eventType):
+            case WebSocketEventTypes.TIMER_DECREMENTED:
+                handleTimerChange(parsedEventData);
+                break;
+
+            case WebSocketEventTypes.TIMER_INCREMENTED:
                 handleTimerChange(parsedEventData);
                 break;
 
@@ -158,6 +162,8 @@ function MultiplayerChessboard({
 
 
     function handleTimerChange(parsedEventData: TimerChangedEventData) {
+        console.log("Changing the timer!")
+        
         const newWhitePlayerClock = parsedEventData["white_player_clock"];
         const newBlackPlayerClock = parsedEventData["black_player_clock"];
 
