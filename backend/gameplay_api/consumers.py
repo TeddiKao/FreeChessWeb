@@ -109,6 +109,16 @@ class GameConsumer(AsyncWebsocketConsumer):
 
             await asyncio.sleep(1)
 
+    async def append_to_position_list(self, chess_game_model: ChessGame):
+        newest_updated_fen = await chess_game_model.get_full_parsed_fen()
+        current_position_list = await self.get_game_attribute(chess_game_model, "position_list")
+
+        updated_position_list: list = copy.deepcopy(current_position_list)
+        updated_position_list.extend(newest_updated_fen)
+
+        await self.update_game_attribute(chess_game_model, "position_list", updated_position_list)
+        await self.save_chess_game_model(chess_game_model)
+
     async def modify_castling_rights(self, chess_game_model: ChessGame, castling_side: str, color: str, new_value: bool = False):
         new_castling_rights = copy.deepcopy(chess_game_model.castling_rights)
 
@@ -310,7 +320,6 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     async def receive(self, text_data):
-
         await self.channel_layer.group_send(
             self.room_group_name,
             {

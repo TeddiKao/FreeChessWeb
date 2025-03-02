@@ -49,3 +49,10 @@ def get_king_position(board_placement, king_color):
 
 def get_opposite_color(color):
 	return "Black" if color.lower() == "white" else "White"
+
+def convert_to_algebraic_notation(square):
+	files_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+	square_file = get_file(square)
+	square_rank = get_row(square)
+
+	return f"{files_list[square_file]}{square_rank + 1}"

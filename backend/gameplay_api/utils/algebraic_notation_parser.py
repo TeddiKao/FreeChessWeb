@@ -1,5 +1,5 @@
 from typing import TypedDict
-from general import *
+from move_validation_api.utils.general import *
 from move_validation_api.utils.get_move_type import get_is_check, get_is_capture
 from .enums import PieceType
 from .fen_parser import parse_board_placement
@@ -44,7 +44,9 @@ def handle_piece_move(board_placement: dict, move_info: MoveInfo):
     capture_notation = "x" if get_is_capture(board_placement, move_info) else ""
     check_notation = "+" if get_is_check(board_placement, move_info) else ""
 
-    return f"{piece_notation}{capture_notation}{notated_square}{check_notation}"
+    full_notation = f"{piece_notation}{capture_notation}{notated_square}{check_notation}"
+
+    return full_notation
 
 
 def get_algebraic_notation(board_placement: dict, move_info: MoveInfo) -> str:

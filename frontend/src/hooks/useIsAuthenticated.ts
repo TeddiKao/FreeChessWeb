@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import api from "../api.js";
+import api from "../api.ts";
 
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants/tokens.js";
+import { ACCESS_TOKEN } from "../constants/tokens.ts";
 import { getAccessToken, getRefreshToken } from "../utils/tokenUtils.ts";
 
 function useIsAuthenticated() {
