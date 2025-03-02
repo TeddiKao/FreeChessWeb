@@ -6,7 +6,7 @@ enum GameSetupStages {
 }
 
 enum TimeControlValidationErrors {
-	INVALID_DURATION = "invalidDurationError"
+	ZERO_DURATION = "zeroDurationError"
 }
 
 enum MatchmakingEvents {
