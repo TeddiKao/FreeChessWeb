@@ -13,9 +13,6 @@ def get_default_board_placement():
 
 	return parsed_board_placement
 
-def get_default_position_list():
-	return [get_default_board_placement()]
-
 def get_default_castling_rights():
 	return {
 		"White": {
@@ -28,6 +25,15 @@ def get_default_castling_rights():
 			"Kingside": True
 		}
 	}
+
+def get_default_position_list():
+	return [{
+		"board_placement": get_default_board_placement(),
+		"castling_rights": get_default_castling_rights(),
+		"en_passant_target_square": None,
+		"halfmove_clock": 0,
+		"fullmove_number": 1
+	}]
 
 class TimerTask(models.Model):
 	timer_task_id = models.UUIDField(default=uuid4, unique=True, primary_key=True)
@@ -63,6 +69,9 @@ class ChessGame(models.Model):
 
 	position_list = models.JSONField(default=get_default_position_list, null=False, blank=False)
 	move_list = models.JSONField(default=list, null=False, blank=False)
+
+	def sync_get_position_list(self):
+		return self.position_list
 
 	@database_sync_to_async
 	def get_full_parsed_fen(self):
