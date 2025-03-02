@@ -234,7 +234,12 @@ function GameSetup() {
                 return showTimeControlAmounts();
 
             case GameSetupStages.CUSTOM_TIME_CREATE:
-                return <CustomTimeControlScreen setSelectedTimeControl={setSelectedTimeControl} setSelectionStage={setTimeControlSelectionStage} />
+                return (
+                    <CustomTimeControlScreen
+                        setSelectedTimeControl={setSelectedTimeControl}
+                        setSelectionStage={setTimeControlSelectionStage}
+                    />
+                );
 
             case GameSetupStages.CONFIRM_START:
                 return showStartConfirmationScreen();
