@@ -215,6 +215,12 @@ class GameConsumer(AsyncWebsocketConsumer):
         chess_game_model.en_passant_target_square = en_passant_target_square
         await self.save_chess_game_model(chess_game_model)
 
+    async def increment_move_number(self, chess_game_model: ChessGame):
+        current_move = await self.get_game_attribute(chess_game_model, "current_move")
+
+        await self.update_game_attribute(chess_game_model, "current_move", current_move + 1)
+
+
     async def update_position(self, chess_game_model: ChessGame, move_info: dict):
         new_board_placement = copy.deepcopy(
             await self.get_game_attribute(chess_game_model, "parsed_board_placement"))
@@ -269,6 +275,10 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.update_en_passant_target_square(chess_game_model, move_info)
         await self.update_game_attribute(chess_game_model, "parsed_board_placement", new_board_placement)
         await self.update_game_attribute(chess_game_model, "current_player_turn", new_side_to_move)
+        
+        if piece_color.lower() == "black":
+            await self.increment_move_number(chess_game_model)
+
         await self.save_chess_game_model(chess_game_model)
 
         await self.append_to_position_list(chess_game_model)
@@ -365,9 +375,26 @@ class GameConsumer(AsyncWebsocketConsumer):
         new_white_player_clock = await self.get_game_attribute(chess_game_model, "white_player_clock")
         new_black_player_clock = await self.get_game_attribute(chess_game_model, "black_player_clock")
 
+        current_move_number = await self.get_game_attribute(chess_game_model, "current_move")
+
         if move_is_valid:
             await self.update_position(chess_game_model, parsed_move_data)
             new_position_list = await self.get_game_attribute(chess_game_model, "position_list")
+
+            print(current_move_number)
+
+            position_index = None
+            if parsed_move_data["piece_color"].lower() == "white":
+                position_index = (current_move_number - 1) * 2 + 1
+            elif parsed_move_data["piece_color"].lower() == "black": 
+                position_index = (current_move_number - 1) * 2 + 2
+
+            print(position_index)
+
+            await self.send(json.dumps({
+                "type": "position_list_updated",
+                "new_position_list": new_position_list,
+            }))
 
             await self.send(json.dumps({
                 "type": "move_made",
@@ -375,12 +402,8 @@ class GameConsumer(AsyncWebsocketConsumer):
                 "move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
                 "move_made_by": event["move_made_by"],
                 "move_is_valid": move_is_valid,
-                "new_parsed_fen": await chess_game_model.get_full_parsed_fen()
-            }))
-
-            await self.send(json.dumps({
-                "type": "position_list_updated",
-                "new_position_list": new_position_list,
+                "new_parsed_fen": await chess_game_model.get_full_parsed_fen(),
+                "new_position_index": position_index,
             }))
 
             if timer_task:

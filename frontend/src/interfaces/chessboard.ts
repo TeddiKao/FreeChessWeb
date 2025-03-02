@@ -21,6 +21,8 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
     gameId: number | string;
     setWhiteTimer: StateSetterFunction<OptionalValue<number>>;
     setBlackTimer: StateSetterFunction<OptionalValue<number>>;
+    setPositionIndex: StateSetterFunction<number>;
+    setPositionList: StateSetterFunction<Array<ParsedFENString>>;
     gameplaySettings: any;
 }
 

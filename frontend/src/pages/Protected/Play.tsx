@@ -13,7 +13,7 @@ import {
 import "../../styles/multiplayer/play.css";
 import "../../styles/chessboard/board-actions.css";
 
-import { fetchFen, fetchTimer } from "../../utils/apiUtils.ts";
+import { fetchFen, fetchPositionList, fetchTimer } from "../../utils/apiUtils.ts";
 
 import GameOverModal from "../../globalComponents/modals/GameOverModal.js";
 import GameplaySettings from "../../globalComponents/modals/GameplaySettings.js";
@@ -23,8 +23,6 @@ import { ParsedFENString, PieceColor } from "../../types/gameLogic.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
 
 function Play() {
-    const [parsedFEN, setParsedFEN] =
-        useState<OptionalValue<ParsedFENString>>(null);
     const location = useLocation();
 
     const [gameEnded, setGameEnded] = useState<boolean>(false);
@@ -38,6 +36,11 @@ function Play() {
     const [blackPlayerTimer, setBlackPlayerTimer] = useState<
         OptionalValue<number>
     >(location.state?.baseTime);
+
+    const [positionList, setPositionList] = useState<Array<ParsedFENString>>([]);
+    const [positionIndex, setPositionIndex] = useState<number>(0);
+
+    const parsedFEN = positionList[positionIndex];
 
     const [boardOrientation, setBoardOrientation] = useState(
         location.state?.assignedColor || "White"
@@ -54,12 +57,36 @@ function Play() {
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     useEffect(() => {
-        getParsedFEN();
+        updatePlayerTimers();
+        updatePositionList();
     }, []);
 
     useEffect(() => {
-        updatePlayerTimers();
-    }, []);
+        console.log("Position list updated");
+        console.log(positionList);
+    }, [positionList]);
+
+    function handleKeyDown(event: KeyboardEvent) {
+        if (event.key === "ArrowLeft") {
+            setPositionIndex((prevIndex) => {
+                return prevIndex > 0? prevIndex - 1 : prevIndex;
+            })
+        } else if (event.key === "ArrowRight") {
+            console.log(positionList);
+
+            setPositionIndex((prevIndex) => {
+                return prevIndex + 1 < positionList.length ? prevIndex + 1 : prevIndex;
+            })
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        }
+    }, [positionList]);
 
     useEffect(() => {
         setGameplaySettings(initialGameplaySettings);
@@ -73,19 +100,10 @@ function Play() {
         return null;
     }
 
-    const gameId = location.state.gameId;
+    const gameId = location.state?.gameId;
 
     const topTimerColor = getTimerColor("top");
     const bottomTimerColor = getTimerColor("bottom");
-
-    async function getParsedFEN() {
-        try {
-            const fetchedFEN = await fetchFen(startingPositionFEN);
-            setParsedFEN(fetchedFEN);
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     function handleSettingsDisplay() {
         setSettingsVisible(true);
@@ -93,11 +111,11 @@ function Play() {
 
     async function updatePlayerTimers(): Promise<void> {
         const whitePlayerTimer = await fetchTimer(
-            Number(location.state.gameId),
+            Number(location.state?.gameId),
             "white"
         );
         const blackPlayerTimer = await fetchTimer(
-            Number(location.state.gameId),
+            Number(location.state?.gameId),
             "black"
         );
 
@@ -105,6 +123,16 @@ function Play() {
 
         setWhitePlayerTimer(whitePlayerTimer);
         setBlackPlayerTimer(blackPlayerTimer);
+    }
+
+    async function updatePositionList(): Promise<void> {
+        if (!location.state?.gameId) {
+            return;
+        }
+
+        const positionList = await fetchPositionList(Number(location.state?.gameId))
+
+        setPositionList(positionList);
     }
 
     function toggleBoardOrientation() {
@@ -169,6 +197,8 @@ function Play() {
                                     gameId={gameId}
                                     setWhiteTimer={setWhitePlayerTimer}
                                     setBlackTimer={setBlackPlayerTimer}
+                                    setPositionIndex={setPositionIndex}
+                                    setPositionList={setPositionList}
                                     gameplaySettings={gameplaySettings}
                                 />
                             </div>

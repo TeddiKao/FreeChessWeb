@@ -46,6 +46,8 @@ function MultiplayerChessboard({
     setWhiteTimer,
     setBlackTimer,
     gameplaySettings,
+    setPositionIndex,
+    setPositionList
 }: MultiplayerChessboardProps) {
     const [previousClickedSquare, setPreviousClickedSquare] =
         useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -135,11 +137,6 @@ function MultiplayerChessboard({
         const parsedEventData = JSON.parse(event.data);
         const eventType = parsedEventData["type"];
 
-        const timerChangeEvents = [
-            WebSocketEventTypes.TIMER_DECREMENTED,
-            WebSocketEventTypes.TIMER_INCREMENTED,
-        ];
-
         switch (eventType) {
             case WebSocketEventTypes.MOVE_MADE:
                 makeMove(parsedEventData);
@@ -154,6 +151,7 @@ function MultiplayerChessboard({
                 break;
 
             case WebSocketEventTypes.POSITION_LIST_UPDATED:
+                console.log("Updating position list!")
                 handlePositionListUpdate(parsedEventData);
                 break;
 
@@ -181,15 +179,12 @@ function MultiplayerChessboard({
     ) {
         const newPositionList = parsedEventData["new_position_list"];
         console.log(newPositionList);
+        setPositionList(newPositionList);
     }
 
     function makeMove(eventData: MoveMadeEventData) {
-        setParsedFENString((prevState: any) => {
-            return {
-                ...prevState,
-                ...eventData["new_parsed_fen"],
-            };
-        });
+        setPositionIndex(eventData["new_position_index"]);
+        console.log(eventData["new_position_index"]);
 
         const startingSquare = eventData["move_data"]["starting_square"];
         const destinationSquare = eventData["move_data"]["destination_square"];

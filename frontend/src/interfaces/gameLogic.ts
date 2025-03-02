@@ -4,7 +4,8 @@ import { BasicWebSocketEventData } from "./general.ts";
 interface MoveMadeEventData extends BasicWebSocketEventData {
 	move_data: MoveInfo,
 	new_parsed_fen: ParsedFENString,
-	move_type: string
+	move_type: string,
+	new_position_index: number,
 }
 
 interface TimerChangedEventData extends BasicWebSocketEventData {
