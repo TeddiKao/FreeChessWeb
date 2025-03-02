@@ -37,6 +37,24 @@ async function fetchTimer(gameId: number, playerColor: PieceColor) {
     return timer;
 }
 
+async function fetchPositionList(gameId: number) {
+    let positionList = null;
+    try {
+        const response = await api.post("gameplay_api/get-position-list/", {
+            game_id: gameId,
+        })
+
+        if (response.status === 200) {
+            positionList = response.data;
+        }
+
+    } catch (error) {
+        console.error(error);
+    }
+
+    return positionList;
+}
+
 async function fetchLegalMoves(
     parsedFENString: object,
     pieceType: string,
@@ -211,5 +229,6 @@ export {
     getIsStalemated,
     getUsername,
     fetchCurrentPosition,
-    fetchTimer
+    fetchTimer,
+    fetchPositionList
 };
