@@ -5,6 +5,10 @@ enum GameSetupStages {
 	CONFIRM_START = "startConfirmation"
 }
 
+enum TimeControlValidationErrors {
+	INVALID_DURATION = "invalidDurationError"
+}
+
 enum MatchmakingEvents {
 	MATCH_FOUND = "match_found",
 	CANCELLED_SUCCESSFULLY = "matchmaking_cancelled_successfully",
@@ -17,4 +21,4 @@ enum TimeControls {
 	CLASSICAL = "classical"
 }
 
-export { GameSetupStages, TimeControls, MatchmakingEvents }
+export { GameSetupStages, TimeControls, MatchmakingEvents, TimeControlValidationErrors }
