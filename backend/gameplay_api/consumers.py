@@ -329,8 +329,6 @@ class GameConsumer(AsyncWebsocketConsumer):
         if timer_tasks_info[self.room_group_name].get("timer_task"):
             timer_task = timer_tasks_info[self.room_group_name]["timer_task"]
             timer_task.cancel()
-            print(timer_task)
-            print(timer_tasks_info[self.room_group_name])
             del timer_tasks_info[self.room_group_name]["timer_task"]
 
         move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
