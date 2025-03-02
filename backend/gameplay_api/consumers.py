@@ -114,7 +114,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         current_position_list = await self.get_game_attribute(chess_game_model, "position_list")
 
         updated_position_list: list = copy.deepcopy(current_position_list)
-        updated_position_list.extend(newest_updated_fen)
+        updated_position_list.extend([newest_updated_fen])
 
         await self.update_game_attribute(chess_game_model, "position_list", updated_position_list)
         await self.save_chess_game_model(chess_game_model)
@@ -271,6 +271,8 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.update_game_attribute(chess_game_model, "current_player_turn", new_side_to_move)
         await self.save_chess_game_model(chess_game_model)
 
+        await self.append_to_position_list(chess_game_model)
+
     async def connect(self):
         query_string: bytes = self.scope.get("query_string", b"")
         decoded_query_string = query_string.decode()
@@ -365,6 +367,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         if move_is_valid:
             await self.update_position(chess_game_model, parsed_move_data)
+            new_position_list = await self.get_game_attribute(chess_game_model, "position_list")
 
             await self.send(json.dumps({
                 "type": "move_made",
@@ -373,6 +376,11 @@ class GameConsumer(AsyncWebsocketConsumer):
                 "move_made_by": event["move_made_by"],
                 "move_is_valid": move_is_valid,
                 "new_parsed_fen": await chess_game_model.get_full_parsed_fen()
+            }))
+
+            await self.send(json.dumps({
+                "type": "position_list_updated",
+                "new_position_list": new_position_list,
             }))
 
             if timer_task:

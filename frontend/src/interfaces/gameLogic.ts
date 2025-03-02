@@ -12,4 +12,8 @@ interface TimerChangedEventData extends BasicWebSocketEventData {
 	black_player_clock: number
 }
 
-export type { MoveMadeEventData, TimerChangedEventData }
+interface PositionListUpdateEventData extends BasicWebSocketEventData {
+	new_position_list: Array<ParsedFENString>
+}
+
+export type { MoveMadeEventData, TimerChangedEventData, PositionListUpdateEventData }

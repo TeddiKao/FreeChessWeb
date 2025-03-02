@@ -4,7 +4,12 @@ import "../../styles/chessboard/chessboard.css";
 import Square from "../Square.js";
 
 import { clearSquaresStyling, getRank, getFile } from "../../utils/boardUtils";
-import { fetchCurrentPosition, fetchLegalMoves, fetchMoveIsValid, fetchTimer } from "../../utils/apiUtils";
+import {
+    fetchCurrentPosition,
+    fetchLegalMoves,
+    fetchMoveIsValid,
+    fetchTimer,
+} from "../../utils/apiUtils";
 
 import {
     whitePromotionRank,
@@ -20,10 +25,7 @@ import { playAudio } from "../../utils/audioUtils";
 import _ from "lodash";
 import { MoveMethods, WebSocketEventTypes } from "../../enums/gameLogic.ts";
 import { MultiplayerChessboardProps } from "../../interfaces/chessboard.js";
-import {
-    ChessboardSquareIndex,
-    OptionalValue,
-} from "../../types/general.ts";
+import { ChessboardSquareIndex, OptionalValue } from "../../types/general.ts";
 import {
     BoardPlacement,
     ParsedFENString,
@@ -31,7 +33,11 @@ import {
     PieceInfo,
     PieceType,
 } from "../../types/gameLogic.ts";
-import { MoveMadeEventData, TimerChangedEventData } from "../../interfaces/gameLogic.ts";
+import {
+    MoveMadeEventData,
+    PositionListUpdateEventData,
+    TimerChangedEventData,
+} from "../../interfaces/gameLogic.ts";
 
 function MultiplayerChessboard({
     parsed_fen_string,
@@ -39,7 +45,7 @@ function MultiplayerChessboard({
     gameId,
     setWhiteTimer,
     setBlackTimer,
-    gameplaySettings
+    gameplaySettings,
 }: MultiplayerChessboardProps) {
     const [previousClickedSquare, setPreviousClickedSquare] =
         useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -87,8 +93,6 @@ function MultiplayerChessboard({
             "readyState" in gameWebsocket?.current &&
             gameWebsocket.current instanceof WebSocket
         ) {
-            console.log("Closing websocket...");
-
             if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
                 gameWebsocket.current.close();
             }
@@ -130,11 +134,11 @@ function MultiplayerChessboard({
     function handleOnMessage(event: MessageEvent) {
         const parsedEventData = JSON.parse(event.data);
         const eventType = parsedEventData["type"];
-        
+
         const timerChangeEvents = [
             WebSocketEventTypes.TIMER_DECREMENTED,
             WebSocketEventTypes.TIMER_INCREMENTED,
-        ]
+        ];
 
         switch (eventType) {
             case WebSocketEventTypes.MOVE_MADE:
@@ -149,6 +153,10 @@ function MultiplayerChessboard({
                 handleTimerChange(parsedEventData);
                 break;
 
+            case WebSocketEventTypes.POSITION_LIST_UPDATED:
+                handlePositionListUpdate(parsedEventData);
+                break;
+
             default:
                 break;
         }
@@ -160,10 +168,7 @@ function MultiplayerChessboard({
         setParsedFENString(currentPosition);
     }
 
-
     function handleTimerChange(parsedEventData: TimerChangedEventData) {
-        console.log("Changing the timer!")
-        
         const newWhitePlayerClock = parsedEventData["white_player_clock"];
         const newBlackPlayerClock = parsedEventData["black_player_clock"];
 
@@ -171,6 +176,12 @@ function MultiplayerChessboard({
         setBlackTimer(Math.ceil(newBlackPlayerClock));
     }
 
+    function handlePositionListUpdate(
+        parsedEventData: PositionListUpdateEventData
+    ) {
+        const newPositionList = parsedEventData["new_position_list"];
+        console.log(newPositionList);
+    }
 
     function makeMove(eventData: MoveMadeEventData) {
         setParsedFENString((prevState: any) => {
@@ -469,9 +480,7 @@ function MultiplayerChessboard({
 
     const piecePlacements = parsedFENString["board_placement"];
 
-    function handleSquareClick(
-        event: React.MouseEvent<HTMLElement>,
-    ) {
+    function handleSquareClick(event: React.MouseEvent<HTMLElement>) {
         if (!previousClickedSquare && !clickedSquare) {
             setPreviousClickedSquare(event.currentTarget.id);
         } else {
@@ -488,7 +497,7 @@ function MultiplayerChessboard({
             if (!prevFENString) {
                 return parsedFENString;
             }
-           
+
             let updatedBoardPlacement = {
                 ...prevFENString,
                 board_placement: {
@@ -566,8 +575,8 @@ function MultiplayerChessboard({
 
                 additional_info: {
                     promoted_piece: "queen",
-                }
-            }
+                },
+            };
 
             gameWebsocket?.current?.send(JSON.stringify(moveDetails));
 
@@ -612,8 +621,6 @@ function MultiplayerChessboard({
     }
 
     function generateChessboard() {
-        console.log("Generating Chessboard")
-
         const squareElements = [];
 
         const startingRow = boardOrientation.toLowerCase() === "white" ? 8 : 1;
