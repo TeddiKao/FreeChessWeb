@@ -59,6 +59,9 @@ class ChessGame(models.Model):
 	timer_initiator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="timer_initiator", null=True, blank=True)
 	timer_task = models.OneToOneField(TimerTask, on_delete=models.CASCADE, related_name="timer_task", null=True, blank=True)
 
+	position_list = models.JSONField(default=list, null=False, blank=False)
+	move_list = models.JSONField(default=list, null=False, blank=False)
+
 	@database_sync_to_async
 	def get_full_parsed_fen(self):
 		return {
