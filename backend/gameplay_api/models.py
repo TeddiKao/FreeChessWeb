@@ -13,6 +13,9 @@ def get_default_board_placement():
 
 	return parsed_board_placement
 
+def get_default_position_list():
+	return [get_default_board_placement()]
+
 def get_default_castling_rights():
 	return {
 		"White": {
@@ -39,12 +42,12 @@ class ChessGame(models.Model):
 	game_result = models.CharField(max_length=50, default="Ongoing")
 
 	current_move = models.IntegerField(default=1)
-	current_player_turn = models.CharField(max_length=30, default="white")
+	current_player_turn = models.CharField(max_length=5, default="white")
 
 	halfmove_clock = models.IntegerField(default=0) # 50 move rule detection
 
-	white_player_clock = models.DecimalField(max_digits=6, decimal_places=1) # In seconds
-	black_player_clock = models.DecimalField(max_digits=6, decimal_places=1) # In seconds
+	white_player_clock = models.DecimalField(max_digits=7, decimal_places=1) # In seconds
+	black_player_clock = models.DecimalField(max_digits=7, decimal_places=1) # In seconds
 	white_player_increment = models.IntegerField(blank=False, null=False, default=0)
 	black_player_increment = models.IntegerField(blank=False, null=False, default=0)
 
@@ -57,9 +60,8 @@ class ChessGame(models.Model):
 
 	is_timer_running = models.BooleanField(default=False, null=False, blank=False)
 	timer_initiator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="timer_initiator", null=True, blank=True)
-	timer_task = models.OneToOneField(TimerTask, on_delete=models.CASCADE, related_name="timer_task", null=True, blank=True)
 
-	position_list = models.JSONField(default=list, null=False, blank=False)
+	position_list = models.JSONField(default=get_default_position_list, null=False, blank=False)
 	move_list = models.JSONField(default=list, null=False, blank=False)
 
 	@database_sync_to_async
