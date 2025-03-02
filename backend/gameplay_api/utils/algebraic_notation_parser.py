@@ -29,9 +29,11 @@ def handle_pawn_move(board_placement: dict, move_info: MoveInfo):
     starting_file = get_file(starting_square)
     file_letter = files_list[int(starting_file)]
 
-    capture_notation = "x" if is_capture(board_placement, move_info) else ""
+    capture_notation = "x" if get_is_capture(board_placement, move_info) else ""
+    check_notation = "+" if get_is_check(board_placement, move_info) else ""
 
-    return f"{file_letter}{capture_notation}{notated_square}"
+    return f"{file_letter}{capture_notation}{notated_square}{check_notation}"
+
 
 def handle_piece_move(board_placement: dict, move_info: MoveInfo):
     destination_square = move_info["destination_square"]
