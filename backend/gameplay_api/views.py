@@ -72,3 +72,11 @@ class GetPlayerTimerView(APIView):
 		player_timer = getattr(chess_game_model, player_timer_attr)
 
 		return Response(player_timer, status=status.HTTP_200_OK)
+	
+class GetPositionListView(APIView):
+	def post(self, request):
+		game_id = request.data.get("game_id")
+		chess_game_model: ChessGame = ChessGame.objects.get(id=game_id)
+		position_list = chess_game_model.sync_get_position_list()
+
+		return Response(position_list, status=status.HTTP_200_OK)
