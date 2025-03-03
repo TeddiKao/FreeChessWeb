@@ -84,6 +84,10 @@ function Play() {
             setPositionIndex((prevIndex) => {
                 return prevIndex + 1 < positionList.length ? prevIndex + 1 : prevIndex;
             })
+        } else if (event.key === "ArrowUp") {
+            setPositionIndex(0);
+        } else if (event.key === "ArrowDown") {
+            setPositionIndex(positionList.length - 1);
         }
     }
 
