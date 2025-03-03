@@ -80,6 +80,9 @@ class ChessGame(models.Model):
 
 	def sync_get_position_list(self):
 		return self.position_list
+	
+	def sync_get_move_list(self):
+		return self.move_list
 
 	@database_sync_to_async
 	def get_full_parsed_fen(self):

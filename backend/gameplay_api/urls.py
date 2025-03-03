@@ -8,4 +8,5 @@ urlpatterns = [
 	path("get-current-position/", GetCurrentPositionView.as_view(), name="get_current_position"),
 	path("get-player-timer/", GetPlayerTimerView.as_view(), name="get_player_timer"),
 	path("get-position-list/", GetPositionListView.as_view(), name="get_position_list"),
+	path("get-move-list/", GetMoveListView.as_view(), name="get_move_list")
 ]

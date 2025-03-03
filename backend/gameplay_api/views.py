@@ -80,3 +80,11 @@ class GetPositionListView(APIView):
 		position_list = chess_game_model.sync_get_position_list()
 
 		return Response(position_list, status=status.HTTP_200_OK)
+	
+class GetMoveListView(APIView):
+	def post(self, request):
+		game_id = request.data.get("game_id")
+		chess_game_model: ChessGame = ChessGame.objects.get(id=game_id)
+		move_list = chess_game_model.sync_get_move_list()
+
+		return Response(move_list, status=status.HTTP_200_OK)
