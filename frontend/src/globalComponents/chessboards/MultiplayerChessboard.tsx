@@ -162,6 +162,10 @@ function MultiplayerChessboard({
                 handlePositionListUpdate(parsedEventData);
                 break;
 
+            case WebSocketEventTypes.MOVE_LIST_UPDATED:
+                handleMoveListUpdate(parsedEventData);
+                break;
+
             default:
                 break;
         }
@@ -185,8 +189,12 @@ function MultiplayerChessboard({
         parsedEventData: PositionListUpdateEventData
     ) {
         const newPositionList = parsedEventData["new_position_list"];
-        console.log(newPositionList);
         setPositionList(newPositionList);
+    }
+
+    function handleMoveListUpdate(parsedEventData: any) {
+        const newMoveList = parsedEventData["new_move_list"];
+        console.log(newMoveList);
     }
 
     function makeMove(eventData: MoveMadeEventData) {

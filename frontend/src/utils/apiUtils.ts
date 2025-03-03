@@ -55,6 +55,24 @@ async function fetchPositionList(gameId: number) {
     return positionList;
 }
 
+async function fetchMoveList(gameId: number) {
+    let moveList = null;
+    try {
+        const response = await api.post("gameplay_api/get-move-list/", {
+            game_id: gameId,
+        })
+
+        if (response.status === 200) {
+            moveList = response.data;
+        }
+
+    } catch (error) {
+        console.error(error);
+    }
+
+    return moveList;
+}
+
 async function fetchLegalMoves(
     parsedFENString: object,
     pieceType: string,

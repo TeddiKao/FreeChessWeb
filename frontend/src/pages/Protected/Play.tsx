@@ -44,6 +44,8 @@ function Play() {
     }>>([]);
     const [positionIndex, setPositionIndex] = useState<number>(0);
 
+    const [moveList, setMoveList] = useState([]);
+
     const parsedFEN = positionList[positionIndex]?.["position"];
     const lastDraggedSquare = positionList[positionIndex]?.["last_dragged_square"]
     const lastDroppedSquare = positionList[positionIndex]?.["last_dropped_square"];
@@ -136,6 +138,12 @@ function Play() {
         const positionList = await fetchPositionList(Number(location.state?.gameId))
 
         setPositionList(positionList);
+    }
+
+    async function updateMoveList(): Promise<void> {
+        if (!location.state?.gameId) {
+            return;
+        }
     }
 
     function toggleBoardOrientation() {
