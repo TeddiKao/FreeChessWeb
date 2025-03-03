@@ -45,7 +45,7 @@ function Play() {
     }>>([]);
     const [positionIndex, setPositionIndex] = useState<number>(0);
 
-    const [moveList, setMoveList] = useState([]);
+    const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
 
     const parsedFEN = positionList[positionIndex]?.["position"];
     const lastDraggedSquare = positionList[positionIndex]?.["last_dragged_square"]
@@ -212,6 +212,7 @@ function Play() {
                                     parsed_fen_string={parsedFEN}
                                     orientation={boardOrientation}
                                     gameId={gameId}
+                                    setMoveList={setMoveList}
                                     setWhiteTimer={setWhitePlayerTimer}
                                     setBlackTimer={setBlackPlayerTimer}
                                     setPositionIndex={setPositionIndex}

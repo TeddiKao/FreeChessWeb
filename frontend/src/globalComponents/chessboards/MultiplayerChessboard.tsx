@@ -8,7 +8,6 @@ import {
     fetchCurrentPosition,
     fetchLegalMoves,
     fetchMoveIsValid,
-    fetchTimer,
 } from "../../utils/apiUtils";
 
 import {
@@ -48,6 +47,7 @@ function MultiplayerChessboard({
     gameplaySettings,
     setPositionIndex,
     setPositionList,
+    setMoveList,
     lastDraggedSquare,
     lastDroppedSquare
 }: MultiplayerChessboardProps) {
@@ -194,7 +194,7 @@ function MultiplayerChessboard({
 
     function handleMoveListUpdate(parsedEventData: any) {
         const newMoveList = parsedEventData["new_move_list"];
-        console.log(newMoveList);
+        setMoveList(newMoveList);
     }
 
     function makeMove(eventData: MoveMadeEventData) {

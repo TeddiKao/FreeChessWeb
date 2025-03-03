@@ -27,6 +27,7 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
         last_dragged_square: string,
         last_dropped_square: string
     }>>;
+    setMoveList: StateSetterFunction<Array<Array<string>>>;
     lastDraggedSquare: string,
     lastDroppedSquare: string,
     gameplaySettings: any
