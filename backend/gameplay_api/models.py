@@ -28,12 +28,20 @@ def get_default_castling_rights():
 
 def get_default_position_list():
 	return [{
-		"board_placement": get_default_board_placement(),
-		"castling_rights": get_default_castling_rights(),
-		"en_passant_target_square": None,
-		"halfmove_clock": 0,
-		"fullmove_number": 1
+		"position": {
+			"board_placement": get_default_board_placement(),
+			"castling_rights": get_default_castling_rights(),
+			"en_passant_target_square": None,
+			"halfmove_clock": 0,
+			"fullmove_number": 1
+		},
+
+		"last_dragged_square": None,
+		"last_dropped_square": None
 	}]
+	
+def get_default_last_moved_squares():
+	return []
 
 class TimerTask(models.Model):
 	timer_task_id = models.UUIDField(default=uuid4, unique=True, primary_key=True)

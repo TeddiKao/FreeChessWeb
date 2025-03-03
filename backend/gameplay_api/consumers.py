@@ -14,8 +14,8 @@ from move_validation_api.utils.move_validation import validate_move, validate_ca
 from move_validation_api.utils.get_move_type import get_move_type
 from move_validation_api.utils.general import *
 
-from users_api.models import UserAuthModel
-from .models import ChessGame, TimerTask
+from .models import ChessGame
+from .utils.algebraic_notation_parser import get_algebraic_notation
 
 timer_tasks_info = {}
 
@@ -109,15 +109,40 @@ class GameConsumer(AsyncWebsocketConsumer):
 
             await asyncio.sleep(1)
 
-    async def append_to_position_list(self, chess_game_model: ChessGame):
+    async def append_to_position_list(self, chess_game_model: ChessGame, move_info: dict):
         newest_updated_fen = await chess_game_model.get_full_parsed_fen()
         current_position_list = await self.get_game_attribute(chess_game_model, "position_list")
 
+        starting_square = move_info["starting_square"]
+        destination_square = move_info["destination_square"]
+
         updated_position_list: list = copy.deepcopy(current_position_list)
-        updated_position_list.extend([newest_updated_fen])
+        updated_position_list.extend([{
+            "position": newest_updated_fen,
+            "last_dragged_square": starting_square,
+            "last_dropped_square": destination_square
+        }])
 
         await self.update_game_attribute(chess_game_model, "position_list", updated_position_list)
         await self.save_chess_game_model(chess_game_model)
+
+    async def append_to_move_list(self, chess_game_model: ChessGame, move_info: dict):
+        current_parsed_fen = await chess_game_model.get_full_parsed_fen()
+        board_placement = current_parsed_fen["board_placement"]
+
+        current_move_list = await self.get_game_attribute(chess_game_model, "move_list")
+        updated_move_list: list = copy.deepcopy(current_move_list)
+
+        parsed_notation = get_algebraic_notation(board_placement, move_info)
+        
+        if len(current_move_list) <= 0:
+            updated_move_list.append([parsed_notation])
+        else:
+            last_move = current_move_list[-1]
+            if len(last_move) == 2:
+                updated_move_list.append([parsed_notation])
+            else:
+                updated_move_list[-1].append(parsed_notation)
 
     async def modify_castling_rights(self, chess_game_model: ChessGame, castling_side: str, color: str, new_value: bool = False):
         new_castling_rights = copy.deepcopy(chess_game_model.castling_rights)
@@ -281,7 +306,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         await self.save_chess_game_model(chess_game_model)
 
-        await self.append_to_position_list(chess_game_model)
+        await self.append_to_position_list(chess_game_model, move_info)
 
     async def connect(self):
         query_string: bytes = self.scope.get("query_string", b"")

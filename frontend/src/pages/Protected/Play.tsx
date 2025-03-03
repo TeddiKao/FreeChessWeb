@@ -37,10 +37,16 @@ function Play() {
         OptionalValue<number>
     >(location.state?.baseTime);
 
-    const [positionList, setPositionList] = useState<Array<ParsedFENString>>([]);
+    const [positionList, setPositionList] = useState<Array<{
+        position: ParsedFENString,
+        last_dragged_square: string,
+        last_dropped_square: string,
+    }>>([]);
     const [positionIndex, setPositionIndex] = useState<number>(0);
 
-    const parsedFEN = positionList[positionIndex];
+    const parsedFEN = positionList[positionIndex]?.["position"];
+    const lastDraggedSquare = positionList[positionIndex]?.["last_dragged_square"]
+    const lastDroppedSquare = positionList[positionIndex]?.["last_dropped_square"];
 
     const [boardOrientation, setBoardOrientation] = useState(
         location.state?.assignedColor || "White"
@@ -52,9 +58,6 @@ function Play() {
     const [gameplaySettings, setGameplaySettings] = useState(
         initialGameplaySettings
     );
-
-    const startingPositionFEN =
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     useEffect(() => {
         updatePlayerTimers();
@@ -200,6 +203,8 @@ function Play() {
                                     setPositionIndex={setPositionIndex}
                                     setPositionList={setPositionList}
                                     gameplaySettings={gameplaySettings}
+                                    lastDraggedSquare={lastDraggedSquare}
+                                    lastDroppedSquare={lastDroppedSquare}
                                 />
                             </div>
 

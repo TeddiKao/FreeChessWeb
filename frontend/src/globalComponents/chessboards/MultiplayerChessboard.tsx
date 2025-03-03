@@ -47,7 +47,9 @@ function MultiplayerChessboard({
     setBlackTimer,
     gameplaySettings,
     setPositionIndex,
-    setPositionList
+    setPositionList,
+    lastDraggedSquare,
+    lastDroppedSquare
 }: MultiplayerChessboardProps) {
     const [previousClickedSquare, setPreviousClickedSquare] =
         useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -61,10 +63,11 @@ function MultiplayerChessboard({
     const [droppedSquare, setDroppedSquare] =
         useState<OptionalValue<ChessboardSquareIndex>>(null);
 
-    const [previousDraggedSquare, setPreviousDraggedSquare] =
-        useState<OptionalValue<ChessboardSquareIndex>>(null);
-    const [previousDroppedSquare, setPreviousDroppedSquare] =
-        useState<OptionalValue<ChessboardSquareIndex>>(null);
+    const [previousDraggedSquare, setPreviousDraggedSquare] = 
+        useState<OptionalValue<ChessboardSquareIndex>>(lastDraggedSquare);
+    const [previousDroppedSquare, setPreviousDroppedSquare] = 
+        useState<OptionalValue<ChessboardSquareIndex>>(lastDroppedSquare);
+
     const [promotionCapturedPiece, setPromotionCapturedPiece] =
         useState<OptionalValue<PieceInfo>>(null);
     const [lastUsedMoveMethod, setLastUsedMoveMethod] =
@@ -79,6 +82,11 @@ function MultiplayerChessboard({
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
     }, [parsed_fen_string]);
+
+    useEffect(() => {
+        setPreviousDraggedSquare(lastDraggedSquare);
+        setPreviousDroppedSquare(lastDroppedSquare);
+    }, [lastDraggedSquare, lastDraggedSquare])
 
     useEffect(() => {
         setBoardOrientation(orientation);
@@ -151,7 +159,6 @@ function MultiplayerChessboard({
                 break;
 
             case WebSocketEventTypes.POSITION_LIST_UPDATED:
-                console.log("Updating position list!")
                 handlePositionListUpdate(parsedEventData);
                 break;
 
@@ -186,13 +193,7 @@ function MultiplayerChessboard({
         setPositionIndex(eventData["new_position_index"]);
         console.log(eventData["new_position_index"]);
 
-        const startingSquare = eventData["move_data"]["starting_square"];
-        const destinationSquare = eventData["move_data"]["destination_square"];
-
         playAudio(eventData["move_type"]);
-
-        setPreviousDraggedSquare(startingSquare);
-        setPreviousDroppedSquare(destinationSquare);
     }
 
     function onError() {

@@ -14,7 +14,11 @@ interface TimerChangedEventData extends BasicWebSocketEventData {
 }
 
 interface PositionListUpdateEventData extends BasicWebSocketEventData {
-	new_position_list: Array<ParsedFENString>
+	new_position_list: Array<{
+		position: ParsedFENString,
+		last_dragged_square: string,
+		last_dropped_square: string
+	}>
 }
 
 export type { MoveMadeEventData, TimerChangedEventData, PositionListUpdateEventData }

@@ -22,8 +22,14 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
     setWhiteTimer: StateSetterFunction<OptionalValue<number>>;
     setBlackTimer: StateSetterFunction<OptionalValue<number>>;
     setPositionIndex: StateSetterFunction<number>;
-    setPositionList: StateSetterFunction<Array<ParsedFENString>>;
-    gameplaySettings: any;
+    setPositionList: StateSetterFunction<Array<{
+        position: ParsedFENString,
+        last_dragged_square: string,
+        last_dropped_square: string
+    }>>;
+    lastDraggedSquare: string,
+    lastDroppedSquare: string,
+    gameplaySettings: any
 }
 
 interface EmptySquareProps {
