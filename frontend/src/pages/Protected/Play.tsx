@@ -13,7 +13,7 @@ import {
 import "../../styles/multiplayer/play.css";
 import "../../styles/chessboard/board-actions.css";
 
-import { fetchFen, fetchPositionList, fetchTimer } from "../../utils/apiUtils.ts";
+import { fetchFen, fetchMoveList, fetchPositionList, fetchTimer } from "../../utils/apiUtils.ts";
 
 import GameOverModal from "../../globalComponents/modals/GameOverModal.js";
 import GameplaySettings from "../../globalComponents/modals/GameplaySettings.js";
@@ -21,6 +21,7 @@ import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.js";
 import { OptionalValue } from "../../types/general.js";
 import { ParsedFENString, PieceColor } from "../../types/gameLogic.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
+import MoveListPanel from "../../globalComponents/MoveListPanel.tsx";
 
 function Play() {
     const location = useLocation();
@@ -64,6 +65,7 @@ function Play() {
     useEffect(() => {
         updatePlayerTimers();
         updatePositionList();
+        updateMoveList();
     }, []);
 
     useEffect(() => {
@@ -144,6 +146,10 @@ function Play() {
         if (!location.state?.gameId) {
             return;
         }
+
+        const moveList = await fetchMoveList(Number(location.state?.gameId))
+
+        setMoveList(moveList);
     }
 
     function toggleBoardOrientation() {
@@ -249,6 +255,8 @@ function Play() {
                                 onClick={handleSettingsDisplay}
                             />
                         </div>
+
+                        <MoveListPanel moveList={moveList} />
                     </div>
                 </GameWinnerSetterContext.Provider>
             </GameEndedCauseSetterContext.Provider>

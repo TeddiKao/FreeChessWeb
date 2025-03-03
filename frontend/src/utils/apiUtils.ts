@@ -248,5 +248,6 @@ export {
     getUsername,
     fetchCurrentPosition,
     fetchTimer,
-    fetchPositionList
+    fetchPositionList,
+    fetchMoveList
 };
