@@ -198,7 +198,7 @@ function Play() {
         <GameEndedSetterContext.Provider value={setGameEnded}>
             <GameEndedCauseSetterContext.Provider value={setGameEndedCause}>
                 <GameWinnerSetterContext.Provider value={setGameWinner}>
-                    <div className="playing-interface-container">
+                    <div className="multiplayer-playing-interface-container">
                         <div className="main-chessboard">
                             <div className="top-timer-wrapper">
                                 <Timer

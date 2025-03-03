@@ -31,7 +31,7 @@ def handle_pawn_move(board_placement: dict, en_passant_square, move_info: MoveIn
     capture_notation = "x" if get_is_capture(board_placement, en_passant_square, move_info) else ""
     check_notation = "+" if get_is_check(board_placement, move_info) else ""
 
-    return f"{capture_notation}{notated_square}{check_notation}"
+    return f"{files_list[starting_file] if capture_notation else ""}{capture_notation}{notated_square}{check_notation}"
 
 
 def handle_piece_move(board_placement: dict, move_info: MoveInfo):

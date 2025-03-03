@@ -1,3 +1,5 @@
+import "../styles/gameplay/move-list-panel.css"
+
 type MoveListPanelProps = {
 	moveList: Array<Array<string>>
 }
@@ -12,7 +14,7 @@ function MoveListPanel({ moveList }: MoveListPanelProps) {
 	}
 
 	return (
-		<div className="move-list-panel">
+		<div className="move-list-panel-container">
 			{moveList.map((movePair: Array<string>, moveIndex: number) => {
 				return (
 					<div key={moveIndex} className="move-pair-container">
