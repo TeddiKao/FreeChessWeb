@@ -6,17 +6,28 @@
 
 	display: flex;
 	flex-direction: column;
-	margin-left: 24px;
 
 	background-color: white;
 	box-shadow: 5px 5px 10px hsl(0, 0%, 60%);
 
 	height: 450px;
 	width: 200px;
-	padding-top: 12px;
-	padding-left: 12px;
+	padding-top: 16px;
+	padding-left: 20px;
 
 	border-radius: 8px;
+}
+
+.move-info-container {
+	display: grid;
+	grid-template-columns: 30px 200px;
+}
+
+.move-number {
+	color: hsl(0, 0, 40%);
+	font-weight: bold;
+	margin-top: 4px;
+	margin-bottom: 4px;
 }
 
 .move-pair-container {
