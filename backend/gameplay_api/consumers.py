@@ -126,14 +126,14 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.update_game_attribute(chess_game_model, "position_list", updated_position_list)
         await self.save_chess_game_model(chess_game_model)
 
-    async def append_to_move_list(self, chess_game_model: ChessGame, move_info: dict):
-        current_parsed_fen = await chess_game_model.get_full_parsed_fen()
-        board_placement = current_parsed_fen["board_placement"]
+    async def append_to_move_list(self, chess_game_model: ChessGame, parsed_fen, move_info: dict):
+        board_placement = parsed_fen["board_placement"]
+        en_passant_target_square = parsed_fen["en_passant_target_square"]
 
         current_move_list = await self.get_game_attribute(chess_game_model, "move_list")
         updated_move_list: list[list] = copy.deepcopy(current_move_list)
 
-        parsed_notation = get_algebraic_notation(board_placement, move_info)
+        parsed_notation = get_algebraic_notation(board_placement, en_passant_target_square, move_info)
         
         if len(current_move_list) <= 0:
             updated_move_list.append([parsed_notation])
@@ -143,6 +143,8 @@ class GameConsumer(AsyncWebsocketConsumer):
                 updated_move_list.append([parsed_notation])
             else:
                 updated_move_list[-1].append(parsed_notation)
+
+        await self.update_game_attribute(chess_game_model, "move_list", updated_move_list)
 
     async def modify_castling_rights(self, chess_game_model: ChessGame, castling_side: str, color: str, new_value: bool = False):
         new_castling_rights = copy.deepcopy(chess_game_model.castling_rights)
@@ -247,6 +249,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 
     async def update_position(self, chess_game_model: ChessGame, move_info: dict):
+        original_parsed_fen = copy.deepcopy(await chess_game_model.get_full_parsed_fen())
         new_board_placement = copy.deepcopy(
             await self.get_game_attribute(chess_game_model, "parsed_board_placement"))
 
@@ -307,7 +310,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.save_chess_game_model(chess_game_model)
 
         await self.append_to_position_list(chess_game_model, move_info)
-        await self.append_to_move_list(chess_game_model, move_info)
+        await self.append_to_move_list(chess_game_model, original_parsed_fen, move_info)
 
     async def connect(self):
         query_string: bytes = self.scope.get("query_string", b"")
