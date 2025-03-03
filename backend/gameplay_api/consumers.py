@@ -131,7 +131,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         board_placement = current_parsed_fen["board_placement"]
 
         current_move_list = await self.get_game_attribute(chess_game_model, "move_list")
-        updated_move_list: list = copy.deepcopy(current_move_list)
+        updated_move_list: list[list] = copy.deepcopy(current_move_list)
 
         parsed_notation = get_algebraic_notation(board_placement, move_info)
         
@@ -307,6 +307,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.save_chess_game_model(chess_game_model)
 
         await self.append_to_position_list(chess_game_model, move_info)
+        await self.append_to_move_list(chess_game_model, move_info)
 
     async def connect(self):
         query_string: bytes = self.scope.get("query_string", b"")
@@ -405,8 +406,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         if move_is_valid:
             await self.update_position(chess_game_model, parsed_move_data)
             new_position_list = await self.get_game_attribute(chess_game_model, "position_list")
-
-            print(current_move_number)
+            new_move_list = await self.get_game_attribute(chess_game_model, "move_list")
 
             position_index = None
             if parsed_move_data["piece_color"].lower() == "white":
@@ -414,11 +414,14 @@ class GameConsumer(AsyncWebsocketConsumer):
             elif parsed_move_data["piece_color"].lower() == "black": 
                 position_index = (current_move_number - 1) * 2 + 2
 
-            print(position_index)
-
             await self.send(json.dumps({
                 "type": "position_list_updated",
                 "new_position_list": new_position_list,
+            }))
+
+            await self.send(json.dumps({
+                "type": "move_list_updated",
+                "new_move_list": new_move_list,
             }))
 
             await self.send(json.dumps({
