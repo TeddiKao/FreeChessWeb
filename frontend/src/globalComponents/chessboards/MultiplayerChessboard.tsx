@@ -1,8 +1,29 @@
 import React, { useState, useEffect, useRef } from "react";
+import _ from "lodash";
 
+// Basic imports like CSS files and components
 import "../../styles/chessboard/chessboard.css";
 import Square from "../Square.js";
 
+// Types, interfaces, enums
+import { MoveMethods, WebSocketEventTypes } from "../../enums/gameLogic.ts";
+import { MultiplayerChessboardProps } from "../../interfaces/chessboard.js";
+import { ChessboardSquareIndex, OptionalValue } from "../../types/general.ts";
+import {
+    BoardPlacement,
+    ParsedFENString,
+    PieceColor,
+    PieceInfo,
+    PieceType,
+} from "../../types/gameLogic.ts";
+
+import {
+    MoveMadeEventData,
+    PositionListUpdateEventData,
+    TimerChangedEventData,
+} from "../../interfaces/gameLogic.ts";
+
+// Utils
 import { clearSquaresStyling, getRank, getFile } from "../../utils/boardUtils";
 import {
     fetchCurrentPosition,
@@ -15,28 +36,14 @@ import {
     blackPromotionRank,
 } from "../../constants/boardSquares.js";
 
-import { websocketBaseURL } from "../../constants/urls.js";
-import useWebSocket from "../../hooks/useWebsocket";
 import { getAccessToken } from "../../utils/tokenUtils";
-
 import { playAudio } from "../../utils/audioUtils";
 
-import _ from "lodash";
-import { MoveMethods, WebSocketEventTypes } from "../../enums/gameLogic.ts";
-import { MultiplayerChessboardProps } from "../../interfaces/chessboard.js";
-import { ChessboardSquareIndex, OptionalValue } from "../../types/general.ts";
-import {
-    BoardPlacement,
-    ParsedFENString,
-    PieceColor,
-    PieceInfo,
-    PieceType,
-} from "../../types/gameLogic.ts";
-import {
-    MoveMadeEventData,
-    PositionListUpdateEventData,
-    TimerChangedEventData,
-} from "../../interfaces/gameLogic.ts";
+// Constants
+import { websocketBaseURL } from "../../constants/urls.ts";
+
+// Hooks
+import useWebSocket from "../../hooks/useWebsocket.ts";
 
 function MultiplayerChessboard({
     parsed_fen_string,
