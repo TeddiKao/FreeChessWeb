@@ -4,6 +4,7 @@ import asyncio
 
 from decimal import Decimal
 from asyncio import Lock
+from time import perf_counter
 
 from urllib.parse import parse_qs
 
@@ -18,6 +19,12 @@ from .models import ChessGame
 from .utils.algebraic_notation_parser import get_algebraic_notation
 
 timer_tasks_info = {}
+
+def calculate_position_index(piece_color: str, move_number: int):
+    if piece_color.lower() == "white":
+        return (move_number - 1) * 2 + 1
+    else:
+        return (move_number - 1) * 2 + 2
 
 class GameConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
@@ -382,6 +389,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             del timer_tasks_info[self.room_group_name]["timer_task"]
 
         move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
+        
         chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
         previous_position: dict = copy.deepcopy(
             await self.get_game_attribute(chess_game_model, "parsed_board_placement"))
@@ -408,14 +416,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         if move_is_valid:
             await self.update_position(chess_game_model, parsed_move_data)
+
             new_position_list = await self.get_game_attribute(chess_game_model, "position_list")
             new_move_list = await self.get_game_attribute(chess_game_model, "move_list")
 
-            position_index = None
-            if parsed_move_data["piece_color"].lower() == "white":
-                position_index = (current_move_number - 1) * 2 + 1
-            elif parsed_move_data["piece_color"].lower() == "black": 
-                position_index = (current_move_number - 1) * 2 + 2
+            piece_color = parsed_move_data["piece_color"]
+            position_index = calculate_position_index(piece_color, current_move_number)
 
             await self.send(json.dumps({
                 "type": "position_list_updated",

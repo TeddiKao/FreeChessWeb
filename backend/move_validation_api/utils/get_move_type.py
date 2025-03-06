@@ -4,7 +4,6 @@ from .general import *
 
 def get_is_castling(move_info: dict) -> bool:
 	piece_type: str = move_info["piece_type"]
-	piece_color: str = move_info["piece_color"]
 	starting_square: str = move_info["starting_square"]
 	destination_square: str = move_info["destination_square"]
 

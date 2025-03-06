@@ -11,7 +11,7 @@
 	box-shadow: 5px 5px 10px hsl(0, 0%, 60%);
 
 	height: 450px;
-	width: 200px;
+	width: 250px;
 	padding-top: 16px;
 	padding-left: 20px;
 
@@ -20,7 +20,7 @@
 
 .move-info-container {
 	display: grid;
-	grid-template-columns: 30px 200px;
+	grid-template-columns: 40px 200px;
 }
 
 .move-number {
