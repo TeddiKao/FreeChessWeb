@@ -3,7 +3,6 @@ from .general import get_king_position
 
 
 def get_is_stalemated(current_fen: dict, king_color: str) -> bool:
-
     board_placement = current_fen["board_placement"]
     castling_rights = current_fen["castling_rights"]
     en_passant_target_square = current_fen["en_passant_target_square"]

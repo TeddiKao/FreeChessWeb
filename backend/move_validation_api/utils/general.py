@@ -1,8 +1,8 @@
 import math
 import copy
 
-def get_row(square):
-	return math.ceil((int(square) + 1) / 8) - 1
+def get_row(square: str | int):
+    return math.ceil((int(square) + 1) / 8) - 1
 
 def get_file(square):
 	return int(square) % 8
@@ -24,7 +24,10 @@ def is_on_same_diagonal(square1, square2):
 	square2_file = get_file(square2)
 	square2_rank = get_row(square2)
 
-	return abs(square1_file - square2_file) == abs(square1_rank - square2_rank)
+	file_dist = abs(square1_file - square2_file)
+	rank_dist = abs(square1_rank - square2_rank)
+
+	return file_dist == rank_dist
 
 def get_pawn_attacking_squares(pawn_square, pawn_color):
 	attacking_squares = []
