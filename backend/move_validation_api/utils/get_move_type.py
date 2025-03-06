@@ -29,7 +29,7 @@ def get_is_check(board_placement: dict, move_info: dict) -> bool:
 	}, destination_square, move_info["additional_info"])
 
 	king_position = get_king_position(board_placement, get_opposite_color(piece_color))
-	king_in_check = is_king_in_check(updated_board_placement, get_opposite_color(piece_color), king_position)
+	king_in_check = is_king_in_check(updated_board_placement, get_opposite_color(piece_color))
 
 	return king_in_check
 

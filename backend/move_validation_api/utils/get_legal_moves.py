@@ -1,6 +1,7 @@
 from .general import *
 from .legal_move_helpers import update_FEN
 from .get_attacking_squares import get_attacking_squares_of_color
+from .check_detection import is_king_in_check
 
 piece_directions_mapping = {
     "rook": ["north", "south", "east", "west"],
@@ -30,13 +31,6 @@ def get_legal_moves(move_info, board_placement, en_passant_target_square, castli
 
     elif move_info["piece_type"].lower() == "pawn":
         return get_pawn_legal_moves(board_placement, en_passant_target_square, move_info)
-
-
-def is_king_in_check(board_placement, king_color, king_square):
-    attacked_squares = get_attacking_squares_of_color(
-        get_opposite_color(king_color), board_placement)
-
-    return king_square in attacked_squares
 
 
 def validate_castling(board_placement, castling_rights, king_color: str, castling_side: str):
@@ -116,12 +110,18 @@ def get_legal_moves_in_diagonal_direction(board_placement, move_info, piece_loca
             "piece_color": board_placement[start_square]["piece_color"]
         }
 
+        if f"{square}" in board_placement:
+            if board_placement[f"{square}"]["piece_color"] != piece_color:
+                legal_squares.append(str(square))
+                break
+
+            break
+
         updated_board_placement = update_FEN(
             board_placement, starting_square_info, square)
-        king_position = get_king_position(board_placement, piece_color)
         king_in_check = False
 
-        if is_king_in_check(updated_board_placement, piece_color, king_position):
+        if is_king_in_check(updated_board_placement, piece_color):
             king_in_check = True
 
         if not king_in_check:
@@ -129,15 +129,6 @@ def get_legal_moves_in_diagonal_direction(board_placement, move_info, piece_loca
 
         if not is_on_same_diagonal(start_square, square):
             break
-
-        if f"{square}" in board_placement:
-            if board_placement[f"{square}"]["piece_color"] != piece_color:
-                break
-
-            if f"{square}" in legal_squares:
-                legal_squares.remove(f"{square}")
-
-                break
 
         if is_square_on_edge(f"{square}"):
             break
@@ -178,21 +169,20 @@ def get_legal_moves_in_straight_direction(board_placement, constant_value_str, d
             "piece_color": board_placement[start_square]["piece_color"]
         }
 
-        updated_FEN = update_FEN(board_placement, starting_square_info, square)
-        king_position = get_king_position(updated_FEN, piece_color)
-        king_in_check = False
-
-        if is_king_in_check(updated_FEN, piece_color, king_position):
-            king_in_check = True
-
         if f"{square}" in board_placement:
-            if board_placement[f"{square}"]["piece_color"] == piece_color:
+            if board_placement[f"{square}"]["piece_color"] != piece_color:
+                legal_squares.append(str(square))
                 break
 
-            if not king_in_check:
-                legal_squares.append(square)
-
             break
+
+        updated_board_placement = update_FEN(
+            board_placement, starting_square_info, square)
+        king_in_check = False
+
+
+        if is_king_in_check(updated_board_placement, piece_color):
+            king_in_check = True
 
         if not king_in_check:
             legal_squares.append(square)
@@ -292,7 +282,7 @@ def get_pawn_legal_moves(board_placement, en_passant_target_square, move_info):
             board_placement, starting_square_info, attacking_square)
         king_position = get_king_position(updated_FEN, piece_color)
 
-        if is_king_in_check(updated_FEN, piece_color, king_position):
+        if is_king_in_check(updated_FEN, piece_color):
             continue
 
         legal_squares.append(attacking_square)
@@ -306,7 +296,7 @@ def get_pawn_legal_moves(board_placement, en_passant_target_square, move_info):
         square_up_king_position = get_king_position(
             square_up_updated_FEN, piece_color)
 
-        if not is_king_in_check(square_up_updated_FEN, piece_color, square_up_king_position):
+        if not is_king_in_check(square_up_updated_FEN, piece_color):
             legal_squares.append(f"{int(starting_square) + 8}")
 
         if get_row(starting_square) != 1:
@@ -320,7 +310,7 @@ def get_pawn_legal_moves(board_placement, en_passant_target_square, move_info):
         double_square_king_position = get_king_position(
             double_square_updated_FEN, piece_color)
 
-        if not is_king_in_check(double_square_updated_FEN, piece_color, double_square_king_position):
+        if not is_king_in_check(double_square_updated_FEN, piece_color):
             legal_squares.append(f"{int(starting_square) + 16}")
 
     else:
@@ -332,7 +322,7 @@ def get_pawn_legal_moves(board_placement, en_passant_target_square, move_info):
         square_up_king_position = get_king_position(
             square_up_updated_FEN, piece_color)
 
-        if not is_king_in_check(square_up_updated_FEN, piece_color, square_up_king_position):
+        if not is_king_in_check(square_up_updated_FEN, piece_color):
             legal_squares.append(f"{int(starting_square) - 8}")
 
         if get_row(starting_square) != 6:
@@ -346,7 +336,7 @@ def get_pawn_legal_moves(board_placement, en_passant_target_square, move_info):
         double_square_king_position = get_king_position(
             double_square_updated_FEN, piece_color)
 
-        if is_king_in_check(double_square_updated_FEN, piece_color, double_square_king_position):
+        if is_king_in_check(double_square_updated_FEN, piece_color):
             return legal_squares
 
         legal_squares.append(f"{int(starting_square) - 16}")
@@ -458,7 +448,7 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
         king_position = get_king_position(
             updated_board_placement, move_info["piece_color"])
 
-        if not is_king_in_check(updated_board_placement, move_info["piece_color"], king_position):
+        if not is_king_in_check(updated_board_placement, move_info["piece_color"]):
             continue
 
         if legal_move not in cleaned_legal_moves:
@@ -516,7 +506,7 @@ def get_knight_legal_moves(board_placement: dict, move_info: dict) -> list:
                 cleaned_legal_moves.remove(f"{legal_move}")
                 continue
 
-        if is_king_in_check(updated_board_placement, move_info["piece_color"], king_position):
+        if is_king_in_check(updated_board_placement, move_info["piece_color"]):
             if legal_move in cleaned_legal_moves:
                 cleaned_legal_moves.remove(f"{legal_move}")
                 continue

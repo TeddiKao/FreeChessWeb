@@ -20,11 +20,13 @@ from .utils.algebraic_notation_parser import get_algebraic_notation
 
 timer_tasks_info = {}
 
+
 def calculate_position_index(piece_color: str, move_number: int):
     if piece_color.lower() == "white":
         return (move_number - 1) * 2 + 1
     else:
         return (move_number - 1) * 2 + 2
+
 
 class GameConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
@@ -140,8 +142,9 @@ class GameConsumer(AsyncWebsocketConsumer):
         current_move_list = await self.get_game_attribute(chess_game_model, "move_list")
         updated_move_list: list[list] = copy.deepcopy(current_move_list)
 
-        parsed_notation = get_algebraic_notation(board_placement, en_passant_target_square, move_info)
-        
+        parsed_notation = get_algebraic_notation(
+            board_placement, en_passant_target_square, move_info)
+
         if len(current_move_list) <= 0:
             updated_move_list.append([parsed_notation])
         else:
@@ -224,6 +227,8 @@ class GameConsumer(AsyncWebsocketConsumer):
         return new_board_placement
 
     async def update_en_passant_target_square(self, chess_game_model: ChessGame, move_info: dict):
+        en_passant_update_start = perf_counter()
+
         piece_color: str = move_info["piece_color"]
         piece_type: str = move_info["piece_type"]
         starting_square = move_info["starting_square"]
@@ -249,16 +254,20 @@ class GameConsumer(AsyncWebsocketConsumer):
         chess_game_model.en_passant_target_square = en_passant_target_square
         await self.save_chess_game_model(chess_game_model)
 
+        en_passant_update_end = perf_counter()
+
     async def increment_move_number(self, chess_game_model: ChessGame):
         current_move = await self.get_game_attribute(chess_game_model, "current_move")
 
         await self.update_game_attribute(chess_game_model, "current_move", current_move + 1)
 
-
     async def update_position(self, chess_game_model: ChessGame, move_info: dict):
+        copy_data_start = perf_counter()
         original_parsed_fen = copy.deepcopy(await chess_game_model.get_full_parsed_fen())
         new_board_placement = copy.deepcopy(
             await self.get_game_attribute(chess_game_model, "parsed_board_placement"))
+        copy_data_end = perf_counter()
+        copy_data_time = copy_data_end - copy_data_start
 
         starting_square = move_info["starting_square"]
         destination_square = move_info["destination_square"]
@@ -291,6 +300,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 new_board_placement = await self.handle_pawn_promotion(move_info, new_board_placement)
 
         if not "promoted_piece" in additonal_info.keys():
+            regular_move_update_start = perf_counter()
             new_board_placement[str(destination_square)] = {
                 "piece_type": piece_type,
                 "piece_color": piece_color,
@@ -305,12 +315,27 @@ class GameConsumer(AsyncWebsocketConsumer):
 
                     del new_board_placement[str(captured_pawn_square)]
 
+            regular_move_update_end = perf_counter()
+            regular_move_update_time = regular_move_update_end - regular_move_update_start
+
         new_side_to_move = "black" if piece_color.lower() == "white" else "white"
 
+        game_state_update_start = perf_counter()
         await self.update_en_passant_target_square(chess_game_model, move_info)
+
+        position_update_start = perf_counter()
         await self.update_game_attribute(chess_game_model, "parsed_board_placement", new_board_placement)
+        position_update_end = perf_counter()
+        position_update_time = position_update_end - position_update_start
+
+        side_to_move_update_start = perf_counter()
         await self.update_game_attribute(chess_game_model, "current_player_turn", new_side_to_move)
-        
+        side_to_move_update_end = perf_counter()
+        side_to_move_update_time = side_to_move_update_end - side_to_move_update_start
+
+        game_state_update_end = perf_counter()
+        game_state_update_time = game_state_update_end - game_state_update_start
+
         if piece_color.lower() == "black":
             await self.increment_move_number(chess_game_model)
 
@@ -337,11 +362,11 @@ class GameConsumer(AsyncWebsocketConsumer):
         room_group_exists = timer_tasks_info.get(self.room_group_name)
         timer_task_exists = None
         if room_group_exists:
-            timer_task_exists = timer_tasks_info[self.room_group_name].get("timer_task")
+            timer_task_exists = timer_tasks_info[self.room_group_name].get(
+                "timer_task")
 
         if not is_timer_running and not timer_task_exists:
             timer_task = asyncio.create_task(self.handle_timer_decrement())
-            print("Timer task created")
 
             if self.room_group_name not in timer_tasks_info.keys():
                 timer_tasks_info[self.room_group_name] = {
@@ -377,10 +402,9 @@ class GameConsumer(AsyncWebsocketConsumer):
             }
         )
 
-
     async def move_received(self, event):
         chess_game_model = await self.get_chess_game(self.game_id)
-        
+
         timer_task = None
 
         if timer_tasks_info[self.room_group_name].get("timer_task"):
@@ -389,7 +413,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             del timer_tasks_info[self.room_group_name]["timer_task"]
 
         move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
-        
+
         chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
         previous_position: dict = copy.deepcopy(
             await self.get_game_attribute(chess_game_model, "parsed_board_placement"))
@@ -404,7 +428,6 @@ class GameConsumer(AsyncWebsocketConsumer):
         black_player_increment = await self.get_game_attribute(chess_game_model, "black_player_increment")
 
         if white_player_username == event["move_made_by"]:
-
             await self.increment_white_player_timer(chess_game_model, white_player_increment)
         elif black_player_username == event["move_made_by"]:
             await self.increment_black_player_timer(chess_game_model, black_player_increment)
@@ -415,13 +438,18 @@ class GameConsumer(AsyncWebsocketConsumer):
         current_move_number = await self.get_game_attribute(chess_game_model, "current_move")
 
         if move_is_valid:
+            update_position_start = perf_counter()
             await self.update_position(chess_game_model, parsed_move_data)
+            update_position_end = perf_counter()
+
+            update_position_time = update_position_end - update_position_start
 
             new_position_list = await self.get_game_attribute(chess_game_model, "position_list")
             new_move_list = await self.get_game_attribute(chess_game_model, "move_list")
 
             piece_color = parsed_move_data["piece_color"]
-            position_index = calculate_position_index(piece_color, current_move_number)
+            position_index = calculate_position_index(
+                piece_color, current_move_number)
 
             await self.send(json.dumps({
                 "type": "position_list_updated",
@@ -450,11 +478,11 @@ class GameConsumer(AsyncWebsocketConsumer):
                     "black_player_clock": float(new_black_player_clock)
                 }))
 
-        new_timer_task_exists = timer_tasks_info[self.room_group_name].get("timer_task")
+        new_timer_task_exists = timer_tasks_info[self.room_group_name].get(
+            "timer_task")
         if not new_timer_task_exists:
             new_timer_task = asyncio.create_task(self.handle_timer_decrement())
             timer_tasks_info[self.room_group_name]["timer_task"] = new_timer_task
-
 
     async def timer_decremented(self, event):
         if self.channel_name:

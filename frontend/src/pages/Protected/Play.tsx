@@ -76,11 +76,6 @@ function Play() {
         updateMoveList();
     }, []);
 
-    useEffect(() => {
-        console.log("Position list updated");
-        console.log(positionList);
-    }, [positionList]);
-
     function handleKeyDown(event: KeyboardEvent) {
         if (event.key === "ArrowLeft") {
             setPositionIndex((prevIndex) => {
@@ -139,8 +134,6 @@ function Play() {
             Number(location.state?.gameId),
             "black"
         );
-
-        console.log(whitePlayerTimer, blackPlayerTimer);
 
         setWhitePlayerTimer(whitePlayerTimer);
         setBlackPlayerTimer(blackPlayerTimer);
@@ -273,7 +266,9 @@ function Play() {
                             />
                         </div>
 
-                        <MoveListPanel moveList={moveList} />
+                        <div className="gameplay-side-panel">
+                            <MoveListPanel moveList={moveList} />
+                        </div>
                     </div>
                 </GameWinnerSetterContext.Provider>
             </GameEndedCauseSetterContext.Provider>
