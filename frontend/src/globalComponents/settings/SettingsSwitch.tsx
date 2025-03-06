@@ -1,4 +1,4 @@
-import "../../styles/settings/settings-switch.css"
+import "../../styles/components/settings/settings-switch.css"
 
 interface SettingsSwitchProps {
     switchState: boolean;

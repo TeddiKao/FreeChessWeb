@@ -1,18 +1,3 @@
-:root {
-	--default-font: "Inter";
-	--accent-color: hsl(30, 100%, 45%);
-	--hovered-accent-color: hsl(30, 100%, 40%);
-
-	--input-font-size: 1rem;
-	--button-font-size: 1rem;
-
-	--light-square-color: hsl(32, 100%, 87%);
-	--dark-square-color: hsl(32, 100%, 35%);
-
-	--last-dragged-square-color: hsl(60, 100%, 50%);
-	--last-dropped-square-color: hsl(60, 100%, 40%);
-}
-
 body {
 	font-family: var(--default-font);
 	margin: 0;
