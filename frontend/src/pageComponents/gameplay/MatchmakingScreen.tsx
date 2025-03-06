@@ -3,7 +3,7 @@ import { displayTimeControl } from "../../utils/timeUtils.ts";
 
 import useWebSocket from "../../hooks/useWebsocket.ts";
 
-import "../../styles/matchmaking/matchmaking-screen.css";
+import "../../styles/features/gameSetup/matchmaking-screen.css";
 import { useNavigate } from "react-router-dom";
 import { getAccessToken } from "../../utils/tokenUtils.ts";
 import { getUsername } from "../../utils/apiUtils.ts";

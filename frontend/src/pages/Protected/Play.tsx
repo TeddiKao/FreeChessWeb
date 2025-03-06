@@ -10,10 +10,14 @@ import {
     GameWinnerSetterContext,
 } from "../../contexts/chessboardContexts.js";
 
-import "../../styles/multiplayer/play.css";
-import "../../styles/chessboard/board-actions.css";
+import "../../styles/pages/play.css";
+import "../../styles/components/chessboard/board-actions.css";
 
-import { fetchFen, fetchMoveList, fetchPositionList, fetchTimer } from "../../utils/apiUtils.ts";
+import {
+    fetchMoveList,
+    fetchPositionList,
+    fetchTimer,
+} from "../../utils/apiUtils.ts";
 
 import GameOverModal from "../../globalComponents/modals/GameOverModal.js";
 import GameplaySettings from "../../globalComponents/modals/GameplaySettings.js";
@@ -38,18 +42,22 @@ function Play() {
         OptionalValue<number>
     >(location.state?.baseTime);
 
-    const [positionList, setPositionList] = useState<Array<{
-        position: ParsedFENString,
-        last_dragged_square: string,
-        last_dropped_square: string,
-    }>>([]);
+    const [positionList, setPositionList] = useState<
+        Array<{
+            position: ParsedFENString;
+            last_dragged_square: string;
+            last_dropped_square: string;
+        }>
+    >([]);
     const [positionIndex, setPositionIndex] = useState<number>(0);
 
     const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
 
     const parsedFEN = positionList[positionIndex]?.["position"];
-    const lastDraggedSquare = positionList[positionIndex]?.["last_dragged_square"]
-    const lastDroppedSquare = positionList[positionIndex]?.["last_dropped_square"];
+    const lastDraggedSquare =
+        positionList[positionIndex]?.["last_dragged_square"];
+    const lastDroppedSquare =
+        positionList[positionIndex]?.["last_dropped_square"];
 
     const [boardOrientation, setBoardOrientation] = useState(
         location.state?.assignedColor || "White"
@@ -76,14 +84,16 @@ function Play() {
     function handleKeyDown(event: KeyboardEvent) {
         if (event.key === "ArrowLeft") {
             setPositionIndex((prevIndex) => {
-                return prevIndex > 0? prevIndex - 1 : prevIndex;
-            })
+                return prevIndex > 0 ? prevIndex - 1 : prevIndex;
+            });
         } else if (event.key === "ArrowRight") {
             console.log(positionList);
 
             setPositionIndex((prevIndex) => {
-                return prevIndex + 1 < positionList.length ? prevIndex + 1 : prevIndex;
-            })
+                return prevIndex + 1 < positionList.length
+                    ? prevIndex + 1
+                    : prevIndex;
+            });
         } else if (event.key === "ArrowUp") {
             setPositionIndex(0);
         } else if (event.key === "ArrowDown") {
@@ -96,7 +106,7 @@ function Play() {
 
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
-        }
+        };
     }, [positionList]);
 
     useEffect(() => {
@@ -141,7 +151,9 @@ function Play() {
             return;
         }
 
-        const positionList = await fetchPositionList(Number(location.state?.gameId))
+        const positionList = await fetchPositionList(
+            Number(location.state?.gameId)
+        );
 
         setPositionList(positionList);
     }
@@ -151,7 +163,7 @@ function Play() {
             return;
         }
 
-        const moveList = await fetchMoveList(Number(location.state?.gameId))
+        const moveList = await fetchMoveList(Number(location.state?.gameId));
 
         setMoveList(moveList);
     }

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-import "../styles/chessboard/promotion-popup.css";
+import "../styles/components/chessboard/chessboard.css";
 import { PieceColor, PieceType } from "../types/gameLogic";
 import { OptionalValue } from "../types/general";
 

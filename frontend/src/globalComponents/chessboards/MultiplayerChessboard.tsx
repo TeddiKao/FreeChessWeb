@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import _ from "lodash";
 
 // Basic imports like CSS files and components
-import "../../styles/chessboard/chessboard.css";
+import "../../styles/components/chessboard/chessboard.css";
 import Square from "../Square.js";
 
 // Types, interfaces, enums

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../styles/matchmaking/custom-time-control-screen.css";
+import "../../styles/features/gameSetup/custom-time-control-screen.css";
 import { StateSetterFunction } from "../../types/general";
 import { convertTimeControlToSeconds } from "../../utils/timeUtils";
 import { TimeControl, TimeDuration } from "../../types/gameSetup";

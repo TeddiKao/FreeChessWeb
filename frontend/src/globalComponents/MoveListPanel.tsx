@@ -1,4 +1,4 @@
-import "../styles/gameplay/move-list-panel.css";
+import "../styles/features/gameplay/move-list-panel.css";
 
 type MoveListPanelProps = {
     moveList: Array<Array<string>>;

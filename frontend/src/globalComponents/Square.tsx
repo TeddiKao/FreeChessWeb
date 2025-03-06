@@ -1,6 +1,6 @@
 import { useDrag, useDrop } from "react-dnd";
 
-import "../styles/chessboard/square.css";
+import "../styles/components/chessboard/square.css";
 import PromotionPopup from "./PromotionPopup.tsx";
 import React, { useEffect, useState } from "react";
 import { isSquareLight } from "../utils/boardUtils";
