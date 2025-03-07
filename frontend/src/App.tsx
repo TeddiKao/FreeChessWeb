@@ -2,6 +2,7 @@ import { Navigate, BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
 
 import GuestHomePage from "./pages/GuestHomePage.js";
 import Login from "./pages/Login.js";
@@ -17,6 +18,7 @@ import ProtectedRoute from "./globalComponents/routes/ProtectedRoute.js";
 import AuthenticationRoute from "./globalComponents/routes/AuthenticationRoute.js";
 import Play from "./pages/Protected/Play.js";
 import PassAndPlay from "./pages/Protected/PassAndPlay.js";
+import { isTouchDevice } from "./utils/generalUtils.js";
 
 function Logout() {
     localStorage.clear();

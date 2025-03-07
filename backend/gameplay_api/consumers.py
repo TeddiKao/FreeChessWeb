@@ -412,7 +412,12 @@ class GameConsumer(AsyncWebsocketConsumer):
             timer_task.cancel()
             del timer_tasks_info[self.room_group_name]["timer_task"]
 
+        move_validation_start = perf_counter()
         move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
+        move_validation_end = perf_counter()
+        move_validation_time = move_validation_end - move_validation_start
+
+        print(f"Move validation time: {move_validation_time}")
 
         chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
         previous_position: dict = copy.deepcopy(

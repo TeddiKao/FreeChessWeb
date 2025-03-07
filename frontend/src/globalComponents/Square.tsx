@@ -140,7 +140,7 @@ function Square({
             squareHTML = (
                 <img
                     ref={drag}
-                    onDrag={() => {
+                    onDragStart={() => {
                         handleOnDrag(squareNumber);
                     }}
                     className="piece-image"

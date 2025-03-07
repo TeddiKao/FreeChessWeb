@@ -19,8 +19,13 @@ function padZero(value: number): string | number {
 	}
 }
 
+function isTouchDevice() {
+	return ("ontouchstart" in window) || navigator.maxTouchPoints > 0;
+}
+
 export {
 	capitaliseFirstLetter,
 	compareObjects,
-	padZero
+	padZero,
+	isTouchDevice,
 }
