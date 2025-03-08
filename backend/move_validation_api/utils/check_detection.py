@@ -114,7 +114,8 @@ def is_checked_northwest(board_placement: dict, king_color):
 
     should_check_for_pawn = True
 
-    while not is_square_on_edge(current_checking_square):
+    while True:
+        print(current_checking_square)
         if str(current_checking_square) in board_placement.keys() and str(current_checking_square) != str(king_position):
             piece_color = board_placement[str(
                 current_checking_square)]["piece_color"]
@@ -132,6 +133,9 @@ def is_checked_northwest(board_placement: dict, king_color):
             break
 
         should_check_for_pawn = False
+        if is_square_on_edge(current_checking_square):
+            break
+
         current_checking_square += 7
 
 
@@ -140,8 +144,9 @@ def is_checked_northeast(board_placement: dict, king_color):
     current_checking_square = int(king_position) + 9
 
     should_check_for_pawn = True
-    while not is_square_on_edge(current_checking_square):
-        if str(current_checking_square) in board_placement.keys():
+    while True:
+        print(current_checking_square)
+        if str(current_checking_square) in board_placement.keys() and str(current_checking_square) != str(king_position):
             piece_color = board_placement[str(
                 current_checking_square)]["piece_color"]
             piece_type = board_placement[str(
@@ -158,6 +163,9 @@ def is_checked_northeast(board_placement: dict, king_color):
             break
 
         should_check_for_pawn = False
+        if is_square_on_edge(current_checking_square):
+            break
+
         current_checking_square += 9
 
 
@@ -166,8 +174,9 @@ def is_checked_southwest(board_placement: dict, king_color):
     current_checking_square = int(king_position) - 9
 
     should_check_for_pawn = True
-    while not is_square_on_edge(current_checking_square):
-        if str(current_checking_square) in board_placement.keys():
+    while True:
+        print(current_checking_square)
+        if str(current_checking_square) in board_placement.keys() and str(current_checking_square) != str(king_position):
             piece_color = board_placement[str(
                 current_checking_square)]["piece_color"]
             piece_type = board_placement[str(
@@ -177,13 +186,16 @@ def is_checked_southwest(board_placement: dict, king_color):
                 if piece_color.lower() != king_color.lower() and piece_color.lower() == "white":
                     return True
 
-            if piece_type in diagonal_moving_pieces:
+            if piece_type.lower() in diagonal_moving_pieces:
                 if piece_color.lower() != king_color.lower():
                     return True
 
             break
 
         should_check_for_pawn = False
+        if is_square_on_edge(current_checking_square):
+            break
+
         current_checking_square -= 9
 
 
@@ -192,8 +204,9 @@ def is_checked_southeast(board_placement: dict, king_color: dict):
     current_checking_square = int(king_position) - 7
 
     should_check_for_pawn = True
-    while not is_square_on_edge(current_checking_square):
-        if str(current_checking_square) in board_placement.keys():
+    while True:
+        print(current_checking_square)
+        if str(current_checking_square) in board_placement.keys() and str(current_checking_square) != str(king_position):
             piece_color = board_placement[str(
                 current_checking_square)]["piece_color"]
             piece_type = board_placement[str(
@@ -203,13 +216,16 @@ def is_checked_southeast(board_placement: dict, king_color: dict):
                 if piece_color.lower() != king_color.lower() and piece_color.lower() == "white":
                     return True
 
-            if piece_type in diagonal_moving_pieces:
+            if piece_type.lower() in diagonal_moving_pieces:
                 if piece_color.lower() != king_color.lower():
                     return True
 
             break
 
         should_check_for_pawn = False
+        if is_square_on_edge(current_checking_square):
+            break
+
         current_checking_square -= 7
 
 

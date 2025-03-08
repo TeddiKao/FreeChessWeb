@@ -1,3 +1,5 @@
+@use "../../global/variables";
+
 .time-control-selection-interface-container {
     display: flex;
     flex-direction: row;
@@ -113,7 +115,7 @@
 
     margin-top: 8px;
 
-    background-color: var(--accent-color);
+    background-color: variables.$accent-color;
     color: white;
 
     border: none;
@@ -137,7 +139,7 @@
     padding-left: 120px;
     padding-right: 120px;
 
-    background-color: var(--accent-color);
+    background-color: variables.$accent-color;
     color: white;
 
     border: none;
