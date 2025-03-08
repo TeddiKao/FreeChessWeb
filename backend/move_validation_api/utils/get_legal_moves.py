@@ -112,7 +112,14 @@ def get_legal_moves_in_diagonal_direction(board_placement, move_info, piece_loca
 
         if f"{square}" in board_placement:
             if board_placement[f"{square}"]["piece_color"] != piece_color:
+                updated_board_placement = update_FEN(
+                    board_placement, starting_square_info, square)
+                
+                if is_king_in_check(updated_board_placement, piece_color):
+                    break
+
                 legal_squares.append(str(square))
+
                 break
 
             break
@@ -171,7 +178,14 @@ def get_legal_moves_in_straight_direction(board_placement, constant_value_str, d
 
         if f"{square}" in board_placement:
             if board_placement[f"{square}"]["piece_color"] != piece_color:
+                updated_board_placement = update_FEN(
+                    board_placement, starting_square_info, square)
+                
+                if is_king_in_check(updated_board_placement, piece_color):
+                    break
+
                 legal_squares.append(str(square))
+
                 break
 
             break
@@ -473,18 +487,22 @@ def get_knight_legal_moves(board_placement: dict, move_info: dict) -> list:
         f"{int(starting_square) - 10}",
     ]
 
-    cleaned_legal_moves = copy.deepcopy(legal_moves)
+    cleaned_legal_moves = []
 
     for legal_move in legal_moves:
-        if not f"{legal_move}" in board_placement:
+        if f"{legal_move}" in board_placement:
+            if board_placement[f"{legal_move}"]["piece_color"].lower() == move_info["piece_color"].lower():
+                continue
+
+
+        if not is_square_on_board(int(legal_move)):
             continue
 
-        if board_placement[f"{legal_move}"]["piece_color"].lower() != move_info["piece_color"].lower():
-            continue
+        cleaned_legal_moves.append(str(legal_move))
 
-        cleaned_legal_moves.remove(f"{legal_move}")
+    final_legal_moves = []
 
-    for legal_move in legal_moves:
+    for legal_move in cleaned_legal_moves:
         starting_square_info = {
             "starting_square": starting_square,
             "piece_type": board_placement[starting_square]["piece_type"],
@@ -493,31 +511,16 @@ def get_knight_legal_moves(board_placement: dict, move_info: dict) -> list:
 
         updated_board_placement = update_FEN(
             board_placement, starting_square_info, legal_move)
-        king_position = get_king_position(
-            updated_board_placement, move_info["piece_color"])
 
         if abs(get_file(f"{legal_move}") - get_file(f"{starting_square}")) > 2:
-            if legal_move in cleaned_legal_moves:
-                cleaned_legal_moves.remove(f"{legal_move}")
-                continue
+            continue
 
         if abs(get_row(legal_move) - get_row(starting_square)) > 2:
-            if legal_move in cleaned_legal_moves:
-                cleaned_legal_moves.remove(f"{legal_move}")
-                continue
+            continue
 
         if is_king_in_check(updated_board_placement, move_info["piece_color"]):
-            if legal_move in cleaned_legal_moves:
-                cleaned_legal_moves.remove(f"{legal_move}")
-                continue
-
-    for legal_move in legal_moves:
-        if int(legal_move) >= 0 and int(legal_move) <= 63:
             continue
 
-        if f"{legal_move}" not in cleaned_legal_moves:
-            continue
+        final_legal_moves.append(legal_move)
 
-        cleaned_legal_moves.remove(f"{legal_move}")
-
-    return cleaned_legal_moves
+    return final_legal_moves

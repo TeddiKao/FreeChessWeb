@@ -59,3 +59,6 @@ def convert_to_algebraic_notation(square):
 	square_rank = get_row(square)
 
 	return f"{files_list[square_file]}{square_rank + 1}"
+
+def is_square_on_board(square_number):
+	return 0 <= int(square_number) <= 63

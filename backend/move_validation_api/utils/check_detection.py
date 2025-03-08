@@ -50,7 +50,7 @@ def is_checked_south(board_placement: dict, king_color: str):
             piece_color = board_placement[square]["piece_color"]
             piece_type = board_placement[square]["piece_type"]
 
-            check_for_king = rank == king_rank + 1
+            check_for_king = rank == king_rank - 1
             if check_for_king:
                 if piece_type.lower() == "king" and piece_color.lower() != king_color.lower():
                     return True
@@ -113,8 +113,9 @@ def is_checked_northwest(board_placement: dict, king_color):
     current_checking_square = int(king_position) + 7
 
     should_check_for_pawn = True
+    should_check_for_king = True
 
-    while True:
+    while is_square_on_board(current_checking_square):
         print(current_checking_square)
         if str(current_checking_square) in board_placement.keys() and str(current_checking_square) != str(king_position):
             piece_color = board_placement[str(
@@ -125,6 +126,10 @@ def is_checked_northwest(board_placement: dict, king_color):
             if should_check_for_pawn and piece_type.lower() == "pawn":
                 if piece_color.lower() != king_color.lower() and piece_color.lower() == "black":
                     return True
+                
+            if should_check_for_king and piece_type.lower() == "king":
+                if piece_color.lower() != king_color.lower():
+                    return True
 
             if piece_type.lower() in diagonal_moving_pieces:
                 if piece_color.lower() != king_color.lower():
@@ -133,6 +138,8 @@ def is_checked_northwest(board_placement: dict, king_color):
             break
 
         should_check_for_pawn = False
+        should_check_for_king = False
+
         if is_square_on_edge(current_checking_square):
             break
 
@@ -144,7 +151,9 @@ def is_checked_northeast(board_placement: dict, king_color):
     current_checking_square = int(king_position) + 9
 
     should_check_for_pawn = True
-    while True:
+    should_check_for_king = True
+
+    while is_square_on_board(current_checking_square):
         print(current_checking_square)
         if str(current_checking_square) in board_placement.keys() and str(current_checking_square) != str(king_position):
             piece_color = board_placement[str(
@@ -155,6 +164,10 @@ def is_checked_northeast(board_placement: dict, king_color):
             if should_check_for_pawn and piece_type.lower() == "pawn":
                 if piece_color.lower() != king_color.lower() and piece_color.lower() == "black":
                     return True
+                
+            if should_check_for_king and piece_type.lower() == "king":
+                if piece_color.lower() != king_color.lower():
+                    return True
 
             if piece_type.lower() in diagonal_moving_pieces:
                 if piece_color.lower() != king_color.lower():
@@ -163,6 +176,8 @@ def is_checked_northeast(board_placement: dict, king_color):
             break
 
         should_check_for_pawn = False
+        should_check_for_king = False
+
         if is_square_on_edge(current_checking_square):
             break
 
@@ -174,7 +189,9 @@ def is_checked_southwest(board_placement: dict, king_color):
     current_checking_square = int(king_position) - 9
 
     should_check_for_pawn = True
-    while True:
+    should_check_for_king = True
+
+    while is_square_on_board(current_checking_square):
         print(current_checking_square)
         if str(current_checking_square) in board_placement.keys() and str(current_checking_square) != str(king_position):
             piece_color = board_placement[str(
@@ -185,6 +202,10 @@ def is_checked_southwest(board_placement: dict, king_color):
             if should_check_for_pawn and piece_type.lower() == "pawn":
                 if piece_color.lower() != king_color.lower() and piece_color.lower() == "white":
                     return True
+                
+            if should_check_for_king and piece_type.lower() == "king":
+                if piece_color.lower() != king_color.lower():
+                    return True
 
             if piece_type.lower() in diagonal_moving_pieces:
                 if piece_color.lower() != king_color.lower():
@@ -193,6 +214,8 @@ def is_checked_southwest(board_placement: dict, king_color):
             break
 
         should_check_for_pawn = False
+        should_check_for_king = False
+
         if is_square_on_edge(current_checking_square):
             break
 
@@ -204,7 +227,9 @@ def is_checked_southeast(board_placement: dict, king_color: dict):
     current_checking_square = int(king_position) - 7
 
     should_check_for_pawn = True
-    while True:
+    should_check_for_king = True
+
+    while is_square_on_board(current_checking_square):
         print(current_checking_square)
         if str(current_checking_square) in board_placement.keys() and str(current_checking_square) != str(king_position):
             piece_color = board_placement[str(
@@ -215,6 +240,10 @@ def is_checked_southeast(board_placement: dict, king_color: dict):
             if should_check_for_pawn and piece_type.lower() == "pawn":
                 if piece_color.lower() != king_color.lower() and piece_color.lower() == "white":
                     return True
+                
+            if should_check_for_king and piece_type.lower() == "king":
+                if piece_color.lower() != king_color.lower():
+                    return True
 
             if piece_type.lower() in diagonal_moving_pieces:
                 if piece_color.lower() != king_color.lower():
@@ -223,6 +252,8 @@ def is_checked_southeast(board_placement: dict, king_color: dict):
             break
 
         should_check_for_pawn = False
+        should_check_for_pawn = False
+
         if is_square_on_edge(current_checking_square):
             break
 
