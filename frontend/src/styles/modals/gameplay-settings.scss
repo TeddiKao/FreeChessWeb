@@ -2,52 +2,73 @@
 @use "../global/variables.scss";
 
 .gameplay-settings-container {
-	@include page-center-xy;
+    @include page-center-xy;
 
-	@include flex-column;
+    @include flex-column;
 
-	background-color: white;
-	z-index: 1000;
+    background-color: white;
+    z-index: 1000;
 
-	border-radius: 12px;
+    border-radius: 12px;
 
-	width: 30vw;
-	height: 60vh
+    width: 30vw;
+    height: 60vh;
 }
 
 .gameplay-settings-heading {
-	margin-top: 8px;
-	margin-bottom: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
 
-	text-align: center;
+    text-align: center;
 }
 
 .setting-container {
-	@include flex-row;
-	align-items: center;
+    @include flex-row;
+    align-items: center;
 
-	margin-left: 16px;
+    margin-left: 16px;
 }
 
 .setting-container p {
-	margin-top: 6px;
-	margin-bottom: 6px;
+    margin-top: 6px;
+    margin-bottom: 6px;
 }
 
 .close-button {
-	position: absolute;
-	bottom: 8%;
-	right: 8%;
+    position: absolute;
+    bottom: 8%;
+    right: 8%;
 
-	padding-top: 8px;
-	padding-bottom: 8px;
-	padding-left: 20px;
-	padding-right: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 20px;
+    padding-right: 20px;
 
-	background-color: variables.$accent-color;
-	color: white;
+    background-color: variables.$accent-color;
+    color: white;
 
-	border: none;
-	border-radius: 4px;
-	box-shadow: 3px 3px 5px hsl(0, 0%, 60%);
+    border: none;
+    border-radius: 4px;
+    box-shadow: 3px 3px 5px hsl(0, 0%, 60%);
+}
+
+@media screen and (max-width: 1000px) and (min-width: 620px) {
+    .gameplay-settings-container {
+        width: 50vw;
+        height: 60vh;
+    }
+}
+
+@media screen and (max-width: 620px) and (min-width: 540px) {
+	.gameplay-settings-container {
+        width: 60vw;
+        height: 60vh;
+	}
+}
+
+@media screen and (max-width: 540px) {
+	.gameplay-settings-container {
+        width: 70vw;
+        height: 60vh;
+	}
 }
