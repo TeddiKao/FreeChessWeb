@@ -2,13 +2,21 @@ import { useEffect, useState } from "react";
 import SettingsSwitch from "./SettingsSwitch.js";
 import api from "../../api.js";
 
+type SettingComponentProps = {
+    settingName: string,
+    settingId: string,
+    settingType: string,
+    initialSettingValue: any,
+    setGameplaySettings: any,
+}
+
 function Setting({
     settingName,
     settingId,
     settingType,
     initialSettingValue,
-    setGameplaySettingvs,
-}) {
+    setGameplaySettings,
+}: SettingComponentProps) {
     const [settingValue, setSettingValue] = useState(initialSettingValue);
 
     useEffect(() => {
@@ -37,7 +45,7 @@ function Setting({
                 const newSettingValue = newSettings[settingId];
 
                 setSettingValue(newSettingValue);
-                setGameplaySettingvs(newSettings);
+                setGameplaySettings(newSettings);
             }
         } catch (error) {
             console.error(error);

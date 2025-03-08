@@ -1,0 +1,37 @@
+@mixin page-center-xy($additional-transforms: null) {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%), #{$additional-transforms};
+}
+
+@mixin page-center-x($additional-transforms: null) {
+	position: fixed;
+	left: 50%;
+	transform: translateX(-50%), #{$additional-transforms};
+}
+
+@mixin page-center-y($additional-transforms: null) {
+	position: fixed;
+    top: 50%;
+    transform: translateY(-50%) #{$additional-transforms};
+}
+
+@mixin parent-element-center-xy($additional-transforms: null) {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%), #{$additional-transforms};
+}
+
+@mixin parent-element-center-x($additional-transforms: null) {
+	position: absolute;
+    left: 50%;
+    transform: translateX(-50%), #{$additional-transforms};
+}
+
+@mixin parent-element-center-y($additional-transforms: null) {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%) #{$additional-transforms};
+}

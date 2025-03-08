@@ -2,10 +2,8 @@
 @use "./global/variables.scss";
 
 .auth-form-container {
-	@include flex-column;
+	@include flex-column-x-center;
 	position: fixed;
-
-	align-items: center;
 
 	top: 40%;
 	left: 50%;

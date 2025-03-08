@@ -3,13 +3,11 @@
 
 .dashboard-navbar {
 	@include flex-row;
-
 	align-items: center;
 }
 
 .navigation-links {
-	@include flex-row;
-	align-items: center;
+	@include flex-row-y-center;
 
 	margin-left: 12px;
 
@@ -18,8 +16,7 @@
 }
 
 .account-links {
-	@include flex-row;
-	align-items: center;
+	@include flex-row-y-center;
 
 	position: absolute;
 	left: 85%;
