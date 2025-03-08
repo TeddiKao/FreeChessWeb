@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, useRef } from "react";
 
-import "../../styles/components/chessboard/chessboard.css";
+import "../../styles/components/chessboard/chessboard.scss";
 import Square from "../Square.js";
 
 import {
@@ -173,9 +173,12 @@ function Chessboard({
             return;
         }
 
-        console.log(pieceTypeToValidate)
+        console.log(pieceTypeToValidate);
 
-        const lowercasedPieceType = pieceTypeToValidate.toLowerCase() as Lowercase<typeof pieceTypeToValidate>
+        const lowercasedPieceType =
+            pieceTypeToValidate.toLowerCase() as Lowercase<
+                typeof pieceTypeToValidate
+            >;
 
         if (lowercasedPieceType === "pawn") {
             handlePromotionCaptureStorage(

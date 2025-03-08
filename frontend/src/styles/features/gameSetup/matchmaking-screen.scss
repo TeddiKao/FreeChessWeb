@@ -1,6 +1,8 @@
+@use "../../global/mixins.scss";
+@use "../../global/variables.scss";
+
 .matchmaking-screen-container {
-	display: flex;
-	flex-direction: column;
+	@include flex-column;
 	align-items: center;
 	justify-content: center;
 
@@ -31,10 +33,10 @@
 
 	width: 100%;
 
-	background-color: var(--accent-color);
+	background-color: variables.$accent-color;
 	border: none;
 	border-radius: 4px;
 
 	color: white;
-	font-size: var(--button-font-size);
+	font-size: variables.$accent-color;
 }

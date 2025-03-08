@@ -1,4 +1,4 @@
-import "../../styles/components/settings/settings-switch.css"
+import "../../styles/components/settings/settings-switch.scss";
 
 interface SettingsSwitchProps {
     switchState: boolean;
@@ -13,7 +13,10 @@ function SettingsSwitch({ switchState, setSwitchState }: SettingsSwitchProps) {
     }
 
     return (
-        <div onClick={handleSwitchToggle} className={`settings-switch ${switchClassname}`}>
+        <div
+            onClick={handleSwitchToggle}
+            className={`settings-switch ${switchClassname}`}
+        >
             <div className="switch-slider"></div>
         </div>
     );

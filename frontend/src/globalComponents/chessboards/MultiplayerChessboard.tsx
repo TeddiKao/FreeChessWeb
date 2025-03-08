@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import _ from "lodash";
 
 // Basic imports like CSS files and components
-import "../../styles/components/chessboard/chessboard.css";
+import "../../styles/components/chessboard/chessboard.scss";
 import Square from "../Square.js";
 
 // Types, interfaces, enums
@@ -56,7 +56,7 @@ function MultiplayerChessboard({
     setPositionList,
     setMoveList,
     lastDraggedSquare,
-    lastDroppedSquare
+    lastDroppedSquare,
 }: MultiplayerChessboardProps) {
     const [previousClickedSquare, setPreviousClickedSquare] =
         useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -70,9 +70,9 @@ function MultiplayerChessboard({
     const [droppedSquare, setDroppedSquare] =
         useState<OptionalValue<ChessboardSquareIndex>>(null);
 
-    const [previousDraggedSquare, setPreviousDraggedSquare] = 
+    const [previousDraggedSquare, setPreviousDraggedSquare] =
         useState<OptionalValue<ChessboardSquareIndex>>(lastDraggedSquare);
-    const [previousDroppedSquare, setPreviousDroppedSquare] = 
+    const [previousDroppedSquare, setPreviousDroppedSquare] =
         useState<OptionalValue<ChessboardSquareIndex>>(lastDroppedSquare);
 
     const [promotionCapturedPiece, setPromotionCapturedPiece] =
@@ -93,7 +93,7 @@ function MultiplayerChessboard({
     useEffect(() => {
         setPreviousDraggedSquare(lastDraggedSquare);
         setPreviousDroppedSquare(lastDroppedSquare);
-    }, [lastDraggedSquare, lastDraggedSquare])
+    }, [lastDraggedSquare, lastDraggedSquare]);
 
     useEffect(() => {
         setBoardOrientation(orientation);

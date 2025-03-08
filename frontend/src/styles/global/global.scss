@@ -1,27 +1,29 @@
-@import url("variables.css");
+@use "variables";
+@use "mixins";
 
 body {
-	font-family: var(--default-font);
-	margin: 0;
+    font-family: variables.$default-font;
 }
 
-input, button {
-	font-family: var(--default-font);
+input,
+button {
+    font-family: variables.$default-font;
 }
 
 input {
-	font-size: var(--input-font-size);
+    font-size: variables.$input-font-size;
 }
 
 button {
-	font-size: var(--button-font-size);
+    font-size: variables.$button-font-size;
 }
 
 a {
-	text-decoration: none;
-	color: inherit
+    text-decoration: none;
+    color: inherit;
 }
 
-a:hover, button:hover {
-	cursor: pointer;
+a:hover,
+button:hover {
+    cursor: pointer;
 }

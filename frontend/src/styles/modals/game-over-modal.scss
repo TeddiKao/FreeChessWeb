@@ -1,11 +1,10 @@
-.game-over-modal-container {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+@use "../global/mixins.scss";
+@use "../global/variables.scss";
 
-	display: flex;
-	flex-direction: column;
+.game-over-modal-container {
+	@include parent-element-center-xy;
+	
+	@include flex-column;
 	align-items: center;
 
 	background-color: white;
@@ -30,8 +29,7 @@
 }
 
 .buttons-container {
-	display: flex;
-	flex-direction: row;
+	@include flex-row;
 	justify-content: center;
 }
 
@@ -43,9 +41,9 @@
 	padding-left: 16px;
 	padding-right: 16px;
 
-	background-color: var(--accent-color);
+	background-color: variables.$accent-color;
 	border: none;
 
 	color: white;
-	font-size: var(--button-font-size);
+	font-size: variables.$button-font-size;
 }

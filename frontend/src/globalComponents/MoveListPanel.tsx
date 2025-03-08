@@ -1,4 +1,4 @@
-import "../styles/features/gameplay/move-list-panel.css";
+import "../styles/features/gameplay/move-list-panel.scss";
 
 type MoveListPanelProps = {
     moveList: Array<Array<string>>;
@@ -16,7 +16,7 @@ function MoveListPanel({ moveList }: MoveListPanelProps) {
             {moveList.map((movePair: Array<string>, moveIndex: number) => {
                 return (
                     <div className="move-info-container">
-						<p className="move-number">{moveIndex + 1}.</p>
+                        <p className="move-number">{moveIndex + 1}.</p>
                         <div key={moveIndex} className="move-pair-container">
                             {generateMovePairMoves(movePair)}
                         </div>

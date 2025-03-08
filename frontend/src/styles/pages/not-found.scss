@@ -1,6 +1,8 @@
+@use "../global/mixins.scss";
+@use "../global/global.scss";
+
 .not-found-page-container {
-	display: flex;
-	flex-direction: column;
+	@include flex-column;
 	align-items: center;
 }
 
@@ -14,6 +16,6 @@
 	padding-top: 12px;
 	padding-bottom: 12px;
 
-	background-color: var(--accent-color);
+	background-color: variables.$accent-color;
 	color: white;
 }

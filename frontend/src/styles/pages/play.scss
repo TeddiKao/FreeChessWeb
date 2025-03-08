@@ -1,11 +1,11 @@
+@use "../global/mixins.scss";
+
 .multiplayer-playing-interface-container {
 	position: fixed;
 	left: 10%;
-	top: 50%;
-	transform: translateY(-50%);
+	@include page-center-y;
 
-	display: flex;
-	flex-direction: row;
+	@include flex-row;
 }
 
 .main-chessboard {
@@ -13,7 +13,6 @@
 }
 
 .chessboard-info {
-	display: flex;
-	flex-direction: row;
+	@include flex-row;
 	justify-content: right;
 }

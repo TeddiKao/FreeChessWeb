@@ -7,8 +7,8 @@ import {
     GameWinnerSetterContext,
 } from "../../contexts/chessboardContexts.js";
 
-import "../../styles/components/chessboard/board-actions.css"
-import "../../styles/pages/pass-and-play.css"
+import "../../styles/components/chessboard/board-actions.scss";
+import "../../styles/pages/pass-and-play.scss";
 
 import Chessboard from "../../globalComponents/chessboards/Chessboard.js";
 import GameOverModal from "../../globalComponents/modals/GameOverModal.js";

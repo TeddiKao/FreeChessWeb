@@ -1,28 +1,26 @@
 import { useEffect, useRef } from "react";
 
-import "../styles/components/chessboard/chessboard.css";
+import "../styles/components/chessboard/chessboard.scss";
 import { PieceColor, PieceType } from "../types/gameLogic";
 import { OptionalValue } from "../types/general";
 
-type PromotionCancelFunction = (
-    color: PieceColor
-) => void;
+type PromotionCancelFunction = (color: PieceColor) => void;
 
 type PawnPromotionFunction = (
     color: PieceColor,
     promotedPiece: PieceType,
     moveMethod: string,
     autoQueen?: boolean
-) => void
+) => void;
 
 type PromotionPopupProps = {
     color: PieceColor;
     isOpen: boolean;
     onClose: () => void;
-    handlePromotionCancel: PromotionCancelFunction, 
-    handlePawnPromotion: PawnPromotionFunction,
-    boardOrientation: string,
-    moveMethod: OptionalValue<string>
+    handlePromotionCancel: PromotionCancelFunction;
+    handlePawnPromotion: PawnPromotionFunction;
+    boardOrientation: string;
+    moveMethod: OptionalValue<string>;
 };
 
 function PromotionPopup({

@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import "../../styles/features/gameSetup/custom-time-control-screen.css";
+import "../../styles/features/gameSetup/custom-time-control-screen.scss";
 import { StateSetterFunction } from "../../types/general";
 import { convertTimeControlToSeconds } from "../../utils/timeUtils";
 import { TimeControl, TimeDuration } from "../../types/gameSetup";
 
 type CustomTimeControlScreenProps = {
     setSelectionStage: StateSetterFunction<string>;
-	setSelectedTimeControl: StateSetterFunction<TimeControl | null>
+    setSelectedTimeControl: StateSetterFunction<TimeControl | null>;
 };
 
 function CustomTimeControlScreen({
     setSelectionStage,
-	setSelectedTimeControl,
+    setSelectedTimeControl,
 }: CustomTimeControlScreenProps) {
     const [baseTimeHours, setBaseTimeHours] = useState<number | string>("");
     const [baseTimeMinutes, setBaseTimeMinutes] = useState<number | string>("");
@@ -26,25 +26,26 @@ function CustomTimeControlScreen({
     );
 
     function handleContinue() {
-		const baseTimeDuration: TimeDuration = {
-			hours: Number(baseTimeHours),
-			minutes: Number(baseTimeMinutes),
+        const baseTimeDuration: TimeDuration = {
+            hours: Number(baseTimeHours),
+            minutes: Number(baseTimeMinutes),
             seconds: Number(baseTimeSeconds),
-		}
+        };
 
-		const incrementDuration: TimeDuration = {
+        const incrementDuration: TimeDuration = {
             hours: Number(incrementHours),
             minutes: Number(incrementMinutes),
             seconds: Number(incrementSeconds),
-        }
+        };
 
-		const baseTimeInSeconds = convertTimeControlToSeconds(baseTimeDuration);
-		const incrementTimeInSeconds = convertTimeControlToSeconds(incrementDuration);
+        const baseTimeInSeconds = convertTimeControlToSeconds(baseTimeDuration);
+        const incrementTimeInSeconds =
+            convertTimeControlToSeconds(incrementDuration);
 
-		setSelectedTimeControl({
-			baseTime: baseTimeInSeconds,
-			increment: incrementTimeInSeconds
-		})
+        setSelectedTimeControl({
+            baseTime: baseTimeInSeconds,
+            increment: incrementTimeInSeconds,
+        });
 
         setSelectionStage("startConfirmation");
     }

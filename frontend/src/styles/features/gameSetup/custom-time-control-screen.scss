@@ -1,3 +1,5 @@
+@use "../../global/mixins.scss";
+
 .screen-header {
 	margin-top: 8px;
 	margin-bottom: 8px;
@@ -9,8 +11,7 @@
 }
 
 .time-inputs {
-	display: flex;
-	flex-direction: row;
+	@include flex-row;
 }
 
 .time-inputs input {

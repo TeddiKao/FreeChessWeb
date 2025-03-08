@@ -1,4 +1,4 @@
-import "../styles/navigation-dropdown.css";
+import "../styles/navigation-dropdown.scss";
 
 type NavigationLink = {
     linkName: string;

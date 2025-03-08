@@ -1,7 +1,7 @@
 import useGameplaySettings from "../../hooks/useGameplaySettings.js";
 import Setting from "../settings/Setting.js";
 
-import "../../styles/modals/gameplay-settings.css";
+import "../../styles/modals/gameplay-settings.scss";
 
 function GameplaySettings({ onClose, setGameplaySettings }) {
     const gameplaySettings = useGameplaySettings();

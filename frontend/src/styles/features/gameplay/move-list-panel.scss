@@ -1,6 +1,7 @@
+@use "../../global/mixins.scss";
+
 .move-list-panel-container {
-	display: flex;
-	flex-direction: column;
+	@include flex-column;
 
 	height: 450px;
 	width: 250px;

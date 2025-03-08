@@ -10,8 +10,8 @@ import {
     GameWinnerSetterContext,
 } from "../../contexts/chessboardContexts.js";
 
-import "../../styles/pages/play.css";
-import "../../styles/components/chessboard/board-actions.css";
+import "../../styles/pages/play.scss";
+import "../../styles/components/chessboard/board-actions.scss";
 
 import {
     fetchMoveList,

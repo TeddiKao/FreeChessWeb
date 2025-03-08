@@ -1,11 +1,11 @@
-import "../../styles/wrappers/modal-wrapper.css"
+import "../../styles/wrappers/modal-wrapper.scss";
 import { ReactNode } from "react";
 import ReactDom from "react-dom";
 
 type ModalWrapperProps = {
-    children: ReactNode,
-    visible: boolean,
-}
+    children: ReactNode;
+    visible: boolean;
+};
 
 function ModalWrapper({ children, visible }: ModalWrapperProps) {
     const portalRoot = document.getElementById("portal");

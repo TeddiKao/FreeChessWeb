@@ -1,7 +1,10 @@
 import { DisplayChessboardProps } from "../../interfaces/chessboard";
-import "../../styles/components/chessboard/chessboard.css";
+import "../../styles/components/chessboard/chessboard.scss";
 
-function DisplayChessboard({ parsed_fen_string, orientation }: DisplayChessboardProps) {
+function DisplayChessboard({
+    parsed_fen_string,
+    orientation,
+}: DisplayChessboardProps) {
     if (!parsed_fen_string) {
         return null;
     }

@@ -1,17 +1,17 @@
-import "../../styles/features/gameplay/timer.css"
-import { formatTime } from "../../utils/timeUtils.ts"
+import "../../styles/features/gameplay/timer.scss";
+import { formatTime } from "../../utils/timeUtils.ts";
 
 type TimerProps = {
-	playerColor: string,
-	timeInSeconds: number
-}
+    playerColor: string;
+    timeInSeconds: number;
+};
 
 function Timer({ playerColor, timeInSeconds }: TimerProps) {
-	return (
-		<div className={`${playerColor}-player-timer-container`}>
-			<p className="timer-amount">{formatTime(timeInSeconds)}</p>
-		</div>
-	)
+    return (
+        <div className={`${playerColor}-player-timer-container`}>
+            <p className="timer-amount">{formatTime(timeInSeconds)}</p>
+        </div>
+    );
 }
 
-export default Timer
+export default Timer;

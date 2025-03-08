@@ -1,6 +1,7 @@
+@use "./global/mixins.scss";
+
 .navigation-dropdown-container {
-	display: flex;
-	flex-direction: column;
+	@include flex-column;
 	position: absolute;
 	top: 30px;
 

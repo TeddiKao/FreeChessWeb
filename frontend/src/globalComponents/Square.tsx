@@ -1,6 +1,6 @@
 import { useDrag, useDrop } from "react-dnd";
 
-import "../styles/components/chessboard/square.css";
+import "../styles/components/chessboard/square.scss";
 import PromotionPopup from "./PromotionPopup.tsx";
 import React, { useEffect, useState } from "react";
 import { isSquareLight } from "../utils/boardUtils";
@@ -100,7 +100,7 @@ function Square({
     function handleSquareHiglight(event: React.MouseEvent<HTMLDivElement>) {
         event.preventDefault();
 
-        setIsHighlighted((prevHighlighted: boolean) => !prevHighlighted)
+        setIsHighlighted((prevHighlighted: boolean) => !prevHighlighted);
     }
 
     function handleOnDrop(droppedSquare: string | number) {

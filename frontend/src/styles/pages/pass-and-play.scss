@@ -1,21 +1,19 @@
+@use "../global/mixins.scss";
+@use "../global/variables.scss";
+
 .chessboard-wrapper {
 	display: flex;
 	flex-direction: row;
 }
 
 .playing-interface-container {
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+	@include page-center-xy;
 
-	display: flex;
-	flex-direction: row;
+	@include flex-row;
 	justify-content: center;
 }
 
 .main-chessboard {
-	display: flex;
-	flex-direction: column;
+	@include flex-column;
 	justify-content: center;
 }

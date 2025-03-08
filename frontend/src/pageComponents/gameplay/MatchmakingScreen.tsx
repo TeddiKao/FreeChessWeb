@@ -3,7 +3,7 @@ import { displayTimeControl } from "../../utils/timeUtils.ts";
 
 import useWebSocket from "../../hooks/useWebsocket.ts";
 
-import "../../styles/features/gameSetup/matchmaking-screen.css";
+import "../../styles/features/gameSetup/matchmaking-screen.scss";
 import { useNavigate } from "react-router-dom";
 import { getAccessToken } from "../../utils/tokenUtils.ts";
 import { getUsername } from "../../utils/apiUtils.ts";
@@ -95,7 +95,9 @@ function MatchmakingScreen({
             return;
         }
 
-        if (parsedEventData["type"] === MatchmakingEvents.CANCELLED_SUCCESSFULLY) {
+        if (
+            parsedEventData["type"] === MatchmakingEvents.CANCELLED_SUCCESSFULLY
+        ) {
             handleMatchmakingCancelSuccess();
         }
     }
@@ -143,8 +145,8 @@ function MatchmakingScreen({
         console.log("Cancelling matchmaking!");
 
         const cancellationDetails = {
-            type: "cancel_matchmaking"
-        }
+            type: "cancel_matchmaking",
+        };
 
         const stringfiedData = JSON.stringify(cancellationDetails);
 

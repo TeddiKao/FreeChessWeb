@@ -1,11 +1,10 @@
-.gameplay-settings-container {
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+@use "../global/mixins.scss";
+@use "../global/variables.scss";
 
-	display: flex;
-	flex-direction: column;
+.gameplay-settings-container {
+	@include page-center-xy;
+
+	@include flex-column;
 
 	background-color: white;
 	z-index: 1000;
@@ -24,8 +23,7 @@
 }
 
 .setting-container {
-	display: flex;
-	flex-direction: row;
+	@include flex-row;
 	align-items: center;
 
 	margin-left: 16px;
@@ -46,7 +44,7 @@
 	padding-left: 20px;
 	padding-right: 20px;
 
-	background-color: var(--accent-color);
+	background-color: variables.$accent-color;
 	color: white;
 
 	border: none;

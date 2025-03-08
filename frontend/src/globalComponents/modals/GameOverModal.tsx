@@ -1,4 +1,4 @@
-import "../../styles/modals/game-over-modal.css";
+import "../../styles/modals/game-over-modal.scss";
 import { capitaliseFirstLetter } from "../../utils/generalUtils";
 
 function GameOverModal({ visible, gameEndCause, gameWinner }) {

@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 
 import api from "../api.js";
-import "../styles/auth-form.css";
+import "../styles/auth-form.scss";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants/tokens.js";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +12,7 @@ type AuthFormProps = {
 type UsernameFieldProps = {
     username: string;
     handleUsernameChange: (event: ChangeEvent<HTMLInputElement>) => void;
-}
+};
 
 function UsernameField({ username, handleUsernameChange }: UsernameFieldProps) {
     return (
@@ -136,7 +136,12 @@ function AuthForm({ method }: AuthFormProps) {
                 />
                 <br />
 
-                {shouldRenderUsernameField ? <UsernameField username={username} handleUsernameChange={handleUsernameChange} /> : null}
+                {shouldRenderUsernameField ? (
+                    <UsernameField
+                        username={username}
+                        handleUsernameChange={handleUsernameChange}
+                    />
+                ) : null}
 
                 <input
                     type={isPasswordVisible ? "text" : "password"}

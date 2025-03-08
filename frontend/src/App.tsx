@@ -12,7 +12,7 @@ import NotFound from "./pages/NotFound.js";
 import Dashboard from "./pages/Protected/Dashboard.js";
 import GameSetup from "./pages/Protected/GameSetup.js";
 
-import "./styles/global/global.css";
+import "./styles/global/global.scss";
 
 import ProtectedRoute from "./globalComponents/routes/ProtectedRoute.js";
 import AuthenticationRoute from "./globalComponents/routes/AuthenticationRoute.js";
