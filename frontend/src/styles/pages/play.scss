@@ -1,4 +1,4 @@
-@use "../global/mixins.scss";
+@use "../global/mixins.scss" as *;
 
 .multiplayer-playing-interface-container {
 	position: fixed;

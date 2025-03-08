@@ -1,8 +1,8 @@
-@use "./global/mixins.scss";
+@use "./global/mixins.scss" as *;
 @use "./global/variables.scss";
 
 .unauthenticated-navbar-container {
-	@include flex-column;
+	@include flex-row;
 	align-items: center;
 
 	padding-top: 16px;

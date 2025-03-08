@@ -1,3 +1,5 @@
+@use "../../global/variables";
+
 .chessboard-square, .previous-dropped-square, .previous-dragged-square {
 	height: 55px;
 	position: relative;
@@ -15,21 +17,21 @@
 }
 
 .light {
-	background-color: var(--light-square-color);
+	background-color: variables.$light-square-color;
 }
 
 .dark {
-	background-color: var(--dark-square-color);
+	background-color: variables.$dark-square-color;
 	border: none;
 }
 
 .previous-dragged-square {
-	background-color: var(--last-dragged-square-color);
+	background-color: variables.$last-dragged-square-color;
 	border: none;
 }
 
 .previous-dropped-square {
-	background-color: var(--last-dropped-square-color);
+	background-color: variables.$last-dropped-square-color;
 	border: none;
 }
 
