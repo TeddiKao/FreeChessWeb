@@ -252,7 +252,7 @@ def is_checked_southeast(board_placement: dict, king_color: dict):
             break
 
         should_check_for_pawn = False
-        should_check_for_pawn = False
+        should_check_for_king = False
 
         if is_square_on_edge(current_checking_square):
             break

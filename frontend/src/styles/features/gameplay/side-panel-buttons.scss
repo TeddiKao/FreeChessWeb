@@ -1,0 +1,14 @@
+@use "../../global/mixins" as *;
+
+.gameplay-side-panel-buttons-container {
+	@include flex-row-y-center;
+	padding-left: 16px;
+
+	button {
+		width: 23%;
+		padding-top: 4px;
+		padding-bottom: 4px;
+
+		margin-right: 8px;
+	}
+}

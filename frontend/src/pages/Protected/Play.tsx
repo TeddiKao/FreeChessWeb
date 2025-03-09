@@ -185,7 +185,7 @@ function Play() {
 
     function handleNextMove() {
         setPositionIndex((prevIndex) =>
-            prevIndex < positionList.length ? prevIndex + 1 : prevIndex
+            prevIndex + 1 < positionList.length ? prevIndex + 1 : prevIndex
         );
     }
 

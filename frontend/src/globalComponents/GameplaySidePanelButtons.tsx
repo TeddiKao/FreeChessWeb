@@ -1,3 +1,5 @@
+import "../styles/features/gameplay/side-panel-buttons.scss"
+
 type GameplaySidePanelButtonsProps = {
     backToStart: (...args: any[]) => any;
     handlePreviousMove: (...args: any[]) => any;

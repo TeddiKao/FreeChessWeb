@@ -62,7 +62,7 @@ function PassAndPlay() {
 
     async function getParsedFEN() {
         const startingPositionFEN =
-            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 11";
+            "8/4k3/p5K1/1p2BP1p/1pp3pp/8/8/8 w - - 0 1";
 
         try {
             const fetchedFEN = await fetchFen(startingPositionFEN);
