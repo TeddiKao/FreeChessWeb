@@ -143,6 +143,9 @@ function Square({
                     onDragStart={() => {
                         handleOnDrag(squareNumber);
                     }}
+                    onTouchStart={() => {
+                        handleOnDrag(squareNumber);
+                    }}
                     className="piece-image"
                     src={`/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
                         pieceType
