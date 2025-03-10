@@ -1,11 +1,8 @@
 @use "../global/mixins.scss" as *;
 
 .multiplayer-playing-interface-container {
-	position: fixed;
-	left: 10%;
-	@include page-center-y;
-
-	@include flex-row;
+	@include flex-row-x-center;
+	@include page-center-xy;
 }
 
 .main-chessboard {
@@ -15,4 +12,9 @@
 .chessboard-info {
 	@include flex-row;
 	justify-content: right;
+}
+
+.gameplay-side-panel {
+	@include flex-column;
+	margin-top: 40px;
 }

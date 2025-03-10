@@ -3,15 +3,20 @@
 .move-list-panel-container {
 	@include flex-column;
 
-	height: 450px;
+	margin-left: 20px;
+	margin-bottom: 16px;
+
+	height: 300px;
 	width: 250px;
 	padding-top: 16px;
-	padding-left: 20px;
+	padding-left: 12px;
+
+	box-shadow: 3px 3px 5px hsl(0, 0%, 70%);
 
 	overflow-x: hidden;
 	overflow-y: auto;
 
-	border-radius: 8px;
+	background-color: white;
 }
 
 .move-info-container {

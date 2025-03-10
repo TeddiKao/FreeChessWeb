@@ -13,8 +13,8 @@
 
 @mixin page-center-y($additional-transforms: null) {
 	position: fixed;
-    top: 50%;
-    transform: translateY(-50%) #{$additional-transforms};
+	top: 50%;
+	transform: translateY(-50%) #{$additional-transforms};
 }
 
 @mixin parent-element-center-xy($additional-transforms: null) {
