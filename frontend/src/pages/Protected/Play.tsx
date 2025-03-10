@@ -26,7 +26,7 @@ import { OptionalValue } from "../../types/general.js";
 import { ParsedFENString, PieceColor } from "../../types/gameLogic.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
 import MoveListPanel from "../../globalComponents/MoveListPanel.tsx";
-import GameplayActionButtons from "../../globalComponents/GameplayActionButtons.tsx";
+import MoveNavigationButtons from "../../globalComponents/MoveNavigationButtons.tsx";
 
 function Play() {
     const location = useLocation();
@@ -289,7 +289,7 @@ function Play() {
 
                         <div className="gameplay-side-panel">
                             <MoveListPanel moveList={moveList} />
-                            <GameplayActionButtons
+                            <MoveNavigationButtons
                                 backToStart={handleBackToStart}
                                 handlePreviousMove={handlePreviousMove}
                                 handleNextMove={handleNextMove}

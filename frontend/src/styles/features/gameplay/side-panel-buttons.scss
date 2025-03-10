@@ -5,8 +5,22 @@
 	padding-left: 20px;
 }
 
+.move-navigation-header {
+	margin-top: 4px;
+	margin-bottom: 4px;
+
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 8px;
+
+	background-color: hsl(0, 0%, 85%)
+}
+
 .move-navigation-buttons-container {
-	@include flex-row-y-center;
+	@include flex-row-space-between;
+
+	margin-top: 8px;
+	margin-left: 8px;
 
 	button {
 		padding-top: 4px;

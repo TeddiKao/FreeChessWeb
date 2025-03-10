@@ -1,20 +1,21 @@
 import "../styles/features/gameplay/side-panel-buttons.scss";
 
-type GameplayActionButtonsProps = {
+type MoveNavigationButtonsProps = {
     backToStart: (...args: any[]) => any;
     handlePreviousMove: (...args: any[]) => any;
     handleNextMove: (...args: any[]) => any;
     backToCurrentPosition: (...args: any[]) => any;
 };
 
-function GameplayActionButtons({
+function MoveNavigationButtons({
     backToStart,
     handlePreviousMove,
     handleNextMove,
     backToCurrentPosition,
-}: GameplayActionButtonsProps) {
+}: MoveNavigationButtonsProps) {
     return (
-        <div className="gameplay-side-panel-buttons-container">
+        <div className="move-navigation-container">
+            <h4 className="move-navigation-header">Move navigation</h4>
             <div className="move-navigation-buttons-container">
                 <button
                     onClick={backToStart}
@@ -38,12 +39,8 @@ function GameplayActionButtons({
                     {">|"}
                 </button>
             </div>
-
-            <div className="offer-action-buttons">
-                <img src="/resignButton.svg" className="resign-button" />
-            </div>
         </div>
     );
 }
 
-export default GameplayActionButtons;
+export default MoveNavigationButtons;
