@@ -17,4 +17,8 @@
 .gameplay-side-panel {
 	@include flex-column;
 	margin-top: 40px;
+	margin-left: 12px;
+	height: 450px;
+
+	background-color: white;
 }

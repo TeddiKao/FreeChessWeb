@@ -3,20 +3,24 @@
 .move-list-panel-container {
 	@include flex-column;
 
-	margin-left: 20px;
 	margin-bottom: 16px;
 
 	height: 300px;
-	width: 250px;
 	padding-top: 16px;
-	padding-left: 12px;
-
-	box-shadow: 3px 3px 5px hsl(0, 0%, 70%);
 
 	overflow-x: hidden;
 	overflow-y: auto;
+}
 
-	background-color: white;
+.move-list-header {
+	margin-top: -20px;
+	margin-bottom: 0;
+
+	padding-top: 8px;
+	padding-bottom: 8px;
+	padding-left: 8px;
+
+	background-color: hsl(0, 0%, 85%);
 }
 
 .move-info-container {
@@ -25,18 +29,32 @@
 }
 
 .move-number {
-	color: hsl(0, 0%, 40%);
+	color: black;
 	font-weight: bold;
-	margin-top: 4px;
-	margin-bottom: 4px;
+	text-align: right;
+
+	padding-left: 16px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-right: 32px;
+
+	margin-top: 0;
+	margin-bottom: 0;
+
+	background-color: hsl(0, 0%, 85%);
 }
 
 .move-pair-container {
 	display: grid;
 	grid-template-columns: 100px 100px;
+
+	margin-left: 20px;
 }
 
 .move-pair-container p {
-	margin-top: 4px;
-	margin-bottom: 4px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+
+	margin-top: 0;
+	margin-bottom: 0;
 }
