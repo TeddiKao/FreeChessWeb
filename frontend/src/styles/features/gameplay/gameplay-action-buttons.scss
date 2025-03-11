@@ -1,0 +1,38 @@
+@use "../../global/mixins" as *;
+
+.gameplay-action-buttons-container {
+	@include flex-column;
+	justify-content: space-between;
+}
+
+.gameplay-action-buttons-header {
+	margin-top: 0;
+    margin-bottom: 4px;
+
+    padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 4px;
+
+	background-color: hsl(0, 0%, 85%)
+}
+
+.gameplay-action-buttons {
+	@include flex-row;
+
+	div {
+		@include flex-row-y-center;
+		margin-left: 4px;
+		padding-right: 4px;
+
+		.helper-text {
+			margin-top: 0;
+			margin-bottom: 0;
+			margin-left: 4px;
+		}
+	}
+
+	div:hover {
+		cursor: pointer;
+		background-color: darken($color: (hsl(0, 0%, 100%)), $amount: 10%);
+	}
+}

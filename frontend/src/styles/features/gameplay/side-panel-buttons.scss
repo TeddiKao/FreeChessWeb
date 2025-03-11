@@ -21,6 +21,7 @@
 
 	margin-left: 8px;
 	margin-top: 8px;
+	margin-bottom: 8px;
 
 	button {
 		padding-top: 4px;
@@ -34,8 +35,4 @@
 
 .offer-action-buttons {
 	@include flex-row-y-center;
-
-	img:hover {
-		cursor: pointer;
-	}
 }

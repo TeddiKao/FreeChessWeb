@@ -25,9 +25,10 @@ import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.js";
 import { OptionalValue } from "../../types/general.js";
 import { ParsedFENString, PieceColor } from "../../types/gameLogic.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
-import MoveListPanel from "../../globalComponents/MoveListPanel.tsx";
-import MoveNavigationButtons from "../../globalComponents/MoveNavigationButtons.tsx";
+import MoveListPanel from "../../globalComponents/gameplaySidePanel/MoveListPanel.tsx";
+import MoveNavigationButtons from "../../globalComponents/gameplaySidePanel/MoveNavigationButtons.tsx";
 import { ArrowKeys } from "../../enums/general.ts";
+import GameplayActionButtons from "../../globalComponents/gameplaySidePanel/GameplayActionButtons.tsx";
 
 function Play() {
     const location = useLocation();
@@ -308,6 +309,7 @@ function Play() {
                                 handleNextMove={handleNextMove}
                                 backToCurrentPosition={handleCurrentPosition}
                             />
+                            <GameplayActionButtons />
                         </div>
                     </div>
                 </GameWinnerSetterContext.Provider>
