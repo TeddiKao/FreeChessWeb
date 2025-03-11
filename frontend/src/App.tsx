@@ -9,15 +9,15 @@ import Login from "./pages/Login.js";
 import Signup from "./pages/Signup.js";
 import NotFound from "./pages/NotFound.js";
 
-import Dashboard from "./pages/Protected/Dashboard.js";
-import GameSetup from "./pages/Protected/GameSetup.js";
+import Dashboard from "./pages/protected/Dashboard.js";
+import GameSetup from "./pages/protected/GameSetup.js";
 
 import "./styles/global/global.scss";
 
 import ProtectedRoute from "./globalComponents/routes/ProtectedRoute.js";
 import AuthenticationRoute from "./globalComponents/routes/AuthenticationRoute.js";
-import Play from "./pages/Protected/Play.js";
-import PassAndPlay from "./pages/Protected/PassAndPlay.js";
+import Play from "./pages/protected/Play.js";
+import PassAndPlay from "./pages/protected/PassAndPlay.js";
 
 function Logout() {
     localStorage.clear();
