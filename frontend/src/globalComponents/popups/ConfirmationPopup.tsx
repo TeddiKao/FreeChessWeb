@@ -27,6 +27,7 @@ function ConfirmationPopup({
 	}
 
 	function handleCancel() {
+		console.log("Cancelling!")
 		setIsOpen(false);
 
         if (cancelAction) {
@@ -35,7 +36,9 @@ function ConfirmationPopup({
 	}
 
 	return (
-		<div className="confirmation-popup-container">
+		<div className="confirmation-popup-container" onClick={(event) => {
+			event.stopPropagation();
+		}}>
 			{title ? <h3>{title}</h3> : null}
 			<p className="confirmation-message">{confirmationMessage}</p>
 			<div className="confirmation-buttons-container">

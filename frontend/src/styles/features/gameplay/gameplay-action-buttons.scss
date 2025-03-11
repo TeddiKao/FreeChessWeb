@@ -21,7 +21,7 @@
 .gameplay-action-buttons {
 	@include flex-row;
 
-	div {
+	.resignation-icon {
 		@include flex-row-y-center;
 		margin-left: 4px;
 		padding-right: 4px;
@@ -33,7 +33,7 @@
 		}
 	}
 
-	div:hover {
+	.resignation-icon:hover {
 		cursor: pointer;
 		background-color: darken($color: (hsl(0, 0%, 100%)), $amount: 10%);
 	}

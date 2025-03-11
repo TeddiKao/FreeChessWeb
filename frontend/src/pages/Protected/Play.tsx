@@ -337,7 +337,7 @@ function Play() {
                                 handleNextMove={handleNextMove}
                                 backToCurrentPosition={handleCurrentPosition}
                             />
-                            <GameplayActionButtons />
+                            <GameplayActionButtons gameWebsocket={gameWebsocket} />
                         </div>
                     </div>
                 </GameWinnerSetterContext.Provider>
