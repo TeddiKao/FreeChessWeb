@@ -56,6 +56,7 @@ function MultiplayerChessboard({
     setPositionList,
     setMoveList,
     lastDraggedSquare,
+    gameWebsocket,
     lastDroppedSquare,
 }: MultiplayerChessboardProps) {
     const [previousClickedSquare, setPreviousClickedSquare] =
@@ -82,9 +83,7 @@ function MultiplayerChessboard({
 
     const [boardOrientation, setBoardOrientation] = useState(orientation);
 
-    const [gameWebsocketConnected, _] = useState(true);
-
-    const gameWebsocket = useRef<OptionalValue<WebSocket>>(null);
+    const [gameWebsocketConnected, _] = useState(!!gameWebsocket.current);
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -103,37 +102,16 @@ function MultiplayerChessboard({
         handleClickToMove();
     }, [previousClickedSquare, clickedSquare]);
 
-    function handleUnload() {
-        if (
-            gameWebsocket &&
-            gameWebsocket.current &&
-            "readyState" in gameWebsocket?.current &&
-            gameWebsocket.current instanceof WebSocket
-        ) {
-            if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
-                gameWebsocket.current.close();
-            }
-        }
-    }
-
     useEffect(() => {
-        const gameWebsocketURL = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
-        const websocket = useWebSocket(
-            gameWebsocketURL,
-            handleOnMessage,
-            onError
-        );
-
-        gameWebsocket.current = websocket;
-        window.addEventListener("beforeunload", handleUnload);
-
-        return () => {
-            window.removeEventListener("beforeunload", handleUnload);
-        };
+        updateCurrentPosition();
     }, []);
 
     useEffect(() => {
-        updateCurrentPosition();
+        if (gameWebsocket.current) {
+            gameWebsocket.current.onmessage = (event: MessageEvent) => {
+                handleOnMessage(event);
+            }
+        }
     }, []);
 
     useEffect(() => {

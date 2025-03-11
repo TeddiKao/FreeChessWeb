@@ -1,6 +1,6 @@
 let websocket: any = null;
 
-function useWebSocket(url: string, onMessage: any, onError: any) {
+function useWebSocket(url: string, onMessage?: any, onError?: any) {
     if (websocket) {
         if (websocket.readyState !== WebSocket.CLOSED) {
             return websocket;
@@ -9,8 +9,13 @@ function useWebSocket(url: string, onMessage: any, onError: any) {
 
     websocket = new WebSocket(url);
 
-    websocket.onmessage = onMessage;
-    websocket.onerror = onError;
+    if (onMessage) {
+        websocket.onmessage = onMessage;
+    }
+
+    if (onError) {
+        websocket.onerror = onError;
+    }
 
     return websocket;
 }

@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import MultiplayerChessboard from "../../globalComponents/chessboards/MultiplayerChessboard.js";
 import Timer from "../../pageComponents/gameplay/Timer.tsx";
@@ -29,6 +29,9 @@ import MoveListPanel from "../../globalComponents/gameplaySidePanel/MoveListPane
 import MoveNavigationButtons from "../../globalComponents/gameplaySidePanel/MoveNavigationButtons.tsx";
 import { ArrowKeys } from "../../enums/general.ts";
 import GameplayActionButtons from "../../globalComponents/gameplaySidePanel/GameplayActionButtons.tsx";
+import useWebSocket from "../../hooks/useWebsocket.ts";
+import { websocketBaseURL } from "../../constants/urls.ts";
+import { getAccessToken } from "../../utils/tokenUtils.ts";
 
 function Play() {
     const location = useLocation();
@@ -73,10 +76,35 @@ function Play() {
         initialGameplaySettings
     );
 
+    const gameWebsocket = useRef<WebSocket | null>(null);
+
     useEffect(() => {
         updatePlayerTimers();
         updatePositionList();
         updateMoveList();
+    }, []);
+
+    function handleWindowUnload() {
+        if (gameWebsocket.current) {
+            gameWebsocket.current.close();
+        }
+    }
+
+    useEffect(() => {
+        const gameWebsocketURL = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}&gameId=${location.state?.gameId}`;
+        const websocket = useWebSocket(gameWebsocketURL);
+
+        gameWebsocket.current = websocket;
+
+        window.addEventListener("beforeunload", handleWindowUnload);
+
+        return () => {
+            window.removeEventListener("beforeunload", handleWindowUnload);
+            
+            if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
+                gameWebsocket.current.close();
+            }
+        }
     }, []);
 
     function handleKeyDown(event: KeyboardEvent) {
@@ -87,7 +115,6 @@ function Play() {
                 });
 
                 break;
-
 
             case ArrowKeys.ARROW_RIGHT:
                 setPositionIndex((prevIndex) => {
@@ -264,6 +291,7 @@ function Play() {
                                     gameplaySettings={gameplaySettings}
                                     lastDraggedSquare={lastDraggedSquare}
                                     lastDroppedSquare={lastDroppedSquare}
+                                    gameWebsocket={gameWebsocket}
                                 />
                             </div>
 
