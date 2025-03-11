@@ -27,6 +27,7 @@ import { ParsedFENString, PieceColor } from "../../types/gameLogic.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
 import MoveListPanel from "../../globalComponents/MoveListPanel.tsx";
 import MoveNavigationButtons from "../../globalComponents/MoveNavigationButtons.tsx";
+import { ArrowKeys } from "../../enums/general.ts";
 
 function Play() {
     const location = useLocation();
@@ -78,22 +79,34 @@ function Play() {
     }, []);
 
     function handleKeyDown(event: KeyboardEvent) {
-        if (event.key === "ArrowLeft") {
-            setPositionIndex((prevIndex) => {
-                return prevIndex > 0 ? prevIndex - 1 : prevIndex;
-            });
-        } else if (event.key === "ArrowRight") {
-            console.log(positionList);
+        switch (event.key) {
+            case ArrowKeys.ARROW_LEFT:
+                setPositionIndex((prevIndex) => {
+                    return prevIndex > 0 ? prevIndex - 1 : prevIndex;
+                });
 
-            setPositionIndex((prevIndex) => {
-                return prevIndex + 1 < positionList.length
-                    ? prevIndex + 1
-                    : prevIndex;
-            });
-        } else if (event.key === "ArrowUp") {
-            setPositionIndex(0);
-        } else if (event.key === "ArrowDown") {
-            setPositionIndex(positionList.length - 1);
+                break;
+
+
+            case ArrowKeys.ARROW_RIGHT:
+                setPositionIndex((prevIndex) => {
+                    return prevIndex + 1 < positionList.length
+                        ? prevIndex + 1
+                        : prevIndex;
+                });
+
+                break;
+
+            case ArrowKeys.ARROW_UP:
+                setPositionIndex(0);
+                break;
+
+            case ArrowKeys.ARROW_DOWN:
+                setPositionIndex(positionList.length - 1);
+                break;
+
+            default:
+                break;
         }
     }
 
