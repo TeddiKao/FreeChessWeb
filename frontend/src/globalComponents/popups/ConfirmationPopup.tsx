@@ -1,7 +1,9 @@
+import "../../styles/popups/confirmation-popup.scss"
+
 type ConfirmationPopupProps = {
     confirmationMessage: string;
     confirmAction: () => void;
-    cancelAction: () => void;
+    cancelAction?: () => void;
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
     title?: string;
@@ -26,11 +28,15 @@ function ConfirmationPopup({
 
 	function handleCancel() {
 		setIsOpen(false);
-        cancelAction();
+
+        if (cancelAction) {
+			cancelAction();
+		}
 	}
 
 	return (
 		<div className="confirmation-popup-container">
+			{title ? <h3>{title}</h3> : null}
 			<p className="confirmation-message">{confirmationMessage}</p>
 			<div className="confirmation-buttons-container">
 				<button className="confirm-button" onClick={handleConfirmation}>Yes</button>

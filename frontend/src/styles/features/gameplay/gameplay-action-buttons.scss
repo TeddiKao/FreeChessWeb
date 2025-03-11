@@ -3,6 +3,8 @@
 .gameplay-action-buttons-container {
 	@include flex-column;
 	justify-content: space-between;
+
+	position: relative;
 }
 
 .gameplay-action-buttons-header {
@@ -11,7 +13,7 @@
 
     padding-top: 4px;
 	padding-bottom: 4px;
-	padding-left: 4px;
+	padding-left: 8px;
 
 	background-color: hsl(0, 0%, 85%)
 }
