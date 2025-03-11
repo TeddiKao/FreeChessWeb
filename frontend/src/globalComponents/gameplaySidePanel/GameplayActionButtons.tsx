@@ -2,31 +2,44 @@ import { useState } from "react";
 
 import "../../styles/features/gameplay/gameplay-action-buttons.scss";
 import ConfirmationPopup from "../popups/ConfirmationPopup";
+import { RefObject } from "../../types/general";
 
-function GameplayActionButtons() {
+type GameplayActionButtonsProps = {
+    gameWebsocket: RefObject<WebSocket | null>;
+}
+
+function GameplayActionButtons({ gameWebsocket }: GameplayActionButtonsProps) {
     const [confirmationPopupVisible, setConfirmationPopupVisible] =
         useState(false);
 
-    function handleResignation() {
+    function handleResignationPopupDisplay() {
         setConfirmationPopupVisible(true);
+    }
+
+    function handleResignationConfirmation() {
+        const resignationDetails = {
+            type: "resign_request"
+        }
+
+        gameWebsocket.current?.send(JSON.stringify(resignationDetails));
     }
 
     return (
         <div className="gameplay-action-buttons-container">
             <h4 className="gameplay-action-buttons-header">Gameplay actions</h4>
             <div className="gameplay-action-buttons">
-                <div onClick={handleResignation} className="resignation-icon">
+                <div onClick={handleResignationPopupDisplay} className="resignation-icon">
                     <img className="resign-icon" src="/resignButton.svg" />
                     <p className="helper-text">Resign</p>
+
+                    <ConfirmationPopup
+                        isOpen={confirmationPopupVisible}
+                        setIsOpen={setConfirmationPopupVisible}
+                        confirmationMessage="Are you sure you want to resign?"
+                        confirmAction={handleResignationConfirmation}
+                    />
                 </div>
             </div>
-
-            <ConfirmationPopup
-                isOpen={confirmationPopupVisible}
-                setIsOpen={setConfirmationPopupVisible}
-				confirmationMessage="Are you sure you want to resign?"
-				confirmAction={() => console.log("Resign")}
-            />
         </div>
     );
 }
