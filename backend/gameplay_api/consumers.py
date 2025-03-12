@@ -266,13 +266,9 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.update_game_attribute(chess_game_model, "current_move", current_move + 1)
 
     async def update_position(self, chess_game_model: ChessGame, move_info: dict):
-        copy_data_start = perf_counter()
         original_parsed_fen = copy.deepcopy(await chess_game_model.get_full_parsed_fen())
         new_board_placement = copy.deepcopy(
             await self.get_game_attribute(chess_game_model, "parsed_board_placement"))
-        copy_data_end = perf_counter()
-        copy_data_time = copy_data_end - copy_data_start
-
         starting_square = move_info["starting_square"]
         destination_square = move_info["destination_square"]
         initial_square = move_info["initial_square"] if "initial_square" in move_info.keys(
@@ -304,7 +300,6 @@ class GameConsumer(AsyncWebsocketConsumer):
                 new_board_placement = await self.handle_pawn_promotion(move_info, new_board_placement)
 
         if not "promoted_piece" in additonal_info.keys():
-            regular_move_update_start = perf_counter()
             new_board_placement[str(destination_square)] = {
                 "piece_type": piece_type,
                 "piece_color": piece_color,
@@ -319,26 +314,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 
                     del new_board_placement[str(captured_pawn_square)]
 
-            regular_move_update_end = perf_counter()
-            regular_move_update_time = regular_move_update_end - regular_move_update_start
-
         new_side_to_move = "black" if piece_color.lower() == "white" else "white"
 
-        game_state_update_start = perf_counter()
         await self.update_en_passant_target_square(chess_game_model, move_info)
 
-        position_update_start = perf_counter()
         await self.update_game_attribute(chess_game_model, "parsed_board_placement", new_board_placement)
-        position_update_end = perf_counter()
-        position_update_time = position_update_end - position_update_start
-
-        side_to_move_update_start = perf_counter()
         await self.update_game_attribute(chess_game_model, "current_player_turn", new_side_to_move)
-        side_to_move_update_end = perf_counter()
-        side_to_move_update_time = side_to_move_update_end - side_to_move_update_start
-
-        game_state_update_end = perf_counter()
-        game_state_update_time = game_state_update_end - game_state_update_start
 
         if piece_color.lower() == "black":
             await self.increment_move_number(chess_game_model)
