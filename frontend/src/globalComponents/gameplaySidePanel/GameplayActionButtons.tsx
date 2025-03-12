@@ -3,28 +3,49 @@ import { useState, useEffect } from "react";
 import "../../styles/features/gameplay/gameplay-action-buttons.scss";
 import ConfirmationPopup from "../popups/ConfirmationPopup";
 import { RefObject } from "../../types/general";
+import { WebSocketEventTypes } from "../../enums/gameLogic";
 
 type GameplayActionButtonsProps = {
     gameWebsocket: RefObject<WebSocket | null>;
 };
 
 function GameplayActionButtons({ gameWebsocket }: GameplayActionButtonsProps) {
-    const [resignationPopupVisible, setConfirmationPopupVisible] =
+    const [resignationPopupVisible, setResignationPopupVisible] =
         useState(false);
 
+    useEffect(() => {
+        if (gameWebsocket.current) {
+            gameWebsocket.current.onmessage = (event: MessageEvent) => {
+                handleOnMessage(event);
+            };
+        }
+    }, []);
+
     function handleResignationPopupDisplay() {
-        setConfirmationPopupVisible(true);
+        setResignationPopupVisible(true);
     }
 
-    useEffect(() => {
-        console.log("Visiblity changed!");
-    }, [resignationPopupVisible]);
-
     function handleResignationConfirmation() {
-        // const resignationDetails = {
-        //     type: "resign_request"
-        // }
-        // gameWebsocket.current?.send(JSON.stringify(resignationDetails));
+        const resignationDetails = {
+            type: "resign_request"
+        }
+
+        gameWebsocket.current?.send(JSON.stringify(resignationDetails));
+    }
+
+    function handleOnMessage(event: MessageEvent) {
+        const parsedEventData = JSON.parse(event.data);
+        const eventType = parsedEventData["type"];
+
+        switch (eventType) {
+            case WebSocketEventTypes.PLAYER_RESIGNED:
+                handleResignation(parsedEventData);
+                break;
+        }
+    }
+
+    function handleResignation(eventData: any) {
+        console.log(`Player ${eventData["resigning_color"]} resigned!`);
     }
 
     return (
@@ -40,7 +61,7 @@ function GameplayActionButtons({ gameWebsocket }: GameplayActionButtonsProps) {
 
                     <ConfirmationPopup
                         isOpen={resignationPopupVisible}
-                        setIsOpen={setConfirmationPopupVisible}
+                        setIsOpen={setResignationPopupVisible}
                         confirmationMessage="Are you sure you want to resign?"
                         confirmAction={handleResignationConfirmation}
                     />

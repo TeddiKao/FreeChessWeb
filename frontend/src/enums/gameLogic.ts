@@ -9,6 +9,7 @@ enum WebSocketEventTypes {
 	TIMER_INCREMENTED = "timer_incremented",
 	POSITION_LIST_UPDATED = "position_list_updated",
 	MOVE_LIST_UPDATED = "move_list_updated",
+	PLAYER_RESIGNED = "player_resigned",
 }
 
 export { MoveMethods, WebSocketEventTypes }
