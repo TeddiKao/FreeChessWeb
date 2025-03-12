@@ -46,6 +46,15 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.update_game_attribute(chess_game_model, "game_status", "Ended")
         await self.update_game_attribute(chess_game_model, "game_result", game_result)
 
+    async def get_game_result_from_resigning_player(self, chess_game_model: ChessGame, resigning_player):
+        white_player = await self.get_game_attribute(chess_game_model, "white_player")
+        black_player = await self.get_game_attribute(chess_game_model, "black_player")
+
+        if resigning_player == white_player:
+            return "Black won"
+        else:
+            return = "White won"
+
     async def decrement_white_player_timer(self, chess_game_model: ChessGame, decrement_amount: float | int):
         current_time = await self.get_game_attribute(chess_game_model, "white_player_clock")
         new_time = current_time - Decimal(decrement_amount)
@@ -497,7 +506,7 @@ class GameConsumer(AsyncWebsocketConsumer):
     async def handle_resignation(self, event):
         chess_game_model = await self.get_chess_game(self.game_id)
 
-        await self.end_game()
+        await self.end_game(chess_game_model, "")
 
 
     async def resume_timer(self, event):
