@@ -55,6 +55,7 @@ class ChessGame(models.Model):
 	game_status = models.CharField(max_length=50, default="Ongoing")
 	game_result = models.CharField(max_length=50, default="Ongoing")
 	game_winner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, blank=True, null=True)
+	game_end_cause = models.CharField(max_length=50, null=True, blank=True)
 
 	current_move = models.IntegerField(default=1)
 	current_player_turn = models.CharField(max_length=5, default="white")
