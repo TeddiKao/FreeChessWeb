@@ -412,6 +412,8 @@ function MultiplayerChessboard({
 
         if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
             const moveDetails = {
+                type: "move_made",
+
                 piece_color: pieceColorToValidate,
                 piece_type: pieceTypeToValidate,
                 starting_square: previousClickedSquare,
