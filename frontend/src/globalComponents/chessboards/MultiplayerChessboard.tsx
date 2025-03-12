@@ -291,6 +291,8 @@ function MultiplayerChessboard({
 
         if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
             const moveDetails = {
+                type: "move_made",
+
                 piece_color: pieceColorToValidate,
                 piece_type: pieceTypeToValidate,
                 starting_square: draggedSquare,
@@ -559,6 +561,8 @@ function MultiplayerChessboard({
 
         if (rank === promotionRank && autoQueen) {
             const moveDetails = {
+                type: "move_made",
+
                 piece_color: pieceColor,
                 piece_type: "queen",
                 starting_square: startSquare,
@@ -592,6 +596,8 @@ function MultiplayerChessboard({
 
     function handlePawnPromotion(color: PieceColor, promotedPiece: PieceType) {
         const moveDetails = {
+            type: "move_made",
+
             piece_color: color,
             piece_type: "Pawn",
             starting_square: previousDraggedSquare,
