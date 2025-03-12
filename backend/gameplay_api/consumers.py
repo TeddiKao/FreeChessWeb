@@ -506,7 +506,8 @@ class GameConsumer(AsyncWebsocketConsumer):
     async def handle_resignation(self, event):
         chess_game_model = await self.get_chess_game(self.game_id)
 
-        await self.end_game(chess_game_model, "")
+        game_result = await self.get_game_result_from_resigning_player(chess_game_model, event["resigner"])
+        await self.end_game(chess_game_model, game_result)
 
 
     async def resume_timer(self, event):
