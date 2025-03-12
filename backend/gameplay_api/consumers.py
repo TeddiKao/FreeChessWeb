@@ -53,7 +53,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         if resigning_player == white_player:
             return "Black won"
         else:
-            return = "White won"
+            return "White won"
 
     async def decrement_white_player_timer(self, chess_game_model: ChessGame, decrement_amount: float | int):
         current_time = await self.get_game_attribute(chess_game_model, "white_player_clock")
