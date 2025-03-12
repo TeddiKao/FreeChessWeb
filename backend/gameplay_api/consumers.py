@@ -42,6 +42,10 @@ class GameConsumer(AsyncWebsocketConsumer):
         setattr(chess_game_model, attribute, new_value)
         chess_game_model.save()
 
+    async def end_game(self, chess_game_model: ChessGame, game_result: str):
+        await self.update_game_attribute(chess_game_model, "game_status", "Ended")
+        await self.update_game_attribute(chess_game_model, "game_result", game_result)
+
     async def decrement_white_player_timer(self, chess_game_model: ChessGame, decrement_amount: float | int):
         current_time = await self.get_game_attribute(chess_game_model, "white_player_clock")
         new_time = current_time - Decimal(decrement_amount)
@@ -393,14 +397,26 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     async def receive(self, text_data):
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                "type": "move_received",
-                "move_data": text_data,
-                "move_made_by": self.scope["user"].username
-            }
-        )
+        parsed_text_data = json.loads(text_data)
+        match parsed_text_data["type"]:
+            case "move_received":
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        "type": "move_received",
+                        "move_data": text_data,
+                        "move_made_by": self.scope["user"].username
+                    }
+                )
+
+            case "resign_request":
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        "type": "handle_resignation",
+                        "resigner": self.scope["user"].username
+                    }
+                )
 
     async def move_received(self, event):
         chess_game_model = await self.get_chess_game(self.game_id)
@@ -496,6 +512,12 @@ class GameConsumer(AsyncWebsocketConsumer):
                 "white_player_clock": float(event["white_player_clock"]),
                 "black_player_clock": float(event["black_player_clock"]),
             }))
+
+    async def handle_resignation(self, event):
+        chess_game_model = await self.get_chess_game(self.game_id)
+
+        await self.end_game()
+
 
     async def resume_timer(self, event):
         asyncio.create_task(self.handle_timer_decrement())
