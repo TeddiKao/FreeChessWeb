@@ -387,36 +387,46 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     async def receive(self, text_data):
-        parsed_text_data = json.loads(text_data)
-        match parsed_text_data["type"]:
-            case "move_received":
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        "type": "move_received",
-                        "move_data": text_data,
-                        "move_made_by": self.scope["user"].username
-                    }
-                )
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                "type": "move_received",
+                "move_data": text_data,
+                "move_made_by": self.scope["user"].username
+            }
+        )
 
-            case "resign_request":
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        "type": "handle_resignation",
-                        "resigner": self.scope["user"].username
-                    }
-                )
+        # parsed_text_data = json.loads(text_data)
+        # match parsed_text_data["type"]:
+        #     case "move_made":
+        #         await self.channel_layer.group_send(
+        #             self.room_group_name,
+        #             {
+        #                 "type": "move_received",
+        #                 "move_data": text_data,
+        #                 "move_made_by": self.scope["user"].username
+        #             }
+        #         )
+
+        #     case "resign_request":
+        #         await self.channel_layer.group_send(
+        #             self.room_group_name,
+        #             {
+        #                 "type": "handle_resignation",
+        #                 "resigner": self.scope["user"].username
+        #             }
+        #         )
 
     async def move_received(self, event):
         chess_game_model = await self.get_chess_game(self.game_id)
 
         timer_task = None
 
-        if timer_tasks_info[self.room_group_name].get("timer_task"):
-            timer_task = timer_tasks_info[self.room_group_name]["timer_task"]
-            timer_task.cancel()
-            del timer_tasks_info[self.room_group_name]["timer_task"]
+        if timer_tasks_info.get(self.room_group_name):
+            if timer_tasks_info[self.room_group_name].get("timer_task"):
+                timer_task = timer_tasks_info[self.room_group_name]["timer_task"]
+                timer_task.cancel()
+                del timer_tasks_info[self.room_group_name]["timer_task"]
 
         move_validation_start = perf_counter()
         move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
@@ -449,11 +459,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         current_move_number = await self.get_game_attribute(chess_game_model, "current_move")
 
         if move_is_valid:
-            update_position_start = perf_counter()
             await self.update_position(chess_game_model, parsed_move_data)
-            update_position_end = perf_counter()
-
-            update_position_time = update_position_end - update_position_start
 
             new_position_list = await self.get_game_attribute(chess_game_model, "position_list")
             new_move_list = await self.get_game_attribute(chess_game_model, "move_list")
@@ -472,6 +478,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 "new_move_list": new_move_list,
             }))
 
+
             await self.send(json.dumps({
                 "type": "move_made",
                 "move_data": parsed_move_data,
@@ -481,6 +488,8 @@ class GameConsumer(AsyncWebsocketConsumer):
                 "new_parsed_fen": await chess_game_model.get_full_parsed_fen(),
                 "new_position_index": position_index,
             }))
+
+            print("Successfully sent data!")
 
             if timer_task:
                 await self.send(json.dumps({
@@ -503,12 +512,19 @@ class GameConsumer(AsyncWebsocketConsumer):
                 "black_player_clock": float(event["black_player_clock"]),
             }))
 
+            print("Decremented timer!")
+
     async def handle_resignation(self, event):
         chess_game_model = await self.get_chess_game(self.game_id)
 
         game_result = await self.get_game_result_from_resigning_player(chess_game_model, event["resigner"])
         await self.end_game(chess_game_model, game_result)
 
+        await self.send(json.dumps({
+            "type": "player_resigned",
+            "resigner": event["resigner"],
+            "game_result": game_result
+        }))
 
     async def resume_timer(self, event):
         asyncio.create_task(self.handle_timer_decrement())

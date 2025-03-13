@@ -107,12 +107,38 @@ function MultiplayerChessboard({
     }, []);
 
     useEffect(() => {
-        if (gameWebsocket.current) {
-            gameWebsocket.current.onmessage = (event: MessageEvent) => {
-                handleOnMessage(event);
+        setInterval(() => {
+            if (gameWebsocket.current) {
+                console.log(
+                    gameWebsocket.current.readyState === WebSocket.OPEN
+                );
+            }
+        }, 1000);
+    }, []);
+
+    useEffect(() => {
+        const attachOnMessageListener = () => {
+            if (gameWebsocket.current) {
+                gameWebsocket.current.onmessage = null;
+                gameWebsocket.current.onmessage = (event: MessageEvent) => {
+                    handleOnMessage(event);
+                };
             }
         }
-    }, []);
+
+        if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
+            attachOnMessageListener();
+        } else {
+            gameWebsocket.current?.addEventListener("open", attachOnMessageListener);
+        }
+
+        return () => {
+            if (gameWebsocket.current) {
+                gameWebsocket.current.onmessage = null;
+                gameWebsocket.current.removeEventListener("open", attachOnMessageListener);
+            }
+        };
+    }, [gameWebsocket.current]);
 
     useEffect(() => {
         handleOnDrop();
@@ -127,8 +153,11 @@ function MultiplayerChessboard({
     }, [gameWebsocketConnected]);
 
     function handleOnMessage(event: MessageEvent) {
+        console.log("Message received!");
         const parsedEventData = JSON.parse(event.data);
         const eventType = parsedEventData["type"];
+
+        console.log(`Event type: ${eventType}`);
 
         switch (eventType) {
             case WebSocketEventTypes.MOVE_MADE:
