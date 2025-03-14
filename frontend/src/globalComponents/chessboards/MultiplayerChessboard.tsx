@@ -36,14 +36,10 @@ import {
     blackPromotionRank,
 } from "../../constants/boardSquares.js";
 
-import { getAccessToken } from "../../utils/tokenUtils";
 import { playAudio } from "../../utils/audioUtils";
-
-// Constants
-import { websocketBaseURL } from "../../constants/urls.ts";
-
-// Hooks
 import useWebSocket from "../../hooks/useWebsocket.ts";
+import { getAccessToken } from "../../utils/tokenUtils.ts";
+import { websocketBaseURL } from "../../constants/urls.ts";
 
 function MultiplayerChessboard({
     parsed_fen_string,
@@ -56,7 +52,6 @@ function MultiplayerChessboard({
     setPositionList,
     setMoveList,
     lastDraggedSquare,
-    gameWebsocket,
     lastDroppedSquare,
 }: MultiplayerChessboardProps) {
     const [previousClickedSquare, setPreviousClickedSquare] =
@@ -83,7 +78,7 @@ function MultiplayerChessboard({
 
     const [boardOrientation, setBoardOrientation] = useState(orientation);
 
-    const [gameWebsocketConnected, _] = useState(!!gameWebsocket.current);
+    const gameWebsocketRef = useRef<WebSocket | null>(null);
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -106,51 +101,36 @@ function MultiplayerChessboard({
         updateCurrentPosition();
     }, []);
 
+
     useEffect(() => {
-        setInterval(() => {
-            if (gameWebsocket.current) {
-                console.log(
-                    gameWebsocket.current.readyState === WebSocket.OPEN
-                );
-            }
-        }, 1000);
+        const gameWebsocketUrl = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
+        const gameWebsocket = useWebSocket(gameWebsocketUrl, handleOnMessage);
+
+        // window.addEventListener("beforeunload", handleWindowUnload);
+
+        gameWebsocketRef.current = gameWebsocket;
+
+        console.log(gameWebsocketRef.current)
+
+        // return () => {
+        //     window.removeEventListener("beforeunload", handleWindowUnload);
+
+        //     if (gameWebsocketRef.current?.readyState === WebSocket.OPEN) {
+        //         console.log("Closing websocket...");
+        //         gameWebsocketRef.current.close();
+        //     }
+        // }
     }, []);
-
-    useEffect(() => {
-        const attachOnMessageListener = () => {
-            if (gameWebsocket.current) {
-                gameWebsocket.current.onmessage = null;
-                gameWebsocket.current.onmessage = (event: MessageEvent) => {
-                    handleOnMessage(event);
-                };
-            }
-        }
-
-        if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
-            attachOnMessageListener();
-        } else {
-            gameWebsocket.current?.addEventListener("open", attachOnMessageListener);
-        }
-
-        return () => {
-            if (gameWebsocket.current) {
-                gameWebsocket.current.onmessage = null;
-                gameWebsocket.current.removeEventListener("open", attachOnMessageListener);
-            }
-        };
-    }, [gameWebsocket.current]);
 
     useEffect(() => {
         handleOnDrop();
     }, [draggedSquare, droppedSquare]);
 
-    useEffect(() => {
-        if (!gameWebsocketConnected) {
-            if (gameWebsocket?.current instanceof WebSocket) {
-                gameWebsocket.current.close();
-            }
+    function handleWindowUnload() {
+        if (gameWebsocketRef.current?.readyState === WebSocket.OPEN) {
+            gameWebsocketRef.current.close();
         }
-    }, [gameWebsocketConnected]);
+    }
 
     function handleOnMessage(event: MessageEvent) {
         console.log("Message received!");
@@ -318,7 +298,7 @@ function MultiplayerChessboard({
             }
         }
 
-        if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
+        if (gameWebsocketRef.current?.readyState === WebSocket.OPEN) {
             const moveDetails = {
                 type: "move_made",
 
@@ -331,7 +311,7 @@ function MultiplayerChessboard({
                 additional_info: {},
             };
 
-            gameWebsocket.current?.send(JSON.stringify(moveDetails));
+            gameWebsocketRef.current?.send(JSON.stringify(moveDetails));
         }
 
         setDraggedSquare(null);
@@ -441,7 +421,7 @@ function MultiplayerChessboard({
             }
         }
 
-        if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
+        if (gameWebsocketRef.current?.readyState === WebSocket.OPEN) {
             const moveDetails = {
                 type: "move_made",
 
@@ -453,7 +433,7 @@ function MultiplayerChessboard({
                 move_type: "regular",
             };
 
-            gameWebsocket.current?.send(JSON.stringify(moveDetails));
+            gameWebsocketRef.current?.send(JSON.stringify(moveDetails));
         }
 
         setPreviousDraggedSquare(previousClickedSquare);
@@ -602,7 +582,7 @@ function MultiplayerChessboard({
                 },
             };
 
-            gameWebsocket?.current?.send(JSON.stringify(moveDetails));
+            gameWebsocketRef?.current?.send(JSON.stringify(moveDetails));
 
             return;
         }
@@ -637,7 +617,7 @@ function MultiplayerChessboard({
             },
         };
 
-        gameWebsocket?.current?.send(JSON.stringify(moveDetails));
+        gameWebsocketRef?.current?.send(JSON.stringify(moveDetails));
 
         setDraggedSquare(null);
         setDroppedSquare(null);

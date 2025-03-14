@@ -29,10 +29,9 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
         last_dropped_square: string
     }>>;
     setMoveList: StateSetterFunction<Array<Array<string>>>;
-    gameWebsocket: RefObject<WebSocket | null>,
     lastDraggedSquare: string,
     lastDroppedSquare: string,
-    gameplaySettings: any
+    gameplaySettings: any,
 }
 
 interface EmptySquareProps {

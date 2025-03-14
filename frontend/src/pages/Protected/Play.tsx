@@ -76,35 +76,10 @@ function Play() {
         initialGameplaySettings
     );
 
-    const gameWebsocket = useRef<WebSocket | null>(null);
-
     useEffect(() => {
         updatePlayerTimers();
         updatePositionList();
         updateMoveList();
-    }, []);
-
-    function handleWindowUnload() {
-        if (gameWebsocket.current) {
-            gameWebsocket.current.close();
-        }
-    }
-
-    useEffect(() => {
-        const gameWebsocketURL = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}&gameId=${location.state?.gameId}`;
-        const websocket = useWebSocket(gameWebsocketURL);
-
-        gameWebsocket.current = websocket;
-
-        window.addEventListener("beforeunload", handleWindowUnload);
-
-        return () => {
-            window.removeEventListener("beforeunload", handleWindowUnload);
-            
-            if (gameWebsocket.current?.readyState === WebSocket.OPEN) {
-                gameWebsocket.current.close();
-            }
-        }
     }, []);
 
     function handleKeyDown(event: KeyboardEvent) {
@@ -166,7 +141,6 @@ function Play() {
     function handleSettingsDisplay() {
         setSettingsVisible(true);
     }
-
     async function updatePlayerTimers(): Promise<void> {
         const whitePlayerTimer = await fetchTimer(
             Number(location.state?.gameId),
@@ -291,7 +265,6 @@ function Play() {
                                     gameplaySettings={gameplaySettings}
                                     lastDraggedSquare={lastDraggedSquare}
                                     lastDroppedSquare={lastDroppedSquare}
-                                    gameWebsocket={gameWebsocket}
                                 />
                             </div>
 
@@ -337,7 +310,7 @@ function Play() {
                                 handleNextMove={handleNextMove}
                                 backToCurrentPosition={handleCurrentPosition}
                             />
-                            <GameplayActionButtons gameWebsocket={gameWebsocket} />
+                            <GameplayActionButtons />
                         </div>
                     </div>
                 </GameWinnerSetterContext.Provider>

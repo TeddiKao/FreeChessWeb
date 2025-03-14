@@ -10,6 +10,10 @@ type GameplayActionButtonsProps = {
 };
 
 function GameplayActionButtons({ gameWebsocket }: GameplayActionButtonsProps) {
+    if (!gameWebsocket) {
+        return null;
+    }
+    
     const [resignationPopupVisible, setResignationPopupVisible] =
         useState(false);
 
