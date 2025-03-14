@@ -42,19 +42,6 @@ class GameConsumer(AsyncWebsocketConsumer):
         setattr(chess_game_model, attribute, new_value)
         chess_game_model.save()
 
-    async def end_game(self, chess_game_model: ChessGame, game_result: str):
-        await self.update_game_attribute(chess_game_model, "game_status", "Ended")
-        await self.update_game_attribute(chess_game_model, "game_result", game_result)
-
-    async def get_game_result_from_resigning_player(self, chess_game_model: ChessGame, resigning_player):
-        white_player = await self.get_game_attribute(chess_game_model, "white_player")
-        black_player = await self.get_game_attribute(chess_game_model, "black_player")
-
-        if resigning_player == white_player:
-            return "Black won"
-        else:
-            return "White won"
-
     async def decrement_white_player_timer(self, chess_game_model: ChessGame, decrement_amount: float | int):
         current_time = await self.get_game_attribute(chess_game_model, "white_player_clock")
         new_time = current_time - Decimal(decrement_amount)
@@ -396,27 +383,6 @@ class GameConsumer(AsyncWebsocketConsumer):
             }
         )
 
-        # parsed_text_data = json.loads(text_data)
-        # match parsed_text_data["type"]:
-        #     case "move_made":
-        #         await self.channel_layer.group_send(
-        #             self.room_group_name,
-        #             {
-        #                 "type": "move_received",
-        #                 "move_data": text_data,
-        #                 "move_made_by": self.scope["user"].username
-        #             }
-        #         )
-
-        #     case "resign_request":
-        #         await self.channel_layer.group_send(
-        #             self.room_group_name,
-        #             {
-        #                 "type": "handle_resignation",
-        #                 "resigner": self.scope["user"].username
-        #             }
-        #         )
-
     async def move_received(self, event):
         chess_game_model = await self.get_chess_game(self.game_id)
 
@@ -432,8 +398,6 @@ class GameConsumer(AsyncWebsocketConsumer):
         move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
         move_validation_end = perf_counter()
         move_validation_time = move_validation_end - move_validation_start
-
-        print(f"Move validation time: {move_validation_time}")
 
         chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
         previous_position: dict = copy.deepcopy(
@@ -478,7 +442,6 @@ class GameConsumer(AsyncWebsocketConsumer):
                 "new_move_list": new_move_list,
             }))
 
-
             await self.send(json.dumps({
                 "type": "move_made",
                 "move_data": parsed_move_data,
@@ -488,8 +451,6 @@ class GameConsumer(AsyncWebsocketConsumer):
                 "new_parsed_fen": await chess_game_model.get_full_parsed_fen(),
                 "new_position_index": position_index,
             }))
-
-            print("Successfully sent data!")
 
             if timer_task:
                 await self.send(json.dumps({
@@ -512,19 +473,68 @@ class GameConsumer(AsyncWebsocketConsumer):
                 "black_player_clock": float(event["black_player_clock"]),
             }))
 
-            print("Decremented timer!")
-
-    async def handle_resignation(self, event):
-        chess_game_model = await self.get_chess_game(self.game_id)
-
-        game_result = await self.get_game_result_from_resigning_player(chess_game_model, event["resigner"])
-        await self.end_game(chess_game_model, game_result)
-
-        await self.send(json.dumps({
-            "type": "player_resigned",
-            "resigner": event["resigner"],
-            "game_result": game_result
-        }))
-
     async def resume_timer(self, event):
         asyncio.create_task(self.handle_timer_decrement())
+
+class ResignConsumer(AsyncWebsocketConsumer):
+	@database_sync_to_async
+	def get_chess_game(self, chess_game_id) -> ChessGame:
+		return ChessGame.objects.get(id=chess_game_id)
+
+	@database_sync_to_async
+	def get_game_attribute(self, chess_game_model: ChessGame, attribute_name: str):
+		return getattr(chess_game_model, attribute_name)
+
+	@database_sync_to_async
+	def update_game_attribute(self, chess_game_model: ChessGame, attribute: str, new_value):
+		setattr(chess_game_model, attribute, new_value)
+		chess_game_model.save()
+
+	async def end_game(self, chess_game_model: ChessGame, game_result: str):
+		await self.update_game_attribute(chess_game_model, "game_status", "Ended")
+		await self.update_game_attribute(chess_game_model, "game_result", game_result)
+        
+	async def get_game_result_from_resigning_player(self, chess_game_model: ChessGame, resigning_player):
+		white_player = await self.get_game_attribute(chess_game_model, "white_player")
+		black_player = await self.get_game_attribute(chess_game_model, "black_player")
+
+		if resigning_player == white_player:
+			return "Black won"
+		elif resigning_player == black_player:
+			return "White won"
+
+
+	async def connect(self):
+		query_string: bytes = self.scope.get("query_string")
+		decoded_query_string = query_string.decode()
+
+		game_id = parse_qs(decoded_query_string)["gameId"][0]
+
+		await self.accept()
+
+		self.game_id = game_id
+		self.room_group_name = f"resign_room_{game_id}"
+		self.chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
+
+		await self.channel_layer.group_add(
+			self.room_group_name,
+			self.channel_name
+		)
+
+	async def receive(self, text_data = None, bytes_data = None):
+		resigner = self.scope["user"].username
+
+		chess_game_model = await self.get_chess_game(self.game_id)
+
+		await self.channel_layer.group_send(
+			self.room_group_name,
+			{
+				"type": "player_resigned",
+				"resigner": resigner
+			}
+		)
+
+		await self.end_game(chess_game_model, "Resigned")
+          
+    
+        
