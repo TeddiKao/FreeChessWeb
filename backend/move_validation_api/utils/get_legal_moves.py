@@ -99,9 +99,18 @@ def get_legal_moves_in_diagonal_direction(board_placement, move_info, piece_loca
     start_square = move_info["starting_square"]
     piece_color = move_info["piece_color"]
 
+    start_square_file = get_file(start_square)
+    start_square_rank = get_row(start_square)
+
     while True:
         square += square_offset
         if square < 0 or square > 63:
+            break
+
+        square_file = get_file(square)
+        square_rank = get_row(square)
+
+        if abs(start_square_file - square_file) != abs(start_square_rank - square_rank):
             break
 
         starting_square_info = {
