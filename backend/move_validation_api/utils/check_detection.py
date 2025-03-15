@@ -78,7 +78,7 @@ def is_checked_east(board_placement: dict, king_color: str):
                 if piece_type.lower() == "king" and piece_color.lower() != king_color.lower():
                     return True
 
-            if piece_type in orthogonal_moving_pieces:
+            if piece_type.lower() in orthogonal_moving_pieces:
                 if piece_color.lower() != king_color.lower():
                     return True
 
@@ -101,7 +101,7 @@ def is_checked_west(board_placement: dict, king_color: str):
                 if piece_type.lower() == "king" and piece_color.lower() != king_color.lower():
                     return True
 
-            if piece_type in orthogonal_moving_pieces:
+            if piece_type.lower() in orthogonal_moving_pieces:
                 if piece_color.lower() != king_color.lower():
                     return True
 
