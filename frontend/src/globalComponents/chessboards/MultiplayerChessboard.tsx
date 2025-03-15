@@ -101,25 +101,24 @@ function MultiplayerChessboard({
         updateCurrentPosition();
     }, []);
 
-
     useEffect(() => {
         const gameWebsocketUrl = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
         const gameWebsocket = useWebSocket(gameWebsocketUrl, handleOnMessage);
 
-        // window.addEventListener("beforeunload", handleWindowUnload);
+        window.addEventListener("beforeunload", handleWindowUnload);
 
         gameWebsocketRef.current = gameWebsocket;
 
         console.log(gameWebsocketRef.current)
 
-        // return () => {
-        //     window.removeEventListener("beforeunload", handleWindowUnload);
+        return () => {
+            window.removeEventListener("beforeunload", handleWindowUnload);
 
-        //     if (gameWebsocketRef.current?.readyState === WebSocket.OPEN) {
-        //         console.log("Closing websocket...");
-        //         gameWebsocketRef.current.close();
-        //     }
-        // }
+            if (gameWebsocketRef.current?.readyState === WebSocket.OPEN) {
+                console.log("Closing websocket...");
+                gameWebsocketRef.current.close();
+            }
+        }
     }, []);
 
     useEffect(() => {
