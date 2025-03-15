@@ -94,6 +94,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		while await self.get_game_attribute(chess_game, "game_status") == "Ongoing":
 			async with self.timer_lock:
+				chess_game = await self.get_chess_game(self.game_id)
 				side_to_move = await self.get_game_attribute(chess_game, "current_player_turn")
 
 				if side_to_move.lower() == "white":
@@ -374,6 +375,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
 	async def receive(self, text_data):
+		print(f"Received message: {text_data}")
+
 		await self.channel_layer.group_send(
 			self.room_group_name,
 			{
@@ -394,10 +397,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 				timer_task.cancel()
 				del timer_tasks_info[self.room_group_name]["timer_task"]
 
-		move_validation_start = perf_counter()
 		move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
-		move_validation_end = perf_counter()
-		move_validation_time = move_validation_end - move_validation_start
 
 		chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
 		previous_position: dict = copy.deepcopy(
@@ -508,7 +508,8 @@ class ResignConsumer(AsyncWebsocketConsumer):
 		query_string: bytes = self.scope.get("query_string")
 		decoded_query_string = query_string.decode()
 
-		game_id = parse_qs(decoded_query_string)["gameId"][0]
+		game_id = int(parse_qs(decoded_query_string)["gameId"][0])
+		print(f"Game id: {game_id}")
 
 		await self.accept()
 
@@ -522,6 +523,8 @@ class ResignConsumer(AsyncWebsocketConsumer):
 		)
 
 	async def receive(self, text_data = None, bytes_data = None):
+		print("Received resingation request")
+
 		resigner = self.scope["user"].username
 
 		chess_game_model = await self.get_chess_game(self.game_id)
@@ -536,9 +539,10 @@ class ResignConsumer(AsyncWebsocketConsumer):
 
 		await self.end_game(chess_game_model, "Resigned")
 			
-	async def player_resigned(self):
+	async def player_resigned(self, event):
 		await self.send(json.dumps({
-				
+			"type": "player_resigned",
+			"resigner": event["resigner"],
 		}))
           
     
