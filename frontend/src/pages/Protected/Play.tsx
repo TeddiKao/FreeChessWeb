@@ -303,7 +303,13 @@ function Play() {
                     handleNextMove={handleNextMove}
                     backToCurrentPosition={handleCurrentPosition}
                 />
-                <GameplayActionButtons gameId={gameId} />
+                
+                <GameplayActionButtons
+                    setGameEnded={setHasGameEnded}
+                    setGameEndedCause={setGameEndedCause}
+                    setGameWinner={setGameWinner}
+                    gameId={gameId}
+                />
             </div>
         </div>
     );
