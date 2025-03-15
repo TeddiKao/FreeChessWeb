@@ -10,7 +10,11 @@ import useWebSocket from "../../hooks/useWebsocket";
 import { websocketBaseURL } from "../../constants/urls";
 import { getAccessToken } from "../../utils/tokenUtils";
 
-function GameplayActionButtons(){
+type GameplayActionButtonsProps = {
+    gameId: string | number;
+}
+
+function GameplayActionButtons({ gameId }: GameplayActionButtonsProps) {
     const actionWebsocketRef = useRef<WebSocket | null>(null);
 
 
@@ -18,10 +22,27 @@ function GameplayActionButtons(){
         useState(false);
 
     useEffect(() => {
-        const actionWebsocketUrl = `${websocketBaseURL}ws/action-server/?token=${getAccessToken()};`
+        const actionWebsocketUrl = `${websocketBaseURL}ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`
 
         actionWebsocketRef.current = useWebSocket(actionWebsocketUrl, handleOnMessage);
+        console.log(actionWebsocketRef.current)
+        
+        window.addEventListener("beforeunload", handleWindowUnload);
+
+        return () => {
+            if (actionWebsocketRef.current?.readyState === WebSocket.OPEN) {
+                actionWebsocketRef.current.close();
+            }
+
+            window.removeEventListener("beforeunload", handleWindowUnload);
+        }
     }, []);
+
+    function handleWindowUnload() {
+        if (actionWebsocketRef.current?.readyState === WebSocket.OPEN) {
+            actionWebsocketRef.current.close();
+        }
+    }
 
     function handleResignationPopupDisplay() {
         setResignationPopupVisible(true);
@@ -31,6 +52,8 @@ function GameplayActionButtons(){
         const resignationDetails = {
             type: "resign_request"
         }
+
+        console.log(actionWebsocketRef.current)
 
         actionWebsocketRef.current?.send(JSON.stringify(resignationDetails));
     }

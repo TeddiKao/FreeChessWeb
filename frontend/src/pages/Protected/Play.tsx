@@ -29,17 +29,9 @@ import MoveListPanel from "../../globalComponents/gameplaySidePanel/MoveListPane
 import MoveNavigationButtons from "../../globalComponents/gameplaySidePanel/MoveNavigationButtons.tsx";
 import { ArrowKeys } from "../../enums/general.ts";
 import GameplayActionButtons from "../../globalComponents/gameplaySidePanel/GameplayActionButtons.tsx";
-import useWebSocket from "../../hooks/useWebsocket.ts";
-import { websocketBaseURL } from "../../constants/urls.ts";
-import { getAccessToken } from "../../utils/tokenUtils.ts";
 
 function Play() {
     const location = useLocation();
-
-    const [gameEnded, setGameEnded] = useState<boolean>(false);
-    const [gameEndedCause, setGameEndedCause] =
-        useState<OptionalValue<string>>(null);
-    const [gameWinner, setGameWinner] = useState<OptionalValue<string>>(null);
 
     const [whitePlayerTimer, setWhitePlayerTimer] = useState<
         OptionalValue<number>
@@ -58,6 +50,10 @@ function Play() {
     const [positionIndex, setPositionIndex] = useState<number>(0);
 
     const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
+
+    const [hasGameEnded, setHasGameEnded] = useState<boolean>(false);
+    const [gameEndedCause, setGameEndedCause] = useState<string>("");
+    const [gameWinner, setGameWinner] = useState<string>("");
 
     const parsedFEN = positionList[positionIndex]?.["position"];
     const lastDraggedSquare =
@@ -240,82 +236,76 @@ function Play() {
     }
 
     return (
-        <GameEndedSetterContext.Provider value={setGameEnded}>
-            <GameEndedCauseSetterContext.Provider value={setGameEndedCause}>
-                <GameWinnerSetterContext.Provider value={setGameWinner}>
-                    <div className="multiplayer-playing-interface-container">
-                        <div className="main-chessboard">
-                            <div className="top-timer-wrapper">
-                                <Timer
-                                    playerColor={topTimerColor}
-                                    timeInSeconds={topTimerAmount}
-                                />
-                            </div>
+        <div className="multiplayer-playing-interface-container">
+            <div className="main-chessboard">
+                <div className="top-timer-wrapper">
+                    <Timer
+                        playerColor={topTimerColor}
+                        timeInSeconds={topTimerAmount}
+                    />
+                </div>
 
-                            <div className="chessboard-info">
-                                <MultiplayerChessboard
-                                    parsed_fen_string={parsedFEN}
-                                    orientation={boardOrientation}
-                                    gameId={gameId}
-                                    setMoveList={setMoveList}
-                                    setWhiteTimer={setWhitePlayerTimer}
-                                    setBlackTimer={setBlackPlayerTimer}
-                                    setPositionIndex={setPositionIndex}
-                                    setPositionList={setPositionList}
-                                    gameplaySettings={gameplaySettings}
-                                    lastDraggedSquare={lastDraggedSquare}
-                                    lastDroppedSquare={lastDroppedSquare}
-                                />
-                            </div>
+                <div className="chessboard-info">
+                    <MultiplayerChessboard
+                        parsed_fen_string={parsedFEN}
+                        orientation={boardOrientation}
+                        gameId={gameId}
+                        setMoveList={setMoveList}
+                        setWhiteTimer={setWhitePlayerTimer}
+                        setBlackTimer={setBlackPlayerTimer}
+                        setPositionIndex={setPositionIndex}
+                        setPositionList={setPositionList}
+                        gameplaySettings={gameplaySettings}
+                        lastDraggedSquare={lastDraggedSquare}
+                        lastDroppedSquare={lastDroppedSquare}
+                    />
+                </div>
 
-                            <GameOverModal
-                                visible={gameEnded}
-                                gameEndCause={gameEndedCause}
-                                gameWinner={gameWinner}
-                            />
+                <GameOverModal
+                    visible={hasGameEnded}
+                    gameEndCause={gameEndedCause}
+                    gameWinner={gameWinner}
+                />
 
-                            <ModalWrapper visible={settingsVisible}>
-                                <GameplaySettings
-                                    onClose={handleSettingsClose}
-                                    setGameplaySettings={setGameplaySettings}
-                                />
-                            </ModalWrapper>
+                <ModalWrapper visible={settingsVisible}>
+                    <GameplaySettings
+                        onClose={handleSettingsClose}
+                        setGameplaySettings={setGameplaySettings}
+                    />
+                </ModalWrapper>
 
-                            <div className="bottom-timer-wrapper">
-                                <Timer
-                                    playerColor={bottomTimerColor}
-                                    timeInSeconds={bottomTimerAmount}
-                                />
-                            </div>
-                        </div>
+                <div className="bottom-timer-wrapper">
+                    <Timer
+                        playerColor={bottomTimerColor}
+                        timeInSeconds={bottomTimerAmount}
+                    />
+                </div>
+            </div>
 
-                        <div className="board-actions">
-                            <img
-                                onClick={toggleBoardOrientation}
-                                className="flip-board-icon"
-                                src="/flip-board-icon.png"
-                            />
-                            <img
-                                className="settings-icon"
-                                src="/settings.svg"
-                                onClick={handleSettingsDisplay}
-                            />
-                        </div>
+            <div className="board-actions">
+                <img
+                    onClick={toggleBoardOrientation}
+                    className="flip-board-icon"
+                    src="/flip-board-icon.png"
+                />
+                <img
+                    className="settings-icon"
+                    src="/settings.svg"
+                    onClick={handleSettingsDisplay}
+                />
+            </div>
 
-                        <div className="gameplay-side-panel">
-                            <MoveListPanel moveList={moveList} />
-                            <MoveNavigationButtons
-                                backToStart={handleBackToStart}
-                                handlePreviousMove={handlePreviousMove}
-                                handleNextMove={handleNextMove}
-                                backToCurrentPosition={handleCurrentPosition}
-                            />
-                            <GameplayActionButtons />
-                        </div>
-                    </div>
-                </GameWinnerSetterContext.Provider>
-            </GameEndedCauseSetterContext.Provider>
-        </GameEndedSetterContext.Provider>
+            <div className="gameplay-side-panel">
+                <MoveListPanel moveList={moveList} />
+                <MoveNavigationButtons
+                    backToStart={handleBackToStart}
+                    handlePreviousMove={handlePreviousMove}
+                    handleNextMove={handleNextMove}
+                    backToCurrentPosition={handleCurrentPosition}
+                />
+                <GameplayActionButtons gameId={gameId} />
+            </div>
+        </div>
     );
 }
 
