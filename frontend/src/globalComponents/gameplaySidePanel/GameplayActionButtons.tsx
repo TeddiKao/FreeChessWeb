@@ -1,28 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import "../../styles/features/gameplay/gameplay-action-buttons.scss";
 import ConfirmationPopup from "../popups/ConfirmationPopup";
+
 import { RefObject } from "../../types/general";
 import { WebSocketEventTypes } from "../../enums/gameLogic";
 
-type GameplayActionButtonsProps = {
-    gameWebsocket: RefObject<WebSocket | null>;
-};
+import useWebSocket from "../../hooks/useWebsocket";
+import { websocketBaseURL } from "../../constants/urls";
+import { getAccessToken } from "../../utils/tokenUtils";
 
-function GameplayActionButtons({ gameWebsocket }: GameplayActionButtonsProps) {
-    if (!gameWebsocket) {
-        return null;
-    }
-    
+function GameplayActionButtons(){
+    const actionWebsocketRef = useRef<WebSocket | null>(null);
+
+
     const [resignationPopupVisible, setResignationPopupVisible] =
         useState(false);
 
     useEffect(() => {
-        if (gameWebsocket.current) {
-            gameWebsocket.current.onmessage = (event: MessageEvent) => {
-                handleOnMessage(event);
-            };
-        }
+        const actionWebsocketUrl = `${websocketBaseURL}ws/action-server/?token=${getAccessToken()};`
+
+        actionWebsocketRef.current = useWebSocket(actionWebsocketUrl, handleOnMessage);
     }, []);
 
     function handleResignationPopupDisplay() {
@@ -34,18 +32,13 @@ function GameplayActionButtons({ gameWebsocket }: GameplayActionButtonsProps) {
             type: "resign_request"
         }
 
-        gameWebsocket.current?.send(JSON.stringify(resignationDetails));
+        actionWebsocketRef.current?.send(JSON.stringify(resignationDetails));
     }
 
     function handleOnMessage(event: MessageEvent) {
-        const parsedEventData = JSON.parse(event.data);
-        const eventType = parsedEventData["type"];
+        console.log(JSON.parse(event.data));
 
-        switch (eventType) {
-            case WebSocketEventTypes.PLAYER_RESIGNED:
-                handleResignation(parsedEventData);
-                break;
-        }
+        handleResignation(JSON.parse(event.data));
     }
 
     function handleResignation(eventData: any) {
