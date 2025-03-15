@@ -14,6 +14,7 @@ from channels.db import database_sync_to_async
 from move_validation_api.utils.move_validation import validate_move, validate_castling
 from move_validation_api.utils.get_move_type import get_move_type
 from move_validation_api.utils.general import *
+from move_validation_api.utils.result_detection import get_is_checkmated, get_is_stalemated
 
 from .models import ChessGame
 from .utils.algebraic_notation_parser import get_algebraic_notation
@@ -427,6 +428,11 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 			new_position_list = await self.get_game_attribute(chess_game_model, "position_list")
 			new_move_list = await self.get_game_attribute(chess_game_model, "move_list")
+			new_parsed_fen = await chess_game_model.get_full_parsed_fen()
+
+			opposing_color = get_opposite_color(piece_color.lower())
+			is_checkmated = get_is_checkmated(new_parsed_fen, opposing_color)
+			is_stalemated = get_is_stalemated(new_parsed_fen, opposing_color)
 
 			piece_color = parsed_move_data["piece_color"]
 			position_index = calculate_position_index(
@@ -448,9 +454,21 @@ class GameConsumer(AsyncWebsocketConsumer):
 				"move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
 				"move_made_by": event["move_made_by"],
 				"move_is_valid": move_is_valid,
-				"new_parsed_fen": await chess_game_model.get_full_parsed_fen(),
+				"new_parsed_fen": new_parsed_fen,
 				"new_position_index": position_index,
 			}))
+
+			if is_checkmated:
+				await self.send(json.dumps({
+					"type": "player_checkmated",
+					"winning_color": piece_color,
+					"winning_player": event["move_made_by"],
+				}))
+
+			if is_stalemated:
+				await self.send(json.dumps({
+					"type": "player_stalemated",
+				}))
 
 			if timer_task:
 				await self.send(json.dumps({
