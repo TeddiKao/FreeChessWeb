@@ -113,8 +113,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 						{
 							"type": "timer_decremented",
 							"white_player_clock": white_player_clock,
-							"black_player_clock": black_player_clock,
-							"side_to_move": side_to_move.lower(),
+									"black_player_clock": black_player_clock,
+									"side_to_move": side_to_move.lower(),
 						}
 					)
 
@@ -207,6 +207,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 			del new_board_placement[original_kingside_rook_square]
 
 		return new_board_placement
+
+	async def end_game(self, chess_game_model: ChessGame, game_result: str):
+		await self.update_game_attribute(chess_game_model, "game_status", "Ended")
+		await self.update_game_attribute(chess_game_model, "game_result", game_result)
 
 	async def handle_pawn_promotion(self, move_info: dict, original_board_placement: dict):
 		destination_square = move_info["destination_square"]
@@ -376,14 +380,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
 	async def receive(self, text_data):
-		print(f"Received message: {text_data}")
 
 		await self.channel_layer.group_send(
 			self.room_group_name,
 			{
 				"type": "move_received",
 				"move_data": text_data,
-				"move_made_by": self.scope["user"].username
+						"move_made_by": self.scope["user"].username
 			}
 		)
 
@@ -424,6 +427,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 		current_move_number = await self.get_game_attribute(chess_game_model, "current_move")
 
 		if move_is_valid:
+			piece_color = parsed_move_data["piece_color"]
+
 			await self.update_position(chess_game_model, parsed_move_data)
 
 			new_position_list = await self.get_game_attribute(chess_game_model, "position_list")
@@ -434,7 +439,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 			is_checkmated = get_is_checkmated(new_parsed_fen, opposing_color)
 			is_stalemated = get_is_stalemated(new_parsed_fen, opposing_color)
 
-			piece_color = parsed_move_data["piece_color"]
 			position_index = calculate_position_index(
 				piece_color, current_move_number)
 
@@ -459,6 +463,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 			}))
 
 			if is_checkmated:
+				
+
 				await self.send(json.dumps({
 					"type": "player_checkmated",
 					"winning_color": piece_color,
@@ -494,6 +500,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 	async def resume_timer(self, event):
 		asyncio.create_task(self.handle_timer_decrement())
 
+
 class ResignConsumer(AsyncWebsocketConsumer):
 	@database_sync_to_async
 	def get_chess_game(self, chess_game_id) -> ChessGame:
@@ -511,7 +518,7 @@ class ResignConsumer(AsyncWebsocketConsumer):
 	async def end_game(self, chess_game_model: ChessGame, game_result: str):
 		await self.update_game_attribute(chess_game_model, "game_status", "Ended")
 		await self.update_game_attribute(chess_game_model, "game_result", game_result)
-		
+
 	async def get_game_result_from_resigning_player(self, chess_game_model: ChessGame, resigning_player):
 		white_player = await self.get_game_attribute(chess_game_model, "white_player")
 		black_player = await self.get_game_attribute(chess_game_model, "black_player")
@@ -521,13 +528,11 @@ class ResignConsumer(AsyncWebsocketConsumer):
 		elif resigning_player == black_player:
 			return "White won"
 
-
 	async def connect(self):
 		query_string: bytes = self.scope.get("query_string")
 		decoded_query_string = query_string.decode()
 
 		game_id = int(parse_qs(decoded_query_string)["gameId"][0])
-		print(f"Game id: {game_id}")
 
 		await self.accept()
 
@@ -540,9 +545,7 @@ class ResignConsumer(AsyncWebsocketConsumer):
 			self.channel_name
 		)
 
-	async def receive(self, text_data = None, bytes_data = None):
-		print("Received resingation request")
-
+	async def receive(self, text_data=None, bytes_data=None):
 		resigner = self.scope["user"].username
 
 		chess_game_model = await self.get_chess_game(self.game_id)
@@ -556,12 +559,9 @@ class ResignConsumer(AsyncWebsocketConsumer):
 		)
 
 		await self.end_game(chess_game_model, "Resigned")
-			
+
 	async def player_resigned(self, event):
 		await self.send(json.dumps({
 			"type": "player_resigned",
 			"resigner": event["resigner"],
 		}))
-          
-    
-        
