@@ -153,6 +153,14 @@ function MultiplayerChessboard({
                 handleMoveListUpdate(parsedEventData);
                 break;
 
+            case WebSocketEventTypes.PLAYER_CHECKMATED:
+                handleCheckmate(parsedEventData);
+                break;
+
+            case WebSocketEventTypes.PLAYER_STALEMATED:
+                handleStalemate(parsedEventData);
+                break;
+
             default:
                 break;
         }
@@ -162,6 +170,14 @@ function MultiplayerChessboard({
         const currentPosition = await fetchCurrentPosition(Number(gameId));
 
         setParsedFENString(currentPosition);
+    }
+
+    function handleStalemate(parsedEventData: any) {
+
+    }
+
+    function handleCheckmate(parsedEventData: any) {
+
     }
 
     function handleTimerChange(parsedEventData: TimerChangedEventData) {
