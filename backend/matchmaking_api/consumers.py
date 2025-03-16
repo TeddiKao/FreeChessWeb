@@ -180,7 +180,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
         self.increment = int(increment)
         self.match_player_task = create_task(self.match_player())
 
-        self.room_group_name = f"user_{self.scope["user"].id}"
+        self.room_group_name = f"user_{user.id}"
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
@@ -194,7 +194,6 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
         }))
 
     async def disconnect(self, code):
-
         try:
             wating_player_model = await self.get_waiting_player_model_from_user(self.scope["user"])
         except WaitingPlayer.DoesNotExist:
