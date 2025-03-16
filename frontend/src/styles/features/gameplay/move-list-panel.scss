@@ -42,6 +42,10 @@
 	background-color: hsl(0, 0%, 90%);
 }
 
+.notated-move:hover {
+	cursor: pointer;
+}
+
 .move-pair-container {
 	display: grid;
 	grid-template-columns: 100px 100px;

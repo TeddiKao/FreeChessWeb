@@ -299,7 +299,7 @@ function Play() {
             </div>
 
             <div className="gameplay-side-panel">
-                <MoveListPanel moveList={moveList} />
+                <MoveListPanel moveList={moveList} setPositionIndex={setPositionIndex}/>
                 <MoveNavigationButtons
                     backToStart={handleBackToStart}
                     handlePreviousMove={handlePreviousMove}
