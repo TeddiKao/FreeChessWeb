@@ -1,7 +1,13 @@
 import "../../styles/modals/game-over-modal.scss";
 import { capitaliseFirstLetter } from "../../utils/generalUtils";
 
-function GameOverModal({ visible, gameEndCause, gameWinner }) {
+type GameOverModalProps = {
+    visible: boolean,
+    gameEndCause: string,
+    gameWinner: string | null,
+}
+
+function GameOverModal({ visible, gameEndCause, gameWinner }: GameOverModalProps) {
     if (!visible) {
         return null;
     }
