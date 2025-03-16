@@ -10,18 +10,19 @@ import {
 import "../../styles/components/chessboard/board-actions.scss";
 import "../../styles/pages/pass-and-play.scss";
 
-import Chessboard from "../../globalComponents/chessboards/Chessboard.js";
-import GameOverModal from "../../globalComponents/modals/GameOverModal.js";
-import GameplaySettings from "../../globalComponents/modals/GameplaySettings.js";
-import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.js";
-import useGameplaySettings from "../../hooks/useGameplaySettings.js";
+import Chessboard from "../../globalComponents/chessboards/Chessboard.tsx";
+import GameOverModal from "../../globalComponents/modals/GameOverModal.tsx";
+import GameplaySettings from "../../globalComponents/modals/GameplaySettings.tsx";
+import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.tsx";
+import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
+import { ParsedFENString } from "../../types/gameLogic.ts";
 
 function PassAndPlay() {
-    const [parsedFEN, setParsedFEN] = useState(null);
+    const [parsedFEN, setParsedFEN] = useState<ParsedFENString | null>(null);
 
-    const [gameEnded, setGameEnded] = useState(false);
-    const [gameEndedCause, setGameEndedCause] = useState(null);
-    const [gameWinner, setGameWinner] = useState(null);
+    const [gameEnded, setGameEnded] = useState<boolean>(false);
+    const [gameEndedCause, setGameEndedCause] = useState<string | null>(null);
+    const [gameWinner, setGameWinner] = useState<string | null>(null);
 
     const initialGameplaySettings = useGameplaySettings();
     const [gameplaySettings, setGameplaySettings] = useState(
@@ -62,7 +63,7 @@ function PassAndPlay() {
 
     async function getParsedFEN() {
         const startingPositionFEN =
-            "8/4k3/p5K1/1p2BP1p/1pp3pp/8/8/8 w - - 0 1";
+            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
         try {
             const fetchedFEN = await fetchFen(startingPositionFEN);
@@ -80,7 +81,7 @@ function PassAndPlay() {
                         <div className="main-chessboard">
                             <div className="chessboard-wrapper">
                                 <Chessboard
-                                    parsed_fen_string={parsedFEN}
+                                    parsed_fen_string={parsedFEN as ParsedFENString}
                                     orientation={boardOrientation}
                                     setBoardOrientation={setBoardOrientation}
                                     flipOnMove={false}

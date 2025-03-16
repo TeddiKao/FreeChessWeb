@@ -3,8 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import "../../styles/features/gameplay/gameplay-action-buttons.scss";
 import ConfirmationPopup from "../popups/ConfirmationPopup";
 
-import { RefObject, StateSetterFunction } from "../../types/general";
-import { WebSocketEventTypes } from "../../enums/gameLogic";
+import { StateSetterFunction } from "../../types/general";
 
 import useWebSocket from "../../hooks/useWebsocket";
 import { websocketBaseURL } from "../../constants/urls";
@@ -12,31 +11,24 @@ import { getAccessToken } from "../../utils/tokenUtils";
 
 type GameplayActionButtonsProps = {
     gameId: string | number;
-    setGameEnded: StateSetterFunction<boolean>;
-    setGameEndedCause: StateSetterFunction<string>;
-    setGameWinner: StateSetterFunction<string>;
-};
+    setGameEnded: StateSetterFunction<boolean>,
+    setGameEndedCause: StateSetterFunction<string>,
+    setGameWinner: StateSetterFunction<string>,
+}
 
-function GameplayActionButtons({
-    gameId,
-    setGameEnded,
-    setGameEndedCause,
-    setGameWinner,
-}: GameplayActionButtonsProps) {
+function GameplayActionButtons({ gameId, setGameEnded, setGameEndedCause, setGameWinner }: GameplayActionButtonsProps) {
     const actionWebsocketRef = useRef<WebSocket | null>(null);
+
 
     const [resignationPopupVisible, setResignationPopupVisible] =
         useState(false);
 
     useEffect(() => {
-        const actionWebsocketUrl = `${websocketBaseURL}ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`;
+        const actionWebsocketUrl = `${websocketBaseURL}ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`
 
-        actionWebsocketRef.current = useWebSocket(
-            actionWebsocketUrl,
-            handleOnMessage
-        );
-        console.log(actionWebsocketRef.current);
-
+        actionWebsocketRef.current = useWebSocket(actionWebsocketUrl, handleOnMessage);
+        console.log(actionWebsocketRef.current)
+        
         window.addEventListener("beforeunload", handleWindowUnload);
 
         return () => {
@@ -45,7 +37,7 @@ function GameplayActionButtons({
             }
 
             window.removeEventListener("beforeunload", handleWindowUnload);
-        };
+        }
     }, []);
 
     function handleWindowUnload() {
@@ -60,10 +52,10 @@ function GameplayActionButtons({
 
     function handleResignationConfirmation() {
         const resignationDetails = {
-            type: "resign_request",
-        };
+            type: "resign_request"
+        }
 
-        console.log(actionWebsocketRef.current);
+        console.log(actionWebsocketRef.current)
 
         actionWebsocketRef.current?.send(JSON.stringify(resignationDetails));
     }

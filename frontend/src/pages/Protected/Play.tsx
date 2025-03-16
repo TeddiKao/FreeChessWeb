@@ -258,6 +258,9 @@ function Play() {
                         gameplaySettings={gameplaySettings}
                         lastDraggedSquare={lastDraggedSquare}
                         lastDroppedSquare={lastDroppedSquare}
+                        setGameEnded={setHasGameEnded}
+                        setGameEndedCause={setGameEndedCause}
+                        setGameWinner={setGameWinner}
                     />
                 </div>
 
@@ -303,7 +306,7 @@ function Play() {
                     handleNextMove={handleNextMove}
                     backToCurrentPosition={handleCurrentPosition}
                 />
-                
+
                 <GameplayActionButtons
                     setGameEnded={setHasGameEnded}
                     setGameEndedCause={setGameEndedCause}

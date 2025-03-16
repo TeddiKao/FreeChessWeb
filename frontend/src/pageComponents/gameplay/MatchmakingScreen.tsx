@@ -41,15 +41,26 @@ function MatchmakingScreen({
 
     const navigate = useNavigate();
 
+
     useEffect(() => {
         async function onMatchFound() {
             if (matchFound) {
+                console.log(matchmakingWebsocketRef.current)
+
+                if (matchmakingWebsocketRef.current) {
+                    if (matchmakingWebsocketRef.current.readyState === WebSocket.OPEN) {
+                        matchmakingWebsocketRef.current.close();
+                        console.log("Closed WebSocket successfully!")
+                    }
+                }
+
                 const gameSetupInfo = {
                     baseTime,
                     increment,
                     gameId: gameIdRef.current,
                     assignedColor: await getAssignedColor(),
                 };
+
 
                 navigate("/play", {
                     state: gameSetupInfo,

@@ -29,6 +29,7 @@ def get_is_stalemated(current_fen: dict, king_color: str) -> bool:
         all_legal_moves += get_legal_moves(
             move_info, board_placement, en_passant_target_square, castling_rights)
 
+    
     legal_moves_num = len(all_legal_moves)
     if legal_moves_num == 0:
         if not king_in_check:

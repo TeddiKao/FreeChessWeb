@@ -90,6 +90,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 	def save_chess_game_model(self, chess_game_model: ChessGame):
 		chess_game_model.save()
 
+	async def end_game(self, chess_game_model: ChessGame, game_result: str):
+		await self.update_game_attribute(chess_game_model, "game_status", "Ended")
+		await self.update_game_attribute(chess_game_model, "game_result", game_result)
+
 	async def handle_timer_decrement(self):
 		chess_game = await self.get_chess_game(self.game_id)
 
@@ -463,7 +467,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			}))
 
 			if is_checkmated:
-				
+				await self.end_game(chess_game_model, f"{piece_color.capitalize()} won")
 
 				await self.send(json.dumps({
 					"type": "player_checkmated",
@@ -472,6 +476,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 				}))
 
 			if is_stalemated:
+				await self.end_game(chess_game_model, "Draw")
+
 				await self.send(json.dumps({
 					"type": "player_stalemated",
 				}))

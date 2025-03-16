@@ -238,7 +238,6 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
             await self.close()
 
     async def player_matched(self, event):
-
         await self.send(json.dumps({
             "type": "match_found",
             "match_found": event["match_found"],
@@ -246,3 +245,5 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
             "black_player": event["black_player"],
             "game_id": event["game_id"]
         }))
+
+        

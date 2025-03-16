@@ -53,6 +53,10 @@ function MultiplayerChessboard({
     setMoveList,
     lastDraggedSquare,
     lastDroppedSquare,
+
+    setGameEnded,
+    setGameWinner,
+    setGameEndedCause
 }: MultiplayerChessboardProps) {
     const [previousClickedSquare, setPreviousClickedSquare] =
         useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -173,11 +177,14 @@ function MultiplayerChessboard({
     }
 
     function handleStalemate(parsedEventData: any) {
-
+        setGameEnded(true);
+        setGameEndedCause("Stalemate");
     }
 
     function handleCheckmate(parsedEventData: any) {
-
+        setGameEnded(true);
+        setGameEndedCause("Checkmate");
+        setGameWinner(parsedEventData["winning_color"])
     }
 
     function handleTimerChange(parsedEventData: TimerChangedEventData) {
@@ -205,8 +212,6 @@ function MultiplayerChessboard({
 
         playAudio(eventData["move_type"]);
     }
-
-    function onError() {}
 
     async function handleOnDrop() {
         clearSquaresStyling();
