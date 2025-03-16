@@ -105,6 +105,10 @@ class ChessGame(models.Model):
             "fullmove_number": self.current_move
 		}
 	
+	@database_sync_to_async
+	def async_get_game_attribute(self, attribute_name):
+		return getattr(self, attribute_name)
+	
 class UserGameplaySettings(models.Model):
 	user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
 	auto_queen = models.BooleanField(default=False, blank=False, null=False)

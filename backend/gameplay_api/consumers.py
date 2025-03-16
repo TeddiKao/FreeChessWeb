@@ -21,7 +21,6 @@ from .utils.algebraic_notation_parser import get_algebraic_notation
 
 timer_tasks_info = {}
 
-
 def calculate_position_index(piece_color: str, move_number: int):
     if piece_color.lower() == "white":
         return (move_number - 1) * 2 + 1
@@ -525,6 +524,23 @@ class ResignConsumer(AsyncWebsocketConsumer):
 		await self.update_game_attribute(chess_game_model, "game_status", "Ended")
 		await self.update_game_attribute(chess_game_model, "game_result", game_result)
 
+	async def get_game_winner_from_resigning_player(self, chess_game_model: ChessGame, resigning_player):
+		white_player = await chess_game_model.async_get_game_attribute("white_player")
+		black_player = await chess_game_model.async_get_game_attribute("black_player")
+
+		print(type(white_player), type(black_player))
+		print(white_player, black_player)
+
+		white_player_username = await white_player.async_get_player_username()
+		black_player_username = await black_player.async_get_player_username()
+
+		print(white_player_username, black_player_username)
+
+		if resigning_player == white_player_username:
+			return "Black"
+		elif resigning_player == black_player_username:
+			return "White"
+
 	async def get_game_result_from_resigning_player(self, chess_game_model: ChessGame, resigning_player):
 		white_player = await self.get_game_attribute(chess_game_model, "white_player")
 		black_player = await self.get_game_attribute(chess_game_model, "black_player")
@@ -555,12 +571,14 @@ class ResignConsumer(AsyncWebsocketConsumer):
 		resigner = self.scope["user"].username
 
 		chess_game_model = await self.get_chess_game(self.game_id)
+		winning_color = await self.get_game_winner_from_resigning_player(chess_game_model, resigner)
 
 		await self.channel_layer.group_send(
 			self.room_group_name,
 			{
 				"type": "player_resigned",
-				"resigner": resigner
+				"resigner": resigner,
+				"winning_color": winning_color,
 			}
 		)
 
@@ -570,4 +588,5 @@ class ResignConsumer(AsyncWebsocketConsumer):
 		await self.send(json.dumps({
 			"type": "player_resigned",
 			"resigner": event["resigner"],
+			"winning_color": event["winning_color"]
 		}))
