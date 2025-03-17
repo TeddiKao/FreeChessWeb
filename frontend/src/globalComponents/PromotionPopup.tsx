@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
-import "../styles/components/chessboard/chessboard.scss";
+import "../styles/components/chessboard/promotion-popup.scss";
 import { PieceColor, PieceType } from "../types/gameLogic";
 import { OptionalValue } from "../types/general";
 
@@ -38,7 +38,7 @@ function PromotionPopup({
             : "bottom";
     const promotionMenu: any = useRef(null);
 
-    function handleClickOutside(event: any) {
+    function handleClickOutside(event: MouseEvent) {
         if (
             promotionMenu.current &&
             !promotionMenu.current.contains(event.target)

@@ -2,7 +2,7 @@ from rest_framework.serializers import ModelSerializer
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
-from .password_validators import MinimumLengthValidator, UppercaseLetterValidator, LowercaseLetterValidator, DigitValidator
+from .password_validators import MinimumLengthValidator, UppercaseLetterValidator, LowercaseLetterValidator, CommonPasswordValidator, DigitValidator
 
 def format_detected_error(detected_error: str):
 	return detected_error[2:-2]
@@ -16,7 +16,8 @@ class UserSerializer(ModelSerializer):
 			MinimumLengthValidator(min_length=8),
 			LowercaseLetterValidator(),
 			UppercaseLetterValidator(),
-			DigitValidator()
+			DigitValidator(),
+			CommonPasswordValidator()
 		]
 
 		for password_validator in password_validators:

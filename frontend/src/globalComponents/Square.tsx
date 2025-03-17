@@ -26,6 +26,9 @@ function Square({
 }: SquareProps) {
     let startingSquare: OptionalValue<string> = null;
 
+    if (displayPromotionPopup) {
+    }
+
     const [popupIsOpen, setPopupIsOpen] = useState<boolean>(
         displayPromotionPopup
     );

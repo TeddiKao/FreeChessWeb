@@ -56,7 +56,6 @@ function handleEnPassant(
     destinationSquare: ChessboardSquareIndex
 ): ParsedFENString {
     const enPassantSquare: OptionalValue<number> = fenString["en_passant_target_square"];
-    console.log(`EnPassant: ${enPassantSquare}`)
     
     if (!enPassantSquare) {
         return fenString;
@@ -73,8 +72,6 @@ function handleEnPassant(
 
     const pawnToCaptureLocation: number =
         getEnPassantPawnLocation(enPassantSquare);
-
-    console.log(`Pawn location: ${pawnToCaptureLocation}`);
 
     delete updatedBoardPlacement[`${pawnToCaptureLocation}`];
 

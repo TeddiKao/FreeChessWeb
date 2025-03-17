@@ -173,7 +173,7 @@ function Chessboard({
             return;
         }
 
-        console.log(pieceTypeToValidate);
+        
 
         const lowercasedPieceType =
             pieceTypeToValidate.toLowerCase() as Lowercase<
@@ -690,6 +690,8 @@ function Chessboard({
         moveMethod: string,
         autoQueen: boolean = false
     ) {
+        
+
         if (!parsedFENString) {
             return;
         }
@@ -707,11 +709,11 @@ function Chessboard({
             return;
         }
 
-        if (!unpromotedBoardPlacementRef) {
+        if (!unpromotedBoardPlacementRef.current) {
             return;
         }
 
-        console.log(
+        
             await updatePromotedBoardPlacment(
                 parsedFENString,
                 color,
@@ -733,6 +735,8 @@ function Chessboard({
                 promotionEndingSquare,
                 unpromotedBoardPlacementRef
             );
+
+        
 
         setParsedFENString(updatedBoardPlacement);
 
@@ -790,6 +794,11 @@ function Chessboard({
                     const promotionRank =
                         pieceColor.toLowerCase() === "white" ? 7 : 0;
                     const pieceRank = getRank(boardPlacementSquare);
+
+                    if (pieceType.toLowerCase() === "pawn" && promotionRank === pieceRank) {
+                        
+                        
+                    }
 
                     squareElements.push(
                         <Square

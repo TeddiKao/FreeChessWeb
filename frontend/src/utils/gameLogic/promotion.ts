@@ -119,8 +119,6 @@ function handlePromotionCaptureStorage(
     const destinationFile: number = getFile(destinationSquare);
     const destinationRank: number = getRank(destinationSquare);
 
-    console.log(destinationRank, pieceColor);
-
     if (!isPawnPromotion(pieceColor, destinationRank)) {
         return;
     }
@@ -131,14 +129,21 @@ function handlePromotionCaptureStorage(
     console.log("Updated unpromoted board placement");
 
     if (!isCapture(startFile, destinationFile)) {
+        console.log("Not capturing piece while promoting!")
+
         if (autoQueen) {
+            console.log("Auto queening!")
             handlePawnPromotion(pieceColor, "queen", moveMethod, true);
         }
 
         return;
     }
 
+    console.log("Capturing piece while promoting!");
+    console.log(`Auto queening: ${autoQueen}`)
+
     if (autoQueen) {
+        console.log("Auto queening!")
         handlePawnPromotion(pieceColor, "queen", moveMethod, true);
         return;
     }
