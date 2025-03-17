@@ -56,7 +56,9 @@ function MultiplayerChessboard({
 
     setGameEnded,
     setGameWinner,
-    setGameEndedCause
+    setGameEndedCause,
+
+    squareSize
 }: MultiplayerChessboardProps) {
     const [previousClickedSquare, setPreviousClickedSquare] =
         useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -83,6 +85,9 @@ function MultiplayerChessboard({
     const [boardOrientation, setBoardOrientation] = useState(orientation);
 
     const gameWebsocketRef = useRef<WebSocket | null>(null);
+    const chessboardStyles = {
+        gridTemplateColumns: `repeat(8, ${squareSize}px`
+    }
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -716,6 +721,7 @@ function MultiplayerChessboard({
                             previousDroppedSquare={previousDroppedSquare}
                             orientation={boardOrientation}
                             moveMethod={lastUsedMoveMethod}
+                            squareSize={squareSize}
                         />
                     );
                 } else {
@@ -735,6 +741,7 @@ function MultiplayerChessboard({
                             previousDroppedSquare={previousDroppedSquare}
                             orientation={boardOrientation}
                             moveMethod={lastUsedMoveMethod}
+                            squareSize={squareSize}
                         />
                     );
                 }
@@ -746,7 +753,7 @@ function MultiplayerChessboard({
 
     return (
         <>
-            <div className="chessboard-container">{generateChessboard()}</div>
+            <div style={chessboardStyles} className="chessboard-container">{generateChessboard()}</div>
         </>
     );
 }

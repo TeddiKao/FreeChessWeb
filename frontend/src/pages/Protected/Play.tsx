@@ -261,6 +261,7 @@ function Play() {
                         setGameEnded={setHasGameEnded}
                         setGameEndedCause={setGameEndedCause}
                         setGameWinner={setGameWinner}
+                        squareSize={58}
                     />
                 </div>
 
