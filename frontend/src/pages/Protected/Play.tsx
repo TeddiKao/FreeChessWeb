@@ -4,12 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import MultiplayerChessboard from "../../globalComponents/chessboards/MultiplayerChessboard.js";
 import Timer from "../../pageComponents/gameplay/Timer.tsx";
 
-import {
-    GameEndedSetterContext,
-    GameEndedCauseSetterContext,
-    GameWinnerSetterContext,
-} from "../../contexts/chessboardContexts.js";
-
 import "../../styles/pages/play.scss";
 import "../../styles/components/chessboard/board-actions.scss";
 
@@ -77,6 +71,10 @@ function Play() {
         updatePositionList();
         updateMoveList();
     }, []);
+
+    useEffect(() => {
+        setPositionIndex(positionList.length - 1);
+    }, [positionList]);
 
     function handleKeyDown(event: KeyboardEvent) {
         switch (event.key) {
@@ -159,6 +157,8 @@ function Play() {
         const positionList = await fetchPositionList(
             Number(location.state?.gameId)
         );
+
+        console.log(positionList);
 
         setPositionList(positionList);
     }

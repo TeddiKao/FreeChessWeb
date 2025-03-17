@@ -249,5 +249,5 @@ export {
     fetchCurrentPosition,
     fetchTimer,
     fetchPositionList,
-    fetchMoveList
+    fetchMoveList,
 };

@@ -27,8 +27,6 @@ import {
 import { clearSquaresStyling, getRank, getFile } from "../../utils/boardUtils";
 import {
     fetchCurrentPosition,
-    fetchLastDraggedSquare,
-    fetchLastDroppedSquare,
     fetchLegalMoves,
     fetchMoveIsValid,
 } from "../../utils/apiUtils";
@@ -105,6 +103,7 @@ function MultiplayerChessboard({
 
     useEffect(() => {
         updateCurrentPosition();
+        console.log(lastDraggedSquare, lastDroppedSquare);
     }, []);
 
     useEffect(() => {
@@ -178,17 +177,10 @@ function MultiplayerChessboard({
         setParsedFENString(currentPosition);
     }
 
-    async function updateLastDraggedSquare() {
-        const lastDraggedSquare = await fetchLastDraggedSquare(Number(gameId));
-
-        setPreviousDraggedSquare(lastDraggedSquare);
+    function updateLastMovedSquares() {
+        
     }
 
-    async function updateLastDroppedSquare() {
-        const lastDroppedSquare = await fetchLastDroppedSquare(Number(gameId));
-
-        setPreviousDroppedSquare(lastDroppedSquare);
-    }
 
     function handleStalemate(parsedEventData: any) {
         setGameEnded(true);
