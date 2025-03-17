@@ -722,8 +722,7 @@ function Chessboard({
                 promotionStartingSquare,
                 promotionEndingSquare,
                 unpromotedBoardPlacementRef
-            )
-        );
+            ) 
 
         const [updatedBoardPlacement, moveType]: any =
             await updatePromotedBoardPlacment(
