@@ -27,7 +27,6 @@ class UserSerializer(ModelSerializer):
 				detected_errors.append(formatted_error)
 
 		if len(detected_errors) > 0:
-			print(detected_errors)
 			raise ValidationError(detected_errors)
 
 		return data

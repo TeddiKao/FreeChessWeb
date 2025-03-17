@@ -4,6 +4,7 @@ import api from "../api.js";
 import "../styles/auth-form.scss";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants/tokens.js";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 
 type AuthFormProps = {
     method: string;
@@ -33,6 +34,8 @@ function AuthForm({ method }: AuthFormProps) {
     const [email, setEmail] = useState<string>("");
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+
+    const [passwordErrors, setPasswordErrors] = useState<Array<string>>([]);
 
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
@@ -88,13 +91,15 @@ function AuthForm({ method }: AuthFormProps) {
     async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        try {
-            const userCredentials =
-                method === "login"
-                    ? { email, password }
-                    : { email, username, password };
+        const userCredentials =
+            method === "login"
+                ? { email, password }
+                : { email, username, password };
 
-            const response = await api.post(url, userCredentials);
+        let response;
+
+        try {
+            response = await api.post(url, userCredentials);
 
             if (method === "login") {
                 handleLogin(response.data.access, response.data.refresh);
@@ -115,8 +120,14 @@ function AuthForm({ method }: AuthFormProps) {
                     console.log(error);
                 }
             }
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            if (!(error instanceof AxiosError)) {
+                return;
+            }
+
+            if (error.status === 400) {
+                setPasswordErrors(error.response?.data["non_field_errors"])
+            }
         }
     }
 
@@ -127,30 +138,37 @@ function AuthForm({ method }: AuthFormProps) {
         <div className="auth-form-container">
             <h1>{formTitle}</h1>
             <form className="auth-form" onSubmit={handleFormSubmit}>
-                <input
-                    type="email"
-                    className="email-input"
-                    value={email}
-                    onChange={handleEmailChange}
-                    placeholder="Email"
-                />
-                <br />
+                <div className="email-input-container">
+                    <input
+                        type="email"
+                        className="email-input"
+                        value={email}
+                        onChange={handleEmailChange}
+                        placeholder="Email"
+                    />
+                    <br />
+                </div>
 
                 {shouldRenderUsernameField ? (
-                    <UsernameField
-                        username={username}
-                        handleUsernameChange={handleUsernameChange}
-                    />
+                    <div className="username-field-container">
+                        <UsernameField
+                            username={username}
+                            handleUsernameChange={handleUsernameChange}
+                        />
+                    </div>
                 ) : null}
 
-                <input
-                    type={isPasswordVisible ? "text" : "password"}
-                    className="password-input"
-                    value={password}
-                    onChange={handlePasswordChange}
-                    placeholder="Password"
-                />
-                <br />
+                <div className="password-input-container">
+                    <input
+                        type={isPasswordVisible ? "text" : "password"}
+                        className="password-input"
+                        value={password}
+                        onChange={handlePasswordChange}
+                        placeholder="Password"
+                    />
+                    <br />
+                </div>
+
                 <div className="show-password-container">
                     <input
                         type="checkbox"
