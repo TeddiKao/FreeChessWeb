@@ -69,6 +69,7 @@ function Chessboard({
     setBoardOrientation,
     flipOnMove,
     gameplaySettings,
+    squareSize
 }: ChessboardProps) {
     const [previousClickedSquare, setPreviousClickedSquare] =
         useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -102,6 +103,10 @@ function Chessboard({
     const selectingPromotionRef = useRef<boolean>(false);
     const unpromotedBoardPlacementRef =
         useRef<OptionalValue<ParsedFENString>>(null);
+
+    const chessboardStyles = {
+        gridTemplateColumns: `repeat(8, ${squareSize}px)`
+    }
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -816,6 +821,7 @@ function Chessboard({
                             previousDraggedSquare={previousDraggedSquare}
                             previousDroppedSquare={previousDroppedSquare}
                             moveMethod={lastUsedMoveMethod}
+                            squareSize={squareSize}
                         />
                     );
                 } else {
@@ -835,6 +841,7 @@ function Chessboard({
                             previousDraggedSquare={previousDraggedSquare}
                             previousDroppedSquare={previousDroppedSquare}
                             moveMethod={lastUsedMoveMethod}
+                            squareSize={squareSize}
                         />
                     );
                 }
@@ -846,7 +853,7 @@ function Chessboard({
 
     return (
         <>
-            <div className="chessboard-container">{generateChessboard()}</div>
+            <div style={chessboardStyles} className="chessboard-container">{generateChessboard()}</div>
         </>
     );
 }

@@ -103,7 +103,6 @@ function MultiplayerChessboard({
 
     useEffect(() => {
         updateCurrentPosition();
-        console.log(lastDraggedSquare, lastDroppedSquare);
     }, []);
 
     useEffect(() => {

@@ -85,6 +85,7 @@ function PassAndPlay() {
                                     orientation={boardOrientation}
                                     setBoardOrientation={setBoardOrientation}
                                     flipOnMove={false}
+                                    squareSize={70}
                                     gameplaySettings={gameplaySettings}
                                 />
                             </div>

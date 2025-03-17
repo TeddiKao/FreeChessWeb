@@ -10,6 +10,7 @@ import { ParsedFENString, PieceColor, PieceType } from "../types/gameLogic.ts";
 interface DisplayChessboardProps {
     parsed_fen_string: ParsedFENString;
     orientation: string;
+    squareSize?: number;
 }
 
 interface ChessboardProps extends DisplayChessboardProps {
@@ -61,6 +62,7 @@ interface EmptySquareProps {
     previousDraggedSquare: OptionalValue<ChessboardSquareIndex>;
     previousDroppedSquare: OptionalValue<ChessboardSquareIndex>;
     moveMethod: OptionalValue<string>;
+    squareSize?: number
 }
 
 interface FilledSquareProps {

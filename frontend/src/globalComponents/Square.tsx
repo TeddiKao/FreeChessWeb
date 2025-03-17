@@ -3,7 +3,7 @@ import { useDrag, useDrop } from "react-dnd";
 import "../styles/components/chessboard/square.scss";
 import PromotionPopup from "./PromotionPopup.tsx";
 import React, { useEffect, useState } from "react";
-import { isSquareLight } from "../utils/boardUtils";
+import { getFile, getRank, isSquareLight, isSquareOnFileEdge, isSquareOnRankEdge } from "../utils/boardUtils";
 import { SquareProps } from "../interfaces/chessboard.ts";
 import { OptionalValue } from "../types/general.ts";
 import { capitaliseFirstLetter } from "../utils/generalUtils.ts";
@@ -23,16 +23,23 @@ function Square({
     previousDroppedSquare,
     orientation,
     moveMethod,
+    squareSize
 }: SquareProps) {
     let startingSquare: OptionalValue<string> = null;
-
-    if (displayPromotionPopup) {
-    }
 
     const [popupIsOpen, setPopupIsOpen] = useState<boolean>(
         displayPromotionPopup
     );
     const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
+    const verticalSideToCheck = orientation.toLowerCase() === "white" ? "top" : "bottom"
+    const horizontalSideToCheck = orientation.toLowerCase() === "white" ? "left" : "right"
+
+    const squareOnRankEdge = isSquareOnRankEdge(Number(squareNumber), horizontalSideToCheck);
+    const squareOnFileEdge = isSquareOnFileEdge(Number(squareNumber), verticalSideToCheck)
+
+    const squareStyles = {
+        height: `${squareSize}px`
+    }
 
     function getSquareClass() {
         if (squareNumber === previousDraggedSquare) {
@@ -160,10 +167,25 @@ function Square({
         return squareHTML;
     }
 
+    function generateFileCoordinateHTML() {
+        const filesList = ["a", "b", "c", "d", "e", "f", "g", "h"];
+        
+        return (
+            <p className="file-coordinate">{filesList[getFile(squareNumber)]}</p>
+        )
+    }
+
+    function generateRankCoordinateHTML() {
+        return (
+            <p className="rank-coordinate">{getRank(squareNumber) + 1}</p>
+        )
+    }
+
     return (
         <div
             ref={drop}
             className={getSquareClass()}
+            style={squareStyles}
             id={`${squareNumber}`}
             onClick={(event) => {
                 handleSquareClick(event, squareNumber);
@@ -171,6 +193,9 @@ function Square({
             }}
             onContextMenu={handleSquareHiglight}
         >
+            {squareOnRankEdge && generateRankCoordinateHTML()}
+            {squareOnFileEdge && generateFileCoordinateHTML()}
+
             {pieceColor && pieceType ? generateSquareHTML() : null}
         </div>
     );

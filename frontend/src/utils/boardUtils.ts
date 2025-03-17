@@ -46,23 +46,23 @@ function getSquareExists(square: number | string, boardPlacement: object) {
     return Object.keys(boardPlacement).includes(`${square}`);
 }
 
-function isSquareOnFileEdge(square: number, sideToCheck: "left" | "right" | "bothSides") {
+function isSquareOnFileEdge(square: number, sideToCheck: "top" | "bottom" | "both") {
+    if (sideToCheck === "top") {
+        return getRank(square) === 0;
+    } else if (sideToCheck === "bottom") {
+        return getRank(square) === 7;
+    } else if (sideToCheck === "both") {
+        return getRank(square) in [0, 7];
+    }
+}
+
+function isSquareOnRankEdge(square: number, sideToCheck: "left" | "right" | "both") {
     if (sideToCheck === "left") {
         return getFile(square) === 0;
     } else if (sideToCheck === "right") {
         return getFile(square) === 7;
-    } else if (sideToCheck === "bothSides") {
+    } else if (sideToCheck === "both") {
         return getFile(square) in [0, 7];
-    }
-}
-
-function isSquareOnRankEdge(square: number, sideToCheck: "left" | "right" | "bothSides") {
-    if (sideToCheck === "left") {
-        return getRank(square) === 0;
-    } else if (sideToCheck === "right") {
-        return getRank(square) === 7;
-    } else if (sideToCheck === "bothSides") {
-        return getRank(square) in [0, 7];
     }
 }
 
