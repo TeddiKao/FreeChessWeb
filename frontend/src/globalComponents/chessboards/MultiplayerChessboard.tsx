@@ -27,6 +27,8 @@ import {
 import { clearSquaresStyling, getRank, getFile } from "../../utils/boardUtils";
 import {
     fetchCurrentPosition,
+    fetchLastDraggedSquare,
+    fetchLastDroppedSquare,
     fetchLegalMoves,
     fetchMoveIsValid,
 } from "../../utils/apiUtils";
@@ -174,6 +176,18 @@ function MultiplayerChessboard({
         const currentPosition = await fetchCurrentPosition(Number(gameId));
 
         setParsedFENString(currentPosition);
+    }
+
+    async function updateLastDraggedSquare() {
+        const lastDraggedSquare = await fetchLastDraggedSquare(Number(gameId));
+
+        setPreviousDraggedSquare(lastDraggedSquare);
+    }
+
+    async function updateLastDroppedSquare() {
+        const lastDroppedSquare = await fetchLastDroppedSquare(Number(gameId));
+
+        setPreviousDroppedSquare(lastDroppedSquare);
     }
 
     function handleStalemate(parsedEventData: any) {
