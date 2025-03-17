@@ -794,11 +794,6 @@ function Chessboard({
                         pieceColor.toLowerCase() === "white" ? 7 : 0;
                     const pieceRank = getRank(boardPlacementSquare);
 
-                    if (pieceType.toLowerCase() === "pawn" && promotionRank === pieceRank) {
-                        
-                        
-                    }
-
                     squareElements.push(
                         <Square
                             key={boardPlacementSquare}

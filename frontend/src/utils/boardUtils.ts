@@ -46,12 +46,24 @@ function getSquareExists(square: number | string, boardPlacement: object) {
     return Object.keys(boardPlacement).includes(`${square}`);
 }
 
-function isSquareOnFileEdge(square: number) {
-    return getFile(square) in [0, 7];
+function isSquareOnFileEdge(square: number, sideToCheck: "left" | "right" | "bothSides") {
+    if (sideToCheck === "left") {
+        return getFile(square) === 0;
+    } else if (sideToCheck === "right") {
+        return getFile(square) === 7;
+    } else if (sideToCheck === "bothSides") {
+        return getFile(square) in [0, 7];
+    }
 }
 
-function isSquareOnRankEdge(square: number) {
-    return getRank(square) in [0, 7]
+function isSquareOnRankEdge(square: number, sideToCheck: "left" | "right" | "bothSides") {
+    if (sideToCheck === "left") {
+        return getRank(square) === 0;
+    } else if (sideToCheck === "right") {
+        return getRank(square) === 7;
+    } else if (sideToCheck === "bothSides") {
+        return getRank(square) in [0, 7];
+    }
 }
 
 export {
