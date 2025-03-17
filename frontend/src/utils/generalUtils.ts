@@ -1,10 +1,10 @@
 import { isEqual } from "lodash";
 
 function capitaliseFirstLetter(string: string): string {
-	const firstLetter = string.charAt(0).toUpperCase();
+	const capitalisedFirstLetter = string.charAt(0).toUpperCase();
 	const remainingLetters = string.slice(1);
 
-	return `${firstLetter}${remainingLetters}`;
+	return `${capitalisedFirstLetter}${remainingLetters}`;
 }
 
 function compareObjects(objectA: object | null, objectB: object | null): boolean {
