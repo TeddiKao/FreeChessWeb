@@ -26,4 +26,10 @@ class DigitValidator:
 			raise ValidationError("Password must have at least one digit")
 
 class CommonPasswordValidator:
-	pass
+	def validate(self, password, user=None):
+		common_passwords = [
+			"password123"
+		]
+
+		if password.lower() in common_passwords:
+			raise ValidationError("Password is too common")
