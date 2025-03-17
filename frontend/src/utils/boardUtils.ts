@@ -46,11 +46,12 @@ function getSquareExists(square: number | string, boardPlacement: object) {
     return Object.keys(boardPlacement).includes(`${square}`);
 }
 
-function isSquareOnEdge(square: number) {
-    const fileOnEdge = getFile(square) in [0, 7];
-    const rankOnEdge = getFile(square) in [0, 7];
+function isSquareOnFileEdge(square: number) {
+    return getFile(square) in [0, 7];
+}
 
-    return fileOnEdge || rankOnEdge
+function isSquareOnRankEdge(square: number) {
+    return getRank(square) in [0, 7]
 }
 
 export {
@@ -61,5 +62,6 @@ export {
     getBoardEndingIndex,
     isSquareLight,
     getSquareExists,
-    isSquareOnEdge
+    isSquareOnRankEdge,
+    isSquareOnFileEdge,
 };
