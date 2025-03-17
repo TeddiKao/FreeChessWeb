@@ -40,9 +40,6 @@ def get_default_position_list():
 		"last_dropped_square": None
 	}]
 	
-def get_default_last_moved_squares():
-	return []
-
 class TimerTask(models.Model):
 	timer_task_id = models.UUIDField(default=uuid4, unique=True, primary_key=True)
 	status = models.CharField(max_length=20)

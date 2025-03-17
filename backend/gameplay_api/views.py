@@ -88,21 +88,3 @@ class GetMoveListView(APIView):
 		move_list = chess_game_model.sync_get_move_list()
 
 		return Response(move_list, status=status.HTTP_200_OK)
-	
-class GetLastDraggedSquareView(APIView):
-	permission_classes = [IsAuthenticated]
-	def post(self, request):
-		game_id = request.data.get("game_id")
-		chess_game_model: ChessGame = ChessGame.objects.get(id=game_id)
-		last_dragged_square = chess_game_model.sync_get_game_attribute("last_dragged_square")
-
-		return Response(last_dragged_square, status=status.HTTP_200_OK)
-	
-class GetLastDroppedSquareView(APIView):
-	permission_classes = [IsAuthenticated]
-	def post(self, request):
-		game_id = request.data.get("game_id")
-		chess_game_model: ChessGame = ChessGame.objects.get(id=game_id)
-		last_dropped_square = chess_game_model.sync_get_game_attribute("last_dropped_square")
-
-		return Response(last_dropped_square, status=status.HTTP_200_OK)
