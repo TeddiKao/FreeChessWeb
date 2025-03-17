@@ -196,7 +196,7 @@ function Square({
             {squareOnRankEdge && generateRankCoordinateHTML()}
             {squareOnFileEdge && generateFileCoordinateHTML()}
 
-            {pieceColor && pieceType ? generateSquareHTML() : null}
+            {pieceColor && pieceType && generateSquareHTML()}
         </div>
     );
 }
