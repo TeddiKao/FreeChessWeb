@@ -126,7 +126,7 @@ function AuthForm({ method }: AuthFormProps) {
             }
 
             if (error.status === 400) {
-                setPasswordErrors(error.response?.data["non_field_errors"])
+                setPasswordErrors(error.response?.data["non_field_errors"]);
             }
         }
     }
@@ -161,7 +161,11 @@ function AuthForm({ method }: AuthFormProps) {
                 <div className="password-input-container">
                     <input
                         type={isPasswordVisible ? "text" : "password"}
-                        className="password-input"
+                        className={
+                            passwordErrors.length === 0
+                                ? "password-input"
+                                : "error-password-input"
+                        }
                         value={password}
                         onChange={handlePasswordChange}
                         placeholder="Password"
@@ -178,6 +182,16 @@ function AuthForm({ method }: AuthFormProps) {
                     />
                     <p>Show password</p>
                 </div>
+
+                {passwordErrors.length > 0 && (
+                    <ul className="password-errors-container">
+                        {passwordErrors.map((error, index) => (
+                            <li key={index} className="password-error">
+                                {error}
+                            </li>
+                        ))}
+                    </ul>
+                )}
 
                 <FormSubtitle />
 

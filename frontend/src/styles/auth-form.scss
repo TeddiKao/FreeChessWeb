@@ -22,12 +22,35 @@
 	width: 250px
 }
 
+.error-password-input {
+	@extend .password-input;
+	
+	border-color: variables.$error-input-color;
+	border-style: solid;
+	border-width: variables.$error-input-border-width;
+}
+
+.password-errors-container {
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+.password-error {
+	margin-top: 4px;
+	margin-bottom: 4px;
+
+	width: 250px;
+
+	color: variables.$error-input-color;
+}
+
 .password-input {
 	margin-bottom: 4px;
 }
 
 .show-password-container p {
 	margin-top: 4px;
+	margin-bottom: 4px;
 }
 
 .form-subtitle {
