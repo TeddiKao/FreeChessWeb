@@ -8,6 +8,7 @@ import { StateSetterFunction } from "../../types/general";
 import useWebSocket from "../../hooks/useWebsocket";
 import { websocketBaseURL } from "../../constants/urls";
 import { getAccessToken } from "../../utils/tokenUtils";
+import { WebSocketEventTypes } from "../../enums/gameLogic";
 
 type GameplayActionButtonsProps = {
     gameId: string | number;
@@ -18,7 +19,6 @@ type GameplayActionButtonsProps = {
 
 function GameplayActionButtons({ gameId, setGameEnded, setGameEndedCause, setGameWinner }: GameplayActionButtonsProps) {
     const actionWebsocketRef = useRef<WebSocket | null>(null);
-
 
     const [resignationPopupVisible, setResignationPopupVisible] =
         useState(false);
@@ -61,13 +61,25 @@ function GameplayActionButtons({ gameId, setGameEnded, setGameEndedCause, setGam
     }
 
     function handleOnMessage(event: MessageEvent) {
-        console.log(JSON.parse(event.data));
+        const parsedEventData = JSON.parse(event.data);
+        const eventType = parsedEventData["type"];
 
-        handleResignation(JSON.parse(event.data));
+        switch (eventType) {
+            case WebSocketEventTypes.PLAYER_RESIGNED:
+                handleResignation(parsedEventData);
+                break;
+
+            default:
+                console.error(`Unknown even type ${eventType}`)
+        }
     }
 
     function handleResignation(eventData: any) {
-        console.log(`Player ${eventData["resigning_color"]} resigned!`);
+        console.log(eventData);
+
+        setGameEnded(true);
+        setGameEndedCause("Resignation");
+        setGameWinner(eventData["winning_color"]);
     }
 
     return (
