@@ -599,20 +599,7 @@ function MultiplayerChessboard({
                 : blackPromotionRank;
 
         if (rank === promotionRank && autoQueen) {
-            const moveDetails = {
-                type: "move_made",
-
-                piece_color: pieceColor,
-                piece_type: "queen",
-                starting_square: startSquare,
-                destination_square: destinationSquare,
-
-                additional_info: {
-                    promoted_piece: "queen",
-                },
-            };
-
-            gameWebsocketRef?.current?.send(JSON.stringify(moveDetails));
+            handleAutoQueen(pieceColor, startSquare, destinationSquare);
 
             return;
         }
@@ -631,6 +618,23 @@ function MultiplayerChessboard({
         setPromotionCapturedPiece(capturedPieceInfo);
 
         return true;
+    }
+
+    function handleAutoQueen(pieceColor: string, startSquare: ChessboardSquareIndex, destinationSquare: ChessboardSquareIndex) {
+        const moveDetails = {
+            type: "move_made",
+
+            piece_color: pieceColor,
+            piece_type: "queen",
+            starting_square: startSquare,
+            destination_square: destinationSquare,
+
+            additional_info: {
+                promoted_piece: "queen",
+            },
+        };
+
+        gameWebsocketRef?.current?.send(JSON.stringify(moveDetails));
     }
 
     function handlePawnPromotion(color: PieceColor, promotedPiece: PieceType) {
