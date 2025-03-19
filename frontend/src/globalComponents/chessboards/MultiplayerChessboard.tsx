@@ -326,10 +326,13 @@ function MultiplayerChessboard({
         gameWebsocketRef.current?.send(JSON.stringify(moveDetails));
     }
 
-    function handlePromotionSetup(pieceColorToValidate: PieceColor, moveMethod: string) {
+    function handlePromotionSetup(
+        pieceColorToValidate: PieceColor,
+        moveMethod: string
+    ) {
         const usingDrag = moveMethod.toLowerCase() === "drag";
-        const squareToClear = usingDrag ? draggedSquare : previousClickedSquare
-        const promotionSquare = usingDrag ? droppedSquare : clickedSquare
+        const squareToClear = usingDrag ? draggedSquare : previousClickedSquare;
+        const promotionSquare = usingDrag ? droppedSquare : clickedSquare;
 
         setParsedFENString((prevFENString: OptionalValue<ParsedFENString>) => {
             if (!prevFENString) {
@@ -356,7 +359,7 @@ function MultiplayerChessboard({
 
         setPreviousDraggedSquare(squareToClear);
         setPreviousDroppedSquare(promotionSquare);
-        
+
         if (usingDrag) {
             setDraggedSquare(null);
             setDroppedSquare(null);
@@ -454,7 +457,7 @@ function MultiplayerChessboard({
             );
 
             if (isPromotion) {
-                handlePromotionSetup(pieceColorToValidate, "click")
+                handlePromotionSetup(pieceColorToValidate, "click");
                 return;
             }
         }
@@ -598,14 +601,17 @@ function MultiplayerChessboard({
                 ? whitePromotionRank
                 : blackPromotionRank;
 
-        if (rank === promotionRank && autoQueen) {
+        const isCapture = fileDifference === 1;
+        const isPromotion = rank === promotionRank;
+
+        if (isPromotion && autoQueen) {
             handleAutoQueen(pieceColor, startSquare, destinationSquare);
 
             return;
         }
 
-        if (!(rank === promotionRank) || !(fileDifference === 1)) {
-            if (rank === promotionRank && fileDifference === 0) {
+        if (!isPromotion || !isCapture) {
+            if (isPromotion && fileDifference === 0) {
                 return true;
             }
 
@@ -620,7 +626,11 @@ function MultiplayerChessboard({
         return true;
     }
 
-    function handleAutoQueen(pieceColor: string, startSquare: ChessboardSquareIndex, destinationSquare: ChessboardSquareIndex) {
+    function handleAutoQueen(
+        pieceColor: string,
+        startSquare: ChessboardSquareIndex,
+        destinationSquare: ChessboardSquareIndex
+    ) {
         const moveDetails = {
             type: "move_made",
 
