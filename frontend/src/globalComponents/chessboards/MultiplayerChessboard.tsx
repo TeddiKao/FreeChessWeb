@@ -236,7 +236,7 @@ function MultiplayerChessboard({
             return;
         }
 
-        if (!(draggedSquare && droppedSquare)) {
+        if (!droppedSquare) {
             handleLegalMoveDisplay("drag");
             setLastUsedMoveMethod("drag");
 
@@ -385,7 +385,7 @@ function MultiplayerChessboard({
         }
 
         const boardPlacement = parsedFENString["board_placement"];
-        const squareInfo = boardPlacement[`${draggedSquare}`];
+        const squareInfo = boardPlacement[`${startingSquare}`];
         const pieceType = squareInfo["piece_type"];
         const pieceColor = squareInfo["piece_color"];
 
@@ -468,8 +468,6 @@ function MultiplayerChessboard({
             sendRegularMoveDetails(pieceInfo, initialSquare, "click");
         }
 
-        setPreviousDraggedSquare(previousClickedSquare);
-        setPreviousDroppedSquare(clickedSquare);
         setPreviousClickedSquare(null);
         setClickedSquare(null);
 
