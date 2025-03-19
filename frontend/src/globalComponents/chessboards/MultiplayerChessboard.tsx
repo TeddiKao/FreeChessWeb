@@ -638,6 +638,16 @@ function MultiplayerChessboard({
     }
 
     function handlePawnPromotion(color: PieceColor, promotedPiece: PieceType) {
+        sendPromotionDetails(color, promotedPiece);
+
+        setDraggedSquare(null);
+        setDroppedSquare(null);
+        setPreviousClickedSquare(null);
+        setClickedSquare(null);
+        setPromotionCapturedPiece(null);
+    }
+
+    function sendPromotionDetails(color: string, promotedPiece: string) {
         const moveDetails = {
             type: "move_made",
 
@@ -652,12 +662,6 @@ function MultiplayerChessboard({
         };
 
         gameWebsocketRef?.current?.send(JSON.stringify(moveDetails));
-
-        setDraggedSquare(null);
-        setDroppedSquare(null);
-        setPreviousClickedSquare(null);
-        setClickedSquare(null);
-        setPromotionCapturedPiece(null);
     }
 
     function generateChessboard() {
