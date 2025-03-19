@@ -38,7 +38,7 @@ function GameSetup() {
         useState<TimeControlInfo | null>(null);
 
     useEffect(() => {
-        getParsedFEN();
+        updateParsedFEN();
     }, []);
 
     async function handleStartClick() {
@@ -48,7 +48,7 @@ function GameSetup() {
     const startingPositionFEN =
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-    async function getParsedFEN() {
+    async function updateParsedFEN() {
         try {
             const parsedFEN = await fetchFen(startingPositionFEN);
             setParsedFEN(parsedFEN);
