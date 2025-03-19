@@ -18,6 +18,8 @@ import {
 } from "../../types/gameLogic.ts";
 
 import {
+    CheckmateEventData,
+    MoveListUpdateEventData,
     MoveMadeEventData,
     PositionListUpdateEventData,
     TimerChangedEventData,
@@ -181,17 +183,13 @@ function MultiplayerChessboard({
         setParsedFENString(currentPosition);
     }
 
-    function updateLastMovedSquares() {
-        
-    }
-
 
     function handleStalemate(parsedEventData: any) {
         setGameEnded(true);
         setGameEndedCause("Stalemate");
     }
 
-    function handleCheckmate(parsedEventData: any) {
+    function handleCheckmate(parsedEventData: CheckmateEventData) {
         setGameEnded(true);
         setGameEndedCause("Checkmate");
         setGameWinner(parsedEventData["winning_color"])
@@ -212,7 +210,7 @@ function MultiplayerChessboard({
         setPositionList(newPositionList);
     }
 
-    function handleMoveListUpdate(parsedEventData: any) {
+    function handleMoveListUpdate(parsedEventData: MoveListUpdateEventData) {
         const newMoveList = parsedEventData["new_move_list"];
         setMoveList(newMoveList);
     }
