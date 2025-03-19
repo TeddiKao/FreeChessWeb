@@ -280,59 +280,65 @@ function MultiplayerChessboard({
             );
 
             if (isPromotion) {
-                setParsedFENString(
-                    (prevFENString: OptionalValue<ParsedFENString>) => {
-                        if (!prevFENString) {
-                            return parsedFENString;
-                        }
-
-                        let newPiecePlacements = structuredClone(prevFENString);
-
-                        newPiecePlacements = {
-                            ...newPiecePlacements,
-                            board_placement: {
-                                ...newPiecePlacements["board_placement"],
-                                [`${droppedSquare}`]: {
-                                    piece_type: "pawn",
-                                    piece_color: pieceColorToValidate,
-                                },
-                            },
-                        };
-
-                        delete newPiecePlacements["board_placement"][
-                            `${draggedSquare}`
-                        ];
-
-                        return newPiecePlacements;
-                    }
-                );
-
-                setPreviousDraggedSquare(draggedSquare);
-                setPreviousDroppedSquare(droppedSquare);
-                setDraggedSquare(null);
-                setDroppedSquare(null);
-                setLastUsedMoveMethod("drag");
+                handlePromotionSetup(pieceColorToValidate);
 
                 return;
             }
         }
 
         if (gameWebsocketRef.current?.readyState === WebSocket.OPEN) {
-            const moveDetails = {
-                type: "move_made",
-
-                piece_color: pieceColorToValidate,
-                piece_type: pieceTypeToValidate,
-                starting_square: draggedSquare,
-                initial_square: initialSquare,
-                destination_square: droppedSquare,
-
-                additional_info: {},
-            };
-
-            gameWebsocketRef.current?.send(JSON.stringify(moveDetails));
+            sendMoveDetails(pieceColorToValidate, pieceTypeToValidate, initialSquare);
         }
 
+        setDraggedSquare(null);
+        setDroppedSquare(null);
+        setLastUsedMoveMethod("drag");
+    }
+
+    function sendMoveDetails(pieceColorToValidate: string, pieceTypeToValidate: string, initialSquare: ChessboardSquareIndex | undefined) {
+        const moveDetails = {
+            type: "move_made",
+
+            piece_color: pieceColorToValidate,
+            piece_type: pieceTypeToValidate,
+            starting_square: draggedSquare,
+            initial_square: initialSquare,
+            destination_square: droppedSquare,
+
+            additional_info: {},
+        };
+
+        gameWebsocketRef.current?.send(JSON.stringify(moveDetails));
+    }
+
+    function handlePromotionSetup(pieceColorToValidate: PieceColor) {
+        setParsedFENString(
+            (prevFENString: OptionalValue<ParsedFENString>) => {
+                if (!prevFENString) {
+                    return parsedFENString;
+                }
+
+                let newPiecePlacements = structuredClone(prevFENString);
+
+                newPiecePlacements = {
+                    ...newPiecePlacements,
+                    board_placement: {
+                        ...newPiecePlacements["board_placement"],
+                        [`${droppedSquare}`]: {
+                            piece_type: "pawn",
+                            piece_color: pieceColorToValidate,
+                        },
+                    },
+                };
+
+                delete newPiecePlacements["board_placement"][`${draggedSquare}`];
+
+                return newPiecePlacements;
+            }
+        );
+
+        setPreviousDraggedSquare(draggedSquare);
+        setPreviousDroppedSquare(droppedSquare);
         setDraggedSquare(null);
         setDroppedSquare(null);
         setLastUsedMoveMethod("drag");
