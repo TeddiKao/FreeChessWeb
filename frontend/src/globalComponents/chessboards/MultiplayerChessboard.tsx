@@ -287,7 +287,12 @@ function MultiplayerChessboard({
         }
 
         if (gameWebsocketRef.current?.readyState === WebSocket.OPEN) {
-            sendMoveDetails(pieceColorToValidate, pieceTypeToValidate, initialSquare);
+            const pieceInfo = {
+                piece_color: pieceColorToValidate,
+                piece_type: pieceTypeToValidate,
+            }
+
+            sendRegularMoveDetails(pieceInfo, initialSquare);
         }
 
         setDraggedSquare(null);
@@ -295,12 +300,12 @@ function MultiplayerChessboard({
         setLastUsedMoveMethod("drag");
     }
 
-    function sendMoveDetails(pieceColorToValidate: string, pieceTypeToValidate: string, initialSquare: ChessboardSquareIndex | undefined) {
+    function sendRegularMoveDetails(pieceInfo: PieceInfo, initialSquare: ChessboardSquareIndex | undefined) {
         const moveDetails = {
             type: "move_made",
 
-            piece_color: pieceColorToValidate,
-            piece_type: pieceTypeToValidate,
+            piece_color: pieceInfo["piece_color"],
+            piece_type: pieceInfo["piece_type"],
             starting_square: draggedSquare,
             initial_square: initialSquare,
             destination_square: droppedSquare,
