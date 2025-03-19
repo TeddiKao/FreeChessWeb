@@ -26,7 +26,12 @@ import {
 } from "../../interfaces/gameLogic.ts";
 
 // Utils
-import { clearSquaresStyling, getRank, getFile } from "../../utils/boardUtils";
+import {
+    clearSquaresStyling,
+    getRank,
+    getFile,
+    getSquareExists,
+} from "../../utils/boardUtils";
 import {
     fetchCurrentPosition,
     fetchLegalMoves,
@@ -60,7 +65,7 @@ function MultiplayerChessboard({
     setGameWinner,
     setGameEndedCause,
 
-    squareSize
+    squareSize,
 }: MultiplayerChessboardProps) {
     const [previousClickedSquare, setPreviousClickedSquare] =
         useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -88,8 +93,8 @@ function MultiplayerChessboard({
 
     const gameWebsocketRef = useRef<WebSocket | null>(null);
     const chessboardStyles = {
-        gridTemplateColumns: `repeat(8, ${squareSize}px`
-    }
+        gridTemplateColumns: `repeat(8, ${squareSize}px`,
+    };
 
     useEffect(() => {
         setParsedFENString(parsed_fen_string);
@@ -183,7 +188,6 @@ function MultiplayerChessboard({
         setParsedFENString(currentPosition);
     }
 
-
     function handleStalemate(parsedEventData: any) {
         setGameEnded(true);
         setGameEndedCause("Stalemate");
@@ -192,7 +196,7 @@ function MultiplayerChessboard({
     function handleCheckmate(parsedEventData: CheckmateEventData) {
         setGameEnded(true);
         setGameEndedCause("Checkmate");
-        setGameWinner(parsedEventData["winning_color"])
+        setGameWinner(parsedEventData["winning_color"]);
     }
 
     function handleTimerChange(parsedEventData: TimerChangedEventData) {
@@ -280,7 +284,7 @@ function MultiplayerChessboard({
             );
 
             if (isPromotion) {
-                handlePromotionSetup(pieceColorToValidate);
+                handlePromotionSetup(pieceColorToValidate, "drag");
 
                 return;
             }
@@ -290,9 +294,9 @@ function MultiplayerChessboard({
             const pieceInfo = {
                 piece_color: pieceColorToValidate,
                 piece_type: pieceTypeToValidate,
-            }
+            };
 
-            sendRegularMoveDetails(pieceInfo, initialSquare);
+            sendRegularMoveDetails(pieceInfo, initialSquare, "drag");
         }
 
         setDraggedSquare(null);
@@ -300,15 +304,21 @@ function MultiplayerChessboard({
         setLastUsedMoveMethod("drag");
     }
 
-    function sendRegularMoveDetails(pieceInfo: PieceInfo, initialSquare: ChessboardSquareIndex | undefined) {
+    function sendRegularMoveDetails(
+        pieceInfo: PieceInfo,
+        initialSquare: ChessboardSquareIndex | undefined,
+        moveMethod: string
+    ) {
+        const usingDrag = moveMethod.toLowerCase() === "drag";
+
         const moveDetails = {
             type: "move_made",
 
             piece_color: pieceInfo["piece_color"],
             piece_type: pieceInfo["piece_type"],
-            starting_square: draggedSquare,
+            starting_square: usingDrag ? draggedSquare : previousClickedSquare,
             initial_square: initialSquare,
-            destination_square: droppedSquare,
+            destination_square: usingDrag ? droppedSquare : clickedSquare,
 
             additional_info: {},
         };
@@ -316,37 +326,46 @@ function MultiplayerChessboard({
         gameWebsocketRef.current?.send(JSON.stringify(moveDetails));
     }
 
-    function handlePromotionSetup(pieceColorToValidate: PieceColor) {
-        setParsedFENString(
-            (prevFENString: OptionalValue<ParsedFENString>) => {
-                if (!prevFENString) {
-                    return parsedFENString;
-                }
+    function handlePromotionSetup(pieceColorToValidate: PieceColor, moveMethod: string) {
+        const usingDrag = moveMethod.toLowerCase() === "drag";
+        const squareToClear = usingDrag ? draggedSquare : previousClickedSquare
+        const promotionSquare = usingDrag ? droppedSquare : clickedSquare
 
-                let newPiecePlacements = structuredClone(prevFENString);
-
-                newPiecePlacements = {
-                    ...newPiecePlacements,
-                    board_placement: {
-                        ...newPiecePlacements["board_placement"],
-                        [`${droppedSquare}`]: {
-                            piece_type: "pawn",
-                            piece_color: pieceColorToValidate,
-                        },
-                    },
-                };
-
-                delete newPiecePlacements["board_placement"][`${draggedSquare}`];
-
-                return newPiecePlacements;
+        setParsedFENString((prevFENString: OptionalValue<ParsedFENString>) => {
+            if (!prevFENString) {
+                return parsedFENString;
             }
-        );
 
-        setPreviousDraggedSquare(draggedSquare);
-        setPreviousDroppedSquare(droppedSquare);
-        setDraggedSquare(null);
-        setDroppedSquare(null);
-        setLastUsedMoveMethod("drag");
+            let newPiecePlacements = structuredClone(prevFENString);
+
+            newPiecePlacements = {
+                ...newPiecePlacements,
+                board_placement: {
+                    ...newPiecePlacements["board_placement"],
+                    [`${promotionSquare}`]: {
+                        piece_type: "pawn",
+                        piece_color: pieceColorToValidate,
+                    },
+                },
+            };
+
+            delete newPiecePlacements["board_placement"][`${squareToClear}`];
+
+            return newPiecePlacements;
+        });
+
+        setPreviousDraggedSquare(squareToClear);
+        setPreviousDroppedSquare(promotionSquare);
+        
+        if (usingDrag) {
+            setDraggedSquare(null);
+            setDroppedSquare(null);
+        } else {
+            setPreviousClickedSquare(null);
+            setClickedSquare(null);
+        }
+
+        setLastUsedMoveMethod(usingDrag ? "drag" : "click");
     }
 
     function handleLegalMoveDisplay(moveMethod: string) {
@@ -384,17 +403,17 @@ function MultiplayerChessboard({
 
         clearSquaresStyling();
 
-        if (!(previousClickedSquare && clickedSquare)) {
-            const boardPlacement = parsedFENString["board_placement"];
+        const boardPlacement: BoardPlacement =
+            parsedFENString["board_placement"];
 
-            if (
-                !Object.keys(boardPlacement).includes(
-                    `${previousClickedSquare}`
-                )
-            ) {
-                return;
-            }
+        if (!getSquareExists(previousClickedSquare, boardPlacement)) {
+            setPreviousClickedSquare(null);
+            setClickedSquare(null);
 
+            return;
+        }
+
+        if (!clickedSquare) {
             handleLegalMoveDisplay("click");
             setLastUsedMoveMethod("click");
 
@@ -408,20 +427,8 @@ function MultiplayerChessboard({
             return;
         }
 
-        if (
-            !Object.keys(parsedFENString["board_placement"]).includes(
-                `${previousClickedSquare}`
-            )
-        ) {
-            setPreviousClickedSquare(null);
-            setClickedSquare(null);
-
-            return;
-        }
-
-        const boardPlacement: BoardPlacement =
-            parsedFENString["board_placement"];
-        boardPlacement[`${previousClickedSquare}`]["starting_square"];
+        const initialSquare =
+            boardPlacement[`${previousClickedSquare}`]["starting_square"];
         const pieceTypeToValidate =
             boardPlacement[`${previousClickedSquare}`]["piece_type"];
         const pieceColorToValidate =
@@ -447,23 +454,18 @@ function MultiplayerChessboard({
             );
 
             if (isPromotion) {
+                handlePromotionSetup(pieceColorToValidate, "click")
                 return;
             }
         }
 
         if (gameWebsocketRef.current?.readyState === WebSocket.OPEN) {
-            const moveDetails = {
-                type: "move_made",
-
+            const pieceInfo = {
                 piece_color: pieceColorToValidate,
                 piece_type: pieceTypeToValidate,
-                starting_square: previousClickedSquare,
-                destination_square: clickedSquare,
-
-                move_type: "regular",
             };
 
-            gameWebsocketRef.current?.send(JSON.stringify(moveDetails));
+            sendRegularMoveDetails(pieceInfo, initialSquare, "click");
         }
 
         setPreviousDraggedSquare(previousClickedSquare);
@@ -762,7 +764,9 @@ function MultiplayerChessboard({
 
     return (
         <>
-            <div style={chessboardStyles} className="chessboard-container">{generateChessboard()}</div>
+            <div style={chessboardStyles} className="chessboard-container">
+                {generateChessboard()}
+            </div>
         </>
     );
 }
