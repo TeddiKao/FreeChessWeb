@@ -282,7 +282,7 @@ function Play() {
                 <div className="bottom-timer-wrapper">
                     <Timer
                         playerColor={bottomTimerColor}
-                        timeInSeconds={bottomTimerAmount}
+                        timeInSeconds={bottomTimerAmount!}
                     />
                 </div>
             </div>
