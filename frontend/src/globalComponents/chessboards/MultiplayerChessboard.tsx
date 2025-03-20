@@ -47,6 +47,7 @@ import { playAudio } from "../../utils/audioUtils";
 import useWebSocket from "../../hooks/useWebsocket.ts";
 import { getAccessToken } from "../../utils/tokenUtils.ts";
 import { websocketBaseURL } from "../../constants/urls.ts";
+import { getOppositeColor } from "../../utils/gameLogic/general.ts";
 
 function MultiplayerChessboard({
     parsed_fen_string,
@@ -177,6 +178,10 @@ function MultiplayerChessboard({
                 handleStalemate(parsedEventData);
                 break;
 
+            case WebSocketEventTypes.PLAYER_TIMEOUT:
+                handlePlayerTimeout(parsedEventData);
+                break;
+
             default:
                 break;
         }
@@ -197,6 +202,18 @@ function MultiplayerChessboard({
         setGameEnded(true);
         setGameEndedCause("Checkmate");
         setGameWinner(parsedEventData["winning_color"]);
+    }
+
+    function handlePlayerTimeout(parsedEventData: any) {
+        // if (parsedEventData["timeout_color"].toLowerCase() === "white") {
+        //     setWhiteTimer(0);
+        // } else {
+        //     setBlackTimer(0);
+        // }
+
+        setGameEnded(true);
+        setGameEndedCause("Timeout");
+        setGameWinner(getOppositeColor(parsedEventData["timeout_color"]))
     }
 
     function handleTimerChange(parsedEventData: TimerChangedEventData) {

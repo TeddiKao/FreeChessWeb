@@ -23,7 +23,7 @@ import MoveListPanel from "../../globalComponents/gameplaySidePanel/MoveListPane
 import MoveNavigationButtons from "../../globalComponents/gameplaySidePanel/MoveNavigationButtons.tsx";
 import { ArrowKeys } from "../../enums/general.ts";
 import GameplayActionButtons from "../../globalComponents/gameplaySidePanel/GameplayActionButtons.tsx";
-
+import { isNullOrUndefined } from "../../utils/generalUtils.ts";
 function Play() {
     const location = useLocation();
 
@@ -120,6 +120,7 @@ function Play() {
     }, [initialGameplaySettings]);
 
     if (!location.state) {
+        console.log("No location state detected!")
         return <Navigate to={"/game-setup"} />;
     }
 
@@ -227,7 +228,7 @@ function Play() {
     const topTimerAmount = getTimeAmount(topTimerColor);
     const bottomTimerAmount = getTimeAmount(bottomTimerColor);
 
-    if (!topTimerAmount || !bottomTimerAmount) {
+    if (isNullOrUndefined(topTimerAmount) || isNullOrUndefined(bottomTimerAmount)) {
         return <Navigate to="/game-setup" />;
     }
 
@@ -241,7 +242,7 @@ function Play() {
                 <div className="top-timer-wrapper">
                     <Timer
                         playerColor={topTimerColor}
-                        timeInSeconds={topTimerAmount}
+                        timeInSeconds={topTimerAmount!}
                     />
                 </div>
 

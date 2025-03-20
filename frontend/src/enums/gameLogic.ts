@@ -12,6 +12,7 @@ enum WebSocketEventTypes {
 	PLAYER_RESIGNED = "player_resigned",
 	PLAYER_STALEMATED = "player_stalemated",
 	PLAYER_CHECKMATED = "player_checkmated",
+	PLAYER_TIMEOUT = "player_timeout"
 }
 
 export { MoveMethods, WebSocketEventTypes }

@@ -92,6 +92,24 @@ class ChessGame(models.Model):
 			"halfmove_clock": self.halfmove_clock,
 			"fullmove_number": self.current_move
 		}
+	
+	@database_sync_to_async
+	def async_end_game(self, game_result):
+		self.game_status = "Ended"
+		self.game_result = game_result
+		self.save()
+
+	@database_sync_to_async
+	def async_get_white_player_username(self):
+		return self.white_player.username
+	
+	@database_sync_to_async
+	def async_get_black_player_username(self):
+		return self.black_player.username
+
+	@database_sync_to_async
+	def async_save(self):
+		self.save()
 
 	def sync_get_full_parsed_fen(self):
 		return {

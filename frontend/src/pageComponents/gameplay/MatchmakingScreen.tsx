@@ -72,6 +72,8 @@ function MatchmakingScreen({
     }, [matchFound, setMatchFound, navigate]);
 
     useEffect(() => {
+        window.addEventListener("beforeunload", handleWindowUnload);
+
         if (isMatchmaking) {
             if (!websocketConnected) {
                 const websocketURL = `ws://localhost:8000/ws/matchmaking-server/?token=${getAccessToken()}&baseTime=${baseTime}&increment=${increment}`;
@@ -86,6 +88,8 @@ function MatchmakingScreen({
         }
 
         return () => {
+            window.removeEventListener("beforeunload", handleWindowUnload);
+
             if (
                 matchmakingWebsocketRef.current?.readyState === WebSocket.OPEN
             ) {
@@ -93,6 +97,12 @@ function MatchmakingScreen({
             }
         };
     }, []);
+
+    function handleWindowUnload() {
+        if (matchmakingWebsocketRef.current?.readyState === WebSocket.OPEN) {
+            matchmakingWebsocketRef.current.close();
+        }
+    }
 
     function onMessage(event: MessageEvent): void {
         const parsedEventData = JSON.parse(event.data);

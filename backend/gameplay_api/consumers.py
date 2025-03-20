@@ -21,6 +21,7 @@ from .utils.algebraic_notation_parser import get_algebraic_notation
 
 timer_tasks_info = {}
 
+
 def calculate_position_index(piece_color: str, move_number: int):
     if piece_color.lower() == "white":
         return (move_number - 1) * 2 + 1
@@ -99,27 +100,37 @@ class GameConsumer(AsyncWebsocketConsumer):
 		while await self.get_game_attribute(chess_game, "game_status") == "Ongoing":
 			async with self.timer_lock:
 				chess_game = await self.get_chess_game(self.game_id)
-				side_to_move = await self.get_game_attribute(chess_game, "current_player_turn")
-
-				if side_to_move.lower() == "white":
-					await self.decrement_white_player_timer(chess_game, 1)
-				elif side_to_move.lower() == "black":
-					await self.decrement_black_player_timer(chess_game, 1)
-
+				
 				white_player_clock = await self.get_game_attribute(chess_game, "white_player_clock")
 				black_player_clock = await self.get_game_attribute(chess_game, "black_player_clock")
 
-				if self.channel_name:
+				side_to_move = await self.get_game_attribute(chess_game, "current_player_turn")
 
+				print(white_player_clock, black_player_clock)
+
+				if white_player_clock > 0 and black_player_clock > 0:
+					if side_to_move.lower() == "white":
+						await self.decrement_white_player_timer(chess_game, 1)
+					elif side_to_move.lower() == "black":
+						await self.decrement_black_player_timer(chess_game, 1)
+
+				if self.channel_name:
 					await self.channel_layer.group_send(
 						self.room_group_name,
 						{
 							"type": "timer_decremented",
 							"white_player_clock": white_player_clock,
-									"black_player_clock": black_player_clock,
-									"side_to_move": side_to_move.lower(),
+							"black_player_clock": black_player_clock,
+							"side_to_move": side_to_move.lower(),
 						}
 					)
+
+				if white_player_clock <= 0:
+					await self.handle_player_timeout(chess_game, "white")
+					break
+				elif black_player_clock <= 0:
+					await self.handle_player_timeout(chess_game, "black")
+					break
 
 			await asyncio.sleep(1)
 
@@ -334,6 +345,19 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.append_to_position_list(chess_game_model, move_info)
 		await self.append_to_move_list(chess_game_model, original_parsed_fen, move_info)
 
+	async def handle_player_timeout(self, chess_game_model: ChessGame, timeout_color: str):
+		await chess_game_model.async_end_game("Timeout")
+
+		await self.channel_layer.group_send(
+			self.room_group_name,
+			{
+				"type": "player_timeout",
+				"timeout_color": timeout_color
+			}
+		)
+
+		print("Successfully sent timeout message!")
+
 	async def connect(self):
 		query_string: bytes = self.scope.get("query_string", b"")
 		decoded_query_string = query_string.decode()
@@ -383,13 +407,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
 	async def receive(self, text_data):
-
 		await self.channel_layer.group_send(
 			self.room_group_name,
 			{
 				"type": "move_received",
 				"move_data": text_data,
-						"move_made_by": self.scope["user"].username
+				"move_made_by": self.scope["user"].username
 			}
 		)
 
@@ -466,7 +489,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			}))
 
 			if is_checkmated:
-				await self.end_game(chess_game_model, f"{piece_color.capitalize()} won")
+				await chess_game_model.async_end_game(f"{piece_color.capitalize()} won")
 
 				await self.send(json.dumps({
 					"type": "player_checkmated",
@@ -475,7 +498,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 				}))
 
 			if is_stalemated:
-				await self.end_game(chess_game_model, "Draw")
+				await chess_game_model.async_end_game("Draw")
 
 				await self.send(json.dumps({
 					"type": "player_stalemated",
@@ -502,6 +525,15 @@ class GameConsumer(AsyncWebsocketConsumer):
 				"black_player_clock": float(event["black_player_clock"]),
 			}))
 
+	async def player_timeout(self, event):
+		if self.channel_name:
+			await self.send(json.dumps({
+				"type": "player_timeout",
+				"timeout_color": event["timeout_color"]
+			}))
+
+			print("Sent message to clients!")
+
 	async def resume_timer(self, event):
 		asyncio.create_task(self.handle_timer_decrement())
 
@@ -520,10 +552,6 @@ class ResignConsumer(AsyncWebsocketConsumer):
 		setattr(chess_game_model, attribute, new_value)
 		chess_game_model.save()
 
-	async def end_game(self, chess_game_model: ChessGame, game_result: str):
-		await self.update_game_attribute(chess_game_model, "game_status", "Ended")
-		await self.update_game_attribute(chess_game_model, "game_result", game_result)
-
 	async def get_game_winner_from_resigning_player(self, chess_game_model: ChessGame, resigning_player):
 		white_player = await chess_game_model.async_get_game_attribute("white_player")
 		black_player = await chess_game_model.async_get_game_attribute("black_player")
@@ -533,8 +561,6 @@ class ResignConsumer(AsyncWebsocketConsumer):
 
 		white_player_username = await white_player.async_get_player_username()
 		black_player_username = await black_player.async_get_player_username()
-
-		print(white_player_username, black_player_username)
 
 		if resigning_player == white_player_username:
 			return "Black"
@@ -570,7 +596,7 @@ class ResignConsumer(AsyncWebsocketConsumer):
 	async def receive(self, text_data=None, bytes_data=None):
 		resigner = self.scope["user"].username
 
-		chess_game_model = await self.get_chess_game(self.game_id)
+		chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
 		winning_color = await self.get_game_winner_from_resigning_player(chess_game_model, resigner)
 
 		await self.channel_layer.group_send(
@@ -578,11 +604,11 @@ class ResignConsumer(AsyncWebsocketConsumer):
 			{
 				"type": "player_resigned",
 				"resigner": resigner,
-				"winning_color": winning_color,
+						"winning_color": winning_color,
 			}
 		)
 
-		await self.end_game(chess_game_model, "Resigned")
+		await chess_game_model.async_end_game("Resigned")
 
 	async def player_resigned(self, event):
 		await self.send(json.dumps({
