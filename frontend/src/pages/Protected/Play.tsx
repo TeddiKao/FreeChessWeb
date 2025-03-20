@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import MultiplayerChessboard from "../../globalComponents/chessboards/MultiplayerChessboard.js";
 import Timer from "../../pageComponents/gameplay/Timer.tsx";
@@ -24,6 +24,7 @@ import MoveNavigationButtons from "../../globalComponents/gameplaySidePanel/Move
 import { ArrowKeys } from "../../enums/general.ts";
 import GameplayActionButtons from "../../globalComponents/gameplaySidePanel/GameplayActionButtons.tsx";
 import { isNullOrUndefined } from "../../utils/generalUtils.ts";
+
 function Play() {
     const location = useLocation();
 
