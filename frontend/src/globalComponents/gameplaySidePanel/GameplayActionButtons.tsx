@@ -12,37 +12,52 @@ import { WebSocketEventTypes } from "../../enums/gameLogic";
 
 type GameplayActionButtonsProps = {
     gameId: string | number;
-    setGameEnded: StateSetterFunction<boolean>,
-    setGameEndedCause: StateSetterFunction<string>,
-    setGameWinner: StateSetterFunction<string>,
-}
+    setGameEnded: StateSetterFunction<boolean>;
+    setGameEndedCause: StateSetterFunction<string>;
+    setGameWinner: StateSetterFunction<string>;
+};
 
-function GameplayActionButtons({ gameId, setGameEnded, setGameEndedCause, setGameWinner }: GameplayActionButtonsProps) {
+function GameplayActionButtons({
+    gameId,
+    setGameEnded,
+    setGameEndedCause,
+    setGameWinner,
+}: GameplayActionButtonsProps) {
     const actionWebsocketRef = useRef<WebSocket | null>(null);
+    const actionWebsocketExists = useRef<boolean>(false);
 
     const [resignationPopupVisible, setResignationPopupVisible] =
         useState(false);
 
     useEffect(() => {
-        const actionWebsocketUrl = `${websocketBaseURL}ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`
+        if (actionWebsocketExists.current === false) {
+            const actionWebsocketUrl = `${websocketBaseURL}ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`;
 
-        actionWebsocketRef.current = useWebSocket(actionWebsocketUrl, handleOnMessage);
-        console.log(actionWebsocketRef.current)
-        
-        window.addEventListener("beforeunload", handleWindowUnload);
+            actionWebsocketRef.current = useWebSocket(
+                actionWebsocketUrl,
+                handleOnMessage
+            );
+
+            actionWebsocketExists.current = true;
+
+            window.addEventListener("beforeunload", handleWindowUnload);
+        }
 
         return () => {
             if (actionWebsocketRef.current?.readyState === WebSocket.OPEN) {
                 actionWebsocketRef.current.close();
             }
 
+            actionWebsocketExists.current = false;
+
             window.removeEventListener("beforeunload", handleWindowUnload);
-        }
+        };
     }, []);
 
     function handleWindowUnload() {
         if (actionWebsocketRef.current?.readyState === WebSocket.OPEN) {
             actionWebsocketRef.current.close();
+            actionWebsocketExists.current = false;
         }
     }
 
@@ -52,10 +67,10 @@ function GameplayActionButtons({ gameId, setGameEnded, setGameEndedCause, setGam
 
     function handleResignationConfirmation() {
         const resignationDetails = {
-            type: "resign_request"
-        }
+            type: "resign_request",
+        };
 
-        console.log(actionWebsocketRef.current)
+        console.log(actionWebsocketRef.current);
 
         actionWebsocketRef.current?.send(JSON.stringify(resignationDetails));
     }
@@ -70,7 +85,7 @@ function GameplayActionButtons({ gameId, setGameEnded, setGameEndedCause, setGam
                 break;
 
             default:
-                console.error(`Unknown even type ${eventType}`)
+                console.error(`Unknown even type ${eventType}`);
         }
     }
 

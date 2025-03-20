@@ -93,6 +93,8 @@ function MultiplayerChessboard({
     const [boardOrientation, setBoardOrientation] = useState(orientation);
 
     const gameWebsocketRef = useRef<WebSocket | null>(null);
+    const gameWebsocketExists = useRef<boolean>(false);
+
     const chessboardStyles = {
         gridTemplateColumns: `repeat(8, ${squareSize}px`,
     };
@@ -119,18 +121,25 @@ function MultiplayerChessboard({
     }, []);
 
     useEffect(() => {
-        const gameWebsocketUrl = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
-        const gameWebsocket = useWebSocket(gameWebsocketUrl, handleOnMessage);
+        if (gameWebsocketExists.current === false) {
+            const gameWebsocketUrl = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
+            const gameWebsocket = useWebSocket(
+                gameWebsocketUrl,
+                handleOnMessage
+            );
 
-        window.addEventListener("beforeunload", handleWindowUnload);
+            window.addEventListener("beforeunload", handleWindowUnload);
 
-        gameWebsocketRef.current = gameWebsocket;
+            gameWebsocketRef.current = gameWebsocket;
+            gameWebsocketExists.current = true;
+        }
 
         return () => {
             window.removeEventListener("beforeunload", handleWindowUnload);
 
             if (gameWebsocketRef.current?.readyState === WebSocket.OPEN) {
                 gameWebsocketRef.current.close();
+                gameWebsocketExists.current = false;
             }
         };
     }, []);
@@ -142,6 +151,7 @@ function MultiplayerChessboard({
     function handleWindowUnload() {
         if (gameWebsocketRef.current?.readyState === WebSocket.OPEN) {
             gameWebsocketRef.current.close();
+            gameWebsocketExists.current = false;
         }
     }
 
@@ -213,7 +223,7 @@ function MultiplayerChessboard({
 
         setGameEnded(true);
         setGameEndedCause("Timeout");
-        setGameWinner(getOppositeColor(parsedEventData["timeout_color"]))
+        setGameWinner(getOppositeColor(parsedEventData["timeout_color"]));
     }
 
     function handleTimerChange(parsedEventData: TimerChangedEventData) {
