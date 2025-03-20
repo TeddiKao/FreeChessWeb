@@ -11,6 +11,10 @@ function compareObjects(objectA: object | null, objectB: object | null): boolean
 	return isEqual(objectA, objectB);
 }
 
+function isNullOrUndefined(value: any): boolean {
+	return value === null || value === undefined;
+}
+
 function padZero(value: number): string | number {
     if (value >= 10) {
 		return value;
@@ -28,4 +32,5 @@ export {
 	compareObjects,
 	padZero,
 	isTouchDevice,
+	isNullOrUndefined,
 }
