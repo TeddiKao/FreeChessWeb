@@ -18,6 +18,7 @@ type UsernameFieldProps = {
 function UsernameField({ username, handleUsernameChange }: UsernameFieldProps) {
     return (
         <>
+            <p className="auth-input-helper-text">Username</p>
             <input
                 type="text"
                 className="username-input"
@@ -69,8 +70,8 @@ function AuthForm({ method }: AuthFormProps) {
         setPassword(event.target.value);
     }
 
-    function handlePasswordVisibleChange(event: ChangeEvent<HTMLInputElement>) {
-        setIsPasswordVisible(event.target.checked);
+    function togglePasswordVisible() {
+        setIsPasswordVisible((prevVisible) => !prevVisible);
     }
 
     const loginUrl = "/users_api/token/get/";
@@ -131,6 +132,10 @@ function AuthForm({ method }: AuthFormProps) {
         }
     }
 
+    function getShowPasswordPromptText() {
+        return isPasswordVisible ? "Hide Password" : "Show Password";
+    }
+
     const formTitle: string = method === "Login" ? "Login" : "Sign up";
     const shouldRenderUsernameField: boolean = method === "Signup";
 
@@ -139,12 +144,13 @@ function AuthForm({ method }: AuthFormProps) {
             <h1 className="auth-form-heading">{formTitle}</h1>
             <form className="auth-form" onSubmit={handleFormSubmit}>
                 <div className="email-input-container">
+                    <p className="auth-input-helper-text">Email</p>
                     <input
                         type="email"
                         className="email-input"
                         value={email}
                         onChange={handleEmailChange}
-                        placeholder="Email"
+                        placeholder="Email address"
                     />
                     <br />
                 </div>
@@ -159,6 +165,7 @@ function AuthForm({ method }: AuthFormProps) {
                 ) : null}
 
                 <div className="password-input-container">
+                    <p className="auth-input-helper-text">Password</p>
                     <input
                         type={isPasswordVisible ? "text" : "password"}
                         className={
@@ -174,13 +181,7 @@ function AuthForm({ method }: AuthFormProps) {
                 </div>
 
                 <div className="show-password-container">
-                    <input
-                        type="checkbox"
-                        checked={isPasswordVisible}
-                        className="show-password-checkbox"
-                        onChange={handlePasswordVisibleChange}
-                    />
-                    <p>Show password</p>
+                    <p onClick={togglePasswordVisible} className="show-password-prompt">{getShowPasswordPromptText()}</p>
                 </div>
 
                 {passwordErrors.length > 0 && (
