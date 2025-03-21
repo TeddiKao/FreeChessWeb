@@ -136,7 +136,7 @@ function AuthForm({ method }: AuthFormProps) {
 
     return (
         <div className="auth-form-container">
-            <h1>{formTitle}</h1>
+            <h1 className="auth-form-heading">{formTitle}</h1>
             <form className="auth-form" onSubmit={handleFormSubmit}>
                 <div className="email-input-container">
                     <input
