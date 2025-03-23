@@ -269,7 +269,7 @@ def get_pawn_legal_moves(board_placement, en_passant_target_square, move_info):
     legal_squares = []
 
     starting_square = move_info["starting_square"]
-    piece_color = move_info["piece_color"]
+    piece_color = move_info["piece_color"].lower()
 
     starting_square_info = {
         "starting_square": starting_square,
@@ -297,7 +297,7 @@ def get_pawn_legal_moves(board_placement, en_passant_target_square, move_info):
 
             continue
 
-        pawn_color = board_placement[attacking_square]["piece_color"]
+        pawn_color = board_placement[attacking_square]["piece_color"].lower()
         if pawn_color == piece_color:
             continue
 

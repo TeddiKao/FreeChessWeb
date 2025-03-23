@@ -164,35 +164,42 @@ function AuthForm({ method }: AuthFormProps) {
                     </div>
                 ) : null}
 
-                <div className="password-input-container">
-                    <p className="auth-input-helper-text">Password</p>
-                    <input
-                        type={isPasswordVisible ? "text" : "password"}
-                        className={
-                            passwordErrors.length === 0
-                                ? "password-input"
-                                : "error-password-input"
-                        }
-                        value={password}
-                        onChange={handlePasswordChange}
-                        placeholder="Password"
-                    />
-                    <br />
-                </div>
+                <div className="password-items-container">
+                    <div className="password-input-container">
+                        <p className="auth-input-helper-text">Password</p>
+                        <input
+                            type={isPasswordVisible ? "text" : "password"}
+                            className={
+                                passwordErrors.length === 0
+                                    ? "password-input"
+                                    : "error-password-input"
+                            }
+                            value={password}
+                            onChange={handlePasswordChange}
+                            placeholder="Password"
+                        />
+                        <br />
+                    </div>
 
-                <div className="show-password-container">
-                    <p onClick={togglePasswordVisible} className="show-password-prompt">{getShowPasswordPromptText()}</p>
-                </div>
+                    <div className="show-password-container">
+                        <p
+                            onClick={togglePasswordVisible}
+                            className="show-password-prompt"
+                        >
+                            {getShowPasswordPromptText()}
+                        </p>
+                    </div>
 
-                {passwordErrors.length > 0 && (
-                    <ul className="password-errors-container">
-                        {passwordErrors.map((error, index) => (
-                            <li key={index} className="password-error">
-                                {error}
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                    {passwordErrors.length > 0 && (
+                        <ul className="password-errors-container">
+                            {passwordErrors.map((error, index) => (
+                                <li key={index} className="password-error">
+                                    {error}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
 
                 <FormSubtitle />
 

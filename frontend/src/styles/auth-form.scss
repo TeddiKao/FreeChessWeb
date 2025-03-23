@@ -71,6 +71,7 @@
 	width: 250px;
 
 	color: variables.$error-input-color;
+	font-size: 0.9rem;
 }
 
 .password-input {
@@ -79,7 +80,7 @@
 
 .show-password-container p {
 	margin-top: 4px;
-	margin-bottom: 12px;
+	margin-bottom: 0;
 
 	font-size: 0.9rem;
 	font-weight: bold;
@@ -88,6 +89,10 @@
 
 .show-password-container p:hover {
 	cursor: pointer;
+}
+
+.password-items-container {
+	margin-bottom: 12px;
 }
 
 .form-subtitle {

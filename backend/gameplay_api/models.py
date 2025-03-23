@@ -111,6 +111,11 @@ class ChessGame(models.Model):
 	def async_save(self):
 		self.save()
 
+	@database_sync_to_async
+	def get_fen_from_game_id(self, game_id):
+		game_data = ChessGame.objects.only("id", "parsed_board_placement", "castling_rights", "en_passant_target_square", "halfmove_clock", "current_move").get(id=game_id)
+
+		return game_data.sync_get_full_parsed_fen()
 	def sync_get_full_parsed_fen(self):
 		return {
 			"board_placement": self.parsed_board_placement,

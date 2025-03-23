@@ -164,7 +164,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                     "black_player": None
                 }))
 
-            await sleep(1)
+            await sleep(0.5)
 
     async def connect(self):
         user = self.scope["user"]

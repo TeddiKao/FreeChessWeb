@@ -9,9 +9,11 @@ def get_is_stalemated(current_fen: dict, king_color: str) -> bool:
 
     all_legal_moves = []
 
-    king_position = get_king_position(board_placement, king_color)
     king_in_check = is_king_in_check(
         board_placement, king_color)
+    
+    if king_in_check:
+        return False
 
     for square in board_placement.keys():
         piece_color: str = board_placement[square]["piece_color"]
@@ -29,13 +31,10 @@ def get_is_stalemated(current_fen: dict, king_color: str) -> bool:
         all_legal_moves += get_legal_moves(
             move_info, board_placement, en_passant_target_square, castling_rights)
 
-    
-    legal_moves_num = len(all_legal_moves)
-    if legal_moves_num == 0:
-        if not king_in_check:
-            return True
+        if len(all_legal_moves) > 0:
+            return False
 
-    return False
+    return True
 
 
 def get_is_checkmated(current_fen: dict, king_color: str) -> bool:
@@ -47,6 +46,9 @@ def get_is_checkmated(current_fen: dict, king_color: str) -> bool:
 
     king_in_check: bool = is_king_in_check(
         board_placement, king_color)
+    
+    if not king_in_check:
+        return False
 
     for square in board_placement.keys():
         piece_color: str = board_placement[square]["piece_color"]
@@ -64,10 +66,7 @@ def get_is_checkmated(current_fen: dict, king_color: str) -> bool:
         all_legal_moves += get_legal_moves(
             move_info, board_placement, en_passant_target_square, castling_rights)
 
-    legal_moves_num: int = len(all_legal_moves)
+        if len(all_legal_moves) > 0:
+            return False
 
-    if legal_moves_num == 0:
-        if king_in_check:
-            return True
-
-    return False
+    return True
