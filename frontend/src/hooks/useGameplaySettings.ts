@@ -5,12 +5,12 @@ function useGameplaySettings() {
     const [gameplaySettings, setGameplaySettings] = useState<object | null>(null);
 
     useEffect(() => {
-        async function modifyGameplaySettings(): Promise<void> {
+        async function updateGameplaySettings(): Promise<void> {
             const newGameplaySettings: object | null = await fetchGameplaySettings();
             setGameplaySettings(newGameplaySettings);
         }
 
-        modifyGameplaySettings();
+        updateGameplaySettings();
     }, []);
 
     async function fetchGameplaySettings(): Promise<object | null> {

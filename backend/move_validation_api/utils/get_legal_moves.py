@@ -120,7 +120,7 @@ def get_legal_moves_in_diagonal_direction(board_placement, move_info, piece_loca
         }
 
         if f"{square}" in board_placement:
-            if board_placement[f"{square}"]["piece_color"] != piece_color:
+            if board_placement[f"{square}"]["piece_color"].lower() != piece_color.lower():
                 updated_board_placement = update_FEN(
                     board_placement, starting_square_info, square)
                 

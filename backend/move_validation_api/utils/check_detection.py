@@ -282,7 +282,6 @@ def is_checked_by_knight(board_placement: dict, king_color: str):
 
 
 def is_checked_orthogonally(board_placement: dict, king_color: str):
-
     if is_checked_north(board_placement, king_color):
         return True
 
