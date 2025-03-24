@@ -31,8 +31,6 @@
 	padding-left: 12px;
 	padding-right: 15px;
 
-	margin-bottom: 12px;
-
 	width: 250px;
 
 	background-color: hsl(0, 0%, 90%);
@@ -40,6 +38,10 @@
 	border-radius: 4px;
 
 	font-size: 0.9rem
+}
+
+.email-input-container, .username-field-container {
+	margin-bottom: 12px;
 }
 
 .auth-input-helper-text {
@@ -59,12 +61,28 @@
 	border-width: variables.$error-input-border-width;
 }
 
-.password-errors-container {
+.error-username-input {
+	@extend .username-input;
+
+	border-color: variables.$error-input-color;
+	border-style: solid;
+	border-width: variables.$error-input-border-width;
+}
+
+.error-email-input {
+	@extend .email-input;
+
+	border-color: variables.$error-input-color;
+	border-style: solid;
+	border-width: variables.$error-input-border-width;
+}
+
+.password-errors-container, .email-errors-container, .username-errors-container {
 	margin-top: 4px;
 	margin-bottom: 4px;
 }
 
-.password-error {
+.password-error, .email-error, .username-error {
 	margin-top: 4px;
 	margin-bottom: 4px;
 

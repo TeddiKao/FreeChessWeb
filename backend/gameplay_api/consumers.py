@@ -192,8 +192,6 @@ class GameConsumer(AsyncWebsocketConsumer):
         new_board_placement = copy.deepcopy(original_board_placement)
 
         destination_square = move_info["destination_square"]
-        initial_square = move_info["initial_square"] if "initial_square" in move_info.keys(
-        ) else None
 
         piece_color: str = move_info["piece_color"]
 
@@ -286,7 +284,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     async def update_position(self, chess_game_model: ChessGame, move_info: dict):
         original_parsed_fen = copy.deepcopy(await chess_game_model.get_full_parsed_fen())
-        new_board_placement = copy.deepcopy(await self.get_game_attribute(chess_game_model, "parsed_board_placement"))
+        new_board_placement = copy.deepcopy(original_parsed_fen["board_placement"])
 
         starting_square = move_info["starting_square"]
         destination_square = move_info["destination_square"]
@@ -516,36 +514,33 @@ class GameConsumer(AsyncWebsocketConsumer):
                 asyncio.to_thread(get_is_stalemated, new_parsed_fen, opposing_color)
             )
 
-
             result_detection_end = perf_counter()
 
             result_detection_time = result_detection_end - result_detection_start
             print(f"Result detection time: {result_detection_time:.6f}")
 
             position_index = calculate_position_index(
-                piece_color, current_move_number)
+                piece_color, current_move_number) 
 
-            await self.send(json.dumps({
-                "type": "position_list_updated",
-                "new_position_list": new_position_list,
-            }))
+            await asyncio.gather(
+                self.send(json.dumps({
+                    "type": "position_list_updated",
+                    "new_position_list": new_position_list,
+                })),
 
-            await self.send(json.dumps({
-                "type": "move_list_updated",
-                "new_move_list": new_move_list,
-            }))
+                self.send(json.dumps({
+                    "type": "move_list_updated",
+                    "new_move_list": new_move_list,
+                })),
 
-            move_made_send_start = perf_counter()
-            await self.send(json.dumps({
-                "type": "move_made",
-                "move_data": parsed_move_data,
-                "move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
-                "new_parsed_fen": new_parsed_fen,
-                "new_position_index": position_index,
-            }))
-            move_made_send_end = perf_counter()
-            move_made_send_time = move_made_send_end - move_made_send_start
-            print(f"Move made send time: {move_made_send_time:.6f}")
+                self.send(json.dumps({
+                    "type": "move_made",
+                    "move_data": parsed_move_data,
+                    "move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
+                    "new_parsed_fen": new_parsed_fen,
+                    "new_position_index": position_index,
+                }))
+            )
 
             if is_checkmated:
                 await chess_game_model.async_end_game(f"{piece_color.capitalize()} won")

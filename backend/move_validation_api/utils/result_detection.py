@@ -1,6 +1,4 @@
 from .get_legal_moves import is_king_in_check, get_legal_moves
-from .general import get_king_position
-
 
 def get_is_stalemated(current_fen: dict, king_color: str) -> bool:
     board_placement = current_fen["board_placement"]

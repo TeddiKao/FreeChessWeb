@@ -5,6 +5,8 @@ import "../styles/auth-form.scss";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants/tokens.js";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
+import { SignupErrors } from "../enums/validationErrors/authentication.js";
+import { isNullOrUndefined } from "../utils/generalUtils.js";
 
 type AuthFormProps = {
     method: string;
@@ -13,20 +15,50 @@ type AuthFormProps = {
 type UsernameFieldProps = {
     username: string;
     handleUsernameChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    usernameErrors: Array<string> | undefined;
 };
 
-function UsernameField({ username, handleUsernameChange }: UsernameFieldProps) {
+function UsernameField({
+    username,
+    handleUsernameChange,
+    usernameErrors,
+}: UsernameFieldProps) {
     return (
         <>
             <p className="auth-input-helper-text">Username</p>
             <input
                 type="text"
-                className="username-input"
+                className={
+                    usernameErrors?.length === 0 ||
+                    isNullOrUndefined(usernameErrors)
+                        ? "username-input"
+                        : "error-username-input"
+                }
                 value={username}
                 onChange={handleUsernameChange}
                 placeholder="Username"
             />
             <br />
+
+            {usernameErrors && usernameErrors?.length > 0 && (
+                <div className="username-errors-container">
+                    {usernameErrors.map(
+                        (errorName: string, errorIndex: number) => {
+                            switch (errorName) {
+                                case SignupErrors.USERNAME_ALREADY_EXISTS:
+                                    return (
+                                        <p
+                                            key={errorIndex}
+                                            className="username-error"
+                                        >
+                                            This username is taken
+                                        </p>
+                                    );
+                            }
+                        }
+                    )}
+                </div>
+            )}
         </>
     );
 }
@@ -36,6 +68,8 @@ function AuthForm({ method }: AuthFormProps) {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
+    const [usernameErrors, setUsernameErrors] = useState<Array<string>>([]);
+    const [emailErrors, setEmailErrors] = useState<Array<string>>([]);
     const [passwordErrors, setPasswordErrors] = useState<Array<string>>([]);
 
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -122,12 +156,16 @@ function AuthForm({ method }: AuthFormProps) {
                 }
             }
         } catch (error: any) {
+            console.error(error);
+
             if (!(error instanceof AxiosError)) {
                 return;
             }
 
             if (error.status === 400) {
-                setPasswordErrors(error.response?.data["non_field_errors"]);
+                setPasswordErrors(error.response?.data?.["non_field_errors"]);
+                setUsernameErrors(error.response?.data?.username);
+                setEmailErrors(error.response?.data?.email);
             }
         }
     }
@@ -147,18 +185,44 @@ function AuthForm({ method }: AuthFormProps) {
                     <p className="auth-input-helper-text">Email</p>
                     <input
                         type="email"
-                        className="email-input"
+                        className={
+                            emailErrors?.length === 0 ||
+                            isNullOrUndefined(emailErrors)
+                                ? "email-input"
+                                : "error-email-input"
+                        }
                         value={email}
                         onChange={handleEmailChange}
                         placeholder="Email address"
                     />
                     <br />
+
+                    {emailErrors?.length > 0 && (
+                        <div className="email-errors-container">
+                            {emailErrors.map((errorName, errorIndex) => {
+                                console.log(`Error name: ${errorName}`);
+
+                                switch (errorName) {
+                                    case SignupErrors.EMAIL_ALREADY_EXISTS:
+                                        return (
+                                            <p
+                                                key={errorIndex}
+                                                className="email-error"
+                                            >
+                                                This email is taken
+                                            </p>
+                                        );
+                                }
+                            })}
+                        </div>
+                    )}
                 </div>
 
                 {shouldRenderUsernameField ? (
                     <div className="username-field-container">
                         <UsernameField
                             username={username}
+                            usernameErrors={usernameErrors}
                             handleUsernameChange={handleUsernameChange}
                         />
                     </div>
@@ -170,7 +234,8 @@ function AuthForm({ method }: AuthFormProps) {
                         <input
                             type={isPasswordVisible ? "text" : "password"}
                             className={
-                                passwordErrors.length === 0
+                                passwordErrors?.length === 0 ||
+                                isNullOrUndefined(passwordErrors)
                                     ? "password-input"
                                     : "error-password-input"
                             }
@@ -190,7 +255,7 @@ function AuthForm({ method }: AuthFormProps) {
                         </p>
                     </div>
 
-                    {passwordErrors.length > 0 && (
+                    {passwordErrors?.length > 0 && (
                         <ul className="password-errors-container">
                             {passwordErrors.map((error, index) => (
                                 <li key={index} className="password-error">
