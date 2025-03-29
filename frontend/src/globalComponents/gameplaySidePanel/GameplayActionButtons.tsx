@@ -98,6 +98,10 @@ function GameplayActionButtons({
                 handleResignation(parsedEventData);
                 break;
 
+            case WebSocketEventTypes.DRAW_OFFERED:
+                console.log(`Draw offered by ${parsedEventData["offered_by"]}`)
+                break;
+
             default:
                 console.error(`Unknown even type ${eventType}`);
         }

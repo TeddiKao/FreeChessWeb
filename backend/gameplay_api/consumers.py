@@ -21,7 +21,6 @@ from .utils.algebraic_notation_parser import get_algebraic_notation
 
 timer_tasks_info = {}
 
-
 def calculate_position_index(piece_color: str, move_number: int):
 	if piece_color.lower() == "white":
 		return (move_number - 1) * 2 + 1
@@ -380,6 +379,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.accept()
 
 		self.room_group_name = f"game_{game_id}"
+
 		self.game_id = game_id
 
 		self.chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
@@ -642,8 +642,30 @@ class ResignConsumer(AsyncWebsocketConsumer):
 		self.room_group_name = f"resign_room_{game_id}"
 		self.chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
 
+		self.white_player, self.black_player = await asyncio.gather(
+			self.chess_game_model.async_get_game_attribute("white_player"),
+			self.chess_game_model.async_get_game_attribute("black_player")
+		)
+
+		self.white_player_id, self.black_player_id = await asyncio.gather(
+			self.white_player.async_get_player_id(),
+			self.black_player.async_get_player_id()
+		)
+
+		if self.scope["user"].id == self.white_player_id:
+			self.own_room_group_name = f"resign_room_{game_id}_player_{self.white_player_id}"
+			self.opponent_room_group_name = f"resign_room_{game_id}_player_{self.black_player_id}"
+		else:
+			self.own_room_group_name = f"resign_room_{game_id}_player_{self.black_player_id}"
+			self.opponent_room_group_name = f"resign_room_{game_id}_player_{self.white_player_id}"
+
 		await self.channel_layer.group_add(
 			self.room_group_name,
+			self.channel_name
+		)
+
+		await self.channel_layer.group_add(
+			self.own_room_group_name,
 			self.channel_name
 		)
 
@@ -660,18 +682,32 @@ class ResignConsumer(AsyncWebsocketConsumer):
 				{
 					"type": "player_resigned",
 					"resigner": resigner,
-							"winning_color": winning_color,
+					"winning_color": winning_color,
 				}
 			)
 
 			await chess_game_model.async_end_game("Resigned")
 
-		elif received_data["type"] == "draw_offer":
-			pass
+		elif received_data["type"] == "draw_offered":
+
+			await self.channel_layer.group_send(
+				self.opponent_room_group_name,
+				{
+					"type": "draw_offered",
+					"offered_by": self.scope["user"].username
+				}
+			)
+
 
 	async def player_resigned(self, event):
 		await self.send(json.dumps({
 			"type": "player_resigned",
 			"resigner": event["resigner"],
 			"winning_color": event["winning_color"]
+		}))
+
+	async def draw_offered(self, event):
+		await self.send(json.dumps({
+			"type": "draw_offered",
+			"offered_by": event["offered_by"]
 		}))
