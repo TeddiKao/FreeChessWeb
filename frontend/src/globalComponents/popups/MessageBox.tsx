@@ -34,11 +34,11 @@ function MessageBox({ visible, setVisible, type, xAlignment, yAlignment, disappe
 	}
 
 	function getMessageBoxXAlignClass() {
-		return `${xAlignment}-align-message-box`
+		return `${xAlignment}-align-x-message-box`
 	}
 
 	function getMessageBoxYAlignClass() {
-		return `${yAlignment}-align-message-box`
+		return `${yAlignment}-align-y-message-box`
 	}
 
 	return (
