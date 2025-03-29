@@ -29,6 +29,8 @@ function GameplayActionButtons({
     const [resignationPopupVisible, setResignationPopupVisible] =
         useState(false);
 
+    const [drawOfferPopupVisible, setDrawOfferPopupVisible] = useState(false);
+
     useEffect(() => {
         if (actionWebsocketExists.current === false) {
             const actionWebsocketUrl = `${websocketBaseURL}ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`;
@@ -63,6 +65,10 @@ function GameplayActionButtons({
 
     function handleResignationPopupDisplay() {
         setResignationPopupVisible(true);
+    }
+
+    function handleDrawOfferPopupDisplay() {
+        setDrawOfferPopupVisible(true);
     }
 
     function handleResignationConfirmation() {
@@ -103,7 +109,7 @@ function GameplayActionButtons({
             <div className="gameplay-action-buttons">
                 <div
                     onClick={handleResignationPopupDisplay}
-                    className="resignation-icon"
+                    className="resignation-container"
                 >
                     <img className="resign-icon" src="/resignButton.svg" />
                     <p className="helper-text">Resign</p>
@@ -113,6 +119,16 @@ function GameplayActionButtons({
                         setIsOpen={setResignationPopupVisible}
                         confirmationMessage="Are you sure you want to resign?"
                         confirmAction={handleResignationConfirmation}
+                    />
+                </div>
+
+                <div className="draw-offer-container" onClick={handleDrawOfferPopupDisplay}>
+                    <p className="helper-text">Draw</p>
+
+                    <ConfirmationPopup
+                        isOpen={drawOfferPopupVisible}
+                        setIsOpen={setDrawOfferPopupVisible}
+                        confirmationMessage="Are you sure you want to offer a draw?"
                     />
                 </div>
             </div>
