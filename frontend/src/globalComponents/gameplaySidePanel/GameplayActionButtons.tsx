@@ -81,6 +81,14 @@ function GameplayActionButtons({
         actionWebsocketRef.current?.send(JSON.stringify(resignationDetails));
     }
 
+    function handleDrawOfferConfirmation() {
+        const drawOfferDetails = {
+            type: "draw_offered"
+        }
+
+        actionWebsocketRef?.current?.send(JSON.stringify(drawOfferDetails));
+    }
+
     function handleOnMessage(event: MessageEvent) {
         const parsedEventData = JSON.parse(event.data);
         const eventType = parsedEventData["type"];
@@ -129,6 +137,7 @@ function GameplayActionButtons({
                         isOpen={drawOfferPopupVisible}
                         setIsOpen={setDrawOfferPopupVisible}
                         confirmationMessage="Are you sure you want to offer a draw?"
+                        confirmAction={handleDrawOfferConfirmation}
                     />
                 </div>
             </div>
