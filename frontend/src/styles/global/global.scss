@@ -1,11 +1,21 @@
 @use "variables";
 @use "mixins" as *;
 
+* {
+    box-sizing: border-box;
+}
+
+html {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: variables.$default-font;
     margin: 0;
     padding: 0;
     background-color: hsl(0, 0%, 95%);
+    overflow-y: hidden;
 }
 
 input,
