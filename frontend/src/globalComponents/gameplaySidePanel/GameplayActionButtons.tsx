@@ -15,6 +15,8 @@ type GameplayActionButtonsProps = {
     setGameEnded: StateSetterFunction<boolean>;
     setGameEndedCause: StateSetterFunction<string>;
     setGameWinner: StateSetterFunction<string>;
+    setMessagePopupVisible: StateSetterFunction<boolean>;
+    setMessageToDisplay: StateSetterFunction<string>;
 };
 
 function GameplayActionButtons({
@@ -22,6 +24,8 @@ function GameplayActionButtons({
     setGameEnded,
     setGameEndedCause,
     setGameWinner,
+    setMessageToDisplay,
+    setMessagePopupVisible
 }: GameplayActionButtonsProps) {
     const actionWebsocketRef = useRef<WebSocket | null>(null);
     const actionWebsocketExists = useRef<boolean>(false);
@@ -87,6 +91,9 @@ function GameplayActionButtons({
         }
 
         actionWebsocketRef?.current?.send(JSON.stringify(drawOfferDetails));
+
+        setMessagePopupVisible(true);
+        setMessageToDisplay("Draw offer sent")
     }
 
     function handleOnMessage(event: MessageEvent) {

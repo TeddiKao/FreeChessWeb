@@ -1,9 +1,10 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { StateSetterFunction } from "../../types/general"
 import { convertToMilliseconds } from "../../utils/timeUtils"
 
+import "../../styles/popups/message-box.scss"
+
 type MessageBoxProps = {
-	visible: boolean,
 	setVisible: StateSetterFunction<boolean>
 
 	type: "info" | "error" | "warning" | "success",
@@ -14,20 +15,16 @@ type MessageBoxProps = {
 	disappearAfterSeconds: number,
 }
 
-function MessageBox({ visible, setVisible, type, xAlignment, yAlignment, disappearAfterSeconds, text, icon }: MessageBoxProps) {
+function MessageBox({ setVisible, type, xAlignment, yAlignment, disappearAfterSeconds, text, icon }: MessageBoxProps) {
 	useEffect(() => {
 		const hideMessageBoxTimeout = setTimeout(() => {
 			setVisible(false);
-		}, convertToMilliseconds(disappearAfterSeconds))
-
+		}, convertToMilliseconds(disappearAfterSeconds));
+	
 		return () => {
 			clearTimeout(hideMessageBoxTimeout);
 		}
-	})
-
-	if (!visible) {
-		return null;
-	}
+	}, []);
 	
 	function getMessageBoxTypeClass() {
 		return `${type}-message-box`
@@ -42,7 +39,7 @@ function MessageBox({ visible, setVisible, type, xAlignment, yAlignment, disappe
 	}
 
 	return (
-		<div className={`${getMessageBoxTypeClass()} ${getMessageBoxXAlignClass()} ${getMessageBoxYAlignClass()}`}>
+		<div className={`message-box-container ${getMessageBoxTypeClass()} ${getMessageBoxXAlignClass()} ${getMessageBoxYAlignClass()}`}>
 			{icon && <img className="message-box-icon" src={icon} />}
 			<p className="message-box-text">{text}</p>
 		</div>

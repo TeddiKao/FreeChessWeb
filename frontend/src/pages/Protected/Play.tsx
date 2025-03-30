@@ -308,7 +308,7 @@ function Play() {
             </div>
 
             <div className="gameplay-side-panel">
-                <MoveListPanel moveList={moveList} setPositionIndex={setPositionIndex}/>
+                <MoveListPanel moveList={moveList} setPositionIndex={setPositionIndex} />
                 <MoveNavigationButtons
                     backToStart={handleBackToStart}
                     handlePreviousMove={handlePreviousMove}
@@ -321,19 +321,21 @@ function Play() {
                     setGameEndedCause={setGameEndedCause}
                     setGameWinner={setGameWinner}
                     gameId={gameId}
+                    setMessagePopupVisible={setMessageBoxVisible}
+                    setMessageToDisplay={setMessageToDisplay}
                 />
             </div>
 
-            <MessageBox 
-                visible={messageBoxVisible} 
-                setVisible={setMessageBoxVisible} 
-                
+            {messageBoxVisible && <MessageBox
+                visible={messageBoxVisible}
+                setVisible={setMessageBoxVisible}
+
                 type={messageType}
-                text={messageToDisplay} 
-                disappearAfterSeconds={3} 
-                xAlignment="right" 
+                text={messageToDisplay}
+                disappearAfterSeconds={3}
+                xAlignment="right"
                 yAlignment="bottom"
-            />
+            />}
         </div>
     );
 }
