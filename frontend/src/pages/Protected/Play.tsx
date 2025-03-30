@@ -24,6 +24,8 @@ import MoveNavigationButtons from "../../globalComponents/gameplaySidePanel/Move
 import { ArrowKeys } from "../../enums/general.ts";
 import GameplayActionButtons from "../../globalComponents/gameplaySidePanel/GameplayActionButtons.tsx";
 import { isNullOrUndefined } from "../../utils/generalUtils.ts";
+import MessageBox from "../../globalComponents/popups/MessageBox.tsx";
+import { MessageBoxTypes } from "../../types/messageBox.ts";
 
 function Play() {
     const location = useLocation();
@@ -49,6 +51,10 @@ function Play() {
     const [hasGameEnded, setHasGameEnded] = useState<boolean>(false);
     const [gameEndedCause, setGameEndedCause] = useState<string>("");
     const [gameWinner, setGameWinner] = useState<string>("");
+
+    const [messageBoxVisible, setMessageBoxVisible] = useState<boolean>(false);
+    const [messageToDisplay, setMessageToDisplay] = useState<string>("");
+    const [messageType, setMessageType] = useState<MessageBoxTypes>("info");
 
     const parsedFEN = positionList[positionIndex]?.["position"];
     const lastDraggedSquare =
@@ -302,7 +308,7 @@ function Play() {
             </div>
 
             <div className="gameplay-side-panel">
-                <MoveListPanel moveList={moveList} setPositionIndex={setPositionIndex}/>
+                <MoveListPanel moveList={moveList} setPositionIndex={setPositionIndex} />
                 <MoveNavigationButtons
                     backToStart={handleBackToStart}
                     handlePreviousMove={handlePreviousMove}
@@ -315,8 +321,21 @@ function Play() {
                     setGameEndedCause={setGameEndedCause}
                     setGameWinner={setGameWinner}
                     gameId={gameId}
+                    setMessagePopupVisible={setMessageBoxVisible}
+                    setMessageToDisplay={setMessageToDisplay}
                 />
             </div>
+
+            {messageBoxVisible && <MessageBox
+                visible={messageBoxVisible}
+                setVisible={setMessageBoxVisible}
+
+                type={messageType}
+                text={messageToDisplay}
+                disappearAfterSeconds={3}
+                xAlignment="right"
+                yAlignment="bottom"
+            />}
         </div>
     );
 }

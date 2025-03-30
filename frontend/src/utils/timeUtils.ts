@@ -6,6 +6,10 @@ function convertTimeControlTime(time: number) {
 	return time / 60;
 }
 
+function convertToMilliseconds(timeInSeconds: number) {
+	return timeInSeconds * 1000
+}
+
 function convertTimeControlToSeconds(timeControl: TimeDuration): number {
     const timeControlHours = timeControl.hours
 	const timeControlMinutes = timeControl.minutes
@@ -45,4 +49,4 @@ function displayTimeControl({ baseTime, increment }: TimeControl): string {
 	return timeControlString;
 }
 
-export { formatTime, displayTimeControl, convertTimeControlToSeconds }
+export { formatTime, displayTimeControl, convertTimeControlToSeconds, convertToMilliseconds }

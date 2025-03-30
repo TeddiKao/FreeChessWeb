@@ -15,6 +15,8 @@ type GameplayActionButtonsProps = {
     setGameEnded: StateSetterFunction<boolean>;
     setGameEndedCause: StateSetterFunction<string>;
     setGameWinner: StateSetterFunction<string>;
+    setMessagePopupVisible: StateSetterFunction<boolean>;
+    setMessageToDisplay: StateSetterFunction<string>;
 };
 
 function GameplayActionButtons({
@@ -22,6 +24,8 @@ function GameplayActionButtons({
     setGameEnded,
     setGameEndedCause,
     setGameWinner,
+    setMessageToDisplay,
+    setMessagePopupVisible
 }: GameplayActionButtonsProps) {
     const actionWebsocketRef = useRef<WebSocket | null>(null);
     const actionWebsocketExists = useRef<boolean>(false);
@@ -81,6 +85,17 @@ function GameplayActionButtons({
         actionWebsocketRef.current?.send(JSON.stringify(resignationDetails));
     }
 
+    function handleDrawOfferConfirmation() {
+        const drawOfferDetails = {
+            type: "draw_offered"
+        }
+
+        actionWebsocketRef?.current?.send(JSON.stringify(drawOfferDetails));
+
+        setMessagePopupVisible(true);
+        setMessageToDisplay("Draw offer sent")
+    }
+
     function handleOnMessage(event: MessageEvent) {
         const parsedEventData = JSON.parse(event.data);
         const eventType = parsedEventData["type"];
@@ -88,6 +103,10 @@ function GameplayActionButtons({
         switch (eventType) {
             case WebSocketEventTypes.PLAYER_RESIGNED:
                 handleResignation(parsedEventData);
+                break;
+
+            case WebSocketEventTypes.DRAW_OFFERED:
+                console.log(`Draw offered by ${parsedEventData["offered_by"]}`)
                 break;
 
             default:
@@ -129,6 +148,7 @@ function GameplayActionButtons({
                         isOpen={drawOfferPopupVisible}
                         setIsOpen={setDrawOfferPopupVisible}
                         confirmationMessage="Are you sure you want to offer a draw?"
+                        confirmAction={handleDrawOfferConfirmation}
                     />
                 </div>
             </div>
