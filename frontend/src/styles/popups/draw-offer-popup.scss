@@ -2,9 +2,34 @@
 
 .draw-offer-popup-container {
     position: fixed;
-    right: 0;
-    bottom: 0;
+    right: 20px;
+    bottom: 20px;
+
+    width: 280px;
+
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 8px;
+    padding-right: 20px;
 
     border-left: 4px solid hsl(220, 100%, 60%);
+    border-radius: 4px;
+
     background-color: hsl(220, 100%, 95%);
+
+    box-shadow: 5px 5px 5px hsl(0, 0%, 60%);
+
+    .draw-offer-popup-heading {
+        margin-top: 0;
+        margin-bottom: 4px;
+    }
+
+    .accept-draw-prompt {
+        margin-top: 0;
+        margin-bottom: 12px;
+    }
+
+    .action-buttons-container button {
+        margin-right: 8px;
+    }
 }

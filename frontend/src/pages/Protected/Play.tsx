@@ -132,7 +132,7 @@ function Play() {
     }, [initialGameplaySettings]);
 
     if (!location.state) {
-        console.log("No location state detected!")
+        console.log("No location state detected!");
         return <Navigate to={"/game-setup"} />;
     }
 
@@ -240,7 +240,10 @@ function Play() {
     const topTimerAmount = getTimeAmount(topTimerColor);
     const bottomTimerAmount = getTimeAmount(bottomTimerColor);
 
-    if (isNullOrUndefined(topTimerAmount) || isNullOrUndefined(bottomTimerAmount)) {
+    if (
+        isNullOrUndefined(topTimerAmount) ||
+        isNullOrUndefined(bottomTimerAmount)
+    ) {
         return <Navigate to="/game-setup" />;
     }
 
@@ -249,105 +252,114 @@ function Play() {
     }
 
     return (
-        <div className="multiplayer-playing-interface-container">
-            <div className="main-chessboard">
-                <div className="top-timer-wrapper">
-                    <Timer
-                        playerColor={topTimerColor}
-                        timeInSeconds={topTimerAmount!}
+        <>
+            <div className="multiplayer-playing-interface-container">
+                <div className="main-chessboard">
+                    <div className="top-timer-wrapper">
+                        <Timer
+                            playerColor={topTimerColor}
+                            timeInSeconds={topTimerAmount!}
+                        />
+                    </div>
+
+                    <div className="chessboard-info">
+                        <MultiplayerChessboard
+                            parsed_fen_string={parsedFEN}
+                            orientation={boardOrientation}
+                            gameId={gameId}
+                            setMoveList={setMoveList}
+                            setWhiteTimer={setWhitePlayerTimer}
+                            setBlackTimer={setBlackPlayerTimer}
+                            setPositionIndex={setPositionIndex}
+                            setPositionList={setPositionList}
+                            gameplaySettings={gameplaySettings}
+                            lastDraggedSquare={lastDraggedSquare}
+                            lastDroppedSquare={lastDroppedSquare}
+                            setGameEnded={setHasGameEnded}
+                            setGameEndedCause={setGameEndedCause}
+                            setGameWinner={setGameWinner}
+                            squareSize={58}
+                        />
+                    </div>
+
+                    <GameOverModal
+                        visible={hasGameEnded}
+                        gameEndCause={gameEndedCause}
+                        gameWinner={gameWinner}
+                    />
+
+                    <ModalWrapper visible={settingsVisible}>
+                        <GameplaySettings
+                            onClose={handleSettingsClose}
+                            setGameplaySettings={setGameplaySettings}
+                        />
+                    </ModalWrapper>
+
+                    <div className="bottom-timer-wrapper">
+                        <Timer
+                            playerColor={bottomTimerColor}
+                            timeInSeconds={bottomTimerAmount!}
+                        />
+                    </div>
+                </div>
+
+                <div className="board-actions">
+                    <img
+                        onClick={toggleBoardOrientation}
+                        className="flip-board-icon"
+                        src="/flip-board-icon.png"
+                    />
+                    <img
+                        className="settings-icon"
+                        src="/settings.svg"
+                        onClick={handleSettingsDisplay}
                     />
                 </div>
 
-                <div className="chessboard-info">
-                    <MultiplayerChessboard
-                        parsed_fen_string={parsedFEN}
-                        orientation={boardOrientation}
-                        gameId={gameId}
-                        setMoveList={setMoveList}
-                        setWhiteTimer={setWhitePlayerTimer}
-                        setBlackTimer={setBlackPlayerTimer}
+                <div className="gameplay-side-panel">
+                    <MoveListPanel
+                        moveList={moveList}
                         setPositionIndex={setPositionIndex}
-                        setPositionList={setPositionList}
-                        gameplaySettings={gameplaySettings}
-                        lastDraggedSquare={lastDraggedSquare}
-                        lastDroppedSquare={lastDroppedSquare}
+                    />
+                    <MoveNavigationButtons
+                        backToStart={handleBackToStart}
+                        handlePreviousMove={handlePreviousMove}
+                        handleNextMove={handleNextMove}
+                        backToCurrentPosition={handleCurrentPosition}
+                    />
+
+                    <GameplayActionButtons
                         setGameEnded={setHasGameEnded}
                         setGameEndedCause={setGameEndedCause}
                         setGameWinner={setGameWinner}
-                        squareSize={58}
+                        gameId={gameId}
+                        setMessagePopupVisible={setMessageBoxVisible}
+                        setMessageToDisplay={setMessageToDisplay}
+                        parentActionWebsocket={actionWebSocketRef}
+                        setDrawOfferReceived={setDrawOfferReceived}
                     />
                 </div>
 
-                <GameOverModal
-                    visible={hasGameEnded}
-                    gameEndCause={gameEndedCause}
-                    gameWinner={gameWinner}
-                />
-
-                <ModalWrapper visible={settingsVisible}>
-                    <GameplaySettings
-                        onClose={handleSettingsClose}
-                        setGameplaySettings={setGameplaySettings}
+                {messageBoxVisible && (
+                    <MessageBox
+                        setVisible={setMessageBoxVisible}
+                        type={messageType}
+                        text={messageToDisplay}
+                        disappearAfterSeconds={3}
+                        xAlignment="right"
+                        yAlignment="bottom"
                     />
-                </ModalWrapper>
-
-                <div className="bottom-timer-wrapper">
-                    <Timer
-                        playerColor={bottomTimerColor}
-                        timeInSeconds={bottomTimerAmount!}
-                    />
-                </div>
+                )}
             </div>
 
-            <div className="board-actions">
-                <img
-                    onClick={toggleBoardOrientation}
-                    className="flip-board-icon"
-                    src="/flip-board-icon.png"
-                />
-                <img
-                    className="settings-icon"
-                    src="/settings.svg"
-                    onClick={handleSettingsDisplay}
-                />
-            </div>
-
-            <div className="gameplay-side-panel">
-                <MoveListPanel moveList={moveList} setPositionIndex={setPositionIndex} />
-                <MoveNavigationButtons
-                    backToStart={handleBackToStart}
-                    handlePreviousMove={handlePreviousMove}
-                    handleNextMove={handleNextMove}
-                    backToCurrentPosition={handleCurrentPosition}
-                />
-
-                <GameplayActionButtons
-                    setGameEnded={setHasGameEnded}
-                    setGameEndedCause={setGameEndedCause}
-                    setGameWinner={setGameWinner}
-                    gameId={gameId}
-                    setMessagePopupVisible={setMessageBoxVisible}
-                    setMessageToDisplay={setMessageToDisplay}
-                    parentActionWebsocket={actionWebSocketRef}
-                    setDrawOfferReceived={setDrawOfferReceived}
-                />
-            </div>
-
-            {messageBoxVisible && <MessageBox
-                visible={messageBoxVisible}
-                setVisible={setMessageBoxVisible}
-
-                type={messageType}
-                text={messageToDisplay}
-                disappearAfterSeconds={3}
-                xAlignment="right"
-                yAlignment="bottom"
-            />}
-
-            <DrawOfferPopup onClose={() => {
-                setDrawOfferReceived(false);
-            }} visible={drawOfferReceived} actionWebsocketRef={actionWebSocketRef} />
-        </div>
+            <DrawOfferPopup
+                onClose={() => {
+                    setDrawOfferReceived(false);
+                }}
+                visible={drawOfferReceived}
+                actionWebsocketRef={actionWebSocketRef}
+            />
+        </>
     );
 }
 
