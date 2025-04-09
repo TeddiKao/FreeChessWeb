@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import MultiplayerChessboard from "../../globalComponents/chessboards/MultiplayerChessboard.js";
 import Timer from "../../pageComponents/gameplay/Timer.tsx";
@@ -26,6 +26,7 @@ import GameplayActionButtons from "../../globalComponents/gameplaySidePanel/Game
 import { isNullOrUndefined } from "../../utils/generalUtils.ts";
 import MessageBox from "../../globalComponents/popups/MessageBox.tsx";
 import { MessageBoxTypes } from "../../types/messageBox.ts";
+import DrawOfferPopup from "../../globalComponents/popups/DrawOfferPopup.tsx";
 
 function Play() {
     const location = useLocation();
@@ -56,6 +57,8 @@ function Play() {
     const [messageToDisplay, setMessageToDisplay] = useState<string>("");
     const [messageType, setMessageType] = useState<MessageBoxTypes>("info");
 
+    const [drawOfferReceived, setDrawOfferReceived] = useState<boolean>(false);
+
     const parsedFEN = positionList[positionIndex]?.["position"];
     const lastDraggedSquare =
         positionList[positionIndex]?.["last_dragged_square"];
@@ -72,6 +75,8 @@ function Play() {
     const [gameplaySettings, setGameplaySettings] = useState(
         initialGameplaySettings
     );
+
+    const actionWebSocketRef = useRef(null);
 
     useEffect(() => {
         updatePlayerTimers();
@@ -336,6 +341,8 @@ function Play() {
                 xAlignment="right"
                 yAlignment="bottom"
             />}
+
+            <DrawOfferPopup visible={drawOfferReceived} />
         </div>
     );
 }

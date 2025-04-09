@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import "../../styles/features/gameplay/gameplay-action-buttons.scss";
 import ConfirmationPopup from "../popups/ConfirmationPopup";
 
-import { StateSetterFunction } from "../../types/general";
+import { RefObject, StateSetterFunction } from "../../types/general";
 
 import useWebSocket from "../../hooks/useWebsocket";
 import { websocketBaseURL } from "../../constants/urls";
@@ -12,6 +12,7 @@ import { WebSocketEventTypes } from "../../enums/gameLogic";
 
 type GameplayActionButtonsProps = {
     gameId: string | number;
+    parentActionWebsocket: RefObject<WebSocket | null>
     setGameEnded: StateSetterFunction<boolean>;
     setGameEndedCause: StateSetterFunction<string>;
     setGameWinner: StateSetterFunction<string>;
@@ -20,6 +21,7 @@ type GameplayActionButtonsProps = {
 };
 
 function GameplayActionButtons({
+    parentActionWebsocket,
     gameId,
     setGameEnded,
     setGameEndedCause,
@@ -45,6 +47,8 @@ function GameplayActionButtons({
             );
 
             actionWebsocketExists.current = true;
+
+            parentActionWebsocket.current = actionWebsocketRef.current
 
             window.addEventListener("beforeunload", handleWindowUnload);
         }

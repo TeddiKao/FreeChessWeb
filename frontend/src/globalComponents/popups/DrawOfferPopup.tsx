@@ -1,0 +1,37 @@
+import "../../styles/popups/draw-offer-popup.scss"
+import { RefObject } from "../../types/general";
+
+type DrawOfferPopupProps = {
+    visible: boolean;
+    onClose: () => void
+    actionWebsocketRef: RefObject<WebSocket>
+}
+
+function DrawOfferPopup({ visible, onClose, actionWebsocketRef }: DrawOfferPopupProps) {
+    function handleDrawAccept() {
+        onClose();
+
+        // TODO: Send message to action websocket
+    }
+
+    function handleDrawDecline() {
+        onClose();
+    }
+
+    if (!visible) {
+        return;
+    }
+
+    return (
+        <div className="draw-offer-popup-container">
+            <h3 className="draw-offer-popup-heading">Draw offer</h3>
+            <p className="accept-draw-prompt">Accept draw?</p>
+            <div className="action-buttons-container">
+                <button onClick={handleDrawAccept} className="accept-draw-button">Accept</button>
+                <button onClick={handleDrawDecline} className="decline-draw-button">Decline</button>
+            </div>
+        </div>
+    )
+}
+
+export default DrawOfferPopup;
