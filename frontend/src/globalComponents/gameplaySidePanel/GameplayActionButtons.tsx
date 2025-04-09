@@ -18,6 +18,7 @@ type GameplayActionButtonsProps = {
     setGameWinner: StateSetterFunction<string>;
     setMessagePopupVisible: StateSetterFunction<boolean>;
     setMessageToDisplay: StateSetterFunction<string>;
+    setDrawOfferReceived: StateSetterFunction<boolean>;
 };
 
 function GameplayActionButtons({
@@ -27,7 +28,8 @@ function GameplayActionButtons({
     setGameEndedCause,
     setGameWinner,
     setMessageToDisplay,
-    setMessagePopupVisible
+    setMessagePopupVisible,
+    setDrawOfferReceived
 }: GameplayActionButtonsProps) {
     const actionWebsocketRef = useRef<WebSocket | null>(null);
     const actionWebsocketExists = useRef<boolean>(false);
@@ -110,7 +112,7 @@ function GameplayActionButtons({
                 break;
 
             case WebSocketEventTypes.DRAW_OFFERED:
-                console.log(`Draw offered by ${parsedEventData["offered_by"]}`)
+                handleDrawOffered();
                 break;
 
             default:
@@ -124,6 +126,10 @@ function GameplayActionButtons({
         setGameEnded(true);
         setGameEndedCause("Resignation");
         setGameWinner(eventData["winning_color"]);
+    }
+
+    function handleDrawOffered() {
+        setDrawOfferReceived(true);
     }
 
     return (

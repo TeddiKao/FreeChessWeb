@@ -328,6 +328,8 @@ function Play() {
                     gameId={gameId}
                     setMessagePopupVisible={setMessageBoxVisible}
                     setMessageToDisplay={setMessageToDisplay}
+                    parentActionWebsocket={actionWebSocketRef}
+                    setDrawOfferReceived={setDrawOfferReceived}
                 />
             </div>
 
@@ -342,7 +344,9 @@ function Play() {
                 yAlignment="bottom"
             />}
 
-            <DrawOfferPopup visible={drawOfferReceived} />
+            <DrawOfferPopup onClose={() => {
+                setDrawOfferReceived(false);
+            }} visible={drawOfferReceived} actionWebsocketRef={actionWebSocketRef} />
         </div>
     );
 }

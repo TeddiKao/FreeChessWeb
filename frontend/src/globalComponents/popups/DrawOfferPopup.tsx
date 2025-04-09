@@ -4,14 +4,20 @@ import { RefObject } from "../../types/general";
 type DrawOfferPopupProps = {
     visible: boolean;
     onClose: () => void
-    actionWebsocketRef: RefObject<WebSocket>
+    actionWebsocketRef: RefObject<WebSocket | null>
 }
 
 function DrawOfferPopup({ visible, onClose, actionWebsocketRef }: DrawOfferPopupProps) {
+    if (!actionWebsocketRef || !actionWebsocketRef.current) {
+        return null;
+    }
+    
     function handleDrawAccept() {
         onClose();
 
-        // TODO: Send message to action websocket
+        actionWebsocketRef.current?.send(JSON.stringify({
+            "type": "draw_offer_accepted"
+        }))
     }
 
     function handleDrawDecline() {

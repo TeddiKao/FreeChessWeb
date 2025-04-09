@@ -1,7 +1,9 @@
 @use "../global/mixins.scss" as *;
 
 .draw-offer-popup-container {
-    @include page-center-xy;
+    position: fixed;
+    right: 0;
+    bottom: 0;
 
     border-left: 4px solid hsl(220, 100%, 60%);
     background-color: hsl(220, 100%, 95%);
