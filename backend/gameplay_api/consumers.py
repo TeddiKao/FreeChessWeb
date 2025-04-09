@@ -595,7 +595,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		asyncio.create_task(self.handle_timer_decrement())
 
 
-class ResignConsumer(AsyncWebsocketConsumer):
+class GameActionConsumer(AsyncWebsocketConsumer):
 	@database_sync_to_async
 	def get_chess_game(self, chess_game_id) -> ChessGame:
 		return ChessGame.objects.get(id=chess_game_id)
@@ -689,7 +689,6 @@ class ResignConsumer(AsyncWebsocketConsumer):
 			await chess_game_model.async_end_game("Resigned")
 
 		elif received_data["type"] == "draw_offered":
-
 			await self.channel_layer.group_send(
 				self.opponent_room_group_name,
 				{
@@ -698,6 +697,21 @@ class ResignConsumer(AsyncWebsocketConsumer):
 				}
 			)
 
+		elif received_data["type"] == "draw_offer_accepted":
+			await self.channel_layer.group_send(
+				self.room_group_name,
+				{
+					"accepted_by": self.scope["user"].username
+				}
+			)
+
+		elif received_data["type"] == "draw_offer_declined":
+			await self.channel_layer.group_send(
+				self.opponent_room_group_name,
+				{
+					"declined_by": self.scope["user"].username
+				}
+			)
 
 	async def player_resigned(self, event):
 		await self.send(json.dumps({
@@ -710,4 +724,16 @@ class ResignConsumer(AsyncWebsocketConsumer):
 		await self.send(json.dumps({
 			"type": "draw_offered",
 			"offered_by": event["offered_by"]
+		}))
+
+	async def draw_accepted(self, event):
+		await self.send(json.dumps({
+			"type": "draw_accepted",
+			"accepted_by": event["accepted_by"]
+		}))
+
+	async def decline_draw(self, event):
+		await self.send(json.dumps({
+			"type": "draw_declined",
+			"declined_by": event["declined_by"]
 		}))
