@@ -27,6 +27,7 @@ import { isNullOrUndefined } from "../../utils/generalUtils.ts";
 import MessageBox from "../../globalComponents/popups/MessageBox.tsx";
 import { MessageBoxTypes } from "../../types/messageBox.ts";
 import DrawOfferPopup from "../../globalComponents/popups/DrawOfferPopup.tsx";
+import { playAudio } from "../../utils/audioUtils.ts";
 
 function Play() {
     const location = useLocation();
@@ -64,6 +65,7 @@ function Play() {
         positionList[positionIndex]?.["last_dragged_square"];
     const lastDroppedSquare =
         positionList[positionIndex]?.["last_dropped_square"];
+    const moveType = positionList[positionIndex]?.["move_type"];
 
     const [boardOrientation, setBoardOrientation] = useState(
         location.state?.assignedColor || "White"
@@ -87,6 +89,12 @@ function Play() {
     useEffect(() => {
         setPositionIndex(positionList.length - 1);
     }, [positionList]);
+
+    useEffect(() => {
+        if (!isNullOrUndefined(moveType)) {
+            playAudio(moveType);
+        }
+    }, [positionIndex]);
 
     function handleKeyDown(event: KeyboardEvent) {
         switch (event.key) {
@@ -170,8 +178,6 @@ function Play() {
         const positionList = await fetchPositionList(
             Number(location.state?.gameId)
         );
-
-        console.log(positionList);
 
         setPositionList(positionList);
     }

@@ -140,7 +140,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 			await asyncio.sleep(1)
 
-	async def append_to_position_list(self, chess_game_model: ChessGame, move_info: dict):
+	async def append_to_position_list(self, chess_game_model: ChessGame, move_info: dict, move_type):
 		newest_updated_fen, current_position_list = await asyncio.gather(
 			chess_game_model.get_full_parsed_fen(),
 			self.get_game_attribute(chess_game_model, "position_list")
@@ -153,7 +153,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 		updated_position_list.append({
 			"position": newest_updated_fen,
 			"last_dragged_square": starting_square,
-			"last_dropped_square": destination_square
+			"last_dropped_square": destination_square,
+			"move_type": move_type
 		})
 
 		await self.update_game_attribute(chess_game_model, "position_list", updated_position_list, should_save=False)
@@ -285,6 +286,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 		original_parsed_fen = copy.deepcopy(await chess_game_model.get_full_parsed_fen())
 		new_board_placement = copy.deepcopy(original_parsed_fen["board_placement"])
 
+		move_type = get_move_type(new_board_placement, chess_game_model.en_passant_target_square, move_info)
+
 		starting_square = move_info["starting_square"]
 		destination_square = move_info["destination_square"]
 		initial_square = move_info["initial_square"] if "initial_square" in move_info.keys(
@@ -354,7 +357,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if piece_color == "black":
 			await self.increment_move_number(chess_game_model)
 
-		await self.append_to_position_list(chess_game_model, move_info)
+		await self.append_to_position_list(chess_game_model, move_info, move_type)
 		await self.append_to_move_list(chess_game_model, original_parsed_fen, move_info)
 
 	async def handle_player_timeout(self, chess_game_model: ChessGame, timeout_color: str):
