@@ -44,6 +44,7 @@ function Play() {
             position: ParsedFENString;
             last_dragged_square: string;
             last_dropped_square: string;
+            move_type: string;
         }>
     >([]);
     const [positionIndex, setPositionIndex] = useState<number>(0);
