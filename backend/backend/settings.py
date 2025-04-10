@@ -64,10 +64,10 @@ INSTALLED_APPS = [
 	"rest_framework_simplejwt",
 	"corsheaders",
 
-	"users_api",
-	"gameplay_api",
-	"matchmaking_api",
-	"move_validation_api",
+	"users",
+	"gameplay",
+	"matchmaking",
+	"move_validation",
 	"core"
 ]
 
@@ -120,7 +120,7 @@ CHANNEL_LAYERS = {
     },
 }
 
-AUTH_USER_MODEL = "users_api.UserAuthModel"
+AUTH_USER_MODEL = "users.UserAuthModel"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
