@@ -22,6 +22,10 @@ function DrawOfferPopup({ visible, onClose, actionWebsocketRef }: DrawOfferPopup
 
     function handleDrawDecline() {
         onClose();
+
+        actionWebsocketRef.current?.send(JSON.stringify({
+            "type": "draw_offer_declined"
+        }))
     }
 
     if (!visible) {
