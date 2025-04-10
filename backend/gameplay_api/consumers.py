@@ -671,10 +671,11 @@ class GameActionConsumer(AsyncWebsocketConsumer):
 
 	async def receive(self, text_data=None, bytes_data=None):
 		received_data = json.loads(text_data)
+		chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
+
 		if received_data["type"] == "resign_request":
 			resigner = self.scope["user"].username
 
-			chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
 			winning_color = await self.get_game_winner_from_resigning_player(chess_game_model, resigner)
 
 			await self.channel_layer.group_send(
@@ -698,9 +699,12 @@ class GameActionConsumer(AsyncWebsocketConsumer):
 			)
 
 		elif received_data["type"] == "draw_offer_accepted":
+			await chess_game_model.async_end_game("Draw")
+
 			await self.channel_layer.group_send(
 				self.room_group_name,
 				{
+					"type": "draw_accepted",
 					"accepted_by": self.scope["user"].username
 				}
 			)

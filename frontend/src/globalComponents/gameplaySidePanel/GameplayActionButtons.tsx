@@ -115,6 +115,10 @@ function GameplayActionButtons({
                 handleDrawOffered();
                 break;
 
+            case WebSocketEventTypes.DRAW_OFFER_ACCPETED:
+                handleDrawAccepted();
+                break;
+
             default:
                 console.error(`Unknown even type ${eventType}`);
         }
@@ -130,6 +134,11 @@ function GameplayActionButtons({
 
     function handleDrawOffered() {
         setDrawOfferReceived(true);
+    }
+
+    function handleDrawAccepted() {
+        setGameEnded(true);
+        setGameEndedCause("Agreement");
     }
 
     return (
