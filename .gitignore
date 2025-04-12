@@ -1,1 +1,5 @@
 backend/db.sqlite3
+
+backend/move_validation/__pycache__/
+backend/matchmaking/__pycache__/
+backend/gameplay/__pycache__/cl
