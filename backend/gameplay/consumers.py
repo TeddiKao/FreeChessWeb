@@ -716,6 +716,7 @@ class GameActionConsumer(AsyncWebsocketConsumer):
 			await self.channel_layer.group_send(
 				self.opponent_room_group_name,
 				{
+					"type": "draw_declined",
 					"declined_by": self.scope["user"].username
 				}
 			)
@@ -739,7 +740,7 @@ class GameActionConsumer(AsyncWebsocketConsumer):
 			"accepted_by": event["accepted_by"]
 		}))
 
-	async def decline_draw(self, event):
+	async def draw_declined(self, event):
 		await self.send(json.dumps({
 			"type": "draw_declined",
 			"declined_by": event["declined_by"]
