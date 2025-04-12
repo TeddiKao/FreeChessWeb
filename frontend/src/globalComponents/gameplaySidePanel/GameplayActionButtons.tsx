@@ -8,7 +8,7 @@ import { RefObject, StateSetterFunction } from "../../types/general";
 import useWebSocket from "../../hooks/useWebsocket";
 import { websocketBaseURL } from "../../constants/urls";
 import { getAccessToken } from "../../utils/tokenUtils";
-import { WebSocketEventTypes } from "../../enums/gameLogic";
+import { ActionWebSocketEventTypes } from "../../enums/gameLogic";
 
 type GameplayActionButtonsProps = {
     gameId: string | number;
@@ -107,19 +107,19 @@ function GameplayActionButtons({
         const eventType = parsedEventData["type"];
 
         switch (eventType) {
-            case WebSocketEventTypes.PLAYER_RESIGNED:
+            case ActionWebSocketEventTypes.PLAYER_RESIGNED:
                 handleResignation(parsedEventData);
                 break;
 
-            case WebSocketEventTypes.DRAW_OFFERED:
+            case ActionWebSocketEventTypes.DRAW_OFFERED:
                 handleDrawOffered();
                 break;
 
-            case WebSocketEventTypes.DRAW_OFFER_ACCPETED:
+            case ActionWebSocketEventTypes.DRAW_OFFER_ACCPETED:
                 handleDrawAccepted();
                 break;
 
-            case WebSocketEventTypes.DRAW_OFFER_DECLINED:
+            case ActionWebSocketEventTypes.DRAW_OFFER_DECLINED:
                 handleDrawDeclined();
                 break;
 

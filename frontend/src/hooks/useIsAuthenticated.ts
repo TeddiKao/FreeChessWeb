@@ -48,9 +48,7 @@ function useIsAuthenticated() {
         }
 
         const decodedAccessToken: any = jwtDecode(userAccessToken);
-
         const accessTokenExpiry: any = decodedAccessToken.exp;
-
         const now: number = Date.now() / 1000;
 
         if (accessTokenExpiry < now) {

@@ -6,7 +6,7 @@ import "../../styles/components/chessboard/chessboard.scss";
 import Square from "../Square.js";
 
 // Types, interfaces, enums
-import { MoveMethods, WebSocketEventTypes } from "../../enums/gameLogic.ts";
+import { MoveMethods, GameplayWebSocketEventTypes } from "../../enums/gameLogic.ts";
 import { MultiplayerChessboardProps } from "../../interfaces/chessboard.js";
 import { ChessboardSquareIndex, OptionalValue } from "../../types/general.ts";
 import {
@@ -160,35 +160,35 @@ function MultiplayerChessboard({
         const eventType = parsedEventData["type"];
 
         switch (eventType) {
-            case WebSocketEventTypes.MOVE_MADE:
+            case GameplayWebSocketEventTypes.MOVE_MADE:
                 makeMove(parsedEventData);
                 break;
 
-            case WebSocketEventTypes.TIMER_DECREMENTED:
+            case GameplayWebSocketEventTypes.TIMER_DECREMENTED:
                 handleTimerChange(parsedEventData);
                 break;
 
-            case WebSocketEventTypes.TIMER_INCREMENTED:
+            case GameplayWebSocketEventTypes.TIMER_INCREMENTED:
                 handleTimerChange(parsedEventData);
                 break;
 
-            case WebSocketEventTypes.POSITION_LIST_UPDATED:
+            case GameplayWebSocketEventTypes.POSITION_LIST_UPDATED:
                 handlePositionListUpdate(parsedEventData);
                 break;
 
-            case WebSocketEventTypes.MOVE_LIST_UPDATED:
+            case GameplayWebSocketEventTypes.MOVE_LIST_UPDATED:
                 handleMoveListUpdate(parsedEventData);
                 break;
 
-            case WebSocketEventTypes.PLAYER_CHECKMATED:
+            case GameplayWebSocketEventTypes.PLAYER_CHECKMATED:
                 handleCheckmate(parsedEventData);
                 break;
 
-            case WebSocketEventTypes.PLAYER_STALEMATED:
+            case GameplayWebSocketEventTypes.PLAYER_STALEMATED:
                 handleStalemate(parsedEventData);
                 break;
 
-            case WebSocketEventTypes.PLAYER_TIMEOUT:
+            case GameplayWebSocketEventTypes.PLAYER_TIMEOUT:
                 handlePlayerTimeout(parsedEventData);
                 break;
 
