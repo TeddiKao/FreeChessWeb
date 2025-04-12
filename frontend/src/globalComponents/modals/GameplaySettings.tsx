@@ -2,8 +2,14 @@ import useGameplaySettings from "../../hooks/useGameplaySettings.js";
 import Setting from "../settings/Setting.js";
 
 import "../../styles/modals/gameplay-settings.scss";
+import { StateSetterFunction } from "../../types/general.js";
 
-function GameplaySettings({ onClose, setGameplaySettings }) {
+type GameplaySettingsModalProps = {
+    onClose: () => void;
+    setGameplaySettings: StateSetterFunction<any>;
+}
+
+function GameplaySettings({ onClose, setGameplaySettings }: GameplaySettingsModalProps) {
     const gameplaySettings = useGameplaySettings();
     if (!gameplaySettings) {
         return null;
@@ -20,7 +26,7 @@ function GameplaySettings({ onClose, setGameplaySettings }) {
                 settingId="auto_queen"
                 initialSettingValue={autoQueen}
                 settingType="switch"
-                setGameplaySettingvs={setGameplaySettings}
+                setGameplaySettings={setGameplaySettings}
             />
 
             <Setting
@@ -28,7 +34,7 @@ function GameplaySettings({ onClose, setGameplaySettings }) {
                 settingType="switch"
                 settingId="show_legal_moves"
                 initialSettingValue={showLegalMoves}
-                setGameplaySettingvs={setGameplaySettings}
+                setGameplaySettings={setGameplaySettings}
             />
 
             <button onClick={onClose} className="close-button">
