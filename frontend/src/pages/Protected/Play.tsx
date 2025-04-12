@@ -327,7 +327,10 @@ function Play() {
                     <MoveListPanel
                         moveList={moveList}
                         setPositionIndex={setPositionIndex}
+                        gameWinner={gameWinner}
+                        gameEnded={hasGameEnded}
                     />
+                    
                     <MoveNavigationButtons
                         backToStart={handleBackToStart}
                         handlePreviousMove={handlePreviousMove}
