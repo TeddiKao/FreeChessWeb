@@ -18,6 +18,7 @@ interface PositionListUpdateEventData extends BasicWebSocketEventData {
         position: ParsedFENString;
         last_dragged_square: string;
         last_dropped_square: string;
+        move_type: string;
     }>;
 }
 

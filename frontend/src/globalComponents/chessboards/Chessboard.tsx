@@ -178,8 +178,6 @@ function Chessboard({
             return;
         }
 
-        
-
         const lowercasedPieceType =
             pieceTypeToValidate.toLowerCase() as Lowercase<
                 typeof pieceTypeToValidate
