@@ -104,4 +104,4 @@ def is_threefold_repetiiton(position_list: list, position: dict):
     return position_occurences >= 3
 
 def check_50_move_rule_draw(halfmove_clock: int):
-    return halfmove_clock >= 10
+    return halfmove_clock >= 100
