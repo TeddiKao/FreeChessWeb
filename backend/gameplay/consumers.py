@@ -14,7 +14,7 @@ from channels.db import database_sync_to_async
 from move_validation.utils.move_validation import validate_move
 from move_validation.utils.get_move_type import get_move_type
 from move_validation.utils.general import *
-from move_validation.utils.result_detection import get_is_checkmated, get_is_stalemated
+from move_validation.utils.result_detection import get_is_checkmated, get_is_stalemated, is_threefold_repetiiton
 
 from .models import ChessGame
 from .utils.algebraic_notation_parser import get_algebraic_notation
@@ -545,21 +545,28 @@ class GameConsumer(AsyncWebsocketConsumer):
 				}))
 			)
 
-			if is_checkmated:
-				await chess_game_model.async_end_game(f"{piece_color.capitalize()} won")
+			if is_checkmated or is_stalemated:
+				if is_checkmated:
+					await chess_game_model.async_end_game(f"{piece_color.capitalize()} won")
 
+					await self.send(json.dumps({
+						"type": "player_checkmated",
+						"winning_color": piece_color,
+						"winning_player": event["move_made_by"],
+					}))
+
+				if is_stalemated:
+					await chess_game_model.async_end_game("Draw")
+
+					await self.send(json.dumps({
+						"type": "player_stalemated",
+					}))
+
+			elif is_threefold_repetiiton(new_position_list, new_parsed_fen):
 				await self.send(json.dumps({
-					"type": "player_checkmated",
-					"winning_color": piece_color,
-					"winning_player": event["move_made_by"],
+					"type": "threefold_repetition_detected",
 				}))
 
-			if is_stalemated:
-				await chess_game_model.async_end_game("Draw")
-
-				await self.send(json.dumps({
-					"type": "player_stalemated",
-				}))
 
 			if timer_task:
 				await self.send(json.dumps({
