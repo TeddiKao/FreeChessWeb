@@ -60,5 +60,16 @@ def convert_to_algebraic_notation(square):
 
 	return f"{files_list[square_file]}{square_rank + 1}"
 
+def get_all_pieces_of_color(board_placement, color: str):
+	color = color.lower()
+
+	pieces = []
+	for square in board_placement.keys():
+		if board_placement[square]["piece_color"].lower() == color:
+			piece_type = board_placement[square]["piece_type"]
+			pieces.append(piece_type)
+
+	return pieces
+
 def is_square_on_board(square_number):
 	return 0 <= int(square_number) <= 63
