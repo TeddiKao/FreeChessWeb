@@ -82,4 +82,4 @@ def get_position_occurences(position_list: list, position: dict):
 def is_threefold_repetiiton(position_list: list, position: dict):
     position_occurences = get_position_occurences(position_list, position)
 
-    return position_occurences
+    return position_occurences >= 3
