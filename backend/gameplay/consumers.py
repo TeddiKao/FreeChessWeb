@@ -357,6 +357,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if piece_color == "black":
 			await self.increment_move_number(chess_game_model)
 
+		if piece_type.lower() != "pawn" and move_type.lower() == "capture":
+			current_halfmove_clock = chess_game_model.halfmove_clock
+			
+			await self.update_game_attribute(chess_game_model, "halfmove_clock", current_halfmove_clock + 1, should_save=False)
+		else:
+			await self.update_game_attribute(chess_game_model, "halfmove_clock", 0)
+
 		await self.append_to_position_list(chess_game_model, move_info, move_type)
 		await self.append_to_move_list(chess_game_model, original_parsed_fen, move_info)
 
