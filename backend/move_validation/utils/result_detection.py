@@ -68,3 +68,8 @@ def get_is_checkmated(current_fen: dict, king_color: str) -> bool:
             return False
 
     return True
+
+def is_threefold_repetiiton(position_list: list, position: dict):
+    position_occurences = position_list.count(position)
+
+    return position_occurences >= 3
