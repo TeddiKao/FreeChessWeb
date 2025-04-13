@@ -12,6 +12,7 @@ enum GameplayWebSocketEventTypes {
 	PLAYER_STALEMATED = "player_stalemated",
 	PLAYER_CHECKMATED = "player_checkmated",
 	THREEFOLD_REPETITION_DETECTED =  "threefold_repetition_detected",
+	FIFTY_MOVE_RULE_DETECTED = "50_move_rule_detected",
 	PLAYER_TIMEOUT = "player_timeout"
 }
 

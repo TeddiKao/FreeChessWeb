@@ -185,11 +185,15 @@ function MultiplayerChessboard({
                 break;
 
             case GameplayWebSocketEventTypes.PLAYER_STALEMATED:
-                handleStalemate(parsedEventData);
+                handleStalemate();
                 break;
 
             case GameplayWebSocketEventTypes.THREEFOLD_REPETITION_DETECTED:
                 handleThreefoldRepetition();
+                break;
+
+            case GameplayWebSocketEventTypes.FIFTY_MOVE_RULE_DETECTED:
+                handle50MoveRule();
                 break;
 
             case GameplayWebSocketEventTypes.PLAYER_TIMEOUT:
@@ -207,7 +211,7 @@ function MultiplayerChessboard({
         setParsedFENString(currentPosition);
     }
 
-    function handleStalemate(parsedEventData: any) {
+    function handleStalemate() {
         setGameEnded(true);
         setGameEndedCause("Stalemate");
     }
@@ -215,6 +219,11 @@ function MultiplayerChessboard({
     function handleThreefoldRepetition() {
         setGameEnded(true);
         setGameEndedCause("Repetition")
+    }
+
+    function handle50MoveRule() {
+        setGameEnded(true);
+        setGameEndedCause("50-move-rule");
     }
 
     function handleCheckmate(parsedEventData: CheckmateEventData) {
