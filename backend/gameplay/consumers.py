@@ -14,7 +14,7 @@ from channels.db import database_sync_to_async
 from move_validation.utils.move_validation import validate_move
 from move_validation.utils.get_move_type import get_move_type
 from move_validation.utils.general import *
-from move_validation.utils.result_detection import get_is_checkmated, get_is_stalemated, is_threefold_repetiiton
+from move_validation.utils.result_detection import get_is_checkmated, get_is_stalemated, is_threefold_repetiiton, check_50_move_rule_draw
 
 from .models import ChessGame
 from .utils.algebraic_notation_parser import get_algebraic_notation
@@ -567,6 +567,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 				
 				await self.send(json.dumps({
 					"type": "threefold_repetition_detected",
+				}))
+
+			elif check_50_move_rule_draw(chess_game_model.halfmove_clock):
+				await chess_game_model.async_end_game("Draw")
+
+				await self.send(json.dumps({
+					"type": "50_move_rule_detected"
 				}))
 
 
