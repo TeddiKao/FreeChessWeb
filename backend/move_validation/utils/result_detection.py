@@ -105,3 +105,6 @@ def is_threefold_repetiiton(position_list: list, position: dict):
 
 def check_50_move_rule_draw(halfmove_clock: int):
     return halfmove_clock >= 100
+
+def has_sufficient_material():
+    pass
