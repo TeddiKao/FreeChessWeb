@@ -563,6 +563,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 					}))
 
 			elif is_threefold_repetiiton(new_position_list, new_parsed_fen):
+				await chess_game_model.async_end_game("Draw")
+				
 				await self.send(json.dumps({
 					"type": "threefold_repetition_detected",
 				}))
