@@ -11,6 +11,7 @@ enum GameplayWebSocketEventTypes {
 	MOVE_LIST_UPDATED = "move_list_updated",
 	PLAYER_STALEMATED = "player_stalemated",
 	PLAYER_CHECKMATED = "player_checkmated",
+	THREEFOLD_REPETITION_DETECTED =  "threefold_repetition_detected",
 	PLAYER_TIMEOUT = "player_timeout"
 }
 

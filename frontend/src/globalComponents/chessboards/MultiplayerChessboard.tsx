@@ -188,6 +188,10 @@ function MultiplayerChessboard({
                 handleStalemate(parsedEventData);
                 break;
 
+            case GameplayWebSocketEventTypes.THREEFOLD_REPETITION_DETECTED:
+                handleThreefoldRepetition();
+                break;
+
             case GameplayWebSocketEventTypes.PLAYER_TIMEOUT:
                 handlePlayerTimeout(parsedEventData);
                 break;
@@ -206,6 +210,11 @@ function MultiplayerChessboard({
     function handleStalemate(parsedEventData: any) {
         setGameEnded(true);
         setGameEndedCause("Stalemate");
+    }
+
+    function handleThreefoldRepetition() {
+        setGameEnded(true);
+        setGameEndedCause("Repetition")
     }
 
     function handleCheckmate(parsedEventData: CheckmateEventData) {
