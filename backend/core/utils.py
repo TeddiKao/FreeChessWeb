@@ -1,4 +1,5 @@
 from django.db.models import Model, Field
+from deepdiff import DeepDiff
 
 def to_dict(model_instance: Model, exclude_fields: list[str] = None):
 	exclude_fields = exclude_fields or []
@@ -16,3 +17,6 @@ def to_dict(model_instance: Model, exclude_fields: list[str] = None):
 		model_data[field_name] = field_value
 
 	return model_data
+
+def compare_dictionaries(dict1: dict, dict2):
+	return not DeepDiff(dict1, dict2)

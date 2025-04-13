@@ -1,4 +1,5 @@
 from .get_legal_moves import is_king_in_check, get_legal_moves
+from core.utils import compare_dictionaries
 
 def get_is_stalemated(current_fen: dict, king_color: str) -> bool:
     board_placement = current_fen["board_placement"]
@@ -69,7 +70,16 @@ def get_is_checkmated(current_fen: dict, king_color: str) -> bool:
 
     return True
 
-def is_threefold_repetiiton(position_list: list, position: dict):
-    position_occurences = position_list.count(position)
+def get_position_occurences(position_list: list, position: dict):
+    occurences = 0
 
-    return position_occurences >= 3
+    for position_list_data in position_list:
+        if compare_dictionaries(position_list_data["position"], position):
+            occurences += 1
+
+    return occurences
+
+def is_threefold_repetiiton(position_list: list, position: dict):
+    position_occurences = get_position_occurences(position_list, position)
+
+    return position_occurences
