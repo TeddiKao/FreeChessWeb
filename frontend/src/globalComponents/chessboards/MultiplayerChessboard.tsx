@@ -196,6 +196,10 @@ function MultiplayerChessboard({
                 handle50MoveRule();
                 break;
 
+            case GameplayWebSocketEventTypes.INSUFFICIENT_MATERIAL:
+                handleInsufficientMaterial();
+                break;
+
             case GameplayWebSocketEventTypes.PLAYER_TIMEOUT:
                 handlePlayerTimeout(parsedEventData);
                 break;
@@ -224,6 +228,11 @@ function MultiplayerChessboard({
     function handle50MoveRule() {
         setGameEnded(true);
         setGameEndedCause("50-move-rule");
+    }
+
+    function handleInsufficientMaterial() {
+        setGameEnded(true);
+        setGameEndedCause("Insufficient material");
     }
 
     function handleCheckmate(parsedEventData: CheckmateEventData) {
