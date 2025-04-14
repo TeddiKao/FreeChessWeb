@@ -74,8 +74,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		await self.update_game_attribute(chess_game_model, "black_player_clock", new_time)
 
-	async def check_move_validation(self, move_info):
+	async def check_move_validation(self, move_info, move_made_by = None):
 		game_id = self.game_id
+		color_moved = move_info["piece_color"]
+		side_to_move = await ChessGame.async_get_game_attribute_from_id(game_id, "current_player_turn")
+
+		if side_to_move.lower() != color_moved.lower():
+			return False
 
 		move_data_fetch_start = perf_counter()
 
