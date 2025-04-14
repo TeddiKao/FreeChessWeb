@@ -71,7 +71,7 @@ def get_all_pieces_of_color(board_placement, color: str):
 
 	return pieces
 
-def get_all_pieces_on_board(board_placement: dict, color: str):
+def get_all_pieces_on_board(board_placement: dict):
 	pieces = []
 	for square in board_placement.keys():
 		square_info = board_placement[square]

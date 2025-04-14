@@ -1,5 +1,13 @@
 from .get_legal_moves import is_king_in_check, get_legal_moves
+from .general import get_all_pieces_on_board
+
 from core.utils import compare_dictionaries
+
+insufficient_material_configurations = [
+    ["king", "bishop", "king"],
+    ["king", "knight", "king"],
+    ["king", "knight", "king", "knight"],
+]
 
 def get_is_stalemated(current_fen: dict, king_color: str) -> bool:
     board_placement = current_fen["board_placement"]
@@ -106,5 +114,7 @@ def is_threefold_repetiiton(position_list: list, position: dict):
 def check_50_move_rule_draw(halfmove_clock: int):
     return halfmove_clock >= 100
 
-def has_sufficient_material():
-    pass
+def has_sufficient_material(board_placement):
+    all_pieces_on_board = get_all_pieces_on_board(board_placement)
+
+    return not (all_pieces_on_board in insufficient_material_configurations)
