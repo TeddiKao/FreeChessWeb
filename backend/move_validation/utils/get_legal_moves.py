@@ -179,6 +179,10 @@ def get_legal_moves_in_straight_direction(board_placement, constant_value_str, d
         else:
             square = f"{get_square(piece_file, value)}"
 
+        print(square)
+
+        king_position = get_king_position(board_placement, piece_color)
+
         starting_square_info = {
             "starting_square": start_square,
             "piece_type": board_placement[start_square]["piece_type"],
@@ -186,10 +190,13 @@ def get_legal_moves_in_straight_direction(board_placement, constant_value_str, d
         }
 
         if f"{square}" in board_placement:
-            if board_placement[f"{square}"]["piece_color"] != piece_color:
+            if board_placement[f"{square}"]["piece_color"].lower() != piece_color.lower():
+                if str(square) == str(king_position):
+                    break
+                
                 updated_board_placement = update_FEN(
                     board_placement, starting_square_info, square)
-                
+
                 if is_king_in_check(updated_board_placement, piece_color):
                     break
 
@@ -197,6 +204,9 @@ def get_legal_moves_in_straight_direction(board_placement, constant_value_str, d
 
                 break
 
+            break
+
+        if str(square) == str(king_position):
             break
 
         updated_board_placement = update_FEN(

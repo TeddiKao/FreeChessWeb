@@ -19,6 +19,4 @@ def to_dict(model_instance: Model, exclude_fields: list[str] = None):
 	return model_data
 
 def compare_dictionaries(dict1: dict, dict2: dict):
-	print(DeepDiff(dict1, dict2))
-
 	return len(DeepDiff(dict1, dict2)) == 0

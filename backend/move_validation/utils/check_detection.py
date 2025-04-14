@@ -23,6 +23,9 @@ def is_checked_north(board_placement: dict, king_color: str):
 
     for rank in range(king_rank + 1, 8):
         square = str(get_square(king_file, rank))
+        if square == king_position:
+            continue
+
         if square in board_placement.keys():
             piece_color = board_placement[square]["piece_color"]
             piece_type = board_placement[square]["piece_type"]
@@ -46,6 +49,9 @@ def is_checked_south(board_placement: dict, king_color: str):
 
     for rank in range(king_rank - 1, -1, -1):
         square = str(get_square(king_file, rank))
+        if square == king_position:
+            continue
+
         if square in board_placement.keys():
             piece_color = board_placement[square]["piece_color"]
             piece_type = board_placement[square]["piece_type"]
@@ -69,6 +75,9 @@ def is_checked_east(board_placement: dict, king_color: str):
 
     for file in range(king_file + 1, 8):
         square = str(get_square(file, king_rank))
+        if square == king_position:
+            continue
+
         if square in board_placement.keys():
             piece_color = board_placement[square]["piece_color"]
             piece_type = board_placement[square]["piece_type"]
@@ -92,6 +101,10 @@ def is_checked_west(board_placement: dict, king_color: str):
 
     for file in range(king_file - 1, -1, -1):
         square = str(get_square(file, king_rank))
+
+        if square == king_position:
+            continue 
+
         if square in board_placement.keys():
             piece_color = board_placement[square]["piece_color"]
             piece_type = board_placement[square]["piece_type"]
@@ -116,6 +129,8 @@ def is_checked_northwest(board_placement: dict, king_color):
     should_check_for_king = True
 
     while is_square_on_board(current_checking_square):
+        if str(current_checking_square) == str(king_position):
+            continue
 
         if str(current_checking_square) in board_placement.keys() and str(current_checking_square) != str(king_position):
             piece_color = board_placement[str(
@@ -154,6 +169,8 @@ def is_checked_northeast(board_placement: dict, king_color):
     should_check_for_king = True
 
     while is_square_on_board(current_checking_square):
+        if current_checking_square == king_position:
+            continue
 
         if str(current_checking_square) in board_placement.keys() and str(current_checking_square) != str(king_position):
             piece_color = board_placement[str(
@@ -192,6 +209,8 @@ def is_checked_southwest(board_placement: dict, king_color):
     should_check_for_king = True
 
     while is_square_on_board(current_checking_square):
+        if current_checking_square == king_position:
+            continue
 
         if str(current_checking_square) in board_placement.keys() and str(current_checking_square) != str(king_position):
             piece_color = board_placement[str(
@@ -230,6 +249,8 @@ def is_checked_southeast(board_placement: dict, king_color: dict):
     should_check_for_king = True
 
     while is_square_on_board(current_checking_square):
+        if current_checking_square == king_position:
+            continue
 
         if str(current_checking_square) in board_placement.keys() and str(current_checking_square) != str(king_position):
             piece_color = board_placement[str(
@@ -263,7 +284,11 @@ def is_checked_southeast(board_placement: dict, king_color: dict):
 def is_checked_by_knight(board_placement: dict, king_color: str):
     king_position = get_king_position(board_placement, king_color)
     for knight_movement in KNIGHT_MOVEMENTS:
+
         new_position = int(king_position) + knight_movement
+        if new_position == king_position:
+            continue
+
         file_difference = get_file(king_position) - get_file(new_position)
         rank_difference = get_row(king_position) - get_row(new_position)
 
