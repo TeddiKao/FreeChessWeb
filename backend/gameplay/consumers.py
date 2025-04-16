@@ -200,7 +200,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		piece_color: str = move_info["piece_color"]
 
-		# Piece type is not decalared as it will always be a king
+		# Piece type is not declared as it will always be a king
 
 		kingside_castling_squares = [6, 62]
 		queenside_castling_squares = [2, 58]

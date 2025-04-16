@@ -114,14 +114,12 @@ class ChessGame(models.Model):
 	@database_sync_to_async
 	def get_fen_from_game_id(self, game_id):
 		game_data = ChessGame.objects.only("id", "parsed_board_placement", "castling_rights", "en_passant_target_square", "halfmove_clock", "current_move").get(id=game_id)
-
 		return game_data.sync_get_full_parsed_fen()
 	
 	@database_sync_to_async
 	def async_get_game_attribute_from_id(self, game_id, attr_name):
 		attribute_data = ChessGame.objects.only(attr_name).get(id=game_id)
-		print(attribute_data)
-
+		
 		return getattr(attribute_data, attr_name)
 
 	def sync_get_full_parsed_fen(self):
