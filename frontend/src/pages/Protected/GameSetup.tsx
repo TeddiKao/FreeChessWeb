@@ -131,6 +131,7 @@ function GameSetup() {
                     timeControlDescription={bulletDescription}
                     setSelectionStage={setTimeControlSelectionStage}
                     setType={setSelectedTimeControlType}
+                    setSelectedTimeControl={setSelectedTimeControl}
                     setCustomTimeControlCreated={setCustomTimeControlCreated}
                 />
 
@@ -139,6 +140,7 @@ function GameSetup() {
                     timeControlDescription={blitzDescription}
                     setSelectionStage={setTimeControlSelectionStage}
                     setType={setSelectedTimeControlType}
+                    setSelectedTimeControl={setSelectedTimeControl}
                     setCustomTimeControlCreated={setCustomTimeControlCreated}
                 />
 
@@ -147,6 +149,7 @@ function GameSetup() {
                     timeControlDescription={rapidDescription}
                     setSelectionStage={setTimeControlSelectionStage}
                     setType={setSelectedTimeControlType}
+                    setSelectedTimeControl={setSelectedTimeControl}
                     setCustomTimeControlCreated={setCustomTimeControlCreated}
                 />
 
@@ -155,6 +158,7 @@ function GameSetup() {
                     timeControlDescription={classicalDescription}
                     setSelectionStage={setTimeControlSelectionStage}
                     setType={setSelectedTimeControlType}
+                    setSelectedTimeControl={setSelectedTimeControl}
                     setCustomTimeControlCreated={setCustomTimeControlCreated}
                 />
 
@@ -163,12 +167,13 @@ function GameSetup() {
                     timeControlDescription={customDescription}
                     setSelectionStage={setTimeControlSelectionStage}
                     setType={setSelectedTimeControlType}
+                    setSelectedTimeControl={setSelectedTimeControl}
                     setCustomTimeControlCreated={setCustomTimeControlCreated}
                 />
             </div>
         );
     }
-    
+
     function showTimeControlAmounts() {
         if (!selectedTimeControlType) {
             return null;
