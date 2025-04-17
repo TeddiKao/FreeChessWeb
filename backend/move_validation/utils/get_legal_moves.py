@@ -1,6 +1,5 @@
 from .general import *
 from .legal_move_helpers import update_FEN
-from .get_attacking_squares import get_attacking_squares_of_color
 from .check_detection import is_king_in_check
 
 piece_directions_mapping = {
