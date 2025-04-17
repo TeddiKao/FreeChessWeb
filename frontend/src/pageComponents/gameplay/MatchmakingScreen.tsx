@@ -45,7 +45,7 @@ function MatchmakingScreen({
     useEffect(() => {
         async function onMatchFound() {
             if (matchFound) {
-                console.log(matchmakingWebsocketRef.current);
+                
 
                 if (matchmakingWebsocketRef.current) {
                     if (
@@ -55,7 +55,7 @@ function MatchmakingScreen({
                         matchmakingWebsocketRef.current.close();
                         matchmakingWebsocketExists.current = false;
 
-                        console.log("Closed WebSocket successfully!");
+                        
                     }
                 }
 
@@ -115,7 +115,7 @@ function MatchmakingScreen({
 
     function onMessage(event: MessageEvent): void {
         const parsedEventData = JSON.parse(event.data);
-        console.log(parsedEventData["type"]);
+        
 
         if (parsedEventData["type"] === MatchmakingEvents.MATCH_FOUND) {
             if (parsedEventData["match_found"]) {
@@ -163,7 +163,7 @@ function MatchmakingScreen({
     }
 
     function onError() {
-        console.log("Error!");
+        
     }
 
     function handleMatchmakingCancelSuccess(): void {
@@ -172,7 +172,7 @@ function MatchmakingScreen({
     }
 
     function handleMatchmakingCancel() {
-        console.log("Cancelling matchmaking!");
+        
 
         const cancellationDetails = {
             type: "cancel_matchmaking",

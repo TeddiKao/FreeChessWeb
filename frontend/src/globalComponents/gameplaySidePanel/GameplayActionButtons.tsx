@@ -86,7 +86,7 @@ function GameplayActionButtons({
             type: "resign_request",
         };
 
-        console.log(actionWebsocketRef.current);
+        
 
         actionWebsocketRef.current?.send(JSON.stringify(resignationDetails));
     }
@@ -129,7 +129,7 @@ function GameplayActionButtons({
     }
 
     function handleResignation(eventData: any) {
-        console.log(eventData);
+        
 
         setGameEnded(true);
         setGameEndedCause("Resignation");

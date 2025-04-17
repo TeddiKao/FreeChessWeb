@@ -141,7 +141,7 @@ function Play() {
     }, [initialGameplaySettings]);
 
     if (!location.state) {
-        console.log("No location state detected!");
+        
         return <Navigate to={"/game-setup"} />;
     }
 

@@ -238,7 +238,7 @@ function GameSetup() {
     }
 
     function renderTimeControlSelectionPanel() {
-        console.log(timeControlSelectionStage);
+        
 
         switch (timeControlSelectionStage) {
             case GameSetupStages.TYPE_SELECT:

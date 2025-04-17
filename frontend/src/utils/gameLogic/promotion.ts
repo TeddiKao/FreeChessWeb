@@ -126,24 +126,24 @@ function handlePromotionCaptureStorage(
     selectingPromotionRef.current = true;
     unpromotedBoardPlacementRef.current = updatedFENString;
 
-    console.log("Updated unpromoted board placement");
+    
 
     if (!isCapture(startFile, destinationFile)) {
-        console.log("Not capturing piece while promoting!")
+        
 
         if (autoQueen) {
-            console.log("Auto queening!")
+            
             handlePawnPromotion(pieceColor, "queen", moveMethod, true);
         }
 
         return;
     }
 
-    console.log("Capturing piece while promoting!");
-    console.log(`Auto queening: ${autoQueen}`)
+    
+    
 
     if (autoQueen) {
-        console.log("Auto queening!")
+        
         handlePawnPromotion(pieceColor, "queen", moveMethod, true);
         return;
     }

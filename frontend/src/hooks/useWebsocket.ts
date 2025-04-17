@@ -10,7 +10,7 @@ function useWebSocket(url: string, onMessage?: any, onError?: any) {
     }
 
     websocket.onclose = (event: CloseEvent) => {
-        console.log(event.code)
+        
     }
 
     return websocket;
