@@ -96,7 +96,8 @@ function GameSetup() {
                 } else {
                     return GameSetupStages.CUSTOM_TIME_CREATE
                 }
-                
+
+            case GameSetupStages.CUSTOM_TIME_CREATE:
             case GameSetupStages.AMOUNT_SELECT:
                 return GameSetupStages.TYPE_SELECT;
         }
@@ -241,6 +242,7 @@ function GameSetup() {
             case GameSetupStages.CUSTOM_TIME_CREATE:
                 return (
                     <CustomTimeControlScreen
+                        handleGoBack={handleGoBack}
                         setCustomTimeControlCreated={setCustomTimeControlCreated}
                         setSelectedTimeControl={setSelectedTimeControl}
                         setSelectionStage={setTimeControlSelectionStage}

@@ -8,12 +8,14 @@ type CustomTimeControlScreenProps = {
     setSelectionStage: StateSetterFunction<string>;
     setSelectedTimeControl: StateSetterFunction<TimeControl | null>;
     setCustomTimeControlCreated: StateSetterFunction<boolean>;
+    handleGoBack: () => void;
 };
 
 function CustomTimeControlScreen({
     setSelectionStage,
     setSelectedTimeControl,
-    setCustomTimeControlCreated
+    setCustomTimeControlCreated,
+    handleGoBack
 }: CustomTimeControlScreenProps) {
     const [baseTimeHours, setBaseTimeHours] = useState<number | string>("");
     const [baseTimeMinutes, setBaseTimeMinutes] = useState<number | string>("");
@@ -158,6 +160,7 @@ function CustomTimeControlScreen({
             >
                 Continue
             </button>
+            <p className="go-back-button" onClick={handleGoBack}>Go back</p>
         </div>
     );
 }
