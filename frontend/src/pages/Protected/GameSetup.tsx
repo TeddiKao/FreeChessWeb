@@ -36,6 +36,7 @@ function GameSetup() {
     >(null);
     const [selectedTimeControl, setSelectedTimeControl] =
         useState<TimeControlInfo | null>(null);
+    const [customTimeControlCreated, setCustomTimeControlCreated] = useState<boolean>(false);
 
     useEffect(() => {
         updateParsedFEN();
@@ -90,8 +91,12 @@ function GameSetup() {
     function getPreviousTimeControlSelectionStage() {
         switch (timeControlSelectionStage) {
             case GameSetupStages.CONFIRM_START:
-                return GameSetupStages.AMOUNT_SELECT;
-
+                if (!customTimeControlCreated) {
+                    return GameSetupStages.AMOUNT_SELECT
+                } else {
+                    return GameSetupStages.CUSTOM_TIME_CREATE
+                }
+                
             case GameSetupStages.AMOUNT_SELECT:
                 return GameSetupStages.TYPE_SELECT;
         }
@@ -236,6 +241,7 @@ function GameSetup() {
             case GameSetupStages.CUSTOM_TIME_CREATE:
                 return (
                     <CustomTimeControlScreen
+                        setCustomTimeControlCreated={setCustomTimeControlCreated}
                         setSelectedTimeControl={setSelectedTimeControl}
                         setSelectionStage={setTimeControlSelectionStage}
                     />

@@ -7,11 +7,13 @@ import { TimeControl, TimeDuration } from "../../types/gameSetup";
 type CustomTimeControlScreenProps = {
     setSelectionStage: StateSetterFunction<string>;
     setSelectedTimeControl: StateSetterFunction<TimeControl | null>;
+    setCustomTimeControlCreated: StateSetterFunction<boolean>;
 };
 
 function CustomTimeControlScreen({
     setSelectionStage,
     setSelectedTimeControl,
+    setCustomTimeControlCreated
 }: CustomTimeControlScreenProps) {
     const [baseTimeHours, setBaseTimeHours] = useState<number | string>("");
     const [baseTimeMinutes, setBaseTimeMinutes] = useState<number | string>("");
@@ -47,6 +49,7 @@ function CustomTimeControlScreen({
             increment: incrementTimeInSeconds,
         });
 
+        setCustomTimeControlCreated(true);
         setSelectionStage("startConfirmation");
     }
 
