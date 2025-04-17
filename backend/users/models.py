@@ -5,7 +5,6 @@ from .managers import CustomUserManager
 
 from channels.db import database_sync_to_async
 
-# Create your models here.
 class UserAuthModel(AbstractBaseUser):
 	username = models.CharField(max_length=80, blank=False, unique=True)
 	email = models.EmailField(blank=False, unique=True)
