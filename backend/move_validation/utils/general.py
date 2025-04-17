@@ -80,5 +80,8 @@ def get_all_pieces_on_board(board_placement: dict):
 
 	return pieces
 
+def square_has_piece(board_placement, square):
+	return not not board_placement.get(square)
+
 def is_square_on_board(square_number):
 	return 0 <= int(square_number) <= 63

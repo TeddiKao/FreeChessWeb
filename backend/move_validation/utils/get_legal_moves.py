@@ -288,10 +288,16 @@ def get_legal_moves_in_direction(board_placement, start_square, directions, piec
 def get_sliding_piece_legal_moves(board_placement, move_info):
     legal_squares = []
 
-    piece_type = move_info["piece_type"].lower()
-    piece_color = move_info["piece_color"]
+    piece_type = move_info.get("piece_type").lower()
+    piece_color = move_info.get("piece_color")
 
-    starting_square = move_info["starting_square"]
+    starting_square = move_info.get("starting_square")
+
+    if not piece_type or not piece_color or not starting_square:
+        return []
+    
+    if not square_has_piece(board_placement, starting_square):
+        return []
 
     legal_squares = get_legal_moves_in_direction(
         board_placement, starting_square, piece_directions_mapping[piece_type], piece_color)
@@ -302,8 +308,14 @@ def get_sliding_piece_legal_moves(board_placement, move_info):
 def get_pawn_legal_moves(board_placement, en_passant_target_square, move_info):
     legal_squares = []
 
-    starting_square = move_info["starting_square"]
+    starting_square = move_info.get("starting_square")
     piece_color = move_info["piece_color"].lower()
+
+    if not starting_square or not piece_color:
+        return []
+    
+    if not square_has_piece(board_placement, starting_square):
+        return []
 
     starting_square_info = {
         "starting_square": starting_square,
@@ -404,8 +416,14 @@ def get_pawn_legal_moves(board_placement, en_passant_target_square, move_info):
 def get_king_legal_moves(board_placement, castling_rights, move_info):
     legal_moves = []
 
-    starting_square = move_info["starting_square"]
-    piece_color = move_info["piece_color"]
+    starting_square = move_info.get("starting_square")
+    piece_color = move_info.get("piece_color")
+
+    if not starting_square or not piece_color:
+        return []
+
+    if not square_has_piece(board_placement, starting_square):
+        return []
 
     adjacent_squares = [
         f"{int(starting_square) + 1}",  # left_square
@@ -517,7 +535,10 @@ def get_king_legal_moves(board_placement, castling_rights, move_info):
 
 
 def get_knight_legal_moves(board_placement: dict, move_info: dict) -> list:
-    starting_square = move_info["starting_square"]
+    starting_square = move_info.get("starting_square")
+
+    if not square_has_piece(board_placement, starting_square):
+        return []
 
     legal_moves = [
         f"{int(starting_square) + 15}",
