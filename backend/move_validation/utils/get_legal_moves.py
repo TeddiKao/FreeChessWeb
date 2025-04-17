@@ -84,6 +84,9 @@ def validate_castling(board_placement, castling_rights, king_color: str, castlin
 
     if not castling_rights[king_color.capitalize()][castling_side.capitalize()]:
         return False, None
+    
+    if is_king_in_check(board_placement, king_color):
+        return False, None
 
     middle_square = castle_middle_square_mapping[king_color.lower(
     )][castling_side.lower()]
