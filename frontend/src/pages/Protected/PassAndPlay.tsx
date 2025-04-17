@@ -21,7 +21,7 @@ function PassAndPlay() {
     const [parsedFEN, setParsedFEN] = useState<ParsedFENString | null>(null);
 
     const [gameEnded, setGameEnded] = useState<boolean>(false);
-    const [gameEndedCause, setGameEndedCause] = useState<string | null>(null);
+    const [gameEndedCause, setGameEndedCause] = useState<string>("");
     const [gameWinner, setGameWinner] = useState<string | null>(null);
 
     const initialGameplaySettings = useGameplaySettings();
