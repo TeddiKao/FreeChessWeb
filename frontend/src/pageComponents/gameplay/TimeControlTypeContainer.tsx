@@ -1,11 +1,13 @@
 import { Dispatch, SetStateAction } from "react";
 import { GameSetupStages } from "../../enums/gameSetup";
+import { StateSetterFunction } from "../../types/general";
 
 type TimeControlTypeContainerProps = {
     timeControlName: string;
     timeControlDescription: string;
     setSelectionStage: (stage: string) => void;
     setType: Dispatch<SetStateAction<string | null>>
+    setCustomTimeControlCreated: StateSetterFunction<boolean>
 };
 
 function TimeControlTypeContainer({
@@ -13,9 +15,11 @@ function TimeControlTypeContainer({
     timeControlDescription,
     setSelectionStage,
     setType,
+    setCustomTimeControlCreated
 }: TimeControlTypeContainerProps) {
     function handleRegularTimeControlClick(): void {
         setSelectionStage(GameSetupStages.AMOUNT_SELECT);
+        setCustomTimeControlCreated(false);
         setType(timeControlName);
     }
 

@@ -131,6 +131,7 @@ function GameSetup() {
                     timeControlDescription={bulletDescription}
                     setSelectionStage={setTimeControlSelectionStage}
                     setType={setSelectedTimeControlType}
+                    setCustomTimeControlCreated={setCustomTimeControlCreated}
                 />
 
                 <TimeControlTypeContainer
@@ -138,6 +139,7 @@ function GameSetup() {
                     timeControlDescription={blitzDescription}
                     setSelectionStage={setTimeControlSelectionStage}
                     setType={setSelectedTimeControlType}
+                    setCustomTimeControlCreated={setCustomTimeControlCreated}
                 />
 
                 <TimeControlTypeContainer
@@ -145,6 +147,7 @@ function GameSetup() {
                     timeControlDescription={rapidDescription}
                     setSelectionStage={setTimeControlSelectionStage}
                     setType={setSelectedTimeControlType}
+                    setCustomTimeControlCreated={setCustomTimeControlCreated}
                 />
 
                 <TimeControlTypeContainer
@@ -152,6 +155,7 @@ function GameSetup() {
                     timeControlDescription={classicalDescription}
                     setSelectionStage={setTimeControlSelectionStage}
                     setType={setSelectedTimeControlType}
+                    setCustomTimeControlCreated={setCustomTimeControlCreated}
                 />
 
                 <TimeControlTypeContainer
@@ -159,6 +163,7 @@ function GameSetup() {
                     timeControlDescription={customDescription}
                     setSelectionStage={setTimeControlSelectionStage}
                     setType={setSelectedTimeControlType}
+                    setCustomTimeControlCreated={setCustomTimeControlCreated}
                 />
             </div>
         );
