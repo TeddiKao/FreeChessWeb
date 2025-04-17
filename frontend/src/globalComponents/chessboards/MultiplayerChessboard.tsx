@@ -685,11 +685,13 @@ function MultiplayerChessboard({
         startSquare: ChessboardSquareIndex,
         destinationSquare: ChessboardSquareIndex
     ) {
+        console.log("Queening automatically");
+
         const moveDetails = {
             type: "move_made",
 
             piece_color: pieceColor,
-            piece_type: "queen",
+            piece_type: "pawn",
             starting_square: startSquare,
             destination_square: destinationSquare,
 
