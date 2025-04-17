@@ -168,9 +168,7 @@ function GameSetup() {
             </div>
         );
     }
-
-    console.log(selectedTimeControl);
-
+    
     function showTimeControlAmounts() {
         if (!selectedTimeControlType) {
             return null;
