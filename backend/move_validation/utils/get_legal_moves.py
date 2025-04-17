@@ -16,6 +16,49 @@ direction_offset_mapping = {
     "southeast": -7,
 }
 
+king_starting_square_mapping = {
+        "white": 4,
+        "black": 60,
+    }
+
+    # Pieces between king and rook (exclude castling square)
+castle_middle_square_mapping = {
+    "white": {
+        "queenside": [1, 3],
+        "kingside": [5]
+    },
+
+    "black": {
+        "queenside": [57, 59],
+        "kingside": [61]
+    }
+}
+
+castle_through_square_mapping = {
+    "white": {
+        "queenside": 3,
+        "kingside": 5,
+    },
+
+    "black": {
+        "queenside": 59,
+        "kingside": 61
+    }
+}
+
+# Castled king position
+castled_king_position_mapping = {
+    "white": {
+        "queenside": 2,
+        "kingside": 6,
+    },
+
+    "black": {
+        "queenside": 58,
+        "kingside": 62,
+    }
+}
+
 
 def get_legal_moves(move_info, board_placement, en_passant_target_square, castling_rights=None):
     sliding_pieces = ["queen", "rook", "bishop"]
@@ -35,49 +78,6 @@ def get_legal_moves(move_info, board_placement, en_passant_target_square, castli
 
 def validate_castling(board_placement, castling_rights, king_color: str, castling_side: str):
     king_position = get_king_position(board_placement, king_color)
-
-    king_starting_square_mapping = {
-        "white": 4,
-        "black": 60,
-    }
-
-    # Pieces between king and rook (exclude castling square)
-    castle_middle_square_mapping = {
-        "white": {
-            "queenside": [1, 3],
-            "kingside": [5]
-        },
-
-        "black": {
-            "queenside": [57, 59],
-            "kingside": [61]
-        }
-    }
-
-    castle_through_square_mapping = {
-        "white": {
-            "queenside": 3,
-            "kingside": 5,
-        },
-
-        "black": {
-            "queenside": 59,
-            "kingside": 61
-        }
-    }
-
-    # Castled king position
-    castled_king_position_mapping = {
-        "white": {
-            "queenside": 2,
-            "kingside": 6,
-        },
-
-        "black": {
-            "queenside": 58,
-            "kingside": 62,
-        }
-    }
 
     if king_starting_square_mapping[king_color.lower()] != int(king_position):
         return False, None
