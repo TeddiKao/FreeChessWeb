@@ -54,6 +54,18 @@ def validate_castling(board_placement, castling_rights, king_color: str, castlin
         }
     }
 
+    castle_through_square_mapping = {
+        "white": {
+            "queenside": 3,
+            "kingside": 5,
+        },
+
+        "black": {
+            "queenside": 59,
+            "kingside": 61
+        }
+    }
+
     # Castled king position
     castled_king_position_mapping = {
         "white": {
@@ -78,9 +90,18 @@ def validate_castling(board_placement, castling_rights, king_color: str, castlin
     castled_square = castled_king_position_mapping[king_color.lower(
     )][castling_side.lower()]
 
+    castle_through_square = castle_through_square_mapping[king_color.lower()][castling_side.lower()]
+
     for square in middle_square:
         if f"{square}" in board_placement:
             return False, None
+        
+    if is_king_in_check(update_FEN(board_placement, {
+        "starting_square": king_position,
+        "piece_color": king_color,
+        "piece_type": "king"
+    }, castle_through_square), king_color):
+        return False, None
 
     if f"{castled_square}" in board_placement:
         return False, None
