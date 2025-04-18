@@ -71,14 +71,10 @@ def disambiguate_move(board_placement: dict, move_info: MoveInfo):
         }
     ])
 
-    print(other_possible_pieces, all_possible_pieces)
-
     on_same_file = is_on_same_file(all_possible_pieces)
     on_same_rank = is_on_same_rank(all_possible_pieces)
 
     algebraic_notation = None
-
-    print(on_same_file, on_same_rank)
 
     if not on_same_file:
         start_file = files_list[get_file(starting_square)]
