@@ -3,6 +3,7 @@ djangorestframework
 djangorestframework-simplejwt
 django-cors-headers
 python-dotenv
+channels_redis
 channels
 daphne
 deepdiff
