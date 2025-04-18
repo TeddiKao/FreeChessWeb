@@ -102,8 +102,12 @@ def is_on_same_rank(pieces_list: list):
 	rank_to_check = get_row(pieces_list[0]["piece_square"])
 	same_rank = True
 
+	print(pieces_list)
+
 	for piece_info in pieces_list:
 		piece_square = piece_info["piece_square"]
+		print(type(get_row(piece_square)), type(rank_to_check))
+
 		if get_row(piece_square) != rank_to_check:
 			same_rank = False
 			break
