@@ -4,20 +4,20 @@ import { DndProvider } from "react-dnd";
 import { MultiBackend } from "react-dnd-multi-backend";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
 
-import GuestHomePage from "./pages/GuestHomePage.js";
-import Login from "./pages/Login.js";
-import Signup from "./pages/Signup.js";
-import NotFound from "./pages/NotFound.js";
+import GuestHomePage from "./pages/GuestHomePage.tsx";
+import Login from "./pages/Login.tsx";
+import Signup from "./pages/Signup.tsx";
+import NotFound from "./pages/NotFound.tsx";
 
-import Dashboard from "./pages/protected/Dashboard.js";
-import GameSetup from "./pages/protected/GameSetup.js";
+import Dashboard from "./pages/protected/Dashboard.tsx";
+import GameSetup from "./pages/protected/GameSetup.tsx";
 
 import "./styles/global/global.scss";
 
-import ProtectedRoute from "./globalComponents/routes/ProtectedRoute.js";
-import AuthenticationRoute from "./globalComponents/routes/AuthenticationRoute.js";
-import Play from "./pages/protected/Play.js";
-import PassAndPlay from "./pages/protected/PassAndPlay.js";
+import ProtectedRoute from "./globalComponents/routes/ProtectedRoute.tsx";
+import AuthenticationRoute from "./globalComponents/routes/AuthenticationRoute.tsx";
+import Play from "./pages/protected/Play.tsx";
+import PassAndPlay from "./pages/protected/PassAndPlay.tsx";
 
 function Logout() {
     localStorage.clear();
