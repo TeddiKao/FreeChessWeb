@@ -85,3 +85,27 @@ def square_has_piece(board_placement, square):
 
 def is_square_on_board(square_number):
 	return 0 <= int(square_number) <= 63
+
+def is_on_same_file(pieces_list: list):
+	file_to_check = get_file(pieces_list[0]["piece_square"])
+	same_file = True
+
+	for piece_info in pieces_list:
+		piece_square = piece_info["piece_square"]
+		if get_file(piece_square) != file_to_check:
+			same_file = False
+			break
+
+	return same_file
+
+def is_on_same_rank(pieces_list: list):
+	rank_to_check = get_row(pieces_list[0]["piece_square"])
+	same_rank = True
+
+	for piece_info in pieces_list:
+		piece_square = piece_info["piece_square"]
+		if get_row(piece_square) != rank_to_check:
+			same_rank = False
+			break
+
+	return same_rank
