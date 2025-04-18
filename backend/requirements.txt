@@ -7,3 +7,5 @@ channels_redis
 channels
 daphne
 deepdiff
+dj-database-url
+psycopg2-binary
