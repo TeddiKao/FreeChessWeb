@@ -51,6 +51,7 @@ SIMPLE_JWT = {
 
 INSTALLED_APPS = [
     "channels",
+    "channels_redis",
 	"daphne",
     
     'django.contrib.admin',
