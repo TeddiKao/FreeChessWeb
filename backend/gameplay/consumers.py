@@ -81,6 +81,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		if side_to_move.lower() != color_moved.lower():
 			return False
+		
+		allowed_player_to_move = await ChessGame.async_get_player_allowed_to_move_from_id(game_id)
+		if move_made_by != allowed_player_to_move:
+			return False
 
 		move_data_fetch_start = perf_counter()
 
@@ -464,7 +468,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 				del timer_tasks_info[self.room_group_name]["timer_task"]
 
 		move_validation_start = perf_counter()
-		move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]))
+		move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]), event["move_made_by"])
 		move_validation_end = perf_counter()
 
 		print(
