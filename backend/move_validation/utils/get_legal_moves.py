@@ -58,10 +58,9 @@ castled_king_position_mapping = {
     }
 }
 
+sliding_pieces = ["queen", "rook", "bishop"]
 
 def get_legal_moves(move_info, board_placement, en_passant_target_square, castling_rights=None):
-    sliding_pieces = ["queen", "rook", "bishop"]
-
     if move_info["piece_type"].lower() == "king":
         return get_king_legal_moves(board_placement, castling_rights, move_info)
 
@@ -587,3 +586,24 @@ def get_knight_legal_moves(board_placement: dict, move_info: dict) -> list:
         final_legal_moves.append(legal_move)
 
     return final_legal_moves
+
+def get_legal_moves_of_piece(board_placement, piece_info):
+    piece_color = piece_info["piece_color"]
+    piece_type = piece_info["piece_type"]
+    piece_square = piece_info["piece_square"]
+
+    if not square_has_piece(board_placement, piece_square):
+        return []
+    
+    if piece_type.lower() in sliding_pieces:
+        return get_sliding_piece_legal_moves(board_placement, {
+            "piece_color": piece_color,
+            "piece_type": piece_type,
+            "starting_square": piece_square
+        })
+    
+    elif piece_type.lower() == "knight":
+        return get_knight_legal_moves(board_placement, {
+            "piece_color": piece_color,
+            "starting_square": piece_square
+        })
