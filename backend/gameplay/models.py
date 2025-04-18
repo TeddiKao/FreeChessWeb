@@ -121,6 +121,14 @@ class ChessGame(models.Model):
 		attribute_data = ChessGame.objects.only(attr_name).get(id=game_id)
 		
 		return getattr(attribute_data, attr_name)
+	
+	@database_sync_to_async
+	def async_get_player_allowed_to_move(self):
+		side_to_move = self.current_player_turn
+		if side_to_move.lower() == "white":
+			return self.white_player.username
+		else:
+			return self.black_player.username
 
 	def sync_get_full_parsed_fen(self):
 		return {
