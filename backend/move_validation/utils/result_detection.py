@@ -7,6 +7,7 @@ insufficient_material_configurations = [
     ["king", "bishop", "king"],
     ["king", "knight", "king"],
     ["king", "knight", "king", "knight"],
+    ["king", "king"]
 ]
 
 def get_is_stalemated(current_fen: dict, king_color: str) -> bool:
