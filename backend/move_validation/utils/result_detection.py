@@ -108,8 +108,7 @@ def get_position_occurences(position_list: list, position: dict):
 
 def is_threefold_repetiiton(position_list: list, position: dict):
     position_occurences = get_position_occurences(position_list, position)
-    print(position_occurences)
-
+    
     return position_occurences >= 3
 
 def check_50_move_rule_draw(halfmove_clock: int):
