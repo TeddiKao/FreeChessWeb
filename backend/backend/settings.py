@@ -108,12 +108,18 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+USE_POSTGRE_SQL_DB = os.getenv("USE_POSTGRE_SQL_DB") == "True"
+
+if USE_POSTGRE_SQL_DB:
+    pass
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+
 
 CHANNEL_HOST = os.getenv("CHANNEL_HOST")
 CHANNEL_PORT = os.getenv("CHANNEL_PORT")
