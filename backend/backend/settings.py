@@ -15,6 +15,7 @@ from datetime import timedelta
 from dotenv import load_dotenv
 
 import os
+import dj_database_url
 
 load_dotenv()
 
@@ -109,9 +110,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 USE_POSTGRE_SQL_DB = os.getenv("USE_POSTGRE_SQL_DB") == "True"
+POSTGRE_DB_URL = os.getenv("POSTGRE_DB_PLACEHOLDER_URL")
+POSTGRE_DB_PASSWORD = os.getenv("POSTGRE_DB_PASSWORD")
 
 if USE_POSTGRE_SQL_DB:
-    pass
+    POSTGRE_DB_FULL_URL = POSTGRE_DB_URL.replace("[YOUR-PASSWORD]", POSTGRE_DB_PASSWORD)
+    DATABASES = {
+        "default": dj_database_url.parse(POSTGRE_DB_FULL_URL, conn_max_age=600)
+    }
 else:
     DATABASES = {
         'default': {
