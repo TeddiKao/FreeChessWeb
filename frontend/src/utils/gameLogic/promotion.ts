@@ -126,24 +126,15 @@ function handlePromotionCaptureStorage(
     selectingPromotionRef.current = true;
     unpromotedBoardPlacementRef.current = updatedFENString;
 
-    
-
     if (!isCapture(startFile, destinationFile)) {
-        
-
         if (autoQueen) {
-            
             handlePawnPromotion(pieceColor, "queen", moveMethod, true);
         }
 
         return;
     }
 
-    
-    
-
     if (autoQueen) {
-        
         handlePawnPromotion(pieceColor, "queen", moveMethod, true);
         return;
     }
