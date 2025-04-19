@@ -120,7 +120,7 @@ CHANNEL_PORT = os.getenv("CHANNEL_PORT")
 
 USE_REDIS = os.getenv("USE_REDIS")
 
-if USE_REDIS:
+if USE_REDIS == "True":
     CHANNEL_LAYERS = {
         'default': {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
