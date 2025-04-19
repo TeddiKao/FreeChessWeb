@@ -118,14 +118,24 @@ DATABASES = {
 CHANNEL_HOST = os.getenv("CHANNEL_HOST")
 CHANNEL_PORT = os.getenv("CHANNEL_PORT")
 
-CHANNEL_LAYERS = {
-    'default': {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [(CHANNEL_HOST, int(CHANNEL_PORT))],
+USE_REDIS = os.getenv("USE_REDIS")
+
+if USE_REDIS:
+    CHANNEL_LAYERS = {
+        'default': {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [(CHANNEL_HOST, int(CHANNEL_PORT))],
+            },
         },
-    },
-}
+    }
+else:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels.layers.InMemoryChannelLayer"
+        }
+    }
+    
 
 AUTH_USER_MODEL = "users.UserAuthModel"
 
