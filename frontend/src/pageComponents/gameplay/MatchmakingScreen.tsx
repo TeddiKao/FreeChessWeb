@@ -82,7 +82,7 @@ function MatchmakingScreen({
         if (isMatchmaking) {
             if (!websocketConnected) {
                 if (!matchmakingWebsocketExists.current) {
-                    const websocketURL = `${websocketBaseURL}/ws/matchmaking-server/?token=${getAccessToken()}&baseTime=${baseTime}&increment=${increment}`;
+                    const websocketURL = `${websocketBaseURL}ws/matchmaking-server/?token=${getAccessToken()}&baseTime=${baseTime}&increment=${increment}`;
                     const matchmakingWebsocket = useWebSocket(
                         websocketURL,
                         onMessage,
