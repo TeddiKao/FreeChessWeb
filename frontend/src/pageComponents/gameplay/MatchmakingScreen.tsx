@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { getAccessToken } from "../../utils/tokenUtils.ts";
 import { getUsername } from "../../utils/apiUtils.ts";
 import { MatchmakingEvents } from "../../enums/gameSetup.ts";
+import { websocketBaseURL } from "../../constants/urls.ts";
 
 type timeControlInfo = {
     baseTime: number;
@@ -81,7 +82,7 @@ function MatchmakingScreen({
         if (isMatchmaking) {
             if (!websocketConnected) {
                 if (!matchmakingWebsocketExists.current) {
-                    const websocketURL = `ws://localhost:8000/ws/matchmaking-server/?token=${getAccessToken()}&baseTime=${baseTime}&increment=${increment}`;
+                    const websocketURL = `${websocketBaseURL}/ws/matchmaking-server/?token=${getAccessToken()}&baseTime=${baseTime}&increment=${increment}`;
                     const matchmakingWebsocket = useWebSocket(
                         websocketURL,
                         onMessage,

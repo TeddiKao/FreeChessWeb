@@ -136,11 +136,19 @@ CHANNEL_PORT = os.getenv("CHANNEL_PORT")
 USE_REDIS = os.getenv("USE_REDIS")
 
 if USE_REDIS == "True":
+    HOST_NAME = os.getenv("HOST_NAME")
+    REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
+
     CHANNEL_LAYERS = {
         'default': {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": [(CHANNEL_HOST, int(CHANNEL_PORT))],
+                "hosts": [{
+                    "host": HOST_NAME,
+                    "port": CHANNEL_PORT,
+                    "password": REDIS_PASSWORD,
+                    "ssl": True
+                }],
             },
         },
     }
