@@ -51,11 +51,11 @@ SIMPLE_JWT = {
 # Application definition
 
 INSTALLED_APPS = [
+    "users",
+
     "channels",
     "channels_redis",
 	"daphne",
-
-    "users",
     
     'django.contrib.admin',
     'django.contrib.auth',
