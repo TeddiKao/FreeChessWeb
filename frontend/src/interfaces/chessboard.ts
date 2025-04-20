@@ -2,7 +2,6 @@ import React from "react";
 import {
     ChessboardSquareIndex,
     OptionalValue,
-    RefObject,
     StateSetterFunction,
 } from "../types/general.ts";
 import { ParsedFENString, PieceColor, PieceType } from "../types/gameLogic.ts";
