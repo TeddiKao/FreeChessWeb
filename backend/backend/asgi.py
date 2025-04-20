@@ -3,11 +3,13 @@ import os
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 
+from users.middleware.auth_middleware import JWTAuthenticationMiddleware
+
+django_asgi_application = get_asgi_application()
+
 import users.routing
 import matchmaking.routing
 import gameplay.routing
-
-from users.middleware.auth_middleware import JWTAuthenticationMiddleware
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 
@@ -18,6 +20,6 @@ gameplay_api_urls = gameplay.routing.websocket_urlpatterns
 websocket_routes = users_api_urls + matchmaking_api_urls + gameplay_api_urls
 
 application = ProtocolTypeRouter({
-	"http": get_asgi_application(),
+	"http": django_asgi_application,
 	"websocket": JWTAuthenticationMiddleware(URLRouter(websocket_routes))
 })
