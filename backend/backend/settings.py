@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     "channels",
     "channels_redis",
 	"daphne",
+
+    "users",
     
     'django.contrib.admin',
     'django.contrib.auth',
@@ -66,7 +68,6 @@ INSTALLED_APPS = [
 	"rest_framework_simplejwt",
 	"corsheaders",
 
-	"users",
 	"gameplay",
 	"matchmaking",
 	"move_validation",
