@@ -50,6 +50,8 @@ SIMPLE_JWT = {
 
 # Application definition
 
+AUTH_USER_MODEL = "users.UserAuthModel"
+
 INSTALLED_APPS = [
     "users",
 
@@ -148,9 +150,6 @@ else:
             "BACKEND": "channels.layers.InMemoryChannelLayer"
         }
     }
-    
-
-AUTH_USER_MODEL = "users.UserAuthModel"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
