@@ -135,19 +135,17 @@ CHANNEL_PORT = os.getenv("CHANNEL_PORT")
 
 USE_REDIS = os.getenv("USE_REDIS")
 
-if USE_REDIS == "True":
-    HOST_NAME = os.getenv("HOST_NAME")
-    REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
+CHANNEL_HOST = os.getenv("CHANNEL_HOST")
+CHANNEL_PORT = os.getenv("CHANNEL_PORT")
+USE_REDIS = os.getenv("USE_REDIS")
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
 
+if USE_REDIS == "True":
     CHANNEL_LAYERS = {
         'default': {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": [{
-                    "host": HOST_NAME,
-                    "port": CHANNEL_PORT,
-                    "password": REDIS_PASSWORD,
-                }],
+                "hosts": [f"rediss://:{REDIS_PASSWORD}@{CHANNEL_HOST}:{CHANNEL_PORT}"],
             },
         },
     }
@@ -157,6 +155,7 @@ else:
             "BACKEND": "channels.layers.InMemoryChannelLayer"
         }
     }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
