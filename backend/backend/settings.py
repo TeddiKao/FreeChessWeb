@@ -147,7 +147,6 @@ if USE_REDIS == "True":
                     "host": HOST_NAME,
                     "port": CHANNEL_PORT,
                     "password": REDIS_PASSWORD,
-                    "ssl": True
                 }],
             },
         },
