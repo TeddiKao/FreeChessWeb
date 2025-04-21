@@ -161,7 +161,7 @@ class UserGameplaySettings(models.Model):
 	show_legal_moves = models.BooleanField(default=True, blank=False, null=False)
 
 class GameplayTimerTask(models.Model):
-	game_room_id = models.CharField(null=False, blank=False)
+	game_room_id = models.CharField(null=False, blank=False, max_length=50)
 	is_running = models.BooleanField(null=False, blank=False, default=False)
 
 	@database_sync_to_async
