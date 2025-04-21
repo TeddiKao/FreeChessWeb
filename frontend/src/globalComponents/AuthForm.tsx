@@ -74,6 +74,8 @@ function AuthForm({ method }: AuthFormProps) {
 
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
+    const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
+
     const navigate = useNavigate();
 
     function FormSubtitle() {
@@ -126,6 +128,12 @@ function AuthForm({ method }: AuthFormProps) {
     async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
+        if (isAuthenticating) {
+            return null;
+        }
+
+        setIsAuthenticating(true);
+
         const userCredentials =
             method === "login"
                 ? { email, password }
@@ -168,6 +176,8 @@ function AuthForm({ method }: AuthFormProps) {
                 setEmailErrors(error.response?.data?.email);
             }
         }
+
+        setIsAuthenticating(false);
     }
 
     function getShowPasswordPromptText() {
