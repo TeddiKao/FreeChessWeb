@@ -602,12 +602,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 					"black_player_clock": float(new_black_player_clock)
 				}))
 
-		new_timer_task_exists = timer_tasks_info[self.room_group_name].get(
-			"timer_task")
-
-		if not new_timer_task_exists:
-			await timer_task.async_start()
-			asyncio.create_task(self.handle_timer_decrement())
+		asyncio.create_task(self.handle_timer_decrement())
 
 		move_receive_end = perf_counter()
 		print(
