@@ -166,13 +166,13 @@ class GameplayTimerTask(models.Model):
 
 	@database_sync_to_async
 	def async_get_timer_task_from_room_id(self, room_id):
-		timer_task = GameplayTimerTask.objects.first(game_room_id=room_id)
+		timer_task = GameplayTimerTask.objects.filter(game_room_id=room_id).first()
 
 		return timer_task
 	
 	@database_sync_to_async
 	def async_get_timer_exists_from_room_id(self, room_id):
-		timer_task = GameplayTimerTask.objects.first(game_room_id=room_id)
+		timer_task = GameplayTimerTask.objects.filter(game_room_id=room_id).first()
 
 		if timer_task:
 			return True

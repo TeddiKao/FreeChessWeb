@@ -413,13 +413,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.get_game_attribute(self.chess_game_model, "is_timer_running")
 		)
 
-		room_group_exists = timer_tasks_info.get(self.room_group_name)
-		timer_task_exists = None
-		if room_group_exists:
-			timer_task_exists = timer_tasks_info[self.room_group_name].get(
-				"timer_task")
-
-		timer_task_in_db = GameplayTimerTask.objects.first(game_room_id=self.room_group_name)
+		timer_task_in_db = GameplayTimerTask.objects.filter(game_room_id=self.room_group_name).first()
 		if not timer_task_in_db:
 			GameplayTimerTask.objects.create(game_room_id=self.room_group_name, is_timer_running=True)
 
