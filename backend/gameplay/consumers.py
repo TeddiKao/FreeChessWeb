@@ -469,11 +469,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		timer_task = None
 
-		if timer_tasks_info.get(self.room_group_name):
-			if timer_tasks_info[self.room_group_name].get("timer_task"):
-				timer_task = timer_tasks_info[self.room_group_name]["timer_task"]
-				timer_task.cancel()
-				del timer_tasks_info[self.room_group_name]["timer_task"]
+		timer_task_exists = await GameplayTimerTask.async_get_timer_exists_from_room_id(self.room_group_name)
+		if timer_task_exists:
+			timer_task: GameplayTimerTask = await GameplayTimerTask.async_get_timer_task_from_room_id(self.room_group_name)
+			await timer_task.async_stop()
 
 		move_validation_start = perf_counter()
 		move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]), event["move_made_by"])
@@ -621,8 +620,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 			"timer_task")
 
 		if not new_timer_task_exists:
-			new_timer_task = asyncio.create_task(self.handle_timer_decrement())
-			timer_tasks_info[self.room_group_name]["timer_task"] = new_timer_task
+			await timer_task.async_start()
+			asyncio.create_task(self.handle_timer_decrement())
 
 		move_receive_end = perf_counter()
 		print(
