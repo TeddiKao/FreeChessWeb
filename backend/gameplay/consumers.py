@@ -139,7 +139,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 						{
 							"type": "timer_decremented",
 							"white_player_clock": float(white_player_clock),
-							"black_player_clock": flaot(black_player_clock),
+							"black_player_clock": float(black_player_clock),
 							"side_to_move": side_to_move,
 						}
 					)
