@@ -39,11 +39,6 @@ def get_default_position_list():
 		"last_dragged_square": None,
 		"last_dropped_square": None
 	}]
-	
-class TimerTask(models.Model):
-	timer_task_id = models.UUIDField(default=uuid4, unique=True, primary_key=True)
-	status = models.CharField(max_length=20)
-
 
 class ChessGame(models.Model):
 	white_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="white_player")
@@ -168,3 +163,9 @@ class UserGameplaySettings(models.Model):
 class GameplayTimerTask(models.Model):
 	game_room_id = models.CharField(null=False, blank=False)
 	is_running = models.BooleanField(null=False, blank=False, default=False)
+
+	@database_sync_to_async
+	def async_get_timer_task_from_room_id(self, room_id):
+		timer_task = GameplayTimerTask.objects.get(game_room_id=room_id)
+
+		return timer_task
