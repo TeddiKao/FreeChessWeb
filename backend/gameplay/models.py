@@ -164,14 +164,16 @@ class GameplayTimerTask(models.Model):
 	game_room_id = models.CharField(null=False, blank=False, max_length=50)
 	is_running = models.BooleanField(null=False, blank=False, default=False)
 
+	@classmethod
 	@database_sync_to_async
-	def async_get_timer_task_from_room_id(self, room_id):
+	def async_get_timer_task_from_room_id(cls, room_id):
 		timer_task = GameplayTimerTask.objects.filter(game_room_id=room_id).first()
 
 		return timer_task
 	
+	@classmethod
 	@database_sync_to_async
-	def async_get_timer_exists_from_room_id(self, room_id):
+	def async_get_timer_exists_from_room_id(cls, room_id):
 		timer_task = GameplayTimerTask.objects.filter(game_room_id=room_id).first()
 
 		if timer_task:
@@ -179,8 +181,9 @@ class GameplayTimerTask(models.Model):
 		else:
 			return False
 		
+	@classmethod
 	@database_sync_to_async
-	def async_create_timer(self, game_room_id, is_timer_running = True):
+	def async_create_timer(cls, game_room_id, is_timer_running = True):
 		GameplayTimerTask.objects.create(game_room_id=game_room_id, is_running=is_timer_running)
 	
 	def is_timer_running(self):
