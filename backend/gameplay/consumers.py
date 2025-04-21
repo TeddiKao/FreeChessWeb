@@ -16,7 +16,7 @@ from move_validation.utils.get_move_type import get_move_type
 from move_validation.utils.general import *
 from move_validation.utils.result_detection import get_is_checkmated, get_is_stalemated, is_threefold_repetiiton, check_50_move_rule_draw, has_sufficient_material
 
-from .models import ChessGame
+from .models import ChessGame, GameplayTimerTask
 from .utils.algebraic_notation_parser import get_algebraic_notation
 
 timer_tasks_info = {}
@@ -109,6 +109,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	async def handle_timer_decrement(self):
 		chess_game = await self.get_chess_game(self.game_id)
+
 
 		while await self.get_game_attribute(chess_game, "game_status") == "Ongoing":
 			async with self.timer_lock:
@@ -418,6 +419,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if not is_timer_running and not timer_task_exists:
 			timer_task = asyncio.create_task(self.handle_timer_decrement())
 
+			timer_task_in_db = GameplayTimerTask.objects.first(game_room_id=self.room_group_name)
+			if not timer_task_in_db:
+				GameplayTimerTask.objects.create(game_room_id=self.room_group_name, is_timer_running=True)
+			
 			if self.room_group_name not in timer_tasks_info.keys():
 				timer_tasks_info[self.room_group_name] = {
 					"timer_task": timer_task
