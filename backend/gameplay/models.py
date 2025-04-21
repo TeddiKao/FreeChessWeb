@@ -170,6 +170,15 @@ class GameplayTimerTask(models.Model):
 
 		return timer_task
 	
+	@database_sync_to_async
+	def async_get_timer_exists(self, room_id):
+		timer_task = GameplayTimerTask.objects.get(game_room_id=room_id)
+
+		if timer_task:
+			return True
+		else:
+			return False
+	
 	def is_timer_running(self):
 		return self.is_running
 	
