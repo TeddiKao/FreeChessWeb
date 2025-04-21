@@ -109,9 +109,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	async def handle_timer_decrement(self):
 		chess_game = await self.get_chess_game(self.game_id)
+		timer_task: GameplayTimerTask = await GameplayTimerTask.async_get_timer_task_from_room_id(self.room_group_name)
 
+		is_game_ongoing = await self.get_game_attribute(chess_game, "game_status") == "Ongoing"
+		timer_running = timer_task.is_timer_running()
 
-		while await self.get_game_attribute(chess_game, "game_status") == "Ongoing":
+		while is_game_ongoing and timer_running:
 			async with self.timer_lock:
 				chess_game = await self.get_chess_game(self.game_id)
 
