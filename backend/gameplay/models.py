@@ -167,21 +167,21 @@ class GameplayTimerTask(models.Model):
 	@classmethod
 	@database_sync_to_async
 	def async_get_timer_task_from_room_id(cls, room_id):
-		timer_task = GameplayTimerTask.objects.filter(game_room_id=room_id).first()
+		timer_task = cls.objects.filter(game_room_id=room_id).first()
 
 		return timer_task
 	
 	@classmethod
 	@database_sync_to_async
 	def async_get_timer_exists_from_room_id(cls, room_id):
-		timer_task = GameplayTimerTask.objects.filter(game_room_id=room_id).first()
+		timer_task = cls.objects.filter(game_room_id=room_id).first()
 
 		return bool(timer_task)
 		
 	@classmethod
 	@database_sync_to_async
 	def async_create_timer(cls, game_room_id, is_timer_running = True):
-		GameplayTimerTask.objects.create(game_room_id=game_room_id, is_running=is_timer_running)
+		cls.objects.create(game_room_id=game_room_id, is_running=is_timer_running)
 	
 	def is_timer_running(self):
 		return self.is_running
