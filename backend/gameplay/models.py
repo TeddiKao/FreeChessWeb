@@ -164,3 +164,7 @@ class UserGameplaySettings(models.Model):
 	user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
 	auto_queen = models.BooleanField(default=False, blank=False, null=False)
 	show_legal_moves = models.BooleanField(default=True, blank=False, null=False)
+
+class GameplayTimerTask(models.Model):
+	game_room_id = models.CharField(null=False, blank=False)
+	is_running = models.BooleanField(null=False, blank=False, default=False)
