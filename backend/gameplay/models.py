@@ -191,10 +191,10 @@ class GameplayTimerTask(models.Model):
 	
 	@database_sync_to_async
 	def async_start(self):
-		setattr(self, "is_running", True)
+		self.is_running = True
 		self.save()
 
 	@database_sync_to_async
 	def async_stop(self):
-		setattr(self, "is_running", False)
+		self.is_running = False
 		self.save()
