@@ -19,14 +19,11 @@ from move_validation.utils.result_detection import get_is_checkmated, get_is_sta
 from .models import ChessGame, GameplayTimerTask
 from .utils.algebraic_notation_parser import get_algebraic_notation
 
-timer_tasks_info = {}
-
 def calculate_position_index(piece_color: str, move_number: int):
 	if piece_color.lower() == "white":
 		return (move_number - 1) * 2 + 1
 	else:
 		return (move_number - 1) * 2 + 2
-
 
 class GameConsumer(AsyncWebsocketConsumer):
 	@database_sync_to_async
