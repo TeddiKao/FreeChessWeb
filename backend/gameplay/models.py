@@ -169,3 +169,6 @@ class GameplayTimerTask(models.Model):
 		timer_task = GameplayTimerTask.objects.get(game_room_id=room_id)
 
 		return timer_task
+	
+	def is_timer_running(self):
+		return self.is_running
