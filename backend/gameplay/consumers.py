@@ -135,8 +135,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 						self.room_group_name,
 						{
 							"type": "timer_decremented",
-							"white_player_clock": float(white_player_clock),
-							"black_player_clock": float(black_player_clock),
+							"white_player_clock": float(white_player_clock) - 1,
+							"black_player_clock": float(black_player_clock) - 1,
 							"side_to_move": side_to_move,
 						}
 					)
