@@ -39,11 +39,6 @@ def get_default_position_list():
 		"last_dragged_square": None,
 		"last_dropped_square": None
 	}]
-	
-class TimerTask(models.Model):
-	timer_task_id = models.UUIDField(default=uuid4, unique=True, primary_key=True)
-	status = models.CharField(max_length=20)
-
 
 class ChessGame(models.Model):
 	white_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="white_player")
@@ -166,5 +161,37 @@ class UserGameplaySettings(models.Model):
 	show_legal_moves = models.BooleanField(default=True, blank=False, null=False)
 
 class GameplayTimerTask(models.Model):
-	game_room_id = models.CharField(null=False, blank=False)
+	game_room_id = models.CharField(null=False, blank=False, max_length=50)
 	is_running = models.BooleanField(null=False, blank=False, default=False)
+
+	@classmethod
+	@database_sync_to_async
+	def async_get_timer_task_from_room_id(cls, room_id):
+		timer_task = cls.objects.filter(game_room_id=room_id).first()
+
+		return timer_task
+	
+	@classmethod
+	@database_sync_to_async
+	def async_get_timer_exists_from_room_id(cls, room_id):
+		timer_task = cls.objects.filter(game_room_id=room_id).first()
+
+		return bool(timer_task)
+		
+	@classmethod
+	@database_sync_to_async
+	def async_create_timer(cls, game_room_id, is_timer_running = True):
+		cls.objects.create(game_room_id=game_room_id, is_running=is_timer_running)
+	
+	def is_timer_running(self):
+		return self.is_running
+	
+	@database_sync_to_async
+	def async_start(self):
+		self.is_running = True
+		self.save()
+
+	@database_sync_to_async
+	def async_stop(self):
+		self.is_running = False
+		self.save()

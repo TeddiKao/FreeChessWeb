@@ -16,17 +16,14 @@ from move_validation.utils.get_move_type import get_move_type
 from move_validation.utils.general import *
 from move_validation.utils.result_detection import get_is_checkmated, get_is_stalemated, is_threefold_repetiiton, check_50_move_rule_draw, has_sufficient_material
 
-from .models import ChessGame
+from .models import ChessGame, GameplayTimerTask
 from .utils.algebraic_notation_parser import get_algebraic_notation
-
-timer_tasks_info = {}
 
 def calculate_position_index(piece_color: str, move_number: int):
 	if piece_color.lower() == "white":
 		return (move_number - 1) * 2 + 1
 	else:
 		return (move_number - 1) * 2 + 2
-
 
 class GameConsumer(AsyncWebsocketConsumer):
 	@database_sync_to_async
@@ -109,8 +106,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	async def handle_timer_decrement(self):
 		chess_game = await self.get_chess_game(self.game_id)
+		timer_task: GameplayTimerTask = await GameplayTimerTask.async_get_timer_task_from_room_id(self.room_group_name)
 
-		while await self.get_game_attribute(chess_game, "game_status") == "Ongoing":
+		is_game_ongoing = (await self.get_game_attribute(chess_game, "game_status")) == "Ongoing"
+		timer_running = timer_task.is_timer_running() if timer_task else False
+
+		while is_game_ongoing and timer_running:
 			async with self.timer_lock:
 				chess_game = await self.get_chess_game(self.game_id)
 
@@ -129,13 +130,18 @@ class GameConsumer(AsyncWebsocketConsumer):
 					elif side_to_move == "black":
 						await self.decrement_black_player_timer(chess_game, 1)
 
+				white_player_clock, black_player_clock = await asyncio.gather(
+					self.get_game_attribute(chess_game, "white_player_clock"),
+					self.get_game_attribute(chess_game, "black_player_clock")
+				)
+
 				if self.channel_name:
 					await self.channel_layer.group_send(
 						self.room_group_name,
 						{
 							"type": "timer_decremented",
-							"white_player_clock": white_player_clock,
-							"black_player_clock": black_player_clock,
+							"white_player_clock": float(white_player_clock),
+							"black_player_clock": float(black_player_clock),
 							"side_to_move": side_to_move,
 						}
 					)
@@ -409,21 +415,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.get_game_attribute(self.chess_game_model, "is_timer_running")
 		)
 
-		room_group_exists = timer_tasks_info.get(self.room_group_name)
-		timer_task_exists = None
-		if room_group_exists:
-			timer_task_exists = timer_tasks_info[self.room_group_name].get(
-				"timer_task")
+		timer_task_in_db = await GameplayTimerTask.async_get_timer_task_from_room_id(self.room_group_name)
+		if not timer_task_in_db:
+			await GameplayTimerTask.async_create_timer(is_timer_running=True, game_room_id=self.room_group_name)
+			asyncio.create_task(self.handle_timer_decrement())
 
-		if not is_timer_running and not timer_task_exists:
-			timer_task = asyncio.create_task(self.handle_timer_decrement())
-
-			if self.room_group_name not in timer_tasks_info.keys():
-				timer_tasks_info[self.room_group_name] = {
-					"timer_task": timer_task
-				}
-
-			await self.update_game_attribute(self.chess_game_model, "is_timer_running", True)
+		await self.update_game_attribute(self.chess_game_model, "is_timer_running", True)
 
 		self.timer_lock = Lock()
 
@@ -461,11 +458,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		timer_task = None
 
-		if timer_tasks_info.get(self.room_group_name):
-			if timer_tasks_info[self.room_group_name].get("timer_task"):
-				timer_task = timer_tasks_info[self.room_group_name]["timer_task"]
-				timer_task.cancel()
-				del timer_tasks_info[self.room_group_name]["timer_task"]
+		timer_task_exists = await GameplayTimerTask.async_get_timer_exists_from_room_id(self.room_group_name)
+		if timer_task_exists:
+			timer_task: GameplayTimerTask = await GameplayTimerTask.async_get_timer_task_from_room_id(self.room_group_name)
+			await timer_task.async_stop()
 
 		move_validation_start = perf_counter()
 		move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]), event["move_made_by"])
@@ -609,12 +605,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 					"black_player_clock": float(new_black_player_clock)
 				}))
 
-		new_timer_task_exists = timer_tasks_info[self.room_group_name].get(
-			"timer_task")
-
-		if not new_timer_task_exists:
-			new_timer_task = asyncio.create_task(self.handle_timer_decrement())
-			timer_tasks_info[self.room_group_name]["timer_task"] = new_timer_task
+		if not timer_task.is_timer_running():
+			asyncio.create_task(self.handle_timer_decrement())
 
 		move_receive_end = perf_counter()
 		print(
