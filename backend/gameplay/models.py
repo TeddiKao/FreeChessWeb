@@ -178,6 +178,10 @@ class GameplayTimerTask(models.Model):
 			return True
 		else:
 			return False
+		
+	@database_sync_to_async
+	def async_create_timer(self, game_room_id, is_timer_running = True):
+		GameplayTimerTask.objects.create(game_room_id=game_room_id, is_running=is_timer_running)
 	
 	def is_timer_running(self):
 		return self.is_running
