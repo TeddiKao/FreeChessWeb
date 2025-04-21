@@ -130,13 +130,18 @@ class GameConsumer(AsyncWebsocketConsumer):
 					elif side_to_move == "black":
 						await self.decrement_black_player_timer(chess_game, 1)
 
+				white_player_clock, black_player_clock = await asyncio.gather(
+					self.get_game_attribute(chess_game, "white_player_clock"),
+					self.get_game_attribute(chess_game, "black_player_clock")
+				)
+
 				if self.channel_name:
 					await self.channel_layer.group_send(
 						self.room_group_name,
 						{
 							"type": "timer_decremented",
-							"white_player_clock": float(white_player_clock) - 1,
-							"black_player_clock": float(black_player_clock) - 1,
+							"white_player_clock": float(white_player_clock),
+							"black_player_clock": float(black_player_clock),
 							"side_to_move": side_to_move,
 						}
 					)
