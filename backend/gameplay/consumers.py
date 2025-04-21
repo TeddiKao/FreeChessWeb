@@ -600,7 +600,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 					"black_player_clock": float(new_black_player_clock)
 				}))
 
-		asyncio.create_task(self.handle_timer_decrement())
+		if not timer_task.is_timer_running():
+			asyncio.create_task(self.handle_timer_decrement())
 
 		move_receive_end = perf_counter()
 		print(
