@@ -5,6 +5,7 @@
     @include flex-column;
 
     background-color: white;
+    z-index: 1000;
 }
 
 .auth-method {
