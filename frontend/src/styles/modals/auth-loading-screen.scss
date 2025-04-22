@@ -3,6 +3,8 @@
 .auth-loading-screen-container {
     @include page-center-xy;
     @include flex-column;
+    justify-content: center;
+    align-items: center;
 
     background-color: white;
     z-index: 1000;
