@@ -1,0 +1,27 @@
+@use "../global/mixins" as *;
+
+.auth-loading-screen-container {
+    @include page-center-xy;
+    @include flex-column-x-center;
+    @include flex-column-y-center;
+
+    background-color: white;
+    z-index: 1000;
+
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+    border-radius: 8px;
+}
+
+.auth-method {
+    margin-top: 8px;
+    margin-bottom: 12px;
+}
+
+.please-wait-text {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
