@@ -138,7 +138,7 @@ function AuthForm({ method }: AuthFormProps) {
 		setIsAuthenticating(true);
 
 		const userCredentials =
-			method === "login"
+			method === "Login"
 				? { email, password }
 				: { email, username, password };
 
@@ -147,7 +147,7 @@ function AuthForm({ method }: AuthFormProps) {
 		try {
 			response = await api.post(url, userCredentials);
 
-			if (method === "login") {
+			if (method === "Login") {
 				handleLogin(response.data.access, response.data.refresh);
 			} else {
 				// Log the user in
