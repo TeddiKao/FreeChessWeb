@@ -9,7 +9,7 @@ import { SignupErrors } from "../enums/validationErrors/authentication.js";
 import { isNullOrUndefined } from "../utils/generalUtils.js";
 import AuthLoadingScreen from "./modals/AuthLoadingScreen.js";
 
-type AuthMethods = "Log in" | "Signup"
+type AuthMethods = "Login" | "Signup"
 
 type AuthFormProps = {
 	method: string;

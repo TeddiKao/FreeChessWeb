@@ -4,12 +4,12 @@ import ModalWrapper from "../wrappers/ModalWrapper";
 
 type AuthLoadingScreenProps = {
 	visible: boolean;
-	authMethod: "Log in" | "Signup";
+	authMethod: "Login" | "Signup";
 };
 
 function AuthLoadingScreen({ visible, authMethod }: AuthLoadingScreenProps) {
 	function getLoadingText() {
-        if (authMethod === "Log in") {
+        if (authMethod === "Login") {
             return "Logging in"
         } else {
             return "Signing up"
