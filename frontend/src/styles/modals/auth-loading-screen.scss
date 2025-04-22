@@ -1,0 +1,18 @@
+@use "../global/mixins" as *;
+
+.auth-loading-screen-container {
+    @include page-center-xy;
+    @include flex-column;
+
+    background-color: white;
+}
+
+.auth-method {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.please-wait-text {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
