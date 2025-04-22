@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { SignupErrors } from "../enums/validationErrors/authentication.js";
 import { isNullOrUndefined } from "../utils/generalUtils.js";
+import AuthLoadingScreen from "./modals/AuthLoadingScreen.js";
+
+type AuthMethods = "Log in" | "Signup"
 
 type AuthFormProps = {
 	method: string;
@@ -284,6 +287,8 @@ function AuthForm({ method }: AuthFormProps) {
 					</button>
 				</form>
 			</div>
+
+			<AuthLoadingScreen visible={isAuthenticating} authMethod={method as AuthMethods} />
 		</>
 	);
 }
