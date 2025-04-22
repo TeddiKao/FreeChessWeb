@@ -4,18 +4,26 @@ import ModalWrapper from "../wrappers/ModalWrapper";
 
 type AuthLoadingScreenProps = {
 	visible: boolean;
-	authMethod: "login" | "signup";
+	authMethod: "Log in" | "Signup";
 };
 
 function AuthLoadingScreen({ visible, authMethod }: AuthLoadingScreenProps) {
-	if (!visible) {
+	function getLoadingText() {
+        if (authMethod === "Log in") {
+            return "Logging in"
+        } else {
+            return "Signing up"
+        }
+    }
+    
+    if (!visible) {
 		return null;
 	}
 
 	return (
 		<ModalWrapper visible={visible}>
 			<div className="auth-loading-screen-container">
-				<h4 className="auth-method">{authMethod}</h4>
+				<h4 className="auth-method">{getLoadingText()}</h4>
 				<LoadingSpinner />
 				<p className="please-wait-text">Please wait</p>
 			</div>
