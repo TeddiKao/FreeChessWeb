@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { SignupErrors } from "../enums/validationErrors/authentication.js";
 import { isNullOrUndefined } from "../utils/generalUtils.js";
-import MessageBox from "./popups/MessageBox.js";
 
 type AuthFormProps = {
 	method: string;
@@ -285,17 +284,6 @@ function AuthForm({ method }: AuthFormProps) {
 					</button>
 				</form>
 			</div>
-
-			{isAuthenticating && (
-				<MessageBox
-					type="info"
-					disappearAfterSeconds={5}
-					xAlignment="right"
-					yAlignment="bottom"
-					text="Authenticating, please wait"
-					setVisible={setIsAuthenticating}
-				/>
-			)}
 		</>
 	);
 }
