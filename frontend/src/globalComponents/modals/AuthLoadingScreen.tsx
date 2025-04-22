@@ -23,7 +23,7 @@ function AuthLoadingScreen({ visible, authMethod }: AuthLoadingScreenProps) {
 	return (
 		<ModalWrapper visible={visible}>
 			<div className="auth-loading-screen-container">
-				<h4 className="auth-method">{getLoadingText()}</h4>
+				<h3 className="auth-method">{getLoadingText()}</h3>
 				<LoadingSpinner />
 				<p className="please-wait-text">Please wait</p>
 			</div>
