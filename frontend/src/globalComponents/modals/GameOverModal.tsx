@@ -27,19 +27,19 @@ function GameOverModal({
 
 	const navigate = useNavigate();
 
+    const websocketUrl = parseWebsocketUrl("matchmaking-server", {
+        baseTime: timeControlInfo.baseTime,
+        increment: timeControlInfo.increment,
+    });
+
+    const matchmakingWebsocket = useWebSocket(
+        websocketUrl,
+        handleOnMessage,
+        undefined,
+        matchmakingWebsocketEnabled
+    );
+
 	useEffect(() => {
-		const websocketUrl = parseWebsocketUrl("matchmaking-server", {
-			baseTime: timeControlInfo.baseTime,
-			increment: timeControlInfo.increment,
-		});
-
-		const matchmakingWebsocket = useWebSocket(
-			websocketUrl,
-			handleOnMessage,
-			undefined,
-			matchmakingWebsocketEnabled
-		);
-
         matchmakingWebsocketRef.current = matchmakingWebsocket;
 
         return () => {
