@@ -9,7 +9,7 @@ function useWebSocket(
 	const [socketState, setSocketState] = useState<WebSocket | null>(null);
     
     useEffect(() => {
-		if (!enabled) {
+        if (!enabled) {
 			return;
 		}
 
