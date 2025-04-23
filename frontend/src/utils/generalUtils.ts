@@ -1,4 +1,6 @@
 import { isEqual } from "lodash";
+import { websocketBaseURL } from "../constants/urls";
+import { getAccessToken } from "./tokenUtils";
 
 function capitaliseFirstLetter(string: string): string {
 	const capitalisedFirstLetter = string.charAt(0).toUpperCase();
@@ -25,6 +27,22 @@ function padZero(value: number): string | number {
 
 function isTouchDevice() {
 	return ("ontouchstart" in window) || navigator.maxTouchPoints > 0;
+}
+
+function parseWebsocketUrl(websocketRoute: string, extraParams: Record<string, any>) {
+	const accessToken = getAccessToken();
+	const urlWithTokenOnly = `${websocketBaseURL}ws/${websocketRoute}/?token=${accessToken}`
+
+	let websocketUrl = urlWithTokenOnly;
+
+	for (const paramName of Object.keys(extraParams)) {
+		const paramValue = extraParams[paramName];
+		const paramUrl = `&${paramName}=${paramValue}`
+
+		websocketUrl += paramUrl;
+	}
+
+	return websocketUrl;
 }
 
 export {
