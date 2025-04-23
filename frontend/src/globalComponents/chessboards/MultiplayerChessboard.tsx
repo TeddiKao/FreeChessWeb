@@ -98,8 +98,9 @@ function MultiplayerChessboard({
 	const gameWebsocketRef = useRef<WebSocket | null>(null);
 	const gameWebsocketExists = useRef<boolean>(false);
 
+    const [gameWebsocketEnabled, setGameWebsocketEnabled] = useState(false);
 	const gameWebsocketUrl = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
-	const gameWebsocket = useWebSocket(gameWebsocketUrl, handleOnMessage, undefined, !gameWebsocketExists.current);
+	const gameWebsocket = useWebSocket(gameWebsocketUrl, handleOnMessage, undefined, gameWebsocketEnabled);
 
 	const chessboardStyles = {
 		gridTemplateColumns: `repeat(8, ${squareSize}px`,
@@ -132,6 +133,8 @@ function MultiplayerChessboard({
 
 			gameWebsocketRef.current = gameWebsocket;
 			gameWebsocketExists.current = true;
+
+            setGameWebsocketEnabled(true);
 		}
 
 		return () => {
