@@ -559,6 +559,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 				}))
 			)
 
+			print("Successfully sent data to clients!")
+
 			if is_checkmated or is_stalemated:
 				if is_checkmated:
 					await chess_game_model.async_end_game(f"{piece_color.capitalize()} won")

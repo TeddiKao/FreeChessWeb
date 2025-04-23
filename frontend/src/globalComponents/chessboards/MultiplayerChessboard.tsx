@@ -100,7 +100,8 @@ function MultiplayerChessboard({
 
     const [gameWebsocketEnabled, setGameWebsocketEnabled] = useState(false);
 	const gameWebsocketUrl = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
-	const gameWebsocket = useWebSocket(gameWebsocketUrl, handleOnMessage, undefined, gameWebsocketEnabled);
+	
+    const gameWebsocket = useWebSocket(gameWebsocketUrl, handleOnMessage, undefined, gameWebsocketEnabled);
 
 	const chessboardStyles = {
 		gridTemplateColumns: `repeat(8, ${squareSize}px`,
@@ -132,6 +133,7 @@ function MultiplayerChessboard({
 			window.addEventListener("beforeunload", handleWindowUnload);
 
 			gameWebsocketRef.current = gameWebsocket;
+
 			gameWebsocketExists.current = true;
 
             setGameWebsocketEnabled(true);
@@ -146,6 +148,10 @@ function MultiplayerChessboard({
 			}
 		};
 	}, []);
+
+    useEffect(() => {
+        gameWebsocketRef.current = gameWebsocket;
+    }, [gameWebsocket]);
 
 	useEffect(() => {
 		handleOnDrop();
@@ -354,7 +360,7 @@ function MultiplayerChessboard({
 			};
 
 			sendRegularMoveDetails(pieceInfo, initialSquare, "drag");
-		}
+		} 
 
 		setDraggedSquare(null);
 		setDroppedSquare(null);
