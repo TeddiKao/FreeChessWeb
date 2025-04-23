@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function useWebSocket(
 	url: string,
@@ -6,15 +6,19 @@ function useWebSocket(
 	onError?: any,
 	enabled = true
 ) {
-	const [socketState, setSocketState] = useState<WebSocket | null>(null);
+	const socketRef = useRef<WebSocket | null>(null);
     
     useEffect(() => {
         if (!enabled) {
 			return;
 		}
 
+        if (socketRef.current) {
+            return;
+        }
+
 		const websocket = new WebSocket(url);
-        setSocketState(websocket);
+        socketRef.current = websocket;
 
 		if (onMessage) {
 			websocket.onmessage = onMessage;
@@ -31,7 +35,7 @@ function useWebSocket(
         }
 	}, [url, enabled]);
 
-	return socketState;
+	return socketRef.current;
 }
 
 export default useWebSocket;
