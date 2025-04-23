@@ -29,11 +29,15 @@ function isTouchDevice() {
 	return ("ontouchstart" in window) || navigator.maxTouchPoints > 0;
 }
 
-function parseWebsocketUrl(websocketRoute: string, extraParams: Record<string, any>) {
+function parseWebsocketUrl(websocketRoute: string, extraParams?: Record<string, any>) {
 	const accessToken = getAccessToken();
 	const urlWithTokenOnly = `${websocketBaseURL}ws/${websocketRoute}/?token=${accessToken}`
 
 	let websocketUrl = urlWithTokenOnly;
+
+	if (!extraParams) {
+		return websocketUrl;
+	}
 
 	for (const paramName of Object.keys(extraParams)) {
 		const paramValue = extraParams[paramName];
@@ -51,4 +55,5 @@ export {
 	padZero,
 	isTouchDevice,
 	isNullOrUndefined,
+	parseWebsocketUrl
 }
