@@ -80,7 +80,7 @@ function GameOverModal({
 
 			navigate("/temp", {
 				state: {
-					routeToRedirect: "/play",
+					route: "/play",
 					routeState: gameSetupInfo,
 				},
 			})
