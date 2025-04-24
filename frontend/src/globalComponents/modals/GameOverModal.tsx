@@ -28,7 +28,7 @@ function GameOverModal({
 		useState(false);
 
 	const [matchFound, setMatchFound] = useState(false);
-	const [isMatchmaking, setIsMatchmaking] = useState(true);
+	const [isMatchmaking, setIsMatchmaking] = useState(false);
 
 	const gameIdRef = useRef<string | number | null>(null);
 	const whitePlayerRef = useRef<string | null>(null);
@@ -146,6 +146,7 @@ function GameOverModal({
 
 	function handleNewGameCreation() {
 		setMatchmakingWebsocketEnabled(true);
+		setIsMatchmaking(true);
 	}
 
 	return (
