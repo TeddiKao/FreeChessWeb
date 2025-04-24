@@ -78,8 +78,11 @@ function GameOverModal({
 				assignedColor: await getAssignedColor(whitePlayerRef.current!, blackPlayerRef.current!)
 			}
 
-			navigate("/play", {
-				state: gameSetupInfo,
+			navigate("/temp", {
+				state: {
+					routeToRedirect: "/play",
+					routeState: gameSetupInfo,
+				},
 			})
 		}
 
