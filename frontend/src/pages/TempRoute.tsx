@@ -28,7 +28,7 @@ function TempRoute() {
         navigate(routeToRedirect, {
             state: routeState
         })
-    }, []);
+    }, [routeToRedirect, routeState, navigate]);
 
     return (
         <div className="temp-route-placeholder"></div>
