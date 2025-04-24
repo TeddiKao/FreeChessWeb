@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { isNullOrUndefined } from "../utils/generalUtils";
 
 type LocationState = {
     route: string,
@@ -12,6 +13,14 @@ function TempRoute() {
     const locationState: LocationState = location.state;
     const routeToRedirect = locationState.route;
     const routeState = locationState.routeState;
+
+    if (isNullOrUndefined(routeToRedirect)) {
+        return null;
+    }
+
+    if (isNullOrUndefined(routeState)) {
+        return null;
+    }
 
     const navigate = useNavigate();
 
