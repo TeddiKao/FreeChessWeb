@@ -39,18 +39,20 @@ function GameplayActionButtons({
 
 	const [drawOfferPopupVisible, setDrawOfferPopupVisible] = useState(false);
 
+	const [actionWebsocketEnabled, setActionWebsocketEnabled] = useState<boolean>(false);
 	const actionWebsocketUrl = `${websocketBaseURL}ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`;
 
 	actionWebsocketRef.current = useWebSocket(
 		actionWebsocketUrl,
 		handleOnMessage,
         undefined,
-        !actionWebsocketExists.current
+        actionWebsocketEnabled
 	);
 
 	useEffect(() => {
 		if (actionWebsocketExists.current === false) {
 			actionWebsocketExists.current = true;
+			setActionWebsocketEnabled(true);
 
 			parentActionWebsocket.current = actionWebsocketRef.current;
 
