@@ -97,8 +97,24 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
             print(f"Matched user: {matched_user}, Player in queue: {player_in_queue}")
 
-            player_in_queue_matched = await player_in_queue.has_player_been_matched()
-            matched_player_matched = await matched_player.has_player_been_matched()
+            player_in_queue_matched = None
+            print(player_in_queue)
+            print(matched_user)
+
+            if player_in_queue:
+                print(player_in_queue)
+                player_in_queue_matched = await player_in_queue.has_player_been_matched()
+            
+            print("Checked if player was in the queue")
+
+            matched_player_matched = None
+
+            print(matched_user)
+            if matched_user:
+                print(matched_user)
+                matched_player_matched = await matched_user.has_player_been_matched()
+
+            print(player_in_queue_matched, matched_player_matched)
 
             if matched_user and not player_in_queue_matched and not matched_player_matched:
                 matched_player_color, player_to_match_color = await self.decide_player_color()
@@ -136,6 +152,10 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                 )
 
                 await self.remove_player_from_queue(matched_user)
+                
+                if player_in_queue:
+                    await self.remove_player_from_queue(player_in_queue)
+
                 await self.channel_layer.group_discard(
                     f"user_{matched_player_user_model.id}",
                     self.channel_name
