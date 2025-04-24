@@ -15,7 +15,6 @@ type GameOverModalProps = {
 	gameEndCause: string;
 	gameWinner: string | null;
 	timeControlInfo: TimeControl;
-	gameId: number | string
 };
 
 function GameOverModal({
@@ -72,7 +71,7 @@ function GameOverModal({
 				matchmakingWebsocketExists.current = false;
 			}
 
-			const pageState = {
+			const gameSetupInfo = {
 				baseTime: timeControlInfo.baseTime,
 				increment: timeControlInfo.increment,
 				gameId: gameIdRef.current,
@@ -80,7 +79,7 @@ function GameOverModal({
 			}
 
 			navigate("/play", {
-				state: pageState,
+				state: gameSetupInfo,
 			})
 		}
 
@@ -103,6 +102,8 @@ function GameOverModal({
 		whitePlayerRef.current = whitePlayer;
 		blackPlayerRef.current = blackPlayer;
 
+		console.log("Successfully updated all data!")
+
 		setTimeout(() => {
 			setMatchFound(true);
 		}, 50)
@@ -113,6 +114,8 @@ function GameOverModal({
 
 		const parsedEventData = JSON.parse(eventData.data);
 		const eventType = parsedEventData["type"];
+
+		console.log(eventType, MatchmakingEvents.MATCH_FOUND);
 
 		switch (eventType) {
 			case MatchmakingEvents.MATCH_FOUND:
