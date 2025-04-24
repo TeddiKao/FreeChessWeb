@@ -15,5 +15,10 @@ class WaitingPlayer(models.Model):
 		return self.has_been_matched
 
 	@database_sync_to_async
+	def update_has_player_been_matched(self, new_value):
+		self.has_been_matched = new_value
+		self.save()
+
+	@database_sync_to_async
 	def get_username(self):
 		return self.user.username
