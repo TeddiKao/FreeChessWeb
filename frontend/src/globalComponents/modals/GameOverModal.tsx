@@ -9,6 +9,7 @@ import { TimeControl } from "../../types/gameSetup";
 import { useNavigate } from "react-router-dom";
 import { MatchmakingEvents } from "../../enums/gameSetup";
 import { getAssignedColor } from "../../utils/matchmakingUtils";
+import MatchmakingShortcutScreen from "./MatchmakingShortcutScreen";
 
 type GameOverModalProps = {
 	visible: boolean;
@@ -25,9 +26,9 @@ function GameOverModal({
 }: GameOverModalProps) {
 	const [matchmakingWebsocketEnabled, setMatchmakingWebsocketEnabled] =
 		useState(false);
-	
+
 	const [matchFound, setMatchFound] = useState(false);
-	const [isMatchmaking, setIsMatchmaking] = useState(true);
+	const [isMatchmaking, setIsMatchmaking] = useState(false);
 
 	const gameIdRef = useRef<string | number | null>(null);
 	const whitePlayerRef = useRef<string | null>(null);
@@ -42,7 +43,6 @@ function GameOverModal({
 		baseTime: timeControlInfo.baseTime,
 		increment: timeControlInfo.increment,
 		gameId: gameIdRef.current,
-
 	});
 
 	const matchmakingWebsocket = useWebSocket(
@@ -66,7 +66,9 @@ function GameOverModal({
 
 	useEffect(() => {
 		async function handleNavigation() {
-			if (matchmakingWebsocketRef.current?.readyState === WebSocket.OPEN) {
+			if (
+				matchmakingWebsocketRef.current?.readyState === WebSocket.OPEN
+			) {
 				matchmakingWebsocketRef.current.close();
 				matchmakingWebsocketExists.current = false;
 			}
@@ -75,15 +77,18 @@ function GameOverModal({
 				baseTime: timeControlInfo.baseTime,
 				increment: timeControlInfo.increment,
 				gameId: gameIdRef.current,
-				assignedColor: await getAssignedColor(whitePlayerRef.current!, blackPlayerRef.current!)
-			}
+				assignedColor: await getAssignedColor(
+					whitePlayerRef.current!,
+					blackPlayerRef.current!
+				),
+			};
 
 			navigate("/temp", {
 				state: {
 					route: "/play",
 					routeState: gameSetupInfo,
 				},
-			})
+			});
 		}
 
 		if (matchFound) {
@@ -105,11 +110,11 @@ function GameOverModal({
 		whitePlayerRef.current = whitePlayer;
 		blackPlayerRef.current = blackPlayer;
 
-		console.log("Successfully updated all data!")
+		console.log("Successfully updated all data!");
 
 		setTimeout(() => {
 			setMatchFound(true);
-		}, 50)
+		}, 50);
 	}
 
 	function handleOnMessage(eventData: any) {
@@ -124,7 +129,7 @@ function GameOverModal({
 			case MatchmakingEvents.MATCH_FOUND:
 				if (parsedEventData["match_found"]) {
 					handleMatchFound(parsedEventData);
-				}	
+				}
 
 				break;
 		}
@@ -141,22 +146,27 @@ function GameOverModal({
 
 	function handleNewGameCreation() {
 		setMatchmakingWebsocketEnabled(true);
+		setIsMatchmaking(true);
 	}
 
 	return (
-		<div className="game-over-modal-container">
-			<h1 className="game-result">{gameResultText}</h1>
-			<p className="game-end-cause">by {gameEndCauseText}</p>
-			<div className="buttons-container">
-				<button
-					onClick={handleNewGameCreation}
-					className="new-game-button"
-				>
-					New game
-				</button>
-				<button className="rematch-button">Rematch</button>
+		<>
+			<div className="game-over-modal-container">
+				<h1 className="game-result">{gameResultText}</h1>
+				<p className="game-end-cause">by {gameEndCauseText}</p>
+				<div className="buttons-container">
+					<button
+						onClick={handleNewGameCreation}
+						className="new-game-button"
+					>
+						New game
+					</button>
+					<button className="rematch-button">Rematch</button>
+				</div>
 			</div>
-		</div>
+
+			<MatchmakingShortcutScreen timeControlInfo={timeControlInfo} visible={isMatchmaking} />
+		</>
 	);
 }
 
