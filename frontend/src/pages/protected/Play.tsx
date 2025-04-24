@@ -293,6 +293,12 @@ function Play() {
                         visible={hasGameEnded}
                         gameEndCause={gameEndedCause}
                         gameWinner={gameWinner}
+                        timeControlInfo={(
+                            {
+                                baseTime: location.state?.baseTime,
+                                increment: location.state?.increment,
+                            }
+                        )}
                     />
 
                     <ModalWrapper visible={settingsVisible}>

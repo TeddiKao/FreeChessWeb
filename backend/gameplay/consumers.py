@@ -113,6 +113,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		while is_game_ongoing and timer_running:
 			async with self.timer_lock:
+				is_game_ongoing = (await self.get_game_attribute(chess_game, "game_status")) == "Ongoing"
+				timer_running = timer_task.is_timer_running() if timer_task else False
+
 				chess_game = await self.get_chess_game(self.game_id)
 
 				white_player_clock, black_player_clock = await asyncio.gather(
@@ -558,6 +561,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 					"new_position_index": position_index,
 				}))
 			)
+
+			print("Successfully sent data to clients!")
 
 			if is_checkmated or is_stalemated:
 				if is_checkmated:

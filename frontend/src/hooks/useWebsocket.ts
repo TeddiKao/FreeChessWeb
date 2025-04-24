@@ -1,19 +1,41 @@
-function useWebSocket(url: string, onMessage?: any, onError?: any) {
-    const websocket = new WebSocket(url);
+import { useEffect, useRef, useState } from "react";
 
-    if (onMessage) {
-        websocket.onmessage = onMessage;
-    }
+function useWebSocket(
+	url: string,
+	onMessage?: any,
+	onError?: any,
+	enabled = true
+) {
+	const socketRef = useRef<WebSocket | null>(null);
+    
+    useEffect(() => {
+        if (!enabled) {
+			return;
+		}
 
-    if (onError) {
-        websocket.onerror = onError;
-    }
+        if (socketRef.current) {
+            return;
+        }
 
-    websocket.onclose = (event: CloseEvent) => {
-        
-    }
+		const websocket = new WebSocket(url);
+        socketRef.current = websocket;
 
-    return websocket;
+		if (onMessage) {
+			websocket.onmessage = onMessage;
+		}
+
+		if (onError) {
+			websocket.onerror = onError;
+		}
+
+        return () => {
+            if (websocket.readyState === WebSocket.OPEN) {
+                websocket.close();
+            }
+        }
+	}, [url, enabled]);
+
+	return socketRef.current;
 }
 
 export default useWebSocket;

@@ -18,6 +18,7 @@ import ProtectedRoute from "./globalComponents/routes/ProtectedRoute.tsx";
 import AuthenticationRoute from "./globalComponents/routes/AuthenticationRoute.tsx";
 import Play from "./pages/protected/Play.tsx";
 import PassAndPlay from "./pages/protected/PassAndPlay.tsx";
+import TempRoute from "./pages/TempRoute.tsx";
 
 function Logout() {
     localStorage.clear();
@@ -86,6 +87,8 @@ function App() {
                                 </ProtectedRoute>
                             }
                         />
+
+                        <Route path="/temp" element={<TempRoute />} />
 
                         <Route path="*" element={<NotFound />} />
                     </Routes>

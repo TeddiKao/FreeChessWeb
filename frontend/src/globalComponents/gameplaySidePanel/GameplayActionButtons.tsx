@@ -11,177 +11,178 @@ import { getAccessToken } from "../../utils/tokenUtils";
 import { ActionWebSocketEventTypes } from "../../enums/gameLogic";
 
 type GameplayActionButtonsProps = {
-    gameId: string | number;
-    parentActionWebsocket: RefObject<WebSocket | null>
-    setGameEnded: StateSetterFunction<boolean>;
-    setGameEndedCause: StateSetterFunction<string>;
-    setGameWinner: StateSetterFunction<string>;
-    setMessagePopupVisible: StateSetterFunction<boolean>;
-    setMessageToDisplay: StateSetterFunction<string>;
-    setDrawOfferReceived: StateSetterFunction<boolean>;
+	gameId: string | number;
+	parentActionWebsocket: RefObject<WebSocket | null>;
+	setGameEnded: StateSetterFunction<boolean>;
+	setGameEndedCause: StateSetterFunction<string>;
+	setGameWinner: StateSetterFunction<string>;
+	setMessagePopupVisible: StateSetterFunction<boolean>;
+	setMessageToDisplay: StateSetterFunction<string>;
+	setDrawOfferReceived: StateSetterFunction<boolean>;
 };
 
 function GameplayActionButtons({
-    parentActionWebsocket,
-    gameId,
-    setGameEnded,
-    setGameEndedCause,
-    setGameWinner,
-    setMessageToDisplay,
-    setMessagePopupVisible,
-    setDrawOfferReceived
+	parentActionWebsocket,
+	gameId,
+	setGameEnded,
+	setGameEndedCause,
+	setGameWinner,
+	setMessageToDisplay,
+	setMessagePopupVisible,
+	setDrawOfferReceived,
 }: GameplayActionButtonsProps) {
-    const actionWebsocketRef = useRef<WebSocket | null>(null);
-    const actionWebsocketExists = useRef<boolean>(false);
+	const actionWebsocketRef = useRef<WebSocket | null>(null);
+	const actionWebsocketExists = useRef<boolean>(false);
 
-    const [resignationPopupVisible, setResignationPopupVisible] =
-        useState(false);
+	const [resignationPopupVisible, setResignationPopupVisible] =
+		useState(false);
 
-    const [drawOfferPopupVisible, setDrawOfferPopupVisible] = useState(false);
+	const [drawOfferPopupVisible, setDrawOfferPopupVisible] = useState(false);
 
-    useEffect(() => {
-        if (actionWebsocketExists.current === false) {
-            const actionWebsocketUrl = `${websocketBaseURL}ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`;
+	const actionWebsocketUrl = `${websocketBaseURL}ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`;
 
-            actionWebsocketRef.current = useWebSocket(
-                actionWebsocketUrl,
-                handleOnMessage
-            );
+	actionWebsocketRef.current = useWebSocket(
+		actionWebsocketUrl,
+		handleOnMessage,
+        undefined,
+        !actionWebsocketExists.current
+	);
 
-            actionWebsocketExists.current = true;
+	useEffect(() => {
+		if (actionWebsocketExists.current === false) {
+			actionWebsocketExists.current = true;
 
-            parentActionWebsocket.current = actionWebsocketRef.current
+			parentActionWebsocket.current = actionWebsocketRef.current;
 
-            window.addEventListener("beforeunload", handleWindowUnload);
-        }
+			window.addEventListener("beforeunload", handleWindowUnload);
+		}
 
-        return () => {
-            if (actionWebsocketRef.current?.readyState === WebSocket.OPEN) {
-                actionWebsocketRef.current.close();
-            }
+		return () => {
+			if (actionWebsocketRef.current?.readyState === WebSocket.OPEN) {
+				actionWebsocketRef.current.close();
+			}
 
-            actionWebsocketExists.current = false;
+			actionWebsocketExists.current = false;
 
-            window.removeEventListener("beforeunload", handleWindowUnload);
-        };
-    }, []);
+			window.removeEventListener("beforeunload", handleWindowUnload);
+		};
+	}, []);
 
-    function handleWindowUnload() {
-        if (actionWebsocketRef.current?.readyState === WebSocket.OPEN) {
-            actionWebsocketRef.current.close();
-            actionWebsocketExists.current = false;
-        }
-    }
+	function handleWindowUnload() {
+		if (actionWebsocketRef.current?.readyState === WebSocket.OPEN) {
+			actionWebsocketRef.current.close();
+			actionWebsocketExists.current = false;
+		}
+	}
 
-    function handleResignationPopupDisplay() {
-        setResignationPopupVisible(true);
-    }
+	function handleResignationPopupDisplay() {
+		setResignationPopupVisible(true);
+	}
 
-    function handleDrawOfferPopupDisplay() {
-        setDrawOfferPopupVisible(true);
-    }
+	function handleDrawOfferPopupDisplay() {
+		setDrawOfferPopupVisible(true);
+	}
 
-    function handleResignationConfirmation() {
-        const resignationDetails = {
-            type: "resign_request",
-        };
+	function handleResignationConfirmation() {
+		const resignationDetails = {
+			type: "resign_request",
+		};
 
-        
+		actionWebsocketRef.current?.send(JSON.stringify(resignationDetails));
+	}
 
-        actionWebsocketRef.current?.send(JSON.stringify(resignationDetails));
-    }
+	function handleDrawOfferConfirmation() {
+		const drawOfferDetails = {
+			type: "draw_offered",
+		};
 
-    function handleDrawOfferConfirmation() {
-        const drawOfferDetails = {
-            type: "draw_offered"
-        }
+		actionWebsocketRef?.current?.send(JSON.stringify(drawOfferDetails));
 
-        actionWebsocketRef?.current?.send(JSON.stringify(drawOfferDetails));
+		setMessagePopupVisible(true);
+		setMessageToDisplay("Draw offer sent");
+	}
 
-        setMessagePopupVisible(true);
-        setMessageToDisplay("Draw offer sent")
-    }
+	function handleOnMessage(event: MessageEvent) {
+		const parsedEventData = JSON.parse(event.data);
+		const eventType = parsedEventData["type"];
 
-    function handleOnMessage(event: MessageEvent) {
-        const parsedEventData = JSON.parse(event.data);
-        const eventType = parsedEventData["type"];
+		switch (eventType) {
+			case ActionWebSocketEventTypes.PLAYER_RESIGNED:
+				handleResignation(parsedEventData);
+				break;
 
-        switch (eventType) {
-            case ActionWebSocketEventTypes.PLAYER_RESIGNED:
-                handleResignation(parsedEventData);
-                break;
+			case ActionWebSocketEventTypes.DRAW_OFFERED:
+				handleDrawOffered();
+				break;
 
-            case ActionWebSocketEventTypes.DRAW_OFFERED:
-                handleDrawOffered();
-                break;
+			case ActionWebSocketEventTypes.DRAW_OFFER_ACCPETED:
+				handleDrawAccepted();
+				break;
 
-            case ActionWebSocketEventTypes.DRAW_OFFER_ACCPETED:
-                handleDrawAccepted();
-                break;
+			case ActionWebSocketEventTypes.DRAW_OFFER_DECLINED:
+				handleDrawDeclined();
+				break;
 
-            case ActionWebSocketEventTypes.DRAW_OFFER_DECLINED:
-                handleDrawDeclined();
-                break;
+			default:
+				console.error(`Unknown even type ${eventType}`);
+		}
+	}
 
-            default:
-                console.error(`Unknown even type ${eventType}`);
-        }
-    }
+	function handleResignation(eventData: any) {
+		setGameEnded(true);
+		setGameEndedCause("Resignation");
+		setGameWinner(eventData["winning_color"]);
+	}
 
-    function handleResignation(eventData: any) {
-        
+	function handleDrawOffered() {
+		setDrawOfferReceived(true);
+	}
 
-        setGameEnded(true);
-        setGameEndedCause("Resignation");
-        setGameWinner(eventData["winning_color"]);
-    }
+	function handleDrawDeclined() {
+		setMessagePopupVisible(true);
+		setMessageToDisplay("Draw declined");
+	}
 
-    function handleDrawOffered() {
-        setDrawOfferReceived(true);
-    }
+	function handleDrawAccepted() {
+		setGameEnded(true);
+		setGameEndedCause("Agreement");
+	}
 
-    function handleDrawDeclined() {
-        setMessagePopupVisible(true);
-        setMessageToDisplay("Draw declined")
-    }
+	return (
+		<div className="gameplay-action-buttons-container">
+			<h4 className="gameplay-action-buttons-header">Gameplay actions</h4>
+			<div className="gameplay-action-buttons">
+				<div
+					onClick={handleResignationPopupDisplay}
+					className="resignation-container"
+				>
+					<img className="resign-icon" src="/resignButton.svg" />
+					<p className="helper-text">Resign</p>
 
-    function handleDrawAccepted() {
-        setGameEnded(true);
-        setGameEndedCause("Agreement");
-    }
+					<ConfirmationPopup
+						isOpen={resignationPopupVisible}
+						setIsOpen={setResignationPopupVisible}
+						confirmationMessage="Are you sure you want to resign?"
+						confirmAction={handleResignationConfirmation}
+					/>
+				</div>
 
-    return (
-        <div className="gameplay-action-buttons-container">
-            <h4 className="gameplay-action-buttons-header">Gameplay actions</h4>
-            <div className="gameplay-action-buttons">
-                <div
-                    onClick={handleResignationPopupDisplay}
-                    className="resignation-container"
-                >
-                    <img className="resign-icon" src="/resignButton.svg" />
-                    <p className="helper-text">Resign</p>
+				<div
+					className="draw-offer-container"
+					onClick={handleDrawOfferPopupDisplay}
+				>
+					<p className="helper-text">Draw</p>
 
-                    <ConfirmationPopup
-                        isOpen={resignationPopupVisible}
-                        setIsOpen={setResignationPopupVisible}
-                        confirmationMessage="Are you sure you want to resign?"
-                        confirmAction={handleResignationConfirmation}
-                    />
-                </div>
-
-                <div className="draw-offer-container" onClick={handleDrawOfferPopupDisplay}>
-                    <p className="helper-text">Draw</p>
-
-                    <ConfirmationPopup
-                        isOpen={drawOfferPopupVisible}
-                        setIsOpen={setDrawOfferPopupVisible}
-                        confirmationMessage="Are you sure you want to offer a draw?"
-                        confirmAction={handleDrawOfferConfirmation}
-                    />
-                </div>
-            </div>
-        </div>
-    );
+					<ConfirmationPopup
+						isOpen={drawOfferPopupVisible}
+						setIsOpen={setDrawOfferPopupVisible}
+						confirmationMessage="Are you sure you want to offer a draw?"
+						confirmAction={handleDrawOfferConfirmation}
+					/>
+				</div>
+			</div>
+		</div>
+	);
 }
 
 export default GameplayActionButtons;

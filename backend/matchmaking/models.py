@@ -8,6 +8,16 @@ class WaitingPlayer(models.Model):
 	timestamp = models.DateTimeField(auto_now_add=True)
 	base_time = models.IntegerField(null=False, blank=False, default=models.NOT_PROVIDED)
 	increment_time = models.IntegerField(null=False, blank=False, default=models.NOT_PROVIDED)
+	has_been_matched = models.BooleanField(null=False, blank=False, default=False)
+
+	@database_sync_to_async
+	def has_player_been_matched(self):
+		return self.has_been_matched
+
+	@database_sync_to_async
+	def update_has_player_been_matched(self, new_value):
+		self.has_been_matched = new_value
+		self.save()
 
 	@database_sync_to_async
 	def get_username(self):
