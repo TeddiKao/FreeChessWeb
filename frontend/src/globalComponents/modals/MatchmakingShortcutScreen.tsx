@@ -13,7 +13,7 @@ type MatchmakingShortcutScreenProps = {
 function MatchmakingShortcutScreen({ visible, timeControlInfo }: MatchmakingShortcutScreenProps) {
     return (
         <ModalWrapper visible={visible}>
-            <div className="matchamking-shortcut-screen-container">
+            <div className="matchmaking-shortcut-screen-container">
                 <h3 className="matchmaking-status">Finding match</h3>
                 <LoadingSpinner />
                 <p className="time-control-info">{displayTimeControl(timeControlInfo)}</p>
