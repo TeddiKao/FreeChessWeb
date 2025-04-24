@@ -63,7 +63,7 @@ function GameOverModal({
 				matchmakingWebsocketRef.current.close();
 			}
 		};
-	});
+	}, []);
 
 	useEffect(() => {
 		async function handleNavigation() {
@@ -109,13 +109,15 @@ function GameOverModal({
 	}
 
 	function handleOnMessage(eventData: any) {
-		const parsedEventData = JSON.parse(eventData);
-		const eventType = eventData["type"];
+		console.log(eventData);
+
+		const parsedEventData = JSON.parse(eventData.data);
+		const eventType = parsedEventData["type"];
 
 		switch (eventType) {
 			case MatchmakingEvents.MATCH_FOUND:
 				if (parsedEventData["match_found"]) {
-					handleMatchFound(eventData);
+					handleMatchFound(parsedEventData);
 				}	
 
 				break;
