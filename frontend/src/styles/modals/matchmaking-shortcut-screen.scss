@@ -1,0 +1,24 @@
+@use "../global/mixins" as *;
+
+.matchmaking-shortcut-screen-container {
+    @include page-center-xy;
+    @include flex-column-x-center;
+    @include flex-column-y-center;
+
+    background-color: white;
+
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.matchmaking-status {
+    margin-bottom: 8px;
+}
+
+.matchmaking-status {
+    margin-top: 12px;
+    color: hsl(0, 0%, 80%);
+}
+
