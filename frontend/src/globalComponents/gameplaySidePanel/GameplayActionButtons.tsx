@@ -9,6 +9,7 @@ import useWebSocket from "../../hooks/useWebsocket";
 import { websocketBaseURL } from "../../constants/urls";
 import { getAccessToken } from "../../utils/tokenUtils";
 import { ActionWebSocketEventTypes } from "../../enums/gameLogic";
+import useReactiveRef from "../../hooks/useReactiveRef";
 
 type GameplayActionButtonsProps = {
 	gameId: string | number;
@@ -31,7 +32,7 @@ function GameplayActionButtons({
 	setMessagePopupVisible,
 	setDrawOfferReceived,
 }: GameplayActionButtonsProps) {
-	const actionWebsocketRef = useRef<WebSocket | null>(null);
+	const [actionWebsocketRef, actionWebsocket, setActionWebsocket] = useReactiveRef<WebSocket | null>(null);
 	const actionWebsocketExists = useRef<boolean>(false);
 
 	const [resignationPopupVisible, setResignationPopupVisible] =
@@ -42,7 +43,7 @@ function GameplayActionButtons({
 	const [actionWebsocketEnabled, setActionWebsocketEnabled] = useState<boolean>(false);
 	const actionWebsocketUrl = `${websocketBaseURL}ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`;
 
-	actionWebsocketRef.current = useWebSocket(
+	const socket = useWebSocket(
 		actionWebsocketUrl,
 		handleOnMessage,
         undefined,
@@ -69,6 +70,14 @@ function GameplayActionButtons({
 			window.removeEventListener("beforeunload", handleWindowUnload);
 		};
 	}, []);
+
+	useEffect(() => {
+		parentActionWebsocket.current = actionWebsocket;
+	}, [actionWebsocketEnabled, actionWebsocket]);
+
+	useEffect(() => {
+		setActionWebsocket(socket);
+	}, [socket]);
 
 	function handleWindowUnload() {
 		if (actionWebsocketRef.current?.readyState === WebSocket.OPEN) {
