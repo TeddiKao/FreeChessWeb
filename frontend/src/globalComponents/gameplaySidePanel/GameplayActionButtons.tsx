@@ -9,6 +9,7 @@ import useWebSocket from "../../hooks/useWebsocket";
 import { websocketBaseURL } from "../../constants/urls";
 import { getAccessToken } from "../../utils/tokenUtils";
 import { ActionWebSocketEventTypes } from "../../enums/gameLogic";
+import useReactiveRef from "../../hooks/useReactiveRef";
 
 type GameplayActionButtonsProps = {
 	gameId: string | number;
@@ -31,7 +32,7 @@ function GameplayActionButtons({
 	setMessagePopupVisible,
 	setDrawOfferReceived,
 }: GameplayActionButtonsProps) {
-	const actionWebsocketRef = useRef<WebSocket | null>(null);
+	const [actionWebsocketRef, actionWebsocket,] = useReactiveRef<WebSocket | null>(null);
 	const actionWebsocketExists = useRef<boolean>(false);
 
 	const [resignationPopupVisible, setResignationPopupVisible] =
@@ -72,7 +73,7 @@ function GameplayActionButtons({
 
 	useEffect(() => {
 		parentActionWebsocket.current = actionWebsocketRef.current
-	}, [actionWebsocketEnabled, actionWebsocketRef.current]);
+	}, [actionWebsocketEnabled, actionWebsocket]);
 
 	function handleWindowUnload() {
 		if (actionWebsocketRef.current?.readyState === WebSocket.OPEN) {
