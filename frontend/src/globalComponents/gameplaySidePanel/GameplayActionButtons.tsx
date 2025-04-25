@@ -70,6 +70,10 @@ function GameplayActionButtons({
 		};
 	}, []);
 
+	useEffect(() => {
+		parentActionWebsocket.current = actionWebsocketRef.current
+	}, [actionWebsocketEnabled, actionWebsocketRef.current]);
+
 	function handleWindowUnload() {
 		if (actionWebsocketRef.current?.readyState === WebSocket.OPEN) {
 			actionWebsocketRef.current.close();
