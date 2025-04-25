@@ -9,10 +9,10 @@ function useReactiveRef<T>(initialValue: T): [
     const ref = useRef(initialValue);
     const [currentValue, setCurrentValue] = useState(initialValue);
 
-    const setRefValue = useCallback((newValue: any) => {
+    const setRefValue = (newValue: any) => {
         ref.current = newValue;
         setCurrentValue(newValue);
-    }, []);
+    }
 
     return [ref, currentValue, setRefValue];
 }

@@ -32,7 +32,7 @@ function GameplayActionButtons({
 	setMessagePopupVisible,
 	setDrawOfferReceived,
 }: GameplayActionButtonsProps) {
-	const [actionWebsocketRef, actionWebsocket,] = useReactiveRef<WebSocket | null>(null);
+	const [actionWebsocketRef, actionWebsocket, setActionWebsocket] = useReactiveRef<WebSocket | null>(null);
 	const actionWebsocketExists = useRef<boolean>(false);
 
 	const [resignationPopupVisible, setResignationPopupVisible] =
@@ -43,7 +43,7 @@ function GameplayActionButtons({
 	const [actionWebsocketEnabled, setActionWebsocketEnabled] = useState<boolean>(false);
 	const actionWebsocketUrl = `${websocketBaseURL}ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`;
 
-	actionWebsocketRef.current = useWebSocket(
+	const socket = useWebSocket(
 		actionWebsocketUrl,
 		handleOnMessage,
         undefined,
@@ -72,8 +72,12 @@ function GameplayActionButtons({
 	}, []);
 
 	useEffect(() => {
-		parentActionWebsocket.current = actionWebsocketRef.current
+		parentActionWebsocket.current = actionWebsocket;
 	}, [actionWebsocketEnabled, actionWebsocket]);
+
+	useEffect(() => {
+		setActionWebsocket(socket);
+	}, [socket]);
 
 	function handleWindowUnload() {
 		if (actionWebsocketRef.current?.readyState === WebSocket.OPEN) {
