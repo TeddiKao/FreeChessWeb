@@ -4,9 +4,6 @@ import BotCategory from "../../pageComponents/playBot/BotCategory";
 
 import "../../styles/pages/select-bot.scss";
 
-import { bots as botsTable } from "../../constants/botsConfig";
-import BotCategory from "../../pageComponents/playBot/BotCategory";
-
 function SelectBot() {
 	return (
 		<div className="select-bot-interface-container">
