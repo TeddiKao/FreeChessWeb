@@ -9,8 +9,11 @@ function SelectBot() {
 		<div className="select-bot-interface-container">
 			<DashboardNavbar />
 			<div className="main-page-content">
-				<h2 className="select-bot-page-heading">Play vs bot</h2>
-				<div className="bots-container">
+				<h1 className="select-bot-page-heading">Play vs bot</h1>
+				<p className="select-bot-page-description">
+                    Play against a bot of your choice
+                </p>
+                <div className="bots-container">
 					{botsTable.map((categoryInfo, _) => (
 						<BotCategory categoryInfo={categoryInfo} />
 					))}
