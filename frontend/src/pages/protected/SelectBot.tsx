@@ -7,12 +7,14 @@ import "../../styles/pages/select-bot.scss";
 function SelectBot() {
 	return (
 		<div className="select-bot-interface-container">
-            <DashboardNavbar />
-            <h2 className="select-bot-page-heading">Play vs bot</h2>
-			<div className="bots-container">
-				{botsTable.map((categoryInfo, _) => (
-					<BotCategory categoryInfo={categoryInfo} />
-				))}
+			<DashboardNavbar />
+			<div className="main-page-content">
+				<h2 className="select-bot-page-heading">Play vs bot</h2>
+				<div className="bots-container">
+					{botsTable.map((categoryInfo, _) => (
+						<BotCategory categoryInfo={categoryInfo} />
+					))}
+				</div>
 			</div>
 		</div>
 	);
