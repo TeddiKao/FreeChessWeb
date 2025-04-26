@@ -1,3 +1,5 @@
+@use "../global/mixins" as *;
+
 .select-bot-interface-container {
     @include flex-column;
 }
