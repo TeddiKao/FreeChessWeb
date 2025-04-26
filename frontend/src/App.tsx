@@ -19,6 +19,7 @@ import AuthenticationRoute from "./globalComponents/routes/AuthenticationRoute.t
 import Play from "./pages/protected/Play.tsx";
 import PassAndPlay from "./pages/protected/PassAndPlay.tsx";
 import TempRoute from "./pages/TempRoute.tsx";
+import SelectBot from "./pages/protected/SelectBot.tsx";
 
 function Logout() {
     localStorage.clear();
@@ -84,6 +85,15 @@ function App() {
                             element={
                                 <ProtectedRoute>
                                     <PassAndPlay />
+                                </ProtectedRoute>
+                            }
+                        />
+
+                        <Route 
+                            path="/select-bot"
+                            element={
+                                <ProtectedRoute>
+                                    <SelectBot />
                                 </ProtectedRoute>
                             }
                         />
