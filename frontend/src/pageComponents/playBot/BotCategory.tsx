@@ -1,6 +1,8 @@
 import { BotCategoryInfo } from "../../constants/botsConfig";
 import BotCard from "./BotCard";
 
+import "../../styles/features/playBot/bot-category.scss";
+
 type BotCategoryProps = {
 	categoryInfo: BotCategoryInfo;
 };
@@ -12,9 +14,11 @@ function BotCategory({ categoryInfo }: BotCategoryProps) {
 	return (
 		<div className="bot-category-container">
 			<h3 className="bot-category-name">{categoryName}</h3>
-			{bots.map((botInfo, _) => (
-				<BotCard botInfo={botInfo} />
-			))}
+			<div className="bot-cards-container">
+				{bots.map((botInfo, _) => (
+					<BotCard botInfo={botInfo} />
+				))}
+			</div>
 		</div>
 	);
 }
