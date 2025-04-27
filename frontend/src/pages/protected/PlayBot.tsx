@@ -25,7 +25,9 @@ function PlayBot() {
 		<>
             <DashboardNavbar />
 			<div className="play-bot-interface-container">
-                <BotChessboard parsed_fen_string={parsedFEN} orientation="white" />
+                <div className="bot-chessboard-wrapper">
+                    <BotChessboard parsed_fen_string={parsedFEN} orientation="white" />
+                </div>
             </div>
 		</>
 	);
