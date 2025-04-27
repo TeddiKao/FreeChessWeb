@@ -14,8 +14,7 @@ function PlayBot() {
 
     async function updateParsedFEN() {
         const parsedFEN = await fetchFen(startingFEN);
-
-        return parsedFEN;
+        setParsedFEN(parsedFEN)
     }
 
     if (!parsedFEN) {
@@ -31,3 +30,5 @@ function PlayBot() {
 		</>
 	);
 }
+
+export default PlayBot;
