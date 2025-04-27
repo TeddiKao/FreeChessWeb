@@ -123,3 +123,10 @@ def parse_fen(fen_string: str):
 
 def get_starting_position_structured_fen():
 	return parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+
+def get_default_position_list():
+	return [{
+		"position": get_starting_position_structured_fen(),
+		"last_dragged_square": None,
+		"last_dropped_square": None,
+	}]
