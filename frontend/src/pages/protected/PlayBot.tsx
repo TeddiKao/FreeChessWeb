@@ -4,6 +4,8 @@ import DashboardNavbar from "../../pageComponents/dashboard/DashboardNavbar";
 import { fetchFen } from "../../utils/apiUtils";
 import { ParsedFENString } from "../../types/gameLogic";
 
+import "../../styles/pages/play-bot.scss";
+
 function PlayBot() {
     const startingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     const [parsedFEN, setParsedFEN] = useState<ParsedFENString | null>(null);
