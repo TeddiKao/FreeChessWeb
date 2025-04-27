@@ -18,7 +18,9 @@ interface ChessboardProps extends DisplayChessboardProps {
     gameplaySettings: any;
 }
 
-interface BotChessboardProps extends DisplayChessboardProps {}
+interface BotChessboardProps extends DisplayChessboardProps {
+    gameplaySettings: any
+}
 
 interface MultiplayerChessboardProps extends DisplayChessboardProps {
     gameId: number | string;

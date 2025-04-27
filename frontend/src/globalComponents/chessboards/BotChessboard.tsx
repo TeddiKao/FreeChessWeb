@@ -51,7 +51,7 @@ import {
 
 import { MoveMethods } from "../../enums/gameLogic.ts";
 import { getOppositeColor } from "../../utils/gameLogic/general";
-import { ChessboardProps } from "../../interfaces/chessboard.js";
+import { BotChessboardProps } from "../../interfaces/chessboard.js";
 import { ChessboardSquareIndex, OptionalValue } from "../../types/general.js";
 import {
     BoardPlacement,
@@ -63,14 +63,12 @@ import {
     PieceType,
 } from "../../types/gameLogic.js";
 
-function Chessboard({
+function BotChessboard({
     parsed_fen_string,
     orientation,
-    setBoardOrientation,
-    flipOnMove,
     gameplaySettings,
     squareSize
-}: ChessboardProps) {
+}: BotChessboardProps) {
     const [previousClickedSquare, setPreviousClickedSquare] =
         useState<OptionalValue<ChessboardSquareIndex>>(null);
     const [clickedSquare, setClickedSquare] =
@@ -99,7 +97,6 @@ function Chessboard({
     const setGameEndedCause = useContext(GameEndedCauseSetterContext);
     const setGameWinner = useContext(GameWinnerSetterContext);
 
-    const isFirstRender = useRef<boolean>(false);
     const selectingPromotionRef = useRef<boolean>(false);
     const unpromotedBoardPlacementRef =
         useRef<OptionalValue<ParsedFENString>>(null);
@@ -119,17 +116,6 @@ function Chessboard({
     useEffect(() => {
         handleOnDrop();
     }, [draggedSquare, droppedSquare]);
-
-    useEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return;
-        }
-
-        if (flipOnMove) {
-            setBoardOrientation(sideToMove.toLowerCase());
-        }
-    }, [sideToMove]);
 
     async function handleOnDrop() {
         clearSquaresStyling();
@@ -856,4 +842,4 @@ function Chessboard({
     );
 }
 
-export default Chessboard;
+export default BotChessboard;

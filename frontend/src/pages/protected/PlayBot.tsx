@@ -16,13 +16,17 @@ function PlayBot() {
 	const [boardOrientation, setBoardOrientation] = useState<string>("White");
 
 	const initialGameplaySettings = useGameplaySettings();
-	const [gameplaySettings, setGameplaySettings] = useState<boolean>(false);
+	const [gameplaySettings, setGameplaySettings] = useState<any>(initialGameplaySettings);
 	const [gameplaySettingsVisible, setGameplaySettingsVisible] =
 		useState<boolean>(false);
 
 	useEffect(() => {
 		updateParsedFEN();
 	}, []);
+
+	useEffect(() => {
+		setGameplaySettings(initialGameplaySettings);
+	}, [initialGameplaySettings])
 
 	async function updateParsedFEN() {
 		const parsedFEN = await fetchFen(startingFEN);
@@ -56,6 +60,7 @@ function PlayBot() {
 						squareSize={58}
 						parsed_fen_string={parsedFEN}
 						orientation={boardOrientation}
+						gameplaySettings={gameplaySettings}
 					/>
 				</div>
 
