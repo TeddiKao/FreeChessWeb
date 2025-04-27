@@ -1,6 +1,10 @@
 import { BotChessboardProps } from "../../interfaces/chessboard";
 
-function BotChessboard({ parsed_fen_string, orientation }: BotChessboardProps) {
+function BotChessboard({ parsed_fen_string, orientation, squareSize }: BotChessboardProps) {
+	const chessboardSquareStyles = {
+		width: `${squareSize}px`
+	}
+	
 	function generateChessboard() {
 		const squareElements = [];
 
@@ -34,6 +38,7 @@ function BotChessboard({ parsed_fen_string, orientation }: BotChessboardProps) {
 
 					squareElements.push(
 						<div
+							style={chessboardSquareStyles}
 							key={square}
 							id={`${square}`}
 							className={`chessboard-square ${squareColor}`}
@@ -47,6 +52,7 @@ function BotChessboard({ parsed_fen_string, orientation }: BotChessboardProps) {
 				} else {
 					squareElements.push(
 						<div
+							style={chessboardSquareStyles}
 							key={square}
 							id={`${square}`}
 							className={`chessboard-square ${squareColor}`}
