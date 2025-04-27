@@ -2,9 +2,14 @@ import { BotChessboardProps } from "../../interfaces/chessboard";
 
 function BotChessboard({ parsed_fen_string, orientation, squareSize }: BotChessboardProps) {
 	const chessboardSquareStyles = {
-		width: `${squareSize}px`
+		width: `${squareSize}px`,
+		height: `${squareSize}px`
 	}
-	
+
+	const chessboardStyles = {
+        gridTemplateColumns: `repeat(8, ${squareSize}px)`
+    }
+
 	function generateChessboard() {
 		const squareElements = [];
 
@@ -65,7 +70,7 @@ function BotChessboard({ parsed_fen_string, orientation, squareSize }: BotChessb
 		return squareElements;
 	}
 
-	return <div className="chessboard-container">{generateChessboard()}</div>;
+	return <div style={chessboardStyles} className="chessboard-container">{generateChessboard()}</div>;
 }
 
 export default BotChessboard;
