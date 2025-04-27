@@ -15,7 +15,7 @@ function SelectBot() {
                 </p>
                 <div className="bots-container">
 					{botsTable.map((categoryInfo, _) => (
-						<BotCategory categoryInfo={categoryInfo} />
+						<BotCategory key={categoryInfo.categoryId} categoryInfo={categoryInfo} />
 					))}
 				</div>
 			</div>

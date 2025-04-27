@@ -16,7 +16,7 @@ function BotCategory({ categoryInfo }: BotCategoryProps) {
 			<h3 className="bot-category-name">{categoryName}</h3>
 			<div className="bot-cards-container">
 				{bots.map((botInfo, _) => (
-					<BotCard botInfo={botInfo} />
+					<BotCard key={botInfo.botId} botInfo={botInfo} />
 				))}
 			</div>
 		</div>
