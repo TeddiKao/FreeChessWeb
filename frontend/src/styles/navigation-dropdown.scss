@@ -6,8 +6,10 @@
 	top: 30px;
 
 	box-shadow: 5px 5px 15px hsl(0, 0%, 60%);
+	background-color: white;
 
 	border-radius: 6px;
+	z-index: 500;
 }
 
 .navigation-dropdown-link {
