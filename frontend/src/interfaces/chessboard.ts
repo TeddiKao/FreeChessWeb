@@ -18,6 +18,10 @@ interface ChessboardProps extends DisplayChessboardProps {
     gameplaySettings: any;
 }
 
+interface BotChessboardProps extends DisplayChessboardProps {
+
+}
+
 interface MultiplayerChessboardProps extends DisplayChessboardProps {
     gameId: number | string;
     setWhiteTimer: StateSetterFunction<OptionalValue<number>>;
@@ -76,5 +80,6 @@ export type {
     DisplayChessboardProps,
     ChessboardProps,
     MultiplayerChessboardProps,
+    BotChessboardProps,
     SquareProps,
 };
