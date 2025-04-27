@@ -1,0 +1,11 @@
+@use "../../global/mixins" as *;
+
+.bot-card-container {
+    @include flex-column-y-center;
+}
+
+.bot-image-container {
+    width: 40px;
+    height: 40px;
+    background-color: hsl(0, 0%, 90%);
+}

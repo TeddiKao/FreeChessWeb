@@ -1,5 +1,5 @@
 import { BotCategoryInfo } from "../../constants/botsConfig";
-import BotCard from "./BotInfo";
+import BotCard from "./BotCard";
 
 type BotCategoryProps = {
 	categoryInfo: BotCategoryInfo;
