@@ -1,4 +1,2 @@
-import copy
-
-EMPTY_LIST = copy.copy([])
-EMPTY_DICT = copy.copy({})
+EMPTY_LIST = list
+EMPTY_DICT = dict
