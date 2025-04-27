@@ -53,8 +53,6 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = "users.UserAuthModel"
 
 INSTALLED_APPS = [
-    "users",
-
     "channels",
     "channels_redis",
 	"daphne",
@@ -73,6 +71,8 @@ INSTALLED_APPS = [
 	"gameplay",
 	"matchmaking",
 	"move_validation",
+    "users",
+    "bots",
 	"core"
 ]
 
