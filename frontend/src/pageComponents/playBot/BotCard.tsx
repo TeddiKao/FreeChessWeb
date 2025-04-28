@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import api from "../../api";
 import { BotInfo } from "../../constants/botsConfig";
 
 import "../../styles/features/playBot/bot-card.scss";
