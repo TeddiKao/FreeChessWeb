@@ -151,18 +151,25 @@ function BotChessboard({
         const pieceType = squareInfo["piece_type"];
         const initialSquare = squareInfo["starting_square"];
 
-        await makeMoveInBotGame(gameId, botId, {
-            starting_square: `${draggedSquare}`,
-            destination_square: `${droppedSquare}`,
-            piece_color: pieceColor,
-            piece_type: pieceType,
-        })
+        handleMoveMade(pieceColor, pieceType, initialSquare);
 
         setPreviousDraggedSquare(draggedSquare);
         setPreviousDroppedSquare(droppedSquare);
         setDraggedSquare(null);
         setDroppedSquare(null);
         setLastUsedMoveMethod("drag");
+    }
+
+    async function handleMoveMade(pieceColor: PieceColor, pieceType: PieceType, initialSquare?: ChessboardSquareIndex) {
+        const newStructuredFEN = await makeMoveInBotGame(gameId, botId, {
+            starting_square: `${draggedSquare}`,
+            destination_square: `${droppedSquare}`,
+            piece_color: pieceColor,
+            piece_type: pieceType,
+            initial_square: initialSquare
+        })
+
+        setParsedFENString(newStructuredFEN);
     }
 
     async function handleClickToMove() {
