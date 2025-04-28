@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import BotChessboard from "../../globalComponents/chessboards/BotChessboard";
 import DashboardNavbar from "../../pageComponents/dashboard/DashboardNavbar";
 import { fetchFen } from "../../utils/apiUtils";
-import { ParsedFENString, PieceColor } from "../../types/gameLogic";
+import { ParsedFENString } from "../../types/gameLogic";
 
 import "../../styles/pages/play-bot.scss";
 import useGameplaySettings from "../../hooks/useGameplaySettings";
 import GameplaySettings from "../../globalComponents/modals/GameplaySettings";
 import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper";
+import { Navigate, useLocation } from "react-router-dom";
 
 function PlayBot() {
 	const startingFEN =
@@ -20,6 +21,10 @@ function PlayBot() {
 	const [gameplaySettingsVisible, setGameplaySettingsVisible] =
 		useState<boolean>(false);
 
+	const location = useLocation();
+	const gameId = location.state?.gameId;
+	const bot = location.state?.bot;
+
 	useEffect(() => {
 		updateParsedFEN();
 	}, []);
@@ -27,6 +32,10 @@ function PlayBot() {
 	useEffect(() => {
 		setGameplaySettings(initialGameplaySettings);
 	}, [initialGameplaySettings])
+
+	if (!location.state) {
+		return <Navigate to="/select-bot" />
+	}
 
 	async function updateParsedFEN() {
 		const parsedFEN = await fetchFen(startingFEN);
