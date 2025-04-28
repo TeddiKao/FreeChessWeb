@@ -169,6 +169,8 @@ function BotChessboard({
             initial_square: initialSquare
         })
 
+        console.log(newStructuredFEN);
+
         setParsedFENString(newStructuredFEN);
     }
 

@@ -262,7 +262,7 @@ async function makeMoveInBotGame(gameId: number, bot: string, moveInfo: MoveInfo
             move_info: moveInfo,
         });
 
-        newStructuredFEN = response.data[1];
+        newStructuredFEN = response.data["new_structured_fen"];
     } catch (error) {
         console.error(error);
     }
