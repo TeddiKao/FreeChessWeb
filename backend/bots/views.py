@@ -43,14 +43,14 @@ class MakeMoveView(APIView):
                 return Response({
                     "is_valid": False
                 }, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-            else:
-                new_structured_fen = update_structured_fen(current_structured_fen, move_info)                
-                bot_game.update_full_structured_fen(new_structured_fen)
 
-                return Response({
-                    "is_valid": True,
-                    "new_structured_fen": bot_game.get_full_structured_fen()
-                })
+            new_structured_fen = update_structured_fen(current_structured_fen, move_info)                
+            bot_game.update_full_structured_fen(new_structured_fen)
+
+            return Response({
+                "is_valid": True,
+                "new_structured_fen": bot_game.get_full_structured_fen()
+            })
             
         except Exception as e:
             print(e)
