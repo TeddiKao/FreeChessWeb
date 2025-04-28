@@ -281,5 +281,6 @@ export {
     fetchTimer,
     fetchPositionList,
     fetchMoveList,
-    createBotGame
+    createBotGame,
+    makeMoveInBotGame
 };

@@ -70,6 +70,8 @@ function PlayBot() {
 						parsed_fen_string={parsedFEN}
 						orientation={boardOrientation}
 						gameplaySettings={gameplaySettings}
+						gameId={gameId}
+						botId={bot}
 					/>
 				</div>
 
