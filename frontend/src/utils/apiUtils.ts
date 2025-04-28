@@ -1,5 +1,5 @@
 import api from "../api.ts";
-import { ParsedFENString, PieceColor } from "../types/gameLogic.js";
+import { MoveInfo, ParsedFENString, PieceColor } from "../types/gameLogic.js";
 
 async function fetchCurrentPosition(gameId: number): Promise<ParsedFENString> {
     let currentPosition = null;
@@ -250,6 +250,23 @@ async function createBotGame(botId: string) {
     }
 
     return gameId;
+}
+
+async function makeMoveInBotGame(gameId: number, bot: string, moveInfo: MoveInfo) {
+    let newStructuredFEN = null;
+
+    try {
+        const response = await api.post("/bots/make-move/", {
+            gameId: gameId,
+            bot: bot,
+        });
+
+        newStructuredFEN = response.data[1];
+    } catch (error) {
+        console.error(error);
+    }
+
+    return newStructuredFEN;
 }
 
 export {
