@@ -41,3 +41,10 @@ class BotGame(models.Model):
             "halfmove_clock": self.halfmove_clock,
             "fullmove_number": self.current_move_number
         }
+    
+    def update_full_structured_fen(self, new_structured_fen):
+        self.structured_board_placement = new_structured_fen["board_placement"]
+        self.structured_castling_rights = new_structured_fen["castling_rights"]
+        self.en_passant_target_square = new_structured_fen["en_passant_target_square"]
+        self.halfmove_clock = new_structured_fen["halfmove_clock"]
+        self.current_move_number = new_structured_fen["fullmove_number"]
