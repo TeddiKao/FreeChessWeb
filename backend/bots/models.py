@@ -50,3 +50,9 @@ class BotGame(models.Model):
         self.current_move_number = new_structured_fen["fullmove_number"]
 
         self.save()
+
+    def update_position_list(self, new_position_list):
+        self.position_list = new_position_list
+
+    def update_move_list(self, new_move_list):
+        self.move_list = new_move_list
