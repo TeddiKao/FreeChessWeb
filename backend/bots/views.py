@@ -8,8 +8,9 @@ from rest_framework.response import Response
 from .models import BotGame
 from core.utils import decide_bot_game_color
 from move_validation.utils.move_validation import validate_move
-from gameplay.utils.position_update import update_structured_fen
 
+from gameplay.utils.position_update import update_structured_fen
+from gameplay.utils.game_state_history_update import update_position_list, update_move_list
 class CreateBotGameView(APIView):
     def post(self, request):
         try:
@@ -44,8 +45,16 @@ class MakeMoveView(APIView):
                     "is_valid": False
                 }, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
+            current_position_list = bot_game.position_list
+            current_move_list = bot_game.move_list
+
             new_structured_fen = update_structured_fen(current_structured_fen, move_info)                
+            new_move_list = update_position_list(current_position_list, move_info, new_structured_fen)
+            new_position_list = update_move_list(current_structured_fen, current_move_list, move_info)
+
             bot_game.update_full_structured_fen(new_structured_fen)
+            bot_game.update_move_list(new_move_list)
+            bot_game.update_move_list(new_position_list)
 
             return Response({
                 "is_valid": True,
