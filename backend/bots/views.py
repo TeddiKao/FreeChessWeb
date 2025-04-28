@@ -35,7 +35,8 @@ class MakeMoveView(APIView):
             move_info = request.data.get("move_info")
             game_id = request.data.get("game_id")
             
-            bot_game: BotGame = BotGame.objects.first(id=game_id)
+            bot_game: BotGame = BotGame.objects.filter(id=game_id).first()
+            
             current_structured_fen = bot_game.get_full_structured_fen()
 
             is_move_valid = validate_move(current_structured_fen, move_info)
