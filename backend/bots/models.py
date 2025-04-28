@@ -48,3 +48,5 @@ class BotGame(models.Model):
         self.en_passant_target_square = new_structured_fen["en_passant_target_square"]
         self.halfmove_clock = new_structured_fen["halfmove_clock"]
         self.current_move_number = new_structured_fen["fullmove_number"]
+
+        self.save()
