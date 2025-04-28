@@ -1,6 +1,8 @@
 from django.db.models import Model, Field
 from deepdiff import DeepDiff
 
+import random
+
 def to_dict(model_instance: Model, exclude_fields: list[str] = None):
 	exclude_fields = exclude_fields or []
 
@@ -20,3 +22,15 @@ def to_dict(model_instance: Model, exclude_fields: list[str] = None):
 
 def compare_dictionaries(dict1: dict, dict2: dict):
 	return len(DeepDiff(dict1, dict2)) == 0
+
+def decide_bot_game_color():
+	if random.choices([True, False]):
+		return {
+			"human": "white",
+			"bot": "black",
+		}
+	else:
+		return {
+			"human": "black",
+			"bot": "white",
+		}
