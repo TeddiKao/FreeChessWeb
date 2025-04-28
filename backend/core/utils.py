@@ -26,11 +26,11 @@ def compare_dictionaries(dict1: dict, dict2: dict):
 def decide_bot_game_color():
 	if random.choices([True, False]):
 		return {
-			"human": "white",
-			"bot": "black",
+			"white": "human",
+			"black": "bot",
 		}
 	else:
 		return {
-			"human": "black",
-			"bot": "white",
+			"white": "bot",
+			"black": "human",
 		}
