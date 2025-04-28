@@ -63,51 +63,59 @@ def handle_pawn_promotion(structured_board_placement, move_info):
 	return new_board_placement
 
 def update_structured_fen(structured_fen, move_info):
-	updated_board_placement = copy.deepcopy(structured_fen["board_placement"])
-	updated_castling_rights = copy.deepcopy(structured_fen["castling_rights"])
+	structured_fen = copy.deepcopy(structured_fen)
 
-	starting_square = move_info["starting_square"]
-	destination_square = move_info["destination_square"]
-	piece_color: str = move_info["piece_color"]
-	piece_type: str = move_info["piece_type"]
-	initial_square = move_info.get("initial_square") or None
+	try:
+		updated_board_placement = copy.deepcopy(structured_fen["board_placement"])
+		updated_castling_rights = copy.deepcopy(structured_fen["castling_rights"])
 
-	addtional_info: dict = move_info.get("additional_info") or None
+		starting_square = move_info["starting_square"]
+		destination_square = move_info["destination_square"]
+		piece_color: str = move_info["piece_color"]
+		piece_type: str = move_info["piece_type"]
+		initial_square = move_info.get("initial_square") or None
 
-	starting_file = get_file(starting_square)
-	starting_rank = get_row(starting_square)
-	destination_file = get_file(destination_square)
-	destination_rank = get_row(destination_square)
+		addtional_info: dict = move_info.get("additional_info") or {}
 
-	del updated_board_placement[str(starting_square)]
+		starting_file = get_file(starting_square)
+		starting_rank = get_row(starting_square)
+		destination_file = get_file(destination_square)
+		destination_rank = get_row(destination_square)
 
-	if piece_type.lower() == "king":
-		if abs(starting_file - destination_file) == 2:
-			updated_board_placement = handle_castling(updated_board_placement, move_info)
+		del updated_board_placement[str(starting_square)]
 
-	elif piece_type.lower() == "rook":
-		kingside_rook_starting_squares = [7, 63]
+		if piece_type.lower() == "king":
+			if abs(starting_file - destination_file) == 2:
+				updated_board_placement = handle_castling(updated_board_placement, move_info)
 
-		castling_side = "Kingside" if initial_square in kingside_rook_starting_squares else "Queenside"
-		updated_castling_rights = update_castling_rights(updated_castling_rights, castling_side, piece_color)
+		elif piece_type.lower() == "rook":
+			kingside_rook_starting_squares = [7, 63]
 
-	elif piece_type.lower() == "pawn":
-		if "promoted_piece" in addtional_info.keys():
-			updated_board_placement = handle_pawn_promotion(updated_board_placement, move_info)
+			castling_side = "Kingside" if initial_square in kingside_rook_starting_squares else "Queenside"
+			updated_castling_rights = update_castling_rights(updated_castling_rights, castling_side, piece_color)
 
-	if not "promoted_piece" in addtional_info.keys():
-		updated_board_placement[str(destination_square)] = {
-			"piece_type": piece_type,
-			"piece_color": piece_color,
-			"starting_square": initial_square
-		}
+		elif piece_type.lower() == "pawn":
+			if "promoted_piece" in addtional_info.keys():
+				updated_board_placement = handle_pawn_promotion(updated_board_placement, move_info)
 
-		if structured_fen["en_passant_target_square"]:
-			if int(destination_square) == int(structured_fen["en_passant_target_square"]):
-				captured_pawn_offset = -8 if piece_color == "white" else 8
-				captured_pawn_square = int(
-					destination_square) + captured_pawn_offset
+		if not "promoted_piece" in addtional_info.keys():
+			updated_board_placement[str(destination_square)] = {
+				"piece_type": piece_type,
+				"piece_color": piece_color,
+				"starting_square": initial_square
+			}
 
-				del updated_board_placement[str(captured_pawn_square)]
+			if structured_fen["en_passant_target_square"]:
+				if int(destination_square) == int(structured_fen["en_passant_target_square"]):
+					captured_pawn_offset = -8 if piece_color == "white" else 8
+					captured_pawn_square = int(
+						destination_square) + captured_pawn_offset
 
-	return updated_board_placement
+					del updated_board_placement[str(captured_pawn_square)]
+
+		structured_fen["board_placement"] = updated_board_placement
+		structured_fen["castling_rights"] = updated_castling_rights
+
+		return structured_fen
+	except Exception as e:
+		print(e)
