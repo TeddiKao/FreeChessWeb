@@ -238,6 +238,18 @@ async function getUsername() {
     return username;
 }
 
+async function createBotGame() {
+    let gameId = null;
+    try {
+        const response = await api.post("/bot/create-bot-game/");
+        gameId = response.data["game_id"]
+    } catch (error) {
+        console.error(error);
+    }
+
+    return gameId;
+}
+
 export {
     fetchFen,
     fetchKingIsInCheck,
@@ -250,4 +262,5 @@ export {
     fetchTimer,
     fetchPositionList,
     fetchMoveList,
+    createBotGame
 };
