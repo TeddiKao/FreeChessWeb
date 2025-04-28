@@ -241,7 +241,7 @@ async function getUsername() {
 async function createBotGame(botId: string) {
     let gameId = null;
     try {
-        const response = await api.post("/bot/create-bot-game/", {
+        const response = await api.post("/bots/create-bot-game/", {
             bot: botId,
         });
         gameId = response.data["game_id"]
