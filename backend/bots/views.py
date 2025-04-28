@@ -17,9 +17,7 @@ class CreateBotGameView(APIView):
                 bot=bot_to_play_against,
                 white_player=colors["white"],
                 black_player=colors["black"],
-            )
-
-            print("Successfuly created game!")
+            ).id
 
             return Response({
                 "game_id": bot_game_id,
