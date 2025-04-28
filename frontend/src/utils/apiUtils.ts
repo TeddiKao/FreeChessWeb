@@ -238,10 +238,12 @@ async function getUsername() {
     return username;
 }
 
-async function createBotGame() {
+async function createBotGame(botId: string) {
     let gameId = null;
     try {
-        const response = await api.post("/bot/create-bot-game/");
+        const response = await api.post("/bot/create-bot-game/", {
+            bot: botId,
+        });
         gameId = response.data["game_id"]
     } catch (error) {
         console.error(error);
