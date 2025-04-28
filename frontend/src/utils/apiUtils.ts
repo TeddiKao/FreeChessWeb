@@ -257,8 +257,9 @@ async function makeMoveInBotGame(gameId: number, bot: string, moveInfo: MoveInfo
 
     try {
         const response = await api.post("/bots/make-move/", {
-            gameId: gameId,
+            game_id: gameId,
             bot: bot,
+            move_info: moveInfo,
         });
 
         newStructuredFEN = response.data[1];
