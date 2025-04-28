@@ -32,3 +32,12 @@ class BotGame(models.Model):
 
     captured_white_material = models.JSONField(null=False, blank=False, default=EMPTY_DICT)
     captured_black_material = models.JSONField(null=False, blank=False, default=EMPTY_DICT)
+
+    def get_full_structured_fen(self):
+        return {
+            "board_placement": self.structured_board_placement,
+            "castling_rights": self.structured_castling_rights,
+            "en_passant_target_square": self.en_passant_target_square,
+            "halfmove_clock": self.halfmove_clock,
+            "fullmove_number": self.current_move_number
+        }
