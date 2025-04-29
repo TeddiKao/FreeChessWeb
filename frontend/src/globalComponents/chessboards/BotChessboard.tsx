@@ -166,7 +166,9 @@ function BotChessboard({
             destination_square: `${droppedSquare}`,
             piece_color: pieceColor,
             piece_type: pieceType,
-            initial_square: initialSquare
+            initial_square: initialSquare,
+
+            additional_info: {},
         })
 
         console.log(newStructuredFEN);
