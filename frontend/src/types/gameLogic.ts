@@ -43,6 +43,9 @@ type MoveInfo = {
 	starting_square: ChessboardSquareIndex;
 	destination_square: ChessboardSquareIndex;
     initial_square?: ChessboardSquareIndex,
+    additional_info?: {
+        promoted_piece?: PieceType
+    }
 }
 
 export type {
