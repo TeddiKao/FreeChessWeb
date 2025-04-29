@@ -22,6 +22,13 @@ interface BotChessboardProps extends DisplayChessboardProps {
     gameplaySettings: any,
     gameId: number,
     botId: string,
+    setMoveList: StateSetterFunction<Array<Array<string>>>;
+    setPositionList: StateSetterFunction<{
+        position: ParsedFENString,
+        move_type: string,
+        last_dragged_square: ChessboardSquareIndex,
+        last_dropped_square: ChessboardSquareIndex,
+    }>
 }
 
 interface MultiplayerChessboardProps extends DisplayChessboardProps {
