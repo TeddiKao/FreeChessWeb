@@ -54,5 +54,9 @@ class BotGame(models.Model):
     def update_position_list(self, new_position_list):
         self.position_list = new_position_list
 
+        self.save()
+
     def update_move_list(self, new_move_list):
         self.move_list = new_move_list
+
+        self.save()
