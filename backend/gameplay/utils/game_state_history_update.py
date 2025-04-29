@@ -11,10 +11,13 @@ def update_move_list(current_structured_fen, current_move_list, new_move_info):
 
     algebraic_notation = get_algebraic_notation(structured_board_placement, en_passant_target_square, new_move_info)
     
-    if len(updated_move_list[-1]) == 2:
-        updated_move_list.append([algebraic_notation])
+    if len(updated_move_list) > 0:
+        if len(updated_move_list[-1]) == 2:
+            updated_move_list.append([algebraic_notation])
+        else:
+            updated_move_list[-1].append(algebraic_notation)
     else:
-        updated_move_list[-1].append(algebraic_notation)
+        updated_move_list.append([algebraic_notation])
 
     return updated_move_list
 
