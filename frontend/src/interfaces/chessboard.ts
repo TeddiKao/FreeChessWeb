@@ -31,6 +31,8 @@ interface BotChessboardProps extends DisplayChessboardProps {
 			last_dropped_square: ChessboardSquareIndex;
 		}>
 	>;
+	lastDraggedSquare: ChessboardSquareIndex;
+	lastDroppedSquare: ChessboardSquareIndex;
 }
 
 interface MultiplayerChessboardProps extends DisplayChessboardProps {
