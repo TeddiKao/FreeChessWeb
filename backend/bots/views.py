@@ -49,14 +49,8 @@ class MakeMoveView(APIView):
             current_move_list = bot_game.move_list
 
             new_move_list = update_move_list(current_structured_fen, current_move_list, move_info)
-            
-            
-            new_structured_fen = update_structured_fen(current_structured_fen, move_info)                
-            
-            
+            new_structured_fen = update_structured_fen(current_structured_fen, move_info)               
             new_position_list = update_position_list(current_position_list, move_info, new_structured_fen)
-
-            
 
             bot_game.update_full_structured_fen(new_structured_fen)
             bot_game.update_move_list(new_move_list)
