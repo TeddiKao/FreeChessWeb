@@ -110,20 +110,14 @@ function GameOverModal({
 		whitePlayerRef.current = whitePlayer;
 		blackPlayerRef.current = blackPlayer;
 
-		console.log("Successfully updated all data!");
-
 		setTimeout(() => {
 			setMatchFound(true);
 		}, 50);
 	}
 
 	function handleOnMessage(eventData: any) {
-		console.log(eventData);
-
 		const parsedEventData = JSON.parse(eventData.data);
 		const eventType = parsedEventData["type"];
-
-		console.log(eventType, MatchmakingEvents.MATCH_FOUND);
 
 		switch (eventType) {
 			case MatchmakingEvents.MATCH_FOUND:
@@ -165,7 +159,10 @@ function GameOverModal({
 				</div>
 			</div>
 
-			<MatchmakingShortcutScreen timeControlInfo={timeControlInfo} visible={isMatchmaking} />
+			<MatchmakingShortcutScreen
+				timeControlInfo={timeControlInfo}
+				visible={isMatchmaking}
+			/>
 		</>
 	);
 }
