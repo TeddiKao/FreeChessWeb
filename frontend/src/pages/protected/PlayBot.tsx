@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import BotChessboard from "../../globalComponents/chessboards/BotChessboard";
 import DashboardNavbar from "../../pageComponents/dashboard/DashboardNavbar";
-import { fetchBotGameMoveList, fetchBotGamePositionList, fetchFen } from "../../utils/apiUtils";
+import {
+	fetchBotGameMoveList,
+	fetchBotGamePositionList,
+	fetchFen,
+} from "../../utils/apiUtils";
 import { ParsedFENString } from "../../types/gameLogic";
 
 import "../../styles/pages/play-bot.scss";
@@ -10,6 +14,9 @@ import GameplaySettings from "../../globalComponents/modals/GameplaySettings";
 import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper";
 import { Navigate, useLocation } from "react-router-dom";
 import { ChessboardSquareIndex } from "../../types/general";
+import GameplayActionButtons from "../../globalComponents/gameplaySidePanel/GameplayActionButtons";
+import MoveNavigationButtons from "../../globalComponents/gameplaySidePanel/MoveNavigationButtons";
+import MoveListPanel from "../../globalComponents/gameplaySidePanel/MoveListPanel";
 
 function PlayBot() {
 	const startingFEN =
@@ -17,17 +24,27 @@ function PlayBot() {
 	const [boardOrientation, setBoardOrientation] = useState<string>("White");
 
 	const initialGameplaySettings = useGameplaySettings();
-	const [gameplaySettings, setGameplaySettings] = useState<any>(initialGameplaySettings);
+	const [gameplaySettings, setGameplaySettings] = useState<any>(
+		initialGameplaySettings
+	);
 	const [gameplaySettingsVisible, setGameplaySettingsVisible] =
 		useState<boolean>(false);
 
-	const [positionList, setPositionList] = useState<Array<{
-		position: ParsedFENString;
-		move_type: string;
-		last_dragged_square: ChessboardSquareIndex;
-		last_dropped_square: ChessboardSquareIndex;
-	}>>([]);
-	const [positionIndex, setPositionIndex] = useState<number>(positionList.length - 1);
+	const [gameWinner, setGameWinner] = useState<string>("");
+	const [hasGameEnded, setHasGameEnded] = useState(false);
+	const [gameEndedCause, setGameEndedCause] = useState<string>("");
+
+	const [positionList, setPositionList] = useState<
+		Array<{
+			position: ParsedFENString;
+			move_type: string;
+			last_dragged_square: ChessboardSquareIndex;
+			last_dropped_square: ChessboardSquareIndex;
+		}>
+	>([]);
+	const [positionIndex, setPositionIndex] = useState<number>(
+		positionList.length - 1
+	);
 	const parsedFEN = positionList[positionIndex]?.["position"];
 
 	const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
@@ -47,10 +64,10 @@ function PlayBot() {
 
 	useEffect(() => {
 		setGameplaySettings(initialGameplaySettings);
-	}, [initialGameplaySettings])
+	}, [initialGameplaySettings]);
 
 	if (!location.state) {
-		return <Navigate to="/select-bot" />
+		return <Navigate to="/select-bot" />;
 	}
 
 	async function updatePositionList() {
@@ -77,6 +94,28 @@ function PlayBot() {
 
 	function handleSettingsModalClose() {
 		setGameplaySettingsVisible(false);
+	}
+
+	function handleBackToStart() {
+		setPositionIndex(0);
+	}
+
+	function handlePreviousMove() {
+		setPositionIndex((prevIndex) =>
+			prevIndex - 1 > 0 ? prevIndex - 1 : 0
+		);
+	}
+
+	function handleNextMove() {
+		setPositionIndex((prevIndex) =>
+			prevIndex + 1 >= positionList.length
+				? positionList.length - 1
+				: prevIndex + 1
+		);
+	}
+
+	function handleCurrentPosition() {
+		setPositionIndex(positionList.length - 1);
 	}
 
 	if (!parsedFEN) {
@@ -110,6 +149,22 @@ function PlayBot() {
 						className="settings-icon"
 						src="/settings.svg"
 						onClick={handleSettingsDisplay}
+					/>
+				</div>
+
+				<div className="gameplay-side-panel">
+					<MoveListPanel
+						moveList={moveList}
+						setPositionIndex={setPositionIndex}
+						gameWinner={gameWinner}
+						gameEnded={hasGameEnded}
+					/>
+
+					<MoveNavigationButtons
+						backToStart={handleBackToStart}
+						handlePreviousMove={handlePreviousMove}
+						handleNextMove={handleNextMove}
+						backToCurrentPosition={handleCurrentPosition}
 					/>
 				</div>
 			</div>
