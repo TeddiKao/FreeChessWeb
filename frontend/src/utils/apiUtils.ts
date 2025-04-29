@@ -255,7 +255,7 @@ async function makeMoveInBotGame(
 	bot: string,
 	moveInfo: MoveInfo
 ) {
-	let newStructuredFEN = null;
+	let positionData = null;
 
 	try {
 		const response = await api.post("/bots/make-move/", {
@@ -264,12 +264,12 @@ async function makeMoveInBotGame(
 			move_info: moveInfo,
 		});
 
-		newStructuredFEN = response.data["new_structured_fen"];
+		positionData = response.data;
 	} catch (error) {
 		console.error(error);
 	}
 
-	return newStructuredFEN;
+	return positionData;
 }
 
 async function fetchBotGamePositionList(gameId: number) {

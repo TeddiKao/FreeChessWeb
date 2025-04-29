@@ -71,6 +71,8 @@ function BotChessboard({
 	squareSize,
 	botId,
 	gameId,
+	setMoveList,
+	setPositionList,
 }: BotChessboardProps) {
 	const [previousClickedSquare, setPreviousClickedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -165,7 +167,11 @@ function BotChessboard({
 		pieceType: PieceType,
 		initialSquare?: ChessboardSquareIndex
 	) {
-		const newStructuredFEN = await makeMoveInBotGame(gameId, botId, {
+		const {
+			new_structured_fen: newStructuredFEN,
+			new_position_list: newPositionList,
+			new_move_list: newMoveList,
+		} = await makeMoveInBotGame(gameId, botId, {
 			starting_square: `${draggedSquare}`,
 			destination_square: `${droppedSquare}`,
 			piece_color: pieceColor,
@@ -176,6 +182,8 @@ function BotChessboard({
 		});
 
 		setParsedFENString(newStructuredFEN);
+		setMoveList(newMoveList);
+		setPositionList(newPositionList);
 	}
 
 	async function handleClickToMove() {
