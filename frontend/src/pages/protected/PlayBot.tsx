@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import BotChessboard from "../../globalComponents/chessboards/BotChessboard";
 import DashboardNavbar from "../../pageComponents/dashboard/DashboardNavbar";
-import { fetchFen } from "../../utils/apiUtils";
+import { fetchBotGameMoveList, fetchBotGamePositionList, fetchFen } from "../../utils/apiUtils";
 import { ParsedFENString } from "../../types/gameLogic";
 
 import "../../styles/pages/play-bot.scss";
@@ -9,6 +9,7 @@ import useGameplaySettings from "../../hooks/useGameplaySettings";
 import GameplaySettings from "../../globalComponents/modals/GameplaySettings";
 import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper";
 import { Navigate, useLocation } from "react-router-dom";
+import { ChessboardSquareIndex } from "../../types/general";
 
 function PlayBot() {
 	const startingFEN =
@@ -21,12 +22,24 @@ function PlayBot() {
 	const [gameplaySettingsVisible, setGameplaySettingsVisible] =
 		useState<boolean>(false);
 
+	const [positionList, setPositionList] = useState<Array<{
+		position: ParsedFENString;
+		move_type: string;
+		last_dragged_square: ChessboardSquareIndex;
+		last_dropped_square: ChessboardSquareIndex;
+	}>>([]);
+	const [positionIndex, setPositionIndex] = useState<number>(0);
+
+	const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
+
 	const location = useLocation();
 	const gameId = location.state?.gameId;
 	const bot = location.state?.bot;
 
 	useEffect(() => {
 		updateParsedFEN();
+		updateMoveList();
+		updatePositionList();
 	}, []);
 
 	useEffect(() => {
@@ -40,6 +53,18 @@ function PlayBot() {
 	async function updateParsedFEN() {
 		const parsedFEN = await fetchFen(startingFEN);
 		setParsedFEN(parsedFEN);
+	}
+
+	async function updatePositionList() {
+		const positionList = await fetchBotGamePositionList(gameId);
+
+		setPositionList(positionList);
+	}
+
+	async function updateMoveList() {
+		const moveList = await fetchBotGameMoveList(gameId);
+
+		setMoveList(moveList);
 	}
 
 	function toggleBoardOrientation() {
@@ -71,6 +96,8 @@ function PlayBot() {
 						orientation={boardOrientation}
 						gameplaySettings={gameplaySettings}
 						gameId={gameId}
+						setMoveList={setMoveList}
+						setPositionList={setPositionList}
 						botId={bot}
 					/>
 				</div>
