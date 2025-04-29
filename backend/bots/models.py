@@ -12,7 +12,7 @@ class BotGame(models.Model):
     black_player = models.CharField(max_length=5, null=False, blank=False) # Human or bot
 
     structured_board_placement = models.JSONField(null=False, blank=False, default=get_starting_structured_board_placement)
-    structured_castling_rights = models.JSONField(null=False, blank=False, default=get_starting_position_structured_fen)
+    structured_castling_rights = models.JSONField(null=False, blank=False, default=get_starting_structured_castling_rights)
     en_passant_target_square = models.IntegerField(null=True, blank=True)
     current_move_number = models.IntegerField(null=False, blank=False, default=1)
     current_player_turn = models.CharField(max_length=5, null=False, blank=False, default="white")
