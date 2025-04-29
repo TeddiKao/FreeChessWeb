@@ -42,6 +42,10 @@ function PlayBot() {
 	}, []);
 
 	useEffect(() => {
+		setPositionIndex(positionList.length - 1);
+	}, [positionList]);
+
+	useEffect(() => {
 		setGameplaySettings(initialGameplaySettings);
 	}, [initialGameplaySettings])
 
