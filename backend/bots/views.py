@@ -65,3 +65,23 @@ class MakeMoveView(APIView):
             
         except Exception as e:
             print(e)
+
+class GetBotGameMoveListView(APIView):
+    def post(self, request):
+        game_id = request.data.get(game_id)
+
+        bot_game: BotGame | None = BotGame.objects.filter(id=game_id).first()
+        if not bot_game:
+            return Response("Not found!", status=status.HTTP_404_NOT_FOUND)
+        
+        return bot_game.move_list
+    
+class GetBotGamePositionListView(APIView):
+    def post(self, request):
+        game_id = request.data.get(game_id)
+
+        bot_game: BotGame | None = BotGame.objects.filter(id=game_id).first()
+        if not bot_game:
+            return Response("Not found!", status=status.HTTP_404_NOT_FOUND)
+        
+        return bot_game.position_list

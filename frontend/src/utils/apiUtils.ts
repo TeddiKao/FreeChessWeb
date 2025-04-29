@@ -270,6 +270,36 @@ async function makeMoveInBotGame(gameId: number, bot: string, moveInfo: MoveInfo
     return newStructuredFEN;
 }
 
+async function fetchBotGamePositionList(gameId: number) {
+    let positionList = null;
+    try {
+        const response = await api.post("/bots/get-position-list/", {
+            gameId: gameId,
+        })
+
+        positionList = response.data;
+    } catch (error) {
+        console.error(error);
+    }
+
+    return positionList;
+}
+
+async function fetchBotGameMoveList(gameId: number) {
+    let moveList = null;
+    try {
+        const response = await api.post("/bots/get-move-list/", {
+            gameId: gameId,
+        })
+
+        moveList = response.data;
+    } catch (error) {
+        console.error(error);
+    }
+
+    return moveList;
+}
+
 export {
     fetchFen,
     fetchKingIsInCheck,
@@ -283,5 +313,7 @@ export {
     fetchPositionList,
     fetchMoveList,
     createBotGame,
-    makeMoveInBotGame
+    makeMoveInBotGame,
+    fetchBotGameMoveList,
+    fetchBotGamePositionList
 };
