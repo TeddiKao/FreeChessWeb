@@ -27,8 +27,8 @@ function PlayBot() {
 		last_dragged_square: ChessboardSquareIndex;
 		last_dropped_square: ChessboardSquareIndex;
 	}>>([]);
-	const [positionIndex, setPositionIndex] = useState<number>(0);
-	const parsedFEN = positionList[positionIndex]["position"];
+	const [positionIndex, setPositionIndex] = useState<number>(positionList.length - 1);
+	const parsedFEN = positionList[positionIndex]?.["position"];
 
 	const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
 
