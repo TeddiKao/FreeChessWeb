@@ -14,7 +14,6 @@ import { ChessboardSquareIndex } from "../../types/general";
 function PlayBot() {
 	const startingFEN =
 		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	const [parsedFEN, setParsedFEN] = useState<ParsedFENString | null>(null);
 	const [boardOrientation, setBoardOrientation] = useState<string>("White");
 
 	const initialGameplaySettings = useGameplaySettings();
@@ -29,6 +28,7 @@ function PlayBot() {
 		last_dropped_square: ChessboardSquareIndex;
 	}>>([]);
 	const [positionIndex, setPositionIndex] = useState<number>(0);
+	const parsedFEN = positionList[positionIndex]["position"];
 
 	const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
 
@@ -37,7 +37,6 @@ function PlayBot() {
 	const bot = location.state?.bot;
 
 	useEffect(() => {
-		updateParsedFEN();
 		updateMoveList();
 		updatePositionList();
 	}, []);
@@ -48,11 +47,6 @@ function PlayBot() {
 
 	if (!location.state) {
 		return <Navigate to="/select-bot" />
-	}
-
-	async function updateParsedFEN() {
-		const parsedFEN = await fetchFen(startingFEN);
-		setParsedFEN(parsedFEN);
 	}
 
 	async function updatePositionList() {
