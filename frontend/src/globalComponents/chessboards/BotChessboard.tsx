@@ -73,6 +73,8 @@ function BotChessboard({
 	gameId,
 	setMoveList,
 	setPositionList,
+    lastDraggedSquare,
+    lastDroppedSquare
 }: BotChessboardProps) {
 	const [previousClickedSquare, setPreviousClickedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -87,9 +89,9 @@ function BotChessboard({
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
 
 	const [previousDraggedSquare, setPreviousDraggedSquare] =
-		useState<OptionalValue<ChessboardSquareIndex>>(null);
+		useState<OptionalValue<ChessboardSquareIndex>>(lastDraggedSquare);
 	const [previousDroppedSquare, setPreviousDroppedSquare] =
-		useState<OptionalValue<ChessboardSquareIndex>>(null);
+		useState<OptionalValue<ChessboardSquareIndex>>(lastDroppedSquare);
 	const [promotionCapturedPiece, setPromotionCapturedPiece] =
 		useState<OptionalValue<PieceInfo>>(null);
 
@@ -121,6 +123,11 @@ function BotChessboard({
 	useEffect(() => {
 		handleOnDrop();
 	}, [draggedSquare, droppedSquare]);
+
+    useEffect(() => {
+        setPreviousDraggedSquare(lastDraggedSquare);
+        setPreviousDroppedSquare(lastDroppedSquare);
+    }, [lastDraggedSquare, lastDroppedSquare])
 
 	async function handleOnDrop() {
 		clearSquaresStyling();

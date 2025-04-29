@@ -14,7 +14,6 @@ import GameplaySettings from "../../globalComponents/modals/GameplaySettings";
 import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper";
 import { Navigate, useLocation } from "react-router-dom";
 import { ChessboardSquareIndex } from "../../types/general";
-import GameplayActionButtons from "../../globalComponents/gameplaySidePanel/GameplayActionButtons";
 import MoveNavigationButtons from "../../globalComponents/gameplaySidePanel/MoveNavigationButtons";
 import MoveListPanel from "../../globalComponents/gameplaySidePanel/MoveListPanel";
 
@@ -46,6 +45,8 @@ function PlayBot() {
 		positionList.length - 1
 	);
 	const parsedFEN = positionList[positionIndex]?.["position"];
+	const lastDraggedSquare = positionList[positionIndex]?.["last_dragged_square"];
+	const lastDroppedSquare = positionList[positionIndex]?.["last_dropped_square"]
 
 	const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
 
@@ -128,6 +129,8 @@ function PlayBot() {
 			<div className="play-bot-interface-container">
 				<div className="bot-chessboard-wrapper">
 					<BotChessboard
+						lastDraggedSquare={lastDraggedSquare}
+						lastDroppedSquare={lastDroppedSquare}
 						squareSize={58}
 						parsed_fen_string={parsedFEN}
 						orientation={boardOrientation}
