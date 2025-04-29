@@ -74,8 +74,9 @@ class GetBotGameMoveListView(APIView):
         bot_game: BotGame | None = BotGame.objects.filter(id=game_id).first()
         if not bot_game:
             return Response("Not found!", status=status.HTTP_404_NOT_FOUND)
-        
-        return Response(bot_game.position_list)
+
+        print(bot_game.position_list)
+        return Response(bot_game.position_list, status=status.HTTP_200_OK)
     
 class GetBotGamePositionListView(APIView):
     def post(self, request):
@@ -85,4 +86,4 @@ class GetBotGamePositionListView(APIView):
         if not bot_game:
             return Response("Not found!", status=status.HTTP_404_NOT_FOUND)
         
-        return Response(bot_game.move_list)
+        return Response(bot_game.move_list, status=status.HTTP_200_OK)
