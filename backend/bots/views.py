@@ -58,7 +58,9 @@ class MakeMoveView(APIView):
 
             return Response({
                 "is_valid": True,
-                "new_structured_fen": bot_game.get_full_structured_fen()
+                "new_structured_fen": bot_game.get_full_structured_fen(),
+                "new_position_list": bot_game.position_list,
+                "new_move_list": bot_game.move_list
             })
             
         except Exception as e:
