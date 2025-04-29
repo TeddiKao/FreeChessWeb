@@ -274,7 +274,7 @@ async function fetchBotGamePositionList(gameId: number) {
     let positionList = null;
     try {
         const response = await api.post("/bots/get-position-list/", {
-            gameId: gameId,
+            game_id: gameId,
         })
 
         positionList = response.data;
@@ -289,7 +289,7 @@ async function fetchBotGameMoveList(gameId: number) {
     let moveList = null;
     try {
         const response = await api.post("/bots/get-move-list/", {
-            gameId: gameId,
+            game_id: gameId,
         })
 
         moveList = response.data;
