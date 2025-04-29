@@ -13,6 +13,7 @@ import {
 } from "../../types/general.ts";
 import { fetchMoveIsValid } from "../apiUtils.ts";
 import { getFile, getRank } from "../boardUtils.ts";
+import { isPawnCapture, isPawnPromotion } from "../moveUtils.ts";
 
 function clearUnpromotedPawn(
     boardPlacement: BoardPlacement,
@@ -82,14 +83,6 @@ function getPromotionRank(color: PieceColor): number {
     return promotionRank;
 }
 
-function isCapture(startFile: number, endFile: number): boolean {
-    return Math.abs(startFile - endFile) === 1;
-}
-
-function isPawnPromotion(color: PieceColor, destinationRank: number): boolean {
-    return destinationRank === getPromotionRank(color);
-}
-
 function handlePromotionCaptureStorage(
     fenString: ParsedFENString,
     pieceColor: PieceColor,
@@ -126,7 +119,7 @@ function handlePromotionCaptureStorage(
     selectingPromotionRef.current = true;
     unpromotedBoardPlacementRef.current = updatedFENString;
 
-    if (!isCapture(startFile, destinationFile)) {
+    if (!isPawnCapture(startFile, destinationFile)) {
         if (autoQueen) {
             handlePawnPromotion(pieceColor, "queen", moveMethod, true);
         }
@@ -196,4 +189,5 @@ export {
     cancelPromotion,
     handlePromotionCaptureStorage,
     updatePromotedBoardPlacment,
+    getPromotionRank
 };

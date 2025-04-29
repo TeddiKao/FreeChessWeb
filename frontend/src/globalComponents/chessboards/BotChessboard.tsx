@@ -174,13 +174,16 @@ function BotChessboard({
 		pieceType: PieceType,
 		initialSquare?: ChessboardSquareIndex
 	) {
+		const startingSquare = `${draggedSquare || previousClickedSquare}`
+		const destinationSquare = `${droppedSquare || clickedSquare}`
+
 		const {
 			new_structured_fen: newStructuredFEN,
 			new_position_list: newPositionList,
 			new_move_list: newMoveList,
 		} = await makeMoveInBotGame(gameId, botId, {
-			starting_square: `${draggedSquare}`,
-			destination_square: `${droppedSquare}`,
+			starting_square: startingSquare,
+			destination_square: destinationSquare,
 			piece_color: pieceColor,
 			piece_type: pieceType,
 			initial_square: initialSquare,
@@ -232,149 +235,7 @@ function BotChessboard({
 		const pieceColorToValidate: PieceColor =
 			boardPlacement[`${previousClickedSquare}`]["piece_color"];
 
-		const [isMoveLegal, moveType] = await fetchMoveIsValid(
-			parsedFENString,
-			pieceColorToValidate,
-			pieceTypeToValidate,
-			previousClickedSquare,
-			clickedSquare
-		);
-
-		if (!isMoveLegal) {
-			return;
-		}
-
-		if (pieceTypeToValidate === "pawn") {
-			handlePromotionCaptureStorage(
-				parsedFENString,
-				pieceColorToValidate,
-				previousClickedSquare,
-				clickedSquare,
-				setPromotionCapturedPiece,
-				selectingPromotionRef,
-				unpromotedBoardPlacementRef,
-				handlePawnPromotion,
-				gameplaySettings,
-				"click"
-			);
-		}
-
-		setParsedFENString(
-			(previousFENString: OptionalValue<ParsedFENString>) => {
-				if (!previousFENString) {
-					return parsedFENString;
-				}
-
-				const oringinalBoardPlacements =
-					previousFENString["board_placement"];
-
-				const pieceType =
-					oringinalBoardPlacements[`${previousClickedSquare}`][
-						"piece_type"
-					];
-				const pieceColor =
-					oringinalBoardPlacements[`${previousClickedSquare}`][
-						"piece_color"
-					];
-
-				let newPiecePlacements: ParsedFENString =
-					addPieceToDestinationSquare(
-						previousFENString,
-						clickedSquare,
-						{
-							piece_type: pieceType,
-							piece_color: pieceColor,
-							starting_square: initialSquare,
-						}
-					);
-
-				newPiecePlacements = clearStartingSquare(
-					newPiecePlacements,
-					previousClickedSquare
-				);
-
-				if (pieceTypeToValidate.toLowerCase() === "pawn") {
-					newPiecePlacements = handleEnPassant(
-						newPiecePlacements,
-						clickedSquare
-					);
-				}
-
-				const enPassantMoveInfo: MoveInfo = {
-					starting_square: previousClickedSquare,
-					destination_square: clickedSquare,
-					piece_type: pieceTypeToValidate,
-					piece_color: pieceColorToValidate,
-				};
-
-				newPiecePlacements = updateEnPassantTargetSquare(
-					newPiecePlacements,
-					enPassantMoveInfo
-				);
-
-				if (pieceTypeToValidate === "pawn") {
-					const kingsideRookSquares = [7, 63];
-					const initialSquareExists = initialSquare !== undefined;
-
-					const kingsideRookMoved =
-						initialSquareExists &&
-						kingsideRookSquares.includes(Number(initialSquare));
-
-					const sideToDisable: CastlingSide = kingsideRookMoved
-						? "kingside"
-						: "queenside";
-
-					newPiecePlacements["castling_rights"] = disableCastling(
-						pieceColorToValidate,
-						newPiecePlacements["castling_rights"],
-						[sideToDisable]
-					);
-				}
-
-				if (pieceTypeToValidate.toLowerCase() === "king") {
-					if (isCastling(previousClickedSquare, clickedSquare)) {
-						const isKingside =
-							Number(previousClickedSquare) -
-								Number(clickedSquare) ===
-							-2;
-						const castlingSide: CastlingSide = isKingside
-							? "kingside"
-							: "queenside";
-
-						newPiecePlacements = handleCastling(
-							previousFENString,
-							pieceColorToValidate,
-							castlingSide
-						);
-					}
-
-					const originalCastlingRights = structuredClone(
-						newPiecePlacements["castling_rights"]
-					);
-
-					const newCastlingRights = disableCastling(
-						pieceColorToValidate,
-						originalCastlingRights,
-						["kingside", "queenside"]
-					);
-
-					newPiecePlacements["castling_rights"] = newCastlingRights;
-				}
-
-				handleGameEndDetection(
-					newPiecePlacements,
-					pieceColorToValidate
-				);
-
-				return newPiecePlacements;
-			}
-		);
-
-		const newSideToMove = getOppositeColor(pieceColorToValidate);
-
-		setSideToMove(newSideToMove);
-
-		playAudio(moveType);
+		handleMoveMade(pieceColorToValidate, pieceTypeToValidate, initialSquare);		
 
 		setPreviousDraggedSquare(previousClickedSquare);
 		setPreviousDroppedSquare(clickedSquare);
