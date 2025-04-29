@@ -54,7 +54,7 @@ class MakeMoveView(APIView):
 
             bot_game.update_full_structured_fen(new_structured_fen)
             bot_game.update_move_list(new_move_list)
-            bot_game.update_move_list(new_position_list)
+            bot_game.update_position_list(new_position_list)
 
             return Response({
                 "is_valid": True,
