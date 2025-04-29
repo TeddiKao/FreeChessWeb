@@ -1,4 +1,5 @@
 import copy
+import traceback
 
 from django.shortcuts import render
 from rest_framework.views import APIView
@@ -64,8 +65,7 @@ class MakeMoveView(APIView):
             })
             
         except Exception as e:
-            
-            print(e)
+            traceback.print_exc()
 
 class GetBotGameMoveListView(APIView):
     def post(self, request):
