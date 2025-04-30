@@ -383,7 +383,7 @@ function BotChessboard({
 				color,
 				previousDraggedSquare,
 				previousDroppedSquare,
-				promotionCapturedPiece
+				promotionCapturedPiece || undefined
 			);
 
 			return updatedBoardPlacement;
