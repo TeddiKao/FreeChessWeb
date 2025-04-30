@@ -109,6 +109,14 @@ def update_structured_fen(structured_fen, move_info):
 					
 					del updated_board_placement[str(captured_pawn_square)]
 
+		else:
+			promoted_piece = addtional_info["promoted_piece"]
+
+			updated_board_placement[str(destination_square)] = {
+				"piece_type": promoted_piece,
+				"piece_color": piece_color,
+				"starting_square": initial_square
+			}
 
 		if piece_type.lower() != "pawn" or abs(starting_rank - destination_rank) != 2:
 			structured_fen["en_passant_target_square"] = None
