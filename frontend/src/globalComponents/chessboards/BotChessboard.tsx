@@ -42,6 +42,7 @@ import {
 import {
 	cancelPromotion,
 	handlePromotionCaptureStorage,
+	preparePawnPromotion,
 	updatePromotedBoardPlacment,
 } from "../../utils/gameLogic/promotion";
 
@@ -63,6 +64,7 @@ import {
 	PieceInfo,
 	PieceType,
 } from "../../types/gameLogic.js";
+import { isPawnPromotion } from "../../utils/moveUtils.ts";
 
 function BotChessboard({
 	parsed_fen_string,
@@ -73,8 +75,8 @@ function BotChessboard({
 	gameId,
 	setMoveList,
 	setPositionList,
-    lastDraggedSquare,
-    lastDroppedSquare
+	lastDraggedSquare,
+	lastDroppedSquare,
 }: BotChessboardProps) {
 	const [previousClickedSquare, setPreviousClickedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -124,10 +126,10 @@ function BotChessboard({
 		handleOnDrop();
 	}, [draggedSquare, droppedSquare]);
 
-    useEffect(() => {
-        setPreviousDraggedSquare(lastDraggedSquare);
-        setPreviousDroppedSquare(lastDroppedSquare);
-    }, [lastDraggedSquare, lastDroppedSquare])
+	useEffect(() => {
+		setPreviousDraggedSquare(lastDraggedSquare);
+		setPreviousDroppedSquare(lastDroppedSquare);
+	}, [lastDraggedSquare, lastDroppedSquare]);
 
 	async function handleOnDrop() {
 		clearSquaresStyling();
@@ -174,26 +176,64 @@ function BotChessboard({
 		pieceType: PieceType,
 		initialSquare?: ChessboardSquareIndex
 	) {
-		const startingSquare = `${draggedSquare || previousClickedSquare}`
-		const destinationSquare = `${droppedSquare || clickedSquare}`
+		const startingSquare = `${draggedSquare || previousClickedSquare}`;
+		const destinationSquare = `${droppedSquare || clickedSquare}`;
 
-		const {
-			new_structured_fen: newStructuredFEN,
-			new_position_list: newPositionList,
-			new_move_list: newMoveList,
-		} = await makeMoveInBotGame(gameId, botId, {
-			starting_square: startingSquare,
-			destination_square: destinationSquare,
-			piece_color: pieceColor,
-			piece_type: pieceType,
-			initial_square: initialSquare,
+		if (pieceType.toLowerCase() === "pawn") {
+			handlePromotionCaptureStorage(
+				parsedFENString!,
+				pieceColor,
+				startingSquare,
+				destinationSquare,
+				setPromotionCapturedPiece,
+				selectingPromotionRef,
+				unpromotedBoardPlacementRef,
+				handlePawnPromotion,
+				gameplaySettings,
+				(droppedSquare ? "drag" : "click")
+			)
 
-			additional_info: {},
-		});
+			if (isPawnPromotion(pieceColor, getRank(destinationSquare))) {
+				setParsedFENString((prevFENString) => {
+					const moveInfo = {
+						starting_square: startingSquare,
+						destination_square: destinationSquare,
+						piece_color: pieceColor,
+						piece_type: pieceType,
+						initial_square: initialSquare,
+					};
 
-		setParsedFENString(newStructuredFEN);
-		setMoveList(newMoveList);
-		setPositionList(newPositionList);
+					unpromotedBoardPlacementRef.current = preparePawnPromotion(
+						prevFENString!,
+						moveInfo
+					);
+
+					return preparePawnPromotion(prevFENString!, moveInfo);
+				});
+
+				selectingPromotionRef.current = true;
+			}
+		}
+
+		if (!selectingPromotionRef.current) {
+			const {
+				new_structured_fen: newStructuredFEN,
+				new_position_list: newPositionList,
+				new_move_list: newMoveList,
+			} = await makeMoveInBotGame(gameId, botId, {
+				starting_square: startingSquare,
+				destination_square: destinationSquare,
+				piece_color: pieceColor,
+				piece_type: pieceType,
+				initial_square: initialSquare,
+
+				additional_info: {},
+			});
+
+			setParsedFENString(newStructuredFEN);
+			setMoveList(newMoveList);
+			setPositionList(newPositionList);
+		}
 	}
 
 	async function handleClickToMove() {
@@ -235,7 +275,11 @@ function BotChessboard({
 		const pieceColorToValidate: PieceColor =
 			boardPlacement[`${previousClickedSquare}`]["piece_color"];
 
-		handleMoveMade(pieceColorToValidate, pieceTypeToValidate, initialSquare);		
+		handleMoveMade(
+			pieceColorToValidate,
+			pieceTypeToValidate,
+			initialSquare
+		);
 
 		setPreviousDraggedSquare(previousClickedSquare);
 		setPreviousDroppedSquare(clickedSquare);
@@ -324,8 +368,7 @@ function BotChessboard({
 	function handlePromotionCancel(color: PieceColor) {
 		if (
 			!previousDraggedSquare ||
-			!previousDroppedSquare ||
-			!promotionCapturedPiece
+			!previousDroppedSquare
 		) {
 			return;
 		}
@@ -420,12 +463,36 @@ function BotChessboard({
 		}
 	}
 
+	async function sendPromotionMove(
+		moveInfo: MoveInfo,
+		promotedPiece: PieceType
+	) {
+		const {
+			new_move_list: newMoveList,
+			new_position_list: newPositionList,
+			new_structured_fen: newStructuredFEN,
+		} = await makeMoveInBotGame(gameId, botId, {
+			...moveInfo,
+			additional_info: {
+				promoted_piece: promotedPiece,
+			},
+		});
+
+		console.log(newStructuredFEN);
+
+		setParsedFENString(newStructuredFEN);
+		setMoveList(newMoveList);
+		setPositionList(newPositionList);
+	}
+
 	async function handlePawnPromotion(
 		color: PieceColor,
 		promotedPiece: PieceType,
 		moveMethod: string,
 		autoQueen: boolean = false
 	) {
+		console.log("Promotion function triggered!");
+
 		if (!parsedFENString) {
 			return;
 		}
@@ -447,30 +514,16 @@ function BotChessboard({
 			return;
 		}
 
-		await updatePromotedBoardPlacment(
-			parsedFENString,
-			color,
-			promotedPiece,
-			autoQueen,
-			promotionStartingSquare,
-			promotionEndingSquare,
-			unpromotedBoardPlacementRef
+		console.log("Updating board placement");
+		sendPromotionMove(
+			{
+				starting_square: promotionStartingSquare,
+				destination_square: promotionEndingSquare,
+				piece_color: color,
+				piece_type: "pawn",
+			},
+			promotedPiece
 		);
-
-		const [updatedBoardPlacement, moveType]: any =
-			await updatePromotedBoardPlacment(
-				parsedFENString,
-				color,
-				promotedPiece,
-				autoQueen,
-				promotionStartingSquare,
-				promotionEndingSquare,
-				unpromotedBoardPlacementRef
-			);
-
-		setParsedFENString(updatedBoardPlacement);
-
-		playAudio(moveType);
 		selectingPromotionRef.current = false;
 
 		const newSideToMove =

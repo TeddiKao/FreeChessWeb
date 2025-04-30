@@ -1,5 +1,6 @@
 import {
     BoardPlacement,
+    MoveInfo,
     ParsedFENString,
     PieceColor,
     PieceInfo,
@@ -44,7 +45,7 @@ function cancelPromotion(
     color: PieceColor,
     previousDraggedSquare: ChessboardSquareIndex,
     previousDroppedSquare: ChessboardSquareIndex,
-    promotionCapturedPiece: PieceInfo
+    promotionCapturedPiece?: PieceInfo
 ): ParsedFENString {
     const updatedFENString: ParsedFENString = structuredClone(fenString);
     let updatedBoardPlacement = structuredClone(
@@ -81,6 +82,23 @@ function getPromotionRank(color: PieceColor): number {
     const promotionRank: number = isWhite ? 7 : 0;
 
     return promotionRank;
+}
+
+function preparePawnPromotion(structuredFEN: ParsedFENString, moveInfo: MoveInfo) {
+    const updatedStructuredFEN: ParsedFENString = structuredClone(structuredFEN);
+
+    const startingSquare = moveInfo["starting_square"];
+    const promotionSquare = moveInfo["destination_square"];
+
+    delete updatedStructuredFEN["board_placement"][`${startingSquare}`];
+
+    updatedStructuredFEN["board_placement"][`${promotionSquare}`] = {
+        piece_type: moveInfo["piece_type"],
+        piece_color: moveInfo["piece_color"],
+        starting_square: moveInfo["initial_square"]
+    }
+
+    return updatedStructuredFEN;
 }
 
 function handlePromotionCaptureStorage(
@@ -189,5 +207,7 @@ export {
     cancelPromotion,
     handlePromotionCaptureStorage,
     updatePromotedBoardPlacment,
-    getPromotionRank
+    getPromotionRank,
+    preparePawnPromotion
+
 };
