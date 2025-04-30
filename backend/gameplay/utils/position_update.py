@@ -101,13 +101,15 @@ def update_structured_fen(structured_fen, move_info):
 			else:
 				en_passant_target_square = int(destination_square) + 8
 
-			structured_fen["en_passant_taget_square"] = en_passant_target_square
+			print(en_passant_target_square)
+
+			structured_fen["en_passant_target_square"] = en_passant_target_square
 
 			if "promoted_piece" in addtional_info.keys():
 				updated_board_placement = handle_pawn_promotion(updated_board_placement, move_info)
 
 		if not piece_type.lower() == "pawn":
-			structured_fen["en_passant_taget_square"] = None
+			structured_fen["en_passant_target_square"] = None
 
 		if not "promoted_piece" in addtional_info.keys():
 			updated_board_placement[str(destination_square)] = {
