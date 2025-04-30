@@ -220,6 +220,7 @@ function BotChessboard({
 				new_structured_fen: newStructuredFEN,
 				new_position_list: newPositionList,
 				new_move_list: newMoveList,
+				move_type: moveType
 			} = await makeMoveInBotGame(gameId, botId, {
 				starting_square: startingSquare,
 				destination_square: destinationSquare,
@@ -229,6 +230,8 @@ function BotChessboard({
 
 				additional_info: {},
 			});
+			
+			playAudio(moveType);
 
 			setParsedFENString(newStructuredFEN);
 			setMoveList(newMoveList);

@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from .models import BotGame
 from core.utils import decide_bot_game_color
 from move_validation.utils.move_validation import validate_move
+from move_validation.utils.get_move_type import get_move_type
 
 from gameplay.utils.position_update import update_structured_fen
 from gameplay.utils.game_state_history_update import update_position_list, update_move_list
@@ -39,6 +40,8 @@ class MakeMoveView(APIView):
             
             bot_game: BotGame = BotGame.objects.filter(id=game_id).first()
             current_structured_fen = bot_game.get_full_structured_fen()
+            current_board_placement = current_structured_fen["board_placement"]
+            current_en_passant_target_square = current_structured_fen["en_passant_target_square"]
 
             is_move_valid = validate_move(current_structured_fen, move_info)
             if not is_move_valid:
@@ -57,11 +60,14 @@ class MakeMoveView(APIView):
             bot_game.update_move_list(new_move_list)
             bot_game.update_position_list(new_position_list)
 
+            move_type = get_move_type(current_board_placement, current_en_passant_target_square, move_info)
+
             return Response({
                 "is_valid": True,
                 "new_structured_fen": bot_game.get_full_structured_fen(),
                 "new_position_list": bot_game.position_list,
-                "new_move_list": bot_game.move_list
+                "new_move_list": bot_game.move_list,
+                "move_type": move_type
             })
             
         except Exception as e:
