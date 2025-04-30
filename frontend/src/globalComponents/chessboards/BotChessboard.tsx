@@ -22,16 +22,6 @@ import {
 	makeMoveInBotGame,
 } from "../../utils/apiUtils";
 
-import {
-	disableCastling,
-	handleCastling,
-	isCastling,
-} from "../../utils/gameLogic/castling";
-
-import {
-	handleEnPassant,
-	updateEnPassantTargetSquare,
-} from "../../utils/gameLogic/enPassant";
 
 import {
 	GameEndedSetterContext,
@@ -43,13 +33,7 @@ import {
 	cancelPromotion,
 	handlePromotionCaptureStorage,
 	preparePawnPromotion,
-	updatePromotedBoardPlacment,
 } from "../../utils/gameLogic/promotion";
-
-import {
-	addPieceToDestinationSquare,
-	clearStartingSquare,
-} from "../../utils/gameLogic/basicMovement";
 
 import { MoveMethods } from "../../enums/gameLogic.ts";
 import { getOppositeColor } from "../../utils/gameLogic/general";
@@ -57,7 +41,6 @@ import { BotChessboardProps } from "../../interfaces/chessboard.js";
 import { ChessboardSquareIndex, OptionalValue } from "../../types/general.js";
 import {
 	BoardPlacement,
-	CastlingSide,
 	MoveInfo,
 	ParsedFENString,
 	PieceColor,
@@ -474,6 +457,7 @@ function BotChessboard({
 			new_move_list: newMoveList,
 			new_position_list: newPositionList,
 			new_structured_fen: newStructuredFEN,
+			move_type: moveType
 		} = await makeMoveInBotGame(gameId, botId, {
 			...moveInfo,
 			additional_info: {
@@ -481,7 +465,7 @@ function BotChessboard({
 			},
 		});
 
-		console.log(newStructuredFEN);
+		playAudio(moveType);
 
 		setParsedFENString(newStructuredFEN);
 		setMoveList(newMoveList);

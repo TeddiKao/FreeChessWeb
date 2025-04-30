@@ -4,7 +4,6 @@ import DashboardNavbar from "../../pageComponents/dashboard/DashboardNavbar";
 import {
 	fetchBotGameMoveList,
 	fetchBotGamePositionList,
-	fetchFen,
 } from "../../utils/apiUtils";
 import { ParsedFENString } from "../../types/gameLogic";
 
@@ -16,6 +15,8 @@ import { Navigate, useLocation } from "react-router-dom";
 import { ChessboardSquareIndex } from "../../types/general";
 import MoveNavigationButtons from "../../globalComponents/gameplaySidePanel/MoveNavigationButtons";
 import MoveListPanel from "../../globalComponents/gameplaySidePanel/MoveListPanel";
+import { isNullOrUndefined } from "../../utils/generalUtils";
+import { playAudio } from "../../utils/audioUtils";
 
 function PlayBot() {
 	const startingFEN =
@@ -62,6 +63,13 @@ function PlayBot() {
 	useEffect(() => {
 		setPositionIndex(positionList.length - 1);
 	}, [positionList]);
+
+	useEffect(() => {
+		const moveType = positionList[positionIndex]?.["move_type"];
+		if (!isNullOrUndefined(moveType)) {
+			playAudio(moveType);
+		}
+	}, [positionIndex]);
 
 	useEffect(() => {
 		setGameplaySettings(initialGameplaySettings);
