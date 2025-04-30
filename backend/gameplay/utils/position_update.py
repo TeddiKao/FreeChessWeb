@@ -94,23 +94,6 @@ def update_structured_fen(structured_fen, move_info):
 			castling_side = "Kingside" if initial_square in kingside_rook_starting_squares else "Queenside"
 			updated_castling_rights = update_castling_rights(updated_castling_rights, castling_side, piece_color)
 
-		elif piece_type.lower() == "pawn":
-			en_passant_target_square = None
-			if piece_color.lower() == "white":
-				en_passant_target_square = int(destination_square) - 8
-			else:
-				en_passant_target_square = int(destination_square) + 8
-
-			print(en_passant_target_square)
-
-			structured_fen["en_passant_target_square"] = en_passant_target_square
-
-			if "promoted_piece" in addtional_info.keys():
-				updated_board_placement = handle_pawn_promotion(updated_board_placement, move_info)
-
-		if not piece_type.lower() == "pawn":
-			structured_fen["en_passant_target_square"] = None
-
 		if not "promoted_piece" in addtional_info.keys():
 			updated_board_placement[str(destination_square)] = {
 				"piece_type": piece_type,
@@ -118,13 +101,20 @@ def update_structured_fen(structured_fen, move_info):
 				"starting_square": initial_square
 			}
 
-			if structured_fen["en_passant_target_square"]:
+			if structured_fen["en_passant_target_square"] and piece_type.lower() == "pawn":
 				if int(destination_square) == int(structured_fen["en_passant_target_square"]):
-					captured_pawn_offset = -8 if piece_color == "white" else 8
+					captured_pawn_offset = -8 if piece_color.lower() == "white" else 8
 					captured_pawn_square = int(
-						destination_square) + captured_pawn_offset
-
+							destination_square) + captured_pawn_offset
+					
 					del updated_board_placement[str(captured_pawn_square)]
+
+
+		if piece_type.lower() != "pawn" or abs(starting_rank - destination_rank) != 2:
+			structured_fen["en_passant_target_square"] = None
+		else:
+			target_square_offset = -8 if piece_color.lower() == "white" else 8
+			structured_fen["en_passant_target_square"] = int(destination_square) + target_square_offset
 
 		structured_fen["board_placement"] = updated_board_placement
 		structured_fen["castling_rights"] = updated_castling_rights
