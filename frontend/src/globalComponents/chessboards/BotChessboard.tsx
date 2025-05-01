@@ -198,12 +198,7 @@ function BotChessboard({
 		}
 
 		if (!selectingPromotionRef.current) {
-			const {
-				new_structured_fen: newStructuredFEN,
-				new_position_list: newPositionList,
-				new_move_list: newMoveList,
-				move_type: moveType,
-			} = await makeMoveInBotGame(gameId, botId, {
+			const apiResponse = await makeMoveInBotGame(gameId, botId, {
 				starting_square: startingSquare,
 				destination_square: destinationSquare,
 				piece_color: pieceColor,
@@ -213,11 +208,30 @@ function BotChessboard({
 				additional_info: {},
 			});
 
+			const {
+				new_structured_fen: newStructuredFEN,
+				new_move_list: newMoveList,
+				new_position_list: newPositionList,
+
+				move_type: moveType,
+			} = apiResponse;
+
 			playAudio(moveType);
 
 			setParsedFENString(newStructuredFEN);
 			setMoveList(newMoveList);
 			setPositionList(newPositionList);
+
+			if (apiResponse["game_over"]) {
+				const {
+					game_winner: gameWinner,
+					game_ended_cause: gameEndedCause,
+				} = apiResponse;
+
+				setGameEnded!(true);
+				setGameWinner!(gameWinner);
+				setGameEndedCause!(gameEndedCause);
+			}
 		}
 	}
 
@@ -475,7 +489,7 @@ function BotChessboard({
 				game_winner: gameWinner,
 			} = apiResponse;
 
-			setGameEnded!(true);	
+			setGameEnded!(true);
 			setGameEndedCause!(gameEndedCause);
 			setGameWinner!(gameWinner);
 		}
