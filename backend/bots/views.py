@@ -69,7 +69,12 @@ class MakeMoveView(APIView):
                 return Response({
                     "game_over": True,
                     "game_ended_cause": "checkmate",
-                    "game_winner": move_info["piece_color"]
+                    "game_winner": move_info["piece_color"],
+
+                    "new_structured_fen": bot_game.get_full_structured_fen(),
+                    "new_position_list": bot_game.position_list,
+                    "new_move_list": bot_game.move_list,
+                    "move_type": move_type,
                 })
             elif get_is_stalemated(bot_game.get_full_structured_fen(), get_opposite_color(move_info["piece_color"].lower())):
                 return Response({
