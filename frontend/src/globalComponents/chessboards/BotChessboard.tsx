@@ -252,43 +252,6 @@ function BotChessboard({
 					},
 				})
 			);
-
-			// const apiResponse = await makeMoveInBotGame(gameId, botId, {
-			// 	starting_square: startingSquare,
-			// 	destination_square: destinationSquare,
-			// 	piece_color: pieceColor,
-			// 	piece_type: pieceType,
-			// 	initial_square: initialSquare,
-
-			// 	additional_info: {},
-			// });
-
-			// console.log(apiResponse);
-
-			// const {
-			// 	new_structured_fen: newStructuredFEN,
-			// 	new_move_list: newMoveList,
-			// 	new_position_list: newPositionList,
-
-			// 	move_type: moveType,
-			// } = apiResponse;
-
-			// playAudio(moveType);
-
-			// setParsedFENString(newStructuredFEN);
-			// setMoveList(newMoveList);
-			// setPositionList(newPositionList);
-
-			// if (apiResponse["game_over"]) {
-			// 	const {
-			// 		game_winner: gameWinner,
-			// 		game_ended_cause: gameEndedCause,
-			// 	} = apiResponse;
-
-			// 	setGameEnded!(true);
-			// 	setGameWinner!(gameWinner);
-			// 	setGameEndedCause!(gameEndedCause);
-			// }
 		}
 	}
 
