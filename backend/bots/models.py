@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from channels.db import database_sync_to_async
 
 from gameplay.utils.fen_parser import get_default_position_list, get_starting_position_structured_fen, get_starting_structured_board_placement, get_starting_structured_castling_rights
 
@@ -32,6 +33,11 @@ class BotGame(models.Model):
 
     captured_white_material = models.JSONField(null=False, blank=False, default=EMPTY_DICT)
     captured_black_material = models.JSONField(null=False, blank=False, default=EMPTY_DICT)
+
+    @classmethod
+    @database_sync_to_async
+    def async_get_bot_game_from_id(cls, game_id: int):
+        return cls.objects.filter(id=game_id).first()
 
     def get_player_color(self):
         if self.white_player == "human":
