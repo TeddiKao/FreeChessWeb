@@ -12,7 +12,7 @@ from core.utils import decide_bot_game_color
 from move_validation.utils.general import get_opposite_color
 from move_validation.utils.move_validation import validate_move
 from move_validation.utils.get_move_type import get_move_type
-from move_validation.utils.result_detection import get_is_stalemated, get_is_checkmated
+from move_validation.utils.result_detection import get_is_stalemated, get_is_checkmated, is_threefold_repetiiton, check_50_move_rule_draw
 
 from gameplay.utils.position_update import update_structured_fen
 from gameplay.utils.game_state_history_update import update_position_list, update_move_list
@@ -65,24 +65,36 @@ class MakeMoveView(APIView):
 
             move_type = get_move_type(current_board_placement, current_en_passant_target_square, move_info)
 
-            if get_is_checkmated(bot_game.get_full_structured_fen(), get_opposite_color(move_info["piece_color"])):
+            if get_is_checkmated(new_structured_fen, get_opposite_color(move_info["piece_color"])):
                 return Response({
                     "game_over": True,
                     "game_ended_cause": "checkmate",
                     "game_winner": move_info["piece_color"],
 
-                    "new_structured_fen": bot_game.get_full_structured_fen(),
+                    "new_structured_fen": new_structured_fen,
                     "new_position_list": bot_game.position_list,
                     "new_move_list": bot_game.move_list,
                     "move_type": move_type,
                 })
-            elif get_is_stalemated(bot_game.get_full_structured_fen(), get_opposite_color(move_info["piece_color"].lower())):
+            elif get_is_stalemated(new_structured_fen, get_opposite_color(move_info["piece_color"].lower())):
                 return Response({
                     "game_over": True,
                     "game_ended_cause": "stalemate",
                     "game_winner": None,
 
-                    "new_structured_fen": bot_game.get_full_structured_fen(),
+                    "new_structured_fen": new_structured_fen,
+                    "new_position_list": bot_game.position_list,
+                    "new_move_list": bot_game.move_list,
+                    "move_type": move_type,
+                })
+            
+            elif is_threefold_repetiiton(bot_game.position_list, new_structured_fen):
+                return Response({
+                    "game_over": True,
+                    "game_ended_cause": "repetition",
+                    "game_winner": None,
+
+                    "new_structured_fen": new_structured_fen,
                     "new_position_list": bot_game.position_list,
                     "new_move_list": bot_game.move_list,
                     "move_type": move_type,
