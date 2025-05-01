@@ -94,7 +94,9 @@ function BotChessboard({
 	const [botGameWebsocketRef, botGameWebsocket, setBotGameWebsocket] =
 		useReactiveRef<WebSocket | null>(null);
 
-	const websocketURL = parseWebsocketUrl("bot-game-server");
+	const websocketURL = parseWebsocketUrl("bot-game-server", {
+		gameId: gameId
+	});
 	const socket = useWebSocket(
 		websocketURL,
 		handleOnMessage,
