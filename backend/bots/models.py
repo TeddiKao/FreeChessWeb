@@ -48,6 +48,14 @@ class BotGame(models.Model):
             "halfmove_clock": self.halfmove_clock,
             "fullmove_number": self.current_move_number
         }
+    
+    @database_sync_to_async
+    def async_get_position_list(self):
+        return self.position_list
+    
+    @database_sync_to_async
+    def async_get_move_list(self):
+        return self.move_list
 
     def get_player_color(self):
         if self.white_player == "human":
