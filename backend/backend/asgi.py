@@ -10,14 +10,16 @@ from users.middleware.auth_middleware import JWTAuthenticationMiddleware
 import users.routing
 import matchmaking.routing
 import gameplay.routing
+import bots.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 
-users_api_urls = users.routing.websocket_urlpatterns
-matchmaking_api_urls = matchmaking.routing.websocket_urlpatterns
-gameplay_api_urls = gameplay.routing.websocket_urlpatterns
+users_app_urls = users.routing.websocket_urlpatterns
+matchmaking_app_urls = matchmaking.routing.websocket_urlpatterns
+gameplay_app_urls = gameplay.routing.websocket_urlpatterns
+bot_app_urls = bots.routing.websocket_urlpatterns
 
-websocket_routes = users_api_urls + matchmaking_api_urls + gameplay_api_urls
+websocket_routes = users_app_urls + matchmaking_app_urls + gameplay_app_urls + bot_app_urls
 
 application = ProtocolTypeRouter({
 	"http": django_asgi_application,
