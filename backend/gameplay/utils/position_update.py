@@ -107,6 +107,9 @@ def update_structured_fen(structured_fen, move_info):
 			if abs(starting_file - destination_file) == 2:
 				updated_board_placement = handle_castling(updated_board_placement, move_info)
 
+			updated_castling_rights = update_castling_rights(updated_castling_rights, "Kingside", piece_color)
+			updated_castling_rights = update_castling_rights(updated_castling_rights, "Kingside", piece_color)
+
 		elif piece_type.lower() == "rook":
 			kingside_rook_starting_squares = [7, 63]
 
