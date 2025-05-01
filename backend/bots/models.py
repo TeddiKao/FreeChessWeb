@@ -63,6 +63,13 @@ class BotGame(models.Model):
         self.save()
 
     @database_sync_to_async
+    def async_get_player_color(self) -> str:
+        if self.white_player == "human":
+            return "White"
+        else:
+            return "Black"
+
+    @database_sync_to_async
     def async_get_game_attr(self, attr_name):
         return getattr(self, attr_name)
     
