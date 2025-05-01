@@ -436,16 +436,17 @@ function BotChessboard({
 		moveInfo: MoveInfo,
 		promotedPiece: PieceType
 	) {
-		botGameWebsocketRef.current?.send(JSON.stringify({
-			type: "move_made",
-			move_info: {
-				...moveInfo,
-			},
-			
-			additional_info: {
-				promoted_piece: promotedPiece,
-			}
-		}));
+		botGameWebsocketRef.current?.send(
+			JSON.stringify({
+				type: "move_made",
+				move_info: {
+					...moveInfo,
+					additional_info: {
+						promoted_piece: promotedPiece,
+					},
+				},
+			})
+		);
 
 		// const apiResponse = await makeMoveInBotGame(gameId, botId, {
 		// 	...moveInfo,
