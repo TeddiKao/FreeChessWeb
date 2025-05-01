@@ -64,6 +64,16 @@ class BotGame(models.Model):
     @database_sync_to_async
     def async_get_game_attr(self, attr_name):
         return getattr(self, attr_name)
+    
+    @database_sync_to_async
+    def async_update_full_structured_fen(self, new_structured_fen):
+        self.structured_board_placement = new_structured_fen["board_placement"]
+        self.structured_castling_rights = new_structured_fen["castling_rights"]
+        self.en_passant_target_square = new_structured_fen["en_passant_target_square"]
+        self.halfmove_clock = new_structured_fen["halfmove_clock"]
+        self.current_move_number = new_structured_fen["fullmove_number"]
+
+        self.save()
 
     def get_player_color(self):
         if self.white_player == "human":
