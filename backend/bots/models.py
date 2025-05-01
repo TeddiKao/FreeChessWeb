@@ -33,6 +33,12 @@ class BotGame(models.Model):
     captured_white_material = models.JSONField(null=False, blank=False, default=EMPTY_DICT)
     captured_black_material = models.JSONField(null=False, blank=False, default=EMPTY_DICT)
 
+    def get_player_color(self):
+        if self.white_player == "human":
+            return "white"
+        else:
+            return "black"
+
     def get_full_structured_fen(self):
         return {
             "board_placement": self.structured_board_placement,
