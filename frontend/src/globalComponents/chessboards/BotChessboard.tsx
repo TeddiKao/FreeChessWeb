@@ -118,6 +118,13 @@ function BotChessboard({
 
 			setBotGameWebsocketEnabled(true);
 		}
+
+		return () => {
+			if (botGameWebsocketRef.current?.readyState === WebSocket.OPEN) {
+				botGameWebsocketRef.current?.close();
+				botGameWebsocketExists.current = false;
+			}
+		}
 	}, []);
 
 	useEffect(() => {
