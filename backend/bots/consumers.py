@@ -39,7 +39,7 @@ class BotGameConsumer(AsyncWebsocketConsumer):
             "new_structured_fen": updated_structured_fen,
             "new_position_list": updated_position_list,
             "new_move_list": updated_move_list,
-            "move_type": get_move_type(current_structured_fen, current_en_passant_target_square, move_info)
+            "move_type": get_move_type(current_board_placement, current_en_passant_target_square, move_info)
         }))
 
     async def connect(self):
