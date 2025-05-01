@@ -60,6 +60,7 @@ class BotGame(models.Model):
     @database_sync_to_async
     def async_update_game_attr(self, attr_name, new_value):
         setattr(self, attr_name, new_value)
+        self.save()
 
     @database_sync_to_async
     def async_get_game_attr(self, attr_name):
