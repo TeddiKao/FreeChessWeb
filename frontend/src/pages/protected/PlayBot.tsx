@@ -60,7 +60,7 @@ function PlayBot() {
 	useEffect(() => {
 		updateMoveList();
 		updatePositionList();
-	}, []);
+	}, [gameId]);
 
 	useEffect(() => {
 		setPositionIndex(positionList.length - 1);
