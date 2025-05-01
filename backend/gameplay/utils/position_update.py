@@ -1,11 +1,30 @@
 import copy
 
 from move_validation.utils.general import get_file, get_row
+from move_validation.utils.get_move_type import get_is_capture
 
 def update_castling_rights(structured_castling_rights, castling_side: str, color: str, new_value: str = False):
 	structured_castling_rights[color.capitalize()][castling_side.capitalize()] = new_value
 
 	return structured_castling_rights
+
+def update_halfmove_clock(structured_fen, move_info):
+	board_placement = structured_fen["board_placement"]
+	en_passant_target_square = structured_fen["en_passant_target_square"]
+	
+	piece_type = move_info["piece_type"]
+
+	if not get_is_capture(board_placement, en_passant_target_square, move_info):
+		structured_fen["halfmove_clock"] = 0
+		return structured_fen
+	
+	if piece_type.lower() != "pawn":
+		structured_fen["halfmove_clock"] = 0
+		return structured_fen
+	
+	structured_fen["halfmove_clock"] += 1
+
+	return structured_fen
 
 def handle_castling(structured_board_placement, move_info):
 	starting_square = move_info["starting_square"]
@@ -126,6 +145,8 @@ def update_structured_fen(structured_fen, move_info):
 
 		structured_fen["board_placement"] = updated_board_placement
 		structured_fen["castling_rights"] = updated_castling_rights
+
+		structured_fen = update_halfmove_clock(structured_fen, move_info)
 
 		return structured_fen
 	except Exception as e:
