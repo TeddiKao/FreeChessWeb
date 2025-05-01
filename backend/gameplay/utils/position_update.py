@@ -16,11 +16,11 @@ def update_halfmove_clock(structured_fen, move_info):
 	
 	piece_type = move_info["piece_type"]
 
-	if not get_is_capture(board_placement, en_passant_target_square, move_info):
+	if get_is_capture(board_placement, en_passant_target_square, move_info):
 		updated_structured_fen["halfmove_clock"] = 0
 		return 0
 	
-	if piece_type.lower() != "pawn":
+	if piece_type.lower() == "pawn":
 		return 0
 	
 	return updated_structured_fen["halfmove_clock"] + 1
