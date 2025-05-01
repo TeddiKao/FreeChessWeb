@@ -16,17 +16,8 @@ import { playAudio } from "../../utils/audioUtils";
 
 import {
 	fetchLegalMoves,
-	fetchMoveIsValid,
-	getIsCheckmated,
-	getIsStalemated,
 	makeMoveInBotGame,
 } from "../../utils/apiUtils";
-
-import {
-	GameEndedSetterContext,
-	GameEndedCauseSetterContext,
-	GameWinnerSetterContext,
-} from "../../contexts/chessboardContexts.ts";
 
 import {
 	cancelPromotion,
@@ -35,7 +26,6 @@ import {
 } from "../../utils/gameLogic/promotion";
 
 import { MoveMethods } from "../../enums/gameLogic.ts";
-import { getOppositeColor } from "../../utils/gameLogic/general";
 import { BotChessboardProps } from "../../interfaces/chessboard.js";
 import { ChessboardSquareIndex, OptionalValue } from "../../types/general.js";
 import {
@@ -47,6 +37,8 @@ import {
 	PieceType,
 } from "../../types/gameLogic.js";
 import { isPawnPromotion } from "../../utils/moveUtils.ts";
+import useWebSocket from "../../hooks/useWebsocket.ts";
+import { parseWebsocketUrl } from "../../utils/generalUtils.ts";
 
 function BotChessboard({
 	parsed_fen_string,
@@ -388,53 +380,6 @@ function BotChessboard({
 
 		setPromotionCapturedPiece(null);
 		selectingPromotionRef.current = false;
-	}
-
-	async function handleGameEndDetection(
-		fenString: ParsedFENString,
-		color: PieceColor
-	): Promise<void> {
-		const kingColor = getOppositeColor(color);
-
-		const isCheckmated = await checkIsCheckmated(fenString, kingColor);
-		const isStalemated = await checkIsStalemated(fenString, kingColor);
-
-		const gameEnded = isCheckmated || isStalemated;
-		if (gameEnded) {
-			handleGameEnded(isCheckmated, color);
-		}
-	}
-
-	function handleGameEnded(isCheckmated: boolean, color: string) {
-		if (!setGameEnded || !setGameEndedCause || !setGameWinner) {
-			throw new Error("Game ended contexts not provided");
-		}
-
-		setGameEnded(true);
-
-		const gameEndedCause = isCheckmated ? "checkmate" : "stalemate";
-		const gameWinner = isCheckmated ? color : "";
-
-		setGameEndedCause(gameEndedCause);
-		setGameWinner(gameWinner);
-	}
-
-	async function checkIsCheckmated(
-		currentFEN: ParsedFENString,
-		kingColor: string
-	) {
-		const isCheckmated = await getIsCheckmated(currentFEN, kingColor);
-
-		return isCheckmated;
-	}
-
-	async function checkIsStalemated(
-		currentFEN: ParsedFENString,
-		kingColor: string
-	) {
-		const isStalemated = await getIsStalemated(currentFEN, kingColor);
-
-		return isStalemated;
 	}
 
 	function getPromotionStartingSquare(
