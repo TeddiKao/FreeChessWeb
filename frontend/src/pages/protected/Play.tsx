@@ -13,7 +13,7 @@ import {
 	fetchTimer,
 } from "../../utils/apiUtils.ts";
 
-import GameOverModal from "../../globalComponents/modals/GameOverModal.js";
+import GameOverModal from "../../globalComponents/modals/MultiplayerGameOverModal.js";
 import GameplaySettings from "../../globalComponents/modals/GameplaySettings.js";
 import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.js";
 import { OptionalValue } from "../../types/general.js";

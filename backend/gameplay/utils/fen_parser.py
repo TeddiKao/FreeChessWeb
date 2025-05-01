@@ -120,3 +120,19 @@ def parse_fen(fen_string: str):
 		"halfmove_clock": int(halfmove_clock),
 		"fullmove_number": int(fullmove_number)
 	}
+
+def get_starting_position_structured_fen():
+	return parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+
+def get_starting_structured_board_placement():
+	return parse_board_placement("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+
+def get_starting_structured_castling_rights():
+	return parse_castling_rights("KQkq")
+
+def get_default_position_list():
+	return [{
+		"position": get_starting_position_structured_fen(),
+		"last_dragged_square": None,
+		"last_dropped_square": None,
+	}]

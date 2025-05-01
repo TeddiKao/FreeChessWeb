@@ -8,3 +8,5 @@ backend/db.sqlite3
 .env
 
 **/env/
+
+/engines/

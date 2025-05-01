@@ -1,5 +1,6 @@
 import {
     BoardPlacement,
+    MoveInfo,
     ParsedFENString,
     PieceColor,
     PieceInfo,
@@ -13,6 +14,7 @@ import {
 } from "../../types/general.ts";
 import { fetchMoveIsValid } from "../apiUtils.ts";
 import { getFile, getRank } from "../boardUtils.ts";
+import { isPawnCapture, isPawnPromotion } from "../moveUtils.ts";
 
 function clearUnpromotedPawn(
     boardPlacement: BoardPlacement,
@@ -43,7 +45,7 @@ function cancelPromotion(
     color: PieceColor,
     previousDraggedSquare: ChessboardSquareIndex,
     previousDroppedSquare: ChessboardSquareIndex,
-    promotionCapturedPiece: PieceInfo
+    promotionCapturedPiece?: PieceInfo
 ): ParsedFENString {
     const updatedFENString: ParsedFENString = structuredClone(fenString);
     let updatedBoardPlacement = structuredClone(
@@ -82,12 +84,21 @@ function getPromotionRank(color: PieceColor): number {
     return promotionRank;
 }
 
-function isCapture(startFile: number, endFile: number): boolean {
-    return Math.abs(startFile - endFile) === 1;
-}
+function preparePawnPromotion(structuredFEN: ParsedFENString, moveInfo: MoveInfo) {
+    const updatedStructuredFEN: ParsedFENString = structuredClone(structuredFEN);
 
-function isPawnPromotion(color: PieceColor, destinationRank: number): boolean {
-    return destinationRank === getPromotionRank(color);
+    const startingSquare = moveInfo["starting_square"];
+    const promotionSquare = moveInfo["destination_square"];
+
+    delete updatedStructuredFEN["board_placement"][`${startingSquare}`];
+
+    updatedStructuredFEN["board_placement"][`${promotionSquare}`] = {
+        piece_type: moveInfo["piece_type"],
+        piece_color: moveInfo["piece_color"],
+        starting_square: moveInfo["initial_square"]
+    }
+
+    return updatedStructuredFEN;
 }
 
 function handlePromotionCaptureStorage(
@@ -126,7 +137,7 @@ function handlePromotionCaptureStorage(
     selectingPromotionRef.current = true;
     unpromotedBoardPlacementRef.current = updatedFENString;
 
-    if (!isCapture(startFile, destinationFile)) {
+    if (!isPawnCapture(startFile, destinationFile)) {
         if (autoQueen) {
             handlePawnPromotion(pieceColor, "queen", moveMethod, true);
         }
@@ -196,4 +207,7 @@ export {
     cancelPromotion,
     handlePromotionCaptureStorage,
     updatePromotedBoardPlacment,
+    getPromotionRank,
+    preparePawnPromotion
+
 };

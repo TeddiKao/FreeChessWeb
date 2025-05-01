@@ -20,6 +20,7 @@ import Play from "./pages/protected/Play.tsx";
 import PassAndPlay from "./pages/protected/PassAndPlay.tsx";
 import TempRoute from "./pages/TempRoute.tsx";
 import SelectBot from "./pages/protected/SelectBot.tsx";
+import PlayBot from "./pages/protected/PlayBot.tsx";
 
 function Logout() {
     localStorage.clear();
@@ -97,6 +98,12 @@ function App() {
                                 </ProtectedRoute>
                             }
                         />
+
+                        <Route path="/play-bot" element={
+                            <ProtectedRoute>
+                                <PlayBot />
+                            </ProtectedRoute>
+                        } />
 
                         <Route path="/temp" element={<TempRoute />} />
 

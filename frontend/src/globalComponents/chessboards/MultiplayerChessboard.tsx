@@ -98,10 +98,15 @@ function MultiplayerChessboard({
 	const gameWebsocketRef = useRef<WebSocket | null>(null);
 	const gameWebsocketExists = useRef<boolean>(false);
 
-    const [gameWebsocketEnabled, setGameWebsocketEnabled] = useState(false);
+	const [gameWebsocketEnabled, setGameWebsocketEnabled] = useState(false);
 	const gameWebsocketUrl = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
-	
-    const gameWebsocket = useWebSocket(gameWebsocketUrl, handleOnMessage, undefined, gameWebsocketEnabled);
+
+	const gameWebsocket = useWebSocket(
+		gameWebsocketUrl,
+		handleOnMessage,
+		undefined,
+		gameWebsocketEnabled
+	);
 
 	const chessboardStyles = {
 		gridTemplateColumns: `repeat(8, ${squareSize}px`,
@@ -136,7 +141,7 @@ function MultiplayerChessboard({
 
 			gameWebsocketExists.current = true;
 
-            setGameWebsocketEnabled(true);
+			setGameWebsocketEnabled(true);
 		}
 
 		return () => {
@@ -149,9 +154,9 @@ function MultiplayerChessboard({
 		};
 	}, []);
 
-    useEffect(() => {
-        gameWebsocketRef.current = gameWebsocket;
-    }, [gameWebsocket]);
+	useEffect(() => {
+		gameWebsocketRef.current = gameWebsocket;
+	}, [gameWebsocket]);
 
 	useEffect(() => {
 		handleOnDrop();
@@ -360,7 +365,7 @@ function MultiplayerChessboard({
 			};
 
 			sendRegularMoveDetails(pieceInfo, initialSquare, "drag");
-		} 
+		}
 
 		setDraggedSquare(null);
 		setDroppedSquare(null);
@@ -694,8 +699,6 @@ function MultiplayerChessboard({
 		startSquare: ChessboardSquareIndex,
 		destinationSquare: ChessboardSquareIndex
 	) {
-		console.log("Queening automatically");
-
 		const moveDetails = {
 			type: "move_made",
 
