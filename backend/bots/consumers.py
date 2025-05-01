@@ -7,6 +7,9 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from .models import BotGame
 
 from gameplay.utils.position_update import update_structured_fen
+from gameplay.utils.game_state_history_update import update_move_list, update_position_list
+
+from move_validation.utils.move_validation import validate_move
 
 class BotGameConsumer(AsyncWebsocketConsumer):
     async def handle_player_move_made(self, move_info):
@@ -15,8 +18,11 @@ class BotGameConsumer(AsyncWebsocketConsumer):
         current_move_list = await bot_game_model.async_get_move_list()
         current_position_list = await bot_game_model.async_get_position_list()
 
+        if not validate_move(current_structured_fen, move_info):
+            return
+
         updated_structured_fen = update_structured_fen(current_structured_fen, move_info)
-        
+        updated_move_list = update_position_list(current_position_list)
 
 
     async def connect(self):
