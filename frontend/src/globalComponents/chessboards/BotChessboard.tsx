@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import "../../styles/components/chessboard/chessboard.scss";
 import Square from "../Square.js";
@@ -25,7 +25,7 @@ import {
 	preparePawnPromotion,
 } from "../../utils/gameLogic/promotion";
 
-import { MoveMethods } from "../../enums/gameLogic.ts";
+import { BotGameWebSocketEventTypes, MoveMethods } from "../../enums/gameLogic.ts";
 import { BotChessboardProps } from "../../interfaces/chessboard.js";
 import { ChessboardSquareIndex, OptionalValue } from "../../types/general.js";
 import {
@@ -39,6 +39,7 @@ import {
 import { isPawnPromotion } from "../../utils/moveUtils.ts";
 import useWebSocket from "../../hooks/useWebsocket.ts";
 import { parseWebsocketUrl } from "../../utils/generalUtils.ts";
+import useReactiveRef from "../../hooks/useReactiveRef.ts";
 
 function BotChessboard({
 	parsed_fen_string,
@@ -87,6 +88,13 @@ function BotChessboard({
 		gridTemplateColumns: `repeat(8, ${squareSize}px)`,
 	};
 
+	const [botGameWebsocketEnabled, setBotGameWebsocketEnabled] = useState(false);
+	const botGameWebsocketExists = useRef(false);
+	const [botGameWebsocketRef, botGameWebsocket, setBotGameWebsocket] = useReactiveRef<WebSocket | null>(null);
+
+	const websocketURL = parseWebsocketUrl("bot-game-server")
+	const socket = useWebSocket(websocketURL, handleOnMessage, undefined, botGameWebsocketEnabled);
+
 	useEffect(() => {
 		setParsedFENString(parsed_fen_string);
 	}, [parsed_fen_string]);
@@ -103,6 +111,18 @@ function BotChessboard({
 		setPreviousDraggedSquare(lastDraggedSquare);
 		setPreviousDroppedSquare(lastDroppedSquare);
 	}, [lastDraggedSquare, lastDroppedSquare]);
+
+	useEffect(() => {
+		if (botGameWebsocketExists.current === false) {
+			botGameWebsocketExists.current = true;
+
+			setBotGameWebsocketEnabled(true);
+		}
+	}, []);
+
+	useEffect(() => {
+		setBotGameWebsocket(socket);
+	}, [socket]);
 
 	async function handleOnDrop() {
 		clearSquaresStyling();
@@ -492,6 +512,16 @@ function BotChessboard({
 		setPreviousClickedSquare(null);
 		setClickedSquare(null);
 		setPromotionCapturedPiece(null);
+	}
+
+	function handleOnMessage(event: MessageEvent) {
+		const parsedEventData = JSON.parse(event.data);
+		const eventType = parsedEventData["type"];
+
+		switch (eventType) {
+			case BotGameWebSocketEventTypes.MOVE_REGISTERED:
+				console.log("Move registered!")
+		}
 	}
 
 	function generateChessboard() {
