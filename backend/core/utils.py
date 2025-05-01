@@ -24,7 +24,7 @@ def compare_dictionaries(dict1: dict, dict2: dict):
 	return len(DeepDiff(dict1, dict2)) == 0
 
 def decide_bot_game_color():
-	if random.choices([True, False]):
+	if random.choice([True, False]):
 		return {
 			"white": "human",
 			"black": "bot",
