@@ -438,7 +438,10 @@ function BotChessboard({
 	) {
 		botGameWebsocketRef.current?.send(JSON.stringify({
 			type: "move_made",
-			...moveInfo,
+			move_info: {
+				...moveInfo,
+			},
+			
 			additional_info: {
 				promoted_piece: promotedPiece,
 			}
