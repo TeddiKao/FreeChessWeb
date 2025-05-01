@@ -515,6 +515,17 @@ function BotChessboard({
 		setPromotionCapturedPiece(null);
 	}
 
+	function handleCheckmate({ game_winner: gameWinner }: any) {
+		setGameEnded(true);
+		setGameWinner(gameWinner)
+		setGameEndedCause("checkmate");
+	}
+
+	function handleDraw(drawCause: string) {
+		setGameEnded(true);
+		setGameEndedCause(drawCause)
+	}
+
 	function handleOnMessage(event: MessageEvent) {
 		const parsedEventData = JSON.parse(event.data);
 		const eventType = parsedEventData["type"];
@@ -524,6 +535,26 @@ function BotChessboard({
 		switch (eventType) {
 			case BotGameWebSocketEventTypes.MOVE_REGISTERED:
 				handlePlayerMoveMade(parsedEventData);
+				break;
+
+			case BotGameWebSocketEventTypes.CHECKMATE_OCCURRED:
+				handleCheckmate(parsedEventData);
+				break;
+
+			case BotGameWebSocketEventTypes.STALEMATE_OCCURED:
+				handleDraw("stalemate");
+				break;
+
+			case BotGameWebSocketEventTypes.THREEFOLD_REPETITION_OCCURED:
+				handleDraw("repetition");
+				break;
+
+			case BotGameWebSocketEventTypes.FIFTY_MOVE_RULE_REACHED:
+				handleDraw("50-move rule")
+				break;
+
+			default:
+				console.error(`Invalid event type ${eventType}`)
 		}
 	}
 
