@@ -59,6 +59,9 @@ function BotChessboard({
 	setPositionList,
 	lastDraggedSquare,
 	lastDroppedSquare,
+	setGameEnded,
+	setGameEndedCause,
+	setGameWinner
 }: BotChessboardProps) {
 	const [previousClickedSquare, setPreviousClickedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -83,10 +86,6 @@ function BotChessboard({
 		useState<OptionalValue<string>>(null);
 
 	const [sideToMove, setSideToMove] = useState<string>("white");
-
-	const setGameEnded = useContext(GameEndedSetterContext);
-	const setGameEndedCause = useContext(GameEndedCauseSetterContext);
-	const setGameWinner = useContext(GameWinnerSetterContext);
 
 	const selectingPromotionRef = useRef<boolean>(false);
 	const unpromotedBoardPlacementRef =
@@ -207,6 +206,8 @@ function BotChessboard({
 
 				additional_info: {},
 			});
+
+			console.log(apiResponse);
 
 			const {
 				new_structured_fen: newStructuredFEN,
@@ -412,7 +413,7 @@ function BotChessboard({
 		setGameEnded(true);
 
 		const gameEndedCause = isCheckmated ? "checkmate" : "stalemate";
-		const gameWinner = isCheckmated ? color : null;
+		const gameWinner = isCheckmated ? color : "";
 
 		setGameEndedCause(gameEndedCause);
 		setGameWinner(gameWinner);

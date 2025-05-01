@@ -150,6 +150,9 @@ function PlayBot() {
 						setMoveList={setMoveList}
 						setPositionList={setPositionList}
 						botId={bot}
+						setGameEnded={setHasGameEnded}
+						setGameWinner={setGameWinner}
+						setGameEndedCause={setGameEndedCause}
 					/>
 				</div>
 
