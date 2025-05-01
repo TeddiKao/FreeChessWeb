@@ -436,36 +436,44 @@ function BotChessboard({
 		moveInfo: MoveInfo,
 		promotedPiece: PieceType
 	) {
-		const apiResponse = await makeMoveInBotGame(gameId, botId, {
+		botGameWebsocketRef.current?.send(JSON.stringify({
+			type: "move_made",
 			...moveInfo,
 			additional_info: {
 				promoted_piece: promotedPiece,
-			},
-		});
+			}
+		}));
 
-		if (!apiResponse["game_over"]) {
-			const {
-				new_move_list: newMoveList,
-				new_position_list: newPositionList,
-				new_structured_fen: newStructuredFEN,
-				move_type: moveType,
-			} = apiResponse;
+		// const apiResponse = await makeMoveInBotGame(gameId, botId, {
+		// 	...moveInfo,
+		// 	additional_info: {
+		// 		promoted_piece: promotedPiece,
+		// 	},
+		// });
 
-			playAudio(moveType);
+		// if (!apiResponse["game_over"]) {
+		// 	const {
+		// 		new_move_list: newMoveList,
+		// 		new_position_list: newPositionList,
+		// 		new_structured_fen: newStructuredFEN,
+		// 		move_type: moveType,
+		// 	} = apiResponse;
 
-			setParsedFENString(newStructuredFEN);
-			setMoveList(newMoveList);
-			setPositionList(newPositionList);
-		} else {
-			const {
-				game_ended_cause: gameEndedCause,
-				game_winner: gameWinner,
-			} = apiResponse;
+		// 	playAudio(moveType);
 
-			setGameEnded!(true);
-			setGameEndedCause!(gameEndedCause);
-			setGameWinner!(gameWinner);
-		}
+		// 	setParsedFENString(newStructuredFEN);
+		// 	setMoveList(newMoveList);
+		// 	setPositionList(newPositionList);
+		// } else {
+		// 	const {
+		// 		game_ended_cause: gameEndedCause,
+		// 		game_winner: gameWinner,
+		// 	} = apiResponse;
+
+		// 	setGameEnded!(true);
+		// 	setGameEndedCause!(gameEndedCause);
+		// 	setGameWinner!(gameWinner);
+		// }
 	}
 
 	function handlePlayerMoveMade({
