@@ -94,7 +94,7 @@ function BotChessboard({
 	const botGameWebsocketRef = useRef<WebSocket | null>(null);
 
 	const websocketURL = parseWebsocketUrl("bot-game-server", {
-		gameId: gameId
+		gameId: gameId,
 	});
 	const socket = useWebSocket(
 		websocketURL,
@@ -235,6 +235,19 @@ function BotChessboard({
 		}
 
 		if (!selectingPromotionRef.current) {
+			botGameWebsocketRef.current?.send(
+				JSON.stringify({
+					type: "move_made",
+					move_info: {
+						starting_square: `${draggedSquare || previousClickedSquare}`,
+						destination_square: `${droppedSquare || clickedSquare}`,
+						piece_color: pieceColor,
+						piece_type: pieceType,
+						initial_square: initialSquare
+					},
+				})
+			);
+
 			const apiResponse = await makeMoveInBotGame(gameId, botId, {
 				starting_square: startingSquare,
 				destination_square: destinationSquare,
