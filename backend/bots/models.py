@@ -38,6 +38,16 @@ class BotGame(models.Model):
     @database_sync_to_async
     def async_get_bot_game_from_id(cls, game_id: int):
         return cls.objects.filter(id=game_id).first()
+    
+    @database_sync_to_async
+    def async_get_full_structured_fen(self):
+        return {
+            "board_placement": self.structured_board_placement,
+            "castling_rights": self.structured_castling_rights,
+            "en_passant_target_square": self.en_passant_target_square,
+            "halfmove_clock": self.halfmove_clock,
+            "fullmove_number": self.current_move_number
+        }
 
     def get_player_color(self):
         if self.white_player == "human":
