@@ -99,6 +99,19 @@ class MakeMoveView(APIView):
                     "new_move_list": bot_game.move_list,
                     "move_type": move_type,
                 })
+            
+            elif check_50_move_rule_draw(bot_game.halfmove_clock):
+                return Response({
+                    "game_over": True,
+                    "game_ended_cause": "50-move-rule",
+                    "game_winner": None,
+
+                    "new_structured_fen": new_structured_fen,
+                    "new_position_list": bot_game.position_list,
+                    "new_move_list": bot_game.move_list,
+                    "move_type": move_type,
+                })
+            
 
             return Response({
                 "game_over": False,
