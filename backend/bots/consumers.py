@@ -30,7 +30,7 @@ class BotGameConsumer(AsyncWebsocketConsumer):
         updated_move_list = update_move_list(current_structured_fen, current_move_list, move_info)
         updated_position_list = update_position_list(current_position_list, move_info, updated_structured_fen)
 
-        await bot_game_model.async_update_full_structured_fen()
+        await bot_game_model.async_update_full_structured_fen(updated_structured_fen)
         await bot_game_model.async_update_game_attr("position_list", updated_position_list)
         await bot_game_model.async_update_game_attr("move_list", updated_move_list)
 
