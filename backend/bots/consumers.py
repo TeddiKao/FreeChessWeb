@@ -18,7 +18,7 @@ class BotGameConsumer(AsyncWebsocketConsumer):
         
         current_structured_fen = await bot_game_model.async_get_full_structured_fen()
         current_board_placement = current_structured_fen["board_placement"]
-        current_en_passant_target_square = current_board_placement["en_passant_target_square"]
+        current_en_passant_target_square = current_structured_fen["en_passant_target_square"]
         
         current_move_list = await bot_game_model.async_get_move_list()
         current_position_list = await bot_game_model.async_get_position_list()
