@@ -75,7 +75,12 @@ class MakeMoveView(APIView):
                 return Response({
                     "game_over": True,
                     "game_ended_cause": "stalemate",
-                    "game_winner": None
+                    "game_winner": None,
+
+                    "new_structured_fen": bot_game.get_full_structured_fen(),
+                    "new_position_list": bot_game.position_list,
+                    "new_move_list": bot_game.move_list,
+                    "move_type": move_type,
                 })
 
             return Response({
