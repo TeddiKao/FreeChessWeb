@@ -91,8 +91,7 @@ function BotChessboard({
 	const [botGameWebsocketEnabled, setBotGameWebsocketEnabled] =
 		useState(false);
 	const botGameWebsocketExists = useRef(false);
-	const [botGameWebsocketRef, botGameWebsocket, setBotGameWebsocket] =
-		useReactiveRef<WebSocket | null>(null);
+	const botGameWebsocketRef = useRef<WebSocket | null>(null);
 
 	const websocketURL = parseWebsocketUrl("bot-game-server", {
 		gameId: gameId
@@ -141,7 +140,7 @@ function BotChessboard({
 	}, []);
 
 	useEffect(() => {
-		setBotGameWebsocket(socket);
+		botGameWebsocketRef.current = socket;
 	}, [socket]);
 
 	function handleWindowUnload() {
