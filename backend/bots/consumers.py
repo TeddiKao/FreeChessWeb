@@ -1,5 +1,7 @@
 import json
 
+from urllib.parse import parse_qs
+
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 class BotGameConsumer(AsyncWebsocketConsumer):
@@ -9,8 +11,9 @@ class BotGameConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         query_string: bytes = self.scope.get("query_string", b"")
         decoded_query_string = query_string.decode()
+        parsed_query_string = parse_qs(decoded_query_string)
 
-        game_id = decoded_query_string.get("gameId")[0]
+        game_id = parsed_query_string.get("gameId")[0]
 
         await self.accept()
 
