@@ -9,22 +9,21 @@ def update_castling_rights(structured_castling_rights, castling_side: str, color
 	return structured_castling_rights
 
 def update_halfmove_clock(structured_fen, move_info):
+	updated_structured_fen = copy.deepcopy(structured_fen)
+
 	board_placement = structured_fen["board_placement"]
 	en_passant_target_square = structured_fen["en_passant_target_square"]
 	
 	piece_type = move_info["piece_type"]
 
 	if not get_is_capture(board_placement, en_passant_target_square, move_info):
-		structured_fen["halfmove_clock"] = 0
-		return structured_fen
+		updated_structured_fen["halfmove_clock"] = 0
+		return 0
 	
 	if piece_type.lower() != "pawn":
-		structured_fen["halfmove_clock"] = 0
-		return structured_fen
+		return 0
 	
-	structured_fen["halfmove_clock"] += 1
-
-	return structured_fen
+	return updated_structured_fen["halfmove_clock"] + 1
 
 def handle_castling(structured_board_placement, move_info):
 	starting_square = move_info["starting_square"]
@@ -82,6 +81,7 @@ def handle_pawn_promotion(structured_board_placement, move_info):
 	return new_board_placement
 
 def update_structured_fen(structured_fen, move_info):
+	structured_fen_before_move = copy.deepcopy(structured_fen)
 	structured_fen = copy.deepcopy(structured_fen)
 
 	try:
@@ -146,7 +146,7 @@ def update_structured_fen(structured_fen, move_info):
 		structured_fen["board_placement"] = updated_board_placement
 		structured_fen["castling_rights"] = updated_castling_rights
 
-		structured_fen = update_halfmove_clock(structured_fen, move_info)
+		structured_fen["halfmove_clock"] = update_halfmove_clock(structured_fen_before_move, move_info)
 
 		return structured_fen
 	except Exception as e:
