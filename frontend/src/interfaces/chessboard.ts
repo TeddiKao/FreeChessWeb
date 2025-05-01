@@ -33,6 +33,10 @@ interface BotChessboardProps extends DisplayChessboardProps {
 	>;
 	lastDraggedSquare: ChessboardSquareIndex;
 	lastDroppedSquare: ChessboardSquareIndex;
+
+	setGameEnded: StateSetterFunction<boolean>;
+	setGameEndedCause: StateSetterFunction<string>;
+	setGameWinner: StateSetterFunction<string>;
 }
 
 interface MultiplayerChessboardProps extends DisplayChessboardProps {
