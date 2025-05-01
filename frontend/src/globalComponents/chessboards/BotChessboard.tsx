@@ -22,7 +22,6 @@ import {
 	makeMoveInBotGame,
 } from "../../utils/apiUtils";
 
-
 import {
 	GameEndedSetterContext,
 	GameEndedCauseSetterContext,
@@ -173,8 +172,8 @@ function BotChessboard({
 				unpromotedBoardPlacementRef,
 				handlePawnPromotion,
 				gameplaySettings,
-				(droppedSquare ? "drag" : "click")
-			)
+				droppedSquare ? "drag" : "click"
+			);
 
 			if (isPawnPromotion(pieceColor, getRank(destinationSquare))) {
 				setParsedFENString((prevFENString) => {
@@ -203,7 +202,7 @@ function BotChessboard({
 				new_structured_fen: newStructuredFEN,
 				new_position_list: newPositionList,
 				new_move_list: newMoveList,
-				move_type: moveType
+				move_type: moveType,
 			} = await makeMoveInBotGame(gameId, botId, {
 				starting_square: startingSquare,
 				destination_square: destinationSquare,
@@ -213,7 +212,7 @@ function BotChessboard({
 
 				additional_info: {},
 			});
-			
+
 			playAudio(moveType);
 
 			setParsedFENString(newStructuredFEN);
@@ -352,10 +351,7 @@ function BotChessboard({
 	}
 
 	function handlePromotionCancel(color: PieceColor) {
-		if (
-			!previousDraggedSquare ||
-			!previousDroppedSquare
-		) {
+		if (!previousDraggedSquare || !previousDroppedSquare) {
 			return;
 		}
 
@@ -453,23 +449,36 @@ function BotChessboard({
 		moveInfo: MoveInfo,
 		promotedPiece: PieceType
 	) {
-		const {
-			new_move_list: newMoveList,
-			new_position_list: newPositionList,
-			new_structured_fen: newStructuredFEN,
-			move_type: moveType
-		} = await makeMoveInBotGame(gameId, botId, {
+		const apiResponse = await makeMoveInBotGame(gameId, botId, {
 			...moveInfo,
 			additional_info: {
 				promoted_piece: promotedPiece,
 			},
 		});
 
-		playAudio(moveType);
+		if (!apiResponse["game_over"]) {
+			const {
+				new_move_list: newMoveList,
+				new_position_list: newPositionList,
+				new_structured_fen: newStructuredFEN,
+				move_type: moveType,
+			} = apiResponse;
 
-		setParsedFENString(newStructuredFEN);
-		setMoveList(newMoveList);
-		setPositionList(newPositionList);
+			playAudio(moveType);
+
+			setParsedFENString(newStructuredFEN);
+			setMoveList(newMoveList);
+			setPositionList(newPositionList);
+		} else {
+			const {
+				game_ended_cause: gameEndedCause,
+				game_winner: gameWinner,
+			} = apiResponse;
+
+			setGameEnded!(true);	
+			setGameEndedCause!(gameEndedCause);
+			setGameWinner!(gameWinner);
+		}
 	}
 
 	async function handlePawnPromotion(
