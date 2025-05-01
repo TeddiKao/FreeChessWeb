@@ -22,15 +22,16 @@ class CreateBotGameView(APIView):
             bot_to_play_against = request.data.get("bot")
             colors = decide_bot_game_color()
 
-            bot_game_id = BotGame.objects.create(
+            bot_game: BotGame = BotGame.objects.create(
                 human_player=request.user,
                 bot=bot_to_play_against,
                 white_player=colors["white"],
                 black_player=colors["black"],
-            ).id
+            )
 
             return Response({
-                "game_id": bot_game_id,
+                "game_id": bot_game.id,
+                "assigned_color": bot_game.get_player_color()
             }, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)

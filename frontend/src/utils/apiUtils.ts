@@ -238,16 +238,21 @@ async function getUsername() {
 
 async function createBotGame(botId: string) {
 	let gameId = null;
+	let assignedColor = null;
+
 	try {
 		const response = await api.post("/bots/create-bot-game/", {
 			bot: botId,
 		});
+
 		gameId = response.data["game_id"];
+		assignedColor = response.data["assigned_color"];
+
 	} catch (error) {
 		console.error(error);
 	}
 
-	return gameId;
+	return [gameId, assignedColor];
 }
 
 async function makeMoveInBotGame(

@@ -35,9 +35,9 @@ class BotGame(models.Model):
 
     def get_player_color(self):
         if self.white_player == "human":
-            return "white"
+            return "White"
         else:
-            return "black"
+            return "Black"
 
     def get_full_structured_fen(self):
         return {
