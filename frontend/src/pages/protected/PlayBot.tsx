@@ -20,10 +20,6 @@ import { playAudio } from "../../utils/audioUtils";
 import LocalGameOverModal from "../../globalComponents/modals/LocalGameOverModal";
 
 function PlayBot() {
-	const startingFEN =
-		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	const [boardOrientation, setBoardOrientation] = useState<string>("White");
-
 	const initialGameplaySettings = useGameplaySettings();
 	const [gameplaySettings, setGameplaySettings] = useState<any>(
 		initialGameplaySettings
@@ -57,6 +53,9 @@ function PlayBot() {
 	const location = useLocation();
 	const gameId = location.state?.gameId;
 	const bot = location.state?.bot;
+	const assignedColor = location.state?.assignedColor
+
+	const [boardOrientation, setBoardOrientation] = useState<string>(assignedColor);
 
 	useEffect(() => {
 		updateMoveList();

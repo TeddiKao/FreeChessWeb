@@ -18,6 +18,7 @@ function BotCard({ botInfo }: BotCardProps) {
 			state: {
 				gameId: botGameId,
 				bot: botInfo.botId,
+				assignedColor: assignedColor
 			}
 		})
 	}
