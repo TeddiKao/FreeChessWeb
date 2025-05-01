@@ -1,14 +1,27 @@
 import json
+import copy
 
 from urllib.parse import parse_qs
-
 from channels.generic.websocket import AsyncWebsocketConsumer
+
+from .models import BotGame
+
+from gameplay.utils.position_update import update_structured_fen
 
 class BotGameConsumer(AsyncWebsocketConsumer):
     async def handle_player_move_made(self, move_info):
-        pass
+        bot_game_model: BotGame = await BotGame.async_get_bot_game_from_id(self.game_id)
+        current_structured_fen = await bot_game_model.async_get_full_structured_fen()
+        current_move_list = await bot_game_model.async_get_move_list()
+        current_position_list = await bot_game_model.async_get_position_list()
+
+        updated_structured_fen = update_structured_fen(current_structured_fen, move_info)
+        
+
 
     async def connect(self):
+        print("Connected!")
+
         query_string: bytes = self.scope.get("query_string", b"")
         decoded_query_string = query_string.decode()
         parsed_query_string = parse_qs(decoded_query_string)
@@ -16,6 +29,8 @@ class BotGameConsumer(AsyncWebsocketConsumer):
         game_id = parsed_query_string.get("gameId")[0]
 
         await self.accept()
+
+        self.game_id = game_id
 
     async def receive(self, text_data=None, bytes_data=None):
         parsed_text_data = json.loads(text_data)
