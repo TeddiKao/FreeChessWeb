@@ -19,7 +19,9 @@ function LocalGameOverModal({
 		return null;
 	}
 
-	const gameResultText = `${capitaliseFirstLetter(gameWinner)} won`;
+	const gameResultText = !gameWinner
+		? "Draw"
+		: `${capitaliseFirstLetter(gameWinner)} won`;
 	const gameEndCauseText = capitaliseFirstLetter(gameEndCause);
 
 	return (
