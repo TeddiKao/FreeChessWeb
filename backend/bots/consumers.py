@@ -43,18 +43,18 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 
 		if get_is_checkmated(updated_structured_fen, get_opposite_color(piece_color)):
 			await self.send(json.dumps({
-				"type": "checkmate_occured",
+				"type": "checkmate_occurred",
 				"game_winner": "player" if player_color.lower() == piece_color else "bot"
 			}))
 
 		elif get_is_stalemated(updated_structured_fen, get_opposite_color(piece_color)):
 			await self.send(json.dumps({
-				"type": "stalemate_occured",
+				"type": "stalemate_occurred",
 			}))
 
 		elif is_threefold_repetiiton(updated_position_list, updated_structured_fen):
 			await self.send(json.dumps({
-				"type": "threefold_repetition_occured"
+				"type": "threefold_repetition_occurred"
 			}))
 
 		elif check_50_move_rule_draw(updated_halfmove_clock):
