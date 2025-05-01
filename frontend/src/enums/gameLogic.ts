@@ -17,6 +17,10 @@ enum GameplayWebSocketEventTypes {
 	PLAYER_TIMEOUT = "player_timeout"
 }
 
+enum BotGameWebSocketEventTypes {
+	MOVE_REGISTERED = "move_registered"
+}
+
 enum ActionWebSocketEventTypes {
 	PLAYER_RESIGNED = "player_resigned",
 	DRAW_OFFERED = "draw_offered",
@@ -24,4 +28,4 @@ enum ActionWebSocketEventTypes {
 	DRAW_OFFER_DECLINED = "draw_declined",
 }
 
-export { MoveMethods, GameplayWebSocketEventTypes, ActionWebSocketEventTypes }
+export { MoveMethods, GameplayWebSocketEventTypes, ActionWebSocketEventTypes, BotGameWebSocketEventTypes }
