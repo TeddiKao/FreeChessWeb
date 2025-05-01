@@ -17,6 +17,7 @@ import MoveNavigationButtons from "../../globalComponents/gameplaySidePanel/Move
 import MoveListPanel from "../../globalComponents/gameplaySidePanel/MoveListPanel";
 import { isNullOrUndefined } from "../../utils/generalUtils";
 import { playAudio } from "../../utils/audioUtils";
+import LocalGameOverModal from "../../globalComponents/modals/LocalGameOverModal";
 
 function PlayBot() {
 	const startingFEN =
@@ -46,8 +47,10 @@ function PlayBot() {
 		positionList.length - 1
 	);
 	const parsedFEN = positionList[positionIndex]?.["position"];
-	const lastDraggedSquare = positionList[positionIndex]?.["last_dragged_square"];
-	const lastDroppedSquare = positionList[positionIndex]?.["last_dropped_square"]
+	const lastDraggedSquare =
+		positionList[positionIndex]?.["last_dragged_square"];
+	const lastDroppedSquare =
+		positionList[positionIndex]?.["last_dropped_square"];
 
 	const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
 
@@ -186,6 +189,12 @@ function PlayBot() {
 					setGameplaySettings={setGameplaySettings}
 				/>
 			</ModalWrapper>
+
+			<LocalGameOverModal
+				gameEndCause={gameEndedCause}
+				gameWinner={gameWinner}
+				visible={hasGameEnded}
+			/>
 		</>
 	);
 }
