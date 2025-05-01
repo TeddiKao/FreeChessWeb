@@ -56,6 +56,14 @@ class BotGame(models.Model):
     @database_sync_to_async
     def async_get_move_list(self):
         return self.move_list
+    
+    @database_sync_to_async
+    def async_update_game_attr(self, attr_name, new_value):
+        setattr(self, attr_name, new_value)
+
+    @database_sync_to_async
+    def async_get_game_attr(self, attr_name):
+        return getattr(self, attr_name)
 
     def get_player_color(self):
         if self.white_player == "human":
