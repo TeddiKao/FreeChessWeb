@@ -11,11 +11,16 @@ from gameplay.utils.game_state_history_update import update_move_list, update_po
 
 from move_validation.utils.move_validation import validate_move
 from move_validation.utils.get_move_type import get_move_type
+from move_validation.utils.result_detection import get_is_checkmated, get_is_stalemated, is_threefold_repetiiton, check_50_move_rule_draw
+from move_validation.utils.general import get_opposite_color
 
 class BotGameConsumer(AsyncWebsocketConsumer):
 	async def handle_player_move_made(self, move_info):
+		piece_color = move_info["piece_color"]
+
 		bot_game_model: BotGame = await BotGame.async_get_bot_game_from_id(self.game_id)
-		
+		player_color = bot_game_model.get_player_color()
+
 		current_structured_fen = await bot_game_model.async_get_full_structured_fen()
 		current_board_placement = current_structured_fen["board_placement"]
 		current_en_passant_target_square = current_structured_fen["en_passant_target_square"]
@@ -33,6 +38,29 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		await bot_game_model.async_update_full_structured_fen(updated_structured_fen)
 		await bot_game_model.async_update_game_attr("position_list", updated_position_list)
 		await bot_game_model.async_update_game_attr("move_list", updated_move_list)
+
+		updated_halfmove_clock = await bot_game_model.async_get_game_attr("halfmove_clock")
+
+		if get_is_checkmated(updated_structured_fen, get_opposite_color(piece_color)):
+			await self.send(json.dumps({
+				"type": "checkmate_occured",
+				"game_winner": "player" if player_color.lower() == piece_color else "bot"
+			}))
+
+		elif get_is_stalemated(updated_structured_fen, get_opposite_color(piece_color)):
+			await self.send(json.dumps({
+				"type": "stalemate_occured",
+			}))
+
+		elif is_threefold_repetiiton(updated_position_list, updated_structured_fen):
+			await self.send(json.dumps({
+				"type": "threefold_repetition_occured"
+			}))
+
+		elif check_50_move_rule_draw(updated_halfmove_clock):
+			await self.send(json.dumps({
+				"type": "50_move_rule_reached"
+			}))
 
 		await self.send(json.dumps({
 			"type": "move_registered",
