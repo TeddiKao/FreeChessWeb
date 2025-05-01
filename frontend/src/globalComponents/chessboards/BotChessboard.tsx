@@ -140,6 +140,7 @@ function BotChessboard({
 	}, []);
 
 	useEffect(() => {
+		console.log(socket);
 		botGameWebsocketRef.current = socket;
 	}, [socket]);
 
@@ -239,51 +240,55 @@ function BotChessboard({
 				JSON.stringify({
 					type: "move_made",
 					move_info: {
-						starting_square: `${draggedSquare || previousClickedSquare}`,
+						starting_square: `${
+							draggedSquare || previousClickedSquare
+						}`,
 						destination_square: `${droppedSquare || clickedSquare}`,
 						piece_color: pieceColor,
 						piece_type: pieceType,
-						initial_square: initialSquare
+						initial_square: initialSquare,
+
+						additional_info: {},
 					},
 				})
 			);
 
-			const apiResponse = await makeMoveInBotGame(gameId, botId, {
-				starting_square: startingSquare,
-				destination_square: destinationSquare,
-				piece_color: pieceColor,
-				piece_type: pieceType,
-				initial_square: initialSquare,
+			// const apiResponse = await makeMoveInBotGame(gameId, botId, {
+			// 	starting_square: startingSquare,
+			// 	destination_square: destinationSquare,
+			// 	piece_color: pieceColor,
+			// 	piece_type: pieceType,
+			// 	initial_square: initialSquare,
 
-				additional_info: {},
-			});
+			// 	additional_info: {},
+			// });
 
-			console.log(apiResponse);
+			// console.log(apiResponse);
 
-			const {
-				new_structured_fen: newStructuredFEN,
-				new_move_list: newMoveList,
-				new_position_list: newPositionList,
+			// const {
+			// 	new_structured_fen: newStructuredFEN,
+			// 	new_move_list: newMoveList,
+			// 	new_position_list: newPositionList,
 
-				move_type: moveType,
-			} = apiResponse;
+			// 	move_type: moveType,
+			// } = apiResponse;
 
-			playAudio(moveType);
+			// playAudio(moveType);
 
-			setParsedFENString(newStructuredFEN);
-			setMoveList(newMoveList);
-			setPositionList(newPositionList);
+			// setParsedFENString(newStructuredFEN);
+			// setMoveList(newMoveList);
+			// setPositionList(newPositionList);
 
-			if (apiResponse["game_over"]) {
-				const {
-					game_winner: gameWinner,
-					game_ended_cause: gameEndedCause,
-				} = apiResponse;
+			// if (apiResponse["game_over"]) {
+			// 	const {
+			// 		game_winner: gameWinner,
+			// 		game_ended_cause: gameEndedCause,
+			// 	} = apiResponse;
 
-				setGameEnded!(true);
-				setGameWinner!(gameWinner);
-				setGameEndedCause!(gameEndedCause);
-			}
+			// 	setGameEnded!(true);
+			// 	setGameWinner!(gameWinner);
+			// 	setGameEndedCause!(gameEndedCause);
+			// }
 		}
 	}
 
@@ -500,6 +505,19 @@ function BotChessboard({
 		}
 	}
 
+	function handlePlayerMoveMade({
+		new_structured_fen: newStructuredFEN,
+		new_position_list: newPositionList,
+		new_move_list: newMoveList,
+		move_type: moveType,
+	}: any) {
+		setParsedFENString(newStructuredFEN);
+		setPositionList(newPositionList);
+		setMoveList(newMoveList);
+
+		playAudio(moveType);
+	}
+
 	async function handlePawnPromotion(
 		color: PieceColor,
 		promotedPiece: PieceType,
@@ -557,9 +575,11 @@ function BotChessboard({
 		const parsedEventData = JSON.parse(event.data);
 		const eventType = parsedEventData["type"];
 
+		console.log(parsedEventData);
+
 		switch (eventType) {
 			case BotGameWebSocketEventTypes.MOVE_REGISTERED:
-				console.log("Move registered!");
+				handlePlayerMoveMade(parsedEventData);
 		}
 	}
 
