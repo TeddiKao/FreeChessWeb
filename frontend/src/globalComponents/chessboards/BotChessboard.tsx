@@ -14,10 +14,7 @@ import {
 
 import { playAudio } from "../../utils/audioUtils";
 
-import {
-	fetchLegalMoves,
-	makeMoveInBotGame,
-} from "../../utils/apiUtils";
+import { fetchLegalMoves, makeMoveInBotGame } from "../../utils/apiUtils";
 
 import {
 	cancelPromotion,
@@ -25,7 +22,10 @@ import {
 	preparePawnPromotion,
 } from "../../utils/gameLogic/promotion";
 
-import { BotGameWebSocketEventTypes, MoveMethods } from "../../enums/gameLogic.ts";
+import {
+	BotGameWebSocketEventTypes,
+	MoveMethods,
+} from "../../enums/gameLogic.ts";
 import { BotChessboardProps } from "../../interfaces/chessboard.js";
 import { ChessboardSquareIndex, OptionalValue } from "../../types/general.js";
 import {
@@ -54,7 +54,7 @@ function BotChessboard({
 	lastDroppedSquare,
 	setGameEnded,
 	setGameEndedCause,
-	setGameWinner
+	setGameWinner,
 }: BotChessboardProps) {
 	const [previousClickedSquare, setPreviousClickedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -88,12 +88,19 @@ function BotChessboard({
 		gridTemplateColumns: `repeat(8, ${squareSize}px)`,
 	};
 
-	const [botGameWebsocketEnabled, setBotGameWebsocketEnabled] = useState(false);
+	const [botGameWebsocketEnabled, setBotGameWebsocketEnabled] =
+		useState(false);
 	const botGameWebsocketExists = useRef(false);
-	const [botGameWebsocketRef, botGameWebsocket, setBotGameWebsocket] = useReactiveRef<WebSocket | null>(null);
+	const [botGameWebsocketRef, botGameWebsocket, setBotGameWebsocket] =
+		useReactiveRef<WebSocket | null>(null);
 
-	const websocketURL = parseWebsocketUrl("bot-game-server")
-	const socket = useWebSocket(websocketURL, handleOnMessage, undefined, botGameWebsocketEnabled);
+	const websocketURL = parseWebsocketUrl("bot-game-server");
+	const socket = useWebSocket(
+		websocketURL,
+		handleOnMessage,
+		undefined,
+		botGameWebsocketEnabled
+	);
 
 	useEffect(() => {
 		setParsedFENString(parsed_fen_string);
@@ -114,22 +121,33 @@ function BotChessboard({
 
 	useEffect(() => {
 		if (botGameWebsocketExists.current === false) {
+			window.addEventListener("beforeunload", handleWindowUnload);
+
 			botGameWebsocketExists.current = true;
 
 			setBotGameWebsocketEnabled(true);
 		}
 
 		return () => {
+			window.removeEventListener("beforeunload", handleWindowUnload);
+
 			if (botGameWebsocketRef.current?.readyState === WebSocket.OPEN) {
 				botGameWebsocketRef.current?.close();
 				botGameWebsocketExists.current = false;
 			}
-		}
+		};
 	}, []);
 
 	useEffect(() => {
 		setBotGameWebsocket(socket);
 	}, [socket]);
+
+	function handleWindowUnload() {
+		if (botGameWebsocketRef.current?.readyState === WebSocket.OPEN) {
+			botGameWebsocketRef.current?.close();
+			botGameWebsocketExists.current = false;
+		}
+	}
 
 	async function handleOnDrop() {
 		clearSquaresStyling();
@@ -527,7 +545,7 @@ function BotChessboard({
 
 		switch (eventType) {
 			case BotGameWebSocketEventTypes.MOVE_REGISTERED:
-				console.log("Move registered!")
+				console.log("Move registered!");
 		}
 	}
 
