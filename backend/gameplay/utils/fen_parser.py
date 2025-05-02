@@ -43,12 +43,12 @@ def parse_side_to_move(side_to_move):
 
 def parse_castling_rights(castling_rights: str):
 	castling_rights_info = {
-		"Black": {
+		"White": {
 			"Kingside": False,
 			"Queenside": False,
 		},
 
-		"White": {
+		"Black": {
 			"Kingside": False,
 			"Queenside": False,
 		}
