@@ -537,11 +537,11 @@ function BotChessboard({
 				handleCheckmate(parsedEventData);
 				break;
 
-			case BotGameWebSocketEventTypes.STALEMATE_OCCURED:
+			case BotGameWebSocketEventTypes.STALEMATE_OCCURRED:
 				handleDraw("stalemate");
 				break;
 
-			case BotGameWebSocketEventTypes.THREEFOLD_REPETITION_OCCURED:
+			case BotGameWebSocketEventTypes.THREEFOLD_REPETITION_OCCURRED:
 				handleDraw("repetition");
 				break;
 
