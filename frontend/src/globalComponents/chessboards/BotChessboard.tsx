@@ -526,8 +526,6 @@ function BotChessboard({
 		const parsedEventData = JSON.parse(event.data);
 		const eventType = parsedEventData["type"];
 
-		console.log(parsedEventData);
-
 		switch (eventType) {
 			case BotGameWebSocketEventTypes.MOVE_REGISTERED:
 				handlePlayerMoveMade(parsedEventData);
