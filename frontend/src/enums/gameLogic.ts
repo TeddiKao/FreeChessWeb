@@ -21,7 +21,7 @@ enum BotGameWebSocketEventTypes {
 	MOVE_REGISTERED = "move_registered",
 	CHECKMATE_OCCURRED = "checkmate_occurred",
 	STALEMATE_OCCURED = "stalemate_occurred",
-	THREEFOLD_REPETITION_OCCURED = "threefold_repetition_occured",
+	THREEFOLD_REPETITION_OCCURED = "threefold_repetition_occurred",
 	FIFTY_MOVE_RULE_REACHED = "50_move_rule_reached"
 }
 
