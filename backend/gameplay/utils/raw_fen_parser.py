@@ -7,6 +7,18 @@ piece_letter_mapping = {
     "king": "k"
 }
 
+castling_mapping = {
+    "White": {
+        "Kingside": "K",
+        "Queenside": "Q"
+    },
+
+    "Black": {
+        "Kingside": "k",
+        "Queenside": "q",
+    }
+}
+
 def parse_raw_board_placement(structured_board_placement):
     raw_board_placement = ""
     consecutive_empty_squares = 0
@@ -54,7 +66,23 @@ def parse_raw_board_placement(structured_board_placement):
             
     return raw_board_placement
 
+def parse_raw_castling_rights(structured_castling_rights):
+    raw_castling_rights_string = ""
+
+    for color in structured_castling_rights.keys():
+        for side in structured_castling_rights[color].keys():
+            castle_letter = structured_castling_rights[color][side]
+
+            if not castle_letter:
+                continue
+
+            raw_castling_rights_string += castling_mapping[color][side] 
+
+    return raw_castling_rights_string or "-"    
+
 def parse_raw_fen(structured_fen):
     structured_board_placement = structured_fen["board_placement"]
+    structured_castling_rights = structured_fen["castling_rights"]
     
     raw_board_placement = parse_raw_board_placement(structured_board_placement) 
+    raw_castling_rights = parse_raw_castling_rights(structured_castling_rights)
