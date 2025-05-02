@@ -1,4 +1,3 @@
-import json
 from general import get_file, get_row
 
 def convert_to_algebraic_notation(square):
@@ -79,14 +78,21 @@ def parse_raw_board_placement(structured_board_placement):
 def parse_raw_castling_rights(structured_castling_rights):
     raw_castling_rights_string = ""
 
-    for color in structured_castling_rights.keys():
-        for side in structured_castling_rights[color].keys():
-            castle_letter = structured_castling_rights[color][side]
+    for side in structured_castling_rights["White"].keys():
+        castle_letter = structured_castling_rights["White"][side]
 
-            if not castle_letter:
-                continue
+        if not castle_letter:
+            continue
 
-            raw_castling_rights_string += castling_mapping[color][side] 
+        raw_castling_rights_string += castling_mapping["White"][side]
+
+    for side in structured_castling_rights["Black"].keys():
+        castle_letter = structured_castling_rights["Black"][side]
+
+        if not castle_letter:
+            continue
+
+        raw_castling_rights_string += castling_mapping["Black"][side]
 
     return raw_castling_rights_string or "-"    
 
@@ -110,7 +116,7 @@ def parse_raw_fen(structured_fen):
     raw_side_to_move = parse_raw_side_to_move(structured_side_to_move)
     raw_en_passant_target_square = parse_raw_en_passant_target_square(en_passant_target_square_number)
 
-    full_raw_fen = f"{raw_board_placement} {raw_castling_rights} {raw_side_to_move} {raw_en_passant_target_square} {halfmove_clock} {fullmove_number}"
+    full_raw_fen = f"{raw_board_placement} {raw_side_to_move} {raw_castling_rights} {raw_en_passant_target_square} {halfmove_clock} {fullmove_number}"
 
     return full_raw_fen
 
@@ -279,11 +285,11 @@ print(
         }
     },
     "castling_rights": {
-        "Black": {
+        "White": {
             "Kingside": True,
             "Queenside": True
         },
-        "White": {
+        "Black": {
             "Kingside": True,
             "Queenside": True
         }
