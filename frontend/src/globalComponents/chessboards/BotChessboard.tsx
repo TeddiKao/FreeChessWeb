@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import "../../styles/components/chessboard/chessboard.scss";
 import Square from "../Square.js";
@@ -14,19 +14,7 @@ import {
 
 import { playAudio } from "../../utils/audioUtils";
 
-import {
-	fetchLegalMoves,
-	fetchMoveIsValid,
-	getIsCheckmated,
-	getIsStalemated,
-	makeMoveInBotGame,
-} from "../../utils/apiUtils";
-
-import {
-	GameEndedSetterContext,
-	GameEndedCauseSetterContext,
-	GameWinnerSetterContext,
-} from "../../contexts/chessboardContexts.ts";
+import { fetchLegalMoves, makeMoveInBotGame } from "../../utils/apiUtils";
 
 import {
 	cancelPromotion,
@@ -34,8 +22,10 @@ import {
 	preparePawnPromotion,
 } from "../../utils/gameLogic/promotion";
 
-import { MoveMethods } from "../../enums/gameLogic.ts";
-import { getOppositeColor } from "../../utils/gameLogic/general";
+import {
+	BotGameWebSocketEventTypes,
+	MoveMethods,
+} from "../../enums/gameLogic.ts";
 import { BotChessboardProps } from "../../interfaces/chessboard.js";
 import { ChessboardSquareIndex, OptionalValue } from "../../types/general.js";
 import {
@@ -47,6 +37,9 @@ import {
 	PieceType,
 } from "../../types/gameLogic.js";
 import { isPawnPromotion } from "../../utils/moveUtils.ts";
+import useWebSocket from "../../hooks/useWebsocket.ts";
+import { parseWebsocketUrl } from "../../utils/generalUtils.ts";
+import useReactiveRef from "../../hooks/useReactiveRef.ts";
 
 function BotChessboard({
 	parsed_fen_string,
@@ -61,7 +54,7 @@ function BotChessboard({
 	lastDroppedSquare,
 	setGameEnded,
 	setGameEndedCause,
-	setGameWinner
+	setGameWinner,
 }: BotChessboardProps) {
 	const [previousClickedSquare, setPreviousClickedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -95,6 +88,21 @@ function BotChessboard({
 		gridTemplateColumns: `repeat(8, ${squareSize}px)`,
 	};
 
+	const [botGameWebsocketEnabled, setBotGameWebsocketEnabled] =
+		useState(false);
+	const botGameWebsocketExists = useRef(false);
+	const botGameWebsocketRef = useRef<WebSocket | null>(null);
+
+	const websocketURL = parseWebsocketUrl("bot-game-server", {
+		gameId: gameId,
+	});
+	const socket = useWebSocket(
+		websocketURL,
+		handleOnMessage,
+		undefined,
+		botGameWebsocketEnabled
+	);
+
 	useEffect(() => {
 		setParsedFENString(parsed_fen_string);
 	}, [parsed_fen_string]);
@@ -111,6 +119,37 @@ function BotChessboard({
 		setPreviousDraggedSquare(lastDraggedSquare);
 		setPreviousDroppedSquare(lastDroppedSquare);
 	}, [lastDraggedSquare, lastDroppedSquare]);
+
+	useEffect(() => {
+		if (botGameWebsocketExists.current === false) {
+			window.addEventListener("beforeunload", handleWindowUnload);
+
+			botGameWebsocketExists.current = true;
+
+			setBotGameWebsocketEnabled(true);
+		}
+
+		return () => {
+			window.removeEventListener("beforeunload", handleWindowUnload);
+
+			if (botGameWebsocketRef.current?.readyState === WebSocket.OPEN) {
+				botGameWebsocketRef.current?.close();
+				botGameWebsocketExists.current = false;
+			}
+		};
+	}, []);
+
+	useEffect(() => {
+		console.log(socket);
+		botGameWebsocketRef.current = socket;
+	}, [socket]);
+
+	function handleWindowUnload() {
+		if (botGameWebsocketRef.current?.readyState === WebSocket.OPEN) {
+			botGameWebsocketRef.current?.close();
+			botGameWebsocketExists.current = false;
+		}
+	}
 
 	async function handleOnDrop() {
 		clearSquaresStyling();
@@ -145,8 +184,6 @@ function BotChessboard({
 
 		handleMoveMade(pieceColor, pieceType, initialSquare);
 
-		setPreviousDraggedSquare(draggedSquare);
-		setPreviousDroppedSquare(droppedSquare);
 		setDraggedSquare(null);
 		setDroppedSquare(null);
 		setLastUsedMoveMethod("drag");
@@ -197,42 +234,22 @@ function BotChessboard({
 		}
 
 		if (!selectingPromotionRef.current) {
-			const apiResponse = await makeMoveInBotGame(gameId, botId, {
-				starting_square: startingSquare,
-				destination_square: destinationSquare,
-				piece_color: pieceColor,
-				piece_type: pieceType,
-				initial_square: initialSquare,
+			botGameWebsocketRef.current?.send(
+				JSON.stringify({
+					type: "move_made",
+					move_info: {
+						starting_square: `${
+							draggedSquare || previousClickedSquare
+						}`,
+						destination_square: `${droppedSquare || clickedSquare}`,
+						piece_color: pieceColor,
+						piece_type: pieceType,
+						initial_square: initialSquare,
 
-				additional_info: {},
-			});
-
-			console.log(apiResponse);
-
-			const {
-				new_structured_fen: newStructuredFEN,
-				new_move_list: newMoveList,
-				new_position_list: newPositionList,
-
-				move_type: moveType,
-			} = apiResponse;
-
-			playAudio(moveType);
-
-			setParsedFENString(newStructuredFEN);
-			setMoveList(newMoveList);
-			setPositionList(newPositionList);
-
-			if (apiResponse["game_over"]) {
-				const {
-					game_winner: gameWinner,
-					game_ended_cause: gameEndedCause,
-				} = apiResponse;
-
-				setGameEnded!(true);
-				setGameWinner!(gameWinner);
-				setGameEndedCause!(gameEndedCause);
-			}
+						additional_info: {},
+					},
+				})
+			);
 		}
 	}
 
@@ -281,8 +298,6 @@ function BotChessboard({
 			initialSquare
 		);
 
-		setPreviousDraggedSquare(previousClickedSquare);
-		setPreviousDroppedSquare(clickedSquare);
 		setPreviousClickedSquare(null);
 		setClickedSquare(null);
 		setLastUsedMoveMethod("click");
@@ -390,53 +405,6 @@ function BotChessboard({
 		selectingPromotionRef.current = false;
 	}
 
-	async function handleGameEndDetection(
-		fenString: ParsedFENString,
-		color: PieceColor
-	): Promise<void> {
-		const kingColor = getOppositeColor(color);
-
-		const isCheckmated = await checkIsCheckmated(fenString, kingColor);
-		const isStalemated = await checkIsStalemated(fenString, kingColor);
-
-		const gameEnded = isCheckmated || isStalemated;
-		if (gameEnded) {
-			handleGameEnded(isCheckmated, color);
-		}
-	}
-
-	function handleGameEnded(isCheckmated: boolean, color: string) {
-		if (!setGameEnded || !setGameEndedCause || !setGameWinner) {
-			throw new Error("Game ended contexts not provided");
-		}
-
-		setGameEnded(true);
-
-		const gameEndedCause = isCheckmated ? "checkmate" : "stalemate";
-		const gameWinner = isCheckmated ? color : "";
-
-		setGameEndedCause(gameEndedCause);
-		setGameWinner(gameWinner);
-	}
-
-	async function checkIsCheckmated(
-		currentFEN: ParsedFENString,
-		kingColor: string
-	) {
-		const isCheckmated = await getIsCheckmated(currentFEN, kingColor);
-
-		return isCheckmated;
-	}
-
-	async function checkIsStalemated(
-		currentFEN: ParsedFENString,
-		kingColor: string
-	) {
-		const isStalemated = await getIsStalemated(currentFEN, kingColor);
-
-		return isStalemated;
-	}
-
 	function getPromotionStartingSquare(
 		autoQueen: boolean,
 		moveMethod: string
@@ -464,36 +432,30 @@ function BotChessboard({
 		moveInfo: MoveInfo,
 		promotedPiece: PieceType
 	) {
-		const apiResponse = await makeMoveInBotGame(gameId, botId, {
-			...moveInfo,
-			additional_info: {
-				promoted_piece: promotedPiece,
-			},
-		});
+		botGameWebsocketRef.current?.send(
+			JSON.stringify({
+				type: "move_made",
+				move_info: {
+					...moveInfo,
+					additional_info: {
+						promoted_piece: promotedPiece,
+					},
+				},
+			})
+		);
+	}
 
-		if (!apiResponse["game_over"]) {
-			const {
-				new_move_list: newMoveList,
-				new_position_list: newPositionList,
-				new_structured_fen: newStructuredFEN,
-				move_type: moveType,
-			} = apiResponse;
+	function handlePlayerMoveMade({
+		new_structured_fen: newStructuredFEN,
+		new_position_list: newPositionList,
+		new_move_list: newMoveList,
+		move_type: moveType,
+	}: any) {
+		setParsedFENString(newStructuredFEN);
+		setPositionList(newPositionList);
+		setMoveList(newMoveList);
 
-			playAudio(moveType);
-
-			setParsedFENString(newStructuredFEN);
-			setMoveList(newMoveList);
-			setPositionList(newPositionList);
-		} else {
-			const {
-				game_ended_cause: gameEndedCause,
-				game_winner: gameWinner,
-			} = apiResponse;
-
-			setGameEnded!(true);
-			setGameEndedCause!(gameEndedCause);
-			setGameWinner!(gameWinner);
-		}
+		playAudio(moveType);
 	}
 
 	async function handlePawnPromotion(
@@ -547,6 +509,47 @@ function BotChessboard({
 		setPreviousClickedSquare(null);
 		setClickedSquare(null);
 		setPromotionCapturedPiece(null);
+	}
+
+	function handleCheckmate({ game_winner: gameWinner }: any) {
+		setGameEnded(true);
+		setGameWinner(gameWinner)
+		setGameEndedCause("checkmate");
+	}
+
+	function handleDraw(drawCause: string) {
+		setGameEnded(true);
+		setGameEndedCause(drawCause)
+	}
+
+	function handleOnMessage(event: MessageEvent) {
+		const parsedEventData = JSON.parse(event.data);
+		const eventType = parsedEventData["type"];
+
+		switch (eventType) {
+			case BotGameWebSocketEventTypes.MOVE_REGISTERED:
+				handlePlayerMoveMade(parsedEventData);
+				break;
+
+			case BotGameWebSocketEventTypes.CHECKMATE_OCCURRED:
+				handleCheckmate(parsedEventData);
+				break;
+
+			case BotGameWebSocketEventTypes.STALEMATE_OCCURRED:
+				handleDraw("stalemate");
+				break;
+
+			case BotGameWebSocketEventTypes.THREEFOLD_REPETITION_OCCURRED:
+				handleDraw("repetition");
+				break;
+
+			case BotGameWebSocketEventTypes.FIFTY_MOVE_RULE_REACHED:
+				handleDraw("50-move rule")
+				break;
+
+			default:
+				console.error(`Invalid event type ${eventType}`)
+		}
 	}
 
 	function generateChessboard() {
