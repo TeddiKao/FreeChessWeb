@@ -1,3 +1,5 @@
+from move_validation.utils.general import convert_to_algebraic_notation
+
 piece_letter_mapping = {
     "pawn": "p",
     "knight": "n",
@@ -80,9 +82,26 @@ def parse_raw_castling_rights(structured_castling_rights):
 
     return raw_castling_rights_string or "-"    
 
+def parse_raw_side_to_move(structured_side_to_move):
+    return structured_side_to_move[0].lower()
+
+def parse_raw_en_passant_target_square(target_square_number) -> str:
+    return convert_to_algebraic_notation(target_square_number)
+
 def parse_raw_fen(structured_fen):
     structured_board_placement = structured_fen["board_placement"]
     structured_castling_rights = structured_fen["castling_rights"]
+    structured_side_to_move = structured_fen["side_to_move"]
+    en_passant_target_square_number = structured_fen["en_passant_target_square"]
     
+    halfmove_clock = structured_fen["halfmove_clock"]
+    fullmove_number = structured_fen["fullmove_number"]
+
     raw_board_placement = parse_raw_board_placement(structured_board_placement) 
     raw_castling_rights = parse_raw_castling_rights(structured_castling_rights)
+    raw_side_to_move = parse_raw_side_to_move(structured_side_to_move)
+    raw_en_passant_target_square = parse_raw_en_passant_target_square(en_passant_target_square_number)
+
+    full_raw_fen = f"{raw_board_placement} {raw_castling_rights} {raw_side_to_move} {raw_en_passant_target_square} {halfmove_clock} {fullmove_number}"
+
+    return full_raw_fen
