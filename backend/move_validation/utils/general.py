@@ -65,7 +65,7 @@ def convert_to_square_index(algebraic_notation: str):
 	file = algebraic_notation[0]
 	rank = algebraic_notation[1]
 
-	file_index = files_list[file]
+	file_index = files_list.index(file)
 
 	return get_square(file_index, rank)
 
