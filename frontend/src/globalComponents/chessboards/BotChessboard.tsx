@@ -184,8 +184,6 @@ function BotChessboard({
 
 		handleMoveMade(pieceColor, pieceType, initialSquare);
 
-		setPreviousDraggedSquare(draggedSquare);
-		setPreviousDroppedSquare(droppedSquare);
 		setDraggedSquare(null);
 		setDroppedSquare(null);
 		setLastUsedMoveMethod("drag");
@@ -300,8 +298,6 @@ function BotChessboard({
 			initialSquare
 		);
 
-		setPreviousDraggedSquare(previousClickedSquare);
-		setPreviousDroppedSquare(clickedSquare);
 		setPreviousClickedSquare(null);
 		setClickedSquare(null);
 		setLastUsedMoveMethod("click");
