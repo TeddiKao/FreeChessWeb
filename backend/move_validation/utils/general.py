@@ -1,6 +1,8 @@
 import math
 import copy
 
+files_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
 def get_row(square: str | int):
     return math.ceil((int(square) + 1) / 8) - 1
 
@@ -54,11 +56,18 @@ def get_opposite_color(color):
 	return "Black" if color.lower() == "white" else "White"
 
 def convert_to_algebraic_notation(square):
-	files_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 	square_file = get_file(square)
 	square_rank = get_row(square)
 
 	return f"{files_list[square_file]}{square_rank + 1}"
+
+def convert_to_square_index(algebraic_notation: str):
+	file = algebraic_notation[0]
+	rank = algebraic_notation[1]
+
+	file_index = files_list[file]
+
+	return get_square(file_index, rank)
 
 def get_all_pieces_of_color(board_placement, color: str):
 	color = color.lower()
