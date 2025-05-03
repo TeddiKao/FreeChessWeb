@@ -59,9 +59,11 @@ class BotGame(models.Model):
         return self.move_list
     
     @database_sync_to_async
-    def async_update_game_attr(self, attr_name, new_value):
+    def async_update_game_attr(self, attr_name, new_value, should_save=True):
         setattr(self, attr_name, new_value)
-        self.save()
+   
+        if should_save:
+            self.save()
 
     @database_sync_to_async
     def async_get_player_color(self) -> str:
@@ -79,7 +81,7 @@ class BotGame(models.Model):
         return getattr(self, attr_name)
     
     @database_sync_to_async
-    def async_update_full_structured_fen(self, new_structured_fen):
+    def async_update_full_structured_fen(self, new_structured_fen, should_save=True):
         self.structured_board_placement = new_structured_fen["board_placement"]
         self.structured_castling_rights = new_structured_fen["castling_rights"]
         self.current_player_turn = new_structured_fen["side_to_move"]
@@ -87,7 +89,8 @@ class BotGame(models.Model):
         self.halfmove_clock = new_structured_fen["halfmove_clock"]
         self.current_move_number = new_structured_fen["fullmove_number"]
 
-        self.save()
+        if should_save:
+            self.save()
 
     def sync_is_player_turn(self):
         player_color = self.get_player_color()
