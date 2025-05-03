@@ -3,11 +3,11 @@ import {
     bulletTimeControls,
     classicalTimeControls,
     rapidTimeControls,
-} from "../../constants/timeControls.js";
-import { TimeControls } from "../../enums/gameSetup.ts";
+} from "../../../constants/timeControls.js";
+import { TimeControls } from "../../../enums/gameSetup.ts";
 
-import { compareObjects } from "../../utils/generalUtils.ts";
-import { displayTimeControl } from "../../utils/timeUtils.ts";
+import { compareObjects } from "../../../utils/generalUtils.ts";
+import { displayTimeControl } from "../../../utils/timeUtils.ts";
 
 interface TimeControlInfo {
     id?: number,
