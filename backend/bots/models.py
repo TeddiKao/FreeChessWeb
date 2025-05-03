@@ -44,6 +44,7 @@ class BotGame(models.Model):
         return {
             "board_placement": self.structured_board_placement,
             "castling_rights": self.structured_castling_rights,
+            "side_to_move": self.current_player_turn,
             "en_passant_target_square": self.en_passant_target_square,
             "halfmove_clock": self.halfmove_clock,
             "fullmove_number": self.current_move_number
@@ -77,6 +78,7 @@ class BotGame(models.Model):
     def async_update_full_structured_fen(self, new_structured_fen):
         self.structured_board_placement = new_structured_fen["board_placement"]
         self.structured_castling_rights = new_structured_fen["castling_rights"]
+        self.current_player_turn = new_structured_fen["side_to_move"]
         self.en_passant_target_square = new_structured_fen["en_passant_target_square"]
         self.halfmove_clock = new_structured_fen["halfmove_clock"]
         self.current_move_number = new_structured_fen["fullmove_number"]
