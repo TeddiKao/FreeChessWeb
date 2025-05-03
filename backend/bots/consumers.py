@@ -71,7 +71,7 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		current_board_placement = current_structured_fen["board_placement"]
 		current_en_passant_target_square = current_structured_fen["en_passant_target_square"]
 
-		can_player_move = bot_game_model.async_can_player_move(piece_color)
+		can_player_move = await bot_game_model.async_can_player_move(piece_color)
 		if not can_player_move:
 			return
 
