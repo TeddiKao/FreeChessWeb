@@ -110,8 +110,12 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 			await self.make_bot_move()
 
 	async def make_bot_move(self):
+		print("Started making bot move!")
+
 		bot_game_model: BotGame = await BotGame.async_get_bot_game_from_id(self.game_id)
 		stockfish_engine = initialise_stockfish_instance()
+
+		print("Successfully initialised stockfish engine!")
 
 		current_structured_fen = await bot_game_model.async_get_full_structured_fen()
 		current_board_placement = current_structured_fen["board_placement"]
