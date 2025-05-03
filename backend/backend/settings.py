@@ -27,7 +27,7 @@ ENGINES_DIR = Path(__file__).resolve().parent.parent.parent / "engines"
 
 if ENGINES_DIR.exists():
     for file in ENGINES_DIR.iterdir():
-        print(file.name)
+        
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -168,7 +168,7 @@ if platform.system() == "Windows":
 else:
     STOCKFISH_PATH = str(Path(PROJECT_ROOT_DIR) / "engines" / "stockfish-linux")
 
-print(f"Stockfish path: {STOCKFISH_PATH}")
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 

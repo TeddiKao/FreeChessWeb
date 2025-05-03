@@ -31,7 +31,7 @@ def parse_raw_board_placement(structured_board_placement):
         starting_rank_square = 8 * rank
         ending_rank_square = 8 * (rank + 1) - 1
 
-        print(starting_rank_square, ending_rank_square)
+        
 
         for square in range(starting_rank_square, ending_rank_square + 1):
             square_info = structured_board_placement.get(str(square))

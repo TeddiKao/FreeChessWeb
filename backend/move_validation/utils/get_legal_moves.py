@@ -201,7 +201,7 @@ def get_legal_moves_in_straight_direction(board_placement, constant_value_str, d
         else:
             square = f"{get_square(piece_file, value)}"
 
-        print(square)
+        
 
         king_position = get_king_position(board_placement, piece_color)
 
