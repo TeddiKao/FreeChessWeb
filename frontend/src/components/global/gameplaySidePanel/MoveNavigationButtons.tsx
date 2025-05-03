@@ -1,4 +1,4 @@
-import "../../styles/features/gameplay/side-panel-buttons.scss";
+import "../../../styles/features/gameplay/side-panel-buttons.scss";
 
 type MoveNavigationButtonsProps = {
     backToStart: (...args: any[]) => any;
