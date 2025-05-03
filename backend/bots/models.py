@@ -94,6 +94,7 @@ class BotGame(models.Model):
             "board_placement": self.structured_board_placement,
             "castling_rights": self.structured_castling_rights,
             "en_passant_target_square": self.en_passant_target_square,
+            "side_to_move": self.current_player_turn,
             "halfmove_clock": self.halfmove_clock,
             "fullmove_number": self.current_move_number
         }
