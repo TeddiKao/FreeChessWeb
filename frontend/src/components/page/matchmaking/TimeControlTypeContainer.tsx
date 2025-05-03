@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
-import { GameSetupStages } from "../../enums/gameSetup";
-import { StateSetterFunction } from "../../types/general";
+import { GameSetupStages } from "../../../enums/gameSetup";
+import { StateSetterFunction } from "../../../types/general";
 
 type TimeControlInfo = {
     baseTime: number;
