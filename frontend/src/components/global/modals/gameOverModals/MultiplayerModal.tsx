@@ -9,7 +9,7 @@ import { TimeControl } from "../../types/gameSetup";
 import { useNavigate } from "react-router-dom";
 import { MatchmakingEvents } from "../../enums/gameSetup";
 import { getAssignedColor } from "../../utils/matchmakingUtils";
-import MatchmakingShortcutScreen from "./MatchmakingShortcutScreen";
+import MatchmakingShortcutScreen from "../MatchmakingShortcutScreen";
 
 type GameOverModalProps = {
 	visible: boolean;
