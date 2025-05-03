@@ -93,7 +93,10 @@ def parse_raw_side_to_move(structured_side_to_move):
     return structured_side_to_move[0].lower()
 
 def parse_raw_en_passant_target_square(target_square_number) -> str:
-    return convert_to_algebraic_notation(target_square_number)
+    if target_square_number:
+        return convert_to_algebraic_notation(target_square_number)
+    else:
+        return "-"
 
 def parse_raw_fen(structured_fen):
     structured_board_placement = structured_fen["board_placement"]
