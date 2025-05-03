@@ -1,5 +1,4 @@
 import json
-import copy
 
 from urllib.parse import parse_qs
 from channels.generic.websocket import AsyncWebsocketConsumer
