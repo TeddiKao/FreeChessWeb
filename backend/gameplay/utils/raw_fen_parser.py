@@ -6,7 +6,7 @@ piece_letter_mapping = {
     "bishop": "b",
     "rook": "r",
     "queen": "q",
-    "king": "k"
+    "king": "k",
 }
 
 castling_mapping = {

@@ -1,12 +1,12 @@
 from move_validation.utils.general import convert_to_square_index
 
 piece_letter_mapping = {
-    "pawn": "p",
-    "knight": "n",
-    "bishop": "b",
-    "rook": "r",
-    "queen": "q",
-    "king": "k"
+    "p": "pawn",
+    "n": "knight",
+    "b": "bishop",
+    "r": "rook",
+    "q": "queen",
+    "k": "king"
 }
 
 def parse_regular_move(board_placement, universal_notation):
