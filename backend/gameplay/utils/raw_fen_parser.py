@@ -1,12 +1,12 @@
 from move_validation.utils.general import convert_to_algebraic_notation
 
 piece_letter_mapping = {
-    "p": "pawn",
-    "n": "knight",
-    "b": "bishop",
-    "r": "rook",
-    "q": "queen",
-    "k": "king"
+    "pawn": "p",
+    "knight": "n",
+    "bishop": "b",
+    "rook": "r",
+    "queen": "q",
+    "king": "k"
 }
 
 castling_mapping = {
