@@ -23,10 +23,6 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROJECT_ROOT_DIR = Path(__file__).resolve().parent.parent.parent
-ENGINES_DIR = Path(__file__).resolve().parent.parent.parent / "engines"
-
-if ENGINES_DIR.exists():
-    for file in ENGINES_DIR.iterdir():
         
 
 # Quick-start development settings - unsuitable for production
