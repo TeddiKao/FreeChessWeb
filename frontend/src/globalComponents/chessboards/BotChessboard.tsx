@@ -458,6 +458,19 @@ function BotChessboard({
 		playAudio(moveType);
 	}
 
+	function handleBotMoveMade({
+		new_structured_fen: newStructuredFEN,
+		new_position_list: newPositionList,
+		new_move_list: newMoveList,
+		move_type: moveType,
+	}: any) {
+		setParsedFENString(newStructuredFEN);
+		setPositionList(newPositionList);
+		setMoveList(newMoveList);
+
+		playAudio(moveType);
+	}
+
 	async function handlePawnPromotion(
 		color: PieceColor,
 		promotedPiece: PieceType,
@@ -545,6 +558,10 @@ function BotChessboard({
 
 			case BotGameWebSocketEventTypes.FIFTY_MOVE_RULE_REACHED:
 				handleDraw("50-move rule")
+				break;
+
+			case BotGameWebSocketEventTypes.BOT_MOVE_MADE:
+				handleBotMoveMade(parsedEventData);
 				break;
 
 			default:

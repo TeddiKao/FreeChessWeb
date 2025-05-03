@@ -44,6 +44,7 @@ class BotGame(models.Model):
         return {
             "board_placement": self.structured_board_placement,
             "castling_rights": self.structured_castling_rights,
+            "side_to_move": self.current_player_turn,
             "en_passant_target_square": self.en_passant_target_square,
             "halfmove_clock": self.halfmove_clock,
             "fullmove_number": self.current_move_number
@@ -68,7 +69,11 @@ class BotGame(models.Model):
             return "White"
         else:
             return "Black"
-
+        
+    @database_sync_to_async
+    def async_can_player_move(self, piece_color) -> bool:
+        return self.sync_is_player_turn() and self.sync_can_player_move_piece(piece_color)
+   
     @database_sync_to_async
     def async_get_game_attr(self, attr_name):
         return getattr(self, attr_name)
@@ -77,11 +82,22 @@ class BotGame(models.Model):
     def async_update_full_structured_fen(self, new_structured_fen):
         self.structured_board_placement = new_structured_fen["board_placement"]
         self.structured_castling_rights = new_structured_fen["castling_rights"]
+        self.current_player_turn = new_structured_fen["side_to_move"]
         self.en_passant_target_square = new_structured_fen["en_passant_target_square"]
         self.halfmove_clock = new_structured_fen["halfmove_clock"]
         self.current_move_number = new_structured_fen["fullmove_number"]
 
         self.save()
+
+    def sync_is_player_turn(self):
+        player_color = self.get_player_color()
+        
+        return player_color.lower() == self.current_player_turn.lower()
+
+    def sync_can_player_move_piece(self, piece_color):
+        player_color = self.get_player_color()
+
+        return piece_color.lower() == player_color.lower()
 
     def get_player_color(self):
         if self.white_player == "human":
@@ -94,6 +110,7 @@ class BotGame(models.Model):
             "board_placement": self.structured_board_placement,
             "castling_rights": self.structured_castling_rights,
             "en_passant_target_square": self.en_passant_target_square,
+            "side_to_move": self.current_player_turn,
             "halfmove_clock": self.halfmove_clock,
             "fullmove_number": self.current_move_number
         }
@@ -102,6 +119,7 @@ class BotGame(models.Model):
         self.structured_board_placement = new_structured_fen["board_placement"]
         self.structured_castling_rights = new_structured_fen["castling_rights"]
         self.en_passant_target_square = new_structured_fen["en_passant_target_square"]
+        self.current_player_turn = new_structured_fen["side_to_move"]
         self.halfmove_clock = new_structured_fen["halfmove_clock"]
         self.current_move_number = new_structured_fen["fullmove_number"]
 
