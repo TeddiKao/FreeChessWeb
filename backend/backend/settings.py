@@ -22,9 +22,11 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROJECT_ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+ENGINES_DIR = Path(__file__).resolve().parent.parent.parent / "engines"
 
-for file in Path.iterdir(PROJECT_ROOT_DIR):
-    print(file.name)
+if ENGINES_DIR.exists():
+    for file in ENGINES_DIR.iterdir():
+        print(file.name)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
