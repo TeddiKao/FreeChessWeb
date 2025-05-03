@@ -5,9 +5,12 @@ from urllib.parse import parse_qs
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 from .models import BotGame
+from .engines import initialise_stockfish_instance
 
 from gameplay.utils.position_update import update_structured_fen
 from gameplay.utils.game_state_history_update import update_move_list, update_position_list
+from gameplay.utils.raw_fen_parser import parse_raw_fen
+from gameplay.utils.structured_move_parser import parse_structured_move
 
 from move_validation.utils.move_validation import validate_move
 from move_validation.utils.get_move_type import get_move_type
@@ -15,6 +18,33 @@ from move_validation.utils.result_detection import get_is_checkmated, get_is_sta
 from move_validation.utils.general import get_opposite_color
 
 class BotGameConsumer(AsyncWebsocketConsumer):
+	async def check_for_results(self, bot_game_model: BotGame, piece_color_moved):
+		updated_structured_fen = await bot_game_model.async_get_full_structured_fen()
+		updated_position_list = await bot_game_model.async_get_position_list()
+		
+		updated_halfmove_clock = await bot_game_model.async_get_game_attr("halfmove_clock")
+		
+		if get_is_checkmated(updated_structured_fen, get_opposite_color(piece_color_moved)):
+			await self.send(json.dumps({
+				"type": "checkmate_occurred",
+				"game_winner": "player" if piece_color_moved.lower() == piece_color_moved.lower() else "bot"
+			}))
+
+		elif get_is_stalemated(updated_structured_fen, get_opposite_color(piece_color_moved)):
+			await self.send(json.dumps({
+				"type": "stalemate_occurred",
+			}))
+
+		elif is_threefold_repetiiton(updated_position_list, updated_structured_fen):
+			await self.send(json.dumps({
+				"type": "threefold_repetition_occurred"
+			}))
+
+		elif check_50_move_rule_draw(updated_halfmove_clock):
+			await self.send(json.dumps({
+				"type": "50_move_rule_reached"
+			}))
+
 	async def handle_player_move_made(self, move_info):
 		piece_color = move_info["piece_color"]
 
@@ -41,27 +71,7 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 
 		updated_halfmove_clock = await bot_game_model.async_get_game_attr("halfmove_clock")
 
-		if get_is_checkmated(updated_structured_fen, get_opposite_color(piece_color)):
-			await self.send(json.dumps({
-				"type": "checkmate_occurred",
-				"game_winner": "player" if player_color.lower() == piece_color.lower() else "bot"
-			}))
-
-		elif get_is_stalemated(updated_structured_fen, get_opposite_color(piece_color)):
-			await self.send(json.dumps({
-				"type": "stalemate_occurred",
-			}))
-
-		elif is_threefold_repetiiton(updated_position_list, updated_structured_fen):
-			await self.send(json.dumps({
-				"type": "threefold_repetition_occurred"
-			}))
-
-		elif check_50_move_rule_draw(updated_halfmove_clock):
-			await self.send(json.dumps({
-				"type": "50_move_rule_reached"
-			}))
-
+		await self.check_for_results(bot_game_model, piece_color)
 		await self.send(json.dumps({
 			"type": "move_registered",
 			"new_structured_fen": updated_structured_fen,
@@ -83,8 +93,18 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 
 		self.game_id = game_id
 
-	async def make_bot_move():
-		pass
+	async def make_bot_move(self):
+		bot_game_model: BotGame = await BotGame.async_get_bot_game_from_id(self.game_id)
+		stockfish_engine = initialise_stockfish_instance()
+
+		current_structured_fen = await bot_game_model.async_get_full_structured_fen()
+		raw_fen = parse_raw_fen(current_structured_fen)
+		stockfish_engine.set_fen_position(raw_fen)
+
+		best_move = stockfish_engine.get_best_move()
+		structured_move_info = parse_structured_move(best_move)
+
+		await self.handle_player_move_made(structured_move_info)
 
 	async def receive(self, text_data=None, bytes_data=None):
 		parsed_text_data = json.loads(text_data)
