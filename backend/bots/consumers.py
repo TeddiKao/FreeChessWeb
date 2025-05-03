@@ -101,7 +101,8 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		bot_game_model: BotGame = await BotGame.async_get_bot_game_from_id(self.game_id)
 		current_player_turn = bot_game_model.async_get_game_attr("current_player_turn")
 		
-		if bot_game_model.get_player_color().lower() != current_player_turn.lower():
+		player_color = await bot_game_model.async_get_player_color()
+		if player_color.lower() != current_player_turn.lower():
 			await self.make_bot_move()
 
 	async def make_bot_move(self):
