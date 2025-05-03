@@ -45,7 +45,7 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 				"type": "50_move_rule_reached"
 			}))
 
-	async def get_updated_game_state(bot_game_model: BotGame, move_info: dict):
+	async def get_updated_game_state(self, bot_game_model: BotGame, move_info: dict):
 		current_structured_fen = await bot_game_model.async_get_full_structured_fen()
 		current_move_list = await bot_game_model.async_get_move_list()
 		current_position_list = await bot_game_model.async_get_position_list()
@@ -61,6 +61,7 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		return updated_structured_fen, updated_move_list, updated_position_list
 
 	async def handle_player_move_made(self, move_info):
+		
 		piece_color = move_info["piece_color"]
 
 		bot_game_model: BotGame = await BotGame.async_get_bot_game_from_id(self.game_id)
