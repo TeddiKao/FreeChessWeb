@@ -103,6 +103,7 @@ class BotGame(models.Model):
         self.structured_board_placement = new_structured_fen["board_placement"]
         self.structured_castling_rights = new_structured_fen["castling_rights"]
         self.en_passant_target_square = new_structured_fen["en_passant_target_square"]
+        self.current_player_turn = new_structured_fen["side_to_move"]
         self.halfmove_clock = new_structured_fen["halfmove_clock"]
         self.current_move_number = new_structured_fen["fullmove_number"]
 
