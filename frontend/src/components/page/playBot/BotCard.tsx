@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { BotInfo } from "../../constants/botsConfig";
+import { BotInfo } from "../../../constants/botsConfig";
 
 import "../../styles/features/playBot/bot-card.scss";
-import { createBotGame } from "../../utils/apiUtils";
+import { createBotGame } from "../../../utils/apiUtils";
 
 type BotCardProps = {
 	botInfo: BotInfo;
