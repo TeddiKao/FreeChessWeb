@@ -14,8 +14,8 @@ import GameSetup from "./pages/protected/GameSetup.tsx";
 
 import "./styles/global/global.scss";
 
-import ProtectedRoute from "./globalComponents/routes/ProtectedRoute.tsx";
-import AuthenticationRoute from "./globalComponents/routes/AuthenticationRoute.tsx";
+import ProtectedRoute from "./components/global/routes/ProtectedRoute.tsx";
+import AuthenticationRoute from "./components/global/routes/AuthenticationRoute.tsx";
 import Play from "./pages/protected/Play.tsx";
 import PassAndPlay from "./pages/protected/PassAndPlay.tsx";
 import TempRoute from "./pages/TempRoute.tsx";
