@@ -67,7 +67,7 @@ def convert_to_square_index(algebraic_notation: str):
 
 	file_index = files_list.index(file)
 
-	return get_square(file_index, rank)
+	return get_square(file_index, int(rank))
 
 def get_all_pieces_of_color(board_placement, color: str):
 	color = color.lower()
