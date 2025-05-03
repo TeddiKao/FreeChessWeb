@@ -23,7 +23,7 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		updated_position_list = await bot_game_model.async_get_position_list()
 		
 		updated_halfmove_clock = await bot_game_model.async_get_game_attr("halfmove_clock")
-		player_color = await bot_game_model.get_player_color()
+		player_color = await bot_game_model.async_get_player_color()
 		
 		if get_is_checkmated(updated_structured_fen, get_opposite_color(piece_color_moved)):
 			await self.send(json.dumps({
