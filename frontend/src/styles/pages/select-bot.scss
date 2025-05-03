@@ -1,0 +1,19 @@
+@use "../global/mixins" as *;
+
+.select-bot-interface-container {
+    @include flex-column;
+}
+
+.select-bot-page-heading {
+    margin-top: 12px;
+    margin-bottom: 16px;
+}
+
+.select-bot-page-description {
+    margin-top: 16px;
+    margin-bottom: 8px;
+}
+
+.main-page-content {
+    margin-left: 28px;
+}

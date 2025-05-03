@@ -1,0 +1,9 @@
+@use "../../global/mixins" as *;
+
+.bot-category-container {
+    @include flex-column-y-center;
+}
+
+.bot-cards-container {
+    @include flex-row-y-center;
+}
