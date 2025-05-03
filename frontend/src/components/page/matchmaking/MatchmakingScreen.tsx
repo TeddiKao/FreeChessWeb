@@ -1,14 +1,14 @@
 import { useEffect, useState, useRef } from "react";
-import { displayTimeControl } from "../../utils/timeUtils.ts";
+import { displayTimeControl } from "../../../utils/timeUtils.ts";
 
-import useWebSocket from "../../hooks/useWebsocket.ts";
+import useWebSocket from "../../../hooks/useWebsocket.ts";
 
 import "../../styles/features/gameSetup/matchmaking-screen.scss";
 import { useNavigate } from "react-router-dom";
-import { getAccessToken } from "../../utils/tokenUtils.ts";
-import { getUsername } from "../../utils/apiUtils.ts";
-import { MatchmakingEvents } from "../../enums/gameSetup.ts";
-import { websocketBaseURL } from "../../constants/urls.ts";
+import { getAccessToken } from "../../../utils/tokenUtils.ts";
+import { getUsername } from "../../../utils/apiUtils.ts";
+import { MatchmakingEvents } from "../../../enums/gameSetup.ts";
+import { websocketBaseURL } from "../../../constants/urls.ts";
 
 type timeControlInfo = {
 	baseTime: number;
