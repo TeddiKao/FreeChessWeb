@@ -1,6 +1,6 @@
 import "../../styles/components/dashboard/dashboard-navbar.scss";
 
-import NavigationDropdown from "../../globalComponents/NavigationDropdown.js";
+import NavigationDropdown from "../../global/NavigationDropdown";
 import React, { useEffect, useRef, useState } from "react";
 
 function DashboardNavbar() {
