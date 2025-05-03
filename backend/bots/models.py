@@ -69,7 +69,11 @@ class BotGame(models.Model):
             return "White"
         else:
             return "Black"
-
+        
+    @database_sync_to_async
+    def async_can_player_move(self, piece_color) -> bool:
+        return self.sync_is_player_turn() and self.sync_can_player_move_piece(piece_color)
+   
     @database_sync_to_async
     def async_get_game_attr(self, attr_name):
         return getattr(self, attr_name)
@@ -84,6 +88,16 @@ class BotGame(models.Model):
         self.current_move_number = new_structured_fen["fullmove_number"]
 
         self.save()
+
+    def sync_is_player_turn(self):
+        player_color = self.get_player_color()
+        
+        return player_color.lower() == self.current_player_turn.lower()
+
+    def sync_can_player_move_piece(self, piece_color):
+        player_color = self.get_player_color()
+
+        return piece_color.lower() == player_color.lower()
 
     def get_player_color(self):
         if self.white_player == "human":
