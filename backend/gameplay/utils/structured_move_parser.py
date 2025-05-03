@@ -11,9 +11,13 @@ def parse_structured_move(board_placement, universal_notation):
     piece_moved_type = piece_moved_info["piece_type"]
     piece_moved_color = piece_moved_info["piece_color"]
 
-    return {
-        "starting_square": starting_square_index,
-        "destination_square": destination_square_index,
+    structured_move_info = {
+        "starting_square": str(starting_square_index),
+        "destination_square": str(destination_square_index),
         "piece_type": piece_moved_type,
-        "piece_color": piece_moved_color
+        "piece_color": piece_moved_color,
+
+        "additional_info": {}
     }
+
+    return structured_move_info
