@@ -110,7 +110,7 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		stockfish_engine.set_fen_position(raw_fen)
 
 		best_move = stockfish_engine.get_best_move()
-		structured_move_info = parse_structured_move(best_move)
+		structured_move_info = parse_structured_move(current_board_placement, best_move)
 
 		if not validate_move(current_structured_fen, structured_move_info):
 			return
