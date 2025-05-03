@@ -83,10 +83,14 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 
 		self.game_id = game_id
 
+	async def make_bot_move():
+		pass
+
 	async def receive(self, text_data=None, bytes_data=None):
 		parsed_text_data = json.loads(text_data)
 
 		match parsed_text_data["type"]:
 			case "move_made":
 				move_info = parsed_text_data["move_info"]
+
 				await self.handle_player_move_made(move_info)
