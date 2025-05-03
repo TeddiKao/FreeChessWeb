@@ -45,6 +45,21 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 				"type": "50_move_rule_reached"
 			}))
 
+	async def get_updated_game_state(bot_game_model: BotGame, move_info: dict):
+		current_structured_fen = await bot_game_model.async_get_full_structured_fen()
+		current_move_list = await bot_game_model.async_get_move_list()
+		current_position_list = await bot_game_model.async_get_position_list()
+
+		updated_structured_fen = update_structured_fen(current_structured_fen, move_info)
+		updated_move_list = update_move_list(current_structured_fen, current_move_list, move_info)
+		updated_position_list = update_position_list(current_position_list, move_info, updated_structured_fen)
+
+		await bot_game_model.async_update_full_structured_fen(updated_structured_fen)
+		await bot_game_model.async_update_game_attr("move_list", updated_move_list)
+		await bot_game_model.async_update_game_attr("position_list", updated_position_list)
+
+		return updated_structured_fen, updated_move_list, updated_position_list
+
 	async def handle_player_move_made(self, move_info):
 		piece_color = move_info["piece_color"]
 
@@ -54,22 +69,11 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		current_structured_fen = await bot_game_model.async_get_full_structured_fen()
 		current_board_placement = current_structured_fen["board_placement"]
 		current_en_passant_target_square = current_structured_fen["en_passant_target_square"]
-		
-		current_move_list = await bot_game_model.async_get_move_list()
-		current_position_list = await bot_game_model.async_get_position_list()
 
 		if not validate_move(current_structured_fen, move_info):
 			return
 
-		updated_structured_fen = update_structured_fen(current_structured_fen, move_info)
-		updated_move_list = update_move_list(current_structured_fen, current_move_list, move_info)
-		updated_position_list = update_position_list(current_position_list, move_info, updated_structured_fen)
-
-		await bot_game_model.async_update_full_structured_fen(updated_structured_fen)
-		await bot_game_model.async_update_game_attr("position_list", updated_position_list)
-		await bot_game_model.async_update_game_attr("move_list", updated_move_list)
-
-		updated_halfmove_clock = await bot_game_model.async_get_game_attr("halfmove_clock")
+		updated_structured_fen, updated_move_list, updated_position_list = await self.get_updated_game_state(bot_game_model, move_info)
 
 		await self.check_for_results(bot_game_model, piece_color)
 		await self.send(json.dumps({
@@ -98,13 +102,28 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		stockfish_engine = initialise_stockfish_instance()
 
 		current_structured_fen = await bot_game_model.async_get_full_structured_fen()
+		current_board_placement = current_structured_fen["board_placement"]
+		current_en_passant_target_square = current_structured_fen["en_passant_target_square"]
+		
 		raw_fen = parse_raw_fen(current_structured_fen)
 		stockfish_engine.set_fen_position(raw_fen)
 
 		best_move = stockfish_engine.get_best_move()
 		structured_move_info = parse_structured_move(best_move)
 
-		await self.handle_player_move_made(structured_move_info)
+		if not validate_move(current_structured_fen, structured_move_info):
+			return
+
+		updated_structured_fen, updated_move_list, updated_position_list = await self.get_updated_game_state(bot_game_model, structured_move_info)
+
+		await self.check_for_results(bot_game_model, structured_move_info["piece_color"])
+		await self.send(json.dumps({
+			"type": "bot_move_made",
+			"new_structured_fen": updated_structured_fen,
+			"new_position_list": updated_position_list,
+			"new_move_list": updated_move_list,
+			"move_type": get_move_type(current_board_placement, current_en_passant_target_square, structured_move_info)
+		}))
 
 	async def receive(self, text_data=None, bytes_data=None):
 		parsed_text_data = json.loads(text_data)
