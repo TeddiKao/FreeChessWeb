@@ -1,5 +1,5 @@
 import "../../styles/features/gameplay/timer.scss";
-import { formatTime } from "../../utils/timeUtils.ts";
+import { formatTime } from "../../../utils/timeUtils.ts";
 
 type TimerProps = {
     playerColor: string;
