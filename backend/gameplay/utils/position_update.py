@@ -1,6 +1,6 @@
 import copy
 
-from move_validation.utils.general import get_file, get_row
+from move_validation.utils.general import get_file, get_row, get_opposite_color
 from move_validation.utils.get_move_type import get_is_capture
 
 def update_castling_rights(structured_castling_rights, castling_side: str, color: str, new_value: str = False):
@@ -150,6 +150,7 @@ def update_structured_fen(structured_fen, move_info):
 		structured_fen["castling_rights"] = updated_castling_rights
 
 		structured_fen["halfmove_clock"] = update_halfmove_clock(structured_fen_before_move, move_info)
+		structured_fen["side_to_move"] = get_opposite_color(piece_color.lower())
 
 		return structured_fen
 	except Exception as e:
