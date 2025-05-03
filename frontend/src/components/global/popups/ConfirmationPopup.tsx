@@ -1,4 +1,4 @@
-import "../../styles/popups/confirmation-popup.scss";
+import "../../../styles/popups/confirmation-popup.scss";
 
 type ConfirmationPopupProps = {
     confirmationMessage: string;
