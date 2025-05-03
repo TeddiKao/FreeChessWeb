@@ -1,5 +1,4 @@
 import json
-import time
 import asyncio
 
 from urllib.parse import parse_qs
