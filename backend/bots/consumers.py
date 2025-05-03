@@ -120,8 +120,6 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 			await self.make_bot_move()
 
 	async def make_bot_move(self):
-		bot_move_process_start = time.perf_counter()
-
 		bot_game_model: BotGame = await BotGame.async_get_bot_game_from_id(self.game_id)
 
 		current_structured_fen = await bot_game_model.async_get_full_structured_fen()
