@@ -29,6 +29,8 @@ def parse_regular_move(board_placement, universal_notation):
         "additional_info": {}
     }
 
+    return structured_move_info
+
 def parse_promotion_move(board_placement, universal_notation):
     promoted_piece_letter = universal_notation[-1]
     promoted_piece_name = piece_letter_mapping[promoted_piece_letter.lower()]
