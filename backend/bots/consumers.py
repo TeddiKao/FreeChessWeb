@@ -89,6 +89,8 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 			"move_type": get_move_type(current_board_placement, current_en_passant_target_square, move_info)
 		}))
 
+		return True
+
 	async def connect(self):
 		print("Connected!")
 
@@ -143,5 +145,6 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 			case "move_made":
 				move_info = parsed_text_data["move_info"]
 
-				await self.handle_player_move_made(move_info)
-				await self.make_bot_move()
+				move_successfully_made = await self.handle_player_move_made(move_info)
+				if move_successfully_made:
+					await self.make_bot_move()
