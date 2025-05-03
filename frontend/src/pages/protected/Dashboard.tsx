@@ -1,11 +1,11 @@
-import DashboardNavbar from "../../pageComponents/dashboard/DashboardNavbar.tsx";
+import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar.tsx";
 
 function Dashboard() {
-    return (
-        <>
-            <DashboardNavbar />
-        </>
-    )    
+	return (
+		<>
+			<DashboardNavbar />
+		</>
+	);
 }
 
 export default Dashboard;
