@@ -1,6 +1,5 @@
 from stockfish import Stockfish
-
-import os
+from django.conf import settings
 
 def initialise_stockfish_instance() -> Stockfish:
-    return Stockfish(path=os.environ.get("STOCKFISH_PATH"))
+    return Stockfish(path=settings.STOCKFISH_PATH)
