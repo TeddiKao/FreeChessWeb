@@ -23,11 +23,12 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		updated_position_list = await bot_game_model.async_get_position_list()
 		
 		updated_halfmove_clock = await bot_game_model.async_get_game_attr("halfmove_clock")
+		player_color = await bot_game_model.get_player_color()
 		
 		if get_is_checkmated(updated_structured_fen, get_opposite_color(piece_color_moved)):
 			await self.send(json.dumps({
 				"type": "checkmate_occurred",
-				"game_winner": "player" if piece_color_moved.lower() == piece_color_moved.lower() else "bot"
+				"game_winner": "player" if piece_color_moved.lower() == player_color.lower() else "bot"
 			}))
 
 		elif get_is_stalemated(updated_structured_fen, get_opposite_color(piece_color_moved)):
@@ -97,6 +98,11 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		await self.accept()
 
 		self.game_id = game_id
+		bot_game_model: BotGame = await BotGame.async_get_bot_game_from_id(self.game_id)
+		current_player_turn = bot_game_model.async_get_game_attr("current_player_turn")
+		
+		if bot_game_model.get_player_color().lower() != current_player_turn:
+			await self.make_bot_move()
 
 	async def make_bot_move(self):
 		bot_game_model: BotGame = await BotGame.async_get_bot_game_from_id(self.game_id)
