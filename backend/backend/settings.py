@@ -16,6 +16,7 @@ from dotenv import load_dotenv
 
 import os
 import dj_database_url
+import platform
 
 load_dotenv()
 
@@ -162,8 +163,10 @@ else:
         }
     }
 
-STOCKFISH_PATH = str(Path(PROJECT_ROOT_DIR) / "engines" / "stockfish.exe")
-
+if platform.system() == "Windows":
+    STOCKFISH_PATH = str(Path(PROJECT_ROOT_DIR) / "engines" / "stockfish.exe")
+else:
+    STOCKFISH_PATH = str(Path(PROJECT_ROOT_DIR) / "engines" / "stockfish")
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
