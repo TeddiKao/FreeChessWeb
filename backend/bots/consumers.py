@@ -20,19 +20,22 @@ from move_validation.utils.general import get_opposite_color
 
 class BotGameConsumer(AsyncWebsocketConsumer):
 	async def check_for_results(self, bot_game_model: BotGame, piece_color_moved):
-		updated_structured_fen = await bot_game_model.async_get_full_structured_fen()
-		updated_position_list = await bot_game_model.async_get_position_list()
+		updated_structured_fen, updated_position_list, updated_halfmove_clock, player_color = await asyncio.gather(
+			bot_game_model.async_get_full_structured_fen(),
+			bot_game_model.async_get_position_list(),
+			bot_game_model.async_get_game_attr("halfmove_clock"),
+			bot_game_model.async_get_player_color()
+		)
+
+		opposite_color = get_opposite_color(piece_color_moved)
 		
-		updated_halfmove_clock = await bot_game_model.async_get_game_attr("halfmove_clock")
-		player_color = await bot_game_model.async_get_player_color()
-		
-		if get_is_checkmated(updated_structured_fen, get_opposite_color(piece_color_moved)):
+		if get_is_checkmated(updated_structured_fen, opposite_color):
 			await self.send(json.dumps({
 				"type": "checkmate_occurred",
 				"game_winner": "player" if piece_color_moved.lower() == player_color.lower() else "bot"
 			}))
 
-		elif get_is_stalemated(updated_structured_fen, get_opposite_color(piece_color_moved)):
+		elif get_is_stalemated(updated_structured_fen, opposite_color):
 			await self.send(json.dumps({
 				"type": "stalemate_occurred",
 			}))
@@ -48,16 +51,27 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 			}))
 
 	async def get_updated_game_state(self, bot_game_model: BotGame, move_info: dict):
-		current_structured_fen = await bot_game_model.async_get_full_structured_fen()
-		current_move_list = await bot_game_model.async_get_move_list()
-		current_position_list = await bot_game_model.async_get_position_list()
+		current_structured_fen, current_move_list, current_position_list = await asyncio.gather(
+			bot_game_model.async_get_full_structured_fen(),
+			bot_game_model.async_get_move_list(),
+			bot_game_model.async_get_position_list()
+		)
+
+		compute_updated_data_start = time.perf_counter()
 
 		updated_structured_fen = update_structured_fen(current_structured_fen, move_info)
 		updated_move_list = update_move_list(current_structured_fen, current_move_list, move_info)
 		updated_position_list = update_position_list(current_position_list, move_info, updated_structured_fen)
 
-		await bot_game_model.async_update_full_structured_fen(updated_structured_fen, should_save=False)
-		await bot_game_model.async_update_game_attr("move_list", updated_move_list, should_save=False)
+		compute_updated_data_end = time.perf_counter()
+
+		print(f"Compute updated data took {(compute_updated_data_end - compute_updated_data_start):.6f} seconds")
+
+		await asyncio.gather(
+			bot_game_model.async_update_full_structured_fen(updated_structured_fen, should_save=False),
+			bot_game_model.async_update_game_attr("move_list", updated_move_list, should_save=False)
+		)
+
 		await bot_game_model.async_update_game_attr("position_list", updated_position_list)
 
 		return updated_structured_fen, updated_move_list, updated_position_list
