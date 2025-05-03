@@ -134,3 +134,4 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 				move_info = parsed_text_data["move_info"]
 
 				await self.handle_player_move_made(move_info)
+				await self.make_bot_move()
