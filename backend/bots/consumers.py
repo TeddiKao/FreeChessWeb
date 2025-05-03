@@ -57,15 +57,9 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 			bot_game_model.async_get_position_list()
 		)
 
-		compute_updated_data_start = time.perf_counter()
-
 		updated_structured_fen = update_structured_fen(current_structured_fen, move_info)
 		updated_move_list = update_move_list(current_structured_fen, current_move_list, move_info)
 		updated_position_list = update_position_list(current_position_list, move_info, updated_structured_fen)
-
-		compute_updated_data_end = time.perf_counter()
-
-		print(f"Compute updated data took {(compute_updated_data_end - compute_updated_data_start):.6f} seconds")
 
 		await asyncio.gather(
 			bot_game_model.async_update_full_structured_fen(updated_structured_fen, should_save=False),
@@ -107,8 +101,6 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		return True
 
 	async def connect(self):
-		
-
 		query_string: bytes = self.scope.get("query_string", b"")
 		decoded_query_string = query_string.decode()
 		parsed_query_string = parse_qs(decoded_query_string)
@@ -136,36 +128,20 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		current_board_placement = current_structured_fen["board_placement"]
 		current_en_passant_target_square = current_structured_fen["en_passant_target_square"]
 		
-		raw_fen_parsing_tart = time.perf_counter()
 		raw_fen = parse_raw_fen(current_structured_fen)
-		raw_fen_parsing_end = time.perf_counter()
-
-		print(f"Raw fen parsing took {(raw_fen_parsing_end - raw_fen_parsing_tart):.6f} seconds")
 
 		self.stockfish_engine.set_fen_position(raw_fen)
 
-		stockfish_thinking_start = time.perf_counter()
 		best_move = self.stockfish_engine.get_best_move()
-		stockfish_thinking_end = time.perf_counter()
-
-		print(f"Stockfish thinking took {(stockfish_thinking_end - stockfish_thinking_start):.6f} seconds")
 
 		structured_move_info = parse_structured_move(current_board_placement, best_move)
 
 		if not validate_move(current_structured_fen, structured_move_info):
 			return
 
-		game_state_update_start = time.perf_counter()
 		updated_structured_fen, updated_move_list, updated_position_list = await self.get_updated_game_state(bot_game_model, structured_move_info)
-		game_state_update_end = time.perf_counter()
 
-		print(f"Game state update took {(game_state_update_end - game_state_update_start):.6f} seconds")
-
-		result_check_start = time.perf_counter()
 		await self.check_for_results(bot_game_model, structured_move_info["piece_color"])
-		result_check_end = time.perf_counter()
-
-		print(f"Result check took {(result_check_end - result_check_start):.6f} seconds")
 		
 		await self.send(json.dumps({
 			"type": "bot_move_made",
@@ -174,9 +150,6 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 			"new_move_list": updated_move_list,
 			"move_type": get_move_type(current_board_placement, current_en_passant_target_square, structured_move_info)
 		}))
-
-		bot_move_process_end = time.perf_counter()
-		print(f"Bot move process took {(bot_move_process_end - bot_move_process_start):.6f} seconds")
 
 	async def receive(self, text_data=None, bytes_data=None):
 		parsed_text_data = json.loads(text_data)
