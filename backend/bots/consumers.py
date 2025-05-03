@@ -66,11 +66,14 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		piece_color = move_info["piece_color"]
 
 		bot_game_model: BotGame = await BotGame.async_get_bot_game_from_id(self.game_id)
-		player_color = bot_game_model.get_player_color()
 
 		current_structured_fen = await bot_game_model.async_get_full_structured_fen()
 		current_board_placement = current_structured_fen["board_placement"]
 		current_en_passant_target_square = current_structured_fen["en_passant_target_square"]
+
+		can_player_move = bot_game_model.async_can_player_move(piece_color)
+		if not can_player_move:
+			return
 
 		if not validate_move(current_structured_fen, move_info):
 			return
