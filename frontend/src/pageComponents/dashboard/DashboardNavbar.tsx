@@ -20,6 +20,11 @@ function DashboardNavbar() {
             linkName: "Play vs human",
             linkPath: "/game-setup",
         },
+
+        {
+            linkName: "Play vs bot",
+            linkPath: "/play-bot",
+        }
     ];
 
     function handleMouseHover(event: MouseEvent) {
