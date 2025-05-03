@@ -1,5 +1,6 @@
 import json
 import time
+import asyncio
 
 from urllib.parse import parse_qs
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -55,8 +56,8 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		updated_move_list = update_move_list(current_structured_fen, current_move_list, move_info)
 		updated_position_list = update_position_list(current_position_list, move_info, updated_structured_fen)
 
-		await bot_game_model.async_update_full_structured_fen(updated_structured_fen)
-		await bot_game_model.async_update_game_attr("move_list", updated_move_list)
+		await bot_game_model.async_update_full_structured_fen(updated_structured_fen, should_save=False)
+		await bot_game_model.async_update_game_attr("move_list", updated_move_list, should_save=False)
 		await bot_game_model.async_update_game_attr("position_list", updated_position_list)
 
 		return updated_structured_fen, updated_move_list, updated_position_list
@@ -116,11 +117,6 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		bot_move_process_start = time.perf_counter()
 
 		bot_game_model: BotGame = await BotGame.async_get_bot_game_from_id(self.game_id)
-		
-		stockfish_init_start = time.perf_counter()
-		stockfish_init_end = time.perf_counter()
-
-		print(f"Stockfish engine initialisation took {(stockfish_init_end - stockfish_init_start):.6f} seconds")
 
 		current_structured_fen = await bot_game_model.async_get_full_structured_fen()
 		current_board_placement = current_structured_fen["board_placement"]
@@ -134,7 +130,11 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 
 		self.stockfish_engine.set_fen_position(raw_fen)
 
+		stockfish_thinking_start = time.perf_counter()
 		best_move = self.stockfish_engine.get_best_move()
+		stockfish_thinking_end = time.perf_counter()
+
+		print(f"Stockfish thinking took {(stockfish_thinking_end - stockfish_thinking_start):.6f} seconds")
 
 		structured_move_info = parse_structured_move(current_board_placement, best_move)
 
