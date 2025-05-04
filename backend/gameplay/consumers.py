@@ -89,7 +89,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		move_data_fetch_end = perf_counter()
 		move_data_fetch_time = move_data_fetch_end - move_data_fetch_start
-		print(f"Move data fetch time: {move_data_fetch_time:.6f}")
+		
 
 		if validate_move(full_parsed_fen, move_info):
 			return True
@@ -301,15 +301,14 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.update_game_attribute(chess_game_model, "current_move", current_move + 1, should_save=False)
 
 	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
-		original_parsed_fen = copy.deepcopy(await chess_game_model.get_full_parsed_fen())
+		original_parsed_fen = await chess_game_model.get_full_parsed_fen()
 		new_board_placement = copy.deepcopy(original_parsed_fen["board_placement"])
 
 		move_type = get_move_type(new_board_placement, chess_game_model.en_passant_target_square, move_info)
 
 		starting_square = move_info["starting_square"]
 		destination_square = move_info["destination_square"]
-		initial_square = move_info["initial_square"] if "initial_square" in move_info.keys(
-		) else None
+		initial_square = move_info.get("initial_square")
 
 		piece_color: str = move_info["piece_color"]
 		piece_type: str = move_info["piece_type"]
@@ -322,8 +321,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		file_diff = abs(get_file(starting_square) -
 						get_file(destination_square))
-
-		addtional_info_keys = additonal_info.keys()
 
 		if piece_type == "king":
 			if file_diff == 2:
@@ -338,10 +335,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await self.modify_castling_rights(chess_game_model, castling_side, piece_color)
 
 		elif piece_type == "pawn":
-			if "promoted_piece" in addtional_info_keys:
+			if "promoted_piece" in additonal_info:
 				new_board_placement = await self.handle_pawn_promotion(move_info, new_board_placement)
 
-		if not "promoted_piece" in addtional_info_keys:
+		if not "promoted_piece" in additonal_info:
 			new_board_placement[str(destination_square)] = {
 				"piece_type": piece_type,
 				"piece_color": piece_color,
@@ -370,17 +367,16 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		game_state_update_end = perf_counter()
 		game_state_update_time = game_state_update_end - game_state_update_start
-		print(f"Game state update time: {game_state_update_time:.6f}")
-
+		
 		if piece_color == "black":
 			await self.increment_move_number(chess_game_model)
 
-		if piece_type.lower() != "pawn" and move_type.lower() != "capture":
+		if piece_type != "pawn" and move_type.lower() != "capture":
 			current_halfmove_clock = chess_game_model.halfmove_clock
 			
 			await self.update_game_attribute(chess_game_model, "halfmove_clock", current_halfmove_clock + 1, should_save=False)
 		else:
-			await self.update_game_attribute(chess_game_model, "halfmove_clock", 0)
+			await self.update_game_attribute(chess_game_model, "halfmove_clock", 0, should_save=False)
 
 		await self.append_to_position_list(chess_game_model, move_info, move_type)
 		await self.append_to_move_list(chess_game_model, original_parsed_fen, move_info)
@@ -441,7 +437,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		connection_end = perf_counter()
 		connection_time = connection_start - connection_end
 
-		print(f"Connection time: {connection_time:.6f}")
+		
 
 	async def disconnect(self, code):
 		await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
@@ -470,9 +466,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 		move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]), event["move_made_by"])
 		move_validation_end = perf_counter()
 
-		print(
-			f"Move validation time: {(move_validation_end - move_validation_start):.6f}")
-
 		chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
 		previous_position, en_passant_target_square = await asyncio.gather(
 			self.get_game_attribute(
@@ -498,8 +491,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await self.increment_black_player_timer(chess_game_model, black_player_increment)
 
 		timer_increment_end = perf_counter()
-		print(
-			f"Timer increment time: {(timer_increment_end - timer_increment_start):.6f}")
 
 		new_white_player_clock, new_black_player_clock, current_move_number = await asyncio.gather(
 			self.get_game_attribute(chess_game_model, "white_player_clock"),
@@ -514,8 +505,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await self.update_position(chess_game_model, parsed_move_data)
 			position_update_end = perf_counter()
 
-			print(
-				f"Position update time: {(position_update_end - position_update_start):.6f}")
+			print(f"Position update time: {(position_update_end - position_update_start):.6f}")
 
 			new_position_list, new_move_list, new_parsed_fen = await asyncio.gather(
 				self.get_game_attribute(chess_game_model, "position_list"),
@@ -537,7 +527,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			result_detection_end = perf_counter()
 
 			result_detection_time = result_detection_end - result_detection_start
-			print(f"Result detection time: {result_detection_time:.6f}")
+			
 
 			position_index = calculate_position_index(
 				piece_color, current_move_number) 
@@ -562,7 +552,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 				}))
 			)
 
-			print("Successfully sent data to clients!")
+			
 
 			if is_checkmated or is_stalemated:
 				if is_checkmated:
