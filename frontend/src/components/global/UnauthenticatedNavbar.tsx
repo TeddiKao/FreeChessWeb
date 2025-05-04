@@ -1,5 +1,5 @@
-import { githubLink } from "../constants/urls";
-import "../styles/navbar.scss";
+import { githubLink } from "../../constants/urls";
+import "../../styles/navbar.scss";
 
 function UnauthenticatedNavbar() {
     return (

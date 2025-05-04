@@ -1,12 +1,12 @@
 import { useDrag, useDrop } from "react-dnd";
 
-import "../styles/components/chessboard/square.scss";
+import "../../styles/components/chessboard/square.scss";
 import PromotionPopup from "./PromotionPopup.tsx";
 import React, { useEffect, useState } from "react";
-import { getFile, getRank, isSquareLight, isSquareOnFileEdge, isSquareOnRankEdge } from "../utils/boardUtils";
-import { SquareProps } from "../interfaces/chessboard.ts";
-import { OptionalValue } from "../types/general.ts";
-import { capitaliseFirstLetter } from "../utils/generalUtils.ts";
+import { getFile, getRank, isSquareLight, isSquareOnFileEdge, isSquareOnRankEdge } from "../../utils/boardUtils";
+import { SquareProps } from "../../interfaces/chessboard.ts";
+import { OptionalValue } from "../../types/general.ts";
+import { capitaliseFirstLetter } from "../../utils/generalUtils.ts";
 
 function Square({
     squareNumber,
