@@ -1,5 +1,4 @@
 import { capitaliseFirstLetter } from "../../../../utils/generalUtils";
-import ModalWrapper from "../../wrappers/ModalWrapper";
 
 type LocalGameOverModalProps = {
 	visible: boolean;

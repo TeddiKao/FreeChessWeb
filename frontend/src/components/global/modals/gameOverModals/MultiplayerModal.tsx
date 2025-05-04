@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import "../../styles/modals/game-over-modal.scss";
+import "../../../../styles/modals/game-over-modal.scss";
 import {
 	capitaliseFirstLetter,
 	parseWebsocketUrl,
-} from "../../utils/generalUtils";
-import useWebSocket from "../../hooks/useWebsocket";
-import { TimeControl } from "../../types/gameSetup";
+} from "../../../../utils/generalUtils";
+import useWebSocket from "../../../../hooks/useWebsocket";
+import { TimeControl } from "../../../../types/gameSetup";
 import { useNavigate } from "react-router-dom";
-import { MatchmakingEvents } from "../../enums/gameSetup";
-import { getAssignedColor } from "../../utils/matchmakingUtils";
+import { MatchmakingEvents } from "../../../../enums/gameSetup";
+import { getAssignedColor } from "../../../../utils/matchmakingUtils";
 import MatchmakingShortcutScreen from "../MatchmakingShortcutScreen";
 
 type GameOverModalProps = {
