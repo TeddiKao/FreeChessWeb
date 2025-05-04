@@ -166,9 +166,13 @@ function Square({
             const pieceImageSrc = `/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
                 pieceType
             )}.svg`;
+            const draggingPieceImageSrc = `/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
+                pieceType
+            )}-dragging.svg`;
+
 			squareHTML = (
 				<>
-                    <DragPreviewImage connect={preview} src={pieceImageSrc} />
+                    <DragPreviewImage connect={preview} src={draggingPieceImageSrc} />
 					<img
 						ref={drag}
 						onDragStart={() => {
