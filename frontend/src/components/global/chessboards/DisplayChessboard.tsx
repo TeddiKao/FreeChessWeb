@@ -1,5 +1,5 @@
-import { DisplayChessboardProps } from "../../interfaces/chessboard";
-import "../../styles/components/chessboard/chessboard.scss";
+import { DisplayChessboardProps } from "../../../interfaces/chessboard";
+import "../../../styles/components/chessboard/chessboard.scss";
 
 function DisplayChessboard({
     parsed_fen_string,

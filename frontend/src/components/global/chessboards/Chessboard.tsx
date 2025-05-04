@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, useRef } from "react";
 
-import "../../styles/components/chessboard/chessboard.scss";
+import "../../../styles/components/chessboard/chessboard.scss";
 import Square from "../Square.js";
 
 import {
@@ -10,49 +10,49 @@ import {
     getBoardEndingIndex,
     isSquareLight,
     getSquareExists,
-} from "../../utils/boardUtils";
+} from "../../../utils/boardUtils";
 
-import { playAudio } from "../../utils/audioUtils";
+import { playAudio } from "../../../utils/audioUtils";
 
 import {
     fetchLegalMoves,
     fetchMoveIsValid,
     getIsCheckmated,
     getIsStalemated,
-} from "../../utils/apiUtils";
+} from "../../../utils/apiUtils";
 
 import {
     disableCastling,
     handleCastling,
     isCastling,
-} from "../../utils/gameLogic/castling";
+} from "../../../utils/gameLogic/castling";
 
 import {
     handleEnPassant,
     updateEnPassantTargetSquare,
-} from "../../utils/gameLogic/enPassant";
+} from "../../../utils/gameLogic/enPassant";
 
 import {
     GameEndedSetterContext,
     GameEndedCauseSetterContext,
     GameWinnerSetterContext,
-} from "../../contexts/chessboardContexts.ts";
+} from "../../../contexts/chessboardContexts.ts";
 
 import {
     cancelPromotion,
     handlePromotionCaptureStorage,
     updatePromotedBoardPlacment,
-} from "../../utils/gameLogic/promotion";
+} from "../../../utils/gameLogic/promotion";
 
 import {
     addPieceToDestinationSquare,
     clearStartingSquare,
-} from "../../utils/gameLogic/basicMovement";
+} from "../../../utils/gameLogic/basicMovement";
 
-import { MoveMethods } from "../../enums/gameLogic.ts";
-import { getOppositeColor } from "../../utils/gameLogic/general";
-import { ChessboardProps } from "../../interfaces/chessboard.js";
-import { ChessboardSquareIndex, OptionalValue } from "../../types/general.js";
+import { MoveMethods } from "../../../enums/gameLogic.ts";
+import { getOppositeColor } from "../../../utils/gameLogic/general";
+import { ChessboardProps } from "../../../interfaces/chessboard.js";
+import { ChessboardSquareIndex, OptionalValue } from "../../../types/general.js";
 import {
     BoardPlacement,
     CastlingSide,
@@ -61,7 +61,7 @@ import {
     PieceColor,
     PieceInfo,
     PieceType,
-} from "../../types/gameLogic.js";
+} from "../../../types/gameLogic.js";
 
 function Chessboard({
     parsed_fen_string,

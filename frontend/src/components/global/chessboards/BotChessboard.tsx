@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-import "../../styles/components/chessboard/chessboard.scss";
+import "../../../styles/components/chessboard/chessboard.scss";
 import Square from "../Square.js";
 
 import {
@@ -10,24 +10,24 @@ import {
 	getBoardEndingIndex,
 	isSquareLight,
 	getSquareExists,
-} from "../../utils/boardUtils";
+} from "../../../utils/boardUtils";
 
-import { playAudio } from "../../utils/audioUtils";
+import { playAudio } from "../../../utils/audioUtils";
 
-import { fetchLegalMoves, makeMoveInBotGame } from "../../utils/apiUtils";
+import { fetchLegalMoves } from "../../../utils/apiUtils";
 
 import {
 	cancelPromotion,
 	handlePromotionCaptureStorage,
 	preparePawnPromotion,
-} from "../../utils/gameLogic/promotion";
+} from "../../../utils/gameLogic/promotion";
 
 import {
 	BotGameWebSocketEventTypes,
 	MoveMethods,
-} from "../../enums/gameLogic.ts";
-import { BotChessboardProps } from "../../interfaces/chessboard.js";
-import { ChessboardSquareIndex, OptionalValue } from "../../types/general.js";
+} from "../../../enums/gameLogic.ts";
+import { BotChessboardProps } from "../../../interfaces/chessboard.js";
+import { ChessboardSquareIndex, OptionalValue } from "../../../types/general.js";
 import {
 	BoardPlacement,
 	MoveInfo,
@@ -35,12 +35,10 @@ import {
 	PieceColor,
 	PieceInfo,
 	PieceType,
-} from "../../types/gameLogic.js";
-import { isPawnPromotion } from "../../utils/moveUtils.ts";
-import useWebSocket from "../../hooks/useWebsocket.ts";
-import { parseWebsocketUrl } from "../../utils/generalUtils.ts";
-import useReactiveRef from "../../hooks/useReactiveRef.ts";
-
+} from "../../../types/gameLogic.js";
+import { isPawnPromotion } from "../../../utils/moveUtils.ts";
+import useWebSocket from "../../../hooks/useWebsocket.ts";
+import { parseWebsocketUrl } from "../../../utils/generalUtils.ts";
 function BotChessboard({
 	parsed_fen_string,
 	orientation,

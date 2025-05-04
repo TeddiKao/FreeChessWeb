@@ -2,23 +2,23 @@ import React, { useState, useEffect, useRef } from "react";
 import _ from "lodash";
 
 // Basic imports like CSS files and components
-import "../../styles/components/chessboard/chessboard.scss";
+import "../../../styles/components/chessboard/chessboard.scss";
 import Square from "../Square.js";
 
 // Types, interfaces, enums
 import {
 	MoveMethods,
 	GameplayWebSocketEventTypes,
-} from "../../enums/gameLogic.ts";
-import { MultiplayerChessboardProps } from "../../interfaces/chessboard.js";
-import { ChessboardSquareIndex, OptionalValue } from "../../types/general.ts";
+} from "../../../enums/gameLogic.ts";
+import { MultiplayerChessboardProps } from "../../../interfaces/chessboard.js";
+import { ChessboardSquareIndex, OptionalValue } from "../../../types/general.ts";
 import {
 	BoardPlacement,
 	ParsedFENString,
 	PieceColor,
 	PieceInfo,
 	PieceType,
-} from "../../types/gameLogic.ts";
+} from "../../../types/gameLogic.ts";
 
 import {
 	CheckmateEventData,
@@ -26,7 +26,7 @@ import {
 	MoveMadeEventData,
 	PositionListUpdateEventData,
 	TimerChangedEventData,
-} from "../../interfaces/gameLogic.ts";
+} from "../../../interfaces/gameLogic.ts";
 
 // Utils
 import {
@@ -34,23 +34,23 @@ import {
 	getRank,
 	getFile,
 	getSquareExists,
-} from "../../utils/boardUtils";
+} from "../../../utils/boardUtils";
 import {
 	fetchCurrentPosition,
 	fetchLegalMoves,
 	fetchMoveIsValid,
-} from "../../utils/apiUtils";
+} from "../../../utils/apiUtils";
 
 import {
 	whitePromotionRank,
 	blackPromotionRank,
-} from "../../constants/boardSquares.js";
+} from "../../../constants/boardSquares.js";
 
-import { playAudio } from "../../utils/audioUtils";
-import useWebSocket from "../../hooks/useWebsocket.ts";
-import { getAccessToken } from "../../utils/tokenUtils.ts";
-import { websocketBaseURL } from "../../constants/urls.ts";
-import { getOppositeColor } from "../../utils/gameLogic/general.ts";
+import { playAudio } from "../../../utils/audioUtils";
+import useWebSocket from "../../../hooks/useWebsocket.ts";
+import { getAccessToken } from "../../../utils/tokenUtils.ts";
+import { websocketBaseURL } from "../../../constants/urls.ts";
+import { getOppositeColor } from "../../../utils/gameLogic/general.ts";
 
 function MultiplayerChessboard({
 	parsed_fen_string,
