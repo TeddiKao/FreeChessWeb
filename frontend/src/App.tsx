@@ -21,6 +21,7 @@ import PassAndPlay from "./pages/protected/PassAndPlay.tsx";
 import TempRoute from "./pages/TempRoute.tsx";
 import SelectBot from "./pages/protected/SelectBot.tsx";
 import PlayBot from "./pages/protected/PlayBot.tsx";
+import GameHistory from "./pages/protected/GameHistory.tsx";
 
 function Logout() {
     localStorage.clear();
@@ -102,6 +103,12 @@ function App() {
                         <Route path="/play-bot" element={
                             <ProtectedRoute>
                                 <PlayBot />
+                            </ProtectedRoute>
+                        } />
+
+                        <Route path="/game-history" element={
+                            <ProtectedRoute>
+                                <GameHistory />
                             </ProtectedRoute>
                         } />
 
