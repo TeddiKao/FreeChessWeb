@@ -308,8 +308,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		starting_square = move_info["starting_square"]
 		destination_square = move_info["destination_square"]
-		initial_square = move_info["initial_square"] if "initial_square" in move_info.keys(
-		) else None
+		initial_square = move_info.get("initial_square")
 
 		piece_color: str = move_info["piece_color"]
 		piece_type: str = move_info["piece_type"]
