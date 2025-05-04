@@ -10,12 +10,12 @@ import {
 import "../../styles/components/chessboard/board-actions.scss";
 import "../../styles/pages/pass-and-play.scss";
 
-import Chessboard from "../../globalComponents/chessboards/Chessboard.tsx";
-import GameplaySettings from "../../globalComponents/modals/GameplaySettings.tsx";
-import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.tsx";
+import Chessboard from "../../components/global/chessboards/Chessboard.tsx";
+import GameplaySettings from "../../components/global/modals/GameplaySettings.tsx";
+import ModalWrapper from "../../components/global/wrappers/ModalWrapper.tsx";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
 import { ParsedFENString } from "../../types/gameLogic.ts";
-import LocalGameOverModal from "../../globalComponents/modals/LocalGameOverModal.tsx";
+import LocalGameOverModal from "../../components/global/modals/gameOverModals/LocalModal.tsx";
 
 function PassAndPlay() {
 	const [parsedFEN, setParsedFEN] = useState<ParsedFENString | null>(null);

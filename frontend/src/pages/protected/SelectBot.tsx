@@ -1,6 +1,6 @@
 import { bots as botsTable } from "../../constants/botsConfig";
-import DashboardNavbar from "../../pageComponents/dashboard/DashboardNavbar";
-import BotCategory from "../../pageComponents/playBot/BotCategory";
+import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar";
+import BotCategory from "../../components/page/playBot/BotCategory";
 
 import "../../styles/pages/select-bot.scss";
 

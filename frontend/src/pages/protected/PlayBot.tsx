@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import BotChessboard from "../../globalComponents/chessboards/BotChessboard";
-import DashboardNavbar from "../../pageComponents/dashboard/DashboardNavbar";
+import BotChessboard from "../../components/global/chessboards/BotChessboard";
+import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar";
 import {
 	fetchBotGameMoveList,
 	fetchBotGamePositionList,
@@ -9,15 +9,15 @@ import { ParsedFENString } from "../../types/gameLogic";
 
 import "../../styles/pages/play-bot.scss";
 import useGameplaySettings from "../../hooks/useGameplaySettings";
-import GameplaySettings from "../../globalComponents/modals/GameplaySettings";
-import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper";
+import GameplaySettings from "../../components/global/modals/GameplaySettings";
+import ModalWrapper from "../../components/global/wrappers/ModalWrapper";
 import { Navigate, useLocation } from "react-router-dom";
 import { ChessboardSquareIndex } from "../../types/general";
-import MoveNavigationButtons from "../../globalComponents/gameplaySidePanel/MoveNavigationButtons";
-import MoveListPanel from "../../globalComponents/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "../../components/global/gameplaySidePanel/MoveNavigationButtons";
+import MoveListPanel from "../../components/global/gameplaySidePanel/MoveListPanel";
 import { isNullOrUndefined } from "../../utils/generalUtils";
 import { playAudio } from "../../utils/audioUtils";
-import LocalGameOverModal from "../../globalComponents/modals/LocalGameOverModal";
+import LocalGameOverModal from "../../components/global/modals/gameOverModals/LocalModal";
 
 function PlayBot() {
 	const initialGameplaySettings = useGameplaySettings();

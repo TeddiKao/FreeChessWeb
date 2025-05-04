@@ -1,8 +1,8 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
-import MultiplayerChessboard from "../../globalComponents/chessboards/MultiplayerChessboard.js";
-import Timer from "../../pageComponents/gameplay/Timer.tsx";
+import MultiplayerChessboard from "../../components/global/chessboards/MultiplayerChessboard.tsx";
+import Timer from "../../components/page/matchmaking/Timer.tsx";
 
 import "../../styles/pages/play.scss";
 import "../../styles/components/chessboard/board-actions.scss";
@@ -13,20 +13,20 @@ import {
 	fetchTimer,
 } from "../../utils/apiUtils.ts";
 
-import GameOverModal from "../../globalComponents/modals/MultiplayerGameOverModal.js";
-import GameplaySettings from "../../globalComponents/modals/GameplaySettings.js";
-import ModalWrapper from "../../globalComponents/wrappers/ModalWrapper.js";
+import GameOverModal from "../../components/global/modals/gameOverModals/MultiplayerModal.tsx";
+import GameplaySettings from "../../components/global/modals/GameplaySettings.tsx";
+import ModalWrapper from "../../components/global/wrappers/ModalWrapper.js";
 import { OptionalValue } from "../../types/general.js";
 import { ParsedFENString, PieceColor } from "../../types/gameLogic.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
-import MoveListPanel from "../../globalComponents/gameplaySidePanel/MoveListPanel.tsx";
-import MoveNavigationButtons from "../../globalComponents/gameplaySidePanel/MoveNavigationButtons.tsx";
+import MoveListPanel from "../../components/global/gameplaySidePanel/MoveListPanel.tsx";
+import MoveNavigationButtons from "../../components/global/gameplaySidePanel/MoveNavigationButtons.tsx";
 import { ArrowKeys } from "../../enums/general.ts";
-import GameplayActionButtons from "../../globalComponents/gameplaySidePanel/GameplayActionButtons.tsx";
+import GameplayActionButtons from "../../components/global/gameplaySidePanel/GameplayActionButtons.tsx";
 import { isNullOrUndefined } from "../../utils/generalUtils.ts";
-import MessageBox from "../../globalComponents/popups/MessageBox.tsx";
+import MessageBox from "../../components/global/popups/MessageBox.tsx";
 import { MessageBoxTypes } from "../../types/messageBox.ts";
-import DrawOfferPopup from "../../globalComponents/popups/DrawOfferPopup.tsx";
+import DrawOfferPopup from "../../components/global/popups/DrawOfferPopup.tsx";
 import { playAudio } from "../../utils/audioUtils.ts";
 
 function Play() {
