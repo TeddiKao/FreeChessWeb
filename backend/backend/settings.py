@@ -75,6 +75,7 @@ INSTALLED_APPS = [
 	"move_validation",
     "users",
     "bots",
+    "game_history",
 	"core"
 ]
 
