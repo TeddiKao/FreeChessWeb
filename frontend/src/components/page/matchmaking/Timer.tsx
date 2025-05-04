@@ -1,4 +1,4 @@
-import "../../styles/features/gameplay/timer.scss";
+import "../../../styles/features/gameplay/timer.scss";
 import { formatTime } from "../../../utils/timeUtils.ts";
 
 type TimerProps = {
