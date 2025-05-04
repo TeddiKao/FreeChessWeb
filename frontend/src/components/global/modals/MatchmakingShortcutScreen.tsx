@@ -1,9 +1,9 @@
-import { TimeControl } from "../../types/gameSetup";
-import { displayTimeControl } from "../../utils/timeUtils";
+import { TimeControl } from "../../../types/gameSetup";
+import { displayTimeControl } from "../../../utils/timeUtils";
 import LoadingSpinner from "../LoadingSpinner";
 import ModalWrapper from "../wrappers/ModalWrapper";
 
-import "../../styles/modals/matchmaking-shortcut-screen.scss";
+import "../../../styles/modals/matchmaking-shortcut-screen.scss";
 
 type MatchmakingShortcutScreenProps = {
     visible: boolean,

@@ -1,5 +1,5 @@
 import LoadingSpinner from "../LoadingSpinner";
-import "../../styles/modals/auth-loading-screen.scss";
+import "../../../styles/modals/auth-loading-screen.scss";
 import ModalWrapper from "../wrappers/ModalWrapper";
 
 type AuthLoadingScreenProps = {
