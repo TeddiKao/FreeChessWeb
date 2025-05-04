@@ -137,7 +137,6 @@ function Square({
 	}
 
 	function handleOnDrag(
-		event: React.DragEvent,
 		squareDragged: string | number
 	) {
 		setDraggedSquare(squareDragged);
@@ -172,8 +171,8 @@ function Square({
                     <DragPreviewImage connect={preview} src={pieceImageSrc} />
 					<img
 						ref={drag}
-						onDragStart={(event: React.DragEvent) => {
-							handleOnDrag(event, squareNumber);
+						onDragStart={() => {
+							handleOnDrag(squareNumber);
 						}}
 						onTouchStart={() => {
 							handleOnDrag(squareNumber);
