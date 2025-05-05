@@ -382,10 +382,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.append_to_move_list(chess_game_model, original_parsed_fen, move_info)
 
 	async def handle_player_timeout(self, chess_game_model: ChessGame, timeout_color: str):
-		if timeout_color.lower() == "white":
-			game_winner = await chess_game_model.async_get_game_attribute("black_player")
-		else:
-			game_winner = await chess_game_model.async_get_game_attribute("white_player")
+		game_winner = await chess_game_model.get_player_of_color(get_opposite_color(timeout_color))
 
 		await chess_game_model.async_end_game("Timeout", game_winner)
 
