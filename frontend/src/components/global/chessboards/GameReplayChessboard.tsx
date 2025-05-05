@@ -43,24 +43,25 @@ function GameReplayChessboard({
 				const boardPlacement = parsed_fen_string["board_placement"];
 				const squaresArray = Object.keys(boardPlacement);
 
-				const squareColor = isSquareLight(square - 1)
+				const boardPlacementSquare = square - 1;
+				const squareColor = isSquareLight(boardPlacementSquare)
 					? "light"
 					: "dark";
 
-				if (squaresArray.includes(`${square - 1}`)) {
+				if (squaresArray.includes(`${boardPlacementSquare}`)) {
 					const pieceType =
-						boardPlacement[`${square - 1}`]["piece_type"];
+						boardPlacement[`${boardPlacementSquare}`]["piece_type"];
 					const pieceColor =
-						boardPlacement[`${square - 1}`][
+						boardPlacement[`${boardPlacementSquare}`][
 							"piece_color"
 						].toLowerCase();
 
 					squareElements.push(
 						<div
-							key={square}
-							id={`${square}`}
+							key={`${boardPlacementSquare}`}
+							id={`${boardPlacementSquare}`}
 							className={getSquareClass(
-								`${square - 1}`,
+								`${boardPlacementSquare}`,
 								lastDraggedSquare,
 								lastDroppedSquare
 							)}
@@ -74,8 +75,8 @@ function GameReplayChessboard({
 				} else {
 					squareElements.push(
 						<div
-							key={square}
-							id={`${square}`}
+							key={`${boardPlacementSquare}`}
+							id={`${boardPlacementSquare}`}
 							className={`chessboard-square ${squareColor}`}
 						></div>
 					);
