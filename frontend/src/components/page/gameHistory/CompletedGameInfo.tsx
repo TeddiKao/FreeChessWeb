@@ -9,8 +9,13 @@ function CompletedGameInfo({ gameInfo }: CompletedGameInfoProps) {
 	return (
 		<div className="completed-game-info-container">
 			<div className="players-container">
-				<p className="white-player-name">{gameInfo.white_player}</p>
-				<p className="black-player-name">{gameInfo.black_player}</p>
+				<div className="white-player-container">
+                    <p className="white-player-name">{gameInfo.white_player}</p>
+                </div>
+				
+                <div className="black-player-container">
+                    <p className="black-player-name">{gameInfo.black_player}</p>
+                </div>
 			</div>
 
 			<div className="result-container">
