@@ -67,7 +67,9 @@ function GameReplayChessboard({
 							)}
 						>
 							<img
-								src={`/${pieceColor.toLowerCase()}${capitaliseFirstLetter(pieceType)}.svg`}
+								src={`/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
+									pieceType
+								)}.svg`}
 								className="piece-image"
 							/>
 						</div>
@@ -77,7 +79,11 @@ function GameReplayChessboard({
 						<div
 							key={`${boardPlacementSquare}`}
 							id={`${boardPlacementSquare}`}
-							className={`chessboard-square ${squareColor}`}
+							className={getSquareClass(
+								`${boardPlacementSquare}`,
+								lastDraggedSquare,
+								lastDroppedSquare
+							)}
 						></div>
 					);
 				}
