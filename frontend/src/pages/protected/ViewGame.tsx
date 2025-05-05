@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchMoveList, fetchPositionList } from "../../utils/apiUtils";
+import { fetchGameWinner, fetchMoveList, fetchPositionList } from "../../utils/apiUtils";
 import { ParsedFENString } from "../../types/gameLogic";
 import GameReplayChessboard from "../../components/global/chessboards/GameReplayChessboard";
 
 import "../../styles/pages/view-game.scss";
 import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar";
+import MoveListPanel from "../../components/global/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "../../components/global/gameplaySidePanel/MoveNavigationButtons";
 
 function ViewGame() {
 	const { gameId } = useParams();
@@ -15,6 +17,8 @@ function ViewGame() {
 	const [positionList, setPositionList] = useState([]);
 	const [positionIndex, setPositionIndex] = useState(0);
 	const [moveList, setMoveList] = useState([]);
+
+	const [gameWinner, setGameWinner] = useState("");
 
 	const parsedFEN: ParsedFENString =
 		positionList[positionIndex]?.["position"];
@@ -26,6 +30,7 @@ function ViewGame() {
 	useEffect(() => {
 		updatePositionList();
 		updateMoveList();
+		updateGameWinner();
 	}, []);
 
 	async function updatePositionList() {
@@ -38,11 +43,36 @@ function ViewGame() {
 		setMoveList(fetchedMoveList);
 	}
 
+	async function updateGameWinner() {
+		const fetchedGameWinner = await fetchGameWinner(Number(gameId));
+		setGameWinner(fetchedGameWinner);
+	}
+
 	function toggleBoardOrientation() {
 		const isWhite = boardOrientation.toLowerCase() === "white";
 		const newOrientation = isWhite ? "Black" : "White";
 
 		setBoardOrientation(newOrientation);
+	}
+
+	function handleBackToStart() {
+		setPositionIndex(0);
+	}
+
+	function handlePreviousMove() {
+		setPositionIndex((prevIndex) =>
+			prevIndex > 0 ? (prevIndex -= 1) : prevIndex
+		);
+	}
+
+	function handleNextMove() {
+		setPositionIndex((prevIndex) =>
+			prevIndex + 1 < positionList.length ? prevIndex + 1 : prevIndex
+		);
+	}
+
+	function handleCurrentPosition() {
+		setPositionIndex(positionList.length - 1);
 	}
 
 	return (
@@ -63,6 +93,22 @@ function ViewGame() {
 						onClick={toggleBoardOrientation}
 						className="flip-board-icon"
 						src="/flip-board-icon.png"
+					/>
+				</div>
+
+				<div className="gameplay-side-panel">
+					<MoveListPanel
+						gameEnded={true}
+						gameWinner={gameWinner}
+						setPositionIndex={setPositionIndex}
+						moveList={moveList}
+					/>
+					
+					<MoveNavigationButtons
+						backToStart={handleBackToStart}
+						handlePreviousMove={handlePreviousMove}
+						handleNextMove={handleNextMove}
+						backToCurrentPosition={handleCurrentPosition}
 					/>
 				</div>
 			</div>
