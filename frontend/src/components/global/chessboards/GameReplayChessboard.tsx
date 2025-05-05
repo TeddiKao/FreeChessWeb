@@ -1,5 +1,5 @@
 import { GameReplayChessboardProps } from "../../../interfaces/chessboard";
-import { getSquareClass } from "../../../utils/boardUtils";
+import { getSquareClass, isSquareLight } from "../../../utils/boardUtils";
 
 function GameReplayChessboard({
 	parsed_fen_string,
@@ -29,10 +29,7 @@ function GameReplayChessboard({
 				const boardPlacement = parsed_fen_string["board_placement"];
 				const squaresArray = Object.keys(boardPlacement);
 
-				const file = square - startingIndex + 1;
-				const squareIsLight = (file + row) % 2 !== 0;
-
-				const squareColor = squareIsLight ? "light" : "dark";
+				const squareColor = isSquareLight(square - 1) ? "light" : "dark";
 
 				if (squaresArray.includes(`${square - 1}`)) {
 					const pieceType =
@@ -46,7 +43,7 @@ function GameReplayChessboard({
 						<div
 							key={square}
 							id={`${square}`}
-							className={getSquareClass(`${square}`, lastDraggedSquare, lastDroppedSquare)}
+							className={getSquareClass(`${square - 1}`, lastDraggedSquare, lastDroppedSquare)}
 						>
 							<img
 								src={`/${pieceColor}${pieceType}.svg`}
