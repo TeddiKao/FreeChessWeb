@@ -8,7 +8,6 @@ type CompletedGameInfoProps = {
 
 function CompletedGameInfo({ gameInfo, username }: CompletedGameInfoProps) {
     const [viewOverlayVisible, setViewOverlayVisible] = useState(false);
-    const gameInfoRef = useRef(null);
 
     function getResultIconSrc() {
 		if (!gameInfo.game_winner) {
