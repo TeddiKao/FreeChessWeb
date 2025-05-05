@@ -37,4 +37,12 @@
 
 .result-container {
     margin-left: 12px;
+    
+    @include flex-column-x-center;
+    @include flex-column-y-center;
+}
+
+.result-icon {
+    width: 28px;
+    height: 28px;
 }
