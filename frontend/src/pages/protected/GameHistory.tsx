@@ -16,7 +16,6 @@ function GameHistory() {
 
 	useEffect(() => {
 		setCompletedGames(initialCompletedGames);
-		console.log(initialCompletedGames);
 	}, [initialCompletedGames]);
 
 	useEffect(() => {
