@@ -1,0 +1,6 @@
+@use "../global/mixins" as *;
+
+.view-game-interface-container {
+    @include flex-row-x-center;
+    @include flex-row-y-center;
+}
