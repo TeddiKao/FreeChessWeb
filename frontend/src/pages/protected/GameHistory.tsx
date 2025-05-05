@@ -31,7 +31,7 @@ function GameHistory() {
 		<>
 			<DashboardNavbar />
 			<div className="game-history-interface-container">
-				<h2 className="game-history-header">Game History</h2>
+				<h2 className="game-history-page-header">Game History</h2>
 				<div className="game-history-table">
 					<div className="game-history-table-header">
 						<p className="players-header">Players</p>
