@@ -5,6 +5,7 @@ import {
 	getSquareClass,
 	isSquareLight,
 } from "../../../utils/boardUtils";
+import { capitaliseFirstLetter } from "../../../utils/generalUtils";
 
 function GameReplayChessboard({
 	parsed_fen_string,
@@ -65,7 +66,7 @@ function GameReplayChessboard({
 							)}
 						>
 							<img
-								src={`/${pieceColor}${pieceType}.svg`}
+								src={`/${pieceColor.toLowerCase()}${capitaliseFirstLetter(pieceType)}.svg`}
 								className="piece-image"
 							/>
 						</div>
