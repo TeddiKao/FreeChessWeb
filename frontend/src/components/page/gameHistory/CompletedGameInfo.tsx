@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import "../../../styles/features/gameHistory/completed-game-info.scss";
 
 type CompletedGameInfoProps = {
@@ -6,6 +7,9 @@ type CompletedGameInfoProps = {
 };
 
 function CompletedGameInfo({ gameInfo, username }: CompletedGameInfoProps) {
+    const [viewOverlayVisible, setViewOverlayVisible] = useState(false);
+    const gameInfoRef = useRef(null);
+
     function getResultIconSrc() {
 		if (!gameInfo.game_winner) {
             return "/game-drawn.svg"
@@ -16,8 +20,16 @@ function CompletedGameInfo({ gameInfo, username }: CompletedGameInfoProps) {
         }
 	}
 
+    function showViewOverlay() {
+        setViewOverlayVisible(true);
+    }
+
+    function hideViewOverlay() {
+        setViewOverlayVisible(false);
+    }
+
 	return (
-		<div className="completed-game-info-container">
+		<div onMouseEnter={showViewOverlay} onMouseLeave={hideViewOverlay} className="completed-game-info-container">
 			<div className="players-container">
 				<div className="white-player-container">
                     <div className="white-player-color-icon"></div>
