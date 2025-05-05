@@ -13,7 +13,9 @@ function CompletedGameInfo({ gameInfo }: CompletedGameInfoProps) {
 				<p className="black-player-name">Black player: {gameInfo.black_player}</p>
 			</div>
 
-			<p>Result: {gameInfo.game_winner}</p>
+			<div className="result-container">
+                <p className="result-text">Result: {gameInfo.game_winner}</p>
+            </div>
 		</div>
 	);
 }
