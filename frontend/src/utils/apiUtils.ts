@@ -307,6 +307,18 @@ async function fetchBotGameMoveList(gameId: number) {
 	return moveList;
 }
 
+async function fetchCompletedGames() {
+	let completedGames = null;
+	try {
+		const response = await api.get("/bots/get-completed-games/");
+		completedGames = response.data;
+	} catch (error) {
+		console.error(error);
+	}
+
+	return completedGames;
+}
+
 export {
 	fetchFen,
 	fetchKingIsInCheck,
@@ -323,4 +335,5 @@ export {
 	makeMoveInBotGame,
 	fetchBotGameMoveList,
 	fetchBotGamePositionList,
+	fetchCompletedGames
 };
