@@ -320,6 +320,21 @@ async function fetchCompletedGames() {
 	return completedGames;
 }
 
+async function fetchGameWinner(gameId: number) {
+	let gameWinner = null;
+	try {
+		const response = await api.post("/game-history/get-game-winner/", {
+			game_id: gameId
+		});
+		
+		gameWinner = response.data;
+	} catch (error) {
+		console.error(error);
+	}
+
+	return gameWinner;
+}
+
 export {
 	fetchFen,
 	fetchKingIsInCheck,
@@ -336,5 +351,6 @@ export {
 	makeMoveInBotGame,
 	fetchBotGameMoveList,
 	fetchBotGamePositionList,
-	fetchCompletedGames
+	fetchCompletedGames,
+	fetchGameWinner
 };
