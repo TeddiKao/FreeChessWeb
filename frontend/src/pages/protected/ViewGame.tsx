@@ -4,6 +4,8 @@ import { fetchMoveList, fetchPositionList } from "../../utils/apiUtils";
 import { ParsedFENString } from "../../types/gameLogic";
 import GameReplayChessboard from "../../components/global/chessboards/GameReplayChessboard";
 
+import "../../styles/pages/view-game.scss";
+
 function ViewGame() {
 	const { gameId } = useParams();
 
@@ -27,7 +29,7 @@ function ViewGame() {
 
 	async function updatePositionList() {
 		const fetchedPositionList = await fetchPositionList(Number(gameId));
-		setPositionList(fetchedPositionList);
+        setPositionList(fetchedPositionList);
 	}
 
 	async function updateMoveList() {
