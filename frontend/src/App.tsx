@@ -1,4 +1,5 @@
 import { Navigate, BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 
 import { DndProvider } from "react-dnd";
 import { MultiBackend } from "react-dnd-multi-backend";
@@ -21,7 +22,8 @@ import PassAndPlay from "./pages/protected/PassAndPlay.tsx";
 import TempRoute from "./pages/TempRoute.tsx";
 import SelectBot from "./pages/protected/SelectBot.tsx";
 import PlayBot from "./pages/protected/PlayBot.tsx";
-import { useEffect } from "react";
+import GameHistory from "./pages/protected/GameHistory.tsx";
+import ViewGame from "./pages/protected/ViewGame.tsx";
 
 function Logout() {
     localStorage.clear();
@@ -107,6 +109,18 @@ function App() {
                         <Route path="/play-bot" element={
                             <ProtectedRoute>
                                 <PlayBot />
+                            </ProtectedRoute>
+                        } />
+
+                        <Route path="/game-history" element={
+                            <ProtectedRoute>
+                                <GameHistory />
+                            </ProtectedRoute>
+                        } />
+
+                        <Route path="/:gameId/view" element={
+                            <ProtectedRoute>
+                                <ViewGame />
                             </ProtectedRoute>
                         } />
 

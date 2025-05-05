@@ -41,9 +41,9 @@ function MoveListPanel({
     function generateGameResult() {
         if (!gameWinner) {
             return "1/2 - 1/2"
-        } else if (gameWinner === "White") {
+        } else if (gameWinner.toLowerCase() === "white") {
             return "1-0"
-        } else if (gameWinner === "Black") {
+        } else if (gameWinner.toLowerCase() === "black") {
             return "0-1"
         }
     }

@@ -307,6 +307,34 @@ async function fetchBotGameMoveList(gameId: number) {
 	return moveList;
 }
 
+async function fetchCompletedGames() {
+	let completedGames = null;
+	try {
+		const response = await api.post("/game-history/get-completed-games/");
+		
+		completedGames = response.data;
+	} catch (error) {
+		console.error(error);
+	}
+
+	return completedGames;
+}
+
+async function fetchGameWinner(gameId: number) {
+	let gameWinner = null;
+	try {
+		const response = await api.post("/game-history/get-game-winner/", {
+			game_id: gameId
+		});
+		
+		gameWinner = response.data;
+	} catch (error) {
+		console.error(error);
+	}
+
+	return gameWinner;
+}
+
 export {
 	fetchFen,
 	fetchKingIsInCheck,
@@ -323,4 +351,6 @@ export {
 	makeMoveInBotGame,
 	fetchBotGameMoveList,
 	fetchBotGamePositionList,
+	fetchCompletedGames,
+	fetchGameWinner
 };

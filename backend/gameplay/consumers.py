@@ -382,7 +382,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.append_to_move_list(chess_game_model, original_parsed_fen, move_info)
 
 	async def handle_player_timeout(self, chess_game_model: ChessGame, timeout_color: str):
-		await chess_game_model.async_end_game("Timeout")
+		game_winner = await chess_game_model.get_player_of_color(get_opposite_color(timeout_color))
+
+		await chess_game_model.async_end_game("Timeout", game_winner)
 
 		await self.channel_layer.group_send(
 			self.room_group_name,
@@ -551,12 +553,11 @@ class GameConsumer(AsyncWebsocketConsumer):
 					"new_position_index": position_index,
 				}))
 			)
-
 			
-
 			if is_checkmated or is_stalemated:
 				if is_checkmated:
-					await chess_game_model.async_end_game(f"{piece_color.capitalize()} won")
+					game_winner = await chess_game_model.get_player_of_color(piece_color)
+					await chess_game_model.async_end_game(f"{piece_color.capitalize()} won", game_winner)
 
 					await self.send(json.dumps({
 						"type": "player_checkmated",
@@ -718,7 +719,8 @@ class GameActionConsumer(AsyncWebsocketConsumer):
 				}
 			)
 
-			await chess_game_model.async_end_game("Resigned")
+			game_winner = await chess_game_model.get_player_of_color(winning_color)
+			await chess_game_model.async_end_game("Resigned", game_winner)
 
 		elif received_data["type"] == "draw_offered":
 			await self.channel_layer.group_send(

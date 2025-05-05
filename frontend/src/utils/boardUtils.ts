@@ -66,6 +66,18 @@ function isSquareOnRankEdge(square: number, sideToCheck: "left" | "right" | "bot
     }
 }
 
+function getSquareClass(square: string, previousDraggedSquare: string, previousDroppedSquare: string) {
+    const squareColor = isSquareLight(square) ? "light" : "dark";
+    
+    if (square === previousDraggedSquare) {
+        return "previous-dragged-square";
+    } else if (square === previousDroppedSquare) {
+        return "previous-dropped-square";
+    } else {
+        return `chessboard-square ${squareColor}`;
+    }
+}
+
 export {
     clearSquaresStyling,
     getRank,
@@ -76,4 +88,5 @@ export {
     getSquareExists,
     isSquareOnRankEdge,
     isSquareOnFileEdge,
+    getSquareClass
 };
