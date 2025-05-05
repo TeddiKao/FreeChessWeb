@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import "../../../styles/features/gameHistory/completed-game-info.scss";
+import { useNavigate } from "react-router-dom";
 
 type CompletedGameInfoProps = {
 	gameInfo: any;
@@ -8,6 +9,7 @@ type CompletedGameInfoProps = {
 
 function CompletedGameInfo({ gameInfo, username }: CompletedGameInfoProps) {
     const [viewOverlayVisible, setViewOverlayVisible] = useState(false);
+    const navigate = useNavigate();
 
     function getResultIconSrc() {
 		if (!gameInfo.game_winner) {
@@ -27,8 +29,14 @@ function CompletedGameInfo({ gameInfo, username }: CompletedGameInfoProps) {
         setViewOverlayVisible(false);
     }
 
+    function redirectToViewPage() {
+        const gameId = gameInfo.id;
+
+        navigate(`/${gameId}/view`);
+    }
+
 	return (
-		<div onMouseEnter={showViewOverlay} onMouseLeave={hideViewOverlay} className="completed-game-info-container">
+		<div onClick={redirectToViewPage} onMouseEnter={showViewOverlay} onMouseLeave={hideViewOverlay} className="completed-game-info-container">
 			<div className="players-container">
 				<div className="white-player-container">
                     <div className="white-player-color-icon"></div>
