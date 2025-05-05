@@ -24,3 +24,15 @@ class FetchCompletedGamesView(APIView):
             return Response(serialized_completed_games, status=status.HTTP_200_OK)
         except Exception as e:
             traceback.print_exc()
+
+class FetchGameWinnerView(APIView):
+    def post(self, request):
+        game_id = request.data.get("game_id")
+
+        try:
+            chess_game_model: ChessGame = ChessGame.objects.get(id=game_id)
+            game_winner = chess_game_model.game_winner
+
+            return Response(chess_game_model.sync_get_player_color(game_winner), status=status.HTTP_200_OK)
+        except Exception as e:
+            traceback.print_exc()
