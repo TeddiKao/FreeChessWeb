@@ -5,7 +5,17 @@ type CompletedGameInfoProps = {
 	username: string;
 };
 
-function CompletedGameInfo({ gameInfo }: CompletedGameInfoProps) {
+function CompletedGameInfo({ gameInfo, username }: CompletedGameInfoProps) {
+    function getResultIconSrc() {
+		if (!gameInfo.game_winner) {
+            return "/game-drawn.svg"
+        } else if (gameInfo.gaem_winner === username) {
+            return "/game-won.svg"
+        } else {
+            return "/game-lost.svg"
+        }
+	}
+
 	return (
 		<div className="completed-game-info-container">
 			<div className="players-container">
@@ -21,7 +31,7 @@ function CompletedGameInfo({ gameInfo }: CompletedGameInfoProps) {
 			</div>
 
 			<div className="result-container">
-                <p className="result-text">{gameInfo.game_winner}</p>
+                <img className="result-icon" src={getResultIconSrc()} alt=""/>
             </div>
 		</div>
 	);
