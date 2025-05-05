@@ -553,12 +553,11 @@ class GameConsumer(AsyncWebsocketConsumer):
 					"new_position_index": position_index,
 				}))
 			)
-
 			
-
 			if is_checkmated or is_stalemated:
 				if is_checkmated:
-					await chess_game_model.async_end_game(f"{piece_color.capitalize()} won")
+					game_winner = await chess_game_model.get_player_of_color(piece_color)
+					await chess_game_model.async_end_game(f"{piece_color.capitalize()} won", game_winner)
 
 					await self.send(json.dumps({
 						"type": "player_checkmated",
