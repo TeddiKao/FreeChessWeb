@@ -1,3 +1,5 @@
+@use "../../global/mixins/" as *;
+
 .completed-game-info-container {
     display: grid;
     grid-template-columns: 200px 50px;
@@ -12,6 +14,24 @@
     p {
         margin-top: 8px;
         margin-bottom: 8px;
+        margin-left: 8px;
+    }
+
+    .white-player-container, .black-player-container {
+        @include flex-row-y-center;
+    }
+
+    .white-player-color-icon {
+        width: 20px;
+        height: 20px;
+
+        background-color: white;
+        border-radius: 4px;
+    }
+
+    .black-player-color-icon {
+        @extend .white-player-color-icon;
+        background-color: black;
     }
 }
 

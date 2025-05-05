@@ -10,10 +10,12 @@ function CompletedGameInfo({ gameInfo }: CompletedGameInfoProps) {
 		<div className="completed-game-info-container">
 			<div className="players-container">
 				<div className="white-player-container">
+                    <div className="white-player-color-icon"></div>
                     <p className="white-player-name">{gameInfo.white_player}</p>
                 </div>
 				
                 <div className="black-player-container">
+                    <div className="black-player-color-icon"></div>
                     <p className="black-player-name">{gameInfo.black_player}</p>
                 </div>
 			</div>
