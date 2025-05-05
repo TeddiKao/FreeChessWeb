@@ -1,7 +1,19 @@
-from django.db.models import Model, Field
+from django.db.models import Model, Field, ForeignKey
+from django.contrib.auth import get_user_model
+
 from deepdiff import DeepDiff
 
 import random
+
+def is_user_related_foreign_key(field: Field):
+	is_foreign_key = isinstance(field, ForeignKey)
+
+	try:
+		is_user_related = field.remote_field.model == get_user_model()
+	except AttributeError:
+		is_user_related = False
+
+	return is_foreign_key and is_user_related
 
 def serialize_excluding_fields(model_instance: Model, exclude_fields: list[str] = None):
 	exclude_fields = exclude_fields or []
