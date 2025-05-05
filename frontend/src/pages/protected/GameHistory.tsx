@@ -8,38 +8,48 @@ import useUsername from "../../hooks/useUsername";
 import { isNullOrUndefined } from "../../utils/generalUtils";
 
 function GameHistory() {
-    const initialCompletedGames = useCompletedGames();
-    const initialUsername = useUsername();
+	const initialCompletedGames = useCompletedGames();
+	const initialUsername = useUsername();
 
-    const [completedGames, setCompletedGames] = useState(initialCompletedGames);
-    const [username, setUsername] = useState(initialUsername);
+	const [completedGames, setCompletedGames] = useState(initialCompletedGames);
+	const [username, setUsername] = useState(initialUsername);
 
-    useEffect(() => {
-        setCompletedGames(initialCompletedGames);
-        console.log(initialCompletedGames);
-    }, [initialCompletedGames]);
+	useEffect(() => {
+		setCompletedGames(initialCompletedGames);
+		console.log(initialCompletedGames);
+	}, [initialCompletedGames]);
 
-    useEffect(() => {
-        setUsername(initialUsername);
-    }, [initialUsername]);
+	useEffect(() => {
+		setUsername(initialUsername);
+	}, [initialUsername]);
 
-    if (isNullOrUndefined(completedGames) || isNullOrUndefined(username)) {
-        return null;
-    }
+	if (isNullOrUndefined(completedGames) || isNullOrUndefined(username)) {
+		return null;
+	}
 
 	return (
 		<>
-            <DashboardNavbar />
+			<DashboardNavbar />
 			<div className="game-history-interface-container">
-                <h2 className="game-history-header">Game History</h2>
-                <div className="completed-games-container">
-                    {completedGames.map((gameInfo, index) => {
-                        return (
-                            <CompletedGameInfo username={username!} gameInfo={gameInfo} />
-                        )
-                    })}
-                </div>
-            </div>
+				<h2 className="game-history-header">Game History</h2>
+				<div className="game-history-table">
+					<div className="game-history-table-header">
+						<p className="players-header">Players</p>
+						<p className="result-header">Result</p>
+					</div>
+
+					<div className="completed-games-container">
+						{completedGames.map((gameInfo, _) => {
+							return (
+								<CompletedGameInfo
+									username={username!}
+									gameInfo={gameInfo}
+								/>
+							);
+						})}
+					</div>
+				</div>
+			</div>
 		</>
 	);
 }
