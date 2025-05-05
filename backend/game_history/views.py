@@ -18,5 +18,8 @@ class FetchCompletedGamesView(APIView):
         completed_games = games_played.filter(game_status="Ended")
         serialized_completed_games = serialize_models_including_fields(completed_games, fields_to_include)
 
-        return Response(serialized_completed_games, status=status.HTTP_200_OK)
+        return Response({
+            "completed_games": serialized_completed_games,
+            "user_requested": user.username
+        }, status=status.HTTP_200_OK)
         
