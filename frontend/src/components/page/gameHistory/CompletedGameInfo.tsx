@@ -45,6 +45,13 @@ function CompletedGameInfo({ gameInfo, username }: CompletedGameInfoProps) {
 			<div className="result-container">
                 <img className="result-icon" src={getResultIconSrc()} alt=""/>
             </div>
+
+            {viewOverlayVisible && (
+                <div className="view-game-overlay">
+                    <img className="view-game-icon" src="/view-game.svg" />
+                    <p className="view-overlay-text">View Game</p>
+                </div>
+            )}
 		</div>
 	);
 }

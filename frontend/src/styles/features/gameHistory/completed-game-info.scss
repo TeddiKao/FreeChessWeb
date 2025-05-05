@@ -6,6 +6,12 @@
 
     padding-top: 12px;
     padding-bottom: 12px;
+
+    position: relative;
+}
+
+.completed-game-info-container:hover {
+    cursor: pointer;
 }
 
 .players-container {
@@ -45,4 +51,24 @@
 .result-icon {
     width: 28px;
     height: 28px;
+}
+
+.view-game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    @include flex-column-x-center;
+    @include flex-column-y-center;
+
+    background-color: hsl(120, 100%, 30%);
+    opacity: 0.8;
+}
+
+.view-overlay-text {
+    margin-top: 4px;
+    margin-bottom: 0;
+    color: white;
 }
