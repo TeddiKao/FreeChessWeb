@@ -26,7 +26,10 @@ def serialize_excluding_fields(model_instance: Model, exclude_fields: list[str] 
 			continue
 
 		field_name = field.name
-		field_value = getattr(model_instance, field_name)
+		if is_user_related_foreign_key(field):
+			field_value = getattr(model_instance, field_name).username
+		else:
+			field_value = getattr(model_instance, field_name)
 
 		model_data[field_name] = field_value
 
@@ -41,7 +44,10 @@ def serialize_including_fields(model_instance: Model, include_fields: list[str])
 			continue
 
 		field_name = field.name
-		field_value = getattr(model_instance, field_name)
+		if is_user_related_foreign_key(field):
+			field_value = getattr(model_instance, field_name).username
+		else:
+			field_value = getattr(model_instance, field_name)
 
 		model_data[field_name] = field_value
 
