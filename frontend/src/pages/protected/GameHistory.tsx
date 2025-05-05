@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar";
 import useCompletedGames from "../../hooks/useCompletedGames";
 
@@ -9,15 +9,21 @@ import { isNullOrUndefined } from "../../utils/generalUtils";
 
 function GameHistory() {
     const initialCompletedGames = useCompletedGames();
-    const username = useUsername();
+    const initialUsername = useUsername();
 
     const [completedGames, setCompletedGames] = useState(initialCompletedGames);
+    const [username, setUsername] = useState(initialUsername);
 
     useEffect(() => {
         setCompletedGames(initialCompletedGames);
+        console.log(initialCompletedGames);
     }, [initialCompletedGames]);
 
-    if (isNullOrUndefined(username) || isNullOrUndefined(completedGames)) {
+    useEffect(() => {
+        setUsername(initialUsername);
+    }, [initialUsername]);
+
+    if (isNullOrUndefined(completedGames) || isNullOrUndefined(username)) {
         return null;
     }
 
@@ -29,7 +35,7 @@ function GameHistory() {
                 <div className="completed-games-container">
                     {completedGames.map((gameInfo, index) => {
                         return (
-                            <CompletedGameInfo gameInfo={gameInfo} />
+                            <CompletedGameInfo username={username!} gameInfo={gameInfo} />
                         )
                     })}
                 </div>
