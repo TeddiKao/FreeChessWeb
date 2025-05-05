@@ -12,6 +12,9 @@
 
 .game-history-table {
     @include flex-column;
+    background-color: hsl(0, 0%, 90%);
+    
+    padding-left: 12px;
 }
 
 .game-history-table-header {
