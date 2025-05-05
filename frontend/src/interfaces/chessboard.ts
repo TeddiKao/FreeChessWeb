@@ -63,6 +63,11 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
 	gameplaySettings: any;
 }
 
+interface GameReplayChessboardProps extends DisplayChessboardProps {
+	lastDraggedSquare: string;
+	lastDroppedSquare: string;
+}
+
 interface EmptySquareProps {
 	squareNumber: string | number;
 	squareColor: string;
@@ -100,5 +105,6 @@ export type {
 	ChessboardProps,
 	MultiplayerChessboardProps,
 	BotChessboardProps,
+	GameReplayChessboardProps,
 	SquareProps,
 };
