@@ -10,7 +10,7 @@ from .models import ChessGame
 from .models import UserGameplaySettings
 
 from .serializers import ChessGameSerializer
-from core.utils import serialize_model
+from core.utils import serialize_excluding_fields
 
 from .utils import fen_parser
 
@@ -49,7 +49,7 @@ class UpdateSettingsView(APIView):
 
 		user_gameplay_settings.save()
 
-		serialized_settings = serialize_model(user_gameplay_settings, ["id", "user"])
+		serialized_settings = serialize_excluding_fields(user_gameplay_settings, ["id", "user"])
 
 		return Response(serialized_settings, status=status.HTTP_200_OK)
 
