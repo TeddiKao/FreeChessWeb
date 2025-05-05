@@ -719,7 +719,8 @@ class GameActionConsumer(AsyncWebsocketConsumer):
 				}
 			)
 
-			await chess_game_model.async_end_game("Resigned", get_opposite_color(self.scope["user"]))
+			game_winner = await chess_game_model.get_player_of_color(winning_color)
+			await chess_game_model.async_end_game("Resigned", game_winner)
 
 		elif received_data["type"] == "draw_offered":
 			await self.channel_layer.group_send(
