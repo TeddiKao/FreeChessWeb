@@ -8,6 +8,8 @@ import "../../styles/pages/view-game.scss";
 import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar";
 import MoveListPanel from "../../components/global/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../components/global/gameplaySidePanel/MoveNavigationButtons";
+import { playAudio } from "../../utils/audioUtils";
+import { isNullOrUndefined } from "../../utils/generalUtils";
 
 function ViewGame() {
 	const { gameId } = useParams();
@@ -26,12 +28,19 @@ function ViewGame() {
 		positionList[positionIndex]?.["last_dragged_square"];
 	const lastDroppedSquare =
 		positionList[positionIndex]?.["last_dropped_square"];
+	const moveType = positionList[positionIndex]?.["move_type"];
 
 	useEffect(() => {
 		updatePositionList();
 		updateMoveList();
 		updateGameWinner();
 	}, []);
+
+	useEffect(() => {
+		if (!isNullOrUndefined(moveType)) {
+			playAudio(moveType);
+		}
+	}, [positionIndex]);
 
 	async function updatePositionList() {
 		const fetchedPositionList = await fetchPositionList(Number(gameId));
@@ -103,7 +112,7 @@ function ViewGame() {
 						setPositionIndex={setPositionIndex}
 						moveList={moveList}
 					/>
-					
+
 					<MoveNavigationButtons
 						backToStart={handleBackToStart}
 						handlePreviousMove={handlePreviousMove}
