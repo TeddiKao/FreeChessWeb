@@ -311,6 +311,7 @@ async function fetchCompletedGames() {
 	let completedGames = null;
 	try {
 		const response = await api.post("/game-history/get-completed-games/");
+		
 		completedGames = response.data;
 	} catch (error) {
 		console.error(error);
