@@ -89,10 +89,18 @@ class ChessGame(models.Model):
 		}
 	
 	@database_sync_to_async
-	def async_end_game(self, game_result):
+	def async_end_game(self, game_result, game_winner = None):
 		self.game_status = "Ended"
 		self.game_result = game_result
+		self.game_winner = game_winner
 		self.save()
+
+	@database_sync_to_async
+	def get_player_of_color(self, color):
+		if color.lower() == "white":
+			return self.white_player
+		else:
+			return self.black_player
 
 	@database_sync_to_async
 	def async_get_white_player_username(self):
