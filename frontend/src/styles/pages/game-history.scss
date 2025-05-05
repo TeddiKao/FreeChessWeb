@@ -13,8 +13,6 @@
 .game-history-table {
     @include flex-column;
     background-color: hsl(0, 0%, 90%);
-    
-    padding-left: 12px;
 
     width: 800px;
 }
@@ -22,4 +20,14 @@
 .game-history-table-header {
     display: grid;
     grid-template-columns: 200px 50px;
+    background-color: hsl(0, 0%, 80%);
+
+    padding-top: 12px;
+    padding-left: 12px;
+    padding-bottom: 12px;
+
+    p {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
 }
