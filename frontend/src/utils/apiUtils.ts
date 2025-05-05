@@ -310,7 +310,7 @@ async function fetchBotGameMoveList(gameId: number) {
 async function fetchCompletedGames() {
 	let completedGames = null;
 	try {
-		const response = await api.get("/bots/get-completed-games/");
+		const response = await api.get("/game-history/get-completed-games/");
 		completedGames = response.data;
 	} catch (error) {
 		console.error(error);
