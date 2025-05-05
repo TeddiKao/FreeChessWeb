@@ -21,8 +21,8 @@ import PassAndPlay from "./pages/protected/PassAndPlay.tsx";
 import TempRoute from "./pages/TempRoute.tsx";
 import SelectBot from "./pages/protected/SelectBot.tsx";
 import PlayBot from "./pages/protected/PlayBot.tsx";
-import { useEffect } from "react";
 import GameHistory from "./pages/protected/GameHistory.tsx";
+import { useEffect } from "react";
 
 function Logout() {
     localStorage.clear();
