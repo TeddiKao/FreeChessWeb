@@ -24,6 +24,11 @@ function DashboardNavbar() {
         {
             linkName: "Play vs bot",
             linkPath: "/play-bot",
+        },
+
+        {
+            linkName: "Game history",
+            linkPath: "/game-history",
         }
     ];
 
