@@ -39,9 +39,10 @@ function GameHistory() {
 					</div>
 
 					<div className="completed-games-container">
-						{completedGames.map((gameInfo, _) => {
+						{completedGames.map((gameInfo, index) => {
 							return (
 								<CompletedGameInfo
+									key={index}
 									username={username!}
 									gameInfo={gameInfo}
 								/>
