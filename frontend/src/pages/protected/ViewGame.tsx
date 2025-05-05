@@ -5,6 +5,7 @@ import { ParsedFENString } from "../../types/gameLogic";
 import GameReplayChessboard from "../../components/global/chessboards/GameReplayChessboard";
 
 import "../../styles/pages/view-game.scss";
+import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar";
 
 function ViewGame() {
 	const { gameId } = useParams();
@@ -29,7 +30,7 @@ function ViewGame() {
 
 	async function updatePositionList() {
 		const fetchedPositionList = await fetchPositionList(Number(gameId));
-        setPositionList(fetchedPositionList);
+		setPositionList(fetchedPositionList);
 	}
 
 	async function updateMoveList() {
@@ -45,24 +46,27 @@ function ViewGame() {
 	}
 
 	return (
-		<div className="view-game-interface-container">
-			<div className="view-game-chessboard-wrapper">
-				<GameReplayChessboard
-					orientation={boardOrientation}
-					parsed_fen_string={parsedFEN}
-					lastDraggedSquare={lastDraggedSquare}
-					lastDroppedSquare={lastDroppedSquare}
-				/>
-			</div>
+		<>
+			<DashboardNavbar />
+			<div className="view-game-interface-container">
+				<div className="view-game-chessboard-wrapper">
+					<GameReplayChessboard
+						orientation={boardOrientation}
+						parsed_fen_string={parsedFEN}
+						lastDraggedSquare={lastDraggedSquare}
+						lastDroppedSquare={lastDroppedSquare}
+					/>
+				</div>
 
-			<div className="board-actions">
-				<img
-					onClick={toggleBoardOrientation}
-					className="flip-board-icon"
-					src="/flip-board-icon.png"
-				/>
+				<div className="board-actions">
+					<img
+						onClick={toggleBoardOrientation}
+						className="flip-board-icon"
+						src="/flip-board-icon.png"
+					/>
+				</div>
 			</div>
-		</div>
+		</>
 	);
 }
 
