@@ -45,8 +45,6 @@ def serialize_including_fields(model_instance: Model, include_fields: list[str])
 
 		field_name = field.name
 		if is_user_related_foreign_key(field):
-			print(field_name)
-		
 			if getattr(model_instance, field_name):
 				field_value = getattr(model_instance, field_name).username
 			else:
