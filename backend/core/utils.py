@@ -3,7 +3,7 @@ from deepdiff import DeepDiff
 
 import random
 
-def to_dict(model_instance: Model, exclude_fields: list[str] = None):
+def serialize_model(model_instance: Model, exclude_fields: list[str] = None):
 	exclude_fields = exclude_fields or []
 
 	model_fields: list[Field] = model_instance._meta.fields
