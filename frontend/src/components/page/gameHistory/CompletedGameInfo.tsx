@@ -9,7 +9,7 @@ function CompletedGameInfo({ gameInfo, username }: CompletedGameInfoProps) {
     function getResultIconSrc() {
 		if (!gameInfo.game_winner) {
             return "/game-drawn.svg"
-        } else if (gameInfo.gaem_winner === username) {
+        } else if (gameInfo.game_winner === username) {
             return "/game-won.svg"
         } else {
             return "/game-lost.svg"
