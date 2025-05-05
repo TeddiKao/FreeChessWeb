@@ -1,3 +1,5 @@
+import traceback
+
 from django.shortcuts import render
 from django.db.models import Q
 
@@ -11,12 +13,14 @@ from core.utils import serialize_models_including_fields
 # Create your views here.
 class FetchCompletedGamesView(APIView):
     def post(self, request):
-        user = request.user
-        fields_to_include = ["white_player", "black_player", "game_winner"]
+        try:
+            user = request.user
+            fields_to_include = ["white_player", "black_player", "game_winner"]
 
-        games_played = ChessGame.objects.filter(Q(white_player=user) | Q(black_player=user))
-        completed_games = games_played.filter(game_status="Ended")
-        serialized_completed_games = serialize_models_including_fields(completed_games, fields_to_include)
+            games_played = ChessGame.objects.filter(Q(white_player=user) | Q(black_player=user))
+            completed_games = games_played.filter(game_status="Ended")
+            serialized_completed_games = serialize_models_including_fields(completed_games, fields_to_include)
 
-        return Response(serialized_completed_games, status=status.HTTP_200_OK)
-        
+            return Response(serialized_completed_games, status=status.HTTP_200_OK)
+        except Exception as e:
+            traceback.print_exc()
