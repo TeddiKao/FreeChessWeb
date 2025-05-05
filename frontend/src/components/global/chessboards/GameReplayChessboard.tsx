@@ -7,6 +7,10 @@ function GameReplayChessboard({
 	lastDroppedSquare,
 	orientation,
 }: GameReplayChessboardProps) {
+    if (!parsed_fen_string) {
+        return null;
+    }
+
 	function generateChessboard() {
 		const squareElements = [];
 
@@ -65,7 +69,7 @@ function GameReplayChessboard({
         return squareElements;
 	}
 
-	return <div className="game-replay-chess-board-container">{generateChessboard()}</div>;
+	return <div className="chessboard-container">{generateChessboard()}</div>;
 }
 
 export default GameReplayChessboard;
