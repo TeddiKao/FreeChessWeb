@@ -97,45 +97,6 @@ function Play() {
 		}
 	}, [positionIndex]);
 
-	function handleKeyDown(event: KeyboardEvent) {
-		switch (event.key) {
-			case ArrowKeys.ARROW_LEFT:
-				setPositionIndex((prevIndex) => {
-					return prevIndex > 0 ? prevIndex - 1 : prevIndex;
-				});
-
-				break;
-
-			case ArrowKeys.ARROW_RIGHT:
-				setPositionIndex((prevIndex) => {
-					return prevIndex + 1 < positionList.length
-						? prevIndex + 1
-						: prevIndex;
-				});
-
-				break;
-
-			case ArrowKeys.ARROW_UP:
-				setPositionIndex(0);
-				break;
-
-			case ArrowKeys.ARROW_DOWN:
-				setPositionIndex(positionList.length - 1);
-				break;
-
-			default:
-				break;
-		}
-	}
-
-	useEffect(() => {
-		document.addEventListener("keydown", handleKeyDown);
-
-		return () => {
-			document.removeEventListener("keydown", handleKeyDown);
-		};
-	}, [positionList]);
-
 	useEffect(() => {
 		setGameplaySettings(initialGameplaySettings);
 	}, [initialGameplaySettings]);
