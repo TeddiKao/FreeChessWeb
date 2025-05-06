@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import "../../../styles/features/gameplay/side-panel-buttons.scss";
 import { StateSetterFunction } from "../../../types/general";
+import { ArrowKeys } from "../../../enums/general";
 
 type MoveNavigationButtonsProps = {
 	setPositionIndex: StateSetterFunction<number>;
@@ -10,6 +12,37 @@ function MoveNavigationButtons({
 	setPositionIndex,
     positionListLength
 }: MoveNavigationButtonsProps) {
+    function handleKeyDown(event: KeyboardEvent) {
+        switch (event.key) {
+            case ArrowKeys.ARROW_LEFT:
+                handlePreviousMove();
+                break;
+
+            case ArrowKeys.ARROW_RIGHT:
+                handleNextMove();
+                break;
+
+            case ArrowKeys.ARROW_DOWN:
+                backToCurrentPosition();
+                break;
+
+            case ArrowKeys.ARROW_UP:
+                backToStart();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [positionListLength]);
+
 	function backToStart() {
 		setPositionIndex(0);
 	}
