@@ -64,26 +64,6 @@ function ViewGame() {
 		setBoardOrientation(newOrientation);
 	}
 
-	function handleBackToStart() {
-		setPositionIndex(0);
-	}
-
-	function handlePreviousMove() {
-		setPositionIndex((prevIndex) =>
-			prevIndex > 0 ? (prevIndex -= 1) : prevIndex
-		);
-	}
-
-	function handleNextMove() {
-		setPositionIndex((prevIndex) =>
-			prevIndex + 1 < positionList.length ? prevIndex + 1 : prevIndex
-		);
-	}
-
-	function handleCurrentPosition() {
-		setPositionIndex(positionList.length - 1);
-	}
-
 	return (
 		<>
 			<DashboardNavbar />
