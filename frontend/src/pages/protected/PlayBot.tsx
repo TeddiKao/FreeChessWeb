@@ -107,28 +107,6 @@ function PlayBot() {
 		setGameplaySettingsVisible(false);
 	}
 
-	function handleBackToStart() {
-		setPositionIndex(0);
-	}
-
-	function handlePreviousMove() {
-		setPositionIndex((prevIndex) =>
-			prevIndex - 1 > 0 ? prevIndex - 1 : 0
-		);
-	}
-
-	function handleNextMove() {
-		setPositionIndex((prevIndex) =>
-			prevIndex + 1 >= positionList.length
-				? positionList.length - 1
-				: prevIndex + 1
-		);
-	}
-
-	function handleCurrentPosition() {
-		setPositionIndex(positionList.length - 1);
-	}
-
 	if (!parsedFEN) {
 		return null;
 	}
@@ -177,10 +155,8 @@ function PlayBot() {
 					/>
 
 					<MoveNavigationButtons
-						backToStart={handleBackToStart}
-						handlePreviousMove={handlePreviousMove}
-						handleNextMove={handleNextMove}
-						backToCurrentPosition={handleCurrentPosition}
+						setPositionIndex={setPositionIndex}
+						positionListLength={positionList.length}
 					/>
 				</div>
 			</div>
