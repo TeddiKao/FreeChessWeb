@@ -428,16 +428,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
 	async def receive(self, text_data):
-		await self.channel_layer.group_send(
-			self.room_group_name,
-			{
-				"type": "move_received",
-				"move_data": text_data,
-				"move_made_by": self.scope["user"].username
-			}
-		)
+		move_processing_start = perf_counter()
 
-	async def move_received(self, event):
+		move_made_by = self.scope["user"].username
 		timer_task = None
 
 		timer_task_exists = await GameplayTimerTask.async_get_timer_exists_from_room_id(self.room_group_name)
@@ -445,18 +438,20 @@ class GameConsumer(AsyncWebsocketConsumer):
 			timer_task: GameplayTimerTask = await GameplayTimerTask.async_get_timer_task_from_room_id(self.room_group_name)
 			await timer_task.async_stop()
 
-		move_is_valid: bool = await self.check_move_validation(json.loads(event["move_data"]), event["move_made_by"])
-
+		move_is_valid: bool = await self.check_move_validation(json.loads(text_data), move_made_by)
 		chess_game_model: ChessGame = await self.get_chess_game(self.game_id)
 		previous_position, en_passant_target_square = await asyncio.gather(
-			self.get_game_attribute(
-				chess_game_model, "parsed_board_placement"),
-			self.get_game_attribute(
-				chess_game_model, "en_passant_target_square")
+			self.get_game_attribute(chess_game_model, "parsed_board_placement"),
+			self.get_game_attribute(chess_game_model, "en_passant_target_square")
 		)
 
-		parsed_move_data: dict = json.loads(event["move_data"])
+		parsed_move_data = json.loads(text_data)
+		piece_color = parsed_move_data["piece_color"]
+		opposing_color = get_opposite_color(piece_color.lower())
 
+		if not move_is_valid:
+			return
+		
 		white_player_username, black_player_username, white_player_increment, black_player_increment = await asyncio.gather(
 			self.white_player_user.async_get_player_username(),
 			self.black_player_user.async_get_player_username(),
@@ -465,9 +460,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.get_game_attribute(chess_game_model, "black_player_increment")
 		)
 
-		if white_player_username == event["move_made_by"]:
+		if white_player_username == move_made_by:
 			await self.increment_white_player_timer(chess_game_model, white_player_increment)
-		elif black_player_username == event["move_made_by"]:
+		elif black_player_username == move_made_by:
 			await self.increment_black_player_timer(chess_game_model, black_player_increment)
 
 		new_white_player_clock, new_black_player_clock, current_move_number = await asyncio.gather(
@@ -476,98 +471,125 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.get_game_attribute(chess_game_model, "current_move")
 		)
 
-		if move_is_valid:
-			piece_color = parsed_move_data["piece_color"]
+		await self.update_position(chess_game_model, parsed_move_data)
 
-			await self.update_position(chess_game_model, parsed_move_data)
+		new_position_list, new_move_list, new_parsed_fen = await asyncio.gather(
+			self.get_game_attribute(chess_game_model, "position_list"),
+			self.get_game_attribute(chess_game_model, "move_list"),
+			chess_game_model.get_full_parsed_fen()
+		)
 
-			new_position_list, new_move_list, new_parsed_fen = await asyncio.gather(
-				self.get_game_attribute(chess_game_model, "position_list"),
-				self.get_game_attribute(chess_game_model, "move_list"),
-				chess_game_model.get_full_parsed_fen()
-			)
+		new_board_placement = new_parsed_fen["board_placement"]
+		updated_halfmove_clock = new_parsed_fen["halfmove_clock"]
 
-			new_board_placement = new_parsed_fen["board_placement"]
+		is_checkmated, is_stalemated = await asyncio.gather(
+			asyncio.to_thread(get_is_checkmated, new_parsed_fen, opposing_color),
+			asyncio.to_thread(get_is_stalemated, new_parsed_fen, opposing_color)
+		)
 
-			opposing_color = get_opposite_color(piece_color.lower())
-
-			is_checkmated, is_stalemated = await asyncio.gather(
-				asyncio.to_thread(get_is_checkmated, new_parsed_fen, opposing_color),
-				asyncio.to_thread(get_is_stalemated, new_parsed_fen, opposing_color)
-			)
-
-			position_index = calculate_position_index(
-				piece_color, current_move_number) 
-
-			await asyncio.gather(
-				self.send(json.dumps({
+		position_index = calculate_position_index(
+			piece_color, current_move_number)
+		
+		await asyncio.gather(
+			self.channel_layer.group_send(
+				self.room_group_name,
+				{
 					"type": "position_list_updated",
 					"new_position_list": new_position_list,
-				})),
+				}
+			),
 
-				self.send(json.dumps({
+			self.channel_layer.group_send(
+				self.room_group_name,
+				{
 					"type": "move_list_updated",
-					"new_move_list": new_move_list,
-				})),
-
-				self.send(json.dumps({
-					"type": "move_made",
-					"move_data": parsed_move_data,
-					"move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
-					"new_parsed_fen": new_parsed_fen,
-					"new_position_index": position_index,
-				}))
+					"new_move_list": new_move_list
+				}
 			)
-			
-			if is_checkmated or is_stalemated:
-				if is_checkmated:
-					game_winner = await chess_game_model.get_player_of_color(piece_color)
-					await chess_game_model.async_end_game(f"{piece_color.capitalize()} won", game_winner)
+		)
 
-					await self.send(json.dumps({
-						"type": "player_checkmated",
-						"winning_color": piece_color,
-						"winning_player": event["move_made_by"],
-					}))
+		await self.channel_layer.group_send(
+			self.room_group_name,
+			{
+				"type": "move_received",
+				"move_data": text_data,
+				"move_made_by": self.scope["user"].username,
+				"move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
+				"new_parsed_fen": new_parsed_fen,
+				"new_position_index": position_index
+			}
+		),
 
-				if is_stalemated:
-					await chess_game_model.async_end_game("Draw")
-
-					await self.send(json.dumps({
+		if is_checkmated or is_stalemated:
+			if is_checkmated:
+				await asyncio.gather(
+					chess_game_model.async_end_game(f"{piece_color.captialize()} won", move_made_by.username),
+					self.channel_layer.group_send(
+						self.room_group_name,
+						{
+							"type": "player_checkmated",
+							"winning_color": piece_color,
+							"winning_player": move_made_by
+						}
+					)
+				)
+			else:
+				await self.channel_layer.group_send(
+					self.room_group_name,
+					{
 						"type": "player_stalemated",
-					}))
+					}
+				)
 
-			elif is_threefold_repetiiton(new_position_list, new_parsed_fen):
-				await chess_game_model.async_end_game("Draw")
-				
-				await self.send(json.dumps({
-					"type": "threefold_repetition_detected",
-				}))
+		elif is_threefold_repetiiton(new_position_list, new_parsed_fen):
+			await asyncio.gather(
+				chess_game_model.async_end_game("Draw"),
+				self.channel_layer.group_send(
+					self.room_group_name,
+					{
+						"type": "threefold_repetition_detected"
+					}
+				)
+			)
 
-			elif check_50_move_rule_draw(chess_game_model.halfmove_clock):
-				await chess_game_model.async_end_game("Draw")
+		elif not has_sufficient_material(new_board_placement):
+			await asyncio.gather(
+				chess_game_model.async_end_game("Draw"),
+				self.channel_layer.group_send(
+					self.room_group_name,
+					{
+						"type": "insufficient_material"
+					}
+				)
+			)
 
-				await self.send(json.dumps({
-					"type": "50_move_rule_detected"
-				}))
+		elif check_50_move_rule_draw(updated_halfmove_clock):
+			await asyncio.gather(
+				chess_game_model.async_end_game("Draw"),
+				self.channel_layer.group_send(
+					self.room_group_name,
+					{
+						"type": "fifty_move_rule_detected"
+					}
+				)
+			)
 
-			elif not has_sufficient_material(new_board_placement):
-				await chess_game_model.async_end_game("Draw")
-
-				await self.send(json.dumps({
-					"type": "insufficient_material"
-				}))
-
-
-			if timer_task:
-				await self.send(json.dumps({
+		if timer_task:
+			await self.channel_layer.group_send(
+				self.room_group_name,
+				{
 					"type": "timer_incremented",
 					"white_player_clock": float(new_white_player_clock),
 					"black_player_clock": float(new_black_player_clock)
-				}))
+				}
+			)
 
 		if not timer_task.is_timer_running():
 			asyncio.create_task(self.handle_timer_decrement())
+
+		move_processing_end = perf_counter() 
+
+		print(f"Move processing took: {(move_processing_end - move_processing_start):.6f}")
 
 	async def timer_decremented(self, event):
 		if self.channel_name:
@@ -583,6 +605,61 @@ class GameConsumer(AsyncWebsocketConsumer):
 				"type": "player_timeout",
 				"timeout_color": event["timeout_color"]
 			}))
+
+	async def timer_incremented(self, event):
+		await self.send(json.dumps({
+			"type": "timer_incremented",
+			"white_player_clock": float(event["white_player_clock"]),
+			"black_player_clock": float(event["black_player_clock"])
+		}))
+
+	async def move_received(self, event):
+		await self.send(json.dumps({
+			"type": "move_made",
+			"move_data": event["move_data"],
+			"move_type": event["move_type"],
+			"new_parsed_fen": event["new_parsed_fen"],
+			"new_position_index": event["new_position_index"],
+		}))
+
+	async def player_checkmated(self, event):
+		await self.send(json.dumps({
+			"type": "player_checkmated",
+			"winning_color": event["winning_color"],
+			"winning_player": event["winning_player"]
+		}))
+
+	async def player_stalemated(self, _):
+		await self.send(json.dumps({
+			"type": "player_stalemated"
+		}))
+
+	async def threefold_repetition_detected(self, _):
+		await self.send(json.dumps({
+			"type": "threefold_repetition_detected"
+		}))
+
+	async def fifty_move_rule_detected(self, _):
+		await self.send(json.dumps({
+			"type": "50_move_rule_detected"
+		}))
+
+	async def insufficient_material(self, _):
+		await self.send(json.dumps({
+			"type": "insufficient_material"
+		}))
+
+	async def position_list_updated(self, event):
+		await self.send(json.dumps({
+			"type": "position_list_updated",
+			"new_position_list": event["new_position_list"]
+		}))
+
+	async def move_list_updated(self, event):
+		await self.send(json.dumps({
+			"type": "move_list_updated",
+			"new_move_list": event["new_move_list"]
+		}))
 
 	async def resume_timer(self, event):
 		asyncio.create_task(self.handle_timer_decrement())
