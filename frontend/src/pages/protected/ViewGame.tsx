@@ -114,10 +114,8 @@ function ViewGame() {
 					/>
 
 					<MoveNavigationButtons
-						backToStart={handleBackToStart}
-						handlePreviousMove={handlePreviousMove}
-						handleNextMove={handleNextMove}
-						backToCurrentPosition={handleCurrentPosition}
+						setPositionIndex={setPositionIndex}
+						positionListLength={positionList.length}
 					/>
 				</div>
 			</div>
