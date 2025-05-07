@@ -1,3 +1,6 @@
+import json
+import hashlib
+
 from .get_legal_moves import is_king_in_check, get_legal_moves
 from .general import get_all_pieces_on_board
 
@@ -112,31 +115,37 @@ def is_checkmated_or_stalemated(current_fen: dict, king_color: str):
         return True, False
     else:
         return False, True
+    
+def create_fen_hash(structured_board_placement: dict, castling_rights: dict, en_passant_target_square: str | int):
+    string_fen = json.dumps({
+        "board_placement": structured_board_placement,
+        "castling_rights": castling_rights,
+        "en_passant_target_square": str(en_passant_target_square)
+    }, sort_keys=True)
+
+    hashed_fen = hashlib.sha256(string_fen.encode()).hexdigest()
+
+    return hashed_fen
 
 def get_position_occurences(position_list: list, position: dict):
     occurences = 0
+    
+    target_board_placement = position["board_placement"]
+    target_castling_rights = position["castling_rights"]
+    target_en_passant = position["en_passant_target_square"]
+
+    target_position_hash = create_fen_hash(target_board_placement, target_castling_rights, target_en_passant)
 
     for position_list_data in position_list:
         position_list_fen = position_list_data["position"]
 
-        position_list_board_placement = position_list_fen["board_placement"]
-        position_list_castling_rights = position_list_fen["castling_rights"]
-        position_list_en_passant = position_list_fen["en_passant_target_square"]
+        board_placement_to_check = position_list_fen["board_placement"]
+        current_castling_rights_to_check = position_list_fen["castling_rights"]
+        current_en_passant_to_check = position_list_fen["en_passant_target_square"]
 
-        position_to_check_board_placement = position["board_placement"]
-        position_to_check_castling_rights = position["castling_rights"]
-        position_to_check_en_passant = position["en_passant_target_square"]
-
-        if not compare_dictionaries(position_list_board_placement, position_to_check_board_placement):
-            continue
-
-        if not compare_dictionaries(position_list_castling_rights, position_to_check_castling_rights):
-            continue
-
-        if not compare_dictionaries(position_list_en_passant, position_to_check_en_passant):
-            continue
-
-        occurences += 1
+        position_hash_to_check = create_fen_hash(board_placement_to_check, current_castling_rights_to_check, current_en_passant_to_check)
+        if position_hash_to_check == target_position_hash:
+            occurences += 1
 
     return occurences
 
