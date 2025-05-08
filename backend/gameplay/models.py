@@ -1,4 +1,4 @@
-from uuid import uuid4
+from time import perf_counter
 
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -134,23 +134,38 @@ class ChessGame(models.Model):
 	@database_sync_to_async
 	def async_get_player_allowed_to_move(self):
 		side_to_move = self.current_player_turn
+
 		if side_to_move.lower() == "white":
 			return self.white_player.username
 		else:
 			return self.black_player.username
 		
-	def sync_get_player_allowed_to_move(self):
-		side_to_move = self.current_player_turn
-		if side_to_move.lower() == "white":
-			return self.white_player.username
+	@classmethod
+	def get_player_allowed_to_move(cls, white_player_username, black_player_username, side_to_move):
+		if side_to_move == "white":
+			return white_player_username
 		else:
-			return self.black_player.username
+			return black_player_username
+
+	def sync_get_player_allowed_to_move(self, white_player_username, black_player_username):
+		side_to_move_fetch_start = perf_counter()
+		side_to_move = self.current_player_turn
+		side_to_move_fetch_end = perf_counter()
+		print(f"Side to move fetch took {(side_to_move_fetch_end - side_to_move_fetch_start):.6f} seconds")
+
+		if side_to_move == "white":
+			return white_player_username
+		else:
+			return black_player_username
 		
 	@database_sync_to_async
-	def async_get_player_allowed_to_move_from_id(self, game_id):
+	def async_get_player_allowed_to_move_from_id(self, game_id, white_player_username, black_player_username):
+		game_data_fetch_start = perf_counter()
 		game_data = ChessGame.objects.only("white_player", "black_player", "current_player_turn").get(id=game_id)
-		
-		return game_data.sync_get_player_allowed_to_move()
+		game_data_fetch_end = perf_counter()
+		print(f"Game data fetch took {(game_data_fetch_end - game_data_fetch_start):.6f} seconds")
+
+		return game_data.sync_get_player_allowed_to_move(white_player_username, black_player_username)
 
 
 	def sync_get_full_parsed_fen(self):
@@ -159,12 +174,17 @@ class ChessGame(models.Model):
             "castling_rights": self.castling_rights,
             "en_passant_target_square": self.en_passant_target_square,
             "halfmove_clock": self.halfmove_clock,
-            "fullmove_number": self.current_move
+            "fullmove_number": self.current_move,
+			"side_to_move": self.current_player_turn
 		}
 	
 	@database_sync_to_async
 	def async_get_game_attribute(self, attribute_name):
 		return getattr(self, attribute_name)
+	
+	@database_sync_to_async
+	def async_get_attributes(self, attribute_list):
+		return ChessGame.objects.filter(id=self.id).values(*attribute_list).first()
 	
 	def sync_get_game_attribute(self, attribute_name):
 		return getattr(self, attribute_name)
