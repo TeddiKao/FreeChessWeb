@@ -7,18 +7,18 @@ function convertTimeControlTime(time: number) {
 }
 
 function convertToMilliseconds(timeInSeconds: number) {
-	return timeInSeconds * 1000
+	return timeInSeconds * 1000;
 }
 
 function convertTimeControlToSeconds(timeControl: TimeDuration): number {
-    const timeControlHours = timeControl.hours
-	const timeControlMinutes = timeControl.minutes
-	const timeControlSeconds = timeControl.seconds
+	const timeControlHours = timeControl.hours;
+	const timeControlMinutes = timeControl.minutes;
+	const timeControlSeconds = timeControl.seconds;
 
 	const hoursInSeconds = timeControlHours * 60 * 60;
 	const minutesInSeconds = timeControlMinutes * 60;
 
-	const totalSeconds = hoursInSeconds + minutesInSeconds + timeControlSeconds
+	const totalSeconds = hoursInSeconds + minutesInSeconds + timeControlSeconds;
 
 	return totalSeconds;
 }
@@ -29,14 +29,16 @@ function formatTime(timeInSeconds: number): string {
 	const seconds: number = floor(timeInSeconds % 60);
 
 	const hoursString: string = hours > 0 ? `${hours}` : "";
-	const minutesString: string = hours > 0 ? `${padZero(minutes)}` : `${minutes}`;
+	const minutesString: string =
+		hours > 0 ? `${padZero(minutes)}` : `${minutes}`;
 	const secondsString: string = `${padZero(seconds)}`;
 
-	const hasLeadingColon: boolean = hours > 0
+	const hasLeadingColon: boolean = hours > 0;
 	const leadingColon: string = hasLeadingColon ? ":" : "";
 
-	const trimmedTimeString: string = `${hoursString}${leadingColon}${minutesString}:${secondsString}`.trim();
-	
+	const trimmedTimeString: string =
+		`${hoursString}${leadingColon}${minutesString}:${secondsString}`.trim();
+
 	return trimmedTimeString;
 }
 
@@ -49,4 +51,16 @@ function displayTimeControl({ baseTime, increment }: TimeControl): string {
 	return timeControlString;
 }
 
-export { formatTime, displayTimeControl, convertTimeControlToSeconds, convertToMilliseconds }
+function getLocalTime() {
+	const dateObj = new Date();
+
+	return dateObj.getTime();
+}
+
+export {
+	formatTime,
+	displayTimeControl,
+	convertTimeControlToSeconds,
+	convertToMilliseconds,
+	getLocalTime
+};
