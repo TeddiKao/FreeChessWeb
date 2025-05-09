@@ -4,8 +4,7 @@ import UserGreeting from "../../components/page/dashboard/UserGreeting.tsx";
 function Dashboard() {
 	return (
 		<>
-			<DashboardNavbar />
-			<UserGreeting />
+			
 		</>
 	);
 }

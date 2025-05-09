@@ -1,6 +1,8 @@
 import useUsername from "../../../hooks/useUsername";
 import { getLocalTimeHours } from "../../../utils/timeUtils";
 
+import "../../../styles/components/dashboard/user-greeting.scss";
+
 function UserGreeting() {
     const currentTime = getLocalTimeHours();
     const username = useUsername();
