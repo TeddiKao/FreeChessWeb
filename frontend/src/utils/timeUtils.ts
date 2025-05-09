@@ -51,10 +51,10 @@ function displayTimeControl({ baseTime, increment }: TimeControl): string {
 	return timeControlString;
 }
 
-function getLocalTime() {
+function getLocalTimeHours() {
 	const dateObj = new Date();
 
-	return dateObj.getTime();
+	return dateObj.getHours();
 }
 
 export {
@@ -62,5 +62,5 @@ export {
 	displayTimeControl,
 	convertTimeControlToSeconds,
 	convertToMilliseconds,
-	getLocalTime
+	getLocalTimeHours
 };
