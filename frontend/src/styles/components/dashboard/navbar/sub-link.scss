@@ -4,6 +4,7 @@
 .dashboard-navbar-sublink-container {
     @include flex-row-y-center;
     margin-bottom: 4px;
+    margin-left: 32px;
 }
 
 .dashboard-navbar-sublink-name {
