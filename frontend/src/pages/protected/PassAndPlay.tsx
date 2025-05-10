@@ -16,6 +16,7 @@ import ModalWrapper from "../../components/global/wrappers/ModalWrapper.tsx";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
 import { ParsedFENString } from "../../types/gameLogic.ts";
 import LocalGameOverModal from "../../components/global/modals/gameOverModals/LocalModal.tsx";
+import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar.tsx";
 
 function PassAndPlay() {
 	const [parsedFEN, setParsedFEN] = useState<ParsedFENString | null>(null);
@@ -77,6 +78,7 @@ function PassAndPlay() {
 		<GameEndedSetterContext.Provider value={setGameEnded}>
 			<GameEndedCauseSetterContext.Provider value={setGameEndedCause}>
 				<GameWinnerSetterContext.Provider value={setGameWinner}>
+					<DashboardNavbar />
 					<div className="playing-interface-container">
 						<div className="main-chessboard">
 							<div className="chessboard-wrapper">
