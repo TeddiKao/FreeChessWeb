@@ -24,20 +24,22 @@ function ParentLink({
 
 	return (
 		<div className="dashboard-navbar-parent-link-container">
-			<img
-				className="dashboard-navbar-parent-link-icon"
-				src={icon}
-				alt=""
-			/>
+			<div className="dashboard-navbar-parent-link-info">
+				<img
+					className="dashboard-navbar-parent-link-icon"
+					src={icon}
+					alt=""
+				/>
 
-			{dashboardNavbarExpanded && (
-				<p
-					onClick={toggleParentLinkExpandedState}
-					className="dashboard-navbar-parent-link-name"
-				>
-					{name}
-				</p>
-			)}
+				{dashboardNavbarExpanded && (
+					<p
+						onClick={toggleParentLinkExpandedState}
+						className="dashboard-navbar-parent-link-name"
+					>
+						{name}
+					</p>
+				)}
+			</div>
 
 			{parentLinkExpanded && subLinks && (
 				<div className="dashboard-navbar-sublinks-container">
