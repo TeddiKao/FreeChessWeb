@@ -16,6 +16,7 @@ import MatchmakingScreen from "../../components/page/matchmaking/MatchmakingScre
 import { GameSetupStages } from "../../enums/gameSetup.js";
 import { ParsedFENString } from "../../types/gameLogic.ts";
 import CustomTimeControlScreen from "../../components/page/matchmaking/CustomTimeControlScreen.tsx";
+import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar.tsx";
 
 type TimeControlInfo = {
 	baseTime: number;
@@ -267,33 +268,39 @@ function GameSetup() {
 	const timerWrapperStyles = { width: "440px" };
 
 	return (
-		<div className="time-control-selection-interface-container">
-			<div className="display-chessboard-container">
-				<div style={timerWrapperStyles} className="top-timer-wrapper">
-					<Timer
-						playerColor="black"
-						timeInSeconds={baseTime || 3600}
+		<>
+			<DashboardNavbar />
+			<div className="time-control-selection-interface-container">
+				<div className="display-chessboard-container">
+					<div
+						style={timerWrapperStyles}
+						className="top-timer-wrapper"
+					>
+						<Timer
+							playerColor="black"
+							timeInSeconds={baseTime || 3600}
+						/>
+					</div>
+
+					<DisplayChessboard
+						parsed_fen_string={parsedFEN}
+						orientation="White"
 					/>
+
+					<div
+						style={timerWrapperStyles}
+						className="bottom-timer-wrapper"
+					>
+						<Timer
+							playerColor="white"
+							timeInSeconds={baseTime || 3600}
+						/>
+					</div>
 				</div>
 
-				<DisplayChessboard
-					parsed_fen_string={parsedFEN}
-					orientation="White"
-				/>
-
-				<div
-					style={timerWrapperStyles}
-					className="bottom-timer-wrapper"
-				>
-					<Timer
-						playerColor="white"
-						timeInSeconds={baseTime || 3600}
-					/>
-				</div>
+				{renderGameSetupPanel()}
 			</div>
-
-			{renderGameSetupPanel()}
-		</div>
+		</>
 	);
 }
 
