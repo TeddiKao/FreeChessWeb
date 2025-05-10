@@ -34,7 +34,7 @@ function ParentLink({
 
 	return (
 		<div onClick={handleParentLinkNavigation} className="dashboard-navbar-parent-link-container">
-			<div className="dashboard-navbar-parent-link-info">
+			<div onClick={toggleParentLinkExpandedState} className="dashboard-navbar-parent-link-info">
 				<img
 					className="dashboard-navbar-parent-link-icon"
 					src={icon}
@@ -43,7 +43,6 @@ function ParentLink({
 
 				{dashboardNavbarExpanded && (
 					<p
-						onClick={toggleParentLinkExpandedState}
 						className="dashboard-navbar-parent-link-name"
 					>
 						{name}
