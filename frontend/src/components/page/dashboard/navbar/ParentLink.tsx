@@ -8,6 +8,8 @@ type ParentLinkProps = {
 	dashboardNavbarExpanded: boolean;
 };
 
+import "../../../../styles/components/dashboard/navbar/parent-link.scss";
+
 function ParentLink({
 	icon,
 	name,
