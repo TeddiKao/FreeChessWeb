@@ -32,7 +32,9 @@ function ParentLink({
 				<p
 					onClick={toggleParentLinkExpandedState}
 					className="dashboard-navbar-parent-link-name"
-				>{name}</p>
+				>
+					{name}
+				</p>
 			)}
 
 			{parentLinkExpanded && subLinks && (
