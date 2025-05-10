@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SubLink from "./SubLink";
 
 type ParentLinkProps = {
@@ -21,6 +21,12 @@ function ParentLink({
 }: ParentLinkProps) {
 	const [parentLinkExpanded, setParentLinkExpanded] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!dashboardNavbarExpanded) {
+            setParentLinkExpanded(false);
+        }
+    }, [dashboardNavbarExpanded]);
 
 	function toggleParentLinkExpandedState() {
 		setParentLinkExpanded((prevExpanded) => !prevExpanded);
