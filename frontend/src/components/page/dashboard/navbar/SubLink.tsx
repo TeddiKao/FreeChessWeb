@@ -1,3 +1,5 @@
+import "../../../../styles/components/dashboard/navbar/sub-link.scss";
+
 type SubLinkProps = {
     name: string,
     path: string,
