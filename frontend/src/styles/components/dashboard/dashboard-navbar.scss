@@ -1,3 +1,17 @@
 @use "../../global/mixins" as *;
 @use "../../global/variables";
 
+.dashboard-navbar-container {
+    @include flex-column-x-center;
+
+    position: fixed;
+    top: 0;
+    bottom: 0;
+
+    padding-top: 16px;
+    padding-left: 8px;
+    padding-right: 8px;
+
+    background-color: hsl(0, 0%, 96%);
+}
+
