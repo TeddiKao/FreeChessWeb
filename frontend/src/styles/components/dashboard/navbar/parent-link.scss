@@ -5,6 +5,10 @@
     @include flex-column-y-center;
 }
 
+.dashboard-navbar-parent-link-container:hover {
+    cursor: pointer;
+}
+
 .dashboard-navbar-parent-link-info {
     @include flex-row-y-center;
     margin-bottom: 4px;

@@ -32,12 +32,8 @@ function ParentLink({
         }
     }
 
-    function getParentLinkClass() {
-        return path ? "has-path" : "";
-    }
-
 	return (
-		<div onClick={handleParentLinkNavigation} className={`dashboard-navbar-parent-link-container ${getParentLinkClass()}`}>
+		<div onClick={handleParentLinkNavigation} className="dashboard-navbar-parent-link-container">
 			<div className="dashboard-navbar-parent-link-info">
 				<img
 					className="dashboard-navbar-parent-link-icon"
