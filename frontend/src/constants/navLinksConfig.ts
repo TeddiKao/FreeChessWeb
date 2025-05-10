@@ -24,8 +24,20 @@ const dashboardNavLinks: DashboardNavLinks = [
 
             {
                 name: "Play vs Bot",
-                icon: "/play-vs-bot.svg",
+                icon: "/play-vs-bot-icon.svg",
                 path: "/select-bot"
+            },
+
+            {
+                name: "Play vs Human",
+                icon: "/play-vs-human-icon.svg",
+                path: "/game-setup"
+            },
+
+            {
+                name: "Game History",
+                icon: "/game-history-icon.svg",
+                path: "/game-history"
             }
         ]
     }
