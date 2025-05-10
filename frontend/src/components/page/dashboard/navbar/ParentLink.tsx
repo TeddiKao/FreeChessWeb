@@ -41,7 +41,7 @@ function ParentLink({
 				)}
 			</div>
 
-			{parentLinkExpanded && subLinks && (
+			{parentLinkExpanded && dashboardNavbarExpanded && subLinks && (
 				<div className="dashboard-navbar-sublinks-container">
 					{subLinks.map(({ name, path, icon }, index) => (
 						<SubLink
