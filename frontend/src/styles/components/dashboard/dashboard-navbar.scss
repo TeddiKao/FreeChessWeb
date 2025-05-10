@@ -2,7 +2,7 @@
 @use "../../global/variables";
 
 .dashboard-navbar-container {
-    @include flex-column-x-center;
+    @include flex-column;
 
     position: fixed;
     top: 0;
