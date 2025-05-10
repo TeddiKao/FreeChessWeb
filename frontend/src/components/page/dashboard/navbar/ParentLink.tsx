@@ -27,12 +27,14 @@ function ParentLink({
 				src={icon}
 				alt=""
 			/>
+
 			{dashboardNavbarExpanded && (
 				<p
 					onClick={toggleParentLinkExpandedState}
 					className="dashboard-navbar-parent-link-name"
 				></p>
 			)}
+            
 			{parentLinkExpanded && subLinks && (
 				<div className="dashboard-navbar-sublinks-container">
 					{subLinks.map(({ name, path, icon }, index) => (
