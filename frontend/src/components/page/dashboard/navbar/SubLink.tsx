@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import "../../../../styles/components/dashboard/navbar/sub-link.scss";
 
 type SubLinkProps = {
@@ -7,10 +8,15 @@ type SubLinkProps = {
 }
 
 function SubLink({ name, path, icon }: SubLinkProps) {
+    const navigate = useNavigate();
+    function handleSubLinkNavigation() {
+        navigate(path);
+    }
+
     return (
-        <div className="dashboard-navbar-sublink-container">
+        <div onClick={handleSubLinkNavigation} className="dashboard-navbar-sublink-container">
             <img className="dashboard-navbar-sublink-icon" src={icon} />
-            <a href={path} className="dashboard-navbar-sublink-name">{name}</a>
+            <p className="dashboard-navbar-sublink-name">{name}</p>
         </div>
     )
 }
