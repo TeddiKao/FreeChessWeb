@@ -9,6 +9,7 @@ function Dashboard() {
 			<DashboardNavbar />
 			<div className="dashboard-interface-container">
 				<UserGreeting />
+				<p className="dashboard-suggestion-text">Here are some suggestions for you</p>
 			</div>
 		</>
 	);
