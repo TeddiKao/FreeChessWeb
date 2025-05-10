@@ -20,6 +20,11 @@ function ParentLink({ icon, name, subLinks, dashboardNavbarExpanded }: ParentLin
             {dashboardNavbarExpanded && (
                 <p onClick={toggleParentLinkExpandedState} className="dashboard-navbar-parent-link-name"></p>
             )}
+            {parentLinkExpanded && subLinks && (
+                <div className="dashboard-navbar-sublinks-container">
+                    
+                </div>
+            )}
         </div>
     )
 }
