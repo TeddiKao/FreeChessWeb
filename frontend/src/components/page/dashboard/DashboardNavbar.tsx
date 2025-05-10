@@ -7,15 +7,27 @@ function DashboardNavbar() {
 	const [dashboardNavbarExpanded, setDashboardNavbarExpanded] =
 		useState(false);
 
+	function expandDashboardNavbar() {
+		setDashboardNavbarExpanded(true);
+	}
+
+	function collapseDashboardNavbar() {
+		setDashboardNavbarExpanded(false);
+	}
+
 	return (
-		<div className="dashboard-navbar-container">
+		<div
+			onMouseEnter={expandDashboardNavbar}
+			onMouseLeave={collapseDashboardNavbar}
+			className="dashboard-navbar-container"
+		>
 			{dashboardNavLinks.map(({ name, icon, subLinks }, index) => (
 				<ParentLink
 					key={index}
 					name={name}
 					icon={icon}
 					subLinks={subLinks}
-                    dashboardNavbarExpanded={dashboardNavbarExpanded}
+					dashboardNavbarExpanded={dashboardNavbarExpanded}
 				/>
 			))}
 		</div>
