@@ -18,8 +18,14 @@ const dashboardNavLinks: DashboardNavLinks = [
         subLinks: [
             {
                 name: "Pass and Play",
-                icon: "/play-links-icon.svg",
+                icon: "/pass-and-play-icon.svg",
                 path: "/pass-and-play"
+            },
+
+            {
+                name: "Play vs Bot",
+                icon: "/play-vs-bot.svg",
+                path: "/select-bot"
             }
         ]
     }
