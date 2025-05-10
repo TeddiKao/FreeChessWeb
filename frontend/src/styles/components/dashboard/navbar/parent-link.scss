@@ -3,11 +3,11 @@
 
 .dashboard-navbar-parent-link-container {
     @include flex-column-y-center;
-    margin-bottom: 4px;
 }
 
 .dashboard-navbar-parent-link-info {
     @include flex-row-y-center;
+    margin-bottom: 4px;
 }
 
 .dashboard-navbar-parent-link-name {
