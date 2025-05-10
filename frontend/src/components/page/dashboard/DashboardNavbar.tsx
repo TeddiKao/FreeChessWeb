@@ -21,12 +21,13 @@ function DashboardNavbar() {
 			onMouseLeave={collapseDashboardNavbar}
 			className="dashboard-navbar-container"
 		>
-			{dashboardNavLinks.map(({ name, icon, subLinks }, index) => (
+			{dashboardNavLinks.map(({ name, icon, subLinks, path }, index) => (
 				<ParentLink
 					key={index}
 					name={name}
 					icon={icon}
 					subLinks={subLinks}
+					path={path}
 					dashboardNavbarExpanded={dashboardNavbarExpanded}
 				/>
 			))}

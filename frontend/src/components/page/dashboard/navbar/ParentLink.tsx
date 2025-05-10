@@ -5,25 +5,35 @@ type ParentLinkProps = {
 	icon: string;
 	name: string;
 	subLinks?: Array<{ name: string; path: string; icon: string }>;
+    path?: string;
 	dashboardNavbarExpanded: boolean;
 };
 
 import "../../../../styles/components/dashboard/navbar/parent-link.scss";
+import { useNavigate } from "react-router-dom";
 
 function ParentLink({
 	icon,
 	name,
 	subLinks,
 	dashboardNavbarExpanded,
+    path
 }: ParentLinkProps) {
 	const [parentLinkExpanded, setParentLinkExpanded] = useState(false);
+    const navigate = useNavigate();
 
 	function toggleParentLinkExpandedState() {
 		setParentLinkExpanded((prevExpanded) => !prevExpanded);
 	}
 
+    function handleParentLinkNavigation() {
+        if (path) {
+            navigate(path);
+        }
+    }
+
 	return (
-		<div className="dashboard-navbar-parent-link-container">
+		<div onClick={handleParentLinkNavigation} className="dashboard-navbar-parent-link-container">
 			<div className="dashboard-navbar-parent-link-info">
 				<img
 					className="dashboard-navbar-parent-link-icon"
