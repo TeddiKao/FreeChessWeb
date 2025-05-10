@@ -1,0 +1,9 @@
+@use "../../global/mixins" as *;
+@use "../../global/variables" as *;
+
+.dashboard-interface-container {
+    margin-left: 64px;
+
+    @include flex-column;
+}
+
