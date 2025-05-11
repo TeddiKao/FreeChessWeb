@@ -16,7 +16,8 @@ function DashboardNavbar() {
 	}
 
 	return (
-		<div
+		<nav
+			aria-label="Dashboard navigation bar"
 			onMouseEnter={expandDashboardNavbar}
 			onMouseLeave={collapseDashboardNavbar}
 			onClick={expandDashboardNavbar}
@@ -32,7 +33,7 @@ function DashboardNavbar() {
 					dashboardNavbarExpanded={dashboardNavbarExpanded}
 				/>
 			))}
-		</div>
+		</nav>
 	);
 }
 
