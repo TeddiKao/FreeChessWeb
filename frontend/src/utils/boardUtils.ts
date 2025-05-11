@@ -115,32 +115,6 @@ function calculateXYTransform(
 	return [xTransform, yTransform];
 }
 
-function animatePiece(
-	setAnimatingSquare: StateSetterFunction<
-		OptionalValue<ChessboardSquareIndex>
-	>,
-	setAnimatingStyles: StateSetterFunction<
-		Record<string, unknown>
-	>,
-
-	startingSquare: ChessboardSquareIndex,
-	destinationSquare: ChessboardSquareIndex,
-	squareSize?: number
-): void {
-	const [xTransform, yTransform] = calculateXYTransform(
-		startingSquare,
-		destinationSquare,
-		squareSize
-	);
-
-	setAnimatingSquare(Number(startingSquare));
-	setAnimatingStyles({
-		transform: `translate(${xTransform}px, ${yTransform}px)`,
-		pointerEvents: "none",
-		zIndex: "100",
-	});
-}
-
 export {
 	clearSquaresStyling,
 	getRank,
@@ -153,5 +127,4 @@ export {
 	isSquareOnFileEdge,
 	getSquareClass,
 	calculateXYTransform,
-    animatePiece
 };

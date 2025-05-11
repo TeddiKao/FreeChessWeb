@@ -11,7 +11,6 @@ import {
 	isSquareLight,
 	getSquareExists,
 	calculateXYTransform,
-	animatePiece,
 } from "../../../utils/boardUtils";
 
 import { playAudio } from "../../../utils/audioUtils";
@@ -67,6 +66,7 @@ import {
 	PieceInfo,
 	PieceType,
 } from "../../../types/gameLogic.js";
+import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
 
 function Chessboard({
 	parsed_fen_string,
@@ -100,9 +100,7 @@ function Chessboard({
 
 	const [sideToMove, setSideToMove] = useState<string>("white");
 
-	const [animatingPieceSquare, setAnimatingPieceSquare] =
-		useState<OptionalValue<ChessboardSquareIndex>>(null);
-	const [animatingPieceStyles, setAnimatingPieceStyles] = useState({});
+    const [animatingPieceSquare, animatingPieceStyles, animatePiece] = usePieceAnimation();
 
 	const setGameEnded = useContext(GameEndedSetterContext);
 	const setGameEndedCause = useContext(GameEndedCauseSetterContext);
@@ -400,13 +398,13 @@ function Chessboard({
 			);
 		}
 
+        // @ts-ignore
 		animatePiece(
-			setAnimatingPieceSquare,
-			setAnimatingPieceStyles,
 			previousClickedSquare,
 			clickedSquare,
 			squareSize
 		);
+
 		setTimeout(() => {
 			setParsedFENString(
 				(previousFENString: OptionalValue<ParsedFENString>) => {
@@ -841,8 +839,12 @@ function Chessboard({
 							previousDroppedSquare={previousDroppedSquare}
 							moveMethod={lastUsedMoveMethod}
 							squareSize={squareSize}
-							animatingPieceStyle={animatingPieceStyles}
+                            
+							//@ts-ignore
 							animatingPieceSquare={animatingPieceSquare}
+							
+                            //@ts-ignore
+                            animatingPieceStyle={animatingPieceStyles}
 						/>
 					);
 				} else {
@@ -863,8 +865,12 @@ function Chessboard({
 							previousDroppedSquare={previousDroppedSquare}
 							moveMethod={lastUsedMoveMethod}
 							squareSize={squareSize}
+
+                            //@ts-ignore
 							animatingPieceSquare={animatingPieceSquare}
-							animatingPieceStyle={animatingPieceStyles}
+							
+                            //@ts-ignore
+                            animatingPieceStyle={animatingPieceStyles}
 						/>
 					);
 				}
