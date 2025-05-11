@@ -8,8 +8,8 @@ const rookStartingSquares = {
     },
 
     black: {
-        kingside: 56,
-        queenside: 63,
+        kingside: 63,
+        queenside: 56,
     }
 }
 
