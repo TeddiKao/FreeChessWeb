@@ -7,6 +7,8 @@
 
 .dashboard-suggestion-container {
     margin-top: 8px;
+    margin-right: 12px;
+
     @include flex-column-x-center;
 
     width: 224px;
