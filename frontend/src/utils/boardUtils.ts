@@ -1,3 +1,5 @@
+import { ChessboardSquareIndex } from "../types/general";
+
 function clearSquaresStyling(): void {
     for (let square = 0; square <= 63; square++) {
         const squareElement = document.getElementById(`${square}`);
@@ -76,6 +78,21 @@ function getSquareClass(square: string, previousDraggedSquare: string, previousD
     } else {
         return `chessboard-square ${squareColor}`;
     }
+}
+
+function calculateXYTransform(startingSquare: ChessboardSquareIndex, destinationSquare: ChessboardSquareIndex, squareWidth: number = 55) {
+    const startingSquareRank = getRank(startingSquare);
+    const startingSquareFile = getFile(startingSquare);
+    const destinationSquareRank = getRank(destinationSquare);
+    const destinationSquareFile = getFile(destinationSquare);
+
+    const rankDiff = startingSquareRank - destinationSquareRank;
+    const fileDiff = startingSquareFile - destinationSquareFile;
+
+    const xTransform = fileDiff * squareWidth;
+    const yTransform = rankDiff * squareWidth;
+
+    return [xTransform, yTransform];
 }
 
 export {
