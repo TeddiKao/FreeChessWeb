@@ -53,7 +53,7 @@ function DashboardSuggestions() {
 			<DashboardSuggestion
 				suggestionName="Play vs Bot"
 				suggestionDescription="Play against a bot of your choice"
-				suggestionIcon="/play-vs-bot-dashboard-suggestion.svg"
+				suggestionIcon="/play-bot-dashboard-suggestion.svg"
 				suggestionURL="/select-bot"
 			/>
 		</div>
