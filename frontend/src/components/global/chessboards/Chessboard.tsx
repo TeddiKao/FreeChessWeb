@@ -344,6 +344,7 @@ function Chessboard({
 		clearSquaresStyling();
 
 		if (!getSquareExists(previousClickedSquare, boardPlacement)) {
+            setPreviousClickedSquare(null);
 			return;
 		}
 
@@ -377,7 +378,10 @@ function Chessboard({
 		);
 
 		if (!isMoveLegal) {
-			return;
+			setPreviousClickedSquare(null);
+            setClickedSquare(null);
+
+            return;
 		}
 
 		if (pieceTypeToValidate === "pawn") {
@@ -565,9 +569,12 @@ function Chessboard({
 	const piecePlacements = parsedFENString["board_placement"];
 
 	function handleSquareClick(event: React.MouseEvent<HTMLElement>) {
+        console.log("Square clicked!");
+        console.log(previousClickedSquare, clickedSquare);
+
 		if (!previousClickedSquare && !clickedSquare) {
 			setPreviousClickedSquare(event.currentTarget.id);
-		} else {
+		} else if (previousClickedSquare && !clickedSquare) {
 			setClickedSquare(event.currentTarget.id);
 		}
 	}
