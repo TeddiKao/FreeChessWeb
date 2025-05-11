@@ -38,9 +38,19 @@ function ParentLink({
         }
     }
 
+	function handleParentLinkClicked(event: React.MouseEvent) {
+		event.stopPropagation();
+		
+		if (path) {
+			handleParentLinkNavigation();
+		} else {
+			toggleParentLinkExpandedState();
+		}
+	}
+
 	return (
-		<div onClick={handleParentLinkNavigation} className="dashboard-navbar-parent-link-container">
-			<div onClick={toggleParentLinkExpandedState} className="dashboard-navbar-parent-link-info">
+		<div className="dashboard-navbar-parent-link-container">
+			<div onClick={handleParentLinkClicked} className="dashboard-navbar-parent-link-info">
 				<img
 					className="dashboard-navbar-parent-link-icon"
 					src={icon}
