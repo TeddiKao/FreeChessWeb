@@ -91,6 +91,8 @@ interface EmptySquareProps {
 	previousDroppedSquare: OptionalValue<ChessboardSquareIndex>;
 	moveMethod: OptionalValue<string>;
 	squareSize?: number;
+	animatingPieceStyle: Record<string, unknown>;
+	animatingPieceSquare: OptionalValue<ChessboardSquareIndex>;
 }
 
 interface FilledSquareProps {

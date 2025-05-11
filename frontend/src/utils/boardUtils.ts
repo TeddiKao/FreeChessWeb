@@ -89,7 +89,9 @@ function calculateXYTransform(startingSquare: ChessboardSquareIndex, destination
     const rankDiff = startingSquareRank - destinationSquareRank;
     const fileDiff = startingSquareFile - destinationSquareFile;
 
-    const xTransform = fileDiff * squareWidth;
+    console.log(rankDiff, fileDiff);
+
+    const xTransform = fileDiff * squareWidth * -1;
     const yTransform = rankDiff * squareWidth;
 
     return [xTransform, yTransform];
@@ -105,5 +107,6 @@ export {
     getSquareExists,
     isSquareOnRankEdge,
     isSquareOnFileEdge,
-    getSquareClass
+    getSquareClass,
+    calculateXYTransform
 };

@@ -30,6 +30,8 @@ function Square({
 	orientation,
 	moveMethod,
 	squareSize,
+	animatingPieceSquare,
+	animatingPieceStyle,
 }: SquareProps) {
 	let startingSquare: OptionalValue<string> = null;
 
@@ -136,9 +138,7 @@ function Square({
 		setDroppedSquare(droppedSquare);
 	}
 
-	function handleOnDrag(
-		squareDragged: string | number
-	) {
+	function handleOnDrag(squareDragged: string | number) {
 		setDraggedSquare(squareDragged);
 	}
 
@@ -163,17 +163,26 @@ function Square({
 				/>
 			);
 		} else {
-            const pieceImageSrc = `/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
-                pieceType
-            )}.svg`;
-            const draggingPieceImageSrc = `/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
-                pieceType
-            )}-dragging.svg`;
+			const pieceImageSrc = `/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
+				pieceType
+			)}.svg`;
+			const draggingPieceImageSrc = `/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
+				pieceType
+			)}-dragging.svg`;
 
 			squareHTML = (
 				<>
-                    <DragPreviewImage connect={preview} src={draggingPieceImageSrc} />
+					<DragPreviewImage
+						connect={preview}
+						src={draggingPieceImageSrc}
+					/>
 					<img
+						style={
+							Number(animatingPieceSquare) ===
+							Number(squareNumber)
+								? animatingPieceStyle
+								: undefined
+						}
 						ref={drag}
 						onDragStart={() => {
 							handleOnDrag(squareNumber);
