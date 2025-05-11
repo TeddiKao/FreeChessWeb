@@ -44,7 +44,7 @@ function ParentLink({
 				<img
 					className="dashboard-navbar-parent-link-icon"
 					src={icon}
-					alt=""
+					alt={`${name} icon`}
 				/>
 
 				{dashboardNavbarExpanded && (

@@ -15,7 +15,7 @@ function SubLink({ name, path, icon }: SubLinkProps) {
 
     return (
         <div onClick={handleSubLinkNavigation} className="dashboard-navbar-sublink-container">
-            <img className="dashboard-navbar-sublink-icon" src={icon} />
+            <img alt={`${name} icon`} className="dashboard-navbar-sublink-icon" src={icon} />
             <p className="dashboard-navbar-sublink-name">{name}</p>
         </div>
     )

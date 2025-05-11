@@ -28,6 +28,7 @@ function DashboardSuggestion({
 			<div className="dashboard-suggestion-icon-container">
 				<img
 					src={suggestionIcon}
+					alt={`${suggestionName} suggestion icon`}
 					className="dashboard-suggestion-icon"
 				/>
 			</div>
