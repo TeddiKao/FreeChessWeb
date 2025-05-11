@@ -11,6 +11,7 @@ import {
 	isSquareLight,
 	getSquareExists,
 	calculateXYTransform,
+	animatePiece,
 } from "../../../utils/boardUtils";
 
 import { playAudio } from "../../../utils/audioUtils";
@@ -100,7 +101,7 @@ function Chessboard({
 	const [sideToMove, setSideToMove] = useState<string>("white");
 
 	const [animatingPieceSquare, setAnimatingPieceSquare] =
-		useState<OptionalValue<number>>(null);
+		useState<OptionalValue<ChessboardSquareIndex>>(null);
 	const [animatingPieceStyles, setAnimatingPieceStyles] = useState({});
 
 	const setGameEnded = useContext(GameEndedSetterContext);
@@ -344,7 +345,7 @@ function Chessboard({
 		clearSquaresStyling();
 
 		if (!getSquareExists(previousClickedSquare, boardPlacement)) {
-            setPreviousClickedSquare(null);
+			setPreviousClickedSquare(null);
 			return;
 		}
 
@@ -379,9 +380,9 @@ function Chessboard({
 
 		if (!isMoveLegal) {
 			setPreviousClickedSquare(null);
-            setClickedSquare(null);
+			setClickedSquare(null);
 
-            return;
+			return;
 		}
 
 		if (pieceTypeToValidate === "pawn") {
@@ -399,7 +400,13 @@ function Chessboard({
 			);
 		}
 
-		animatePiece();
+		animatePiece(
+			setAnimatingPieceSquare,
+			setAnimatingPieceStyles,
+			previousClickedSquare,
+			clickedSquare,
+			squareSize
+		);
 		setTimeout(() => {
 			setParsedFENString(
 				(previousFENString: OptionalValue<ParsedFENString>) => {
@@ -569,31 +576,14 @@ function Chessboard({
 	const piecePlacements = parsedFENString["board_placement"];
 
 	function handleSquareClick(event: React.MouseEvent<HTMLElement>) {
-        console.log("Square clicked!");
-        console.log(previousClickedSquare, clickedSquare);
+		console.log("Square clicked!");
+		console.log(previousClickedSquare, clickedSquare);
 
 		if (!previousClickedSquare && !clickedSquare) {
 			setPreviousClickedSquare(event.currentTarget.id);
 		} else if (previousClickedSquare && !clickedSquare) {
 			setClickedSquare(event.currentTarget.id);
 		}
-	}
-
-	function animatePiece() {
-		const [xTransform, yTransform] = calculateXYTransform(
-			previousClickedSquare!,
-			clickedSquare!,
-			squareSize
-		);
-
-		setAnimatingPieceSquare(Number(previousClickedSquare));
-		setAnimatingPieceStyles({
-			transform: `translate(${xTransform}px, ${yTransform}px)`,
-            pointerEvents: "none",
-            zIndex: "100"
-		});
-
-		console.log("Styling set up!");
 	}
 
 	function handleLegalMoveDisplay(moveMethod: string) {
