@@ -1,0 +1,13 @@
+@use "../global/mixins" as *;
+@use "../global/variables" as *;
+
+.dashboard-interface-container {
+    margin-left: 64px;
+
+    @include flex-column;
+}
+
+.dashboard-suggestion-text {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}

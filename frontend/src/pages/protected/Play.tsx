@@ -28,6 +28,7 @@ import MessageBox from "../../components/global/popups/MessageBox.tsx";
 import { MessageBoxTypes } from "../../types/messageBox.ts";
 import DrawOfferPopup from "../../components/global/popups/DrawOfferPopup.tsx";
 import { playAudio } from "../../utils/audioUtils.ts";
+import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar.tsx";
 
 function Play() {
 	const location = useLocation();
@@ -200,6 +201,7 @@ function Play() {
 
 	return (
 		<>
+			<DashboardNavbar />
 			<div className="multiplayer-playing-interface-container">
 				<div className="main-chessboard">
 					<div className="top-timer-wrapper">

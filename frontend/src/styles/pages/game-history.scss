@@ -1,12 +1,12 @@
 @use "../global/mixins.scss" as *;
 
 .game-history-interface-container {
-    margin-left: 24px;
+    margin-left: 64px;
     @include flex-column;
 }
 
 .game-history-page-header {
-    margin-top: 8px;
+    margin-top: 16px;
     margin-bottom: 12px;
 }
 
