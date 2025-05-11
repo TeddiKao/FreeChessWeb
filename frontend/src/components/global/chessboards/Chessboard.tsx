@@ -508,7 +508,7 @@ function Chessboard({
 					return newPiecePlacements;
 				}
 			);
-		}, 1000);
+		}, 300);
 
 		const newSideToMove = getOppositeColor(pieceColorToValidate);
 
