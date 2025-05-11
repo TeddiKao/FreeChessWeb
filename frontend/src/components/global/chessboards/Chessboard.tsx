@@ -582,7 +582,8 @@ function Chessboard({
 		setAnimatingPieceSquare(Number(previousClickedSquare));
 		setAnimatingPieceStyles({
 			transform: `translate(${xTransform}px, ${yTransform}px)`,
-            pointerEvents: "none"
+            pointerEvents: "none",
+            zIndex: "100"
 		});
 
 		console.log("Styling set up!");
