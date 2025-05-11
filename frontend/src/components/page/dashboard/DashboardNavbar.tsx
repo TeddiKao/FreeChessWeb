@@ -19,6 +19,7 @@ function DashboardNavbar() {
 		<div
 			onMouseEnter={expandDashboardNavbar}
 			onMouseLeave={collapseDashboardNavbar}
+			onClick={expandDashboardNavbar}
 			className="dashboard-navbar-container"
 		>
 			{dashboardNavLinks.map(({ name, icon, subLinks, path }, index) => (
