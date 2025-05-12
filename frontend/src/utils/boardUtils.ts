@@ -109,16 +109,14 @@ function calculateXYTransform(
 	const rankDiff = startingSquareRank - destinationSquareRank;
 	const fileDiff = startingSquareFile - destinationSquareFile;
 
-	console.log(rankDiff, fileDiff);
-
 	const xTransform =
 		orientation === "white"
 			? fileDiff * squareWidth * -1
-			: fileDiff * squareWidth; // Equivalent to fileDiff * squareWidth * -1 * -1
+			: fileDiff * squareWidth; // Equivalent to fileDiff * squareWidth * -1 * -1, which reverses the amount
 	const yTransform =
 		orientation === "white"
-			? fileDiff * squareWidth
-			: fileDiff * squareWidth * -1;
+			? rankDiff * squareWidth
+			: rankDiff * squareWidth * -1;
 
 	return [xTransform, yTransform];
 }
