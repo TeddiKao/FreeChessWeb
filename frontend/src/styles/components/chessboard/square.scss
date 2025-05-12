@@ -26,12 +26,12 @@
 }
 
 .previous-dragged-square {
-	background-color: variables.$last-dragged-square-color;
+	background-color: $last-dragged-square-color;
 	border: none;
 }
 
 .previous-dropped-square {
-	background-color: variables.$last-dropped-square-color;
+	background-color: $last-dropped-square-color;
 	border: none;
 }
 
