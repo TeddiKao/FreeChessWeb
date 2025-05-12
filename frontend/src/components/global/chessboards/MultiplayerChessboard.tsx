@@ -52,6 +52,7 @@ import { getAccessToken } from "../../../utils/tokenUtils.ts";
 import { websocketBaseURL } from "../../../constants/urls.ts";
 import { getOppositeColor } from "../../../utils/gameLogic/general.ts";
 import useUsername from "../../../hooks/useUsername.ts";
+import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
 
 function MultiplayerChessboard({
 	parsed_fen_string,
@@ -105,6 +106,8 @@ function MultiplayerChessboard({
 
 	const currentUser = useUsername();
 	const currentUserRef = useRef(currentUser);
+
+	const [animatingPieceSquare, animatingPieceStyles, animatePiece] = usePieceAnimation();
 
 	const gameWebsocket = useWebSocket(
 		gameWebsocketUrl,
@@ -295,9 +298,16 @@ function MultiplayerChessboard({
 	}
 
 	function makeMove(eventData: MoveMadeEventData) {
-		console.log(eventData);
-		console.log(eventData["move_made_by"], currentUserRef.current)
-		setPositionIndex(eventData["new_position_index"]);
+		const moveMadeBy = eventData["move_made_by"];
+		const startingSquare = eventData["move_data"]["starting_square"];
+		const destinationSquare = eventData["move_data"]["destination_square"];
+
+		const moveMethodUsed = lastUsedMoveMethodRef.current;
+
+		if (moveMadeBy !== currentUserRef.current || moveMethodUsed === "click") {
+			// @ts-ignore
+			animatePiece(startingSquare, destinationSquare, squareSize);
+		}
 
 		playAudio(eventData["move_type"]);
 	}
@@ -829,6 +839,12 @@ function MultiplayerChessboard({
 							orientation={boardOrientation}
 							moveMethod={lastUsedMoveMethod}
 							squareSize={squareSize}
+
+							// @ts-ignore
+							animatingPieceSquare={animatingPieceSquare}
+							
+							// @ts-ignore
+							animatingPieceStyle={animatingPieceStyles}
 						/>
 					);
 				} else {
@@ -849,6 +865,12 @@ function MultiplayerChessboard({
 							orientation={boardOrientation}
 							moveMethod={lastUsedMoveMethod}
 							squareSize={squareSize}
+
+							// @ts-ignore
+							animatingPieceSquare={animatingPieceSquare}
+							
+							// @ts-ignore
+							animatingPieceStyle={animatingPieceStyles}
 						/>
 					);
 				}
