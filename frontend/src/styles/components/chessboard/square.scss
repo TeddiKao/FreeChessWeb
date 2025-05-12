@@ -1,4 +1,4 @@
-@use "../../global/variables";
+@use "../../global/variables" as *;
 @use "../../global/mixins" as *;
 
 .chessboard-square, .previous-dropped-square, .previous-dragged-square {
