@@ -21,7 +21,6 @@ import { ParsedFENString, PieceColor } from "../../types/gameLogic.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
 import MoveListPanel from "../../components/global/gameplaySidePanel/MoveListPanel.tsx";
 import MoveNavigationButtons from "../../components/global/gameplaySidePanel/MoveNavigationButtons.tsx";
-import { ArrowKeys } from "../../enums/general.ts";
 import GameplayActionButtons from "../../components/global/gameplaySidePanel/GameplayActionButtons.tsx";
 import { isNullOrUndefined } from "../../utils/generalUtils.ts";
 import MessageBox from "../../components/global/popups/MessageBox.tsx";
@@ -89,7 +88,9 @@ function Play() {
 	}, []);
 
 	useEffect(() => {
-		setPositionIndex(positionList.length - 1);
+		setTimeout(() => {
+			setPositionIndex(positionList.length - 1);
+		}, 300)
 	}, [positionList]);
 
 	useEffect(() => {
