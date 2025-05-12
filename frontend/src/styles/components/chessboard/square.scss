@@ -17,11 +17,11 @@
 }
 
 .light {
-	background-color: variables.$light-square-color;
+	background-color: $light-square-color;
 }
 
 .dark {
-	background-color: variables.$dark-square-color;
+	background-color: $dark-square-color;
 	border: none;
 }
 
