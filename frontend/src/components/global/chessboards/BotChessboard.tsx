@@ -27,7 +27,10 @@ import {
 	MoveMethods,
 } from "../../../enums/gameLogic.ts";
 import { BotChessboardProps } from "../../../interfaces/chessboard.js";
-import { ChessboardSquareIndex, OptionalValue } from "../../../types/general.js";
+import {
+	ChessboardSquareIndex,
+	OptionalValue,
+} from "../../../types/general.js";
 import {
 	BoardPlacement,
 	MoveInfo,
@@ -39,6 +42,9 @@ import {
 import { isPawnPromotion } from "../../../utils/moveUtils.ts";
 import useWebSocket from "../../../hooks/useWebsocket.ts";
 import { parseWebsocketUrl } from "../../../utils/generalUtils.ts";
+import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
+import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
+import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";
 function BotChessboard({
 	parsed_fen_string,
 	orientation,
@@ -75,6 +81,8 @@ function BotChessboard({
 
 	const [lastUsedMoveMethod, setLastUsedMoveMethod] =
 		useState<OptionalValue<string>>(null);
+	const [pieceAnimationSquare, pieceAnimationStyles, animatePiece] =
+		usePieceAnimation();
 
 	const [sideToMove, setSideToMove] = useState<string>("white");
 
@@ -448,8 +456,16 @@ function BotChessboard({
 		new_position_list: newPositionList,
 		new_move_list: newMoveList,
 		move_type: moveType,
+		move_data: moveData
 	}: any) {
-		setParsedFENString(newStructuredFEN);
+		// @ts-ignore
+		animatePiece(
+			moveData["starting_square"],
+			moveData["destination_square"],
+			orientation.toLowerCase(),
+			squareSize
+		);
+
 		setPositionList(newPositionList);
 		setMoveList(newMoveList);
 
@@ -461,8 +477,16 @@ function BotChessboard({
 		new_position_list: newPositionList,
 		new_move_list: newMoveList,
 		move_type: moveType,
+		move_data: moveData
 	}: any) {
-		setParsedFENString(newStructuredFEN);
+		// @ts-ignore
+		animatePiece(
+			moveData["starting_square"],
+			moveData["destination_square"],
+			orientation.toLowerCase(),
+			squareSize
+		);
+
 		setPositionList(newPositionList);
 		setMoveList(newMoveList);
 
@@ -524,13 +548,13 @@ function BotChessboard({
 
 	function handleCheckmate({ game_winner: gameWinner }: any) {
 		setGameEnded(true);
-		setGameWinner(gameWinner)
+		setGameWinner(gameWinner);
 		setGameEndedCause("checkmate");
 	}
 
 	function handleDraw(drawCause: string) {
 		setGameEnded(true);
-		setGameEndedCause(drawCause)
+		setGameEndedCause(drawCause);
 	}
 
 	function handleOnMessage(event: MessageEvent) {
@@ -555,7 +579,7 @@ function BotChessboard({
 				break;
 
 			case BotGameWebSocketEventTypes.FIFTY_MOVE_RULE_REACHED:
-				handleDraw("50-move rule")
+				handleDraw("50-move rule");
 				break;
 
 			case BotGameWebSocketEventTypes.BOT_MOVE_MADE:
@@ -563,7 +587,7 @@ function BotChessboard({
 				break;
 
 			default:
-				console.error(`Invalid event type ${eventType}`)
+				console.error(`Invalid event type ${eventType}`);
 		}
 	}
 
@@ -630,6 +654,10 @@ function BotChessboard({
 							previousDroppedSquare={previousDroppedSquare}
 							moveMethod={lastUsedMoveMethod}
 							squareSize={squareSize}
+							// @ts-ignore
+							animatingPieceSquare={pieceAnimationSquare}
+							// @ts-ignore
+							animatingPieceStyle={pieceAnimationStyles}
 						/>
 					);
 				} else {
@@ -650,6 +678,10 @@ function BotChessboard({
 							previousDroppedSquare={previousDroppedSquare}
 							moveMethod={lastUsedMoveMethod}
 							squareSize={squareSize}
+							// @ts-ignore
+							animatingPieceSquare={pieceAnimationSquare}
+							// @ts-ignore
+							animatingPieceStyle={pieceAnimationStyles}
 						/>
 					);
 				}

@@ -18,6 +18,8 @@ import MoveListPanel from "../../components/global/gameplaySidePanel/MoveListPan
 import { isNullOrUndefined } from "../../utils/generalUtils";
 import { playAudio } from "../../utils/audioUtils";
 import LocalGameOverModal from "../../components/global/modals/gameOverModals/LocalModal";
+import { convertToMilliseconds } from "../../utils/timeUtils";
+import { pieceAnimationTime } from "../../constants/pieceAnimation";
 
 function PlayBot() {
 	const initialGameplaySettings = useGameplaySettings();
@@ -63,7 +65,9 @@ function PlayBot() {
 	}, [gameId]);
 
 	useEffect(() => {
-		setPositionIndex(positionList.length - 1);
+		setTimeout(() => {
+			setPositionIndex(positionList.length - 1);
+		}, convertToMilliseconds(pieceAnimationTime))
 	}, [positionList]);
 
 	useEffect(() => {
