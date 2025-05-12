@@ -51,6 +51,7 @@ import useWebSocket from "../../../hooks/useWebsocket.ts";
 import { getAccessToken } from "../../../utils/tokenUtils.ts";
 import { websocketBaseURL } from "../../../constants/urls.ts";
 import { getOppositeColor } from "../../../utils/gameLogic/general.ts";
+import useUsername from "../../../hooks/useUsername.ts";
 
 function MultiplayerChessboard({
 	parsed_fen_string,
@@ -92,6 +93,7 @@ function MultiplayerChessboard({
 		useState<OptionalValue<PieceInfo>>(null);
 	const [lastUsedMoveMethod, setLastUsedMoveMethod] =
 		useState<OptionalValue<string>>(null);
+	const lastUsedMoveMethodRef = useRef<OptionalValue<string>>(null);
 
 	const [boardOrientation, setBoardOrientation] = useState(orientation);
 
@@ -100,6 +102,9 @@ function MultiplayerChessboard({
 
 	const [gameWebsocketEnabled, setGameWebsocketEnabled] = useState(false);
 	const gameWebsocketUrl = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
+
+	const currentUser = useUsername();
+	const currentUserRef = useRef(currentUser);
 
 	const gameWebsocket = useWebSocket(
 		gameWebsocketUrl,
@@ -134,6 +139,10 @@ function MultiplayerChessboard({
 	}, []);
 
 	useEffect(() => {
+		currentUserRef.current = currentUser;
+	}, [currentUser]);
+
+	useEffect(() => {
 		if (gameWebsocketExists.current === false) {
 			window.addEventListener("beforeunload", handleWindowUnload);
 
@@ -161,6 +170,10 @@ function MultiplayerChessboard({
 	useEffect(() => {
 		handleOnDrop();
 	}, [draggedSquare, droppedSquare]);
+
+	useEffect(() => {
+		lastUsedMoveMethodRef.current = lastUsedMoveMethod;
+	}, [lastUsedMoveMethod]);
 
 	function handleWindowUnload() {
 		if (gameWebsocketRef.current?.readyState === WebSocket.OPEN) {
@@ -256,12 +269,6 @@ function MultiplayerChessboard({
 	}
 
 	function handlePlayerTimeout(parsedEventData: any) {
-		// if (parsedEventData["timeout_color"].toLowerCase() === "white") {
-		//     setWhiteTimer(0);
-		// } else {
-		//     setBlackTimer(0);
-		// }
-
 		setGameEnded(true);
 		setGameEndedCause("Timeout");
 		setGameWinner(getOppositeColor(parsedEventData["timeout_color"]));
@@ -288,6 +295,8 @@ function MultiplayerChessboard({
 	}
 
 	function makeMove(eventData: MoveMadeEventData) {
+		console.log(eventData);
+		console.log(eventData["move_made_by"], currentUserRef.current)
 		setPositionIndex(eventData["new_position_index"]);
 
 		playAudio(eventData["move_type"]);
@@ -370,6 +379,8 @@ function MultiplayerChessboard({
 		setDraggedSquare(null);
 		setDroppedSquare(null);
 		setLastUsedMoveMethod("drag");
+
+		console.log(`Last used move method: ${lastUsedMoveMethod}`);
 	}
 
 	function sendRegularMoveDetails(
@@ -543,6 +554,7 @@ function MultiplayerChessboard({
 		setClickedSquare(null);
 
 		setLastUsedMoveMethod("click");
+		console.log("Updated last used move method!")
 	}
 
 	async function displayLegalMoves(
