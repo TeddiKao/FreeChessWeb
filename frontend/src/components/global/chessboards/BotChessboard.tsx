@@ -468,15 +468,11 @@ function BotChessboard({
 
 		setPositionList(newPositionList);
 		setMoveList(newMoveList);
-
-		playAudio(moveType);
 	}
 
 	function handleBotMoveMade({
-		new_structured_fen: newStructuredFEN,
 		new_position_list: newPositionList,
 		new_move_list: newMoveList,
-		move_type: moveType,
 		move_data: moveData
 	}: any) {
 		// @ts-ignore
@@ -489,8 +485,6 @@ function BotChessboard({
 
 		setPositionList(newPositionList);
 		setMoveList(newMoveList);
-
-		playAudio(moveType);
 	}
 
 	async function handlePawnPromotion(
