@@ -403,7 +403,7 @@ function Chessboard({
 		animatePiece(
 			previousClickedSquare,
 			clickedSquare,
-			squareSize
+			orientation.toLowerCase()
 		);
 
 		setTimeout(() => {

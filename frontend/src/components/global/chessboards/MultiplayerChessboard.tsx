@@ -306,7 +306,7 @@ function MultiplayerChessboard({
 
 		if (moveMadeBy !== currentUserRef.current || moveMethodUsed === "click") {
 			// @ts-ignore
-			animatePiece(startingSquare, destinationSquare, squareSize);
+			animatePiece(startingSquare, destinationSquare, orientation.toLowerCase(), squareSize);
 		}
 
 		playAudio(eventData["move_type"]);
