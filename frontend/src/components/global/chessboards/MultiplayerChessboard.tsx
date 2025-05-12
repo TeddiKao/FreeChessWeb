@@ -62,7 +62,6 @@ function MultiplayerChessboard({
 	setWhiteTimer,
 	setBlackTimer,
 	gameplaySettings,
-	setPositionIndex,
 	setPositionList,
 	setMoveList,
 	lastDraggedSquare,
@@ -123,10 +122,6 @@ function MultiplayerChessboard({
 	const chessboardStyles = {
 		gridTemplateColumns: `repeat(8, ${squareSize}px`,
 	};
-
-	console.log(animatingPieceSquare || parentAnimationSquare);
-	console.log(parentAnimationStyles)
-	console.log(animatingPieceStyles || parentAnimationStyles);
 
 	useEffect(() => {
 		setParsedFENString(parsed_fen_string);

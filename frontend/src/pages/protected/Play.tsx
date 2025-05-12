@@ -122,13 +122,7 @@ function Play() {
 				previousPositionIndexRef.current! - 1 ===
 				positionIndex
 			) {
-				setParsedFEN(positionList[positionIndex]?.["position"]);
-				setLastDraggedSquare(
-					positionList[positionIndex]?.last_dragged_square
-				);
-				setLastDroppedSquare(
-					positionList[positionIndex]?.last_dropped_square
-				);
+				handleReplayMoveAnimation();
 			} else {
 				setParsedFEN(positionList[positionIndex]?.["position"]);
 				setLastDraggedSquare(
@@ -222,7 +216,7 @@ function Play() {
 
 	function handleFastForwardMoveAnimation() {
 		const moveInfo = positionList[positionIndex]["move_info"];
-		
+
 		const startingSquare = moveInfo["starting_square"];
 		const destinationSquare = moveInfo["destination_square"];
 
@@ -235,8 +229,36 @@ function Play() {
 
 		setTimeout(() => {
 			setParsedFEN(positionList[positionIndex]?.["position"]);
-			setLastDraggedSquare(positionList[positionIndex]?.last_dragged_square);
-			setLastDroppedSquare(positionList[positionIndex]?.last_dropped_square);
+			setLastDraggedSquare(
+				positionList[positionIndex]?.last_dragged_square
+			);
+			setLastDroppedSquare(
+				positionList[positionIndex]?.last_dropped_square
+			);
+		}, convertToMilliseconds(pieceAnimationTime));
+	}
+
+	function handleReplayMoveAnimation() {
+		const moveInfo = positionList[positionIndex + 1]["move_info"];
+
+		const startingSquare = moveInfo["starting_square"];
+		const destinationSquare = moveInfo["destination_square"];
+
+		// @ts-ignore
+		animateMoveReplay(
+			startingSquare,
+			destinationSquare,
+			boardOrientation.toLowerCase()
+		);
+
+		setTimeout(() => {
+			setParsedFEN(positionList[positionIndex]?.["position"]);
+			setLastDraggedSquare(
+				positionList[positionIndex]?.last_dragged_square
+			);
+			setLastDroppedSquare(
+				positionList[positionIndex]?.last_dropped_square
+			);
 		}, convertToMilliseconds(pieceAnimationTime));
 	}
 
