@@ -3,6 +3,7 @@ import { ChessboardSquareIndex, OptionalValue } from "../types/general";
 import { calculateXYTransform } from "../utils/boardUtils";
 import { convertToMilliseconds } from "../utils/timeUtils";
 import { pieceAnimationTime } from "../constants/pieceAnimation";
+import { PieceColor } from "../types/gameLogic";
 
 function usePieceAnimation() {
 	const [animatingPieceSquare, setAnimatingPieceSquare] =
@@ -12,11 +13,13 @@ function usePieceAnimation() {
 	function animatePiece(
 		startingSquare: ChessboardSquareIndex,
 		destinationSquare: ChessboardSquareIndex,
-        squareSize?: number
+		orientation: PieceColor,
+        squareSize?: number,
 	) {
 		const [xTransform, yTransform] = calculateXYTransform(
 			startingSquare,
 			destinationSquare,
+			orientation,
 			squareSize
 		);
 
