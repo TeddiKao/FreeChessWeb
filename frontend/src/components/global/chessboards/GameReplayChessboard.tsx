@@ -12,7 +12,11 @@ function GameReplayChessboard({
 	lastDraggedSquare,
 	lastDroppedSquare,
 	orientation,
+	animationSquare,
+	animationStyles,
 }: GameReplayChessboardProps) {
+	console.log(animationStyles);
+
 	if (!parsed_fen_string) {
 		return null;
 	}
@@ -67,6 +71,12 @@ function GameReplayChessboard({
 							)}
 						>
 							<img
+								style={
+									Number(animationSquare) ===
+									Number(boardPlacementSquare)
+										? animationStyles
+										: undefined
+								}
 								src={`/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
 									pieceType
 								)}.svg`}

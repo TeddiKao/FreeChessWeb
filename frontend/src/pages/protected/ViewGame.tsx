@@ -1,6 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchGameWinner, fetchMoveList, fetchPositionList } from "../../utils/apiUtils";
+import {
+	fetchGameWinner,
+	fetchMoveList,
+	fetchPositionList,
+} from "../../utils/apiUtils";
 import { ParsedFENString } from "../../types/gameLogic";
 import GameReplayChessboard from "../../components/global/chessboards/GameReplayChessboard";
 
@@ -10,6 +14,10 @@ import MoveListPanel from "../../components/global/gameplaySidePanel/MoveListPan
 import MoveNavigationButtons from "../../components/global/gameplaySidePanel/MoveNavigationButtons";
 import { playAudio } from "../../utils/audioUtils";
 import { isNullOrUndefined } from "../../utils/generalUtils";
+import { OptionalValue } from "../../types/general";
+import { convertToMilliseconds } from "../../utils/timeUtils";
+import { pieceAnimationTime } from "../../constants/pieceAnimation";
+import usePieceAnimation from "../../hooks/usePieceAnimation";
 
 function ViewGame() {
 	const { gameId } = useParams();
@@ -17,18 +25,32 @@ function ViewGame() {
 	const [boardOrientation, setBoardOrientation] = useState("White");
 
 	const [positionList, setPositionList] = useState([]);
+
+	const previousPositionIndexRef = useRef<OptionalValue<number>>(null);
 	const [positionIndex, setPositionIndex] = useState(0);
+
 	const [moveList, setMoveList] = useState([]);
 
 	const [gameWinner, setGameWinner] = useState("");
 
-	const parsedFEN: ParsedFENString =
-		positionList[positionIndex]?.["position"];
-	const lastDraggedSquare =
-		positionList[positionIndex]?.["last_dragged_square"];
-	const lastDroppedSquare =
-		positionList[positionIndex]?.["last_dropped_square"];
+	const [parsedFEN, setParsedFEN] = useState<ParsedFENString>(
+		positionList[positionIndex]?.["position"]
+	);
+
+	const [lastDraggedSquare, setLastDraggedSquare] = useState(
+		positionList[positionIndex]?.["last_dragged_square"]
+	);
+	const [lastDroppedSquare, setLastDroppedSquare] = useState(
+		positionList[positionIndex]?.["last_dropped_square"]
+	);
 	const moveType = positionList[positionIndex]?.["move_type"];
+
+	const [
+		pieceAnimationSquare,
+		pieceAnimationStyles,
+		animatePiece,
+		animateMoveReplay,
+	] = usePieceAnimation();
 
 	useEffect(() => {
 		updatePositionList();
@@ -37,10 +59,44 @@ function ViewGame() {
 	}, []);
 
 	useEffect(() => {
+		if (previousPositionIndexRef.current) {
+			if (previousPositionIndexRef.current + 1 === positionIndex) {
+				handleFastForwardMoveAnimation();
+			} else if (previousPositionIndexRef.current - 1 === positionIndex) {
+				handleReplayMoveAnimation();
+			} else {
+				setParsedFEN(positionList[positionIndex]?.["position"]);
+				setLastDraggedSquare(
+					positionList[positionIndex]?.["last_dragged_square"]
+				);
+				setLastDroppedSquare(
+					positionList[positionIndex]?.["last_dropped_square"]
+				);
+			}
+		} else {
+			setParsedFEN(positionList[positionIndex]?.["position"]);
+			setLastDraggedSquare(
+				positionList[positionIndex]?.["last_dragged_square"]
+			);
+			setLastDroppedSquare(
+				positionList[positionIndex]?.["last_dropped_square"]
+			);
+		}
+
 		if (!isNullOrUndefined(moveType)) {
 			playAudio(moveType);
 		}
 	}, [positionIndex]);
+
+	useEffect(() => {
+		setParsedFEN(positionList[positionIndex]?.["position"]);
+		setLastDraggedSquare(
+			positionList[positionIndex]?.["last_dragged_square"]
+		);
+		setLastDroppedSquare(
+			positionList[positionIndex]?.["last_dropped_square"]
+		);
+	}, [positionList]);
 
 	async function updatePositionList() {
 		const fetchedPositionList = await fetchPositionList(Number(gameId));
@@ -64,6 +120,54 @@ function ViewGame() {
 		setBoardOrientation(newOrientation);
 	}
 
+	function handleFastForwardMoveAnimation() {
+		const moveInfo = positionList[positionIndex]["move_info"];
+
+		const startingSquare = moveInfo["starting_square"];
+		const destinationSquare = moveInfo["destination_square"];
+
+		// @ts-ignore
+		animatePiece(
+			startingSquare,
+			destinationSquare,
+			boardOrientation.toLowerCase()
+		);
+
+		setTimeout(() => {
+			setParsedFEN(positionList[positionIndex]?.["position"]);
+			setLastDraggedSquare(
+				positionList[positionIndex]?.["last_dragged_square"]
+			);
+			setLastDroppedSquare(
+				positionList[positionIndex]?.["last_dropped_square"]
+			);
+		}, convertToMilliseconds(pieceAnimationTime));
+	}
+
+	function handleReplayMoveAnimation() {
+		const moveInfo = positionList[positionIndex + 1]["move_info"];
+
+		const startingSquare = moveInfo["starting_square"];
+		const destinationSquare = moveInfo["destination_square"];
+
+		// @ts-ignore
+		animateMoveReplay(
+			startingSquare,
+			destinationSquare,
+			boardOrientation.toLowerCase()
+		);
+
+		setTimeout(() => {
+			setParsedFEN(positionList[positionIndex]?.["position"]);
+			setLastDraggedSquare(
+				positionList[positionIndex]?.["last_dragged_square"]
+			);
+			setLastDroppedSquare(
+				positionList[positionIndex]?.["last_dropped_square"]
+			);
+		}, convertToMilliseconds(pieceAnimationTime));
+	}
+
 	return (
 		<>
 			<DashboardNavbar />
@@ -74,6 +178,10 @@ function ViewGame() {
 						parsed_fen_string={parsedFEN}
 						lastDraggedSquare={lastDraggedSquare}
 						lastDroppedSquare={lastDroppedSquare}
+						// @ts-ignore
+						animationSquare={pieceAnimationSquare}
+						// @ts-ignore
+						animationStyles={pieceAnimationStyles}
 					/>
 				</div>
 
@@ -95,6 +203,7 @@ function ViewGame() {
 
 					<MoveNavigationButtons
 						setPositionIndex={setPositionIndex}
+						previousPositionIndexRef={previousPositionIndexRef}
 						positionListLength={positionList.length}
 					/>
 				</div>
