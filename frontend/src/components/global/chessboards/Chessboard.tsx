@@ -10,7 +10,6 @@ import {
 	getBoardEndingIndex,
 	isSquareLight,
 	getSquareExists,
-	calculateXYTransform,
 } from "../../../utils/boardUtils";
 
 import { playAudio } from "../../../utils/audioUtils";
@@ -839,7 +838,7 @@ function Chessboard({
 							previousDroppedSquare={previousDroppedSquare}
 							moveMethod={lastUsedMoveMethod}
 							squareSize={squareSize}
-                            
+
 							//@ts-ignore
 							animatingPieceSquare={animatingPieceSquare}
 							
