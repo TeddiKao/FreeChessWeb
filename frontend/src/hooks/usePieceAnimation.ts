@@ -24,6 +24,11 @@ function usePieceAnimation() {
 			pointerEvents: "none",
 			zIndex: "100",
 		});
+
+		setTimeout(() => {
+			setAnimatingPieceSquare(null);
+			setAnimatingPieceStyles({});
+		}, 300)
 	}
 
     return [animatingPieceSquare, animatingPieceStyles, animatePiece];
