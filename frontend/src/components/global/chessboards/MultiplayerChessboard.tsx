@@ -53,6 +53,7 @@ import { websocketBaseURL } from "../../../constants/urls.ts";
 import { getOppositeColor } from "../../../utils/gameLogic/general.ts";
 import useUsername from "../../../hooks/useUsername.ts";
 import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
+import { isObjEmpty } from "../../../utils/generalUtils.ts";
 
 function MultiplayerChessboard({
 	parsed_fen_string,
@@ -72,6 +73,9 @@ function MultiplayerChessboard({
 	setGameEndedCause,
 
 	squareSize,
+
+	parentAnimationSquare,
+	parentAnimationStyles
 }: MultiplayerChessboardProps) {
 	const [previousClickedSquare, setPreviousClickedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -119,6 +123,10 @@ function MultiplayerChessboard({
 	const chessboardStyles = {
 		gridTemplateColumns: `repeat(8, ${squareSize}px`,
 	};
+
+	console.log(animatingPieceSquare || parentAnimationSquare);
+	console.log(parentAnimationStyles)
+	console.log(animatingPieceStyles || parentAnimationStyles);
 
 	useEffect(() => {
 		setParsedFENString(parsed_fen_string);
@@ -289,6 +297,8 @@ function MultiplayerChessboard({
 		parsedEventData: PositionListUpdateEventData
 	) {
 		const newPositionList = parsedEventData["new_position_list"];
+		console.log(newPositionList);
+
 		setPositionList(newPositionList);
 	}
 
@@ -841,10 +851,10 @@ function MultiplayerChessboard({
 							squareSize={squareSize}
 
 							// @ts-ignore
-							animatingPieceSquare={animatingPieceSquare}
+							animatingPieceSquare={animatingPieceSquare || parentAnimationSquare}
 							
 							// @ts-ignore
-							animatingPieceStyle={animatingPieceStyles}
+							animatingPieceStyle={isObjEmpty(animatingPieceStyles) ? parentAnimationStyles : animatingPieceStyles}
 						/>
 					);
 				} else {
@@ -867,10 +877,10 @@ function MultiplayerChessboard({
 							squareSize={squareSize}
 
 							// @ts-ignore
-							animatingPieceSquare={animatingPieceSquare}
+							animatingPieceSquare={animatingPieceSquare || parentAnimationSquare}
 							
 							// @ts-ignore
-							animatingPieceStyle={animatingPieceStyles}
+							animatingPieceStyle={isObjEmpty(animatingPieceStyles) ? parentAnimationStyles : animatingPieceStyles}
 						/>
 					);
 				}

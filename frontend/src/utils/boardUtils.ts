@@ -159,4 +159,5 @@ export {
 	isSquareOnFileEdge,
 	getSquareClass,
 	calculateXYTransform,
+	calculateReplayXYTransform
 };
