@@ -1,3 +1,4 @@
+import { PieceColor } from "../types/gameLogic";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,
@@ -97,6 +98,7 @@ function getSquareClass(
 function calculateXYTransform(
 	startingSquare: ChessboardSquareIndex,
 	destinationSquare: ChessboardSquareIndex,
+	orientation: PieceColor,
 	squareWidth: number = 55
 ) {
 	const startingSquareRank = getRank(startingSquare);
@@ -109,8 +111,14 @@ function calculateXYTransform(
 
 	console.log(rankDiff, fileDiff);
 
-	const xTransform = fileDiff * squareWidth * -1;
-	const yTransform = rankDiff * squareWidth;
+	const xTransform =
+		orientation === "white"
+			? fileDiff * squareWidth * -1
+			: fileDiff * squareWidth; // Equivalent to fileDiff * squareWidth * -1 * -1
+	const yTransform =
+		orientation === "white"
+			? fileDiff * squareWidth
+			: fileDiff * squareWidth * -1;
 
 	return [xTransform, yTransform];
 }
