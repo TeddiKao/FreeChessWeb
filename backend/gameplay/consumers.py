@@ -178,7 +178,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 			"position": newest_updated_fen,
 			"last_dragged_square": starting_square,
 			"last_dropped_square": destination_square,
-			"move_type": move_type
+			"move_type": move_type,
+			"move_info": move_info
 		})
 
 		await self.update_game_attribute(chess_game_model, "position_list", updated_position_list, should_save=False)
