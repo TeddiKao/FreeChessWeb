@@ -41,7 +41,7 @@ import {
 } from "../../../types/gameLogic.js";
 import { isPawnPromotion } from "../../../utils/moveUtils.ts";
 import useWebSocket from "../../../hooks/useWebsocket.ts";
-import { parseWebsocketUrl } from "../../../utils/generalUtils.ts";
+import { isObjEmpty, parseWebsocketUrl } from "../../../utils/generalUtils.ts";
 import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
 import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
 import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";
@@ -59,6 +59,9 @@ function BotChessboard({
 	setGameEnded,
 	setGameEndedCause,
 	setGameWinner,
+
+	parentAnimationSquare,
+	parentAnimationStyles
 }: BotChessboardProps) {
 	const [previousClickedSquare, setPreviousClickedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -649,9 +652,9 @@ function BotChessboard({
 							moveMethod={lastUsedMoveMethod}
 							squareSize={squareSize}
 							// @ts-ignore
-							animatingPieceSquare={pieceAnimationSquare}
+							animatingPieceSquare={pieceAnimationSquare || parentAnimationSquare}
 							// @ts-ignore
-							animatingPieceStyle={pieceAnimationStyles}
+							animatingPieceStyle={isObjEmpty(pieceAnimationStyles) ? parentAnimationStyles : pieceAnimationStyles}
 						/>
 					);
 				} else {
@@ -673,9 +676,9 @@ function BotChessboard({
 							moveMethod={lastUsedMoveMethod}
 							squareSize={squareSize}
 							// @ts-ignore
-							animatingPieceSquare={pieceAnimationSquare}
+							animatingPieceSquare={pieceAnimationSquare || parentAnimationSquare}
 							// @ts-ignore
-							animatingPieceStyle={pieceAnimationStyles}
+							animatingPieceStyle={isObjEmpty(pieceAnimationStyles) ? parentAnimationStyles : pieceAnimationStyles}
 						/>
 					);
 				}

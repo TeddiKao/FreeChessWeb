@@ -38,6 +38,9 @@ interface BotChessboardProps extends DisplayChessboardProps {
 	setGameEnded: StateSetterFunction<boolean>;
 	setGameEndedCause: StateSetterFunction<string>;
 	setGameWinner: StateSetterFunction<string>;
+
+	parentAnimationSquare: OptionalValue<ChessboardSquareIndex>
+	parentAnimationStyles: Record<string, unknown>
 }
 
 interface MultiplayerChessboardProps extends DisplayChessboardProps {
@@ -71,6 +74,9 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
 interface GameReplayChessboardProps extends DisplayChessboardProps {
 	lastDraggedSquare: string;
 	lastDroppedSquare: string;
+
+	animationSquare: OptionalValue<ChessboardSquareIndex>;
+	animationStyles: Record<string, unknown>
 }
 
 interface EmptySquareProps {

@@ -37,7 +37,8 @@ def update_position_list(current_position_list, new_move_info, new_position):
         "position": new_position,
         "last_dragged_square": starting_square,
         "last_dropped_square": destination_square,
-        "move_type": move_type
+        "move_type": move_type,
+        "move_info": new_move_info
     })
 
     return updated_position_list
