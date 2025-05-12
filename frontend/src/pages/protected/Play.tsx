@@ -28,6 +28,8 @@ import { MessageBoxTypes } from "../../types/messageBox.ts";
 import DrawOfferPopup from "../../components/global/popups/DrawOfferPopup.tsx";
 import { playAudio } from "../../utils/audioUtils.ts";
 import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar.tsx";
+import { convertToMilliseconds } from "../../utils/timeUtils.ts";
+import { pieceAnimationTime } from "../../constants/pieceAnimation.ts";
 
 function Play() {
 	const location = useLocation();
@@ -90,7 +92,7 @@ function Play() {
 	useEffect(() => {
 		setTimeout(() => {
 			setPositionIndex(positionList.length - 1);
-		}, 300)
+		}, convertToMilliseconds(pieceAnimationTime));
 	}, [positionList]);
 
 	useEffect(() => {
