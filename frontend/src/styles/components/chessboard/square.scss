@@ -9,7 +9,7 @@
 .piece-image {
 	position: relative;
 	background: none;
-	transition: transform 0.3s ease;
+	transition: transform $piece-animation-time ease;
 }
 
 .piece-image:hover {
