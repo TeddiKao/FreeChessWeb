@@ -79,6 +79,32 @@ function isSquareOnRankEdge(
 	}
 }
 
+function calculateXYTransform(
+	startingSquare: ChessboardSquareIndex,
+	destinationSquare: ChessboardSquareIndex,
+	orientation: PieceColor,
+	squareWidth: number = 55
+) {
+	const startingSquareRank = getRank(startingSquare);
+	const startingSquareFile = getFile(startingSquare);
+	const destinationSquareRank = getRank(destinationSquare);
+	const destinationSquareFile = getFile(destinationSquare);
+
+	const rankDiff = startingSquareRank - destinationSquareRank;
+	const fileDiff = startingSquareFile - destinationSquareFile;
+
+	const xTransform =
+		orientation === "white"
+			? fileDiff * squareWidth * -1
+			: fileDiff * squareWidth; // Equivalent to fileDiff * squareWidth * -1 * -1, which reverses the amount
+	const yTransform =
+		orientation === "white"
+			? rankDiff * squareWidth
+			: rankDiff * squareWidth * -1;
+
+	return [xTransform, yTransform];
+}
+
 function getSquareClass(
 	square: string,
 	previousDraggedSquare: string,
@@ -95,7 +121,7 @@ function getSquareClass(
 	}
 }
 
-function calculateXYTransform(
+function calculateReplayXYTransform(
 	startingSquare: ChessboardSquareIndex,
 	destinationSquare: ChessboardSquareIndex,
 	orientation: PieceColor,
@@ -106,8 +132,8 @@ function calculateXYTransform(
 	const destinationSquareRank = getRank(destinationSquare);
 	const destinationSquareFile = getFile(destinationSquare);
 
-	const rankDiff = startingSquareRank - destinationSquareRank;
-	const fileDiff = startingSquareFile - destinationSquareFile;
+	const rankDiff = destinationSquareRank - startingSquareRank;
+	const fileDiff = destinationSquareFile - startingSquareFile;
 
 	const xTransform =
 		orientation === "white"
