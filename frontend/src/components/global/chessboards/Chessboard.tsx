@@ -66,6 +66,8 @@ import {
 	PieceType,
 } from "../../../types/gameLogic.js";
 import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
+import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
+import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";
 
 function Chessboard({
 	parsed_fen_string,
@@ -516,7 +518,7 @@ function Chessboard({
 					return newPiecePlacements;
 				}
 			);
-		}, 300);
+		}, convertToMilliseconds(pieceAnimationTime));
 
 		const newSideToMove = getOppositeColor(pieceColorToValidate);
 

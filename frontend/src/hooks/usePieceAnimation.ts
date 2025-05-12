@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { ChessboardSquareIndex, OptionalValue } from "../types/general";
 import { calculateXYTransform } from "../utils/boardUtils";
+import { convertToMilliseconds } from "../utils/timeUtils";
+import { pieceAnimationTime } from "../constants/pieceAnimation";
 
 function usePieceAnimation() {
 	const [animatingPieceSquare, setAnimatingPieceSquare] =
@@ -28,7 +30,7 @@ function usePieceAnimation() {
 		setTimeout(() => {
 			setAnimatingPieceSquare(null);
 			setAnimatingPieceStyles({});
-		}, 300)
+		}, convertToMilliseconds(pieceAnimationTime))
 	}
 
     return [animatingPieceSquare, animatingPieceStyles, animatePiece];
