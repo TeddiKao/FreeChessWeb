@@ -109,9 +109,13 @@ function Play() {
 	}, []);
 
 	useEffect(() => {
-		setTimeout(() => {
+		const animationTimeout = setTimeout(() => {
 			setPositionIndex(positionList.length - 1);
 		}, convertToMilliseconds(pieceAnimationTime));
+
+		return () => {
+			clearTimeout(animationTimeout);
+		}
 	}, [positionList]);
 
 	useEffect(() => {
