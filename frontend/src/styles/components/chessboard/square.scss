@@ -1,4 +1,4 @@
-@use "../../global/variables";
+@use "../../global/variables" as *;
 @use "../../global/mixins" as *;
 
 .chessboard-square, .previous-dropped-square, .previous-dragged-square {
@@ -7,7 +7,9 @@
 }
 
 .piece-image {
+	position: relative;
 	background: none;
+	transition: transform $piece-animation-time ease;
 }
 
 .piece-image:hover {
@@ -15,21 +17,21 @@
 }
 
 .light {
-	background-color: variables.$light-square-color;
+	background-color: $light-square-color;
 }
 
 .dark {
-	background-color: variables.$dark-square-color;
+	background-color: $dark-square-color;
 	border: none;
 }
 
 .previous-dragged-square {
-	background-color: variables.$last-dragged-square-color;
+	background-color: $last-dragged-square-color;
 	border: none;
 }
 
 .previous-dropped-square {
-	background-color: variables.$last-dropped-square-color;
+	background-color: $last-dropped-square-color;
 	border: none;
 }
 

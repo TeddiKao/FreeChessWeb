@@ -4,6 +4,7 @@ import { BasicWebSocketEventData } from "./general.ts";
 interface MoveMadeEventData extends BasicWebSocketEventData {
     move_data: MoveInfo;
     new_parsed_fen: ParsedFENString;
+    move_made_by: string,
     move_type: string;
     new_position_index: number;
 }
@@ -19,6 +20,7 @@ interface PositionListUpdateEventData extends BasicWebSocketEventData {
         last_dragged_square: string;
         last_dropped_square: string;
         move_type: string;
+        move_info: MoveInfo
     }>;
 }
 

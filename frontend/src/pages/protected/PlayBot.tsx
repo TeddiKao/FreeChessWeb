@@ -1,23 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import BotChessboard from "../../components/global/chessboards/BotChessboard";
 import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar";
 import {
 	fetchBotGameMoveList,
 	fetchBotGamePositionList,
 } from "../../utils/apiUtils";
-import { ParsedFENString } from "../../types/gameLogic";
+import { MoveInfo, ParsedFENString } from "../../types/gameLogic";
 
 import "../../styles/pages/play-bot.scss";
 import useGameplaySettings from "../../hooks/useGameplaySettings";
 import GameplaySettings from "../../components/global/modals/GameplaySettings";
 import ModalWrapper from "../../components/global/wrappers/ModalWrapper";
 import { Navigate, useLocation } from "react-router-dom";
-import { ChessboardSquareIndex } from "../../types/general";
+import { ChessboardSquareIndex, OptionalValue } from "../../types/general";
 import MoveNavigationButtons from "../../components/global/gameplaySidePanel/MoveNavigationButtons";
 import MoveListPanel from "../../components/global/gameplaySidePanel/MoveListPanel";
 import { isNullOrUndefined } from "../../utils/generalUtils";
 import { playAudio } from "../../utils/audioUtils";
 import LocalGameOverModal from "../../components/global/modals/gameOverModals/LocalModal";
+import { convertToMilliseconds } from "../../utils/timeUtils";
+import { pieceAnimationTime } from "../../constants/pieceAnimation";
+import useReactiveRef from "../../hooks/useReactiveRef";
+import usePieceAnimation from "../../hooks/usePieceAnimation";
 
 function PlayBot() {
 	const initialGameplaySettings = useGameplaySettings();
@@ -37,25 +41,40 @@ function PlayBot() {
 			move_type: string;
 			last_dragged_square: ChessboardSquareIndex;
 			last_dropped_square: ChessboardSquareIndex;
+			move_info: MoveInfo;
 		}>
 	>([]);
+
+	const previousPositionIndexRef = useRef<OptionalValue<number>>(null);
 	const [positionIndex, setPositionIndex] = useState<number>(
 		positionList.length - 1
 	);
-	const parsedFEN = positionList[positionIndex]?.["position"];
-	const lastDraggedSquare =
-		positionList[positionIndex]?.["last_dragged_square"];
-	const lastDroppedSquare =
-		positionList[positionIndex]?.["last_dropped_square"];
+	const [parsedFEN, setParsedFEN] = useState(
+		positionList[positionIndex]?.["position"]
+	);
+	const [lastDraggedSquare, setLastDraggedSquare] = useState(
+		positionList[positionIndex]?.["last_dragged_square"]
+	);
+	const [lastDroppedSquare, setLastDroppedSquare] = useState(
+		positionList[positionIndex]?.["last_dropped_square"]
+	);
+
+	const [
+		pieceAnimationSquare,
+		pieceAnimationStyles,
+		animatePiece,
+		animateMoveReplay,
+	] = usePieceAnimation();
 
 	const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
 
 	const location = useLocation();
 	const gameId = location.state?.gameId;
 	const bot = location.state?.bot;
-	const assignedColor = location.state?.assignedColor
+	const assignedColor = location.state?.assignedColor;
 
-	const [boardOrientation, setBoardOrientation] = useState<string>(assignedColor);
+	const [boardOrientation, setBoardOrientation] =
+		useState<string>(assignedColor);
 
 	useEffect(() => {
 		updateMoveList();
@@ -63,10 +82,47 @@ function PlayBot() {
 	}, [gameId]);
 
 	useEffect(() => {
-		setPositionIndex(positionList.length - 1);
+		const animationTimeout = setTimeout(() => {
+			setPositionIndex(positionList.length - 1);
+			setParsedFEN(positionList[positionIndex]?.["position"]);
+			setLastDraggedSquare(
+				positionList[positionIndex]?.["last_dragged_square"]
+			);
+			setLastDroppedSquare(
+				positionList[positionIndex]?.["last_dropped_square"]
+			);
+		}, convertToMilliseconds(pieceAnimationTime));
+
+		return () => {
+			clearTimeout(animationTimeout);
+		};
 	}, [positionList]);
 
 	useEffect(() => {
+		if (previousPositionIndexRef.current) {
+			if (previousPositionIndexRef.current + 1 === positionIndex) {
+				handleFastForwardMoveAnimation();
+			} else if (previousPositionIndexRef.current - 1 === positionIndex) {
+				handleReplayMoveAnimation();
+			} else {
+				setParsedFEN(positionList[positionIndex]?.["position"]);
+				setLastDraggedSquare(
+					positionList[positionIndex]?.["last_dragged_square"]
+				);
+				setLastDroppedSquare(
+					positionList[positionIndex]?.["last_dropped_square"]
+				);
+			}
+		} else {
+			setParsedFEN(positionList[positionIndex]?.["position"]);
+			setLastDraggedSquare(
+				positionList[positionIndex]?.["last_dragged_square"]
+			);
+			setLastDroppedSquare(
+				positionList[positionIndex]?.["last_dropped_square"]
+			);
+		}
+
 		const moveType = positionList[positionIndex]?.["move_type"];
 		if (!isNullOrUndefined(moveType)) {
 			playAudio(moveType);
@@ -107,6 +163,56 @@ function PlayBot() {
 		setGameplaySettingsVisible(false);
 	}
 
+	function handleFastForwardMoveAnimation() {
+		const moveInfo = positionList[positionIndex]["move_info"];
+
+		const startingSquare = moveInfo["starting_square"];
+		const destinationSquare = moveInfo["destination_square"];
+
+		console.log(startingSquare, destinationSquare);
+
+		// @ts-ignore
+		animatePiece(
+			startingSquare,
+			destinationSquare,
+			boardOrientation.toLowerCase()
+		);
+
+		setTimeout(() => {
+			setParsedFEN(positionList[positionIndex]?.["position"]);
+			setLastDraggedSquare(
+				positionList[positionIndex]?.["last_dragged_square"]
+			);
+			setLastDroppedSquare(
+				positionList[positionIndex]?.["last_dropped_square"]
+			);
+		}, convertToMilliseconds(pieceAnimationTime));
+	}
+
+	function handleReplayMoveAnimation() {
+		const moveInfo = positionList[positionIndex + 1]["move_info"];
+
+		const startingSquare = moveInfo["starting_square"];
+		const destinationSquare = moveInfo["destination_square"];
+
+		// @ts-ignore
+		animateMoveReplay(
+			startingSquare,
+			destinationSquare,
+			boardOrientation.toLowerCase()
+		);
+
+		setTimeout(() => {
+			setParsedFEN(positionList[positionIndex]?.["position"]);
+			setLastDraggedSquare(
+				positionList[positionIndex]?.["last_dragged_square"]
+			);
+			setLastDroppedSquare(
+				positionList[positionIndex]?.["last_dropped_square"]
+			);
+		}, convertToMilliseconds(pieceAnimationTime));
+	}
+
 	if (!parsedFEN) {
 		return null;
 	}
@@ -120,16 +226,20 @@ function PlayBot() {
 						lastDraggedSquare={lastDraggedSquare}
 						lastDroppedSquare={lastDroppedSquare}
 						squareSize={58}
+						setPositionList={setPositionList}
 						parsed_fen_string={parsedFEN}
 						orientation={boardOrientation}
 						gameplaySettings={gameplaySettings}
 						gameId={gameId}
 						setMoveList={setMoveList}
-						setPositionList={setPositionList}
 						botId={bot}
 						setGameEnded={setHasGameEnded}
 						setGameWinner={setGameWinner}
 						setGameEndedCause={setGameEndedCause}
+						// @ts-ignore
+						parentAnimationSquare={pieceAnimationSquare}
+						// @ts-ignore
+						parentAnimationStyles={pieceAnimationStyles}
 					/>
 				</div>
 
@@ -155,6 +265,7 @@ function PlayBot() {
 					/>
 
 					<MoveNavigationButtons
+						previousPositionIndexRef={previousPositionIndexRef}
 						setPositionIndex={setPositionIndex}
 						positionListLength={positionList.length}
 					/>

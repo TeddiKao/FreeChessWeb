@@ -17,11 +17,14 @@ import GameOverModal from "../../components/global/modals/gameOverModals/Multipl
 import GameplaySettings from "../../components/global/modals/GameplaySettings.tsx";
 import ModalWrapper from "../../components/global/wrappers/ModalWrapper.js";
 import { OptionalValue } from "../../types/general.js";
-import { ParsedFENString, PieceColor } from "../../types/gameLogic.js";
+import {
+	MoveInfo,
+	ParsedFENString,
+	PieceColor,
+} from "../../types/gameLogic.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
 import MoveListPanel from "../../components/global/gameplaySidePanel/MoveListPanel.tsx";
 import MoveNavigationButtons from "../../components/global/gameplaySidePanel/MoveNavigationButtons.tsx";
-import { ArrowKeys } from "../../enums/general.ts";
 import GameplayActionButtons from "../../components/global/gameplaySidePanel/GameplayActionButtons.tsx";
 import { isNullOrUndefined } from "../../utils/generalUtils.ts";
 import MessageBox from "../../components/global/popups/MessageBox.tsx";
@@ -29,6 +32,9 @@ import { MessageBoxTypes } from "../../types/messageBox.ts";
 import DrawOfferPopup from "../../components/global/popups/DrawOfferPopup.tsx";
 import { playAudio } from "../../utils/audioUtils.ts";
 import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar.tsx";
+import { convertToMilliseconds } from "../../utils/timeUtils.ts";
+import { pieceAnimationTime } from "../../constants/pieceAnimation.ts";
+import usePieceAnimation from "../../hooks/usePieceAnimation.ts";
 
 function Play() {
 	const location = useLocation();
@@ -46,8 +52,11 @@ function Play() {
 			last_dragged_square: string;
 			last_dropped_square: string;
 			move_type: string;
+			move_info: MoveInfo;
 		}>
 	>([]);
+
+	const previousPositionIndexRef = useRef(null);
 	const [positionIndex, setPositionIndex] = useState<number>(0);
 
 	const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
@@ -62,16 +71,27 @@ function Play() {
 
 	const [drawOfferReceived, setDrawOfferReceived] = useState<boolean>(false);
 
-	const parsedFEN = positionList[positionIndex]?.["position"];
-	const lastDraggedSquare =
-		positionList[positionIndex]?.["last_dragged_square"];
-	const lastDroppedSquare =
-		positionList[positionIndex]?.["last_dropped_square"];
+	const [parsedFEN, setParsedFEN] = useState(
+		positionList[positionIndex]?.["position"]
+	);
+	const [lastDraggedSquare, setLastDraggedSquare] = useState(
+		positionList[positionIndex]?.["last_dragged_square"]
+	);
+	const [lastDroppedSquare, setLastDroppedSquare] = useState(
+		positionList[positionIndex]?.["last_dropped_square"]
+	);
 	const moveType = positionList[positionIndex]?.["move_type"];
 
 	const [boardOrientation, setBoardOrientation] = useState(
 		location.state?.assignedColor || "White"
 	);
+
+	const [
+		pieceAnimationSquare,
+		pieceAnimationStyles,
+		animatePiece,
+		animateMoveReplay,
+	] = usePieceAnimation();
 
 	const [settingsVisible, setSettingsVisible] = useState(false);
 
@@ -89,10 +109,43 @@ function Play() {
 	}, []);
 
 	useEffect(() => {
-		setPositionIndex(positionList.length - 1);
+		const animationTimeout = setTimeout(() => {
+			setPositionIndex(positionList.length - 1);
+		}, convertToMilliseconds(pieceAnimationTime));
+
+		return () => {
+			clearTimeout(animationTimeout);
+		}
 	}, [positionList]);
 
 	useEffect(() => {
+		if (!isNullOrUndefined(previousPositionIndexRef.current)) {
+			if (previousPositionIndexRef.current! + 1 === positionIndex) {
+				handleFastForwardMoveAnimation();
+			} else if (
+				previousPositionIndexRef.current! - 1 ===
+				positionIndex
+			) {
+				handleReplayMoveAnimation();
+			} else {
+				setParsedFEN(positionList[positionIndex]?.["position"]);
+				setLastDraggedSquare(
+					positionList[positionIndex]?.last_dragged_square
+				);
+				setLastDroppedSquare(
+					positionList[positionIndex]?.last_dropped_square
+				);
+			}
+		} else {
+			setParsedFEN(positionList[positionIndex]?.["position"]);
+			setLastDraggedSquare(
+				positionList[positionIndex]?.last_dragged_square
+			);
+			setLastDroppedSquare(
+				positionList[positionIndex]?.last_dropped_square
+			);
+		}
+
 		if (!isNullOrUndefined(moveType)) {
 			playAudio(moveType);
 		}
@@ -165,6 +218,54 @@ function Play() {
 		setSettingsVisible(false);
 	}
 
+	function handleFastForwardMoveAnimation() {
+		const moveInfo = positionList[positionIndex]["move_info"];
+
+		const startingSquare = moveInfo["starting_square"];
+		const destinationSquare = moveInfo["destination_square"];
+
+		// @ts-ignore
+		animatePiece(
+			startingSquare,
+			destinationSquare,
+			boardOrientation.toLowerCase()
+		);
+
+		setTimeout(() => {
+			setParsedFEN(positionList[positionIndex]?.["position"]);
+			setLastDraggedSquare(
+				positionList[positionIndex]?.last_dragged_square
+			);
+			setLastDroppedSquare(
+				positionList[positionIndex]?.last_dropped_square
+			);
+		}, convertToMilliseconds(pieceAnimationTime));
+	}
+
+	function handleReplayMoveAnimation() {
+		const moveInfo = positionList[positionIndex + 1]["move_info"];
+
+		const startingSquare = moveInfo["starting_square"];
+		const destinationSquare = moveInfo["destination_square"];
+
+		// @ts-ignore
+		animateMoveReplay(
+			startingSquare,
+			destinationSquare,
+			boardOrientation.toLowerCase()
+		);
+
+		setTimeout(() => {
+			setParsedFEN(positionList[positionIndex]?.["position"]);
+			setLastDraggedSquare(
+				positionList[positionIndex]?.last_dragged_square
+			);
+			setLastDroppedSquare(
+				positionList[positionIndex]?.last_dropped_square
+			);
+		}, convertToMilliseconds(pieceAnimationTime));
+	}
+
 	function getTimerColor(timerPosition: string) {
 		const boardSide =
 			boardOrientation.toLowerCase() === "white" ? "bottom" : "top";
@@ -228,6 +329,10 @@ function Play() {
 							setGameEndedCause={setGameEndedCause}
 							setGameWinner={setGameWinner}
 							squareSize={58}
+							// @ts-ignore
+							parentAnimationSquare={pieceAnimationSquare}
+							// @ts-ignore
+							parentAnimationStyles={pieceAnimationStyles}
 						/>
 					</div>
 
@@ -279,6 +384,7 @@ function Play() {
 
 					<MoveNavigationButtons
 						setPositionIndex={setPositionIndex}
+						previousPositionIndexRef={previousPositionIndexRef}
 						positionListLength={positionList.length}
 					/>
 

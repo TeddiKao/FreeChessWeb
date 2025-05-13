@@ -91,6 +91,7 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		await self.check_for_results(bot_game_model, piece_color)
 		await self.send(json.dumps({
 			"type": "move_registered",
+			"move_data": move_info,
 			"new_structured_fen": updated_structured_fen,
 			"new_position_list": updated_position_list,
 			"new_move_list": updated_move_list,
@@ -138,10 +139,12 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 
 		updated_structured_fen, updated_move_list, updated_position_list = await self.get_updated_game_state(bot_game_model, structured_move_info)
 
+		await asyncio.sleep(0.3)
 		await self.check_for_results(bot_game_model, structured_move_info["piece_color"])
 		
 		await self.send(json.dumps({
 			"type": "bot_move_made",
+			"move_data": structured_move_info,
 			"new_structured_fen": updated_structured_fen,
 			"new_position_list": updated_position_list,
 			"new_move_list": updated_move_list,

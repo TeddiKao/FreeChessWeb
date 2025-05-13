@@ -4,7 +4,7 @@ import {
 	OptionalValue,
 	StateSetterFunction,
 } from "../types/general.ts";
-import { ParsedFENString, PieceColor, PieceType } from "../types/gameLogic.ts";
+import { MoveInfo, ParsedFENString, PieceColor, PieceType } from "../types/gameLogic.ts";
 
 interface DisplayChessboardProps {
 	parsed_fen_string: ParsedFENString;
@@ -29,6 +29,7 @@ interface BotChessboardProps extends DisplayChessboardProps {
 			move_type: string;
 			last_dragged_square: ChessboardSquareIndex;
 			last_dropped_square: ChessboardSquareIndex;
+			move_info: MoveInfo
 		}>
 	>;
 	lastDraggedSquare: ChessboardSquareIndex;
@@ -37,6 +38,9 @@ interface BotChessboardProps extends DisplayChessboardProps {
 	setGameEnded: StateSetterFunction<boolean>;
 	setGameEndedCause: StateSetterFunction<string>;
 	setGameWinner: StateSetterFunction<string>;
+
+	parentAnimationSquare: OptionalValue<ChessboardSquareIndex>
+	parentAnimationStyles: Record<string, unknown>
 }
 
 interface MultiplayerChessboardProps extends DisplayChessboardProps {
@@ -50,6 +54,7 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
 			last_dragged_square: string;
 			last_dropped_square: string;
 			move_type: string;
+			move_info: MoveInfo
 		}>
 	>;
 	setMoveList: StateSetterFunction<Array<Array<string>>>;
@@ -61,11 +66,17 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
 	lastDraggedSquare: string;
 	lastDroppedSquare: string;
 	gameplaySettings: any;
+
+	parentAnimationSquare: OptionalValue<ChessboardSquareIndex>
+	parentAnimationStyles: Record<string, unknown>
 }
 
 interface GameReplayChessboardProps extends DisplayChessboardProps {
 	lastDraggedSquare: string;
 	lastDroppedSquare: string;
+
+	animationSquare: OptionalValue<ChessboardSquareIndex>;
+	animationStyles: Record<string, unknown>
 }
 
 interface EmptySquareProps {
@@ -91,6 +102,8 @@ interface EmptySquareProps {
 	previousDroppedSquare: OptionalValue<ChessboardSquareIndex>;
 	moveMethod: OptionalValue<string>;
 	squareSize?: number;
+	animatingPieceStyle: Record<string, unknown>;
+	animatingPieceSquare: OptionalValue<ChessboardSquareIndex>;
 }
 
 interface FilledSquareProps {

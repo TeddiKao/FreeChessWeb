@@ -1,16 +1,18 @@
 import { useEffect } from "react";
 import "../../../styles/features/gameplay/side-panel-buttons.scss";
-import { StateSetterFunction } from "../../../types/general";
+import { OptionalValue, RefObject, StateSetterFunction } from "../../../types/general";
 import { ArrowKeys } from "../../../enums/general";
 
 type MoveNavigationButtonsProps = {
 	setPositionIndex: StateSetterFunction<number>;
+	previousPositionIndexRef: RefObject<OptionalValue<number>>
 	positionListLength: number;
 };
 
 function MoveNavigationButtons({
 	setPositionIndex,
-    positionListLength
+    positionListLength,
+	previousPositionIndexRef
 }: MoveNavigationButtonsProps) {
     function handleKeyDown(event: KeyboardEvent) {
         switch (event.key) {
@@ -44,23 +46,35 @@ function MoveNavigationButtons({
     }, [positionListLength]);
 
 	function backToStart() {
-		setPositionIndex(0);
+		setPositionIndex((prevIndex) => {
+			previousPositionIndexRef.current = prevIndex;
+
+			return 0;
+		});
 	}
 
 	function handlePreviousMove() {
-		setPositionIndex((prevIndex) =>
-			prevIndex > 0 ? prevIndex - 1 : prevIndex
-		);
+		setPositionIndex((prevIndex) => {
+			previousPositionIndexRef.current = prevIndex;
+
+			return prevIndex > 0 ? prevIndex - 1 : prevIndex
+		});
 	}
 
     function handleNextMove() {
         setPositionIndex((prevIndex) => {
+			previousPositionIndexRef.current = prevIndex;
+
             return prevIndex + 1 < positionListLength ? prevIndex + 1 : prevIndex
         })
     }
 
     function backToCurrentPosition() {
-        setPositionIndex(positionListLength - 1);
+        setPositionIndex((prevIndex) => {
+			previousPositionIndexRef.current = prevIndex;
+
+			return positionListLength - 1
+		});
     }
 
 	return (

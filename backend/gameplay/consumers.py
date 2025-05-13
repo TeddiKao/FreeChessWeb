@@ -178,7 +178,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 			"position": newest_updated_fen,
 			"last_dragged_square": starting_square,
 			"last_dropped_square": destination_square,
-			"move_type": move_type
+			"move_type": move_type,
+			"move_info": move_info
 		})
 
 		await self.update_game_attribute(chess_game_model, "position_list", updated_position_list, should_save=False)
@@ -570,7 +571,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.room_group_name,
 			{
 				"type": "move_received",
-				"move_data": text_data,
+				"move_data": json.loads(text_data),
 				"move_made_by": self.scope["user"].username,
 				"move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
 				"new_parsed_fen": new_parsed_fen,
@@ -676,6 +677,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			"type": "move_made",
 			"move_data": event["move_data"],
 			"move_type": event["move_type"],
+			"move_made_by": event["move_made_by"],
 			"new_parsed_fen": event["new_parsed_fen"],
 			"new_position_index": event["new_position_index"],
 		}))
