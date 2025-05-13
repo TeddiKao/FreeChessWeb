@@ -82,7 +82,7 @@ function PlayBot() {
 	}, [gameId]);
 
 	useEffect(() => {
-		setTimeout(() => {
+		const animationTimeout = setTimeout(() => {
 			setPositionIndex(positionList.length - 1);
 			setParsedFEN(positionList[positionIndex]?.["position"]);
 			setLastDraggedSquare(
@@ -92,6 +92,10 @@ function PlayBot() {
 				positionList[positionIndex]?.["last_dropped_square"]
 			);
 		}, convertToMilliseconds(pieceAnimationTime));
+
+		return () => {
+			clearTimeout(animationTimeout);
+		};
 	}, [positionList]);
 
 	useEffect(() => {
