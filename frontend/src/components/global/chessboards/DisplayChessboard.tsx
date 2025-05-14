@@ -1,4 +1,5 @@
 import { DisplayChessboardProps } from "../../../interfaces/chessboard";
+import { EmptySquareRenderParams, FilledSquareRenderParams } from "../../../interfaces/chessboardGrid";
 import "../../../styles/components/chessboard/chessboard.scss";
 import ChessboardGrid from "./ChessboardGrid";
 
@@ -15,7 +16,7 @@ function DisplayChessboard({
 		pieceType,
 		pieceColor,
 		squareColor,
-	}: any) {
+	}: FilledSquareRenderParams) {
 		return (
 			<div
 				key={squareIndex}
@@ -30,7 +31,7 @@ function DisplayChessboard({
 		);
 	}
 
-	function renderEmptySquare({ squareIndex, squareColor }: any) {
+	function renderEmptySquare({ squareIndex, squareColor }: EmptySquareRenderParams) {
 		return (
 			<div
 				key={squareIndex}
@@ -39,7 +40,7 @@ function DisplayChessboard({
 			></div>
 		);
 	}
-    
+
 	return (
 		<ChessboardGrid
 			renderFilledSquare={renderFilledSquare}

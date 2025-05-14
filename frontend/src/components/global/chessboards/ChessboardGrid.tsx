@@ -2,26 +2,15 @@ import { BoardPlacement } from "../../../types/gameLogic";
 
 import "../../../styles/components/chessboard/chessboard.scss";
 import { getFile, getRank, isSquareLight } from "../../../utils/boardUtils";
+import { EmptySquareRenderParams, FilledSquareRenderParams } from "../../../interfaces/chessboardGrid";
 
 type ChessboardGridProps = {
 	boardOrientation: string;
 	boardPlacement: BoardPlacement;
 
-    renderFilledSquare: (params: {
-        squareIndex: number,
-        pieceType: string,
-        pieceColor: string,
-        row: number,
-        column: number,
-		squareColor: string,
-    }) => JSX.Element
+    renderFilledSquare: (params: FilledSquareRenderParams) => JSX.Element
 
-    renderEmptySquare: (params: {
-        sqaureIndex: number,
-        row: number,
-        column: number,
-		squareColor: string
-    }) => JSX.Element
+    renderEmptySquare: (params: EmptySquareRenderParams) => JSX.Element
 };
 
 function ChessboardGrid({
@@ -88,7 +77,7 @@ function ChessboardGrid({
 				} else {
 					squareElements.push(
 						renderEmptySquare({
-							sqaureIndex: square - 1,
+							squareIndex: square - 1,
 							row: row,
 							column: column,
 							squareColor: squareColor
