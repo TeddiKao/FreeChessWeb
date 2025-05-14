@@ -1,32 +1,30 @@
 import { BoardPlacement } from "../../../types/gameLogic";
 
 import "../../../styles/components/chessboard/chessboard.scss";
-import { getFile, getRank } from "../../../utils/boardUtils";
+import { getFile, getRank, isSquareLight } from "../../../utils/boardUtils";
 
 type ChessboardGridProps = {
-	filledSquareComponent: JSX.Element;
-	emptySquareComponent: JSX.Element;
-	boardOrientation: "White" | "Black";
+	boardOrientation: string;
 	boardPlacement: BoardPlacement;
 
     renderFilledSquare: (params: {
-        sqaureIndex: number,
+        squareIndex: number,
         pieceType: string,
         pieceColor: string,
         row: number,
-        column: number
+        column: number,
+		squareColor: string,
     }) => JSX.Element
 
     renderEmptySquare: (params: {
         sqaureIndex: number,
         row: number,
-        column: number
+        column: number,
+		squareColor: string
     }) => JSX.Element
 };
 
 function ChessboardGrid({
-	filledSquareComponent,
-	emptySquareComponent,
 	boardOrientation,
 	boardPlacement,
 
@@ -71,16 +69,20 @@ function ChessboardGrid({
 				const boardPlacementSquare = `${square - 1}`;
 				const column = getFile(boardPlacementSquare);
 
+				const squareLight = isSquareLight(boardPlacementSquare);
+				const squareColor = squareLight ? "light" : "dark";
+
 				if (
 					Object.keys(boardPlacement).includes(boardPlacementSquare)
 				) {
 					squareElements.push(
 						renderFilledSquare({
-							sqaureIndex: square - 1,
+							squareIndex: square - 1,
 							pieceType: boardPlacement[boardPlacementSquare]["piece_type"],
 							pieceColor: boardPlacement[boardPlacementSquare]["piece_color"],
 							row: row,
 							column: column,
+							squareColor: squareColor
 						})
 					);
 				} else {
@@ -88,7 +90,8 @@ function ChessboardGrid({
 						renderEmptySquare({
 							sqaureIndex: square - 1,
 							row: row,
-							column: column
+							column: column,
+							squareColor: squareColor
 						})
 					);
 				}
