@@ -7,6 +7,7 @@ import { EmptySquareRenderParams, FilledSquareRenderParams } from "../../../inte
 type ChessboardGridProps = {
 	boardOrientation: string;
 	boardPlacement: BoardPlacement;
+	chessboardStyles?: { [key: string]: any };
 
     renderFilledSquare: (params: FilledSquareRenderParams) => JSX.Element
 
@@ -16,6 +17,7 @@ type ChessboardGridProps = {
 function ChessboardGrid({
 	boardOrientation,
 	boardPlacement,
+	chessboardStyles,
 
 	renderFilledSquare,
 	renderEmptySquare
@@ -90,7 +92,7 @@ function ChessboardGrid({
 		return squareElements;
 	}
 
-	return <div className="chessboard-container">{generateChessboard()}</div>;
+	return <div style={chessboardStyles} className="chessboard-container">{generateChessboard()}</div>;
 }
 
 export default ChessboardGrid;
