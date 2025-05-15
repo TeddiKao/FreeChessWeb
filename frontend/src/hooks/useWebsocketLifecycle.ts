@@ -6,7 +6,7 @@ import {
 } from "../types/general";
 
 type WebSocketLifecycleHookProps = {
-    websocket: WebSocket;
+    websocket: OptionalValue<WebSocket>;
 	websocketRef: RefObject<OptionalValue<WebSocket>>;
 	websocketExistsRef: RefObject<boolean>;
 	setWebsocketEnabled: StateSetterFunction<boolean>;
