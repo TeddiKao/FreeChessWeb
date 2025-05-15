@@ -2,14 +2,13 @@ from rest_framework.decorators import APIView
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 
 from django.db.models import Q
 
 from .models import ChessGame
 from .models import UserGameplaySettings
 
-from .serializers import ChessGameSerializer
 from core.utils.model_utils import serialize_excluding_fields
 
 from .utils import fen_parser
