@@ -4,7 +4,7 @@ import hashlib
 from .get_legal_moves import is_king_in_check, get_legal_moves
 from .general import get_all_pieces_on_board
 
-from core.utils import compare_dictionaries
+from core.utils.dict_utils import are_dictionaries_equal
 
 insufficient_material_configurations = [
     ["king", "bishop", "king"],
@@ -116,17 +116,6 @@ def is_checkmated_or_stalemated(current_fen: dict, king_color: str):
     else:
         return False, True
     
-def create_fen_hash(structured_board_placement: dict, castling_rights: dict, en_passant_target_square: str | int):
-    string_fen = json.dumps({
-        "board_placement": structured_board_placement,
-        "castling_rights": castling_rights,
-        "en_passant_target_square": str(en_passant_target_square)
-    }, sort_keys=True)
-
-    hashed_fen = hashlib.sha256(string_fen.encode()).hexdigest()
-
-    return hashed_fen
-
 def get_position_occurences(position_list: list, position: dict):
     occurences = 0
     
@@ -134,7 +123,11 @@ def get_position_occurences(position_list: list, position: dict):
     target_castling_rights = position["castling_rights"]
     target_en_passant = position["en_passant_target_square"]
 
-    target_position_hash = create_fen_hash(target_board_placement, target_castling_rights, target_en_passant)
+    target_position = {
+        "board_placement": target_board_placement,
+        "castling_rights": target_castling_rights,
+        "en_passant_target_square": target_en_passant
+    }
 
     for position_list_data in position_list:
         position_list_fen = position_list_data["position"]
@@ -143,8 +136,13 @@ def get_position_occurences(position_list: list, position: dict):
         current_castling_rights_to_check = position_list_fen["castling_rights"]
         current_en_passant_to_check = position_list_fen["en_passant_target_square"]
 
-        position_hash_to_check = create_fen_hash(board_placement_to_check, current_castling_rights_to_check, current_en_passant_to_check)
-        if position_hash_to_check == target_position_hash:
+        position_to_check = {
+            "board_placement": board_placement_to_check,
+            "castling_rights": current_castling_rights_to_check,
+            "en_passant_target_square": current_en_passant_to_check
+        }
+
+        if are_dictionaries_equal(target_position, position_to_check):
             occurences += 1
 
     return occurences
