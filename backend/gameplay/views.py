@@ -10,7 +10,7 @@ from .models import ChessGame
 from .models import UserGameplaySettings
 
 from .serializers import ChessGameSerializer
-from core.utils import serialize_excluding_fields
+from core.utils.model_utils import serialize_excluding_fields
 
 from .utils import fen_parser
 
