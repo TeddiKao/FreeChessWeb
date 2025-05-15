@@ -481,8 +481,8 @@ function MultiplayerChessboard({
 
 		const usingDrag = moveMethod === MoveMethods.DRAG;
 		const startingSquare = usingDrag
-			? draggedSquare
-			: previousClickedSquare;
+			? `${draggedSquare}`
+			: `${previousClickedSquare}`;
 
 		if (!startingSquare) {
 			return;
