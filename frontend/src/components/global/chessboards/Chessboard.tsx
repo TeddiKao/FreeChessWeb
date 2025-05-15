@@ -68,6 +68,11 @@ import {
 import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
 import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
 import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";
+import ChessboardGrid from "./ChessboardGrid.tsx";
+import {
+	EmptySquareRenderParams,
+	FilledSquareRenderParams,
+} from "../../../interfaces/chessboardGrid.ts";
 
 function Chessboard({
 	parsed_fen_string,
@@ -101,7 +106,8 @@ function Chessboard({
 
 	const [sideToMove, setSideToMove] = useState<string>("white");
 
-    const [animatingPieceSquare, animatingPieceStyles, animatePiece] = usePieceAnimation();
+	const [animatingPieceSquare, animatingPieceStyles, animatePiece] =
+		usePieceAnimation();
 
 	const setGameEnded = useContext(GameEndedSetterContext);
 	const setGameEndedCause = useContext(GameEndedCauseSetterContext);
@@ -127,6 +133,14 @@ function Chessboard({
 	useEffect(() => {
 		handleOnDrop();
 	}, [draggedSquare, droppedSquare]);
+
+	useEffect(() => {
+		console.log(`New dragged square: ${previousDraggedSquare}`);
+		console.log(`New dropped square: ${previousDroppedSquare}`);
+		console.log(`New dragged square is a ${typeof(previousDraggedSquare)?.toString()}`)
+		console.log(`New dropped square is a ${typeof(previousDroppedSquare)?.toString()}`)
+	}, [previousDraggedSquare, previousDroppedSquare]);
+
 
 	useEffect(() => {
 		if (isFirstRender.current) {
@@ -176,8 +190,8 @@ function Chessboard({
 			parsedFENString,
 			pieceColorToValidate,
 			pieceTypeToValidate,
-			draggedSquare,
-			droppedSquare
+			draggedSquare.toString(),
+			droppedSquare.toString()
 		);
 
 		if (!moveIsLegal) {
@@ -373,8 +387,8 @@ function Chessboard({
 			parsedFENString,
 			pieceColorToValidate,
 			pieceTypeToValidate,
-			previousClickedSquare,
-			clickedSquare
+			previousClickedSquare.toString(),
+			clickedSquare.toString()
 		);
 
 		if (!isMoveLegal) {
@@ -399,7 +413,7 @@ function Chessboard({
 			);
 		}
 
-        // @ts-ignore
+		// @ts-ignore
 		animatePiece(
 			previousClickedSquare,
 			clickedSquare,
@@ -527,6 +541,8 @@ function Chessboard({
 
 		playAudio(moveType);
 
+		console.log(previousClickedSquare, clickedSquare);
+
 		setPreviousDraggedSquare(previousClickedSquare);
 		setPreviousDroppedSquare(clickedSquare);
 		setPreviousClickedSquare(null);
@@ -545,10 +561,13 @@ function Chessboard({
 
 		const legalMoves = await fetchLegalMoves(
 			parsedFENString,
-			pieceType,
-			pieceColor,
-			startingSquare
+			pieceType.toLowerCase(),
+			pieceColor.toLowerCase(),
+			startingSquare.toString()
 		);
+
+		console.log(parsedFENString);
+		console.log(legalMoves, pieceType, pieceColor, startingSquare);
 
 		if (!legalMoves) {
 			return;
@@ -841,12 +860,10 @@ function Chessboard({
 							previousDroppedSquare={previousDroppedSquare}
 							moveMethod={lastUsedMoveMethod}
 							squareSize={squareSize}
-
 							//@ts-ignore
 							animatingPieceSquare={animatingPieceSquare}
-							
-                            //@ts-ignore
-                            animatingPieceStyle={animatingPieceStyles}
+							//@ts-ignore
+							animatingPieceStyle={animatingPieceStyles}
 						/>
 					);
 				} else {
@@ -867,12 +884,10 @@ function Chessboard({
 							previousDroppedSquare={previousDroppedSquare}
 							moveMethod={lastUsedMoveMethod}
 							squareSize={squareSize}
-
-                            //@ts-ignore
+							//@ts-ignore
 							animatingPieceSquare={animatingPieceSquare}
-							
-                            //@ts-ignore
-                            animatingPieceStyle={animatingPieceStyles}
+							//@ts-ignore
+							animatingPieceStyle={animatingPieceStyles}
 						/>
 					);
 				}
@@ -882,11 +897,87 @@ function Chessboard({
 		return squareElements;
 	}
 
+	function renderFilledSquare({
+		squareIndex,
+		squareColor,
+		pieceType,
+		pieceColor,
+		promotionRank,
+		pieceRank,
+	}: FilledSquareRenderParams) {
+		return (
+			<Square
+				key={squareIndex}
+				squareNumber={squareIndex}
+				squareColor={squareColor}
+				pieceColor={pieceColor as PieceColor}
+				pieceType={pieceType as PieceType}
+				displayPromotionPopup={
+					pieceType.toLowerCase() === "pawn" &&
+					promotionRank === pieceRank &&
+					!autoQueen
+				}
+				orientation={orientation}
+				handleSquareClick={handleSquareClick}
+				setParsedFENString={setParsedFENString}
+				setDraggedSquare={setDraggedSquare}
+				setDroppedSquare={setDroppedSquare}
+				handlePromotionCancel={handlePromotionCancel}
+				handlePawnPromotion={handlePawnPromotion}
+				previousDraggedSquare={previousDraggedSquare}
+				previousDroppedSquare={previousDroppedSquare}
+				moveMethod={lastUsedMoveMethod}
+				squareSize={squareSize}
+				//@ts-ignore
+				animatingPieceSquare={animatingPieceSquare}
+				//@ts-ignore
+				animatingPieceStyle={animatingPieceStyles}
+			/>
+		);
+	}
+
+	function renderEmptySquare({
+		squareIndex,
+		squareColor,
+	}: EmptySquareRenderParams) {
+		return (
+			<Square
+				key={squareIndex}
+				squareNumber={squareIndex}
+				squareColor={squareColor}
+				orientation={orientation}
+				handleSquareClick={handleSquareClick}
+				displayPromotionPopup={false}
+				setParsedFENString={setParsedFENString}
+				setDraggedSquare={setDraggedSquare}
+				setDroppedSquare={setDroppedSquare}
+				handlePromotionCancel={handlePromotionCancel}
+				handlePawnPromotion={handlePawnPromotion}
+				previousDraggedSquare={previousDraggedSquare}
+				previousDroppedSquare={previousDroppedSquare}
+				moveMethod={lastUsedMoveMethod}
+				squareSize={squareSize}
+				//@ts-ignore
+				animatingPieceSquare={animatingPieceSquare}
+				//@ts-ignore
+				animatingPieceStyle={animatingPieceStyles}
+			/>
+		);
+	}
+
 	return (
 		<>
-			<div style={chessboardStyles} className="chessboard-container">
+			{/* <div style={chessboardStyles} className="chessboard-container">
 				{generateChessboard()}
-			</div>
+			</div> */}
+
+			<ChessboardGrid
+				renderFilledSquare={renderFilledSquare}
+				renderEmptySquare={renderEmptySquare}
+				boardOrientation={orientation}
+				boardPlacement={parsedFENString["board_placement"]}
+				chessboardStyles={chessboardStyles}
+			/>
 		</>
 	);
 }

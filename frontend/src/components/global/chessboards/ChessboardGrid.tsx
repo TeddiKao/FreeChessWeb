@@ -2,16 +2,20 @@ import { BoardPlacement } from "../../../types/gameLogic";
 
 import "../../../styles/components/chessboard/chessboard.scss";
 import { getFile, getRank, isSquareLight } from "../../../utils/boardUtils";
-import { EmptySquareRenderParams, FilledSquareRenderParams } from "../../../interfaces/chessboardGrid";
+import {
+	EmptySquareRenderParams,
+	FilledSquareRenderParams,
+} from "../../../interfaces/chessboardGrid";
+import { getPromotionRank } from "../../../utils/gameLogic/promotion";
 
 type ChessboardGridProps = {
 	boardOrientation: string;
 	boardPlacement: BoardPlacement;
 	chessboardStyles?: { [key: string]: any };
 
-    renderFilledSquare: (params: FilledSquareRenderParams) => JSX.Element
+	renderFilledSquare: (params: FilledSquareRenderParams) => JSX.Element;
 
-    renderEmptySquare: (params: EmptySquareRenderParams) => JSX.Element
+	renderEmptySquare: (params: EmptySquareRenderParams) => JSX.Element;
 };
 
 function ChessboardGrid({
@@ -20,7 +24,7 @@ function ChessboardGrid({
 	chessboardStyles,
 
 	renderFilledSquare,
-	renderEmptySquare
+	renderEmptySquare,
 }: ChessboardGridProps) {
 	function generateChessboard() {
 		const squareElements = [];
@@ -66,14 +70,27 @@ function ChessboardGrid({
 				if (
 					Object.keys(boardPlacement).includes(boardPlacementSquare)
 				) {
+					const pieceRank = getRank(boardPlacementSquare);
+					const promotionRank = getPromotionRank(
+						boardPlacement[boardPlacementSquare]["piece_color"]
+					);
+
 					squareElements.push(
 						renderFilledSquare({
 							squareIndex: square - 1,
-							pieceType: boardPlacement[boardPlacementSquare]["piece_type"],
-							pieceColor: boardPlacement[boardPlacementSquare]["piece_color"],
+							pieceType:
+								boardPlacement[boardPlacementSquare][
+									"piece_type"
+								],
+							pieceColor:
+								boardPlacement[boardPlacementSquare][
+									"piece_color"
+								],
 							row: row,
 							column: column,
-							squareColor: squareColor
+							squareColor: squareColor,
+							pieceRank: pieceRank,
+							promotionRank: promotionRank,
 						})
 					);
 				} else {
@@ -82,7 +99,7 @@ function ChessboardGrid({
 							squareIndex: square - 1,
 							row: row,
 							column: column,
-							squareColor: squareColor
+							squareColor: squareColor,
 						})
 					);
 				}
@@ -92,7 +109,11 @@ function ChessboardGrid({
 		return squareElements;
 	}
 
-	return <div style={chessboardStyles} className="chessboard-container">{generateChessboard()}</div>;
+	return (
+		<div style={chessboardStyles} className="chessboard-container">
+			{generateChessboard()}
+		</div>
+	);
 }
 
 export default ChessboardGrid;
