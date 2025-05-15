@@ -6,7 +6,7 @@ import {
 } from "../types/general";
 
 type WebSocketLifecycleHookProps = {
-    websocket: OptionalValue<WebSocket>;
+	websocket: OptionalValue<WebSocket>;
 	websocketRef: RefObject<OptionalValue<WebSocket>>;
 	websocketExistsRef: RefObject<boolean>;
 	setWebsocketEnabled: StateSetterFunction<boolean>;
@@ -14,7 +14,7 @@ type WebSocketLifecycleHookProps = {
 };
 
 function useWebsocketLifecycle({
-    websocket,
+	websocket,
 	websocketRef,
 	websocketExistsRef,
 	setWebsocketEnabled,
@@ -23,20 +23,20 @@ function useWebsocketLifecycle({
 	useEffect(() => {
 		if (websocketExistsRef.current === false) {
 			window.addEventListener("beforeunload", handleWindowUnload);
-           
-            websocketRef.current = websocket;
-            websocketExistsRef.current = true;
 
-            setWebsocketEnabled(true);
+			websocketRef.current = websocket;
+			websocketExistsRef.current = true;
+
+			setWebsocketEnabled(true);
 		}
 
 		return () => {
 			window.removeEventListener("beforeunload", handleWindowUnload);
 
-            if (websocketRef.current?.readyState === WebSocket.OPEN) {
-                websocketRef.current.close();
-                websocketExistsRef.current = false;
-            }
+			if (websocketRef.current?.readyState === WebSocket.OPEN) {
+				websocketRef.current.close();
+				websocketExistsRef.current = false;
+			}
 		};
 	}, []);
 }
