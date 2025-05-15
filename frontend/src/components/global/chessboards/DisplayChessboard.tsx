@@ -1,73 +1,54 @@
 import { DisplayChessboardProps } from "../../../interfaces/chessboard";
+import { EmptySquareRenderParams, FilledSquareRenderParams } from "../../../interfaces/chessboardGrid";
 import "../../../styles/components/chessboard/chessboard.scss";
+import ChessboardGrid from "./ChessboardGrid";
 
 function DisplayChessboard({
-    parsed_fen_string,
-    orientation,
+	parsed_fen_string,
+	orientation,
 }: DisplayChessboardProps) {
-    if (!parsed_fen_string) {
-        return null;
-    }
+	if (!parsed_fen_string) {
+		return null;
+	}
 
-    function generateChessboard() {
-        const squareElements = [];
+	function renderFilledSquare({
+		squareIndex,
+		pieceType,
+		pieceColor,
+		squareColor,
+	}: FilledSquareRenderParams) {
+		return (
+			<div
+				key={squareIndex}
+				id={`${squareIndex}`}
+				className={`chessboard-square ${squareColor}`}
+			>
+				<img
+					src={`/${pieceColor.toLowerCase()}${pieceType}.svg`}
+					className="piece-image"
+				/>
+			</div>
+		);
+	}
 
-        const startingRow = orientation === "White" ? 8 : 1;
-        const endingRow = orientation === "White" ? 1 : 8;
+	function renderEmptySquare({ squareIndex, squareColor }: EmptySquareRenderParams) {
+		return (
+			<div
+				key={squareIndex}
+				id={`${squareIndex}`}
+				className={`chessboard-square ${squareColor}`}
+			></div>
+		);
+	}
 
-        for (
-            let row = startingRow;
-            orientation === "White" ? row >= endingRow : row <= endingRow;
-            orientation === "White" ? row-- : row++
-        ) {
-            const startingIndex = (row - 1) * 8 + 1;
-            const endingIndex = row * 8;
-
-            for (let square = startingIndex; square <= endingIndex; square++) {
-                const boardPlacement = parsed_fen_string["board_placement"];
-                const squaresArray = Object.keys(boardPlacement);
-
-                const file = square - startingIndex + 1;
-                const squareIsLight = (file + row) % 2 !== 0;
-
-                const squareColor = squareIsLight ? "light" : "dark";
-
-                if (squaresArray.includes(`${square - 1}`)) {
-                    const pieceType =
-                        boardPlacement[`${square - 1}`]["piece_type"];
-                    const pieceColor =
-                        boardPlacement[`${square - 1}`][
-                            "piece_color"
-                        ].toLowerCase();
-
-                    squareElements.push(
-                        <div
-                            key={square}
-                            id={`${square}`}
-                            className={`chessboard-square ${squareColor}`}
-                        >
-                            <img
-                                src={`/${pieceColor}${pieceType}.svg`}
-                                className="piece-image"
-                            />
-                        </div>
-                    );
-                } else {
-                    squareElements.push(
-                        <div
-                            key={square}
-                            id={`${square}`}
-                            className={`chessboard-square ${squareColor}`}
-                        ></div>
-                    );
-                }
-            }
-        }
-
-        return squareElements;
-    }
-
-    return <div className="chessboard-container">{generateChessboard()}</div>;
+	return (
+		<ChessboardGrid
+			renderFilledSquare={renderFilledSquare}
+			renderEmptySquare={renderEmptySquare}
+            boardOrientation={orientation}
+            boardPlacement={parsed_fen_string["board_placement"]}
+		/>
+	);
 }
 
 export default DisplayChessboard;

@@ -11,7 +11,10 @@ import {
 	GameplayWebSocketEventTypes,
 } from "../../../enums/gameLogic.ts";
 import { MultiplayerChessboardProps } from "../../../interfaces/chessboard.js";
-import { ChessboardSquareIndex, OptionalValue } from "../../../types/general.ts";
+import {
+	ChessboardSquareIndex,
+	OptionalValue,
+} from "../../../types/general.ts";
 import {
 	BoardPlacement,
 	ParsedFENString,
@@ -54,6 +57,11 @@ import { getOppositeColor } from "../../../utils/gameLogic/general.ts";
 import useUsername from "../../../hooks/useUsername.ts";
 import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
 import { isObjEmpty } from "../../../utils/generalUtils.ts";
+import ChessboardGrid from "./ChessboardGrid.tsx";
+import {
+	EmptySquareRenderParams,
+	FilledSquareRenderParams,
+} from "../../../interfaces/chessboardGrid.ts";
 
 function MultiplayerChessboard({
 	parsed_fen_string,
@@ -74,7 +82,7 @@ function MultiplayerChessboard({
 	squareSize,
 
 	parentAnimationSquare,
-	parentAnimationStyles
+	parentAnimationStyles,
 }: MultiplayerChessboardProps) {
 	const [previousClickedSquare, setPreviousClickedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -110,7 +118,8 @@ function MultiplayerChessboard({
 	const currentUser = useUsername();
 	const currentUserRef = useRef(currentUser);
 
-	const [animatingPieceSquare, animatingPieceStyles, animatePiece] = usePieceAnimation();
+	const [animatingPieceSquare, animatingPieceStyles, animatePiece] =
+		usePieceAnimation();
 
 	const gameWebsocket = useWebSocket(
 		gameWebsocketUrl,
@@ -309,9 +318,17 @@ function MultiplayerChessboard({
 
 		const moveMethodUsed = lastUsedMoveMethodRef.current;
 
-		if (moveMadeBy !== currentUserRef.current || moveMethodUsed === "click") {
+		if (
+			moveMadeBy !== currentUserRef.current ||
+			moveMethodUsed === "click"
+		) {
 			// @ts-ignore
-			animatePiece(startingSquare, destinationSquare, orientation.toLowerCase(), squareSize);
+			animatePiece(
+				startingSquare,
+				destinationSquare,
+				boardOrientation.toLowerCase(),
+				squareSize
+			);
 		}
 
 		playAudio(eventData["move_type"]);
@@ -569,7 +586,7 @@ function MultiplayerChessboard({
 		setClickedSquare(null);
 
 		setLastUsedMoveMethod("click");
-		console.log("Updated last used move method!")
+		console.log("Updated last used move method!");
 	}
 
 	async function displayLegalMoves(
@@ -769,127 +786,96 @@ function MultiplayerChessboard({
 		gameWebsocketRef?.current?.send(JSON.stringify(moveDetails));
 	}
 
-	function generateChessboard() {
-		const squareElements = [];
-
-		const startingRow = boardOrientation.toLowerCase() === "white" ? 8 : 1;
-		const endingRow = boardOrientation.toLowerCase() === "white" ? 1 : 8;
-
-		for (
-			let row = startingRow;
-			boardOrientation.toLowerCase() === "white"
-				? row >= endingRow
-				: row <= endingRow;
-			boardOrientation.toLowerCase() === "white" ? row-- : row++
-		) {
-			const whiteOrientationStartingIndex = (row - 1) * 8 + 1;
-			const whiteOrientationEndingIndex = row * 8;
-
-			const blackOrientationStartingIndex = row * 8;
-			const blackOrientationEndingIndex = (row - 1) * 8 + 1;
-
-			const startingIndex =
-				boardOrientation.toLowerCase() === "white"
-					? whiteOrientationStartingIndex
-					: blackOrientationStartingIndex;
-			const endingIndex =
-				boardOrientation.toLowerCase() === "white"
-					? whiteOrientationEndingIndex
-					: blackOrientationEndingIndex;
-
-			for (
-				let square = startingIndex;
-				boardOrientation.toLowerCase() === "white"
-					? square <= endingIndex
-					: square >= endingIndex;
-				boardOrientation.toLowerCase() === "white" ? square++ : square--
-			) {
-				const file = getFile(square);
-
-				const squareIsLight = (file + row) % 2 !== 0;
-				const squareColor = squareIsLight ? "light" : "dark";
-
-				const boardPlacementSquare = `${square - 1}`;
-				if (
-					Object.keys(piecePlacements).includes(boardPlacementSquare)
-				) {
-					const pieceColor =
-						piecePlacements[boardPlacementSquare]["piece_color"];
-					const pieceType =
-						piecePlacements[boardPlacementSquare]["piece_type"];
-
-					const promotionRank =
-						pieceColor.toLowerCase() === "white" ? 7 : 0;
-					const pieceRank = getRank(boardPlacementSquare);
-
-					squareElements.push(
-						<Square
-							key={boardPlacementSquare}
-							squareNumber={boardPlacementSquare}
-							squareColor={squareColor}
-							pieceColor={pieceColor}
-							pieceType={pieceType}
-							displayPromotionPopup={
-								pieceType.toLowerCase() === "pawn" &&
-								promotionRank === pieceRank
-							}
-							handleSquareClick={handleSquareClick}
-							setParsedFENString={setParsedFENString}
-							setDraggedSquare={setDraggedSquare}
-							setDroppedSquare={setDroppedSquare}
-							handlePromotionCancel={handlePromotionCancel}
-							handlePawnPromotion={handlePawnPromotion}
-							previousDraggedSquare={previousDraggedSquare}
-							previousDroppedSquare={previousDroppedSquare}
-							orientation={boardOrientation}
-							moveMethod={lastUsedMoveMethod}
-							squareSize={squareSize}
-
-							// @ts-ignore
-							animatingPieceSquare={animatingPieceSquare || parentAnimationSquare}
-							
-							// @ts-ignore
-							animatingPieceStyle={isObjEmpty(animatingPieceStyles) ? parentAnimationStyles : animatingPieceStyles}
-						/>
-					);
-				} else {
-					squareElements.push(
-						<Square
-							key={boardPlacementSquare}
-							squareNumber={boardPlacementSquare}
-							squareColor={squareColor}
-							handleSquareClick={handleSquareClick}
-							displayPromotionPopup={false}
-							setParsedFENString={setParsedFENString}
-							setDraggedSquare={setDraggedSquare}
-							setDroppedSquare={setDroppedSquare}
-							handlePromotionCancel={handlePromotionCancel}
-							handlePawnPromotion={handlePawnPromotion}
-							previousDraggedSquare={previousDraggedSquare}
-							previousDroppedSquare={previousDroppedSquare}
-							orientation={boardOrientation}
-							moveMethod={lastUsedMoveMethod}
-							squareSize={squareSize}
-
-							// @ts-ignore
-							animatingPieceSquare={animatingPieceSquare || parentAnimationSquare}
-							
-							// @ts-ignore
-							animatingPieceStyle={isObjEmpty(animatingPieceStyles) ? parentAnimationStyles : animatingPieceStyles}
-						/>
-					);
+	function renderFilledSquare({
+		squareIndex,
+		squareColor,
+		promotionRank,
+		pieceRank,
+		pieceColor,
+		pieceType
+	}: FilledSquareRenderParams) {
+		return (
+			<Square
+				key={squareIndex}
+				squareNumber={squareIndex}
+				squareColor={squareColor}
+				pieceColor={pieceColor as PieceColor}
+				pieceType={pieceType as PieceType}
+				displayPromotionPopup={
+					pieceType.toLowerCase() === "pawn" &&
+					promotionRank === pieceRank
 				}
-			}
-		}
+				handleSquareClick={handleSquareClick}
+				setParsedFENString={setParsedFENString}
+				setDraggedSquare={setDraggedSquare}
+				setDroppedSquare={setDroppedSquare}
+				handlePromotionCancel={handlePromotionCancel}
+				handlePawnPromotion={handlePawnPromotion}
+				previousDraggedSquare={previousDraggedSquare}
+				previousDroppedSquare={previousDroppedSquare}
+				orientation={boardOrientation}
+				moveMethod={lastUsedMoveMethod}
+				squareSize={squareSize}
+				// @ts-ignore
+				animatingPieceSquare={
+					animatingPieceSquare || parentAnimationSquare
+				}
+				// @ts-ignore
+				animatingPieceStyle={
+					// @ts-ignore
+					isObjEmpty(animatingPieceStyles)
+						? parentAnimationStyles
+						: animatingPieceStyles
+				}
+			/>
+		);
+	}
 
-		return squareElements;
+	function renderEmptySquare({
+		squareIndex,
+		squareColor,
+	}: EmptySquareRenderParams) {
+		return (
+			<Square
+				key={squareIndex}
+				squareNumber={squareIndex}
+				squareColor={squareColor}
+				handleSquareClick={handleSquareClick}
+				displayPromotionPopup={false}
+				setParsedFENString={setParsedFENString}
+				setDraggedSquare={setDraggedSquare}
+				setDroppedSquare={setDroppedSquare}
+				handlePromotionCancel={handlePromotionCancel}
+				handlePawnPromotion={handlePawnPromotion}
+				previousDraggedSquare={previousDraggedSquare}
+				previousDroppedSquare={previousDroppedSquare}
+				orientation={boardOrientation}
+				moveMethod={lastUsedMoveMethod}
+				squareSize={squareSize}
+				// @ts-ignore
+				animatingPieceSquare={
+					animatingPieceSquare || parentAnimationSquare
+				}
+				// @ts-ignore
+				animatingPieceStyle={
+					// @ts-ignore
+					isObjEmpty(animatingPieceStyles)
+						? parentAnimationStyles
+						: animatingPieceStyles
+				}
+			/>
+		);
 	}
 
 	return (
 		<>
-			<div style={chessboardStyles} className="chessboard-container">
-				{generateChessboard()}
-			</div>
+			<ChessboardGrid
+				boardOrientation={boardOrientation}
+				boardPlacement={parsedFENString["board_placement"]}
+				renderEmptySquare={renderEmptySquare}
+				renderFilledSquare={renderFilledSquare}
+				chessboardStyles={chessboardStyles}
+			/>
 		</>
 	);
 }

@@ -58,9 +58,9 @@ function Square({
 	};
 
 	function getSquareClass() {
-		if (squareNumber === previousDraggedSquare) {
+		if (squareNumber.toString() === previousDraggedSquare?.toString()) {
 			return "previous-dragged-square";
-		} else if (squareNumber === previousDroppedSquare) {
+		} else if (squareNumber.toString() === previousDroppedSquare?.toString()) {
 			return "previous-dropped-square";
 		} else {
 			return `chessboard-square ${squareColor}`;
@@ -137,6 +137,7 @@ function Square({
 		setDraggedSquare(startingSquare);
 		setDroppedSquare(droppedSquare);
 	}
+
 
 	function handleOnDrag(squareDragged: string | number) {
 		setDraggedSquare(squareDragged);
