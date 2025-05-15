@@ -134,8 +134,6 @@ function Chessboard({
 		handleOnDrop();
 	}, [draggedSquare, droppedSquare]);
 
-	useEffect(() => {}, [previousDraggedSquare, previousDroppedSquare]);
-
 	useEffect(() => {
 		if (isFirstRender.current) {
 			isFirstRender.current = false;
