@@ -159,21 +159,13 @@ function Play() {
 	}, [positionIndex]);
 
 	useEffect(() => {
-		console.log("Updating settings");
-		console.log(`New settings: ${JSON.stringify(initialGameplaySettings)}`);
 		setGameplaySettings(initialGameplaySettings);
 	}, [initialGameplaySettings]);
 
 	if (!location.state) {
 		return <Navigate to={"/game-setup"} />;
 	}
-
-	console.log(parsedFEN);
-	console.log(positionList);
-	console.log(positionIndex);
-	console.log(positionList[positionIndex]);
-	console.log(positionList[positionIndex]?.["position"]);
-
+	
 	if (!gameplaySettings) {
 		return null;
 	}

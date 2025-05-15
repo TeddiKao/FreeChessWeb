@@ -49,7 +49,6 @@ import {
 	blackPromotionRank,
 } from "../../../constants/boardSquares.js";
 
-import { playAudio } from "../../../utils/audioUtils";
 import useWebSocket from "../../../hooks/useWebsocket.ts";
 import { getAccessToken } from "../../../utils/tokenUtils.ts";
 import { websocketBaseURL } from "../../../constants/urls.ts";
@@ -356,13 +355,18 @@ function MultiplayerChessboard({
 
 		const autoQueen = gameplaySettings["auto_queen"];
 
+		console.log(pieceColorToValidate, pieceTypeToValidate, draggedSquare, droppedSquare)
+
+
 		const moveIsLegal = await fetchMoveIsValid(
 			parsedFENString,
 			pieceColorToValidate,
 			pieceTypeToValidate,
-			draggedSquare,
-			droppedSquare
+			draggedSquare.toString(),
+			droppedSquare.toString()
 		);
+
+		console.log(moveIsLegal);
 
 		if (!moveIsLegal) {
 			setDraggedSquare(null);
@@ -413,9 +417,9 @@ function MultiplayerChessboard({
 
 			piece_color: pieceInfo["piece_color"],
 			piece_type: pieceInfo["piece_type"],
-			starting_square: usingDrag ? draggedSquare : previousClickedSquare,
+			starting_square: `${usingDrag ? draggedSquare : previousClickedSquare}`,
 			initial_square: initialSquare,
-			destination_square: usingDrag ? droppedSquare : clickedSquare,
+			destination_square: `${usingDrag ? droppedSquare : clickedSquare}`,
 
 			additional_info: {},
 		};
@@ -477,8 +481,8 @@ function MultiplayerChessboard({
 
 		const usingDrag = moveMethod === MoveMethods.DRAG;
 		const startingSquare = usingDrag
-			? draggedSquare
-			: previousClickedSquare;
+			? `${draggedSquare}`
+			: `${previousClickedSquare}`;
 
 		if (!startingSquare) {
 			return;
