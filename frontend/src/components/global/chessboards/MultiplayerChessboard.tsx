@@ -326,7 +326,7 @@ function MultiplayerChessboard({
 			animatePiece(
 				startingSquare,
 				destinationSquare,
-				orientation.toLowerCase(),
+				boardOrientation.toLowerCase(),
 				squareSize
 			);
 		}
