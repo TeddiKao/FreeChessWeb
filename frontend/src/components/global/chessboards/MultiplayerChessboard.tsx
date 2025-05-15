@@ -62,6 +62,7 @@ import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid.ts";
+import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle.ts";
 
 function MultiplayerChessboard({
 	parsed_fen_string,
@@ -157,26 +158,13 @@ function MultiplayerChessboard({
 		currentUserRef.current = currentUser;
 	}, [currentUser]);
 
-	useEffect(() => {
-		if (gameWebsocketExists.current === false) {
-			window.addEventListener("beforeunload", handleWindowUnload);
-
-			gameWebsocketRef.current = gameWebsocket;
-
-			gameWebsocketExists.current = true;
-
-			setGameWebsocketEnabled(true);
-		}
-
-		return () => {
-			window.removeEventListener("beforeunload", handleWindowUnload);
-
-			if (gameWebsocketRef.current?.readyState === WebSocket.OPEN) {
-				gameWebsocketRef.current.close();
-				gameWebsocketExists.current = false;
-			}
-		};
-	}, []);
+	useWebsocketLifecycle({
+		websocket: gameWebsocket,
+		websocketRef: gameWebsocketRef,
+		websocketExistsRef: gameWebsocketExists,
+		setWebsocketEnabled: setGameWebsocketEnabled,
+		handleWindowUnload: handleWindowUnload,
+	})
 
 	useEffect(() => {
 		gameWebsocketRef.current = gameWebsocket;

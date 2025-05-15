@@ -50,6 +50,7 @@ import {
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid.ts";
 import ChessboardGrid from "./ChessboardGrid.tsx";
+import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle.ts";
 function BotChessboard({
 	parsed_fen_string,
 	orientation,
@@ -134,24 +135,13 @@ function BotChessboard({
 		setPreviousDroppedSquare(lastDroppedSquare);
 	}, [lastDraggedSquare, lastDroppedSquare]);
 
-	useEffect(() => {
-		if (botGameWebsocketExists.current === false) {
-			window.addEventListener("beforeunload", handleWindowUnload);
-
-			botGameWebsocketExists.current = true;
-
-			setBotGameWebsocketEnabled(true);
-		}
-
-		return () => {
-			window.removeEventListener("beforeunload", handleWindowUnload);
-
-			if (botGameWebsocketRef.current?.readyState === WebSocket.OPEN) {
-				botGameWebsocketRef.current?.close();
-				botGameWebsocketExists.current = false;
-			}
-		};
-	}, []);
+	useWebsocketLifecycle({
+		websocket: socket,
+		websocketRef: botGameWebsocketRef,
+		websocketExistsRef: botGameWebsocketExists,
+		setWebsocketEnabled: setBotGameWebsocketEnabled,
+		handleWindowUnload: handleWindowUnload,
+	});
 
 	useEffect(() => {
 		botGameWebsocketRef.current = socket;
