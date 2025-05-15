@@ -318,8 +318,6 @@ function MultiplayerChessboard({
 				squareSize
 			);
 		}
-
-		playAudio(eventData["move_type"]);
 	}
 
 	async function handleOnDrop() {
