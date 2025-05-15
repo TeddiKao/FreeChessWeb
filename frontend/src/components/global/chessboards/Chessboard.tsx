@@ -775,8 +775,8 @@ function Chessboard({
 				color,
 				promotedPiece,
 				autoQueen,
-				promotionStartingSquare,
-				promotionEndingSquare,
+				promotionStartingSquare.toString(),
+				promotionEndingSquare.toString(),
 				unpromotedBoardPlacementRef
 			);
 
