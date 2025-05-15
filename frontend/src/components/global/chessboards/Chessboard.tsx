@@ -134,13 +134,7 @@ function Chessboard({
 		handleOnDrop();
 	}, [draggedSquare, droppedSquare]);
 
-	useEffect(() => {
-		console.log(`New dragged square: ${previousDraggedSquare}`);
-		console.log(`New dropped square: ${previousDroppedSquare}`);
-		console.log(`New dragged square is a ${typeof(previousDraggedSquare)?.toString()}`)
-		console.log(`New dropped square is a ${typeof(previousDroppedSquare)?.toString()}`)
-	}, [previousDraggedSquare, previousDroppedSquare]);
-
+	useEffect(() => {}, [previousDraggedSquare, previousDroppedSquare]);
 
 	useEffect(() => {
 		if (isFirstRender.current) {
@@ -541,8 +535,6 @@ function Chessboard({
 
 		playAudio(moveType);
 
-		console.log(previousClickedSquare, clickedSquare);
-
 		setPreviousDraggedSquare(previousClickedSquare);
 		setPreviousDroppedSquare(clickedSquare);
 		setPreviousClickedSquare(null);
@@ -565,9 +557,6 @@ function Chessboard({
 			pieceColor.toLowerCase(),
 			startingSquare.toString()
 		);
-
-		console.log(parsedFENString);
-		console.log(legalMoves, pieceType, pieceColor, startingSquare);
 
 		if (!legalMoves) {
 			return;
@@ -595,9 +584,6 @@ function Chessboard({
 	const piecePlacements = parsedFENString["board_placement"];
 
 	function handleSquareClick(event: React.MouseEvent<HTMLElement>) {
-		console.log("Square clicked!");
-		console.log(previousClickedSquare, clickedSquare);
-
 		if (!previousClickedSquare && !clickedSquare) {
 			setPreviousClickedSquare(event.currentTarget.id);
 		} else if (previousClickedSquare && !clickedSquare) {

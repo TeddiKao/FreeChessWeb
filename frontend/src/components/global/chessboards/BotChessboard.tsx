@@ -154,7 +154,6 @@ function BotChessboard({
 	}, []);
 
 	useEffect(() => {
-		console.log(socket);
 		botGameWebsocketRef.current = socket;
 	}, [socket]);
 
