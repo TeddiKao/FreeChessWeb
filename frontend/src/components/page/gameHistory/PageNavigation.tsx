@@ -1,4 +1,5 @@
 import { StateSetterFunction } from "../../../types/general";
+import "../../../styles/features/gameHistory/page-navigation.scss";
 
 type PageNavigationProps = {
     setPage: StateSetterFunction<number>;
