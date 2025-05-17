@@ -9,7 +9,7 @@ function useCompletedGames(currentPage: number) {
     }, []);
 
     async function updateCompletedGames(): Promise<void> {
-        const fetchedCompletedGames = await fetchCompletedGames();
+        const fetchedCompletedGames = await fetchCompletedGames(currentPage);
 
         setCompletedGames(fetchedCompletedGames);
     }
