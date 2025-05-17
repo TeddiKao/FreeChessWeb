@@ -57,9 +57,9 @@ function GameHistory() {
 							);
 						})}
 					</div>
-
-					<PageNavigation totalPages={totalPages} currentPage={currentPage} setPage={setCurrentPage} />
 				</div>
+
+				<PageNavigation totalPages={totalPages} currentPage={currentPage} setPage={setCurrentPage} />
 			</div>
 		</>
 	);
