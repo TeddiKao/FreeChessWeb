@@ -307,10 +307,12 @@ async function fetchBotGameMoveList(gameId: number) {
 	return moveList;
 }
 
-async function fetchCompletedGames() {
+async function fetchCompletedGames(currentPage: number) {
 	let completedGames = null;
 	try {
-		const response = await api.post("/game-history/get-completed-games/");
+		const response = await api.post("/game-history/get-completed-games/", {
+			current_page: currentPage
+		});
 		
 		completedGames = response.data;
 	} catch (error) {
