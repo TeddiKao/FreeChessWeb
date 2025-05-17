@@ -582,7 +582,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if is_checkmated or is_stalemated:
 			if is_checkmated:
 				await asyncio.gather(
-					chess_game_model.async_end_game(f"{piece_color.captialize()} won", move_made_by.username),
+					chess_game_model.async_end_game(f"{piece_color.capitalize()} won", move_made_by.username),
 					self.channel_layer.group_send(
 						self.room_group_name,
 						{
