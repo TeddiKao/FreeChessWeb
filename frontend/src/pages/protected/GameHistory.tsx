@@ -12,7 +12,7 @@ import { getTotalPages } from "../../utils/pageNavigationUtils";
 function GameHistory() {
 	const initialUsername = useUsername();
 
-	const [currentPage, setCurrentPage] = useState<number>(0);
+	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [gamesPerPage, setGamesPerPage] = useState<number>(20);
 
 	const initialCompletedGames = useCompletedGames(currentPage);
