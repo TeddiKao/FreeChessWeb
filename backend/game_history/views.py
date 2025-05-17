@@ -15,7 +15,7 @@ class FetchCompletedGamesView(APIView):
     def post(self, request):
         try:
             user = request.user
-            fields_to_include = ["id", "white_player", "black_player", "game_winner"]
+            fields_to_include = ["id", "white_player", "black_player", "game_winner", "played_at"]
 
             games_played = ChessGame.objects.filter(Q(white_player=user) | Q(black_player=user))
             completed_games = games_played.filter(game_status="Ended")
