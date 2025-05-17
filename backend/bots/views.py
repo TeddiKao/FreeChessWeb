@@ -1,13 +1,9 @@
-import copy
-import traceback
-
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 
 from .models import BotGame
-from core.utils import decide_bot_game_color
+from core.utils.game_utils import decide_bot_game_color
 
 class CreateBotGameView(APIView):
     def post(self, request):

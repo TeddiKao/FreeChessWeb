@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from gameplay.models import ChessGame
-from core.utils import serialize_models_including_fields
+from core.utils.model_utils import serialize_models_including_fields
 
 # Create your views here.
 class FetchCompletedGamesView(APIView):
