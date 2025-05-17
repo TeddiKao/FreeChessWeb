@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { fetchCompletedGames } from "../utils/apiUtils";
 
-function useCompletedGames() {
+function useCompletedGames(currentPage: number) {
     const [completedGames, setCompletedGames] = useState([]);
     
     useEffect(() => {
