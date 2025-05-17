@@ -1,13 +1,16 @@
 def get_starting_index(current_page: int, items_per_page: int):
     if current_page == 1:
-        return 1
+        return 0
     else:
         return (current_page - 1) * items_per_page
 
 def get_ending_index(current_page, items_per_page, num_items: int):
-    remaining_items = num_items % items_per_page
+    if num_items < current_page * items_per_page:
+        remaining_items = num_items % items_per_page
 
-    return (((current_page - 1) * items_per_page) + remaining_items) - 1
+        return (((current_page - 1) * items_per_page) + remaining_items) - 1
+    else:
+        return (current_page * items_per_page) - 1
 
 def get_index_display_range(current_page: int, items_per_page: int, num_items: int):
     starting_index = get_starting_index(current_page, items_per_page)
