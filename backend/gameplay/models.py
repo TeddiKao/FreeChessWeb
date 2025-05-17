@@ -2,6 +2,7 @@ from time import perf_counter
 
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 from channels.db import database_sync_to_async
 
@@ -43,7 +44,7 @@ def get_default_position_list():
 class ChessGame(models.Model):
 	white_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="white_player")
 	black_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="black_player")
-	played_at = models.DateTimeField(auto_now_add=True)
+	played_at = models.DateTimeField(default=timezone.now)
 
 	game_status = models.CharField(max_length=50, default="Ongoing")
 	game_result = models.CharField(max_length=50, default="Ongoing")
