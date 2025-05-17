@@ -6,13 +6,22 @@ import "../../styles/pages/game-history.scss";
 import CompletedGameInfo from "../../components/page/gameHistory/CompletedGameInfo";
 import useUsername from "../../hooks/useUsername";
 import { isNullOrUndefined } from "../../utils/generalUtils";
+import PageNavigation from "../../components/page/gameHistory/PageNavigation";
+import { getTotalPages } from "../../utils/pageNavigationUtils";
 
 function GameHistory() {
-	const initialCompletedGames = useCompletedGames();
 	const initialUsername = useUsername();
 
-	const [completedGames, setCompletedGames] = useState(initialCompletedGames);
+	const [currentPage, setCurrentPage] = useState<number>(0);
+	const [gamesPerPage, setGamesPerPage] = useState<number>(20);
+
+	const initialCompletedGames = useCompletedGames(currentPage);
+
+ 	const [completedGames, setCompletedGames] = useState(initialCompletedGames);
 	const [username, setUsername] = useState(initialUsername);
+
+	const completedGamesAmount = completedGames.length;
+	const totalPages = getTotalPages(completedGamesAmount, gamesPerPage);
 
 	useEffect(() => {
 		setCompletedGames(initialCompletedGames);
@@ -48,6 +57,8 @@ function GameHistory() {
 							);
 						})}
 					</div>
+
+					<PageNavigation totalPages={totalPages} currentPage={currentPage} setPage={setCurrentPage} />
 				</div>
 			</div>
 		</>
