@@ -43,7 +43,7 @@ def get_default_position_list():
 class ChessGame(models.Model):
 	white_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="white_player")
 	black_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="black_player")
-	date_time_played = models.DateTimeField(auto_now_add=True)
+	played_at = models.DateTimeField(auto_now_add=True)
 
 	game_status = models.CharField(max_length=50, default="Ongoing")
 	game_result = models.CharField(max_length=50, default="Ongoing")
