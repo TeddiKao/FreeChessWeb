@@ -1,3 +1,6 @@
+from typing import Literal
+from operator import itemgetter
+
 from django.db.models import Model, Field, ForeignKey
 from django.contrib.auth import get_user_model
 
@@ -70,3 +73,8 @@ def serialize_models_including_fields(model_list: list[Model], include_fields: l
 		serialized_model_list.append(serialized_model)
 
 	return serialized_model_list
+
+def sort_serialized_models(model_list: list[dict], sort_by_field: str, sort_order: Literal["ascending", "descending"]):
+	should_reverse = sort_order == "descending"
+	
+	return sorted(model_list, key=itemgetter(sort_by_field), reverse=should_reverse)
