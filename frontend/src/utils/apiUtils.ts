@@ -367,5 +367,6 @@ export {
 	fetchBotGameMoveList,
 	fetchBotGamePositionList,
 	fetchCompletedGames,
-	fetchGameWinner
+	fetchGameWinner,
+	fetchTotalCompletedGames
 };
