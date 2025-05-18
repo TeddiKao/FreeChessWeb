@@ -27,12 +27,21 @@ class FetchCompletedGamesView(APIView):
             sorted_completed_games = sort_serialized_models(serialized_completed_games, "played_at", sort_order="descending")
             completed_games_num = len(sorted_completed_games)
 
-            starting_index, ending_index = get_index_display_range(current_page, 20, completed_games_num)
+            starting_index, ending_index = get_index_display_range(current_page, 3, completed_games_num)
             completed_games_on_page = sorted_completed_games[starting_index:ending_index + 1]
 
             return Response(completed_games_on_page, status=status.HTTP_200_OK)
         except Exception as e:
             traceback.print_exc()
+
+class GetTotalCompletedGamesView(APIView):
+    def post(self, request):
+        user = request.user
+
+        games_played = ChessGame.objects.filter(Q(white_player=user) | Q(black_player=user))
+        completed_games = games_played.filter(game_status="Ended")
+
+        return Response(len(completed_games), status=status.HTTP_200_OK)
 
 class FetchGameWinnerView(APIView):
     def post(self, request):
