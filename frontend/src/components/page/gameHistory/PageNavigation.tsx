@@ -28,7 +28,7 @@ function PageNavigation({
 		return currentPage < totalPages;
 	}
 
-	function getPrePageButtonIsHiddenClass() {
+	function getPrevPageButtonIsHiddenClass() {
 		return !isPrevPageButtonVisible() ? "hidden" : "";
 	}
 
@@ -40,7 +40,8 @@ function PageNavigation({
 		<div className="page-navigation-container">
 			<div
 				role="button"
-				className={`prev-page-button-container ${getPrePageButtonIsHiddenClass()}`}
+                onClick={previousPage}
+				className={`prev-page-button-container ${getPrevPageButtonIsHiddenClass()}`}
 			>
 				<img
 					src="/left-arrow.svg"
@@ -48,13 +49,14 @@ function PageNavigation({
 					alt="Icon for navigating to previous page"
 				/>
 			</div>
-            
+
 			<p className="page-indicator">
 				{currentPage}/{totalPages}
 			</p>
 
 			<div
 				role="button"
+                onClick={nextPage}
 				className={`next-page-button-container ${getNextPageButtonIsHiddenClass()}`}
 			>
 				<img
