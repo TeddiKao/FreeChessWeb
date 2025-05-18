@@ -24,8 +24,8 @@ function useCompletedGames(currentPage: number) {
     }
 
     return {
-        completedGames: completedGames,
-        totalCompletedGames: totalCompletedGames
+        initialCompletedGames: completedGames,
+        initialTotalCompletedGames: totalCompletedGames
     };
 }
 
