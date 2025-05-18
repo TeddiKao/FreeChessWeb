@@ -13,7 +13,7 @@ function GameHistory() {
 	const initialUsername = useUsername();
 
 	const [currentPage, setCurrentPage] = useState<number>(1);
-	const [gamesPerPage, setGamesPerPage] = useState<number>(3);
+	const [gamesPerPage, setGamesPerPage] = useState<number>(20);
 
 	const { initialCompletedGames, initialTotalCompletedGames } =
 		useCompletedGames(currentPage);
