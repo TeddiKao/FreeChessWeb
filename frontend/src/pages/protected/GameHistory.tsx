@@ -6,12 +6,22 @@ import "../../styles/pages/game-history.scss";
 import CompletedGameInfo from "../../components/page/gameHistory/CompletedGameInfo";
 import useUsername from "../../hooks/useUsername";
 import { isNullOrUndefined } from "../../utils/generalUtils";
+import PageNavigation from "../../components/page/gameHistory/PageNavigation";
+import { getTotalPages } from "../../utils/pageNavigationUtils";
 
 function GameHistory() {
-	const initialCompletedGames = useCompletedGames();
 	const initialUsername = useUsername();
 
+	const [currentPage, setCurrentPage] = useState<number>(1);
+	const [gamesPerPage, setGamesPerPage] = useState<number>(20);
+
+	const { initialCompletedGames, initialTotalCompletedGames } =
+		useCompletedGames(currentPage);
+
 	const [completedGames, setCompletedGames] = useState(initialCompletedGames);
+	const [totalCompletedGames, setTotalCompletedGamees] = useState(
+		initialTotalCompletedGames
+	);
 	const [username, setUsername] = useState(initialUsername);
 
 	useEffect(() => {
@@ -22,9 +32,19 @@ function GameHistory() {
 		setUsername(initialUsername);
 	}, [initialUsername]);
 
-	if (isNullOrUndefined(completedGames) || isNullOrUndefined(username)) {
+	useEffect(() => {
+		setTotalCompletedGamees(initialTotalCompletedGames);
+	}, [initialTotalCompletedGames]);
+
+	if (
+		isNullOrUndefined(completedGames) ||
+		isNullOrUndefined(username) ||
+		isNullOrUndefined(totalCompletedGames)
+	) {
 		return null;
 	}
+
+	const totalPages = getTotalPages(totalCompletedGames!, gamesPerPage);
 
 	return (
 		<>
@@ -49,6 +69,12 @@ function GameHistory() {
 						})}
 					</div>
 				</div>
+
+				<PageNavigation
+					totalPages={totalPages}
+					currentPage={currentPage}
+					setPage={setCurrentPage}
+				/>
 			</div>
 		</>
 	);

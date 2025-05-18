@@ -35,3 +35,7 @@
 	top: 50%;
 	transform: translateY(-50%) #{$additional-transforms};
 }
+
+@mixin ghost-element() {
+	visibility: hidden;
+}

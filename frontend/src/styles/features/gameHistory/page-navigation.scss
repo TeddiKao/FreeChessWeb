@@ -1,0 +1,48 @@
+@use "../../global/mixins" as *;
+
+.page-navigation-container {
+    @include flex-row-x-center;
+    @include flex-row-y-center;
+
+    width: 800px;
+    margin-top: 8px;
+}
+
+.page-indicator {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.prev-page-button-container {
+    margin-right: 8px;
+
+    background-color: hsl(0, 0%, 85%);
+
+    padding-left: 4px;
+    padding-top: 4px;
+    padding-right: 4px;
+
+    border-radius: 4px;
+}
+
+.next-page-button-container {
+    margin-left: 8px;
+    background-color: hsl(0, 0%, 85%);
+
+    padding-left: 4px;
+    padding-top: 4px;
+    padding-right: 4px;
+
+    border-radius: 4px;
+}
+
+.prev-page-button-container:hover,
+.next-page-button-container:hover {
+    cursor: pointer;
+    background-color: hsl(0, 0%, 70%);
+    transition: 0.25s ease
+}
+
+.hidden {
+    @include ghost-element;
+}
