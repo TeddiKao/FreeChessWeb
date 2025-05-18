@@ -42,3 +42,7 @@
     background-color: hsl(0, 0%, 70%);
     transition: 0.25s ease
 }
+
+.hidden {
+    @include ghost-element;
+}
