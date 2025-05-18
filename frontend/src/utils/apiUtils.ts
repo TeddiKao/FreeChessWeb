@@ -322,6 +322,19 @@ async function fetchCompletedGames(currentPage: number) {
 	return completedGames;
 }
 
+async function fetchTotalCompletedGames() {
+	let totalCompletedGames = null;
+	try {
+		const response = await api.post("/game-history/get-total-completed-games/");
+		
+		totalCompletedGames = response.data;
+	} catch (error) {
+		console.error(error);
+	}
+
+	return totalCompletedGames;
+}
+
 async function fetchGameWinner(gameId: number) {
 	let gameWinner = null;
 	try {
