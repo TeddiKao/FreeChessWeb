@@ -13,11 +13,11 @@ function PageNavigation({
 	totalPages,
 }: PageNavigationProps) {
 	function nextPage() {
-		setPage((prevPage) => (prevPage < totalPages ? prevPage++ : prevPage));
+		setPage((prevPage) => (prevPage < totalPages ? prevPage + 1 : prevPage));
 	}
 
 	function previousPage() {
-		setPage((prevPage) => (prevPage > 1 ? prevPage-- : prevPage));
+		setPage((prevPage) => (prevPage > 1 ? prevPage - 1 : prevPage));
 	}
 
 	function isPrevPageButtonVisible() {
