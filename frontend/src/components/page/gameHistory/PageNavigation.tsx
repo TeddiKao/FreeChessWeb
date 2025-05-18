@@ -19,7 +19,13 @@ function PageNavigation({ setPage, currentPage, totalPages }: PageNavigationProp
     
     return (
         <div className="page-navigation-container">
+            <div role="button" className="prev-page-button-container">
+                <img src="/left-arrow.svg" className="prev-page-icon" alt="Icon for navigating to previous page" />
+            </div>
             <p className="page-indicator">{currentPage}/{totalPages}</p>
+            <div role="button" className="next-page-button-container">
+                <img src="/right-arrow.svg" className="next-page-icon" alt="Icon for navigating to next page" />
+            </div>
         </div>
     )
 }
