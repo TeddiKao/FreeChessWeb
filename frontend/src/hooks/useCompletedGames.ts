@@ -11,6 +11,11 @@ function useCompletedGames(currentPage: number) {
         updateTotalCompletedGames();
     }, []);
 
+    useEffect(() => {
+        updateCompletedGames();
+        updateTotalCompletedGames();
+    }, [currentPage]);
+
     async function updateCompletedGames(): Promise<void> {
         const fetchedCompletedGames = await fetchCompletedGames(currentPage);
 
