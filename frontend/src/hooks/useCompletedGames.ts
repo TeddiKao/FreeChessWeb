@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
-import { fetchCompletedGames } from "../utils/apiUtils";
+import { fetchCompletedGames, fetchTotalCompletedGames } from "../utils/apiUtils";
+import { OptionalValue } from "../types/general";
 
 function useCompletedGames(currentPage: number) {
     const [completedGames, setCompletedGames] = useState([]);
+    const [totalCompletedGames, setTotalCompletedGames] = useState<OptionalValue<number>>(null);
     
     useEffect(() => {
         updateCompletedGames();
+        updateTotalCompletedGames();
     }, []);
 
     async function updateCompletedGames(): Promise<void> {
@@ -14,7 +17,16 @@ function useCompletedGames(currentPage: number) {
         setCompletedGames(fetchedCompletedGames);
     }
 
-    return completedGames;
+    async function updateTotalCompletedGames(): Promise<void> {
+        const fetchedTotalCompletedGames = await fetchTotalCompletedGames();
+
+        setTotalCompletedGames(fetchedTotalCompletedGames);
+    }
+
+    return {
+        completedGames: completedGames,
+        totalCompletedGames: totalCompletedGames
+    };
 }
 
 export default useCompletedGames
