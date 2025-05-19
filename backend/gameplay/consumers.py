@@ -315,7 +315,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await self.update_game_attribute(chess_game_model, "halfmove_clock", chess_game_model.halfmove_clock + 1, should_save=False)
 
 	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
-		original_parsed_fen = await chess_game_model.get_full_parsed_fen()
+		original_parsed_fen = await chess_game_model.get_full_parsed_fen(exclude_fields=["castling_rights", "halfmove_clock", "fullmove_number"])
 		new_board_placement = copy.deepcopy(original_parsed_fen["board_placement"])
 
 		move_type = get_move_type(new_board_placement, chess_game_model.en_passant_target_square, move_info)
@@ -538,7 +538,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		new_position_list, new_move_list, new_parsed_fen = (
 			game_state_history["position_list"],
 			game_state_history["move_list"],
-			await chess_game_model.get_full_parsed_fen()
+			await chess_game_model.get_full_parsed_fen(exclude_fields=["fullmove_number"])
 		)
 
 		new_board_placement = new_parsed_fen["board_placement"]

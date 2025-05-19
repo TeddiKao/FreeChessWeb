@@ -81,14 +81,24 @@ class ChessGame(models.Model):
 		return self.move_list
 
 	@database_sync_to_async
-	def get_full_parsed_fen(self):
-		return {
-			"board_placement": self.parsed_board_placement,
-			"castling_rights": self.castling_rights,
-			"en_passant_target_square": self.en_passant_target_square,
-			"halfmove_clock": self.halfmove_clock,
-			"fullmove_number": self.current_move
-		}
+	def get_full_parsed_fen(self, exclude_fields = None):
+		if not exclude_fields:
+			exclude_fields = set()
+
+		parsed_fen_field_map = {
+			"board_placement": lambda: self.parsed_board_placement,
+			"castling_rights": lambda: self.castling_rights,
+			"en_passant_target_square": lambda: self.en_passant_target_square,
+			"halfmove_clock": lambda: self.halfmove_clock,
+			"fullmove_number": lambda: self.current_move
+		}		
+
+		fields = {}
+		for fen_field, getter in parsed_fen_field_map.items():
+			if fen_field not in exclude_fields:
+				fields[fen_field] = getter()
+
+		return fields
 	
 	@database_sync_to_async
 	def async_end_game(self, game_result, game_end_cause, game_winner = None):
