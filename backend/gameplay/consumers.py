@@ -390,7 +390,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 	async def handle_player_timeout(self, chess_game_model: ChessGame, timeout_color: str):
 		game_winner = await chess_game_model.get_player_of_color(get_opposite_color(timeout_color))
 
-		await chess_game_model.async_end_game("Timeout", game_winner)
+		await chess_game_model.async_end_game("Timeout", "timeout", game_winner)
 
 		await self.channel_layer.group_send(
 			self.room_group_name,
@@ -582,7 +582,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if is_checkmated or is_stalemated:
 			if is_checkmated:
 				await asyncio.gather(
-					chess_game_model.async_end_game(f"{piece_color.capitalize()} won", self.scope["user"]),
+					chess_game_model.async_end_game(f"{piece_color.capitalize()} won", "checkmate", self.scope["user"]),
 					self.channel_layer.group_send(
 						self.room_group_name,
 						{
@@ -593,6 +593,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 					)
 				)
 			else:
+				chess_game_model.async_end_game("Draw", "stalemate")
 				await self.channel_layer.group_send(
 					self.room_group_name,
 					{
@@ -602,7 +603,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		elif is_threefold_repetiiton(new_position_list, new_parsed_fen):
 			await asyncio.gather(
-				chess_game_model.async_end_game("Draw"),
+				chess_game_model.async_end_game("Draw", "threefold_repetition"),
 				self.channel_layer.group_send(
 					self.room_group_name,
 					{
@@ -613,7 +614,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		elif not has_sufficient_material(new_board_placement):
 			await asyncio.gather(
-				chess_game_model.async_end_game("Draw"),
+				chess_game_model.async_end_game("Draw", "insufficient_material"),
 				self.channel_layer.group_send(
 					self.room_group_name,
 					{
@@ -624,7 +625,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		elif check_50_move_rule_draw(updated_halfmove_clock):
 			await asyncio.gather(
-				chess_game_model.async_end_game("Draw"),
+				chess_game_model.async_end_game("Draw", "50_move_rule"),
 				self.channel_layer.group_send(
 					self.room_group_name,
 					{
@@ -818,7 +819,7 @@ class GameActionConsumer(AsyncWebsocketConsumer):
 			)
 
 			game_winner = await chess_game_model.get_player_of_color(winning_color)
-			await chess_game_model.async_end_game("Resigned", game_winner)
+			await chess_game_model.async_end_game("Resigned", "resignation", game_winner)
 
 		elif received_data["type"] == "draw_offered":
 			await self.channel_layer.group_send(
@@ -830,7 +831,7 @@ class GameActionConsumer(AsyncWebsocketConsumer):
 			)
 
 		elif received_data["type"] == "draw_offer_accepted":
-			await chess_game_model.async_end_game("Draw")
+			await chess_game_model.async_end_game("Draw", "agreement")
 
 			await self.channel_layer.group_send(
 				self.room_group_name,
