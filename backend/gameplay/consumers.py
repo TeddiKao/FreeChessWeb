@@ -593,7 +593,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 					)
 				)
 			else:
-				chess_game_model.async_end_game("Draw", "stalemate")
+				await chess_game_model.async_end_game("Draw", "stalemate")
 				await self.channel_layer.group_send(
 					self.room_group_name,
 					{
