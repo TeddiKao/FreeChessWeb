@@ -91,10 +91,11 @@ class ChessGame(models.Model):
 		}
 	
 	@database_sync_to_async
-	def async_end_game(self, game_result, game_winner = None):
+	def async_end_game(self, game_result, game_end_cause, game_winner = None):
 		self.game_status = "Ended"
 		self.game_result = game_result
 		self.game_winner = game_winner
+		self.game_end_cause = game_end_cause
 		self.save()
 
 	@database_sync_to_async
