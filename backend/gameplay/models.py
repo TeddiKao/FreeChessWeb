@@ -95,6 +95,7 @@ class ChessGame(models.Model):
 		self.game_status = "Ended"
 		self.game_result = game_result
 		self.game_winner = game_winner
+		self.game_end_cause = game_end_cause
 		self.save()
 
 	@database_sync_to_async
