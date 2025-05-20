@@ -104,6 +104,8 @@ print(get_random_secret_key())
 ### Frontend ###
 Use the provided `frontend-env-example.env` file in the root of this repository 
 
+> ⚠️ **Important**: Ensure that your actual `.env` file is placed in the `frontend` directory, in the same directory as the `src` folder
+
 Your `.env` file should look something like this:
 ```env
 WEBSOCKET_BASE_URL = "your-websocket-base-url-here"
