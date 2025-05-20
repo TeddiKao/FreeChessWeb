@@ -113,7 +113,7 @@ function MultiplayerChessboard({
 	const gameWebsocketExists = useRef<boolean>(false);
 
 	const [gameWebsocketEnabled, setGameWebsocketEnabled] = useState(false);
-	const gameWebsocketUrl = `${websocketBaseURL}ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
+	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
 
 	const currentUser = useUsername();
 	const currentUserRef = useRef(currentUser);
