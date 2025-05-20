@@ -112,7 +112,7 @@ VITE_WEBSOCKET_BASE_URL = "your-websocket-base-url-here"
 VITE_API_URL = "your-api-base-url-here"
 ```
 
-#### To check your API base URL #### 
+#### Checking your API base URL #### 
 
 1. Start your backend server as explained above by navigating into the appropriate directory and running `py manage.py runserver` for Windows or `python3 manage.py runserver` for Linux/MacOS
 
@@ -127,6 +127,11 @@ Quit the server with CTRL-BREAK.
 
 Copy the URL shown (e.g. `http://127.0.0.1:8000`) and use it as the value for your `VITE_API_URL`
 > ⚠️ **Important**: Ensure that you exclude the trailing slash (`/`) in the `.env` file to avoid issues
+
+#### Checking your Websocket base URL ####
+Follow steps 1 and 2 for checking your API base URL, but replace `http://` with `ws://`
+
+For example, if your API base URL is `http://127.0.0.1:8000`, your Websocket base URL should be `ws://127.0.0.1:8000`
 
 ## Licensing ##
 This project is licensed under the [MIT LICENSE](./LICENSE)
