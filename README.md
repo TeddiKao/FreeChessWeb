@@ -78,6 +78,7 @@ When testing, ensure that the server is running
 ## Environment Variables ##
 This project requires environment variables to run properly
 
+### Backend ###
 Use the provided `backend-env-example.env` file in the root of the repository for reference
 
 > ⚠️ **Important**: Ensure that your actual `.env` file is placed in the `backend` directory, in the same directory as the `manage.py` file
@@ -89,6 +90,8 @@ SECRET_KEY = "your-secret-key-here"
 DEBUG = True
 DATABASE_URL = "your-database-url-here" # If using PostgreSQL
 DATABASE_PASSWORD = "your-database-password-here" # If using PostgreSQL
+
+# Additional configurations
 ```
 
 To generate a secret key, run:
@@ -97,3 +100,27 @@ from django.core.management.utils import get_random_secret_key
 
 print(get_random_secret_key())
 ```
+
+### Frontend ###
+Use the provided `frontend-env-example.env` file in the root of this repository 
+
+Your `.env` file should look something like this:
+```env
+WEBSOCKET_BASE_URL = "your-websocket-base-url-here"
+VITE_API_BASE_URL = "your-api-base-url-here"
+```
+
+**To check your API base URL** 
+
+1. Start your backend server as explained above by navigating into the appropriate directory and running `py manage.py runserver` for Windows or `python3 manage.py runserver` for Linux/MacOS
+
+2. You should see something like:
+```
+System check identified no issues (0 silenced).
+May 20, 2025 - 14:47:54
+Django version 5.2, using settings 'backend.settings'
+Starting ASGI/Daphne version 4.1.2 development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+```
+
+Copy the URL shown (e.g. `http://127.0.0.1:8000/`) and use it as the value for your `VITE_WEBSOCKET_BASE_URL`
