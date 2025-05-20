@@ -108,8 +108,8 @@ Use the provided `frontend-env-example.env` file in the root of this repository
 
 Your `.env` file should look something like this:
 ```env
-WEBSOCKET_BASE_URL = "your-websocket-base-url-here"
-VITE_API_BASE_URL = "your-api-base-url-here"
+VITE_WEBSOCKET_BASE_URL = "your-websocket-base-url-here"
+VITE_API_URL = "your-api-base-url-here"
 ```
 
 #### To check your API base URL #### 
@@ -125,7 +125,7 @@ Starting ASGI/Daphne version 4.1.2 development server at http://127.0.0.1:8000/
 Quit the server with CTRL-BREAK.
 ```
 
-Copy the URL shown (e.g. `http://127.0.0.1:8000`) and use it as the value for your `VITE_API_BASE_URL`
+Copy the URL shown (e.g. `http://127.0.0.1:8000`) and use it as the value for your `VITE_API_URL`
 > ⚠️ **Important**: Ensure that you exclude the trailing slash (`/`) in the `.env` file to avoid issues
 
 ## Licensing ##
