@@ -35,7 +35,7 @@ function isObjEmpty(obj: object) {
 
 function parseWebsocketUrl(websocketRoute: string, extraParams?: Record<string, any>) {
 	const accessToken = getAccessToken();
-	const urlWithTokenOnly = `${websocketBaseURL}ws/${websocketRoute}/?token=${accessToken}`
+	const urlWithTokenOnly = `${websocketBaseURL}/ws/${websocketRoute}/?token=${accessToken}`
 
 	let websocketUrl = urlWithTokenOnly;
 

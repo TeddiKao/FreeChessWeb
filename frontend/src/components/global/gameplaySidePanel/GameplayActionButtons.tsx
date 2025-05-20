@@ -41,7 +41,7 @@ function GameplayActionButtons({
 	const [drawOfferPopupVisible, setDrawOfferPopupVisible] = useState(false);
 
 	const [actionWebsocketEnabled, setActionWebsocketEnabled] = useState<boolean>(false);
-	const actionWebsocketUrl = `${websocketBaseURL}ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`;
+	const actionWebsocketUrl = `${websocketBaseURL}/ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`;
 
 	const socket = useWebSocket(
 		actionWebsocketUrl,
