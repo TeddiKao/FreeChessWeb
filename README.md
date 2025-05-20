@@ -28,14 +28,14 @@ git clone "https://github.com/TeddiKao/FreeChessWeb.git"
 cd FreeChessWeb
 ```
 
-**Frontend Setup**
+#### Frontend Setup ####
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-**Backend Setup**
+#### Backend Setup ####
 1. Activate virtual environment and install dependencies
 ```bash
 py -m venv env
@@ -110,7 +110,7 @@ WEBSOCKET_BASE_URL = "your-websocket-base-url-here"
 VITE_API_BASE_URL = "your-api-base-url-here"
 ```
 
-**To check your API base URL** 
+#### To check your API base URL #### 
 
 1. Start your backend server as explained above by navigating into the appropriate directory and running `py manage.py runserver` for Windows or `python3 manage.py runserver` for Linux/MacOS
 
