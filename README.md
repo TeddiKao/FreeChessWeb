@@ -78,7 +78,7 @@ When testing, ensure that the server is running
 ## Environment Variables ##
 This project requires environment variables to run properly
 
-Use the provided `env.example` file in the root of the repository for reference
+Use the provided `backend-env-example.env` file in the root of the repository for reference
 
 > ⚠️ **Important**: Ensure that your actual `.env` file is placed in the `backend` directory, in the same directory as the `manage.py` file
 
