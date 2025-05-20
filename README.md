@@ -127,3 +127,6 @@ Quit the server with CTRL-BREAK.
 
 Copy the URL shown (e.g. `http://127.0.0.1:8000`) and use it as the value for your `VITE_API_BASE_URL`
 > ⚠️ **Important**: Ensure that you exclude the trailing slash (`/`) in the `.env` file to avoid issues
+
+## Licensing ##
+This project is licensed under the [MIT LICENSE](./LICENSE)
