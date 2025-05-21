@@ -46,7 +46,7 @@ On Windows:
 env\Scripts\activate
 ```
 
-On Linux/MacOS:
+On Linux/macOS:
 ```bash
 source env/bin/activate
 ```
@@ -68,7 +68,7 @@ On Windows
 py manage.py runserver
 ```
 
-On Linux/MacOS
+On Linux/macOS
 ```bash
 python3 manage.py runserver
 ```
@@ -115,7 +115,7 @@ VITE_API_URL = "your-api-base-url-here"
 
 #### Checking your API base URL #### 
 
-1. Start your backend server as explained above by navigating into the appropriate directory and running `py manage.py runserver` for Windows or `python3 manage.py runserver` for Linux/MacOS
+1. Start your backend server as explained above by navigating into the appropriate directory and running `py manage.py runserver` for Windows or `python3 manage.py runserver` for Linux/macOS
 
 2. You should see something like:
 ```
