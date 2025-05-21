@@ -86,6 +86,8 @@ function Play() {
 		location.state?.assignedColor || "White"
 	);
 
+	const isAnimatingRef = useRef<boolean>(false);
+
 	const [
 		pieceAnimationSquare,
 		pieceAnimationStyles,
@@ -109,7 +111,21 @@ function Play() {
 	}, []);
 
 	useEffect(() => {
-		const animationTimeout = setTimeout(() => {
+		let animationTimeout: NodeJS.Timeout | undefined;
+		if (isAnimatingRef.current) {
+			animationTimeout = setTimeout(() => {
+				setPositionIndex(positionList.length - 1);
+				setParsedFEN(
+					positionList[positionList.length - 1]?.["position"]
+				);
+				setLastDraggedSquare(
+					positionList[positionList.length - 1]?.last_dragged_square
+				);
+				setLastDroppedSquare(
+					positionList[positionList.length - 1]?.last_dropped_square
+				);
+			}, convertToMilliseconds(pieceAnimationTime));
+		} else {
 			setPositionIndex(positionList.length - 1);
 			setParsedFEN(positionList[positionList.length - 1]?.["position"]);
 			setLastDraggedSquare(
@@ -118,10 +134,12 @@ function Play() {
 			setLastDroppedSquare(
 				positionList[positionList.length - 1]?.last_dropped_square
 			);
-		}, convertToMilliseconds(pieceAnimationTime));
+		}
 
 		return () => {
-			clearTimeout(animationTimeout);
+			if (animationTimeout) {
+				clearTimeout(animationTimeout);
+			}
 		};
 	}, [positionList]);
 
@@ -165,7 +183,7 @@ function Play() {
 	if (!location.state) {
 		return <Navigate to={"/game-setup"} />;
 	}
-	
+
 	if (!gameplaySettings) {
 		return null;
 	}
@@ -340,6 +358,7 @@ function Play() {
 							parentAnimationSquare={pieceAnimationSquare}
 							// @ts-ignore
 							parentAnimationStyles={pieceAnimationStyles}
+							isAnimatingRef={isAnimatingRef}
 						/>
 					</div>
 

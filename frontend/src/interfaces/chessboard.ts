@@ -2,6 +2,7 @@ import React from "react";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,
+	RefObject,
 	StateSetterFunction,
 } from "../types/general.ts";
 import { MoveInfo, ParsedFENString, PieceColor, PieceType } from "../types/gameLogic.ts";
@@ -62,6 +63,7 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
 	setGameEnded: StateSetterFunction<boolean>;
 	setGameEndedCause: StateSetterFunction<string>;
 	setGameWinner: StateSetterFunction<string>;
+	isAnimatingRef: RefObject<boolean>;
 
 	lastDraggedSquare: string;
 	lastDroppedSquare: string;

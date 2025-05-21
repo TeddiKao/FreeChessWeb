@@ -62,6 +62,8 @@ import {
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid.ts";
 import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle.ts";
+import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
+import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";
 
 function MultiplayerChessboard({
 	parsed_fen_string,
@@ -78,6 +80,7 @@ function MultiplayerChessboard({
 	setGameEnded,
 	setGameWinner,
 	setGameEndedCause,
+	isAnimatingRef,
 
 	squareSize,
 
@@ -163,7 +166,7 @@ function MultiplayerChessboard({
 		websocketExistsRef: gameWebsocketExists,
 		setWebsocketEnabled: setGameWebsocketEnabled,
 		handleWindowUnload: handleWindowUnload,
-	})
+	});
 
 	useEffect(() => {
 		gameWebsocketRef.current = gameWebsocket;
@@ -288,7 +291,6 @@ function MultiplayerChessboard({
 		parsedEventData: PositionListUpdateEventData
 	) {
 		const newPositionList = parsedEventData["new_position_list"];
-		console.log(newPositionList);
 
 		setPositionList(newPositionList);
 	}
@@ -309,6 +311,7 @@ function MultiplayerChessboard({
 			moveMadeBy !== currentUserRef.current ||
 			moveMethodUsed === "click"
 		) {
+			isAnimatingRef.current = true;
 			// @ts-ignore
 			animatePiece(
 				startingSquare,
@@ -316,6 +319,10 @@ function MultiplayerChessboard({
 				boardOrientation.toLowerCase(),
 				squareSize
 			);
+
+			setTimeout(() => {
+				isAnimatingRef.current = false;
+			}, convertToMilliseconds(pieceAnimationTime));
 		}
 	}
 
@@ -355,8 +362,12 @@ function MultiplayerChessboard({
 
 		const autoQueen = gameplaySettings["auto_queen"];
 
-		console.log(pieceColorToValidate, pieceTypeToValidate, draggedSquare, droppedSquare)
-
+		console.log(
+			pieceColorToValidate,
+			pieceTypeToValidate,
+			draggedSquare,
+			droppedSquare
+		);
 
 		const moveIsLegal = await fetchMoveIsValid(
 			parsedFENString,
@@ -417,7 +428,9 @@ function MultiplayerChessboard({
 
 			piece_color: pieceInfo["piece_color"],
 			piece_type: pieceInfo["piece_type"],
-			starting_square: `${usingDrag ? draggedSquare : previousClickedSquare}`,
+			starting_square: `${
+				usingDrag ? draggedSquare : previousClickedSquare
+			}`,
 			initial_square: initialSquare,
 			destination_square: `${usingDrag ? droppedSquare : clickedSquare}`,
 
@@ -782,7 +795,7 @@ function MultiplayerChessboard({
 		promotionRank,
 		pieceRank,
 		pieceColor,
-		pieceType
+		pieceType,
 	}: FilledSquareRenderParams) {
 		return (
 			<Square
