@@ -291,7 +291,6 @@ function MultiplayerChessboard({
 		parsedEventData: PositionListUpdateEventData
 	) {
 		const newPositionList = parsedEventData["new_position_list"];
-		console.log(newPositionList);
 
 		setPositionList(newPositionList);
 	}

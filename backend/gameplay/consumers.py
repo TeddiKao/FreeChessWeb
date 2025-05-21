@@ -549,6 +549,18 @@ class GameConsumer(AsyncWebsocketConsumer):
 		position_index = calculate_position_index(
 			piece_color, current_move_number)
 		
+		await self.channel_layer.group_send(
+			self.room_group_name,
+			{
+				"type": "move_received",
+				"move_data": json.loads(text_data),
+				"move_made_by": self.scope["user"].username,
+				"move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
+				"new_parsed_fen": new_parsed_fen,
+				"new_position_index": position_index
+			}
+		),
+		
 		await asyncio.gather(
 			self.channel_layer.group_send(
 				self.room_group_name,
@@ -566,18 +578,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 				}
 			)
 		)
-
-		await self.channel_layer.group_send(
-			self.room_group_name,
-			{
-				"type": "move_received",
-				"move_data": json.loads(text_data),
-				"move_made_by": self.scope["user"].username,
-				"move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
-				"new_parsed_fen": new_parsed_fen,
-				"new_position_index": position_index
-			}
-		),
 
 		if is_checkmated or is_stalemated:
 			if is_checkmated:
