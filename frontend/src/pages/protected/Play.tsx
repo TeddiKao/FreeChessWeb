@@ -86,7 +86,7 @@ function Play() {
 		location.state?.assignedColor || "White"
 	);
 
-	const [isAnimating, setIsAnimating] = useState<boolean>(false);
+	const isAnimatingRef = useRef<boolean>(false);
 
 	const [
 		pieceAnimationSquare,
@@ -112,7 +112,7 @@ function Play() {
 
 	useEffect(() => {
 		let animationTimeout: NodeJS.Timeout | undefined;
-		if (isAnimating) {
+		if (isAnimatingRef.current) {
 			animationTimeout = setTimeout(() => {
 				setPositionIndex(positionList.length - 1);
 				setParsedFEN(
@@ -358,6 +358,7 @@ function Play() {
 							parentAnimationSquare={pieceAnimationSquare}
 							// @ts-ignore
 							parentAnimationStyles={pieceAnimationStyles}
+							isAnimatingRef={isAnimatingRef}
 						/>
 					</div>
 
