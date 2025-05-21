@@ -109,7 +109,8 @@ function Play() {
 	}, []);
 
 	useEffect(() => {
-		const animationTimeout = setTimeout(() => {
+		let animationTimeout;
+		animationTimeout = setTimeout(() => {
 			setPositionIndex(positionList.length - 1);
 			setParsedFEN(positionList[positionList.length - 1]?.["position"]);
 			setLastDraggedSquare(
@@ -121,7 +122,9 @@ function Play() {
 		}, convertToMilliseconds(pieceAnimationTime));
 
 		return () => {
-			clearTimeout(animationTimeout);
+			if (animationTimeout) {
+				clearTimeout(animationTimeout);
+			}
 		};
 	}, [positionList]);
 
