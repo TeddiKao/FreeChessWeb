@@ -86,6 +86,8 @@ function Play() {
 		location.state?.assignedColor || "White"
 	);
 
+	const [isAnimating, setIsAnimating] = useState<boolean>(false);
+
 	const [
 		pieceAnimationSquare,
 		pieceAnimationStyles,
@@ -109,8 +111,21 @@ function Play() {
 	}, []);
 
 	useEffect(() => {
-		let animationTimeout;
-		animationTimeout = setTimeout(() => {
+		let animationTimeout: NodeJS.Timeout | undefined;
+		if (isAnimating) {
+			animationTimeout = setTimeout(() => {
+				setPositionIndex(positionList.length - 1);
+				setParsedFEN(
+					positionList[positionList.length - 1]?.["position"]
+				);
+				setLastDraggedSquare(
+					positionList[positionList.length - 1]?.last_dragged_square
+				);
+				setLastDroppedSquare(
+					positionList[positionList.length - 1]?.last_dropped_square
+				);
+			}, convertToMilliseconds(pieceAnimationTime));
+		} else {
 			setPositionIndex(positionList.length - 1);
 			setParsedFEN(positionList[positionList.length - 1]?.["position"]);
 			setLastDraggedSquare(
@@ -119,7 +134,7 @@ function Play() {
 			setLastDroppedSquare(
 				positionList[positionList.length - 1]?.last_dropped_square
 			);
-		}, convertToMilliseconds(pieceAnimationTime));
+		}
 
 		return () => {
 			if (animationTimeout) {
@@ -168,7 +183,7 @@ function Play() {
 	if (!location.state) {
 		return <Navigate to={"/game-setup"} />;
 	}
-	
+
 	if (!gameplaySettings) {
 		return null;
 	}
