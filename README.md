@@ -77,6 +77,7 @@ When testing, ensure that the server is running
 
 ## Environment Variables ##
 This project requires environment variables to run properly
+> ⚠️ Ensure that all the env files created are listed in the `.gitignore` file, but **DO NOT** place the `frontend-env-example.env` and `backend-env-example.env` files into the `.gitignore` file
 
 ### Backend ###
 Use the provided `backend-env-example.env` file in the root of the repository for reference
@@ -132,6 +133,10 @@ Copy the URL shown (e.g. `http://127.0.0.1:8000`) and use it as the value for yo
 Follow steps 1 and 2 for checking your API base URL, but replace `http://` with `ws://`
 
 For example, if your API base URL is `http://127.0.0.1:8000`, your Websocket base URL should be `ws://127.0.0.1:8000`
+
+Then, use that value (for example, `ws://127.0.0.1:8000`) as the value for your `VITE_WEBSOCKET_BASE_URL`
+
+> ⚠️ Once again, that you exclude the trailing slash (`/`) in the `.env` file to avoid issues
 
 ## Licensing ##
 This project is licensed under the [MIT LICENSE](./LICENSE)
