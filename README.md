@@ -136,7 +136,7 @@ For example, if your API base URL is `http://127.0.0.1:8000`, your Websocket bas
 
 Then, use that value (for example, `ws://127.0.0.1:8000`) as the value for your `VITE_WEBSOCKET_BASE_URL`
 
-> ⚠️ Once again, that you exclude the trailing slash (`/`) in the `.env` file to avoid issues
+> ⚠️ Once again, ensure that you exclude the trailing slash (`/`) in the `.env` file to avoid issues
 
 ## Licensing ##
 This project is licensed under the [MIT LICENSE](./LICENSE)
