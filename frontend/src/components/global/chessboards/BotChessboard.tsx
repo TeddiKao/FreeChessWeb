@@ -174,6 +174,10 @@ function BotChessboard({
 			return;
 		}
 
+		if (startingSquare === destinationSquare) {
+			return;
+		} 
+
 		const boardPlacement = parsedFENString["board_placement"];
 		const squareInfo = boardPlacement[`${startingSquare}`];
 
