@@ -123,11 +123,11 @@ function BotChessboard({
 	}, [parsed_fen_string]);
 
 	useEffect(() => {
-		handleClickToMove();
+		handleMoveMade("click");
 	}, [previousClickedSquare, clickedSquare]);
 
 	useEffect(() => {
-		handleOnDrop();
+		handleMoveMade("drag");
 	}, [draggedSquare, droppedSquare]);
 
 	useEffect(() => {
@@ -155,6 +155,7 @@ function BotChessboard({
 	}
 
 	async function handleOnDrop() {
+
 		clearSquaresStyling();
 
 		if (!parsedFENString) {
@@ -193,14 +194,17 @@ function BotChessboard({
 	}
 
 	function handleMoveMade(moveMethod: string) {
+		const startingSquare = moveMethod === "drag" ? draggedSquare : previousClickedSquare;
+		const destinationSquare = moveMethod === "drag" ? droppedSquare : clickedSquare;
+
 		clearSquaresStyling();
 
 		if (!parsedFENString) {
 			return null;
 		}
 
-		if (!(draggedSquare && droppedSquare)) {
-			if (!draggedSquare) {
+		if (!(startingSquare && destinationSquare)) {
+			if (!startingSquare) {
 				return;
 			}
 
@@ -210,7 +214,7 @@ function BotChessboard({
 		}
 
 		const boardPlacement = parsedFENString["board_placement"];
-		const squareInfo = boardPlacement[`${draggedSquare}`];
+		const squareInfo = boardPlacement[`${startingSquare}`];
 
 		const pieceColor = squareInfo["piece_color"];
 		const pieceType = squareInfo["piece_type"];
