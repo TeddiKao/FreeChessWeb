@@ -154,45 +154,6 @@ function BotChessboard({
 		}
 	}
 
-	async function handleOnDrop() {
-
-		clearSquaresStyling();
-
-		if (!parsedFENString) {
-			return null;
-		}
-
-		if (!(draggedSquare && droppedSquare)) {
-			if (!draggedSquare) {
-				return;
-			}
-
-			handleLegalMoveDisplay("drag");
-
-			return;
-		}
-
-		if (draggedSquare === droppedSquare) {
-			setDraggedSquare(null);
-			setDroppedSquare(null);
-
-			return;
-		}
-
-		const boardPlacement = parsedFENString["board_placement"];
-		const squareInfo = boardPlacement[`${draggedSquare}`];
-
-		const pieceColor = squareInfo["piece_color"];
-		const pieceType = squareInfo["piece_type"];
-		const initialSquare = squareInfo["starting_square"];
-
-		updateBoardOnMove(pieceColor, pieceType, initialSquare);
-
-		setDraggedSquare(null);
-		setDroppedSquare(null);
-		setLastUsedMoveMethod("drag");
-	}
-
 	function handleMoveMade(moveMethod: string) {
 		const startingSquare = moveMethod === "drag" ? draggedSquare : previousClickedSquare;
 		const destinationSquare = moveMethod === "drag" ? droppedSquare : clickedSquare;
@@ -295,56 +256,6 @@ function BotChessboard({
 				})
 			);
 		}
-	}
-
-	async function handleClickToMove() {
-		if (!parsedFENString) {
-			return;
-		}
-
-		if (!previousClickedSquare) {
-			return;
-		}
-
-		const boardPlacement: BoardPlacement =
-			parsedFENString["board_placement"];
-
-		clearSquaresStyling();
-
-		if (!getSquareExists(previousClickedSquare, boardPlacement)) {
-			return;
-		}
-
-		const shouldMove = previousClickedSquare && clickedSquare;
-		if (!shouldMove) {
-			handleLegalMoveDisplay("click");
-
-			return;
-		}
-
-		if (previousClickedSquare === clickedSquare) {
-			setPreviousClickedSquare(null);
-			setClickedSquare(null);
-
-			return;
-		}
-
-		const initialSquare =
-			boardPlacement[`${previousClickedSquare}`]["starting_square"];
-		const pieceTypeToValidate =
-			boardPlacement[`${previousClickedSquare}`]["piece_type"];
-		const pieceColorToValidate: PieceColor =
-			boardPlacement[`${previousClickedSquare}`]["piece_color"];
-
-		updateBoardOnMove(
-			pieceColorToValidate,
-			pieceTypeToValidate,
-			initialSquare
-		);
-
-		setPreviousClickedSquare(null);
-		setClickedSquare(null);
-		setLastUsedMoveMethod("click");
 	}
 
 	async function displayLegalMoves(
