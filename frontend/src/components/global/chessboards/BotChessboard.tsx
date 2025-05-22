@@ -185,14 +185,51 @@ function BotChessboard({
 		const pieceType = squareInfo["piece_type"];
 		const initialSquare = squareInfo["starting_square"];
 
-		handleMoveMade(pieceColor, pieceType, initialSquare);
+		updateBoardOnMove(pieceColor, pieceType, initialSquare);
 
 		setDraggedSquare(null);
 		setDroppedSquare(null);
 		setLastUsedMoveMethod("drag");
 	}
 
-	async function handleMoveMade(
+	function handleMoveMade(moveMethod: string) {
+		clearSquaresStyling();
+
+		if (!parsedFENString) {
+			return null;
+		}
+
+		if (!(draggedSquare && droppedSquare)) {
+			if (!draggedSquare) {
+				return;
+			}
+
+			handleLegalMoveDisplay(moveMethod);
+
+			return;
+		}
+
+		const boardPlacement = parsedFENString["board_placement"];
+		const squareInfo = boardPlacement[`${draggedSquare}`];
+
+		const pieceColor = squareInfo["piece_color"];
+		const pieceType = squareInfo["piece_type"];
+		const initialSquare = squareInfo["starting_square"];
+
+		updateBoardOnMove(pieceColor, pieceType, initialSquare);
+
+		if (moveMethod == MoveMethods.DRAG) {
+			setDraggedSquare(null);
+			setDroppedSquare(null);
+		} else {
+			setPreviousClickedSquare(null);
+			setClickedSquare(null);
+		}
+
+		setLastUsedMoveMethod(moveMethod);
+	}
+
+	async function updateBoardOnMove(
 		pieceColor: PieceColor,
 		pieceType: PieceType,
 		initialSquare?: ChessboardSquareIndex
@@ -295,7 +332,7 @@ function BotChessboard({
 		const pieceColorToValidate: PieceColor =
 			boardPlacement[`${previousClickedSquare}`]["piece_color"];
 
-		handleMoveMade(
+		updateBoardOnMove(
 			pieceColorToValidate,
 			pieceTypeToValidate,
 			initialSquare
