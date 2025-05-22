@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import "../../styles/components/chessboard/promotion-popup.scss";
 import { PieceColor, PieceType } from "../../types/gameLogic";
