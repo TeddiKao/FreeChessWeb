@@ -6,13 +6,9 @@ import Square from "../Square.js";
 import {
 	clearSquaresStyling,
 	getRank,
-	getBoardStartingIndex,
-	getBoardEndingIndex,
-	isSquareLight,
 	getSquareExists,
 } from "../../../utils/boardUtils";
 
-import { playAudio } from "../../../utils/audioUtils";
 
 import { fetchLegalMoves } from "../../../utils/apiUtils";
 
@@ -43,8 +39,6 @@ import { isPawnPromotion } from "../../../utils/moveUtils.ts";
 import useWebSocket from "../../../hooks/useWebsocket.ts";
 import { isObjEmpty, parseWebsocketUrl } from "../../../utils/generalUtils.ts";
 import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
-import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
-import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";
 import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
@@ -56,7 +50,6 @@ function BotChessboard({
 	orientation,
 	gameplaySettings,
 	squareSize,
-	botId,
 	gameId,
 	setMoveList,
 	setPositionList,
@@ -345,7 +338,6 @@ function BotChessboard({
 	const autoQueen = gameplaySettings["auto_queen"];
 	const showLegalMoves = gameplaySettings["show_legal_moves"];
 
-	const piecePlacements = parsedFENString["board_placement"];
 
 	function handleSquareClick(event: React.MouseEvent<HTMLElement>) {
 		if (!previousClickedSquare && !clickedSquare) {
@@ -449,10 +441,8 @@ function BotChessboard({
 	}
 
 	function handlePlayerMoveMade({
-		new_structured_fen: newStructuredFEN,
 		new_position_list: newPositionList,
 		new_move_list: newMoveList,
-		move_type: moveType,
 		move_data: moveData,
 	}: any) {
 		// @ts-ignore
