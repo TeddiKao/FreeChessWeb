@@ -5,10 +5,6 @@ import Square from "../Square.js";
 
 import {
 	clearSquaresStyling,
-	getRank,
-	getBoardStartingIndex,
-	getBoardEndingIndex,
-	isSquareLight,
 	getSquareExists,
 } from "../../../utils/boardUtils";
 
@@ -578,8 +574,6 @@ function Chessboard({
 
 	const autoQueen = gameplaySettings["auto_queen"];
 	const showLegalMoves = gameplaySettings["show_legal_moves"];
-
-	const piecePlacements = parsedFENString["board_placement"];
 
 	function handleSquareClick(event: React.MouseEvent<HTMLElement>) {
 		if (!previousClickedSquare && !clickedSquare) {

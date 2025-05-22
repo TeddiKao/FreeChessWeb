@@ -4,10 +4,7 @@ import {
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid";
 import {
-	getBoardEndingIndex,
-	getBoardStartingIndex,
 	getSquareClass,
-	isSquareLight,
 } from "../../../utils/boardUtils";
 import { capitaliseFirstLetter } from "../../../utils/generalUtils";
 import ChessboardGrid from "./ChessboardGrid";

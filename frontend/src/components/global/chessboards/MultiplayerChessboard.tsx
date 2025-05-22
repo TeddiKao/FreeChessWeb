@@ -628,8 +628,6 @@ function MultiplayerChessboard({
 		return null;
 	}
 
-	const piecePlacements = parsedFENString["board_placement"];
-
 	function handleSquareClick(event: React.MouseEvent<HTMLElement>) {
 		if (!previousClickedSquare && !clickedSquare) {
 			setPreviousClickedSquare(event.currentTarget.id);
