@@ -123,11 +123,11 @@ function BotChessboard({
 	}, [parsed_fen_string]);
 
 	useEffect(() => {
-		handleClickToMove();
+		handleMoveMade("click");
 	}, [previousClickedSquare, clickedSquare]);
 
 	useEffect(() => {
-		handleOnDrop();
+		handleMoveMade("drag");
 	}, [draggedSquare, droppedSquare]);
 
 	useEffect(() => {
@@ -154,45 +154,51 @@ function BotChessboard({
 		}
 	}
 
-	async function handleOnDrop() {
+	function handleMoveMade(moveMethod: string) {
+		const startingSquare = moveMethod === "drag" ? draggedSquare : previousClickedSquare;
+		const destinationSquare = moveMethod === "drag" ? droppedSquare : clickedSquare;
+
 		clearSquaresStyling();
 
 		if (!parsedFENString) {
 			return null;
 		}
 
-		if (!(draggedSquare && droppedSquare)) {
-			if (!draggedSquare) {
+		if (!(startingSquare && destinationSquare)) {
+			if (!startingSquare) {
 				return;
 			}
 
-			handleLegalMoveDisplay("drag");
+			handleLegalMoveDisplay(moveMethod);
 
 			return;
 		}
 
-		if (draggedSquare === droppedSquare) {
-			setDraggedSquare(null);
-			setDroppedSquare(null);
-
+		if (startingSquare === destinationSquare) {
 			return;
-		}
+		} 
 
 		const boardPlacement = parsedFENString["board_placement"];
-		const squareInfo = boardPlacement[`${draggedSquare}`];
+		const squareInfo = boardPlacement[`${startingSquare}`];
 
 		const pieceColor = squareInfo["piece_color"];
 		const pieceType = squareInfo["piece_type"];
 		const initialSquare = squareInfo["starting_square"];
 
-		handleMoveMade(pieceColor, pieceType, initialSquare);
+		updateBoardOnMove(pieceColor, pieceType, initialSquare);
 
-		setDraggedSquare(null);
-		setDroppedSquare(null);
-		setLastUsedMoveMethod("drag");
+		if (moveMethod == MoveMethods.DRAG) {
+			setDraggedSquare(null);
+			setDroppedSquare(null);
+		} else if (moveMethod == MoveMethods.CLICK) {
+			setPreviousClickedSquare(null);
+			setClickedSquare(null);
+		}
+
+		setLastUsedMoveMethod(moveMethod);
 	}
 
-	async function handleMoveMade(
+	async function updateBoardOnMove(
 		pieceColor: PieceColor,
 		pieceType: PieceType,
 		initialSquare?: ChessboardSquareIndex
@@ -256,56 +262,6 @@ function BotChessboard({
 		}
 	}
 
-	async function handleClickToMove() {
-		if (!parsedFENString) {
-			return;
-		}
-
-		if (!previousClickedSquare) {
-			return;
-		}
-
-		const boardPlacement: BoardPlacement =
-			parsedFENString["board_placement"];
-
-		clearSquaresStyling();
-
-		if (!getSquareExists(previousClickedSquare, boardPlacement)) {
-			return;
-		}
-
-		const shouldMove = previousClickedSquare && clickedSquare;
-		if (!shouldMove) {
-			handleLegalMoveDisplay("click");
-
-			return;
-		}
-
-		if (previousClickedSquare === clickedSquare) {
-			setPreviousClickedSquare(null);
-			setClickedSquare(null);
-
-			return;
-		}
-
-		const initialSquare =
-			boardPlacement[`${previousClickedSquare}`]["starting_square"];
-		const pieceTypeToValidate =
-			boardPlacement[`${previousClickedSquare}`]["piece_type"];
-		const pieceColorToValidate: PieceColor =
-			boardPlacement[`${previousClickedSquare}`]["piece_color"];
-
-		handleMoveMade(
-			pieceColorToValidate,
-			pieceTypeToValidate,
-			initialSquare
-		);
-
-		setPreviousClickedSquare(null);
-		setClickedSquare(null);
-		setLastUsedMoveMethod("click");
-	}
-
 	async function displayLegalMoves(
 		pieceType: string,
 		pieceColor: string,
@@ -364,8 +320,10 @@ function BotChessboard({
 
 		const usingDrag = moveMethod === MoveMethods.DRAG;
 		const startingSquare = usingDrag
-			? draggedSquare
-			: previousClickedSquare;
+			? `${draggedSquare}`
+			: `${previousClickedSquare}`;
+
+		console.log(typeof(startingSquare));
 
 		if (!startingSquare) {
 			return;
