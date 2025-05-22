@@ -8,5 +8,6 @@ urlpatterns = [
 	path("matchmaking_api/", include("matchmaking.urls")),
 	path("move_validation_api/", include("move_validation.urls")),
 	path("bots/", include("bots.urls")),
-    path("game-history/", include("game_history.urls"))
+    path("game-history/", include("game_history.urls")),
+    path("core/", include("core.urls")),
 ]
