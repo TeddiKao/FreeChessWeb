@@ -405,8 +405,10 @@ function BotChessboard({
 
 		const usingDrag = moveMethod === MoveMethods.DRAG;
 		const startingSquare = usingDrag
-			? draggedSquare
-			: previousClickedSquare;
+			? `${draggedSquare}`
+			: `${previousClickedSquare}`;
+
+		console.log(typeof(startingSquare));
 
 		if (!startingSquare) {
 			return;
