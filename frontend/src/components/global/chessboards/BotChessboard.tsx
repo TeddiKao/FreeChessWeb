@@ -221,7 +221,7 @@ function BotChessboard({
 		if (moveMethod == MoveMethods.DRAG) {
 			setDraggedSquare(null);
 			setDroppedSquare(null);
-		} else {
+		} else if (moveMethod == MoveMethods.CLICK) {
 			setPreviousClickedSquare(null);
 			setClickedSquare(null);
 		}
