@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 function AccountLinks() {
 	const [accountLinksExpanded, setAccountLinksExpanded] =
 		useState<boolean>(false);
-    const navigate = useNavigate();
+	const navigate = useNavigate();
 
 	function expandAccountLinks() {
 		setAccountLinksExpanded(true);
@@ -14,9 +14,9 @@ function AccountLinks() {
 		setAccountLinksExpanded(false);
 	}
 
-    function handleLogout() {
-        navigate("/logout");
-    }
+	function handleLogout() {
+		navigate("/logout");
+	}
 
 	return (
 		<div
@@ -28,11 +28,17 @@ function AccountLinks() {
 				<img
 					className="dashboard-navbar-account-icon"
 					src="/account-icon.svg"
+					alt="Account menu"
+					role="button"
+					tabIndex={0}
 				/>
 
 				{accountLinksExpanded && (
 					<div className="dashboard-navbar-account-options">
-						<div onClick={handleLogout} className="logout-option-container">
+						<div
+							onClick={handleLogout}
+							className="logout-option-container"
+						>
 							<img
 								className="logout-icon"
 								src="/logout-icon.svg"
