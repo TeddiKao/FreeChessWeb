@@ -27,6 +27,10 @@ function AccountLinks() {
 				{accountLinksExpanded && (
 					<div className="dashboard-navbar-account-options">
 						<div className="logout-option-container">
+							<img
+								className="logout-icon"
+								src="/logout-icon.svg"
+							/>
 							<p className="logout-text">Logout</p>
 						</div>
 					</div>

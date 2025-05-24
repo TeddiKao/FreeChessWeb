@@ -24,14 +24,10 @@
     bottom: 16px;
 }
 
-.dashboard-navbar-account-link {
-    position: relative;
-}
-
 .dashboard-navbar-account-options {
     position: absolute;
     bottom: 0px;
-    left: 44px;
+    left: 100%;
 
     padding-top: 8px;
     padding-bottom: 8px;
@@ -41,6 +37,14 @@
     background-color: white;
     box-shadow: 3px 3px 3px hsl(0, 0%, 75%);
     border-radius: 4px;
+}
+
+.logout-option-container {
+    @include flex-row-y-center;
+}
+
+.logout-icon {
+    margin-right: 4px;
 }
 
 .logout-text {
