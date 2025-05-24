@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../../../styles/components/dashboard/dashboard-navbar.scss";
 import { dashboardNavLinks } from "../../../constants/navLinksConfig";
 import ParentLink from "./navbar/ParentLink";
+import AccountLinks from "./navbar/AccountLinks";
 
 function DashboardNavbar() {
 	const [dashboardNavbarExpanded, setDashboardNavbarExpanded] =
@@ -18,21 +19,29 @@ function DashboardNavbar() {
 	return (
 		<nav
 			aria-label="Dashboard navigation bar"
-			onMouseEnter={expandDashboardNavbar}
-			onMouseLeave={collapseDashboardNavbar}
-			onClick={expandDashboardNavbar}
 			className="dashboard-navbar-container"
 		>
-			{dashboardNavLinks.map(({ name, icon, subLinks, path }, index) => (
-				<ParentLink
-					key={index}
-					name={name}
-					icon={icon}
-					subLinks={subLinks}
-					path={path}
-					dashboardNavbarExpanded={dashboardNavbarExpanded}
-				/>
-			))}
+			<div
+				onMouseEnter={expandDashboardNavbar}
+				onMouseLeave={collapseDashboardNavbar}
+				onClick={expandDashboardNavbar}
+				className="dashboard-navbar-main-links-container"
+			>
+				{dashboardNavLinks.map(
+					({ name, icon, subLinks, path }, index) => (
+						<ParentLink
+							key={index}
+							name={name}
+							icon={icon}
+							subLinks={subLinks}
+							path={path}
+							dashboardNavbarExpanded={dashboardNavbarExpanded}
+						/>
+					)
+				)}
+			</div>
+
+			<AccountLinks />
 		</nav>
 	);
 }
