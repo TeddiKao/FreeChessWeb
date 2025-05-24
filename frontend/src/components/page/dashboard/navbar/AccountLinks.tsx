@@ -1,6 +1,23 @@
+import { useState } from "react";
+
 function AccountLinks() {
+	const [accountLinksExpanded, setAccountLinksExpanded] =
+		useState<boolean>(false);
+
+	function expandAccountLinks() {
+		setAccountLinksExpanded(true);
+	}
+
+    function collapseAccountLinks() {
+		setAccountLinksExpanded(false);
+	}
+
 	return (
-		<div className="dashboard-navbar-account-links-container">
+		<div
+			onMouseEnter={expandAccountLinks}
+			onMouseLeave={collapseAccountLinks}
+			className="dashboard-navbar-account-links-container"
+		>
 			<div className="dashboard-navbar-account-link">
 				<img
 					className="dashboard-navbar-account-icon"
