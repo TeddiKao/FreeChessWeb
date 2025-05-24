@@ -8,7 +8,7 @@ function AccountLinks() {
 		setAccountLinksExpanded(true);
 	}
 
-    function collapseAccountLinks() {
+	function collapseAccountLinks() {
 		setAccountLinksExpanded(false);
 	}
 
@@ -24,11 +24,13 @@ function AccountLinks() {
 					src="/account-icon.svg"
 				/>
 
-				<div className="dashboard-navbar-account-options">
-					<div className="logout-option-container">
-						{/* <p className="logout-text">Logout</p> */}
+				{accountLinksExpanded && (
+					<div className="dashboard-navbar-account-options">
+						<div className="logout-option-container">
+							<p className="logout-text">Logout</p>
+						</div>
 					</div>
-				</div>
+				)}
 			</div>
 		</div>
 	);
