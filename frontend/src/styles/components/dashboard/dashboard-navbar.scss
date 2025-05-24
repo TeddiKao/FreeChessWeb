@@ -23,3 +23,20 @@
     position: absolute;
     bottom: 16px;
 }
+
+.dashboard-navbar-account-link {
+    position: relative;
+}
+
+.dashboard-navbar-account-options {
+    position: absolute;
+    top: 0px;
+    left: 44px;
+    
+    background-color: white;
+    box-shadow: 3px 3px 3px hsl(0, 0%, 75%);
+}
+
+.logout-text {
+    margin: 0;
+}
