@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AccountLinks() {
 	const [accountLinksExpanded, setAccountLinksExpanded] =
 		useState<boolean>(false);
+    const navigate = useNavigate();
 
 	function expandAccountLinks() {
 		setAccountLinksExpanded(true);
@@ -11,6 +13,10 @@ function AccountLinks() {
 	function collapseAccountLinks() {
 		setAccountLinksExpanded(false);
 	}
+
+    function handleLogout() {
+        navigate("/logout");
+    }
 
 	return (
 		<div
@@ -26,7 +32,7 @@ function AccountLinks() {
 
 				{accountLinksExpanded && (
 					<div className="dashboard-navbar-account-options">
-						<div className="logout-option-container">
+						<div onClick={handleLogout} className="logout-option-container">
 							<img
 								className="logout-icon"
 								src="/logout-icon.svg"
