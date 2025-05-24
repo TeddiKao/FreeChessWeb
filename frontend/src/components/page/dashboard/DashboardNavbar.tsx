@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../../../styles/components/dashboard/dashboard-navbar.scss";
 import { dashboardNavLinks } from "../../../constants/navLinksConfig";
 import ParentLink from "./navbar/ParentLink";
+import AccountLinks from "./navbar/AccountLinks";
 
 function DashboardNavbar() {
 	const [dashboardNavbarExpanded, setDashboardNavbarExpanded] =
@@ -40,15 +41,7 @@ function DashboardNavbar() {
 				)}
 			</div>
 
-			<div className="dashboard-navbar-account-links-container">
-				<div className="dashboard-navbar-account-link">
-					<img
-						className="dashboard-navbar-account-icon"
-						src="/account-icon.svg"
-					/>
-					<div className="dashboard-navbar-account-options"></div>
-				</div>
-			</div>
+			<AccountLinks />
 		</nav>
 	);
 }
