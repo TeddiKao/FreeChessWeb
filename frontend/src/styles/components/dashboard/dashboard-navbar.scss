@@ -16,3 +16,10 @@
     z-index: 1000;
 }
 
+.dashboard-navbar-account-links-container {
+    @include flex-row;
+    align-items: center;
+
+    position: absolute;
+    bottom: 16px;
+}
