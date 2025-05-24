@@ -18,12 +18,14 @@ function DashboardNavbar() {
 	return (
 		<nav
 			aria-label="Dashboard navigation bar"
-			onMouseEnter={expandDashboardNavbar}
-			onMouseLeave={collapseDashboardNavbar}
-			onClick={expandDashboardNavbar}
 			className="dashboard-navbar-container"
 		>
-			<div className="dashboard-navbar-main-links-container">
+			<div
+				onMouseEnter={expandDashboardNavbar}
+				onMouseLeave={collapseDashboardNavbar}
+				onClick={expandDashboardNavbar}
+				className="dashboard-navbar-main-links-container"
+			>
 				{dashboardNavLinks.map(
 					({ name, icon, subLinks, path }, index) => (
 						<ParentLink
@@ -40,7 +42,10 @@ function DashboardNavbar() {
 
 			<div className="dashboard-navbar-account-links-container">
 				<div className="dashboard-navbar-account-link">
-					<img className="dashboard-navbar-account-icon" src="/account-icon.svg" />
+					<img
+						className="dashboard-navbar-account-icon"
+						src="/account-icon.svg"
+					/>
 					<div className="dashboard-navbar-account-options"></div>
 				</div>
 			</div>
