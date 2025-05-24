@@ -48,7 +48,7 @@
 .logout-option-container:hover {
 	cursor: pointer;
     transition: background-color 0.25s ease;
-	background-color: darken($color: hsl(0, 0%, 100%), $amount: 10);
+	background-color: darken($color: hsl(0, 0%, 100%), $amount: 20%);
 }
 
 .logout-icon {
