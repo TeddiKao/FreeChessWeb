@@ -8,9 +8,10 @@ def format_detected_error(detected_error: str):
 	return detected_error[2:-2]
 
 class UserSerializer(ModelSerializer):
-	def validate(self, data):
+	def validate_password(self, data):
+
 		detected_errors = []
-		provided_password = data.get("password")
+		provided_password = data
 
 		password_validators = [
 			MinimumLengthValidator(min_length=8),

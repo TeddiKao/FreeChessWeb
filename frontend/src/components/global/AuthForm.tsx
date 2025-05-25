@@ -174,7 +174,7 @@ function AuthForm({ method }: AuthFormProps) {
 			}
 
 			if (error.status === 400) {
-				setPasswordErrors(error.response?.data?.["non_field_errors"]);
+				setPasswordErrors(error.response?.data?.password);
 				setUsernameErrors(error.response?.data?.username);
 				setEmailErrors(error.response?.data?.email);
 			}
