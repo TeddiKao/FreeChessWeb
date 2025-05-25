@@ -8,9 +8,10 @@ def format_detected_error(detected_error: str):
 	return detected_error[2:-2]
 
 class UserSerializer(ModelSerializer):
-	def validate(self, data):
+	def validate_password(self, data):
+
 		detected_errors = []
-		provided_password = data.get("password")
+		provided_password = data
 
 		password_validators = [
 			MinimumLengthValidator(min_length=8),
@@ -26,6 +27,18 @@ class UserSerializer(ModelSerializer):
 			except ValidationError as e:
 				formatted_error = format_detected_error(str(e))
 				detected_errors.append(formatted_error)
+
+		if len(detected_errors) > 0:
+			raise ValidationError(detected_errors)
+
+		return data
+
+	def validate_username(self, data):
+		detected_errors = []
+		username_has_spaces = " " in data
+
+		if username_has_spaces:
+			detected_errors.append("Username cannot contain spaces")
 
 		if len(detected_errors) > 0:
 			raise ValidationError(detected_errors)
