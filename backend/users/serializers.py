@@ -33,6 +33,18 @@ class UserSerializer(ModelSerializer):
 
 		return data
 
+	def validate_username(self, data):
+		detected_errors = []
+		username_has_spaces = " " in data
+
+		if username_has_spaces:
+			detected_errors.append("Username cannot contain spaces")
+
+		if len(detected_errors) > 0:
+			raise ValidationError(detected_errors)
+
+		return data
+
 	class Meta:
 		model = get_user_model()
 		fields = ["id", "username", "email", "password"]
