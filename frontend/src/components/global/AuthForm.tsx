@@ -9,7 +9,7 @@ import { SignupErrors } from "../../enums/validationErrors/authentication.js";
 import { isNullOrUndefined } from "../../utils/generalUtils.js";
 import AuthLoadingScreen from "./modals/AuthLoadingScreen.js";
 
-type AuthMethods = "Login" | "Signup"
+type AuthMethods = "Login" | "Signup";
 
 type AuthFormProps = {
 	method: string;
@@ -26,6 +26,34 @@ function UsernameField({
 	handleUsernameChange,
 	usernameErrors,
 }: UsernameFieldProps) {
+	function getErrorElement(errorIndex: number, errorName: string) {
+		switch (errorName) {
+			case SignupErrors.USERNAME_ALREADY_EXISTS:
+				return (
+					<p key={errorIndex} className="username-error">
+						This username is taken
+					</p>
+				);
+
+			default:
+				return (
+					<p key={errorIndex} className="username-error">
+						{errorName}
+					</p>
+				)
+		}
+	}
+
+	function UsernameErrors() {
+		return (
+			<div className="username-errors-container">
+				{usernameErrors!.map((errorName: string, errorIndex: number) => {
+					return getErrorElement(errorIndex, errorName)
+				})}
+			</div>
+		);
+	}
+
 	return (
 		<>
 			<p className="auth-input-helper-text">Username</p>
@@ -43,25 +71,7 @@ function UsernameField({
 			/>
 			<br />
 
-			{usernameErrors && usernameErrors?.length > 0 && (
-				<div className="username-errors-container">
-					{usernameErrors.map(
-						(errorName: string, errorIndex: number) => {
-							switch (errorName) {
-								case SignupErrors.USERNAME_ALREADY_EXISTS:
-									return (
-										<p
-											key={errorIndex}
-											className="username-error"
-										>
-											This username is taken
-										</p>
-									);
-							}
-						}
-					)}
-				</div>
-			)}
+			{usernameErrors && usernameErrors?.length > 0 && <UsernameErrors />}
 		</>
 	);
 }
@@ -288,7 +298,10 @@ function AuthForm({ method }: AuthFormProps) {
 				</form>
 			</div>
 
-			<AuthLoadingScreen visible={isAuthenticating} authMethod={method as AuthMethods} />
+			<AuthLoadingScreen
+				visible={isAuthenticating}
+				authMethod={method as AuthMethods}
+			/>
 		</>
 	);
 }
