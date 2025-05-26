@@ -13,3 +13,5 @@ function roundToNearest(
             return Math.round(num / 1000) * 1000;
     }
 }
+
+export { roundToNearest }
