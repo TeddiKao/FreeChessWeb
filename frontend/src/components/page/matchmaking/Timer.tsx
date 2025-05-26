@@ -4,11 +4,12 @@ import { formatTime, getLowTimeThreshold } from "../../../utils/timeUtils.ts";
 type TimerProps = {
     playerColor: string;
     timeInSeconds: number;
+    startingTimeInSeconds: number;
 };
 
-function Timer({ playerColor, timeInSeconds }: TimerProps) {
+function Timer({ playerColor, timeInSeconds, startingTimeInSeconds }: TimerProps) {
     function hasLowTime() {
-        return timeInSeconds <= getLowTimeThreshold(timeInSeconds);
+        return timeInSeconds <= getLowTimeThreshold(startingTimeInSeconds);
     }
 
     function getTimerClass() {
