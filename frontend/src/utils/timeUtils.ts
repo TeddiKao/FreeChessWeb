@@ -53,7 +53,14 @@ function displayTimeControl({ baseTime, increment }: TimeControl): string {
 }
 
 function getLowTimeThreshold(baseTime: number) {
-	return roundToNearest(baseTime, "ten");
+	const originalLowTime = baseTime * 0.1;
+	const roundedLowTime = roundToNearest(originalLowTime, "ten");
+
+	if (roundedLowTime >= originalLowTime) {
+		return roundedLowTime;
+	} else {
+		return originalLowTime;
+	}
 }
 
 function getLocalTimeHours() {
@@ -67,5 +74,6 @@ export {
 	displayTimeControl,
 	convertTimeControlToSeconds,
 	convertToMilliseconds,
-	getLocalTimeHours
+	getLocalTimeHours,
+	getLowTimeThreshold
 };
