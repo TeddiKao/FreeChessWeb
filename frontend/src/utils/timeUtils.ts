@@ -1,6 +1,7 @@
 import { floor } from "lodash";
 import { padZero } from "./generalUtils.ts";
 import { TimeDuration, TimeControl } from "../types/gameSetup.ts";
+import { roundToNearest } from "./numberUtils.ts";
 
 function convertTimeControlTime(time: number) {
 	return time / 60;
@@ -51,6 +52,17 @@ function displayTimeControl({ baseTime, increment }: TimeControl): string {
 	return timeControlString;
 }
 
+function getLowTimeThreshold(baseTime: number) {
+	const originalLowTime = baseTime * 0.1;
+	const roundedLowTime = roundToNearest(originalLowTime, "ten");
+
+	if (roundedLowTime >= originalLowTime) {
+		return roundedLowTime;
+	} else {
+		return originalLowTime;
+	}
+}
+
 function getLocalTimeHours() {
 	const dateObj = new Date();
 
@@ -62,5 +74,6 @@ export {
 	displayTimeControl,
 	convertTimeControlToSeconds,
 	convertToMilliseconds,
-	getLocalTimeHours
+	getLocalTimeHours,
+	getLowTimeThreshold
 };

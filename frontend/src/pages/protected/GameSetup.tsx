@@ -279,6 +279,7 @@ function GameSetup() {
 						<Timer
 							playerColor="black"
 							timeInSeconds={baseTime || 3600}
+							startingTimeInSeconds={baseTime || 3600}
 						/>
 					</div>
 
@@ -294,6 +295,7 @@ function GameSetup() {
 						<Timer
 							playerColor="white"
 							timeInSeconds={baseTime || 3600}
+							startingTimeInSeconds={baseTime || 3600}
 						/>
 					</div>
 				</div>

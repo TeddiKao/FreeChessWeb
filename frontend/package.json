@@ -37,7 +37,6 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
-    "tsc": "^2.0.4",
     "vite": "^6.3.2"
   }
 }
