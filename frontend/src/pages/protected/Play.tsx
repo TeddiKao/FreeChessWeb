@@ -384,7 +384,7 @@ function Play() {
 						<Timer
 							playerColor={bottomTimerColor}
 							timeInSeconds={bottomTimerAmount!}
-							startingTimeInSeconds={location?.state.baseTime}
+							startingTimeInSeconds={location.state?.baseTime}
 						/>
 					</div>
 				</div>
