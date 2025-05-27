@@ -319,7 +319,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 			return
 		
 		destination_square = move_info["destination_square"]
-		captured_piece_info = board_placement[destination_square]
+
+		if not en_passant_target_square:
+			pawn_square = destination_square
+		else:
+			pawn_square = get_pawn_square_from_en_passant_square(en_passant_target_square, piece_color)
+
+		captured_piece_info = board_placement[pawn_square]
 
 		piece_type = captured_piece_info["piece_type"]
 		piece_color = captured_piece_info["piece_color"]
