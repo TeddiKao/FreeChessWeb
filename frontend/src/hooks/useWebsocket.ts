@@ -15,7 +15,6 @@ function useWebSocket(
 		}
 
         if (socketRef.current) {
-			console.log(socketRef.current)
             return;
         }
 
