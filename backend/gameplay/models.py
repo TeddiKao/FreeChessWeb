@@ -51,6 +51,14 @@ def get_default_captured_material_list():
 		"pawns": 0,
 	}
 
+def get_default_promoted_pieces():
+	return {
+		"queens": 0,
+		"rooks": 0,
+		"bishops": 0,
+		"knights": 0,
+	}
+
 class ChessGame(models.Model):
 	white_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="white_player")
 	black_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="black_player")
@@ -73,6 +81,8 @@ class ChessGame(models.Model):
 
 	captured_white_material = models.JSONField(default=get_default_captured_material_list)
 	captured_black_material = models.JSONField(default=get_default_captured_material_list)
+	promoted_white_pieces = models.JSONField(default=get_default_promoted_pieces, null=False, blank=False)
+	promoted_black_pieces = models.JSONField(default=get_default_promoted_pieces, null=False, blank=False)
 
 	parsed_board_placement = models.JSONField(default=get_default_board_placement)
 	castling_rights = models.JSONField(default=get_default_castling_rights)
