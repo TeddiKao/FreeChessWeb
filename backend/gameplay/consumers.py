@@ -542,6 +542,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		)
 
 		new_board_placement = new_parsed_fen["board_placement"]
+		new_side_to_move = await chess_game_model.async_get_game_attribute("current_player_turn")
 		updated_halfmove_clock = new_parsed_fen["halfmove_clock"]
 
 		is_checkmated, is_stalemated = is_checkmated_or_stalemated(new_parsed_fen, opposing_color)
@@ -557,7 +558,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 				"move_made_by": self.scope["user"].username,
 				"move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
 				"new_parsed_fen": new_parsed_fen,
-				"new_position_index": position_index
+				"new_position_index": position_index,
+				"new_side_to_move": new_side_to_move
 			}
 		),
 		
