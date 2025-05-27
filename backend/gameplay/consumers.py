@@ -729,6 +729,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	async def captured_material_list_updated(self, event):
 		await self.send(json.dumps({
+			"type": "captured_material_list_updated",
 			"new_captured_white_material": event["new_captured_white_material"],
 			"new_captured_black_material": event["new_captured_black_material"],
 		}))
