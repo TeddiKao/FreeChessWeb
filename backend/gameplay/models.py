@@ -34,7 +34,8 @@ def get_default_position_list():
 			"castling_rights": get_default_castling_rights(),
 			"en_passant_target_square": None,
 			"halfmove_clock": 0,
-			"fullmove_number": 1
+			"fullmove_number": 1,
+			"side_to_move": "white",
 		},
 
 		"last_dragged_square": None,
