@@ -1,5 +1,15 @@
 @use "../../global/mixins.scss";
 
+@mixin timer-active-styling {
+	&.active-timer {
+		opacity: 1;
+	}
+
+	&.inactive-timer {
+		opacity: 0.6;
+	}
+}
+
 .top-timer-wrapper {
 	position: relative;
 
@@ -30,18 +40,22 @@
 	padding-right: 8px;
 
 	width: 24%;
+
+	@include timer-active-styling();
 }
 
 .black-player-timer-container {
 	background-color: black;
 
 	@extend .white-player-timer-container;
+	@include timer-active-styling();
 }
 
 .low-time {
 	background-color: hsl(0, 100%, 40%);
 
 	@extend .black-player-timer-container;
+	@include timer-active-styling();
 }
 
 .white-player-timer-container p {

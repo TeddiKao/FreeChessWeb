@@ -5,14 +5,23 @@ type TimerProps = {
     playerColor: string;
     timeInSeconds: number;
     startingTimeInSeconds: number;
+    isActive?: boolean;
 };
 
-function Timer({ playerColor, timeInSeconds, startingTimeInSeconds }: TimerProps) {
+function Timer({ playerColor, timeInSeconds, startingTimeInSeconds, isActive = true }: TimerProps) {
     function hasLowTime() {
         return timeInSeconds <= getLowTimeThreshold(startingTimeInSeconds);
     }
 
-    function getTimerClass() {
+    function getIsActiveTimerClass() {
+        if (isActive) {
+            return "active-timer";
+        } else {
+            return "inactive-timer";
+        }
+    }
+
+    function getLowTimeTimerClass() {
         if (hasLowTime()) {
             return "low-time";
         } else {
@@ -21,7 +30,7 @@ function Timer({ playerColor, timeInSeconds, startingTimeInSeconds }: TimerProps
     }
 
     return (
-        <div className={getTimerClass()}>
+        <div className={`${getLowTimeTimerClass()} ${getIsActiveTimerClass()}`}>
             <p className="timer-amount">{formatTime(timeInSeconds)}</p>
         </div>
     );
