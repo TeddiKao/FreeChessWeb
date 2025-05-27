@@ -83,7 +83,6 @@ function MatchmakingScreen({
 		window.addEventListener("beforeunload", handleWindowUnload);
 
 		if (isMatchmaking) {
-			console.log("Player is matchmaking!")
 			if (!websocketConnected) {
 				if (!matchmakingWebsocketExists.current) {   
 					matchmakingWebsocketRef.current = matchmakingWebsocket;
@@ -178,8 +177,6 @@ function MatchmakingScreen({
 		};
 
 		const stringfiedData = JSON.stringify(cancellationDetails);
-
-		console.log(matchmakingWebsocketRef.current)
 
 		matchmakingWebsocketRef.current?.send(stringfiedData);
 	}
