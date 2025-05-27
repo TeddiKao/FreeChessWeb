@@ -12,7 +12,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
 from move_validation.utils.move_validation import validate_move
-from move_validation.utils.get_move_type import get_move_type
+from move_validation.utils.get_move_type import get_move_type, get_is_capture
 from move_validation.utils.general import *
 from move_validation.utils.result_detection import is_checkmated_or_stalemated, is_threefold_repetiiton, check_50_move_rule_draw, has_sufficient_material
 
@@ -314,8 +314,37 @@ class GameConsumer(AsyncWebsocketConsumer):
 		else:
 			await self.update_game_attribute(chess_game_model, "halfmove_clock", chess_game_model.halfmove_clock + 1, should_save=False)
 
+	async def update_captured_material(self, board_placement, move_info: dict, en_passant_target_square, chess_game_model: ChessGame):
+		if not get_is_capture(board_placement, en_passant_target_square, move_info):
+			return
+		
+		destination_square = move_info["destination_square"]
+		captured_piece_info = board_placement[destination_square]
+
+		piece_type = captured_piece_info["piece_type"]
+		piece_color = captured_piece_info["piece_color"]
+
+		captured_white_material_getter = lambda: chess_game_model.async_get_game_attribute("captured_white_material")
+		captured_black_material_getter = lambda: chess_game_model.async_get_game_attribute("captured_black_material")
+
+		if piece_color.lower() == "white":
+			original_captured_material = await captured_white_material_getter()
+		else:
+			original_captured_material = await captured_black_material_getter()
+
+		updated_captured_material = copy.deepcopy(original_captured_material)
+		updated_captured_material[piece_type.lower()] += 1
+
+		if piece_color.lower() == "white":
+			await self.update_game_attribute(chess_game_model, "captured_white_material", updated_captured_material, should_save=False)
+		else:
+			await self.update_game_attribute(chess_game_model, "captured_black_material", updated_captured_material, should_save=False)
+
 	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
 		original_parsed_fen = await chess_game_model.get_full_parsed_fen(exclude_fields=["castling_rights", "halfmove_clock", "fullmove_number", "side_to_move"])
+		original_board_placement = original_parsed_fen["board_placement"]
+		original_en_passant_target_square = original_parsed_fen["en_passant_target_square"]
+
 		new_board_placement = copy.deepcopy(original_parsed_fen["board_placement"])
 
 		move_type = get_move_type(new_board_placement, chess_game_model.en_passant_target_square, move_info)
@@ -378,7 +407,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 				chess_game_model, "current_player_turn", new_side_to_move, should_save=False),
 			self.append_to_position_list(chess_game_model, move_info, move_type),
 			self.update_halfmove_clock(move_type, piece_type, chess_game_model),
-			self.increment_move_number(chess_game_model, piece_color)
+			self.increment_move_number(chess_game_model, piece_color),
+			self.update_captured_material(original_board_placement, move_info, original_en_passant_target_square, chess_game_model)
 		)
 
 		game_state_update_end = perf_counter()
