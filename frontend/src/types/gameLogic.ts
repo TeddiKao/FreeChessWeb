@@ -24,6 +24,7 @@ type ParsedFENString = {
     en_passant_target_square: number | null;
     halfmove_clock: number;
     fullmove_number: number;
+    side_to_move?: string,
 };
 
 type PieceInfo = {

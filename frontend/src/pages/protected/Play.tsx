@@ -81,6 +81,7 @@ function Play() {
 		positionList[positionIndex]?.["last_dropped_square"]
 	);
 	const moveType = positionList[positionIndex]?.["move_type"];
+	const sideToMove = parsedFEN["side_to_move"];
 
 	const [boardOrientation, setBoardOrientation] = useState(
 		location.state?.assignedColor || "White"
@@ -334,6 +335,7 @@ function Play() {
 						<Timer
 							playerColor={topTimerColor}
 							timeInSeconds={topTimerAmount!}
+							isActive={sideToMove === bottomTimerColor}
 							startingTimeInSeconds={location.state?.baseTime}
 						/>
 					</div>
@@ -384,6 +386,7 @@ function Play() {
 						<Timer
 							playerColor={bottomTimerColor}
 							timeInSeconds={bottomTimerAmount!}
+							isActive={sideToMove === bottomTimerColor}
 							startingTimeInSeconds={location.state?.baseTime}
 						/>
 					</div>
