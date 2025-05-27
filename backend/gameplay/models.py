@@ -42,6 +42,15 @@ def get_default_position_list():
 		"last_dropped_square": None
 	}]
 
+def get_default_captured_material_list():
+	return {
+		"queens": 0,
+		"rooks": 0,
+		"bishops": 0,
+		"knights": 0,
+		"pawns": 0,
+	}
+
 class ChessGame(models.Model):
 	white_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="white_player")
 	black_player = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="black_player")
@@ -62,8 +71,8 @@ class ChessGame(models.Model):
 	white_player_increment = models.IntegerField(blank=False, null=False, default=0)
 	black_player_increment = models.IntegerField(blank=False, null=False, default=0)
 
-	captured_white_material = models.JSONField(default=dict)
-	captured_black_material = models.JSONField(default=dict)
+	captured_white_material = models.JSONField(default=get_default_captured_material_list)
+	captured_black_material = models.JSONField(default=get_default_captured_material_list)
 
 	parsed_board_placement = models.JSONField(default=get_default_board_placement)
 	castling_rights = models.JSONField(default=get_default_castling_rights)
