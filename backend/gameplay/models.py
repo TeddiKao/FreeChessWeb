@@ -90,7 +90,8 @@ class ChessGame(models.Model):
 			"castling_rights": lambda: self.castling_rights,
 			"en_passant_target_square": lambda: self.en_passant_target_square,
 			"halfmove_clock": lambda: self.halfmove_clock,
-			"fullmove_number": lambda: self.current_move
+			"fullmove_number": lambda: self.current_move,
+			"side_to_move": lambda: self.current_player_turn
 		}		
 
 		fields = {}
