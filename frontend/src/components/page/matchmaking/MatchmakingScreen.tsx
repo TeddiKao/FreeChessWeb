@@ -107,7 +107,6 @@ function MatchmakingScreen({
 	}, []);
 
 	useEffect(() => {
-		console.log(matchmakingWebsocket);
 		matchmakingWebsocketRef.current = matchmakingWebsocket;
 	}, [matchmakingWebsocket]);
 
