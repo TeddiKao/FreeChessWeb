@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import useReactiveRef from "./useReactiveRef";
 
 function useWebSocket(
 	url: string,
@@ -6,7 +7,7 @@ function useWebSocket(
 	onError?: any,
 	enabled = true
 ) {
-	const socketRef = useRef<WebSocket | null>(null);
+	const [socketRef, _, setSocket] = useReactiveRef<WebSocket | null>(null);
     
     useEffect(() => {
         if (!enabled) {
@@ -14,11 +15,12 @@ function useWebSocket(
 		}
 
         if (socketRef.current) {
+			console.log(socketRef.current)
             return;
         }
 
 		const websocket = new WebSocket(url);
-        socketRef.current = websocket;
+        setSocket(websocket);
 
 		if (onMessage) {
 			websocket.onmessage = onMessage;
@@ -31,6 +33,7 @@ function useWebSocket(
         return () => {
             if (websocket.readyState === WebSocket.OPEN) {
                 websocket.close();
+				socketRef.current = null;
             }
         }
 	}, [url, enabled]);
