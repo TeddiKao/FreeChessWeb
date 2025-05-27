@@ -212,6 +212,10 @@ function MultiplayerChessboard({
 				handleMoveListUpdate(parsedEventData);
 				break;
 
+			case GameplayWebSocketEventTypes.CAPTURED_MATERIAL_LIST_UPDATED:
+				console.log(parsedEventData);
+				break;
+
 			case GameplayWebSocketEventTypes.PLAYER_CHECKMATED:
 				handleCheckmate(parsedEventData);
 				break;
