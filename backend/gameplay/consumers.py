@@ -575,6 +575,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 		new_side_to_move = new_parsed_fen["side_to_move"]
 		updated_halfmove_clock = new_parsed_fen["halfmove_clock"]
 
+		new_captured_white_material = await chess_game_model.async_get_game_attribute("captured_white_material")
+		new_captured_black_material = await chess_game_model.async_get_game_attribute("captured_black_material")
+
 		is_checkmated, is_stalemated = is_checkmated_or_stalemated(new_parsed_fen, opposing_color)
 
 		position_index = calculate_position_index(
@@ -607,6 +610,15 @@ class GameConsumer(AsyncWebsocketConsumer):
 				{
 					"type": "move_list_updated",
 					"new_move_list": new_move_list
+				}
+			),
+
+			self.channel_layer.group_send(
+				self.room_group_name,
+				{
+					"type": "captured_material_list_updated",
+					"new_captured_white_material": new_captured_white_material,
+					"new_captured_black_material": new_captured_black_material,
 				}
 			)
 		)
@@ -713,6 +725,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 			"move_made_by": event["move_made_by"],
 			"new_parsed_fen": event["new_parsed_fen"],
 			"new_position_index": event["new_position_index"],
+		}))
+
+	async def captured_material_list_updated(self, event):
+		await self.send(json.dumps({
+			"new_captured_white_material": event["new_captured_white_material"],
+			"new_captured_black_material": event["new_captured_black_material"],
 		}))
 
 	async def player_checkmated(self, event):
