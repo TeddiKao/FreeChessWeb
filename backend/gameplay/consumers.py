@@ -333,7 +333,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			original_captured_material = await captured_black_material_getter()
 
 		updated_captured_material = copy.deepcopy(original_captured_material)
-		updated_captured_material[piece_type.lower()] += 1
+		updated_captured_material[f"{piece_type.lower()}s"] += 1
 
 		if piece_color.lower() == "white":
 			await self.update_game_attribute(chess_game_model, "captured_white_material", updated_captured_material, should_save=False)
