@@ -32,7 +32,7 @@ function useWebSocket(
         return () => {
             if (websocket.readyState === WebSocket.OPEN) {
                 websocket.close();
-				socketRef.current = null;
+				setSocket(null);
             }
         }
 	}, [url, enabled]);
