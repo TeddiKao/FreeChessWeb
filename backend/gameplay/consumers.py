@@ -315,7 +315,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await self.update_game_attribute(chess_game_model, "halfmove_clock", chess_game_model.halfmove_clock + 1, should_save=False)
 
 	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
-		original_parsed_fen = await chess_game_model.get_full_parsed_fen(exclude_fields=["castling_rights", "halfmove_clock", "fullmove_number"])
+		original_parsed_fen = await chess_game_model.get_full_parsed_fen(exclude_fields=["castling_rights", "halfmove_clock", "fullmove_number", "side_to_move"])
 		new_board_placement = copy.deepcopy(original_parsed_fen["board_placement"])
 
 		move_type = get_move_type(new_board_placement, chess_game_model.en_passant_target_square, move_info)
@@ -542,7 +542,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		)
 
 		new_board_placement = new_parsed_fen["board_placement"]
-		new_side_to_move = await chess_game_model.async_get_game_attribute("current_player_turn")
+		new_side_to_move = new_parsed_fen["side_to_move"]
 		updated_halfmove_clock = new_parsed_fen["halfmove_clock"]
 
 		is_checkmated, is_stalemated = is_checkmated_or_stalemated(new_parsed_fen, opposing_color)
