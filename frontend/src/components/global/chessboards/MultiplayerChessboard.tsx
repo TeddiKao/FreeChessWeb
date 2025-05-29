@@ -401,6 +401,8 @@ function MultiplayerChessboard({
 				autoQueen
 			);
 
+			console.log(isPromotion);
+
 			if (isPromotion) {
 				handlePromotionSetup(pieceColorToValidate, "drag");
 
@@ -725,10 +727,12 @@ function MultiplayerChessboard({
 		const isCapture = fileDifference === 1;
 		const isPromotion = rank === promotionRank;
 
+		console.log(isPromotion, autoQueen);
+
 		if (isPromotion && autoQueen) {
 			handleAutoQueen(pieceColor, startSquare, destinationSquare);
 
-			return;
+			return true;
 		}
 
 		if (!isPromotion || !isCapture) {
@@ -757,8 +761,8 @@ function MultiplayerChessboard({
 
 			piece_color: pieceColor,
 			piece_type: "pawn",
-			starting_square: startSquare,
-			destination_square: destinationSquare,
+			starting_square: startSquare.toString(),
+			destination_square: destinationSquare.toString(),
 
 			additional_info: {
 				promoted_piece: "queen",
