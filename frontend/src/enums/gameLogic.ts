@@ -10,6 +10,7 @@ enum GameplayWebSocketEventTypes {
 	POSITION_LIST_UPDATED = "position_list_updated",
 	MOVE_LIST_UPDATED = "move_list_updated",
 	CAPTURED_MATERIAL_LIST_UPDATED = "captured_material_list_updated",
+	PROMOTED_PIECES_LIST_UPDATED = "promoted_pieces_list_updated",
 	PLAYER_STALEMATED = "player_stalemated",
 	PLAYER_CHECKMATED = "player_checkmated",
 	THREEFOLD_REPETITION_DETECTED =  "threefold_repetition_detected",
