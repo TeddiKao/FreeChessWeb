@@ -788,8 +788,8 @@ function MultiplayerChessboard({
 
 			piece_color: color,
 			piece_type: "Pawn",
-			starting_square: previousDraggedSquare,
-			destination_square: previousDroppedSquare,
+			starting_square: previousDraggedSquare?.toString(),
+			destination_square: previousDroppedSquare?.toString(),
 
 			additional_info: {
 				promoted_piece: promotedPiece,
