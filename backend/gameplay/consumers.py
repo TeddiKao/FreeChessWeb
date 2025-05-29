@@ -599,6 +599,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 		new_captured_white_material = await chess_game_model.async_get_game_attribute("captured_white_material")
 		new_captured_black_material = await chess_game_model.async_get_game_attribute("captured_black_material")
 
+		new_promoted_white_pieces = await chess_game_model.async_get_game_attribute("promoted_white_pieces")
+		new_promoted_black_pieces = await chess_game_model.async_get_game_attribute("promoted_black_pieces")
+
 		is_checkmated, is_stalemated = is_checkmated_or_stalemated(new_parsed_fen, opposing_color)
 
 		position_index = calculate_position_index(
@@ -640,6 +643,15 @@ class GameConsumer(AsyncWebsocketConsumer):
 					"type": "captured_material_list_updated",
 					"new_captured_white_material": new_captured_white_material,
 					"new_captured_black_material": new_captured_black_material,
+				}
+			),
+
+			self.channel_layer.group_send(
+				self.room_group_name,
+				{
+					"type": "promoted_pieces_list_updated",
+					"new_promoted_white_pieces": new_promoted_white_pieces,
+					"new_promoted_black_pieces": new_promoted_black_pieces,
 				}
 			)
 		)
@@ -753,6 +765,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 			"type": "captured_material_list_updated",
 			"new_captured_white_material": event["new_captured_white_material"],
 			"new_captured_black_material": event["new_captured_black_material"],
+		}))
+
+	async def promoted_pieces_list_updated(self, event):
+		await self.send(json.dumps({
+			"type": "promoted_pieces_list_updated",
+			"new_promoted_white_pieces": event["new_promoted_white_pieces"],
+			"new_promoted_black_pieces": event["new_promoted_black_pieces"],
 		}))
 
 	async def player_checkmated(self, event):
