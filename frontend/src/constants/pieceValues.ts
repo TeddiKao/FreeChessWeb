@@ -1,9 +1,9 @@
 const pieceValueMapping = {
-    queens: 9,
-    rooks: 5,
-    bishops: 3,
-    knights: 3,
-    pawns: 1
+    queen: 9,
+    rook: 5,
+    bishop: 3,
+    knight: 3,
+    pawn: 1
 }
 
 export { pieceValueMapping }
