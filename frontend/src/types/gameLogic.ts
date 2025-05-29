@@ -67,5 +67,6 @@ export type {
     SquareInfo,
     CapturablePiece,
     PromotionPiece,
-    CapturablePiecePlural
+    CapturablePiecePlural,
+    PromotionPiecePlural
 };
