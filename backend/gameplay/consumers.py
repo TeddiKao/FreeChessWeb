@@ -400,7 +400,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		elif piece_type == "pawn":
 			if "promoted_piece" in additonal_info:
+				promoted_piece = move_info["additional_info"]["promoted_piece"]
 				new_board_placement = await self.handle_pawn_promotion(move_info, new_board_placement)
+				
+				await self.update_promoted_pieces_list(promoted_piece, piece_color, chess_game_model)
 
 		if not "promoted_piece" in additonal_info:
 			new_board_placement[destination_square] = {
