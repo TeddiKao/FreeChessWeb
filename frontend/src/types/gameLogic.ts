@@ -35,6 +35,8 @@ type PieceInfo = {
 
 type PieceColor = "white" | "black";
 type PieceType = "pawn" | "rook" | "bishop" | "king" | "knight" | "queen"
+type CapturablePiece = "pawn" | "rook" | "bishop" | "knight" | "queen"
+type PromotionPiece = "rook" | "bishop" | "knight" | "queen"
 
 type CastlingSide = "queenside" | "kingside"
 
@@ -58,5 +60,7 @@ export type {
 	CastlingSide,
 	MoveInfo,
     PieceType,
-    SquareInfo
+    SquareInfo,
+    CapturablePiece,
+    PromotionPiece
 };
