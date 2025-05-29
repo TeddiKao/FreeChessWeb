@@ -40,6 +40,7 @@ type CapturablePiece = "pawn" | "rook" | "bishop" | "knight" | "queen"
 type CapturablePiecePlural = "pawns" | "rooks" | "bishops" | "knights" | "queens"
 
 type PromotionPiece = "rook" | "bishop" | "knight" | "queen"
+type PromotionPiecePlural = "rooks" | "bishops" | "knights" | "queens"
 
 type CastlingSide = "queenside" | "kingside"
 
