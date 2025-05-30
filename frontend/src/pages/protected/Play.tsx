@@ -351,15 +351,6 @@ function Play() {
 			<div className="multiplayer-playing-interface-container">
 				<div className="main-chessboard">
 					<div className="top-player-info">
-						<div className="top-timer-wrapper">
-							<Timer
-								playerColor={topTimerColor}
-								timeInSeconds={topTimerAmount!}
-								isActive={sideToMove === topTimerColor}
-								startingTimeInSeconds={location.state?.baseTime}
-							/>
-						</div>
-
 						<div className="top-player-captured-material">
 							<CapturedMaterial
 								color={getOppositeColor(topTimerColor)}
@@ -371,6 +362,15 @@ function Play() {
 								promotedPiecesList={
 									promotedPiecesList[topTimerColor]
 								}
+							/>
+						</div>
+
+						<div className="top-timer-wrapper">
+							<Timer
+								playerColor={topTimerColor}
+								timeInSeconds={topTimerAmount!}
+								isActive={sideToMove === topTimerColor}
+								startingTimeInSeconds={location.state?.baseTime}
 							/>
 						</div>
 					</div>
@@ -418,20 +418,20 @@ function Play() {
 					</ModalWrapper>
 
 					<div className="bottom-player-info">
+						<div className="bottom-player-captured-material">
+							<CapturedMaterial
+								color={getOppositeColor(bottomTimerColor)}
+								capturedPiecesList={capturedMaterialList[getOppositeColor(bottomTimerColor)]}
+								promotedPiecesList={promotedPiecesList[bottomTimerColor]}
+							/>
+						</div>
+
 						<div className="bottom-timer-wrapper">
 							<Timer
 								playerColor={bottomTimerColor}
 								timeInSeconds={bottomTimerAmount!}
 								isActive={sideToMove === bottomTimerColor}
 								startingTimeInSeconds={location.state?.baseTime}
-							/>
-						</div>
-
-						<div className="bottom-player-captured-material">
-							<CapturedMaterial
-								color={getOppositeColor(bottomTimerColor)}
-								capturedPiecesList={capturedMaterialList[getOppositeColor(bottomTimerColor)]}
-								promotedPiecesList={promotedPiecesList[bottomTimerColor]}
 							/>
 						</div>
 					</div>

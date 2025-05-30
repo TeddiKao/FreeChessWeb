@@ -9,6 +9,10 @@
 	flex-direction: column;
 }
 
+.top-player-info, .bottom-player-info {
+	@include flex-row-y-center;
+}
+
 .chessboard-info {
 	@include flex-row;
 	justify-content: right;
