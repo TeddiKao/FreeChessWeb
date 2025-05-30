@@ -2,7 +2,11 @@ import {
 	CapturedPiecesList,
 	PromotedPiecesList,
 } from "../../interfaces/materialCalculation";
-import { CapturablePiecePlural, PieceColor } from "../../types/gameLogic";
+import {
+	CapturablePiece,
+	CapturablePiecePlural,
+	PieceColor,
+} from "../../types/gameLogic";
 import { capitaliseFirstLetter } from "../../utils/generalUtils";
 
 type CapturedMaterialProps = {
@@ -16,28 +20,27 @@ function CapturedMaterial({
 	promotedPiecesList,
 	color,
 }: CapturedMaterialProps) {
-	function generateCapturedMaterial(pieceType: string) {
+	function generateCapturedMaterial(pieceType: string, pieceAmount: number) {
 		const capturedMaterialElements = [];
 
-		for (const piece in capturedPiecesList) {
-			const numCapturedPieces =
-				capturedPiecesList[piece as CapturablePiecePlural];
+		const numCapturedPieces =
+			capturedPiecesList[pieceType as CapturablePiecePlural];
 
-			const pieceFileName = `/${color}${capitaliseFirstLetter(
-				pieceType
-			)}.svg`;
+		const pieceTypeSingular = pieceType.slice(0, -1) as CapturablePiece;
+		const pieceFileName = `/${color}${capitaliseFirstLetter(
+			pieceTypeSingular
+		)}.svg`;
 
-			for (let pieceI = 0; pieceI < numCapturedPieces; pieceI++) {
-				capturedMaterialElements.push(
-					<img
-						className="captured-piece-image"
-						key={pieceI}
-						src={pieceFileName}
-					/>
-				);
-			}
+		for (let pieceI = 0; pieceI < numCapturedPieces; pieceI++) {
+			capturedMaterialElements.push(
+				<img
+					className="captured-piece-image"
+					key={pieceI}
+					src={pieceFileName}
+				/>
+			);
 		}
-
+        
 		return (
 			<div className={`captured-${pieceType}-container`}>
 				{capturedMaterialElements}
