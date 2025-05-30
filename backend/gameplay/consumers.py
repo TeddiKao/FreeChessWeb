@@ -356,11 +356,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 		
 		destination_square = move_info["destination_square"]
 		piece_color_moved = move_info["piece_color"]
+		piece_type_moved = move_info["piece_type"]
 
-		if not en_passant_target_square:
-			pawn_square = destination_square
-		else:
+		if en_passant_target_square and piece_type_moved.lower() == "pawn" and str(destination_square) == str(en_passant_target_square) :
 			pawn_square = get_pawn_square_from_en_passant_square(en_passant_target_square, piece_color_moved)
+		else:
+			pawn_square = destination_square
 
 		captured_piece_info = board_placement[pawn_square]
 
