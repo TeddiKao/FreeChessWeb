@@ -622,11 +622,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 		new_side_to_move = new_parsed_fen["side_to_move"]
 		updated_halfmove_clock = new_parsed_fen["halfmove_clock"]
 
-		new_captured_white_material = await chess_game_model.async_get_game_attribute("captured_white_material")
-		new_captured_black_material = await chess_game_model.async_get_game_attribute("captured_black_material")
-
-		new_promoted_white_pieces = await chess_game_model.async_get_game_attribute("promoted_white_pieces")
-		new_promoted_black_pieces = await chess_game_model.async_get_game_attribute("promoted_black_pieces")
+		new_captured_white_material, new_captured_black_material, new_promoted_white_pieces, new_promoted_black_pieces = await asyncio.gather(
+			chess_game_model.async_get_game_attribute("captured_white_material"),
+			chess_game_model.async_get_game_attribute("captured_black_material"),
+			chess_game_model.async_get_game_attribute("promoted_white_pieces"),
+			chess_game_model.async_get_game_attribute("promoted_black_pieces"),
+		)
 
 		is_checkmated, is_stalemated = is_checkmated_or_stalemated(new_parsed_fen, opposing_color)
 
