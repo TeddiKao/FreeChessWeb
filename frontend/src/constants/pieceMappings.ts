@@ -1,4 +1,14 @@
-const pluralToSingularPieceMap = {
+import { CapturablePiece, CapturablePiecePlural } from "../types/gameLogic"
+
+interface PluralToSingularPieceMap {
+    [key: string]: CapturablePiece
+}
+
+interface SingularToPluralPieceMap {
+    [key: string]: CapturablePiecePlural
+}
+
+const pluralToSingularPieceMap: PluralToSingularPieceMap = {
     pawns: "pawn",
     knights: "knight",
     bishops: "bishop",
@@ -6,7 +16,7 @@ const pluralToSingularPieceMap = {
     queens: "queen"
 }
 
-const singularToPluralPieceMap = {
+const singularToPluralPieceMap: SingularToPluralPieceMap = {
     pawn: "pawns",
     knight: "knights",
     bishop: "bishops",
