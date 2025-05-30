@@ -262,16 +262,23 @@ class GameConsumer(AsyncWebsocketConsumer):
 	async def update_promoted_pieces_list(self, promoted_piece, promoted_piece_color, chess_game_model: ChessGame):
 		if promoted_piece_color.lower() == "white":
 			original_promoted_pieces_list = await chess_game_model.async_get_game_attribute("promoted_white_pieces")
+			original_captured_pieces_list = await chess_game_model.async_get_game_attribute("captured_white_material")
 		elif promoted_piece_color.lower() == "black":
 			original_promoted_pieces_list = await chess_game_model.async_get_game_attribute("promoted_black_pieces")
+			original_captured_pieces_list = await chess_game_model.async_get_game_attribute("captured_black_material")
 
 		updated_promoted_pieces_list = copy.deepcopy(original_promoted_pieces_list)
+		updated_captured_pieces_list = copy.deepcopy(original_captured_pieces_list)
+		
 		updated_promoted_pieces_list[f"{promoted_piece.lower()}s"] += 1
+		updated_captured_pieces_list["pawns"] += 1
 
 		if promoted_piece_color.lower() == "white":
 			await self.update_game_attribute(chess_game_model, "promoted_white_pieces", updated_promoted_pieces_list)
+			await self.update_game_attribute(chess_game_model, "captured_white_material", updated_captured_pieces_list)
 		elif promoted_piece_color.lower() == "black":
 			await self.update_game_attribute(chess_game_model, "promoted_black_pieces", updated_promoted_pieces_list)
+			await self.update_game_attribute(chess_game_model, "captured_black_material", updated_captured_pieces_list)
 
 	async def handle_pawn_promotion(self, move_info: dict, original_board_placement: dict):
 		destination_square = move_info["destination_square"]
