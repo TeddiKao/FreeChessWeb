@@ -10,7 +10,10 @@
 }
 
 .top-player-info, .bottom-player-info {
+	@include flex-row-space-between;
 	@include flex-row-y-center;
+
+	width: 464px
 }
 
 .chessboard-info {
