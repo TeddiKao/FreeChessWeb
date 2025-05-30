@@ -1,35 +1,66 @@
 import { pieceValueMapping } from "../constants/pieceValues";
-import { CapturedPiecesList, PromotedPiecesList } from "../interfaces/materialCalculation";
-import { CapturablePiece, CapturablePiecePlural, PromotionPiece, PromotionPiecePlural } from "../types/gameLogic";
+import {
+	CapturedPiecesList,
+	PromotedPiecesList,
+} from "../interfaces/materialCalculation";
+import {
+	CapturablePiece,
+	CapturablePiecePlural,
+	PromotionPiece,
+	PromotionPiecePlural,
+} from "../types/gameLogic";
 
-function calculateTotalCapturedPiecesValue(capturedPiecesList: CapturedPiecesList) {
-    let totalCapturedPiecesValue = 0;
-    for (const piece in capturedPiecesList) {
-        const pieceSingularForm = piece.slice(0, -1) as CapturablePiece
-        
-        const pieceValue = pieceValueMapping[pieceSingularForm];
-        const numPieces = capturedPiecesList[piece as CapturablePiecePlural];
-        const totalPieceValue = pieceValue * numPieces;
+function calculateTotalCapturedPiecesValue(
+	capturedPiecesList: CapturedPiecesList
+) {
+	let totalCapturedPiecesValue = 0;
+	for (const piece in capturedPiecesList) {
+		const pieceSingularForm = piece.slice(0, -1) as CapturablePiece;
 
-        totalCapturedPiecesValue += totalPieceValue;
-    }
+		const pieceValue = pieceValueMapping[pieceSingularForm];
+		const numPieces = capturedPiecesList[piece as CapturablePiecePlural];
+		const totalPieceValue = pieceValue * numPieces;
 
-    return totalCapturedPiecesValue;
+		totalCapturedPiecesValue += totalPieceValue;
+	}
+
+	return totalCapturedPiecesValue;
 }
 
-function calculateTotalPromotedPiecesValue(promotedPiecesList: PromotedPiecesList) {
-    let totalPromotedPiecesValue = 0;
-    for (const piece in promotedPiecesList) {
-        const pieceSingularForm = piece.slice(0, -1) as CapturablePiece
-        
-        const pieceValue = pieceValueMapping[pieceSingularForm];
-        const numPieces = promotedPiecesList[piece as PromotionPiecePlural];
-        const totalPieceValue = pieceValue * numPieces;
+function calculateTotalPromotedPiecesValue(
+	promotedPiecesList: PromotedPiecesList
+) {
+	let totalPromotedPiecesValue = 0;
+	for (const piece in promotedPiecesList) {
+		const pieceSingularForm = piece.slice(0, -1) as CapturablePiece;
 
-        totalPromotedPiecesValue += totalPieceValue;
-    }
+		const pieceValue = pieceValueMapping[pieceSingularForm];
+		const numPieces = promotedPiecesList[piece as PromotionPiecePlural];
+		const totalPieceValue = pieceValue * numPieces;
 
-    return totalPromotedPiecesValue;
-} 
+		totalPromotedPiecesValue += totalPieceValue;
+	}
 
-export { calculateTotalCapturedPiecesValue, calculateTotalPromotedPiecesValue }
+	return totalPromotedPiecesValue;
+}
+
+function calculateTotalActualCapturedValue(
+	ownCapturedPiecesList: CapturedPiecesList,
+	opponentPromotedPiecesList: PromotedPiecesList
+) {
+	const totalCapturedPiecesValue = calculateTotalCapturedPiecesValue(
+		ownCapturedPiecesList
+	);
+
+	const opponentPromotedPiecesValue = calculateTotalPromotedPiecesValue(
+		opponentPromotedPiecesList
+	);
+
+	return totalCapturedPiecesValue - opponentPromotedPiecesValue;
+}
+
+export {
+	calculateTotalCapturedPiecesValue,
+	calculateTotalPromotedPiecesValue,
+	calculateTotalActualCapturedValue,
+};
