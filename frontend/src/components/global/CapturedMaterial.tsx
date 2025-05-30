@@ -25,15 +25,12 @@ function CapturedMaterial({
 	function generateCapturedMaterial(pieceType: string, pieceAmount: number) {
 		const capturedMaterialElements = [];
 
-		const numCapturedPieces =
-			capturedPiecesList[pieceType as CapturablePiecePlural];
-
 		const pieceTypeSingular = pieceType.slice(0, -1) as CapturablePiece;
 		const pieceFileName = `/${color}${capitaliseFirstLetter(
 			pieceTypeSingular
 		)}.svg`;
 
-		for (let pieceI = 0; pieceI < numCapturedPieces; pieceI++) {
+		for (let pieceI = 0; pieceI < pieceAmount; pieceI++) {
 			capturedMaterialElements.push(
 				<img
 					className="captured-piece-image"
