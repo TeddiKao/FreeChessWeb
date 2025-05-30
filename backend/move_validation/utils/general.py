@@ -122,3 +122,9 @@ def is_on_same_rank(pieces_list: list):
 			break
 
 	return same_rank
+
+def get_pawn_square_from_en_passant_square(en_passant_square: str | int, capturing_pawn_color: str):
+	if capturing_pawn_color.lower() == "white":
+		return str(int(en_passant_square) - 8)
+	elif capturing_pawn_color.lower() == "black":
+		return str(int(en_passant_square) + 8)

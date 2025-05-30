@@ -14,7 +14,7 @@
 	position: relative;
 
 	height: 40px;
-	width: 480px;
+	width: 440px;
 
 	margin-bottom: 8px;
 }
@@ -23,7 +23,7 @@
 	position: relative;
 
 	height: 40px;
-	width: 480px;
+	width: 440px;
 
 	margin-top: 12px;
 }
@@ -39,7 +39,7 @@
 	padding-left: 16px;
 	padding-right: 8px;
 
-	width: 24%;
+	width: 26%;
 
 	@include timer-active-styling();
 }

@@ -12,7 +12,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
 from move_validation.utils.move_validation import validate_move
-from move_validation.utils.get_move_type import get_move_type
+from move_validation.utils.get_move_type import get_move_type, get_is_capture
 from move_validation.utils.general import *
 from move_validation.utils.result_detection import is_checkmated_or_stalemated, is_threefold_repetiiton, check_50_move_rule_draw, has_sufficient_material
 
@@ -170,6 +170,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.get_game_attribute(chess_game_model, "position_list")
 		)
 
+		updated_captured_white_material, updated_captured_black_material, updated_promoted_white_pieces, updated_promoted_black_pieces = await asyncio.gather(
+			self.get_game_attribute(chess_game_model, "captured_white_material"),
+			self.get_game_attribute(chess_game_model, "captured_black_material"),
+			self.get_game_attribute(chess_game_model, "promoted_white_pieces"),
+			self.get_game_attribute(chess_game_model, "promoted_black_pieces"),
+		)
+
 		starting_square = move_info["starting_square"]
 		destination_square = move_info["destination_square"]
 
@@ -179,7 +186,15 @@ class GameConsumer(AsyncWebsocketConsumer):
 			"last_dragged_square": starting_square,
 			"last_dropped_square": destination_square,
 			"move_type": move_type,
-			"move_info": move_info
+			"move_info": move_info,
+			"captured_material": {
+				"white": updated_captured_white_material,
+				"black": updated_captured_black_material
+			},
+			"promoted_pieces": {
+				"white": updated_promoted_white_pieces,
+				"black": updated_promoted_black_pieces,
+			}
 		})
 
 		await self.update_game_attribute(chess_game_model, "position_list", updated_position_list, should_save=False)
@@ -259,6 +274,27 @@ class GameConsumer(AsyncWebsocketConsumer):
 				chess_game_model, "game_result", game_result)
 		)
 
+	async def update_promoted_pieces_list(self, promoted_piece, promoted_piece_color, chess_game_model: ChessGame):
+		if promoted_piece_color.lower() == "white":
+			original_promoted_pieces_list = await chess_game_model.async_get_game_attribute("promoted_white_pieces")
+			original_captured_pieces_list = await chess_game_model.async_get_game_attribute("captured_white_material")
+		elif promoted_piece_color.lower() == "black":
+			original_promoted_pieces_list = await chess_game_model.async_get_game_attribute("promoted_black_pieces")
+			original_captured_pieces_list = await chess_game_model.async_get_game_attribute("captured_black_material")
+
+		updated_promoted_pieces_list = copy.deepcopy(original_promoted_pieces_list)
+		updated_captured_pieces_list = copy.deepcopy(original_captured_pieces_list)
+		
+		updated_promoted_pieces_list[f"{promoted_piece.lower()}s"] += 1
+		updated_captured_pieces_list["pawns"] += 1
+
+		if promoted_piece_color.lower() == "white":
+			await self.update_game_attribute(chess_game_model, "promoted_white_pieces", updated_promoted_pieces_list, should_save=False)
+			await self.update_game_attribute(chess_game_model, "captured_white_material", updated_captured_pieces_list)
+		elif promoted_piece_color.lower() == "black":
+			await self.update_game_attribute(chess_game_model, "promoted_black_pieces", updated_promoted_pieces_list, should_save=False)
+			await self.update_game_attribute(chess_game_model, "captured_black_material", updated_captured_pieces_list)
+
 	async def handle_pawn_promotion(self, move_info: dict, original_board_placement: dict):
 		destination_square = move_info["destination_square"]
 		initial_square = move_info["initial_square"] if "initial_square" in move_info.keys(
@@ -314,8 +350,45 @@ class GameConsumer(AsyncWebsocketConsumer):
 		else:
 			await self.update_game_attribute(chess_game_model, "halfmove_clock", chess_game_model.halfmove_clock + 1, should_save=False)
 
+	async def update_captured_material(self, board_placement, move_info: dict, en_passant_target_square, chess_game_model: ChessGame):
+		if not get_is_capture(board_placement, en_passant_target_square, move_info):
+			return
+		
+		destination_square = move_info["destination_square"]
+		piece_color_moved = move_info["piece_color"]
+		piece_type_moved = move_info["piece_type"]
+
+		if en_passant_target_square and piece_type_moved.lower() == "pawn" and str(destination_square) == str(en_passant_target_square) :
+			pawn_square = get_pawn_square_from_en_passant_square(en_passant_target_square, piece_color_moved)
+		else:
+			pawn_square = destination_square
+
+		captured_piece_info = board_placement[pawn_square]
+
+		piece_type = captured_piece_info["piece_type"]
+		piece_color = captured_piece_info["piece_color"]
+
+		captured_white_material_getter = lambda: chess_game_model.async_get_game_attribute("captured_white_material")
+		captured_black_material_getter = lambda: chess_game_model.async_get_game_attribute("captured_black_material")
+
+		if piece_color.lower() == "white":
+			original_captured_material = await captured_white_material_getter()
+		else:
+			original_captured_material = await captured_black_material_getter()
+
+		updated_captured_material = copy.deepcopy(original_captured_material)
+		updated_captured_material[f"{piece_type.lower()}s"] += 1
+
+		if piece_color.lower() == "white":
+			await self.update_game_attribute(chess_game_model, "captured_white_material", updated_captured_material, should_save=False)
+		else:
+			await self.update_game_attribute(chess_game_model, "captured_black_material", updated_captured_material, should_save=False)
+
 	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
 		original_parsed_fen = await chess_game_model.get_full_parsed_fen(exclude_fields=["castling_rights", "halfmove_clock", "fullmove_number", "side_to_move"])
+		original_board_placement = original_parsed_fen["board_placement"]
+		original_en_passant_target_square = original_parsed_fen["en_passant_target_square"]
+
 		new_board_placement = copy.deepcopy(original_parsed_fen["board_placement"])
 
 		move_type = get_move_type(new_board_placement, chess_game_model.en_passant_target_square, move_info)
@@ -350,7 +423,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		elif piece_type == "pawn":
 			if "promoted_piece" in additonal_info:
+				promoted_piece = move_info["additional_info"]["promoted_piece"]
 				new_board_placement = await self.handle_pawn_promotion(move_info, new_board_placement)
+				
+				await self.update_promoted_pieces_list(promoted_piece, piece_color, chess_game_model)
 
 		if not "promoted_piece" in additonal_info:
 			new_board_placement[destination_square] = {
@@ -378,7 +454,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 				chess_game_model, "current_player_turn", new_side_to_move, should_save=False),
 			self.append_to_position_list(chess_game_model, move_info, move_type),
 			self.update_halfmove_clock(move_type, piece_type, chess_game_model),
-			self.increment_move_number(chess_game_model, piece_color)
+			self.increment_move_number(chess_game_model, piece_color),
+			self.update_captured_material(original_board_placement, move_info, original_en_passant_target_square, chess_game_model)
 		)
 
 		game_state_update_end = perf_counter()
@@ -545,6 +622,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 		new_side_to_move = new_parsed_fen["side_to_move"]
 		updated_halfmove_clock = new_parsed_fen["halfmove_clock"]
 
+		new_captured_white_material, new_captured_black_material, new_promoted_white_pieces, new_promoted_black_pieces = await asyncio.gather(
+			chess_game_model.async_get_game_attribute("captured_white_material"),
+			chess_game_model.async_get_game_attribute("captured_black_material"),
+			chess_game_model.async_get_game_attribute("promoted_white_pieces"),
+			chess_game_model.async_get_game_attribute("promoted_black_pieces"),
+		)
+
 		is_checkmated, is_stalemated = is_checkmated_or_stalemated(new_parsed_fen, opposing_color)
 
 		position_index = calculate_position_index(
@@ -577,6 +661,24 @@ class GameConsumer(AsyncWebsocketConsumer):
 				{
 					"type": "move_list_updated",
 					"new_move_list": new_move_list
+				}
+			),
+
+			self.channel_layer.group_send(
+				self.room_group_name,
+				{
+					"type": "captured_material_list_updated",
+					"new_captured_white_material": new_captured_white_material,
+					"new_captured_black_material": new_captured_black_material,
+				}
+			),
+
+			self.channel_layer.group_send(
+				self.room_group_name,
+				{
+					"type": "promoted_pieces_list_updated",
+					"new_promoted_white_pieces": new_promoted_white_pieces,
+					"new_promoted_black_pieces": new_promoted_black_pieces,
 				}
 			)
 		)
@@ -683,6 +785,20 @@ class GameConsumer(AsyncWebsocketConsumer):
 			"move_made_by": event["move_made_by"],
 			"new_parsed_fen": event["new_parsed_fen"],
 			"new_position_index": event["new_position_index"],
+		}))
+
+	async def captured_material_list_updated(self, event):
+		await self.send(json.dumps({
+			"type": "captured_material_list_updated",
+			"new_captured_white_material": event["new_captured_white_material"],
+			"new_captured_black_material": event["new_captured_black_material"],
+		}))
+
+	async def promoted_pieces_list_updated(self, event):
+		await self.send(json.dumps({
+			"type": "promoted_pieces_list_updated",
+			"new_promoted_white_pieces": event["new_promoted_white_pieces"],
+			"new_promoted_black_pieces": event["new_promoted_black_pieces"],
 		}))
 
 	async def player_checkmated(self, event):
