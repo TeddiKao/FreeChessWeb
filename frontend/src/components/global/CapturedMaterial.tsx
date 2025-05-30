@@ -32,9 +32,10 @@ function CapturedMaterial({
 		)}.svg`;
 
 		for (let pieceI = 0; pieceI < pieceAmount; pieceI++) {
+			const isFirstPiece = pieceI === 0;
 			capturedMaterialElements.push(
 				<img
-					className={pieceI === 0 ? "first-captured-piece-image" : "captured-piece-image"}
+					className={isFirstPiece ? "first-captured-piece-image" : "captured-piece-image"}
 					key={pieceI}
 					src={pieceFileName}
 				/>
