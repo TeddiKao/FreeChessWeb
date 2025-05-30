@@ -289,10 +289,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 		updated_captured_pieces_list["pawns"] += 1
 
 		if promoted_piece_color.lower() == "white":
-			await self.update_game_attribute(chess_game_model, "promoted_white_pieces", updated_promoted_pieces_list)
+			await self.update_game_attribute(chess_game_model, "promoted_white_pieces", updated_promoted_pieces_list, should_save=False)
 			await self.update_game_attribute(chess_game_model, "captured_white_material", updated_captured_pieces_list)
 		elif promoted_piece_color.lower() == "black":
-			await self.update_game_attribute(chess_game_model, "promoted_black_pieces", updated_promoted_pieces_list)
+			await self.update_game_attribute(chess_game_model, "promoted_black_pieces", updated_promoted_pieces_list, should_save=False)
 			await self.update_game_attribute(chess_game_model, "captured_black_material", updated_captured_pieces_list)
 
 	async def handle_pawn_promotion(self, move_info: dict, original_board_placement: dict):
