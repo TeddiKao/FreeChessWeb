@@ -9,6 +9,8 @@ import {
 } from "../../types/gameLogic";
 import { capitaliseFirstLetter } from "../../utils/generalUtils";
 
+import "../../styles/components/chessboard/captured-material.scss";
+
 type CapturedMaterialProps = {
 	capturedPiecesList: CapturedPiecesList;
 	promotedPiecesList: PromotedPiecesList;
