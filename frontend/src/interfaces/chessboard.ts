@@ -6,6 +6,7 @@ import {
 	StateSetterFunction,
 } from "../types/general.ts";
 import { MoveInfo, ParsedFENString, PieceColor, PieceType } from "../types/gameLogic.ts";
+import { CapturedPiecesList, PromotedPiecesList } from "./materialCalculation.ts";
 
 interface DisplayChessboardProps {
 	parsed_fen_string: ParsedFENString;
@@ -56,6 +57,14 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
 			last_dropped_square: string;
 			move_type: string;
 			move_info: MoveInfo
+			captured_material: {
+				white: CapturedPiecesList;
+				black: CapturedPiecesList;
+			};
+			promoted_pieces: {
+				white: PromotedPiecesList;
+				black: PromotedPiecesList;
+			}
 		}>
 	>;
 	setMoveList: StateSetterFunction<Array<Array<string>>>;
