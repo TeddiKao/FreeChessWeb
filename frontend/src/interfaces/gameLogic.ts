@@ -1,6 +1,6 @@
 import { MoveInfo, ParsedFENString } from "../types/gameLogic";
 import { BasicWebSocketEventData } from "./general.ts";
-import { CapturedPiecesList } from "./materialCalculation.ts";
+import { CapturedPiecesList, PromotedPiecesList } from "./materialCalculation.ts";
 
 interface MoveMadeEventData extends BasicWebSocketEventData {
     move_data: MoveInfo;
@@ -27,8 +27,8 @@ interface PositionListUpdateEventData extends BasicWebSocketEventData {
             black: CapturedPiecesList;
         };
         promoted_pieces: {
-            white: CapturedPiecesList;
-            black: CapturedPiecesList;
+            white: PromotedPiecesList;
+            black: PromotedPiecesList;
         }
     }>;
 }
