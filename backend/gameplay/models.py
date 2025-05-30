@@ -39,7 +39,15 @@ def get_default_position_list():
 		},
 
 		"last_dragged_square": None,
-		"last_dropped_square": None
+		"last_dropped_square": None,
+		"captured_material": {
+			"white": get_default_captured_material_list(),
+			"black": get_default_captured_material_list()
+		},
+		"promoted_pieces": {
+			"white": get_default_promoted_pieces(),
+			"black": get_default_promoted_pieces(),
+		}
 	}]
 
 def get_default_captured_material_list():
