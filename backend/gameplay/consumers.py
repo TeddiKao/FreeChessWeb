@@ -170,6 +170,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.get_game_attribute(chess_game_model, "position_list")
 		)
 
+		updated_captured_white_material, updated_captured_black_material, updated_promoted_white_pieces, updated_promoted_black_pieces = await asyncio.gather(
+			self.get_game_attribute(chess_game_model, "captured_white_material"),
+			self.get_game_attribute(chess_game_model, "captured_black_material"),
+			self.get_game_attribute(chess_game_model, "promoted_white_pieces"),
+			self.get_game_attribute(chess_game_model, "promoted_black_pieces"),
+		)
+
 		starting_square = move_info["starting_square"]
 		destination_square = move_info["destination_square"]
 
@@ -179,7 +186,15 @@ class GameConsumer(AsyncWebsocketConsumer):
 			"last_dragged_square": starting_square,
 			"last_dropped_square": destination_square,
 			"move_type": move_type,
-			"move_info": move_info
+			"move_info": move_info,
+			"captured_material": {
+				"white": updated_captured_white_material,
+				"black": updated_captured_black_material
+			},
+			"promoted_pieces": {
+				"white": updated_promoted_white_pieces,
+				"black": updated_promoted_black_pieces,
+			}
 		})
 
 		await self.update_game_attribute(chess_game_model, "position_list", updated_position_list, should_save=False)
