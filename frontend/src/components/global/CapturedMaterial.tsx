@@ -33,7 +33,7 @@ function CapturedMaterial({
 		for (let pieceI = 0; pieceI < pieceAmount; pieceI++) {
 			capturedMaterialElements.push(
 				<img
-					className="captured-piece-image"
+					className={pieceI === 0 ? "first-captured-piece-image" : "captured-piece-image"}
 					key={pieceI}
 					src={pieceFileName}
 				/>
@@ -41,7 +41,7 @@ function CapturedMaterial({
 		}
 
 		return (
-			<div className={`captured-${pieceType}-container`}>
+			<div className="captured-material-container">
 				{capturedMaterialElements}
 			</div>
 		);

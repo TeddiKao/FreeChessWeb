@@ -1,4 +1,16 @@
-.captured-piece-image {
+@use "../../global/mixins" as *;
+
+.first-captured-piece-image {
     width: 24px;
     height: 24px;
+}
+
+.captured-piece-image {
+    @extend .first-captured-piece-image;
+
+    margin-left: -8px;
+}
+
+.captured-material-container {
+    @include flex-row;
 }
