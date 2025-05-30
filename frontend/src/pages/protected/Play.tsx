@@ -35,6 +35,8 @@ import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar.tsx
 import { convertToMilliseconds } from "../../utils/timeUtils.ts";
 import { pieceAnimationTime } from "../../constants/pieceAnimation.ts";
 import usePieceAnimation from "../../hooks/usePieceAnimation.ts";
+import CapturedMaterial from "../../components/global/CapturedMaterial.tsx";
+import { CapturedPiecesList, PromotedPiecesList } from "../../interfaces/materialCalculation.ts";
 
 function Play() {
 	const location = useLocation();
@@ -53,6 +55,14 @@ function Play() {
 			last_dropped_square: string;
 			move_type: string;
 			move_info: MoveInfo;
+			captured_material: {
+				white: CapturedPiecesList;
+				black: CapturedPiecesList;
+			};
+			promoted_pieces: {
+				white: PromotedPiecesList;
+				black: PromotedPiecesList;
+			}
 		}>
 	>([]);
 
@@ -80,8 +90,12 @@ function Play() {
 	const [lastDroppedSquare, setLastDroppedSquare] = useState(
 		positionList[positionIndex]?.["last_dropped_square"]
 	);
+
 	const moveType = positionList[positionIndex]?.["move_type"];
 	const sideToMove = parsedFEN?.["side_to_move"];
+	
+	const capturedMaterialList = positionList[positionIndex]?.["captured_material"];
+	const promotedPiecesList = positionList[positionIndex]?.["promoted_pieces"];
 
 	const [boardOrientation, setBoardOrientation] = useState(
 		location.state?.assignedColor || "White"
@@ -331,13 +345,19 @@ function Play() {
 			<DashboardNavbar />
 			<div className="multiplayer-playing-interface-container">
 				<div className="main-chessboard">
-					<div className="top-timer-wrapper">
-						<Timer
-							playerColor={topTimerColor}
-							timeInSeconds={topTimerAmount!}
-							isActive={sideToMove === topTimerColor}
-							startingTimeInSeconds={location.state?.baseTime}
-						/>
+					<div className="top-player-info">
+						<div className="top-timer-wrapper">
+							<Timer
+								playerColor={topTimerColor}
+								timeInSeconds={topTimerAmount!}
+								isActive={sideToMove === topTimerColor}
+								startingTimeInSeconds={location.state?.baseTime}
+							/>
+						</div>
+
+						<div className="top-player-captured-material">
+							<CapturedMaterial />
+						</div>
 					</div>
 
 					<div className="chessboard-info">
