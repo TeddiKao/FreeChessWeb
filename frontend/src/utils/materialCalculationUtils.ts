@@ -1,3 +1,4 @@
+import { pluralToSingularPieceMap, singularToPluralPieceMap } from "../constants/pieceMappings";
 import { pieceValueMapping } from "../constants/pieceValues";
 import {
 	CapturedPiecesList,
@@ -6,6 +7,7 @@ import {
 import {
 	CapturablePiece,
 	CapturablePiecePlural,
+	PieceType,
 	PromotionPiece,
 	PromotionPiecePlural,
 } from "../types/gameLogic";
@@ -15,7 +17,7 @@ function calculateTotalCapturedPiecesValue(
 ) {
 	let totalCapturedPiecesValue = 0;
 	for (const piece in capturedPiecesList) {
-		const pieceSingularForm = piece.slice(0, -1) as CapturablePiece;
+		const pieceSingularForm = pluralToSingularPieceMap[piece];
 
 		const pieceValue = pieceValueMapping[pieceSingularForm];
 		const numPieces = capturedPiecesList[piece as CapturablePiecePlural];
@@ -32,7 +34,7 @@ function calculateTotalPromotedPiecesValue(
 ) {
 	let totalPromotedPiecesValue = 0;
 	for (const piece in promotedPiecesList) {
-		const pieceSingularForm = piece.slice(0, -1) as CapturablePiece;
+		const pieceSingularForm = pluralToSingularPieceMap[piece];
 
 		const pieceValue = pieceValueMapping[pieceSingularForm];
 		const numPieces = promotedPiecesList[piece as PromotionPiecePlural];
