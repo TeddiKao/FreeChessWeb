@@ -40,6 +40,7 @@ import {
 	CapturedPiecesList,
 	PromotedPiecesList,
 } from "../../interfaces/materialCalculation.ts";
+import { getOppositeColor } from "../../utils/gameLogic/general.ts";
 
 function Play() {
 	const location = useLocation();
@@ -361,9 +362,11 @@ function Play() {
 
 						<div className="top-player-captured-material">
 							<CapturedMaterial
-								color={topTimerColor}
+								color={getOppositeColor(topTimerColor)}
 								capturedPiecesList={
-									capturedMaterialList[topTimerColor]
+									capturedMaterialList[
+										getOppositeColor(topTimerColor)
+									]
 								}
 								promotedPiecesList={
 									promotedPiecesList[topTimerColor]
@@ -414,13 +417,23 @@ function Play() {
 						/>
 					</ModalWrapper>
 
-					<div className="bottom-timer-wrapper">
-						<Timer
-							playerColor={bottomTimerColor}
-							timeInSeconds={bottomTimerAmount!}
-							isActive={sideToMove === bottomTimerColor}
-							startingTimeInSeconds={location.state?.baseTime}
-						/>
+					<div className="bottom-player-info">
+						<div className="bottom-timer-wrapper">
+							<Timer
+								playerColor={bottomTimerColor}
+								timeInSeconds={bottomTimerAmount!}
+								isActive={sideToMove === bottomTimerColor}
+								startingTimeInSeconds={location.state?.baseTime}
+							/>
+						</div>
+
+						<div className="bottom-player-captured-material">
+							<CapturedMaterial
+								color={getOppositeColor(bottomTimerColor)}
+								capturedPiecesList={capturedMaterialList[getOppositeColor(bottomTimerColor)]}
+								promotedPiecesList={promotedPiecesList[bottomTimerColor]}
+							/>
+						</div>
 					</div>
 				</div>
 
