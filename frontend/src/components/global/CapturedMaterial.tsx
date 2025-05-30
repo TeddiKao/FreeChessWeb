@@ -31,12 +31,12 @@ function CapturedMaterial({
 			pieceTypeSingular
 		)}.svg`;
 
-		for (let pieceI = 0; pieceI < pieceAmount; pieceI++) {
-			const isFirstPiece = pieceI === 0;
+		for (let pieceIndex = 0; pieceIndex < pieceAmount; pieceIndex++) {
+			const isFirstPiece = pieceIndex === 0;
 			capturedMaterialElements.push(
 				<img
 					className={isFirstPiece ? "first-captured-piece-image" : "captured-piece-image"}
-					key={pieceI}
+					key={pieceIndex}
 					src={pieceFileName}
 				/>
 			);
