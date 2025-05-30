@@ -10,6 +10,7 @@ import {
 import { capitaliseFirstLetter } from "../../utils/generalUtils";
 
 import "../../styles/components/chessboard/captured-material.scss";
+import { pluralToSingularPieceMap } from "../../constants/pieceMappings";
 
 type CapturedMaterialProps = {
 	capturedPiecesList: CapturedPiecesList;
@@ -25,7 +26,7 @@ function CapturedMaterial({
 	function generateCapturedMaterial(pieceType: string, pieceAmount: number) {
 		const capturedMaterialElements = [];
 
-		const pieceTypeSingular = pieceType.slice(0, -1) as CapturablePiece;
+		const pieceTypeSingular = pluralToSingularPieceMap[pieceType];
 		const pieceFileName = `/${color}${capitaliseFirstLetter(
 			pieceTypeSingular
 		)}.svg`;
