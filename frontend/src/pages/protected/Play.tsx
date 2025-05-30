@@ -36,7 +36,10 @@ import { convertToMilliseconds } from "../../utils/timeUtils.ts";
 import { pieceAnimationTime } from "../../constants/pieceAnimation.ts";
 import usePieceAnimation from "../../hooks/usePieceAnimation.ts";
 import CapturedMaterial from "../../components/global/CapturedMaterial.tsx";
-import { CapturedPiecesList, PromotedPiecesList } from "../../interfaces/materialCalculation.ts";
+import {
+	CapturedPiecesList,
+	PromotedPiecesList,
+} from "../../interfaces/materialCalculation.ts";
 
 function Play() {
 	const location = useLocation();
@@ -62,7 +65,7 @@ function Play() {
 			promoted_pieces: {
 				white: PromotedPiecesList;
 				black: PromotedPiecesList;
-			}
+			};
 		}>
 	>([]);
 
@@ -93,8 +96,9 @@ function Play() {
 
 	const moveType = positionList[positionIndex]?.["move_type"];
 	const sideToMove = parsedFEN?.["side_to_move"];
-	
-	const capturedMaterialList = positionList[positionIndex]?.["captured_material"];
+
+	const capturedMaterialList =
+		positionList[positionIndex]?.["captured_material"];
 	const promotedPiecesList = positionList[positionIndex]?.["promoted_pieces"];
 
 	const [boardOrientation, setBoardOrientation] = useState(
@@ -356,7 +360,15 @@ function Play() {
 						</div>
 
 						<div className="top-player-captured-material">
-							<CapturedMaterial />
+							<CapturedMaterial
+								color={topTimerColor}
+								capturedPiecesList={
+									capturedMaterialList[topTimerColor]
+								}
+								promotedPiecesList={
+									promotedPiecesList[topTimerColor]
+								}
+							/>
 						</div>
 					</div>
 
