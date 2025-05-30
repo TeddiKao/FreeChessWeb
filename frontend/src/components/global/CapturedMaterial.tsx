@@ -40,7 +40,7 @@ function CapturedMaterial({
 				/>
 			);
 		}
-        
+
 		return (
 			<div className={`captured-${pieceType}-container`}>
 				{capturedMaterialElements}
@@ -51,7 +51,10 @@ function CapturedMaterial({
 	return (
 		<div className="captured-material-container">
 			{Object.keys(capturedPiecesList).map((capturedPiece, _) => {
-				return generateCapturedMaterial(capturedPiece);
+				return generateCapturedMaterial(
+					capturedPiece,
+					capturedPiecesList[capturedPiece as CapturablePiecePlural]
+				);
 			})}
 		</div>
 	);
