@@ -1,7 +1,12 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.http import HttpResponse
+
+def root_health_check(request):
+    return HttpResponse("Ok")
 
 urlpatterns = [
+    path("/", root_health_check),
     path('admin/', admin.site.urls),
 	path("users_api/", include("users.urls")),
 	path("gameplay_api/", include("gameplay.urls")),
