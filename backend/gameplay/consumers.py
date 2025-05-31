@@ -338,6 +338,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		chess_game_model.en_passant_target_square = en_passant_target_square
 
+		await chess_game_model.async_save()
+
 	async def increment_move_number(self, chess_game_model: ChessGame, piece_color: str):
 		if piece_color == "black":
 			current_move = await self.get_game_attribute(chess_game_model, "current_move")
@@ -446,23 +448,24 @@ class GameConsumer(AsyncWebsocketConsumer):
 		new_side_to_move = "black" if piece_color == "white" else "white"
 
 		game_state_update_start = perf_counter()
-		await asyncio.gather(
-			self.update_en_passant_target_square(chess_game_model, move_info),
-			self.update_game_attribute(
-				chess_game_model, "parsed_board_placement", new_board_placement, should_save=False),
-			self.update_game_attribute(
-				chess_game_model, "current_player_turn", new_side_to_move, should_save=False),
-			self.append_to_position_list(chess_game_model, move_info, move_type),
-			self.update_halfmove_clock(move_type, piece_type, chess_game_model),
-			self.increment_move_number(chess_game_model, piece_color),
-			self.update_captured_material(original_board_placement, move_info, original_en_passant_target_square, chess_game_model)
-		)
+
+		await self.update_en_passant_target_square(chess_game_model, move_info)
+
+		chess_game_model.parsed_board_placement = new_board_placement
+		chess_game_model.current_player_turn = new_side_to_move
+		
+		await chess_game_model.async_save()
+
+		await self.append_to_position_list(chess_game_model, move_info, move_type)
+		await self.update_halfmove_clock(move_type, piece_type, chess_game_model)
+		await self.increment_move_number(chess_game_model, piece_color)
+		await self.update_captured_material(original_board_placement, move_info, original_en_passant_target_square, chess_game_model)
+
+		await self.append_to_move_list(chess_game_model, original_parsed_fen, move_info)
 
 		game_state_update_end = perf_counter()
 
 		print(f"Game state updated in {(game_state_update_end - game_state_update_start):.6f} seconds")
-
-		await self.append_to_move_list(chess_game_model, original_parsed_fen, move_info)
 
 	async def handle_player_timeout(self, chess_game_model: ChessGame, timeout_color: str):
 		game_winner = await chess_game_model.get_player_of_color(get_opposite_color(timeout_color))
