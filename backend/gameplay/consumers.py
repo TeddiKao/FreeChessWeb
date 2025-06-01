@@ -86,9 +86,17 @@ class GameConsumer(AsyncWebsocketConsumer):
 		print(f"Validation data fetch took {(validation_data_fetch_end - validation_data_fetch_start):.6f} seconds")
 
 		if side_to_move != color_moved.lower():
+			logger.debug("Side to move does not match color moved")
+			logger.debug(f"Side to move: {side_to_move}")
+			logger.debug(f"Color moved: {color_moved}")
+
 			return False
 		
 		if move_made_by != allowed_player_to_move:
+			logger.debug("Player is not allowed to make a move!")
+			logger.debug(f"Move made by: {move_made_by}")
+			logger.debug(f"Allowed player to move {allowed_player_to_move}")
+
 			return False
 
 		if validate_move(full_parsed_fen, move_info):
