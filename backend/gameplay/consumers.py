@@ -51,19 +51,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if (increment_amount < 0):
 			return
 
-		current_time = await self.get_game_attribute(chess_game_model, "white_player_clock")
-
-		new_time = current_time + Decimal(increment_amount)
-		await self.update_game_attribute(chess_game_model, "white_player_clock", new_time, should_save=False)
+		chess_game_model.white_player_clock += Decimal(increment_amount)
 
 	async def increment_black_player_timer(self, chess_game_model: ChessGame, increment_amount: float | int):
 		if (increment_amount < 0):
 			return
 
-		current_time = await self.get_game_attribute(chess_game_model, "black_player_clock")
-		new_time = current_time + Decimal(increment_amount)
-
-		await self.update_game_attribute(chess_game_model, "black_player_clock", new_time, should_save=False)
+		chess_game_model.black_player_clock += Decimal(increment_amount)
 
 	async def decrement_black_player_timer(self, chess_game_model: ChessGame, decrement_amount: float | int):
 		current_time = await self.get_game_attribute(chess_game_model, "black_player_clock")
