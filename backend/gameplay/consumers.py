@@ -447,6 +447,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		chess_game_model.current_player_turn = new_side_to_move
 		
 		await chess_game_model.async_save()
+		await chess_game_model.refresh_game_from_db()
 
 		await self.append_to_position_list(chess_game_model, move_info, move_type)
 		await self.update_halfmove_clock(move_type, piece_type, chess_game_model)
