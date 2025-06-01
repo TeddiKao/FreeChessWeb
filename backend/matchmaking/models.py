@@ -10,6 +10,8 @@ class WaitingPlayer(models.Model):
 	increment_time = models.IntegerField(null=False, blank=False, default=models.NOT_PROVIDED)
 	has_been_matched = models.BooleanField(null=False, blank=False, default=False)
 
+	assigned_color = models.CharField(max_length=10, null=True, blank=True)
+	
 	@database_sync_to_async
 	def has_player_been_matched(self):
 		return self.has_been_matched
