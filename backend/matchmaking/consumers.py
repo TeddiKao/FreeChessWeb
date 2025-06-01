@@ -2,6 +2,7 @@ import json
 import time
 import random
 import logging
+import traceback
 
 from asyncio import create_task, sleep
 
@@ -93,169 +94,182 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
         match_found = False
         was_added_to_queue = False
 
-        while not match_found:
-            player_in_queue: WaitingPlayer | None = await self.get_player_in_queue(player_to_match)
-            matched_user: WaitingPlayer | None = await self.get_matched_user(player_to_match)
-            
-            if player_in_queue:
-                player_in_queue_username = await player_in_queue.get_username()
-                logger.debug(f"Player in queue: {player_in_queue_username}")
-            else:
-                logger.debug("No player in queue")
-
-            if matched_user:
-                matched_user_username = await matched_user.get_username()
-                logger.debug(f"Matched user: {matched_user_username}")
-            else:
-                logger.debug("No matched user")
-
-            if player_in_queue and await player_in_queue.has_player_been_matched():
-                logger.debug("Player in queue has been matched!")
-                
-                assigned_game_id = player_in_queue.assigned_game_id
-                assigned_color = player_in_queue.assigned_color
-
-                player_in_queue_user_model = await self.get_user_model_from_waiting_player(player_in_queue)
-                player_match = await self.get_matched_user(player_in_queue_user_model)
-                
-                logger.debug(f"Player match: {player_match}")
-
-                if not player_match:
-                    continue
-                
-                player_match_user_model = await self.get_user_model_from_waiting_player(player_match)
-
-                white_player = player_in_queue_user_model if assigned_color and assigned_color.lower() == "white" else player_match_user_model
-                black_player = player_in_queue_user_model if assigned_color and assigned_color.lower() == "black" else player_match_user_model
-
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        "type": "player_matched",
-                        "match_found": True,
-                        "white_player": white_player.username,
-                        "black_player": black_player.username,
-                        "game_id": assigned_game_id,
-                    }
-                )
-
-                await self.remove_player_from_queue(player_in_queue)
-
-                break
-
-            if matched_user and await matched_user.has_player_been_matched():
-                matched_player_user_model = await self.get_user_model_from_waiting_player(matched_user)
-                matched_player_user_id = matched_player_user_model.id
-
-                player_match = await self.get_matched_user(matched_player_user_model)
-                if not player_match:
-                    continue
-                
-                player_match_user_model = await self.get_user_model_from_waiting_player(player_match)
-
-                assigned_game_id = matched_user.assigned_game_id
-                assigned_color = matched_user.assigned_color
-
-                white_player = matched_player_user_model if assigned_color and assigned_color.lower() == "white" else player_match_user_model
-                black_player = matched_player_user_model if assigned_color and assigned_color.lower() == "black" else player_match_user_model
-
-                await self.channel_layer.group_send(
-                    f"user_{matched_player_user_id}",
-                    {
-                        "type": "player_matched",
-                        "match_found": True,
-                        "white_player": white_player.username,
-                        "black_player": black_player.username,
-                        "game_id": assigned_game_id,
-                    }
-                )
-
-                await self.remove_player_from_queue(matched_user)
-
-                break
-
-            if not matched_user and not player_in_queue and was_added_to_queue:
-                break
-
-            player_in_queue_matched = None
-
-            if player_in_queue:
-                player_in_queue_matched = await player_in_queue.has_player_been_matched()
-
-            matched_player_matched = None
-
-            if matched_user:
-                matched_player_matched = await matched_user.has_player_been_matched()
-
-            if matched_user and not player_in_queue_matched and not matched_player_matched:
-                matched_player_color, player_to_match_color = await self.decide_player_color()
-
-                matched_player_user_model = await self.get_user_model_from_waiting_player(matched_user)
-
-                white_player = matched_player_user_model if matched_player_color == "white" else player_to_match
-                black_player = matched_player_user_model if matched_player_color == "black" else player_to_match
-
-                game_id = await self.create_chess_game(white_player, black_player)
-                
-                await player_in_queue.update_has_player_been_matched(True)
-                await matched_user.update_has_player_been_matched(True)
-
-                await player_in_queue.update_player_assigned_color(player_to_match_color)
-                await matched_user.update_player_assigned_color(matched_player_color)
-
-                await player_in_queue.update_player_assigned_game_id(game_id)
-                await matched_user.update_player_assigned_game_id(game_id)
-
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        "type": "player_matched",
-                        "match_found": True,
-                        "white_player": white_player.username,
-                        "black_player": black_player.username,
-                        "game_id": game_id,
-                    }
-                )
-
-                await self.channel_layer.group_send(
-                    f"user_{matched_player_user_model.id}",
-                    {
-                        "type": "player_matched",
-                        "match_found": True,
-                        "white_player": white_player.username,
-                        "black_player": black_player.username,
-                        "game_id": game_id,
-                    }
-                )
-
-                await self.remove_player_from_queue(matched_user)
+        try:
+            while not match_found:
+                player_in_queue: WaitingPlayer | None = await self.get_player_in_queue(player_to_match)
                 
                 if player_in_queue:
+                    matched_player_user_model = await player_in_queue.get_matched_user()
+                    matched_user: WaitingPlayer | None = await self.get_waiting_player_model_from_user(matched_player_user_model)
+                else:
+                    matched_user: WaitingPlayer | None = None
+                
+                if player_in_queue:
+                    player_in_queue_username = await player_in_queue.get_username()
+                    logger.debug(f"Player in queue: {player_in_queue_username}")
+                else:
+                    logger.debug("No player in queue")
+
+                if matched_user:
+                    matched_user_username = await matched_user.get_username()
+                    logger.debug(f"Matched user: {matched_user_username}")
+                else:
+                    logger.debug("No matched user")
+
+                if player_in_queue and await player_in_queue.has_player_been_matched():
+                    logger.debug("Player in queue has been matched!")
+                    
+                    assigned_game_id = player_in_queue.assigned_game_id
+                    assigned_color = player_in_queue.assigned_color
+
+                    player_in_queue_user_model = await self.get_user_model_from_waiting_player(player_in_queue)
+                    player_match = await player_in_queue.get_matched_user()
+                    
+                    logger.debug(f"Player match: {player_match}")
+
+                    if not player_match:
+                        continue
+                    
+                    player_match_user_model = await self.get_user_model_from_waiting_player(player_match)
+
+                    white_player = player_in_queue_user_model if assigned_color and assigned_color.lower() == "white" else player_match_user_model
+                    black_player = player_in_queue_user_model if assigned_color and assigned_color.lower() == "black" else player_match_user_model
+
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            "type": "player_matched",
+                            "match_found": True,
+                            "white_player": white_player.username,
+                            "black_player": black_player.username,
+                            "game_id": assigned_game_id,
+                        }
+                    )
+
                     await self.remove_player_from_queue(player_in_queue)
 
-                await self.channel_layer.group_discard(
-                    f"user_{matched_player_user_model.id}",
-                    self.channel_name
-                )
+                    break
 
-                match_found = True
-                
+                if matched_user and await matched_user.has_player_been_matched():
+                    matched_player_user_model = await self.get_user_model_from_waiting_player(matched_user)
+                    matched_player_user_id = matched_player_user_model.id
 
-                break
-
-            if not player_in_queue:
-                matched_player: WaitingPlayer | None = await self.get_first_matching_player()
-
-                await self.create_waiting_player(player_to_match)
-                was_added_to_queue = True
-
-                if matched_player:
+                    player_match = await matched_user.get_matched_user()
+                    if not player_match:
+                        continue
                     
-                    waiting_player_to_match: WaitingPlayer = await self.get_player_in_queue(player_to_match)
+                    player_match_user_model = await self.get_user_model_from_waiting_player(player_match)
 
-                    await self.set_matched_player(matched_player, player_to_match)
-                    await self.set_matched_player(waiting_player_to_match, await self.get_user_model_from_waiting_player(matched_player))
+                    assigned_game_id = matched_user.assigned_game_id
+                    assigned_color = matched_user.assigned_color
 
+                    white_player = matched_player_user_model if assigned_color and assigned_color.lower() == "white" else player_match_user_model
+                    black_player = matched_player_user_model if assigned_color and assigned_color.lower() == "black" else player_match_user_model
+
+                    await self.channel_layer.group_send(
+                        f"user_{matched_player_user_id}",
+                        {
+                            "type": "player_matched",
+                            "match_found": True,
+                            "white_player": white_player.username,
+                            "black_player": black_player.username,
+                            "game_id": assigned_game_id,
+                        }
+                    )
+
+                    await self.remove_player_from_queue(matched_user)
+
+                    break
+
+                if not matched_user and not player_in_queue and was_added_to_queue:
+                    break
+
+                player_in_queue_matched = None
+
+                if player_in_queue:
+                    player_in_queue_matched = await player_in_queue.has_player_been_matched()
+
+                matched_player_matched = None
+
+                if matched_user:
+                    matched_player_matched = await matched_user.has_player_been_matched()
+
+                if matched_user and not player_in_queue_matched and not matched_player_matched:
+                    matched_player_color, player_to_match_color = await self.decide_player_color()
+
+                    matched_player_user_model = await self.get_user_model_from_waiting_player(matched_user)
+
+                    white_player = matched_player_user_model if matched_player_color == "white" else player_to_match
+                    black_player = matched_player_user_model if matched_player_color == "black" else player_to_match
+
+                    game_id = await self.create_chess_game(white_player, black_player)
+                    
+                    await player_in_queue.update_has_player_been_matched(True)
+                    await matched_user.update_has_player_been_matched(True)
+
+                    await player_in_queue.update_player_assigned_color(player_to_match_color)
+                    await matched_user.update_player_assigned_color(matched_player_color)
+
+                    await player_in_queue.update_player_assigned_game_id(game_id)
+                    await matched_user.update_player_assigned_game_id(game_id)
+
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            "type": "player_matched",
+                            "match_found": True,
+                            "white_player": white_player.username,
+                            "black_player": black_player.username,
+                            "game_id": game_id,
+                        }
+                    )
+
+                    await self.channel_layer.group_send(
+                        f"user_{matched_player_user_model.id}",
+                        {
+                            "type": "player_matched",
+                            "match_found": True,
+                            "white_player": white_player.username,
+                            "black_player": black_player.username,
+                            "game_id": game_id,
+                        }
+                    )
+
+                    await self.remove_player_from_queue(matched_user)
+                    
+                    if player_in_queue:
+                        await self.remove_player_from_queue(player_in_queue)
+
+                    await self.channel_layer.group_discard(
+                        f"user_{matched_player_user_model.id}",
+                        self.channel_name
+                    )
+
+                    match_found = True
+                    
+
+                    break
+
+                if not player_in_queue:
+                    matched_player: WaitingPlayer | None = await self.get_first_matching_player()
+
+                    await self.create_waiting_player(player_to_match)
+                    was_added_to_queue = True
+
+                    if matched_player:
+                        
+                        waiting_player_to_match: WaitingPlayer = await self.get_player_in_queue(player_to_match)
+
+                        await self.set_matched_player(matched_player, player_to_match)
+                        await self.set_matched_player(waiting_player_to_match, await self.get_user_model_from_waiting_player(matched_player))
+
+                    else:
+                        await self.send(json.dumps({
+                            "type": "finding_match",
+                            "match_found": False,
+                            "white_player": None,
+                            "black_player": None
+                        }))
                 else:
                     await self.send(json.dumps({
                         "type": "finding_match",
@@ -263,16 +277,11 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                         "white_player": None,
                         "black_player": None
                     }))
-            else:
-                await self.send(json.dumps({
-                    "type": "finding_match",
-                    "match_found": False,
-                    "white_player": None,
-                    "black_player": None
-                }))
 
-            
-            await sleep(0.5)
+                
+                await sleep(0.5)
+        except Exception as e:
+            traceback.print_exc()
 
         
 
