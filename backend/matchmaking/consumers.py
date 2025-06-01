@@ -100,8 +100,8 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                     assigned_game_id = player_in_queue.assigned_game_id
                     assigned_color = player_in_queue.assigned_color
 
-                    white_player = player_in_queue if assigned_color.lower() == "white" else matched_user
-                    black_player = player_in_queue if assigned_color.lower() == "black" else matched_user
+                    white_player = player_in_queue if assigned_color and assigned_color.lower() == "white" else matched_user
+                    black_player = player_in_queue if assigned_color and assigned_color.lower() == "black" else matched_user
 
                     await self.channel_layer.group_send(
                         self.room_group_name,
@@ -126,8 +126,8 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                     assigned_game_id = matched_user.assigned_game_id
                     assigned_color = matched_user.assigned_color
 
-                    white_player = matched_user if assigned_color.lower() == "white" else player_in_queue
-                    black_player = matched_user if assigned_color.lower() == "black" else player_in_queue
+                    white_player = matched_user if assigned_color and assigned_color.lower() == "white" else player_in_queue
+                    black_player = matched_user if assigned_color and assigned_color.lower() == "black" else player_in_queue
 
                     await self.channel_layer.group_send(
                         f"user_{matched_player_user_id}",
