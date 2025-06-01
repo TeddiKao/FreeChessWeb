@@ -95,7 +95,11 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
         while not match_found:
             player_in_queue: WaitingPlayer | None = await self.get_player_in_queue(player_to_match)
-            matched_user: WaitingPlayer | None = await self.get_matched_user(player_to_match)
+            
+            if player_in_queue:
+                matched_user = await player_in_queue.get_matched_user()
+            else:
+                matched_user = None
             
             if player_in_queue:
                 player_in_queue_username = await player_in_queue.get_username()
