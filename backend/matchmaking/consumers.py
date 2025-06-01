@@ -110,6 +110,8 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                 logger.debug("No matched user")
 
             if player_in_queue and await player_in_queue.has_player_been_matched():
+                logger.debug("Player in queue has been matched!")
+                
                 assigned_game_id = player_in_queue.assigned_game_id
                 assigned_color = player_in_queue.assigned_color
 
