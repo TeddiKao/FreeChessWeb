@@ -11,7 +11,8 @@ class WaitingPlayer(models.Model):
 	has_been_matched = models.BooleanField(null=False, blank=False, default=False)
 
 	assigned_color = models.CharField(max_length=10, null=True, blank=True)
-	
+	assigned_game_id = models.IntegerField(null=True, blank=True)
+
 	@database_sync_to_async
 	def has_player_been_matched(self):
 		return self.has_been_matched
