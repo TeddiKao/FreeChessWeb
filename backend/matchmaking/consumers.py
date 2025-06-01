@@ -129,6 +129,12 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                 await player_in_queue.update_has_player_been_matched(True)
                 await matched_user.update_has_player_been_matched(True)
 
+                await player_in_queue.update_player_assigned_color(player_to_match_color)
+                await matched_user.update_player_assigned_color(matched_player_color)
+
+                await player_in_queue.update_player_assigned_game_id(game_id)
+                await matched_user.update_player_assigned_game_id(game_id)
+
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
