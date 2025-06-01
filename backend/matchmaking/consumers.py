@@ -120,6 +120,9 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
             if matched_user:
                 if await matched_user.has_player_been_matched():
+                    matched_player_user_model = await self.get_user_model_from_waiting_player(matched_user)
+                    matched_player_user_id = matched_player_user_model.id
+
                     assigned_game_id = matched_user.assigned_game_id
                     assigned_color = matched_user.assigned_color
 
@@ -127,7 +130,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                     black_player = matched_user if assigned_color.lower() == "black" else player_in_queue
 
                     await self.channel_layer.group_send(
-                        self.room_group_name,
+                        f"user_{matched_player_user_id}",
                         {
                             "type": "player_matched",
                             "match_found": True,
