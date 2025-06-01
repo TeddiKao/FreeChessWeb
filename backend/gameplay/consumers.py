@@ -1,6 +1,7 @@
 import json
 import copy
 import asyncio
+import logging
 
 from decimal import Decimal
 from asyncio import Lock
@@ -18,6 +19,8 @@ from move_validation.utils.result_detection import is_checkmated_or_stalemated, 
 
 from .models import ChessGame, GameplayTimerTask
 from .utils.algebraic_notation_parser import get_algebraic_notation
+
+logger = logging.getLogger(__name__)
 
 def calculate_position_index(piece_color: str, move_number: int):
 	if piece_color.lower() == "white":
@@ -453,6 +456,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		await self.append_to_move_list(chess_game_model, original_parsed_fen, move_info)
 		await chess_game_model.async_save()
+
+		logger.debug("Saved chess game model successfully!")
+		logger.debug(f"New side to move: {chess_game_model.current_player_turn}")
 
 		game_state_update_end = perf_counter()
 
