@@ -97,9 +97,10 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
             player_in_queue: WaitingPlayer | None = await self.get_player_in_queue(player_to_match)
             
             if player_in_queue:
-                matched_user = await player_in_queue.get_matched_user()
+                matched_player_user_model = player_in_queue.get_matched_user()
+                matched_user: WaitingPlayer | None = await self.get_waiting_player_model_from_user(matched_player_user_model)
             else:
-                matched_user = None
+                matched_user: WaitingPlayer | None = None
             
             if player_in_queue:
                 player_in_queue_username = await player_in_queue.get_username()
@@ -120,7 +121,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                 assigned_color = player_in_queue.assigned_color
 
                 player_in_queue_user_model = await self.get_user_model_from_waiting_player(player_in_queue)
-                player_match = await self.get_matched_user(player_in_queue_user_model)
+                player_match = await player_in_queue.get_matched_user()
                 
                 logger.debug(f"Player match: {player_match}")
 
@@ -151,7 +152,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                 matched_player_user_model = await self.get_user_model_from_waiting_player(matched_user)
                 matched_player_user_id = matched_player_user_model.id
 
-                player_match = await self.get_matched_user(matched_player_user_model)
+                player_match = await matched_user.get_matched_user()
                 if not player_match:
                     continue
                 
