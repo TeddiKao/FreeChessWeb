@@ -28,5 +28,10 @@ class WaitingPlayer(models.Model):
 		self.save()
 
 	@database_sync_to_async
+	def update_player_assigned_game_id(self, game_id):
+		self.assigned_game_id = game_id
+		self.save()
+
+	@database_sync_to_async
 	def get_username(self):
 		return self.user.username
