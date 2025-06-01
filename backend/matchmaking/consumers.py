@@ -95,13 +95,66 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
             player_in_queue: WaitingPlayer | None = await self.get_player_in_queue(player_to_match)
             matched_user: WaitingPlayer | None = await self.get_matched_user(player_to_match)
 
-            if player_in_queue:
-                if await player_in_queue.has_player_been_matched():
-                    break
+            if player_in_queue and await player_in_queue.has_player_been_matched():
+                assigned_game_id = player_in_queue.assigned_game_id
+                assigned_color = player_in_queue.assigned_color
 
-            if matched_user:
-                if await matched_user.has_player_been_matched():
-                    break
+                player_in_queue_user_model = await self.get_user_model_from_waiting_player(player_in_queue)
+                player_match = await self.get_matched_user(player_in_queue_user_model)
+                
+                if not player_match:
+                    continue
+                
+                player_match_user_model = await self.get_user_model_from_waiting_player(player_match)
+
+                white_player = player_in_queue_user_model if assigned_color and assigned_color.lower() == "white" else player_match_user_model
+                black_player = player_in_queue_user_model if assigned_color and assigned_color.lower() == "black" else player_match_user_model
+
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        "type": "player_matched",
+                        "match_found": True,
+                        "white_player": white_player.username,
+                        "black_player": black_player.username,
+                        "game_id": assigned_game_id,
+                    }
+                )
+
+                await self.remove_player_from_queue(player_in_queue)
+
+                break
+
+            if matched_user and await matched_user.has_player_been_matched():
+                matched_player_user_model = await self.get_user_model_from_waiting_player(matched_user)
+                matched_player_user_id = matched_player_user_model.id
+
+                player_match = await self.get_matched_user(matched_player_user_model)
+                if not player_match:
+                    continue
+                
+                player_match_user_model = await self.get_user_model_from_waiting_player(player_match)
+
+                assigned_game_id = matched_user.assigned_game_id
+                assigned_color = matched_user.assigned_color
+
+                white_player = matched_player_user_model if assigned_color and assigned_color.lower() == "white" else player_match_user_model
+                black_player = matched_player_user_model if assigned_color and assigned_color.lower() == "black" else player_match_user_model
+
+                await self.channel_layer.group_send(
+                    f"user_{matched_player_user_id}",
+                    {
+                        "type": "player_matched",
+                        "match_found": True,
+                        "white_player": white_player.username,
+                        "black_player": black_player.username,
+                        "game_id": assigned_game_id,
+                    }
+                )
+
+                await self.remove_player_from_queue(matched_user)
+
+                break
 
             if not matched_user and not player_in_queue and was_added_to_queue:
                 break
@@ -128,6 +181,12 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                 
                 await player_in_queue.update_has_player_been_matched(True)
                 await matched_user.update_has_player_been_matched(True)
+
+                await player_in_queue.update_player_assigned_color(player_to_match_color)
+                await matched_user.update_player_assigned_color(matched_player_color)
+
+                await player_in_queue.update_player_assigned_game_id(game_id)
+                await matched_user.update_player_assigned_game_id(game_id)
 
                 await self.channel_layer.group_send(
                     self.room_group_name,
