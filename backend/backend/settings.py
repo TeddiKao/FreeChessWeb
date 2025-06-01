@@ -165,6 +165,19 @@ if platform.system() == "Windows":
 else:
     STOCKFISH_PATH = str(Path(PROJECT_ROOT_DIR) / "engines" / "stockfish-linux")
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # Keep default Django logs
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': "DEBUG",
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
