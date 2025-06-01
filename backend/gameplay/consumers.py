@@ -379,8 +379,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 			chess_game_model.captured_black_material = updated_captured_material
 
 	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
-		await chess_game_model.refresh_game_from_db()
-		
 		original_parsed_fen = await chess_game_model.get_full_parsed_fen(exclude_fields=["castling_rights", "halfmove_clock", "fullmove_number", "side_to_move"])
 		original_board_placement = original_parsed_fen["board_placement"]
 		original_en_passant_target_square = original_parsed_fen["en_passant_target_square"]
