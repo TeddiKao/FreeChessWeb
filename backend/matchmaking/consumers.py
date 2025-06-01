@@ -100,8 +100,12 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                     assigned_game_id = player_in_queue.assigned_game_id
                     assigned_color = player_in_queue.assigned_color
 
-                    white_player = player_in_queue if assigned_color and assigned_color.lower() == "white" else matched_user
-                    black_player = player_in_queue if assigned_color and assigned_color.lower() == "black" else matched_user
+                    player_in_queue_user_model = await self.get_user_model_from_waiting_player(player_in_queue)
+                    player_match = await self.get_matched_user(player_in_queue_user_model)
+                    player_match_user_model = await self.get_user_model_from_waiting_player(player_match)
+
+                    white_player = player_in_queue_user_model if assigned_color and assigned_color.lower() == "white" else player_match_user_model
+                    black_player = player_in_queue_user_model if assigned_color and assigned_color.lower() == "black" else player_match_user_model
 
                     await self.channel_layer.group_send(
                         self.room_group_name,
@@ -123,11 +127,14 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                     matched_player_user_model = await self.get_user_model_from_waiting_player(matched_user)
                     matched_player_user_id = matched_player_user_model.id
 
+                    player_match = await self.get_matched_user(matched_player_user_model)
+                    player_match_user_model = await self.get_user_model_from_waiting_player(player_match)
+
                     assigned_game_id = matched_user.assigned_game_id
                     assigned_color = matched_user.assigned_color
 
-                    white_player = matched_user if assigned_color and assigned_color.lower() == "white" else player_in_queue
-                    black_player = matched_user if assigned_color and assigned_color.lower() == "black" else player_in_queue
+                    white_player = matched_player_user_model if assigned_color and assigned_color.lower() == "white" else player_match_user_model
+                    black_player = matched_player_user_model if assigned_color and assigned_color.lower() == "black" else player_match_user_model
 
                     await self.channel_layer.group_send(
                         f"user_{matched_player_user_id}",
