@@ -6,7 +6,7 @@ def root_health_check(request):
     return HttpResponse("Ok")
 
 urlpatterns = [
-    path("/", root_health_check),
+    path("", root_health_check),
     path('admin/', admin.site.urls),
 	path("users_api/", include("users.urls")),
 	path("gameplay_api/", include("gameplay.urls")),
