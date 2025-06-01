@@ -97,10 +97,48 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
             if player_in_queue:
                 if await player_in_queue.has_player_been_matched():
+                    assigned_game_id = player_in_queue.assigned_game_id
+                    assigned_color = player_in_queue.assigned_color
+
+                    white_player = player_in_queue if assigned_color.lower() == "white" else matched_user
+                    black_player = player_in_queue if assigned_color.lower() == "black" else matched_user
+
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            "type": "player_matched",
+                            "match_found": True,
+                            "white_player": white_player.username,
+                            "black_player": black_player.username,
+                            "game_id": assigned_game_id,
+                        }
+                    )
+
+                    await self.remove_player_from_queue(player_in_queue)
+
                     break
 
             if matched_user:
                 if await matched_user.has_player_been_matched():
+                    assigned_game_id = matched_user.assigned_game_id
+                    assigned_color = matched_user.assigned_color
+
+                    white_player = matched_user if assigned_color.lower() == "white" else player_in_queue
+                    black_player = matched_user if assigned_color.lower() == "black" else player_in_queue
+
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            "type": "player_matched",
+                            "match_found": True,
+                            "white_player": white_player.username,
+                            "black_player": black_player.username,
+                            "game_id": assigned_game_id,
+                        }
+                    )
+
+                    await self.remove_player_from_queue(matched_user)
+
                     break
 
             if not matched_user and not player_in_queue and was_added_to_queue:
