@@ -51,19 +51,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if (increment_amount < 0):
 			return
 
-		current_time = await self.get_game_attribute(chess_game_model, "white_player_clock")
-
-		new_time = current_time + Decimal(increment_amount)
-		await self.update_game_attribute(chess_game_model, "white_player_clock", new_time, should_save=False)
+		chess_game_model.white_player_clock += Decimal(increment_amount)
 
 	async def increment_black_player_timer(self, chess_game_model: ChessGame, increment_amount: float | int):
 		if (increment_amount < 0):
 			return
 
-		current_time = await self.get_game_attribute(chess_game_model, "black_player_clock")
-		new_time = current_time + Decimal(increment_amount)
-
-		await self.update_game_attribute(chess_game_model, "black_player_clock", new_time, should_save=False)
+		chess_game_model.black_player_clock += Decimal(increment_amount)
 
 	async def decrement_black_player_timer(self, chess_game_model: ChessGame, decrement_amount: float | int):
 		current_time = await self.get_game_attribute(chess_game_model, "black_player_clock")
@@ -197,7 +191,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			}
 		})
 
-		await self.update_game_attribute(chess_game_model, "position_list", updated_position_list, should_save=False)
+		chess_game_model.position_list = updated_position_list
 
 	async def append_to_move_list(self, chess_game_model: ChessGame, parsed_fen, move_info: dict):
 		board_placement = parsed_fen["board_placement"]
@@ -218,7 +212,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			else:
 				updated_move_list[-1].append(parsed_notation)
 
-		await self.update_game_attribute(chess_game_model, "move_list", updated_move_list)
+		chess_game_model.move_list = updated_move_list
 
 	async def modify_castling_rights(self, chess_game_model: ChessGame, castling_side: str, color: str, new_value: bool = False):
 		new_castling_rights = copy.deepcopy(chess_game_model.castling_rights)
@@ -342,15 +336,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	async def increment_move_number(self, chess_game_model: ChessGame, piece_color: str):
 		if piece_color == "black":
-			current_move = await self.get_game_attribute(chess_game_model, "current_move")
-
-			await self.update_game_attribute(chess_game_model, "current_move", current_move + 1, should_save=False)
+			chess_game_model.current_move += 1
 
 	async def update_halfmove_clock(self, move_type, piece_type, chess_game_model: ChessGame):
 		if move_type == "capture" or piece_type == "pawn":
-			await self.update_game_attribute(chess_game_model, "halfmove_clock", 0, should_save=False)
+			chess_game_model.halfmove_clock = 0
 		else:
-			await self.update_game_attribute(chess_game_model, "halfmove_clock", chess_game_model.halfmove_clock + 1, should_save=False)
+			chess_game_model.halfmove_clock += 1
 
 	async def update_captured_material(self, board_placement, move_info: dict, en_passant_target_square, chess_game_model: ChessGame):
 		if not get_is_capture(board_placement, en_passant_target_square, move_info):
@@ -382,9 +374,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 		updated_captured_material[f"{piece_type.lower()}s"] += 1
 
 		if piece_color.lower() == "white":
-			await self.update_game_attribute(chess_game_model, "captured_white_material", updated_captured_material, should_save=False)
+			chess_game_model.captured_white_material = updated_captured_material
 		else:
-			await self.update_game_attribute(chess_game_model, "captured_black_material", updated_captured_material, should_save=False)
+			chess_game_model.captured_black_material = updated_captured_material
 
 	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
 		original_parsed_fen = await chess_game_model.get_full_parsed_fen(exclude_fields=["castling_rights", "halfmove_clock", "fullmove_number", "side_to_move"])
@@ -453,8 +445,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		chess_game_model.parsed_board_placement = new_board_placement
 		chess_game_model.current_player_turn = new_side_to_move
-		
-		await chess_game_model.async_save()
 
 		await self.append_to_position_list(chess_game_model, move_info, move_type)
 		await self.update_halfmove_clock(move_type, piece_type, chess_game_model)
@@ -462,6 +452,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.update_captured_material(original_board_placement, move_info, original_en_passant_target_square, chess_game_model)
 
 		await self.append_to_move_list(chess_game_model, original_parsed_fen, move_info)
+		await chess_game_model.async_save()
 
 		game_state_update_end = perf_counter()
 

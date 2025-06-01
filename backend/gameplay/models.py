@@ -201,6 +201,10 @@ class ChessGame(models.Model):
 			return black_player_username
 		
 	@database_sync_to_async
+	def refresh_game_from_db(self):
+		self.refresh_from_db()
+		
+	@database_sync_to_async
 	def async_get_player_allowed_to_move_from_id(self, game_id, white_player_username, black_player_username):
 		game_data_fetch_start = perf_counter()
 		game_data = ChessGame.objects.only("white_player", "black_player", "current_player_turn").get(id=game_id)
