@@ -118,6 +118,8 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                 player_in_queue_user_model = await self.get_user_model_from_waiting_player(player_in_queue)
                 player_match = await self.get_matched_user(player_in_queue_user_model)
                 
+                logger.debug(f"Player match: {player_match}")
+
                 if not player_match:
                     continue
                 
