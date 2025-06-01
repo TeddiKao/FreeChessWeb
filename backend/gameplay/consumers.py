@@ -446,10 +446,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 		chess_game_model.parsed_board_placement = new_board_placement
 		chess_game_model.current_player_turn = new_side_to_move
 
-		await self.append_to_position_list(chess_game_model, move_info, move_type)
+		await self.update_captured_material(original_board_placement, move_info, original_en_passant_target_square, chess_game_model)
 		await self.update_halfmove_clock(move_type, piece_type, chess_game_model)
 		await self.increment_move_number(chess_game_model, piece_color)
-		await self.update_captured_material(original_board_placement, move_info, original_en_passant_target_square, chess_game_model)
+		await self.append_to_position_list(chess_game_model, move_info, move_type)
 
 		await self.append_to_move_list(chess_game_model, original_parsed_fen, move_info)
 		await chess_game_model.async_save()
