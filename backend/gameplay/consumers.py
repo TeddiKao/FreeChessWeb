@@ -389,7 +389,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 		else:
 			chess_game_model.captured_black_material = updated_captured_material
 
-	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
+	async def update_position(self, move_info: dict):
+		chess_game_model = await self.get_chess_game(self.game_id)
+
 		original_parsed_fen = await chess_game_model.get_full_parsed_fen(exclude_fields=["castling_rights", "halfmove_clock", "fullmove_number", "side_to_move"])
 		original_board_placement = original_parsed_fen["board_placement"]
 		original_en_passant_target_square = original_parsed_fen["en_passant_target_square"]
@@ -614,7 +616,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			move_and_player_clock_data["current_move"]
 		)
 
-		await self.update_position(chess_game_model, parsed_move_data)
+		await self.update_position(parsed_move_data)
 
 		game_state_history = await chess_game_model.async_get_attributes(
 			["position_list", "move_list"]
@@ -764,6 +766,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		print(f"Move processing took: {(move_processing_end - move_processing_start):.6f}")
 
 	async def timer_decremented(self, event):
+		
 		if self.channel_name:
 			await self.send(json.dumps({
 				"type": "timer_decremented",
