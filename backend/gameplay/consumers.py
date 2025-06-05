@@ -1,6 +1,7 @@
 import json
 import copy
 import asyncio
+import logging
 
 from decimal import Decimal
 from asyncio import Lock
@@ -18,6 +19,8 @@ from move_validation.utils.result_detection import is_checkmated_or_stalemated, 
 
 from .models import ChessGame, GameplayTimerTask
 from .utils.algebraic_notation_parser import get_algebraic_notation
+
+logger = logging.getLogger(__name__)
 
 def calculate_position_index(piece_color: str, move_number: int):
 	if piece_color.lower() == "white":
@@ -83,9 +86,17 @@ class GameConsumer(AsyncWebsocketConsumer):
 		print(f"Validation data fetch took {(validation_data_fetch_end - validation_data_fetch_start):.6f} seconds")
 
 		if side_to_move != color_moved.lower():
+			logger.debug("Side to move does not match color moved")
+			logger.debug(f"Side to move: {side_to_move}")
+			logger.debug(f"Color moved: {color_moved}")
+
 			return False
 		
 		if move_made_by != allowed_player_to_move:
+			logger.debug("Player is not allowed to make a move!")
+			logger.debug(f"Move made by: {move_made_by}")
+			logger.debug(f"Allowed player to move {allowed_player_to_move}")
+
 			return False
 
 		if validate_move(full_parsed_fen, move_info):
@@ -378,7 +389,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 		else:
 			chess_game_model.captured_black_material = updated_captured_material
 
-	async def update_position(self, chess_game_model: ChessGame, move_info: dict):
+	async def update_position(self, move_info: dict):
+		chess_game_model = await self.get_chess_game(self.game_id)
+
 		original_parsed_fen = await chess_game_model.get_full_parsed_fen(exclude_fields=["castling_rights", "halfmove_clock", "fullmove_number", "side_to_move"])
 		original_board_placement = original_parsed_fen["board_placement"]
 		original_en_passant_target_square = original_parsed_fen["en_passant_target_square"]
@@ -453,6 +466,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		await self.append_to_move_list(chess_game_model, original_parsed_fen, move_info)
 		await chess_game_model.async_save()
+
+		logger.debug("Saved chess game model successfully!")
+		logger.debug(f"New side to move: {chess_game_model.current_player_turn}")
 
 		game_state_update_end = perf_counter()
 
@@ -600,7 +616,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			move_and_player_clock_data["current_move"]
 		)
 
-		await self.update_position(chess_game_model, parsed_move_data)
+		await self.update_position(parsed_move_data)
 
 		game_state_history = await chess_game_model.async_get_attributes(
 			["position_list", "move_list"]
@@ -750,6 +766,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		print(f"Move processing took: {(move_processing_end - move_processing_start):.6f}")
 
 	async def timer_decremented(self, event):
+		
 		if self.channel_name:
 			await self.send(json.dumps({
 				"type": "timer_decremented",
