@@ -112,11 +112,11 @@ function PassAndPlay() {
 							<img
 								onClick={toggleBoardOrientation}
 								className="flip-board-icon"
-								src="/flip-board-icon.png"
+								src="/icons/gameplay/boardActions/flip-board-icon.png"
 							/>
 							<img
 								className="settings-icon"
-								src="/settings.svg"
+								src="/icons/gameplay/boardActions/settings.svg"
 								onClick={handleSettingsDisplay}
 							/>
 						</div>
