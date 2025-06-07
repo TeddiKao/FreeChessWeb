@@ -47,28 +47,28 @@ function DashboardSuggestions() {
             <DashboardSuggestion
 				suggestionName="Play vs Human"
 				suggestionDescription="Play against another player"
-				suggestionIcon="/play-human-dashboard-suggestion.svg"
+				suggestionIcon="/icons/dashboard/suggestions/play-human-dashboard-suggestion.svg"
 				suggestionURL="/game-setup"
 			/>
 
 			<DashboardSuggestion
 				suggestionName="Pass and Play"
 				suggestionDescription="Play a game of chess on a single device"
-				suggestionIcon="/pass-and-play-dashboard-suggestion.svg"
+				suggestionIcon="/icons/dashboard/suggestions/pass-and-play-dashboard-suggestion.svg"
 				suggestionURL="/pass-and-play"
 			/>
 
 			<DashboardSuggestion
 				suggestionName="Play vs Bot"
 				suggestionDescription="Play against a bot of your choice"
-				suggestionIcon="/play-bot-dashboard-suggestion.svg"
+				suggestionIcon="/icons/dashboard/suggestions/play-bot-dashboard-suggestion.svg"
 				suggestionURL="/select-bot"
 			/>
 
 			<DashboardSuggestion
 				suggestionName="View Game History"
 				suggestionDescription="View and replay your past games"
-				suggestionIcon="/game-history-dashboard-suggestion.svg"
+				suggestionIcon="/icons/dashboard/suggestions/game-history-dashboard-suggestion.svg"
 				suggestionURL="/game-history"
 			/>
 		</div>
