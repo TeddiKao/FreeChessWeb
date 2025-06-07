@@ -33,7 +33,7 @@ import DrawOfferPopup from "../../components/global/popups/DrawOfferPopup.tsx";
 import { playAudio } from "../../utils/audioUtils.ts";
 import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar.tsx";
 import { convertToMilliseconds } from "../../utils/timeUtils.ts";
-import { pieceAnimationTime } from "../../constants/pieceAnimation.ts";
+import { animationOffsetSync, pieceAnimationTime } from "../../constants/pieceAnimation.ts";
 import usePieceAnimation from "../../hooks/usePieceAnimation.ts";
 import CapturedMaterial from "../../components/global/CapturedMaterial.tsx";
 import {
@@ -135,25 +135,9 @@ function Play() {
 		if (isAnimatingRef.current) {
 			animationTimeout = setTimeout(() => {
 				setPositionIndex(positionList.length - 1);
-				setParsedFEN(
-					positionList[positionList.length - 1]?.["position"]
-				);
-				setLastDraggedSquare(
-					positionList[positionList.length - 1]?.last_dragged_square
-				);
-				setLastDroppedSquare(
-					positionList[positionList.length - 1]?.last_dropped_square
-				);
-			}, convertToMilliseconds(pieceAnimationTime));
+			}, convertToMilliseconds(pieceAnimationTime) - convertToMilliseconds(animationOffsetSync));
 		} else {
 			setPositionIndex(positionList.length - 1);
-			setParsedFEN(positionList[positionList.length - 1]?.["position"]);
-			setLastDraggedSquare(
-				positionList[positionList.length - 1]?.last_dragged_square
-			);
-			setLastDroppedSquare(
-				positionList[positionList.length - 1]?.last_dropped_square
-			);
 		}
 
 		return () => {

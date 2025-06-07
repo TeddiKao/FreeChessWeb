@@ -102,9 +102,6 @@ function calculateXYTransform(
 			? rankDiff * squareWidth
 			: rankDiff * squareWidth * -1;
 
-	console.log("Piece animated!");
-	console.log(xTransform, yTransform);
-
 	return [xTransform, yTransform];
 }
 

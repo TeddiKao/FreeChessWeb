@@ -591,7 +591,6 @@ function MultiplayerChessboard({
 		setClickedSquare(null);
 
 		setLastUsedMoveMethod("click");
-		console.log("Updated last used move method!");
 	}
 
 	async function displayLegalMoves(
