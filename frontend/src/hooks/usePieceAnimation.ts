@@ -23,6 +23,8 @@ function usePieceAnimation() {
 			squareSize
 		);
 
+		console.log("Animating piece!");
+
 		setAnimatingPieceSquare(Number(startingSquare));
 		setAnimatingPieceStyles({
 			transform: `translate(${xTransform}px, ${yTransform}px)`,
