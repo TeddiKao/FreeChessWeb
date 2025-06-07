@@ -1,3 +1,3 @@
-const pieceAnimationTime = 0.3; // In seconds
+const pieceAnimationTime = 0.25; // In seconds
 
 export { pieceAnimationTime }
