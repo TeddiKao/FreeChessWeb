@@ -33,7 +33,7 @@ import DrawOfferPopup from "../../components/global/popups/DrawOfferPopup.tsx";
 import { playAudio } from "../../utils/audioUtils.ts";
 import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar.tsx";
 import { convertToMilliseconds } from "../../utils/timeUtils.ts";
-import { pieceAnimationTime } from "../../constants/pieceAnimation.ts";
+import { animationOffsetSync, pieceAnimationTime } from "../../constants/pieceAnimation.ts";
 import usePieceAnimation from "../../hooks/usePieceAnimation.ts";
 import CapturedMaterial from "../../components/global/CapturedMaterial.tsx";
 import {
@@ -135,7 +135,7 @@ function Play() {
 		if (isAnimatingRef.current) {
 			animationTimeout = setTimeout(() => {
 				setPositionIndex(positionList.length - 1);
-			}, convertToMilliseconds(pieceAnimationTime) - 20);
+			}, convertToMilliseconds(pieceAnimationTime) - convertToMilliseconds(animationOffsetSync));
 		} else {
 			setPositionIndex(positionList.length - 1);
 		}
