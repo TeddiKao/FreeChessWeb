@@ -164,10 +164,10 @@ function Square({
 				/>
 			);
 		} else {
-			const pieceImageSrc = `/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
+			const pieceImageSrc = `/icons/chessPieces/regular/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
 				pieceType
 			)}.svg`;
-			const draggingPieceImageSrc = `/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
+			const draggingPieceImageSrc = `/icons/chessPieces/dragging/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
 				pieceType
 			)}-dragging.svg`;
 
