@@ -44,7 +44,7 @@ function PageNavigation({
 				className={`prev-page-button-container ${getPrevPageButtonIsHiddenClass()}`}
 			>
 				<img
-					src="/left-arrow.svg"
+					src="/icons/pageNavigation/left-arrow.svg"
 					className="prev-page-icon"
 					alt="Icon for navigating to previous page"
 				/>
@@ -60,7 +60,7 @@ function PageNavigation({
 				className={`next-page-button-container ${getNextPageButtonIsHiddenClass()}`}
 			>
 				<img
-					src="/right-arrow.svg"
+					src="/icons/pageNavigation/right-arrow.svg"
 					className="next-page-icon"
 					alt="Icon for navigating to next page"
 				/>
