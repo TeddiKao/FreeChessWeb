@@ -27,7 +27,7 @@ function AccountLinks() {
 			<div className="dashboard-navbar-account-link">
 				<img
 					className="dashboard-navbar-account-icon"
-					src="/account-icon.svg"
+					src="/icons/dashboard/navbar/accountLinks/account-icon.svg"
 					alt="Account menu"
 					role="button"
 					tabIndex={0}
@@ -41,7 +41,7 @@ function AccountLinks() {
 						>
 							<img
 								className="logout-icon"
-								src="/logout-icon.svg"
+								src="/icons/dashboard/navbar/accountLinks/logout-icon.svg"
 							/>
 							<p className="logout-text">Logout</p>
 						</div>
