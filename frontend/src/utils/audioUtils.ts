@@ -1,11 +1,11 @@
 import useAudio from "../hooks/useAudio.ts";
 
 function playAudio(moveType: string) {
-    const moveAudio = useAudio("/move-self.mp3");
-    const captureAudio = useAudio("/capture.mp3");
-    const checkAudio = useAudio("/move-check.mp3");
-    const promoteAudio = useAudio("/promote.mp3");
-    const castlingAudio = useAudio("/castle.mp3");
+    const moveAudio = useAudio("/sounds/move-self.mp3");
+    const captureAudio = useAudio("/sounds/capture.mp3");
+    const checkAudio = useAudio("/sounds/move-check.mp3");
+    const promoteAudio = useAudio("/sounds/promote.mp3");
+    const castlingAudio = useAudio("/sounds/castle.mp3");
 
     switch (moveType.toLowerCase()) {
         case "move":
