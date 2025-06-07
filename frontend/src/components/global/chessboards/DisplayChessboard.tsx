@@ -24,7 +24,7 @@ function DisplayChessboard({
 				className={`chessboard-square ${squareColor}`}
 			>
 				<img
-					src={`/${pieceColor.toLowerCase()}${pieceType}.svg`}
+					src={`/icons/chessPieces/regular/${pieceColor.toLowerCase()}${pieceType}.svg`}
 					className="piece-image"
 				/>
 			</div>

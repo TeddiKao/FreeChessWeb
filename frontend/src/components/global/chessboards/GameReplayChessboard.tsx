@@ -44,7 +44,7 @@ function GameReplayChessboard({
 							? animationStyles
 							: undefined
 					}
-					src={`/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
+					src={`/icons/chessPieces/regular/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
 						pieceType
 					)}.svg`}
 					className="piece-image"
