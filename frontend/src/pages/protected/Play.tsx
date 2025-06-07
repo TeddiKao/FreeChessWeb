@@ -135,25 +135,9 @@ function Play() {
 		if (isAnimatingRef.current) {
 			animationTimeout = setTimeout(() => {
 				setPositionIndex(positionList.length - 1);
-				setParsedFEN(
-					positionList[positionList.length - 1]?.["position"]
-				);
-				setLastDraggedSquare(
-					positionList[positionList.length - 1]?.last_dragged_square
-				);
-				setLastDroppedSquare(
-					positionList[positionList.length - 1]?.last_dropped_square
-				);
-			}, convertToMilliseconds(pieceAnimationTime));
+			}, convertToMilliseconds(pieceAnimationTime) - 20);
 		} else {
 			setPositionIndex(positionList.length - 1);
-			setParsedFEN(positionList[positionList.length - 1]?.["position"]);
-			setLastDraggedSquare(
-				positionList[positionList.length - 1]?.last_dragged_square
-			);
-			setLastDroppedSquare(
-				positionList[positionList.length - 1]?.last_dropped_square
-			);
 		}
 
 		return () => {
