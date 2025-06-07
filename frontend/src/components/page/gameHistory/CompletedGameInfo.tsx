@@ -13,11 +13,11 @@ function CompletedGameInfo({ gameInfo, username }: CompletedGameInfoProps) {
 
     function getResultIconSrc() {
 		if (!gameInfo.game_winner) {
-            return "/game-drawn.svg"
+            return "/icons/gameHistory/game-drawn.svg"
         } else if (gameInfo.game_winner === username) {
-            return "/game-won.svg"
+            return "/icons/gameHistory/game-won.svg"
         } else {
-            return "/game-lost.svg"
+            return "/icons/gameHistory/game-lost.svg"
         }
 	}
 
@@ -55,7 +55,7 @@ function CompletedGameInfo({ gameInfo, username }: CompletedGameInfoProps) {
 
             {viewOverlayVisible && (
                 <div className="view-game-overlay">
-                    <img className="view-game-icon" src="/view-game.svg" />
+                    <img className="view-game-icon" src="/icons/gameHistory/view-game.svg" />
                     <p className="view-overlay-text">View Game</p>
                 </div>
             )}

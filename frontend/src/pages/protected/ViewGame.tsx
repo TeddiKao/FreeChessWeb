@@ -189,7 +189,7 @@ function ViewGame() {
 					<img
 						onClick={toggleBoardOrientation}
 						className="flip-board-icon"
-						src="/flip-board-icon.png"
+						src="/icons/gameplay/boardActions/flip-board-icon.png"
 					/>
 				</div>
 

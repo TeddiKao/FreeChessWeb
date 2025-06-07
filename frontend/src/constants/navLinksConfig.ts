@@ -8,35 +8,35 @@ type DashboardNavLinks = Array<{
 const dashboardNavLinks: DashboardNavLinks = [
     {
         name: "Home",
-        icon: "/home-page-icon.svg",
+        icon: "/icons/dashboard/navbar/mainLinks/home-page-icon.svg",
         path: "/home"
     },
 
     {
         name: "Play",
-        icon: "/play-links-icon.svg",
+        icon: "/icons/dashboard/navbar/mainLinks/play-links-icon.svg",
         subLinks: [
             {
                 name: "Pass and Play",
-                icon: "/pass-and-play-icon.svg",
+                icon: "/icons/dashboard/navbar/mainLinks/pass-and-play-icon.svg",
                 path: "/pass-and-play"
             },
 
             {
                 name: "Play vs Bot",
-                icon: "/play-vs-bot-icon.svg",
+                icon: "/icons/dashboard/navbar/mainLinks/play-vs-bot-icon.svg",
                 path: "/select-bot"
             },
 
             {
                 name: "Play vs Human",
-                icon: "/play-vs-human-icon.svg",
+                icon: "/icons/dashboard/navbar/mainLinks/play-vs-human-icon.svg",
                 path: "/game-setup"
             },
 
             {
                 name: "Game History",
-                icon: "/game-history-icon.svg",
+                icon: "/icons/dashboard/navbar/mainLinks/game-history-icon.svg",
                 path: "/game-history"
             }
         ]

@@ -79,28 +79,28 @@ function PromotionPopup({
                         onClick={() => {
                             handlePieceClick("queen");
                         }}
-                        src={`/${color.toLowerCase()}Queen.svg`}
+                        src={`/icons/chessPieces/regular/${color.toLowerCase()}Queen.svg`}
                     />
 
                     <img
                         onClick={() => {
                             handlePieceClick("rook");
                         }}
-                        src={`/${color.toLowerCase()}Rook.svg`}
+                        src={`/icons/chessPieces/regular/${color.toLowerCase()}Rook.svg`}
                     />
 
                     <img
                         onClick={() => {
                             handlePieceClick("knight");
                         }}
-                        src={`/${color.toLowerCase()}Knight.svg`}
+                        src={`/icons/chessPieces/regular/${color.toLowerCase()}Knight.svg`}
                     />
 
                     <img
                         onClick={() => {
                             handlePieceClick("bishop");
                         }}
-                        src={`/${color.toLowerCase()}Bishop.svg`}
+                        src={`/icons/chessPieces/regular/${color.toLowerCase()}Bishop.svg`}
                     />
                 </div>
             );
@@ -114,28 +114,28 @@ function PromotionPopup({
                         onClick={() => {
                             handlePieceClick("bishop");
                         }}
-                        src={`/${color.toLowerCase()}Bishop.svg`}
+                        src={`/icons/chessPieces/regular/${color.toLowerCase()}Bishop.svg`}
                     />
 
                     <img
                         onClick={() => {
                             handlePieceClick("knight");
                         }}
-                        src={`/${color.toLowerCase()}Knight.svg`}
+                        src={`/icons/chessPieces/regular/${color.toLowerCase()}Knight.svg`}
                     />
 
                     <img
                         onClick={() => {
                             handlePieceClick("rook");
                         }}
-                        src={`/${color.toLowerCase()}Rook.svg`}
+                        src={`/icons/chessPieces/regular/${color.toLowerCase()}Rook.svg`}
                     />
 
                     <img
                         onClick={() => {
                             handlePieceClick("queen");
                         }}
-                        src={`/${color.toLowerCase()}Queen.svg`}
+                        src={`/icons/chessPieces/regular/${color.toLowerCase()}Queen.svg`}
                     />
                 </div>
             );

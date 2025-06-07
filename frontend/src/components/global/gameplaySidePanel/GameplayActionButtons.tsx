@@ -167,7 +167,7 @@ function GameplayActionButtons({
 					onClick={handleResignationPopupDisplay}
 					className="resignation-container"
 				>
-					<img className="resign-icon" src="/resignButton.svg" />
+					<img className="resign-icon" src="/icons/gameplay/sidePanel/resignButton.svg" />
 					<p className="helper-text">Resign</p>
 
 					<ConfirmationPopup

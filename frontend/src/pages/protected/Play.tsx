@@ -421,8 +421,14 @@ function Play() {
 						<div className="bottom-player-captured-material">
 							<CapturedMaterial
 								color={getOppositeColor(bottomTimerColor)}
-								capturedPiecesList={capturedMaterialList[getOppositeColor(bottomTimerColor)]}
-								promotedPiecesList={promotedPiecesList[bottomTimerColor]}
+								capturedPiecesList={
+									capturedMaterialList[
+										getOppositeColor(bottomTimerColor)
+									]
+								}
+								promotedPiecesList={
+									promotedPiecesList[bottomTimerColor]
+								}
 							/>
 						</div>
 
@@ -441,11 +447,11 @@ function Play() {
 					<img
 						onClick={toggleBoardOrientation}
 						className="flip-board-icon"
-						src="/flip-board-icon.png"
+						src="/icons/gameplay/boardActions/flip-board-icon.png"
 					/>
 					<img
 						className="settings-icon"
-						src="/settings.svg"
+						src="/icons/gameplay/boardActions/settings.svg"
 						onClick={handleSettingsDisplay}
 					/>
 				</div>
