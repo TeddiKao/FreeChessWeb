@@ -606,14 +606,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 			[
 				"white_player_clock",
 				"black_player_clock",
-				"current_move"
 			]
 		)
 
-		new_white_player_clock, new_black_player_clock, current_move_number = (
+		new_white_player_clock, new_black_player_clock = (
 			move_and_player_clock_data["white_player_clock"],
 			move_and_player_clock_data["black_player_clock"],
-			move_and_player_clock_data["current_move"]
 		)
 
 		await self.update_position(parsed_move_data)
@@ -625,12 +623,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 		new_position_list, new_move_list, new_parsed_fen = (
 			game_state_history["position_list"],
 			game_state_history["move_list"],
-			await chess_game_model.get_full_parsed_fen(exclude_fields=["fullmove_number"])
+			await chess_game_model.get_full_parsed_fen()
 		)
 
 		new_board_placement = new_parsed_fen["board_placement"]
 		new_side_to_move = new_parsed_fen["side_to_move"]
 		updated_halfmove_clock = new_parsed_fen["halfmove_clock"]
+		current_move_number = new_parsed_fen["fullmove_number"]
 
 		new_captured_white_material, new_captured_black_material, new_promoted_white_pieces, new_promoted_black_pieces = await asyncio.gather(
 			chess_game_model.async_get_game_attribute("captured_white_material"),
