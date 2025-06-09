@@ -27,7 +27,7 @@ function CapturedMaterial({
 		const capturedMaterialElements = [];
 
 		const pieceTypeSingular = pluralToSingularPieceMap[pieceType];
-		const pieceFileName = `/${color}${capitaliseFirstLetter(
+		const pieceFileName = `/icons/chessPieces/regular/${color}${capitaliseFirstLetter(
 			pieceTypeSingular
 		)}.svg`;
 
