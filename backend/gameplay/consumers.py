@@ -641,6 +641,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		is_checkmated, is_stalemated = is_checkmated_or_stalemated(new_parsed_fen, opposing_color)
 
+		logger.debug(f"Opposing color: {opposing_color}")
+		logger.debug(f"Is checkmated: {is_checkmated}")
+		logger.debug(f"Is stalemated: {is_stalemated}")
+
 		position_index = calculate_position_index(
 			piece_color, current_move_number)
 		
