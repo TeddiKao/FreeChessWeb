@@ -369,7 +369,7 @@ function MultiplayerChessboard({
 			droppedSquare
 		);
 
-		const moveIsLegal = await fetchMoveIsValid(
+		const [moveIsLegal, _] = await fetchMoveIsValid(
 			parsedFENString,
 			pieceColorToValidate,
 			pieceTypeToValidate,
@@ -553,7 +553,7 @@ function MultiplayerChessboard({
 		const pieceColorToValidate =
 			boardPlacement[`${previousClickedSquare}`]["piece_color"];
 
-		const isMoveLegal = await fetchMoveIsValid(
+		const [isMoveLegal, _] = await fetchMoveIsValid(
 			parsedFENString,
 			pieceColorToValidate,
 			pieceTypeToValidate,
