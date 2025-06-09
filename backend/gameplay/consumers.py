@@ -615,6 +615,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		)
 
 		await self.update_position(parsed_move_data)
+		await chess_game_model.refresh_game_from_db()
 
 		game_state_history = await chess_game_model.async_get_attributes(
 			["position_list", "move_list"]
