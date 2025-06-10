@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState, createContext } from "react";
 import { parseWebsocketUrl } from "../../../utils/generalUtils";
 import useWebSocket from "../../../hooks/useWebsocket";
 import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle";
@@ -6,6 +6,14 @@ import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle";
 type ChallengeWebsocketProviderProps = {
 	children: ReactNode;
 };
+
+type ChallengeWebsocketContextType = {
+	challengeWebsocket: WebSocket | null;
+};
+
+const ChallengeWebsocketContext = createContext<
+	ChallengeWebsocketContextType | undefined
+>(undefined);
 
 function ChallengeWebsocketProvider({
 	children,
@@ -45,7 +53,13 @@ function ChallengeWebsocketProvider({
 		}
 	}
 
-	return children;
+	return (
+		<ChallengeWebsocketContext.Provider
+			value={{ challengeWebsocket: challengeWebsocketRef.current }}
+		>
+			{children}
+		</ChallengeWebsocketContext.Provider>
+	);
 }
 
 export default ChallengeWebsocketProvider;
