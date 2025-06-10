@@ -64,7 +64,7 @@ function ChallengeWebsocketProvider({
 		if (challengeWebsocketRef.current?.readyState == WebSocket.OPEN) {
 			challengeWebsocketRef.current.send(
 				JSON.stringify({
-					type: "challenge",
+					type: "send_challenge",
 					challenge_recepient: recepientUsername,
 				})
 			);
@@ -117,7 +117,7 @@ function ChallengeWebsocketProvider({
 				}
 				timeControl={challengeTimeControl}
 			/>
-			
+
 			{children}
 		</ChallengeWebsocketContext.Provider>
 	);
