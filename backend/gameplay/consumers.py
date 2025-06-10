@@ -1003,3 +1003,26 @@ class GameActionConsumer(AsyncWebsocketConsumer):
 			"type": "draw_declined",
 			"declined_by": event["declined_by"]
 		}))
+
+class GameChallengeConsumer(AsyncWebsocketConsumer):
+	async def connect(self):
+		await self.accept()
+
+		user = self.scope["user"]
+		user_id = user.id
+
+		self.room_group_name = f"user_{user_id}"
+
+		await self.channel_layer.group_add(
+			self.room_group_name,
+			self.channel_name
+		)
+	
+	async def disconnect(self, code):
+		await self.channel_layer.group_discard(
+			self.room_group_name,
+			self.channel_name
+		)
+	
+	async def receive(self, text_data=None, bytes_data=None):
+		print(text_data)
