@@ -2,6 +2,8 @@ import { TimeControl } from "../../../types/gameSetup";
 import { displayTimeControl } from "../../../utils/timeUtils";
 import ModalWrapper from "../wrappers/ModalWrapper";
 
+import "../../../styles/modals/challenge-notification.scss";
+
 type ChallengeNotificationProps = {
 	visible: boolean;
 	challengerUsername: string;
