@@ -1,11 +1,22 @@
+import { TimeControl } from "../../../types/gameSetup";
 import ModalWrapper from "../wrappers/ModalWrapper";
 
-function ChallengeNotification() {
+type ChallengeNotificationProps = {
+	visible: boolean;
+	challengerUsername: string;
+	challengerRelationship?: "Recent opponent";
+	timeControl: TimeControl;
+};
+
+function ChallengeNotification({
+	visible,
+	challengerUsername,
+    challengerRelationship,
+	timeControl,
+}: ChallengeNotificationProps) {
 	return (
-		<ModalWrapper>
-			<div className="challenge-notification-modal-container">
-                
-            </div>
+		<ModalWrapper visible={visible}>
+			<div className="challenge-notification-modal-container"></div>
 		</ModalWrapper>
 	);
 }
