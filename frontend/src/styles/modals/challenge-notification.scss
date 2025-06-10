@@ -62,3 +62,27 @@
 
     color: hsl(0, 0%, 30%);
 }
+
+.challenge-handling-buttons-container {
+	@include flex-row;
+}
+
+.decline-challenge-button {
+	padding-left: 16px;
+	padding-right: 16px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+
+	margin-right: 12px;
+	
+	border: none;
+	border-radius: 4px;
+
+	background-color: hsl(0, 100%, 45%);
+	color: white;
+}
+
+.accept-challenge-button {
+	@extend .decline-challenge-button;
+	background-color: hsl(125, 100%, 40%);
+}
