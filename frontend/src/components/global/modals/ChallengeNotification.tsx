@@ -26,9 +26,9 @@ function ChallengeNotification({
 				<div className="challenger-info-container">
 					<img className="challenger-profile-picture" />
 					<div className="main-challenge-info">
-						<p className="challenger-relationship">
+						{challengerRelationship && <p className="challenger-relationship">
 							{challengerRelationship}
-						</p>
+						</p>}
 
 						<p className="challenger-username">
 							{challengerUsername}
