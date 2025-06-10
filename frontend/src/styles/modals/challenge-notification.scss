@@ -85,4 +85,5 @@
 .accept-challenge-button {
 	@extend .decline-challenge-button;
 	background-color: hsl(125, 100%, 40%);
+	margin-right: 0;
 }
