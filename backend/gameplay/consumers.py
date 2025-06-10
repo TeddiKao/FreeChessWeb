@@ -1017,8 +1017,15 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 			self.room_group_name,
 			self.channel_name
 		)
+
+		await self.send(json.dumps({
+			"type": "connection_established",
+			"message": "Connection established"
+		}))
 	
 	async def disconnect(self, code):
+		logger.debug("Connection closed!")
+
 		await self.channel_layer.group_discard(
 			self.room_group_name,
 			self.channel_name

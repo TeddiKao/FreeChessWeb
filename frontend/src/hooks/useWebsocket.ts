@@ -29,6 +29,10 @@ function useWebSocket(
 			websocket.onerror = onError;
 		}
 
+		websocket.onclose = () => {
+			console.log("Websocket closed");
+		}
+
         return () => {
             if (websocket.readyState === WebSocket.OPEN) {
                 websocket.close();

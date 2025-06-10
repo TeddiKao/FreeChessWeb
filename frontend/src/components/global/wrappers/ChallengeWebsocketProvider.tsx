@@ -44,7 +44,9 @@ function ChallengeWebsocketProvider({
 		challengeWebsocketRef.current = socket;
 	}, [socket]);
 
-	function handleOnMessage() {}
+	function handleOnMessage(event: MessageEvent) {
+		console.log(JSON.parse(event.data))
+	}
 
 	function handleWindowUnload() {
 		if (challengeWebsocketRef.current?.readyState == WebSocket.OPEN) {
