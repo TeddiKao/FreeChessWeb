@@ -1,36 +1,51 @@
 @use "../global/mixins" as *;
 
 .challenge-notification-modal-container {
-    @include page-center-xy;
-    @include flex-column-x-center;
+	@include page-center-xy;
+	@include flex-column-x-center;
 
-    background-color: white;
-    z-index: 1000;
+	background-color: white;
+	z-index: 1000;
 
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left: 24px;
-    padding-right: 24px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 24px;
+	padding-right: 24px;
 
-    border-radius: 8px;
+	border-radius: 8px;
 }
 
 .challenge-notifcation-modal-title {
-    margin-top: 0;
-    margin-bottom: 0;
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 .challenger-info-container {
-    @include flex-row;
+	@include flex-row;
 }
 
 .challenger-profile-picture {
-    width: 24px;
-    height: 24px;
+	width: 24px;
+	height: 24px;
 
-    background-color: hsl(0, 0%, 60%);
+	background-color: hsl(0, 0%, 60%);
+}
+
+.challenger-relationship {
+    margin-top: 0;
+    margin-bottom: 0
+}
+
+.challenger-username {
+    margin-top: 0;
+    margin-bottom: 0
+}
+
+.challenge-time-control {
+    margin-top: 0;
+    margin-bottom: 0
 }
 
 .main-challenge-info {
-    @include flex-column;
+	@include flex-column;
 }
