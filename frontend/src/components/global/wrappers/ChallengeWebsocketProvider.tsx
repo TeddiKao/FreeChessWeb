@@ -2,6 +2,8 @@ import { ReactNode, useEffect, useRef, useState, createContext } from "react";
 import { parseWebsocketUrl } from "../../../utils/generalUtils";
 import useWebSocket from "../../../hooks/useWebsocket";
 import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle";
+import ChallengeNotification from "../modals/ChallengeNotification";
+import { TimeControl } from "../../../types/gameSetup";
 
 type ChallengeWebsocketProviderProps = {
 	children: ReactNode;
@@ -24,6 +26,13 @@ function ChallengeWebsocketProvider({
 	const websocketURL = parseWebsocketUrl("challenge-server");
 	const [challengeWebsocketEnabled, setChallengeWebsocketEnabled] =
 		useState(false);
+
+	const [challengeReceived, setChallengeReceived] = useState<boolean>(false);
+	const [challengerUsername, setChallengerUsername] = useState<string>("");
+	const [challengerRelationship, setChallengerRelationship] =
+		useState<string>("");
+	const [challengeTimeControl, setChallengeTimeControl] =
+		useState<TimeControl | null>(null);
 
 	const challengeWebsocketRef = useRef<WebSocket | null>(null);
 	const challengeWebsocketExistsRef = useRef<boolean>(false);
@@ -100,10 +109,19 @@ function ChallengeWebsocketProvider({
 				declineChallenge,
 			}}
 		>
+			<ChallengeNotification
+				visible={challengeReceived}
+				challengerUsername={challengerUsername}
+				challengerRelationship={
+					challengerRelationship as "Recent opponent" | "Unknown"
+				}
+				timeControl={challengeTimeControl}
+			/>
+			
 			{children}
 		</ChallengeWebsocketContext.Provider>
 	);
 }
 
 export default ChallengeWebsocketProvider;
-export { ChallengeWebsocketContext }
+export { ChallengeWebsocketContext };
