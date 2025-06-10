@@ -19,3 +19,11 @@
     margin-top: 0;
     margin-bottom: 0;
 }
+
+.challenger-info-container {
+    @include flex-row;
+}
+
+.main-challenge-info {
+    @include flex-column;
+}
