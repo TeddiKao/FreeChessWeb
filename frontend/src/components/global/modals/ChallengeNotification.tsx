@@ -3,6 +3,8 @@ import { displayTimeControl } from "../../../utils/timeUtils";
 import ModalWrapper from "../wrappers/ModalWrapper";
 
 import "../../../styles/modals/challenge-notification.scss";
+import { useContext } from "react";
+import { ChallengeWebsocketContext } from "../wrappers/ChallengeWebsocketProvider";
 
 type ChallengeNotificationProps = {
 	visible: boolean;
@@ -17,6 +19,16 @@ function ChallengeNotification({
 	challengerRelationship,
 	timeControl,
 }: ChallengeNotificationProps) {
+	const { acceptChallenge, declineChallenge } = useContext(ChallengeWebsocketContext)!;
+
+	function handleAcceptClick() {
+		acceptChallenge(challengerUsername);
+	}
+
+	function handleDeclineClick() {
+		declineChallenge(challengerUsername);
+	}
+
 	return (
 		<ModalWrapper visible={visible}>
 			<div className="challenge-notification-modal-container">
@@ -26,24 +38,36 @@ function ChallengeNotification({
 				<div className="challenger-info-container">
 					<img className="challenger-profile-picture" />
 					<div className="main-challenge-info">
-						{challengerRelationship && <p className="challenger-relationship">
-							{challengerRelationship}
-						</p>}
+						{challengerRelationship && (
+							<p className="challenger-relationship">
+								{challengerRelationship}
+							</p>
+						)}
 
 						<p className="challenger-username">
 							{challengerUsername}
 						</p>
 
-                        <p className="challenge-time-control">
-                            {displayTimeControl(timeControl)}
-                        </p>
+						<p className="challenge-time-control">
+							{displayTimeControl(timeControl)}
+						</p>
 					</div>
 				</div>
 
-                <div className="challenge-handling-buttons-container">
-                    <button className="decline-challenge-button">Decline</button>
-                    <button className="accept-challenge-button">Accept</button>
-                </div>
+				<div className="challenge-handling-buttons-container">
+					<button
+						onClick={handleDeclineClick}
+						className="decline-challenge-button"
+					>
+						Decline
+					</button>
+					<button
+						onClick={handleAcceptClick}
+						className="accept-challenge-button"
+					>
+						Accept
+					</button>
+				</div>
 			</div>
 		</ModalWrapper>
 	);
