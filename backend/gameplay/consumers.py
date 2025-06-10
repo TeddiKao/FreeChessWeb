@@ -1024,8 +1024,6 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		}))
 	
 	async def disconnect(self, code):
-		logger.debug("Connection closed!")
-
 		await self.channel_layer.group_discard(
 			self.room_group_name,
 			self.channel_name
