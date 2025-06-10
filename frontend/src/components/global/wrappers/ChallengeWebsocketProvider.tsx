@@ -9,6 +9,9 @@ type ChallengeWebsocketProviderProps = {
 
 type ChallengeWebsocketContextType = {
 	challengeWebsocket: WebSocket | null;
+	sendChallenge: (recepientUsername: string) => void;
+	acceptChallenge: (senderUsername: string) => void;
+	declineChallenge: (senderUsername: string) => void;
 };
 
 const ChallengeWebsocketContext = createContext<
@@ -45,7 +48,40 @@ function ChallengeWebsocketProvider({
 	}, [socket]);
 
 	function handleOnMessage(event: MessageEvent) {
-		console.log(JSON.parse(event.data))
+		console.log(JSON.parse(event.data));
+	}
+
+	function sendChallenge(recepientUsername: string) {
+		if (challengeWebsocketRef.current?.readyState == WebSocket.OPEN) {
+			challengeWebsocketRef.current.send(
+				JSON.stringify({
+					type: "challenge",
+					challenge_recepient: recepientUsername,
+				})
+			);
+		}
+	}
+
+	function acceptChallenge(senderUsername: string) {
+		if (challengeWebsocketRef.current?.readyState == WebSocket.OPEN) {
+			challengeWebsocketRef.current.send(
+				JSON.stringify({
+					type: "accept_challenge",
+					challenge_sender: senderUsername,
+				})
+			);
+		}
+	}
+
+	function declineChallenge(senderUsername: string) {
+		if (challengeWebsocketRef.current?.readyState == WebSocket.OPEN) {
+			challengeWebsocketRef.current.send(
+				JSON.stringify({
+					type: "decline_challenge",
+					challenge_sender: senderUsername,
+				})
+			);
+		}
 	}
 
 	function handleWindowUnload() {
@@ -57,7 +93,12 @@ function ChallengeWebsocketProvider({
 
 	return (
 		<ChallengeWebsocketContext.Provider
-			value={{ challengeWebsocket: challengeWebsocketRef.current }}
+			value={{
+				challengeWebsocket: challengeWebsocketRef.current,
+				sendChallenge,
+				acceptChallenge,
+				declineChallenge,
+			}}
 		>
 			{children}
 		</ChallengeWebsocketContext.Provider>
