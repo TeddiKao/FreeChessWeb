@@ -21,7 +21,7 @@
 }
 
 .challenger-info-container {
-	@include flex-row;
+	@include flex-row-y-center;
 }
 
 .main-challenge-info {
