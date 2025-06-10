@@ -20,7 +20,7 @@ function ChallengeNotification({
 	return (
 		<ModalWrapper visible={visible}>
 			<div className="challenge-notification-modal-container">
-				<h2 className="challenge-notifcation-modal-title">
+				<h2 className="challenge-notification-modal-title">
 					Challenge received
 				</h2>
 				<div className="challenger-info-container">
