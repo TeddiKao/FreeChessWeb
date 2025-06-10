@@ -106,3 +106,4 @@ function ChallengeWebsocketProvider({
 }
 
 export default ChallengeWebsocketProvider;
+export { ChallengeWebsocketContext }
