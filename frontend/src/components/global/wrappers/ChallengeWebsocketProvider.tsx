@@ -32,6 +32,10 @@ function ChallengeWebsocketProvider({
 		handleWindowUnload: handleWindowUnload,
 	});
 
+	useEffect(() => {
+		challengeWebsocketRef.current = socket;
+	}, [socket]);
+
 	function handleOnMessage() {}
 
 	function handleWindowUnload() {
