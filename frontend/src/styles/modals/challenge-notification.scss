@@ -1,0 +1,8 @@
+@use "../global/mixins" as *;
+
+.challenge-notification-modal-container {
+    @include page-center-xy;
+    background-color: white;
+
+    z-index: 1000;
+}
