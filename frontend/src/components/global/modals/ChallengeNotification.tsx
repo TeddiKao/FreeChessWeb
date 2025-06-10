@@ -10,7 +10,7 @@ type ChallengeNotificationProps = {
 	visible: boolean;
 	challengerUsername: string;
 	challengerRelationship?: "Recent opponent" | "Unknown";
-	timeControl: TimeControl;
+	timeControl: TimeControl | null;
 };
 
 function ChallengeNotification({
@@ -19,7 +19,13 @@ function ChallengeNotification({
 	challengerRelationship,
 	timeControl,
 }: ChallengeNotificationProps) {
-	const { acceptChallenge, declineChallenge } = useContext(ChallengeWebsocketContext)!;
+	const { acceptChallenge, declineChallenge } = useContext(
+		ChallengeWebsocketContext
+	)!;
+
+	if (!visible) {
+		return null;
+	}
 
 	function handleAcceptClick() {
 		acceptChallenge(challengerUsername);
@@ -49,7 +55,7 @@ function ChallengeNotification({
 						</p>
 
 						<p className="challenge-time-control">
-							{displayTimeControl(timeControl)}
+							{displayTimeControl(timeControl!)}
 						</p>
 					</div>
 				</div>
