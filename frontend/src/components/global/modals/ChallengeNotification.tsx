@@ -7,7 +7,7 @@ import "../../../styles/modals/challenge-notification.scss";
 type ChallengeNotificationProps = {
 	visible: boolean;
 	challengerUsername: string;
-	challengerRelationship?: "Recent opponent";
+	challengerRelationship?: "Recent opponent" | "Unknown";
 	timeControl: TimeControl;
 };
 
