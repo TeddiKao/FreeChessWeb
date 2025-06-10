@@ -24,6 +24,13 @@
 	@include flex-row;
 }
 
+.main-challenge-info {
+	@include flex-column;
+
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
 .challenger-profile-picture {
 	width: 24px;
 	height: 24px;
@@ -44,8 +51,4 @@
 .challenge-time-control {
     margin-top: 0;
     margin-bottom: 0
-}
-
-.main-challenge-info {
-	@include flex-column;
 }
