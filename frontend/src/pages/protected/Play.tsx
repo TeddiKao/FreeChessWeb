@@ -124,6 +124,9 @@ function Play() {
 
 	const actionWebSocketRef = useRef(null);
 
+	const whitePlayerUsername = location.state?.whitePlayerUsername
+	const blackPlayerUsername = location.state?.blackPlayerUsername
+
 	useEffect(() => {
 		updatePlayerTimers();
 		updatePositionList();
@@ -392,6 +395,8 @@ function Play() {
 							baseTime: location.state?.baseTime,
 							increment: location.state?.increment,
 						}}
+						whitePlayerUsername={whitePlayerUsername}
+						blackPlayerUsername={blackPlayerUsername}
 					/>
 
 					<ModalWrapper visible={settingsVisible}>
