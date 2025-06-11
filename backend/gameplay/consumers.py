@@ -1043,16 +1043,23 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		recepient_username = data["challenge_recepient"]
 		recepient_user_id = await UserAuthModel.async_get_id_from_username(recepient_username)
 
+		relationship = data["relationship"]
+		challenge_time_control = data["challenge_time_control"]
+
 		await self.channel_layer.group_send(
 			f"challenge_room_{recepient_user_id}",
 			{
 				"type": "challenge_received",
-				"challenge_sender": self.scope["user"].username
+				"challenge_sender": self.scope["user"].username,
+				"relationship": relationship,
+				"challenge_time_control": challenge_time_control
 			}
 		)
 
 	async def challenge_received(self, event):
 		await self.send(json.dumps({
 			"type": "challenge_received",
-			"challenge_sender": event["challenge_sender"]
+			"challenge_sender": event["challenge_sender"],
+			"relationship": event["relationship"],
+			"challenge_time_control": event["challenge_time_control"]
 		}))
