@@ -4,7 +4,8 @@ import useWebSocket from "../../../hooks/useWebsocket";
 import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle";
 import ChallengeNotification from "../modals/ChallengeNotification";
 import { TimeControl } from "../../../types/gameSetup";
-import { ChallengeRelationships } from "../../../types/challenge";
+import { ChallengeRelationships, ChallengeWebsocketEventData } from "../../../types/challenge";
+import { ChallengeWebsocketEventTypes } from "../../../enums/gameLogic";
 
 type ChallengeWebsocketProviderProps = {
 	children: ReactNode;
@@ -62,7 +63,20 @@ function ChallengeWebsocketProvider({
 	}, [socket]);
 
 	function handleOnMessage(event: MessageEvent) {
-		console.log(JSON.parse(event.data));
+		const data = JSON.parse(event.data);
+		const messageType = data["type"];
+
+		switch (messageType) {
+			case ChallengeWebsocketEventTypes.CHALLENGE_RECEIVED:
+				handleChallengeReceived(data);
+		}
+	}
+
+	function handleChallengeReceived(data: ChallengeWebsocketEventData) {
+		setChallengeReceived(true);
+		setChallengerUsername(data["challenge_sender"]);
+		setChallengerRelationship(data["relationship"]);
+		setChallengeTimeControl(data["challenge_time_control"]);
 	}
 
 	function sendChallenge(
