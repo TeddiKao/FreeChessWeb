@@ -8,6 +8,8 @@ from channels.db import database_sync_to_async
 
 from .utils.fen_parser import parse_board_placement
 
+from users.models import UserAuthModel
+
 def get_default_board_placement():
 	initial_raw_board_placement = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
 	parsed_board_placement = parse_board_placement(initial_raw_board_placement)
@@ -296,3 +298,10 @@ class GameChallenge(models.Model):
 			challenge_base_time=challenge_time_control["baseTime"],
 			challenge_increment=challenge_time_control["increment"]
 		)
+
+	@classmethod
+	@database_sync_to_async
+	def get_challenge_from_sender_username(self, sender_username):
+		sender_user_model = UserAuthModel.sync_get_user_model_from_username(sender_username)
+
+		return self.objects.filter(challenge_sender=sender_user_model).first()
