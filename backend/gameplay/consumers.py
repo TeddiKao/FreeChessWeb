@@ -2,6 +2,7 @@ import json
 import copy
 import asyncio
 import logging
+import random
 
 from decimal import Decimal
 from asyncio import Lock
@@ -1039,6 +1040,9 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 			case "send_challenge":
 				await self.send_challenge(data)
 
+			case "accept_challenge":
+				await self.accept_challenge(data)
+
 	async def send_challenge(self, data):
 		recepient_username = data["challenge_recepient"]
 		recepient_user_id = await UserAuthModel.async_get_id_from_username(recepient_username)
@@ -1061,6 +1065,63 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 				"challenge_sender": self.scope["user"].username,
 				"relationship": relationship,
 				"challenge_time_control": challenge_time_control
+			}
+		)
+
+	async def accept_challenge(self, data):
+		challenge_sender = data["challenge_sender"]
+		challenge_obj: GameChallenge | None = await GameChallenge.async_get_challenge_from_sender_username(challenge_sender)
+
+
+		if challenge_obj == None:
+			return
+		
+		challenge_sender_user_obj: UserAuthModel = await UserAuthModel.async_get_user_model_from_username(challenge_sender)
+		challenge_sender_id = await challenge_sender_user_obj.async_get_player_id()
+		
+		if random.choice([True, False]):
+			white_player = challenge_obj.challenge_recepient
+			black_player = challenge_obj.challenge_sender
+
+			sender_assigned_color = "black"
+			recepient_assigned_color = "white"
+		else:
+			white_player = challenge_obj.challenge_sender
+			black_player = challenge_obj.challenge_recepient
+
+			sender_assigned_color = "white"
+			recepient_assigned_color = "black"
+
+			
+
+		game_id = await ChessGame.async_create(
+			white_player=white_player,
+			black_player=black_player,
+			white_player_clock=challenge_obj.challenge_base_time,
+			black_player_clock=challenge_obj.challenge_base_time,
+			white_player_increment=challenge_obj.challenge_increment,
+			black_player_increment=challenge_obj.challenge_increment,
+		)
+
+		await self.channel_layer.group_send(
+			self.room_group_name,
+			{
+				"type": "challenge_accepted",
+				"game_id": game_id,
+				"base_time": challenge_obj.challenge_base_time,
+				"increment": challenge_obj.challenge_increment,
+				"assigned_color": recepient_assigned_color
+			}
+		)
+
+		await self.channel_layer.group_send(
+			f"challenge_room_{challenge_sender_id}",
+			{
+				"type": "challenge_accepted",
+				"game_id": game_id,
+				"base_time": challenge_obj.challenge_base_time,
+				"increment": challenge_obj.challenge_increment,
+				"assigned_color": sender_assigned_color
 			}
 		)
 
