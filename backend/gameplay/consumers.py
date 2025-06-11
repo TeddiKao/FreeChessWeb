@@ -1142,3 +1142,15 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 			"relationship": event["relationship"],
 			"challenge_time_control": event["challenge_time_control"]
 		}))
+
+	async def challenge_accepted(self, event):
+		await self.send(json.dumps({
+			"type": "challenge_accepted",
+			"game_id": event["game_id"],
+			"base_time": event["base_time"],
+			"increment": event["increment"],
+			"assigned_color": event["assigned_color"],
+
+			"white_player_username": event["white_player_username"],
+			"black_player_username": event["black_player_username"]
+		}))
