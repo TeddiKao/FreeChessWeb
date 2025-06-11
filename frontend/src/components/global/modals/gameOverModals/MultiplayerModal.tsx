@@ -165,7 +165,7 @@ function GameOverModal({
 	function handleRematch() {
 		const recepientUsername = playerUsername === whitePlayerUsername ? blackPlayerUsername : whitePlayerUsername
 
-		sendChallenge(recepientUsername);
+		sendChallenge(recepientUsername, "Recent opponent", timeControlInfo);
 	}
 
 	return (
