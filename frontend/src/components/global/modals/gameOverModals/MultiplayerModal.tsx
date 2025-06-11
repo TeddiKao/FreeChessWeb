@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "../../../../styles/modals/game-over-modal.scss";
 import {
 	capitaliseFirstLetter,
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { MatchmakingEvents } from "../../../../enums/gameSetup";
 import { getAssignedColor } from "../../../../utils/matchmakingUtils";
 import MatchmakingShortcutScreen from "../MatchmakingShortcutScreen";
+import { ChallengeWebsocketContext } from "../../wrappers/ChallengeWebsocketProvider";
 
 type GameOverModalProps = {
 	visible: boolean;
@@ -36,6 +37,8 @@ function GameOverModal({
 
 	const matchmakingWebsocketRef = useRef<WebSocket | null>(null);
 	const matchmakingWebsocketExists = useRef<boolean>(false);
+
+	const { sendChallenge } = useContext(ChallengeWebsocketContext)!;
 
 	const navigate = useNavigate();
 
@@ -142,6 +145,10 @@ function GameOverModal({
 		setMatchmakingWebsocketEnabled(true);
 		setIsMatchmaking(true);
 	}
+	
+	function handleRematch() {
+		
+	}
 
 	return (
 		<>
@@ -155,7 +162,7 @@ function GameOverModal({
 					>
 						New game
 					</button>
-					<button className="rematch-button">Rematch</button>
+					<button onClick={handleRematch} className="rematch-button">Rematch</button>
 				</div>
 			</div>
 
