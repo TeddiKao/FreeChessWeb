@@ -4,6 +4,7 @@ import useWebSocket from "../../../hooks/useWebsocket";
 import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle";
 import ChallengeNotification from "../modals/ChallengeNotification";
 import { TimeControl } from "../../../types/gameSetup";
+import { ChallengeRelationships } from "../../../types/challenge";
 
 type ChallengeWebsocketProviderProps = {
 	children: ReactNode;
@@ -11,7 +12,10 @@ type ChallengeWebsocketProviderProps = {
 
 type ChallengeWebsocketContextType = {
 	challengeWebsocket: WebSocket | null;
-	sendChallenge: (recepientUsername: string) => void;
+	sendChallenge: (
+		recepientUsername: string,
+		relationship: ChallengeRelationships
+	) => void;
 	acceptChallenge: (senderUsername: string) => void;
 	declineChallenge: (senderUsername: string) => void;
 };
@@ -60,12 +64,16 @@ function ChallengeWebsocketProvider({
 		console.log(JSON.parse(event.data));
 	}
 
-	function sendChallenge(recepientUsername: string) {
+	function sendChallenge(
+		recepientUsername: string,
+		relationship: ChallengeRelationships
+	) {
 		if (challengeWebsocketRef.current?.readyState == WebSocket.OPEN) {
 			challengeWebsocketRef.current.send(
 				JSON.stringify({
 					type: "send_challenge",
 					challenge_recepient: recepientUsername,
+					relationship: relationship,
 				})
 			);
 		}
@@ -108,7 +116,7 @@ function ChallengeWebsocketProvider({
 				visible={challengeReceived}
 				challengerUsername={challengerUsername}
 				challengerRelationship={
-					challengerRelationship as "Recent opponent" | "Unknown"
+					challengerRelationship as ChallengeRelationships
 				}
 				timeControl={challengeTimeControl}
 			/>
