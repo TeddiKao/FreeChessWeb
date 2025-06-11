@@ -29,7 +29,7 @@ function GameOverModal({
 	gameWinner,
 	timeControlInfo,
 	whitePlayerUsername,
-	blackPlayerUsername
+	blackPlayerUsername,
 }: GameOverModalProps) {
 	const [matchmakingWebsocketEnabled, setMatchmakingWebsocketEnabled] =
 		useState(false);
@@ -93,6 +93,9 @@ function GameOverModal({
 					whitePlayerRef.current!,
 					blackPlayerRef.current!
 				),
+
+				whitePlayerUsername: whitePlayerRef.current,
+				blackPlayerUsername: blackPlayerRef.current,
 			};
 
 			navigate("/temp", {
@@ -159,9 +162,7 @@ function GameOverModal({
 		setIsMatchmaking(true);
 	}
 
-	function handleRematch() {
-		
-	}
+	function handleRematch() {}
 
 	return (
 		<>
@@ -175,7 +176,9 @@ function GameOverModal({
 					>
 						New game
 					</button>
-					<button onClick={handleRematch} className="rematch-button">Rematch</button>
+					<button onClick={handleRematch} className="rematch-button">
+						Rematch
+					</button>
 				</div>
 			</div>
 
