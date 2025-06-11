@@ -289,7 +289,7 @@ class GameChallenge(models.Model):
 	@classmethod
 	@database_sync_to_async
 	def async_create(cls, challenge_sender, challenge_recepient, relationship, challenge_time_control):
-		GameChallenge.objects.create(
+		cls.objects.create(
 			challenge_sender=challenge_sender,
 			challenge_recepient=challenge_recepient,
 			relationship=relationship,
