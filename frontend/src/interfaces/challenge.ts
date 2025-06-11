@@ -14,6 +14,9 @@ interface ChallengeAcceptedWebsocketEventData extends BasicWebSocketEventData {
     base_time: number;
     increment: number;
     assigned_color: PieceColor;
+
+    white_player_username: string;
+    black_player_username: string;
 }
 
 export type { ChallengeSentWebsocketEventData, ChallengeAcceptedWebsocketEventData }
