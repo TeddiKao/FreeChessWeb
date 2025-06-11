@@ -72,8 +72,9 @@ class JWTAuthenticationMiddleware:
 
 		try:
 			decoded_access_token = jwt.decode(access_token, secret_key, [algorithm])
-		except (InvalidSignatureError, ExpiredSignatureError, DecodeError, InvalidTokenError):
+		except (InvalidSignatureError, ExpiredSignatureError, DecodeError, InvalidTokenError) as e:
 			logger.debug("Access token is invalid!")
+			logger.debug(e)
 			return AnonymousUser()
 		else:
 			user_id = decoded_access_token.get("user_id")
