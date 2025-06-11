@@ -285,3 +285,14 @@ class GameChallenge(models.Model):
 	challenge_increment = models.IntegerField(null=False, blank=False)
 
 	challenge_status = models.CharField(max_length=20, null=False, blank=False, default="pending")
+
+	@classmethod
+	@database_sync_to_async
+	def async_create(cls, challenge_sender, challenge_recepient, relationship, challenge_time_control):
+		GameChallenge.objects.create(
+			challenge_sender=challenge_sender,
+			challenge_recepient=challenge_recepient,
+			relationship=relationship,
+			challenge_base_time=challenge_time_control["baseTime"],
+			challenge_increment=challenge_time_control["increment"]
+		)
