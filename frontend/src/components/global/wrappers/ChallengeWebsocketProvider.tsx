@@ -6,7 +6,8 @@ import ChallengeNotification from "../modals/ChallengeNotification";
 import { TimeControl } from "../../../types/gameSetup";
 import { ChallengeRelationships } from "../../../types/challenge";
 import { ChallengeWebsocketEventTypes } from "../../../enums/gameLogic";
-import { ChallengeWebsocketEventData } from "../../../interfaces/challenge";
+import { ChallengeAcceptedWebsocketEventData, ChallengeSentWebsocketEventData } from "../../../interfaces/challenge";
+import { useNavigate } from "react-router-dom";
 
 type ChallengeWebsocketProviderProps = {
 	children: ReactNode;
@@ -44,6 +45,8 @@ function ChallengeWebsocketProvider({
 	const challengeWebsocketRef = useRef<WebSocket | null>(null);
 	const challengeWebsocketExistsRef = useRef<boolean>(false);
 
+	const navigate = useNavigate();
+
 	const socket = useWebSocket(
 		websocketURL,
 		handleOnMessage,
@@ -70,14 +73,32 @@ function ChallengeWebsocketProvider({
 		switch (messageType) {
 			case ChallengeWebsocketEventTypes.CHALLENGE_RECEIVED:
 				handleChallengeReceived(data);
+				break;
+
+			case ChallengeWebsocketEventTypes.CHALLENGE_DECLINED:
+				handleChallengeAccepted(data);
 		}
 	}
 
-	function handleChallengeReceived(data: ChallengeWebsocketEventData) {
+	function handleChallengeReceived(data: ChallengeSentWebsocketEventData) {
 		setChallengeReceived(true);
 		setChallengerUsername(data["challenge_sender"]);
 		setChallengerRelationship(data["relationship"]);
 		setChallengeTimeControl(data["challenge_time_control"]);
+	}
+
+	function handleChallengeAccepted(data: ChallengeAcceptedWebsocketEventData) {
+		navigate("/play", {
+			state: {
+				gameId: data["game_id"],
+				baseTime: data["base_time"],
+				increment: data["increment"],
+				assignedColor: data["assigned_color"],
+
+				whitePlayerUsername: data["white_player_username"],
+				blackPlayerUsername: data["black_player_username"]
+			}
+		})
 	}
 
 	function sendChallenge(
