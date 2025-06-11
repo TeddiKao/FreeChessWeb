@@ -1080,19 +1080,20 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		challenge_sender_id = await challenge_sender_user_obj.async_get_player_id()
 		
 		if random.choice([True, False]):
-			white_player = challenge_obj.challenge_recepient
-			black_player = challenge_obj.challenge_sender
+			white_player: UserAuthModel = challenge_obj.challenge_recepient
+			black_player: UserAuthModel = challenge_obj.challenge_sender
 
 			sender_assigned_color = "black"
 			recepient_assigned_color = "white"
 		else:
-			white_player = challenge_obj.challenge_sender
-			black_player = challenge_obj.challenge_recepient
+			white_player: UserAuthModel = challenge_obj.challenge_sender
+			black_player: UserAuthModel = challenge_obj.challenge_recepient
 
 			sender_assigned_color = "white"
 			recepient_assigned_color = "black"
 
-			
+		white_player_username = await white_player.async_get_player_username()
+		black_player_username = await black_player.async_get_player_username()
 
 		game_id = await ChessGame.async_create(
 			white_player=white_player,
@@ -1110,7 +1111,10 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 				"game_id": game_id,
 				"base_time": challenge_obj.challenge_base_time,
 				"increment": challenge_obj.challenge_increment,
-				"assigned_color": recepient_assigned_color
+				"assigned_color": recepient_assigned_color,
+
+				"white_player_username": white_player_username,
+				"black_player_username": black_player_username
 			}
 		)
 
@@ -1121,7 +1125,10 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 				"game_id": game_id,
 				"base_time": challenge_obj.challenge_base_time,
 				"increment": challenge_obj.challenge_increment,
-				"assigned_color": sender_assigned_color
+				"assigned_color": sender_assigned_color,
+
+				"white_player_username": white_player_username,
+				"black_player_username": black_player_username
 			}
 		)
 
