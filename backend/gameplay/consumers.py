@@ -1011,7 +1011,7 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		user = self.scope["user"]
 		user_id = user.id
 
-		self.room_group_name = f"user_{user_id}"
+		self.room_group_name = f"challenge_room_{user_id}"
 
 		await self.channel_layer.group_add(
 			self.room_group_name,
