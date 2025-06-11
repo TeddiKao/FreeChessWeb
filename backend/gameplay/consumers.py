@@ -1030,4 +1030,6 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		)
 	
 	async def receive(self, text_data=None, bytes_data=None):
-		print(text_data)
+		await self.send(json.dumps({
+			"challenge_data": json.loads(text_data)
+		}))
