@@ -322,4 +322,4 @@ class GameChallenge(models.Model):
 	
 	@database_sync_to_async
 	def get_attr(self, attr_name):
-		return getattr(attr_name)
+		return getattr(self, attr_name)
