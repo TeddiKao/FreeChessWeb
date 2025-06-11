@@ -4,8 +4,9 @@ import useWebSocket from "../../../hooks/useWebsocket";
 import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle";
 import ChallengeNotification from "../modals/ChallengeNotification";
 import { TimeControl } from "../../../types/gameSetup";
-import { ChallengeRelationships, ChallengeWebsocketEventData } from "../../../types/challenge";
+import { ChallengeRelationships } from "../../../types/challenge";
 import { ChallengeWebsocketEventTypes } from "../../../enums/gameLogic";
+import { ChallengeWebsocketEventData } from "../../../interfaces/challenge";
 
 type ChallengeWebsocketProviderProps = {
 	children: ReactNode;
