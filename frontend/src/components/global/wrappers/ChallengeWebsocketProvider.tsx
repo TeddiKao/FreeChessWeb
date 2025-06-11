@@ -71,13 +71,15 @@ function ChallengeWebsocketProvider({
 		challengeTimeControl: TimeControl
 	) {
 		if (challengeWebsocketRef.current?.readyState == WebSocket.OPEN) {
+			const challengeDetails = {
+				type: "send_challenge",
+				challenge_recepient: recepientUsername,
+				relationship: relationship,
+				challengeTimeControl: challengeTimeControl
+			};
+			
 			challengeWebsocketRef.current.send(
-				JSON.stringify({
-					type: "send_challenge",
-					challenge_recepient: recepientUsername,
-					relationship: relationship,
-					challengeTimeControl: challengeTimeControl
-				})
+				JSON.stringify(challengeDetails)
 			);
 		}
 	}
