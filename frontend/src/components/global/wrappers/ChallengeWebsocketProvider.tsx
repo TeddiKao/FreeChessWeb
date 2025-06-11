@@ -75,7 +75,7 @@ function ChallengeWebsocketProvider({
 				type: "send_challenge",
 				challenge_recepient: recepientUsername,
 				relationship: relationship,
-				challengeTimeControl: challengeTimeControl
+				challenge_time_control: challengeTimeControl
 			};
 			
 			challengeWebsocketRef.current.send(
