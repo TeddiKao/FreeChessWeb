@@ -14,7 +14,8 @@ type ChallengeWebsocketContextType = {
 	challengeWebsocket: WebSocket | null;
 	sendChallenge: (
 		recepientUsername: string,
-		relationship: ChallengeRelationships
+		relationship: ChallengeRelationships,
+		challengeTimeControl: TimeControl
 	) => void;
 	acceptChallenge: (senderUsername: string) => void;
 	declineChallenge: (senderUsername: string) => void;
@@ -66,7 +67,8 @@ function ChallengeWebsocketProvider({
 
 	function sendChallenge(
 		recepientUsername: string,
-		relationship: ChallengeRelationships
+		relationship: ChallengeRelationships,
+		challengeTimeControl: TimeControl
 	) {
 		if (challengeWebsocketRef.current?.readyState == WebSocket.OPEN) {
 			challengeWebsocketRef.current.send(
@@ -74,6 +76,7 @@ function ChallengeWebsocketProvider({
 					type: "send_challenge",
 					challenge_recepient: recepientUsername,
 					relationship: relationship,
+					challengeTimeControl: challengeTimeControl
 				})
 			);
 		}
