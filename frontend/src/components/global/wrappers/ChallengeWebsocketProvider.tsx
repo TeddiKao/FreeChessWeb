@@ -6,7 +6,10 @@ import ChallengeNotification from "../modals/ChallengeNotification";
 import { TimeControl } from "../../../types/gameSetup";
 import { ChallengeRelationships } from "../../../types/challenge";
 import { ChallengeWebsocketEventTypes } from "../../../enums/gameLogic";
-import { ChallengeAcceptedWebsocketEventData, ChallengeSentWebsocketEventData } from "../../../interfaces/challenge";
+import {
+	ChallengeAcceptedWebsocketEventData,
+	ChallengeSentWebsocketEventData,
+} from "../../../interfaces/challenge";
 import { useNavigate } from "react-router-dom";
 
 type ChallengeWebsocketProviderProps = {
@@ -87,18 +90,23 @@ function ChallengeWebsocketProvider({
 		setChallengeTimeControl(data["challenge_time_control"]);
 	}
 
-	function handleChallengeAccepted(data: ChallengeAcceptedWebsocketEventData) {
-		navigate("/play", {
+	function handleChallengeAccepted(
+		data: ChallengeAcceptedWebsocketEventData
+	) {
+		navigate("/temp", {
 			state: {
-				gameId: data["game_id"],
-				baseTime: data["base_time"],
-				increment: data["increment"],
-				assignedColor: data["assigned_color"],
+				route: "/play",
+				routeState: {
+					gameId: data["game_id"],
+					baseTime: data["base_time"],
+					increment: data["increment"],
+					assignedColor: data["assigned_color"],
 
-				whitePlayerUsername: data["white_player_username"],
-				blackPlayerUsername: data["black_player_username"]
-			}
-		})
+					whitePlayerUsername: data["white_player_username"],
+					blackPlayerUsername: data["black_player_username"],
+				},
+			},
+		});
 	}
 
 	function sendChallenge(
@@ -111,9 +119,9 @@ function ChallengeWebsocketProvider({
 				type: "send_challenge",
 				challenge_recepient: recepientUsername,
 				relationship: relationship,
-				challenge_time_control: challengeTimeControl
+				challenge_time_control: challengeTimeControl,
 			};
-			
+
 			challengeWebsocketRef.current.send(
 				JSON.stringify(challengeDetails)
 			);
