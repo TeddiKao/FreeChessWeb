@@ -275,3 +275,13 @@ class GameplayTimerTask(models.Model):
 	def async_stop(self):
 		self.is_running = False
 		self.save()
+
+class GameChallenge(models.Model):
+	challenge_sender = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="challenge_sender")
+	challenge_recepient = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="challenge_recepient")
+
+	relationship = models.CharField(max_length=50, null=False, blank=False)
+	challenge_base_time = models.IntegerField(null=False, blank=False)
+	challenge_increment = models.IntegerField(null=False, blank=False)
+
+	challenge_status = models.CharField(max_length=20, null=False, blank=False, default="pending")
