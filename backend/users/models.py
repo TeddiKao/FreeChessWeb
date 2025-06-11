@@ -23,6 +23,13 @@ class UserAuthModel(AbstractBaseUser):
 		user_id = user_obj.sync_get_player_id()
 
 		return user_id
+	
+	@classmethod
+	@database_sync_to_async
+	def async_get_user_model_from_username(cls, username):
+		user_obj = cls.objects.filter(username=username).first()
+
+		return user_obj
 
 	@database_sync_to_async	
 	def async_get_player_username(self):
