@@ -100,6 +100,8 @@ function ChallengeWebsocketProvider({
 	}
 
 	function acceptChallenge(senderUsername: string) {
+		setChallengeReceived(false);
+
 		if (challengeWebsocketRef.current?.readyState == WebSocket.OPEN) {
 			challengeWebsocketRef.current.send(
 				JSON.stringify({
@@ -111,6 +113,8 @@ function ChallengeWebsocketProvider({
 	}
 
 	function declineChallenge(senderUsername: string) {
+		setChallengeReceived(false);
+
 		if (challengeWebsocketRef.current?.readyState == WebSocket.OPEN) {
 			challengeWebsocketRef.current.send(
 				JSON.stringify({
