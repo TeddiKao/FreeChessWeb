@@ -25,7 +25,8 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def remove_player_from_queue(self, player_object):
-        player_object.delete()
+        if player_object:
+            player_object.delete()
 
     @database_sync_to_async
     def get_player_in_queue(self, player):
@@ -70,7 +71,10 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def get_waiting_player_model_from_user(self, user_model):
-        waiting_player_model = WaitingPlayer.objects.get(user=user_model)
+        try:
+            waiting_player_model = WaitingPlayer.objects.get(user=user_model)
+        except WaitingPlayer.DoesNotExist:
+            waiting_player_model = None
 
         return waiting_player_model
 
@@ -281,6 +285,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                 
                 await sleep(0.5)
         except Exception as e:
+            logger.debug("Issue occured with matchmaking!")
             traceback.print_exc()
 
         
