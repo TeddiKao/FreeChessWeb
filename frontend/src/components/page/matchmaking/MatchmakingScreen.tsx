@@ -68,6 +68,9 @@ function MatchmakingScreen({
 					increment,
 					gameId: gameIdRef.current,
 					assignedColor: await getAssignedColor(),
+
+					whitePlayerUsername: whitePlayerRef.current,
+					blackPlayerUsername: blackPlayerRef.current,
 				};
 
 				navigate("/play", {

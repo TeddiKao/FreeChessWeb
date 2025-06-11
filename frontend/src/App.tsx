@@ -24,114 +24,126 @@ import SelectBot from "./pages/protected/SelectBot.tsx";
 import PlayBot from "./pages/protected/PlayBot.tsx";
 import GameHistory from "./pages/protected/GameHistory.tsx";
 import ViewGame from "./pages/protected/ViewGame.tsx";
+import ChallengeWebsocketProvider from "./components/global/wrappers/ChallengeWebsocketProvider.tsx";
 
 function Logout() {
-    localStorage.clear();
-    return <Navigate to="/login" />;
+	localStorage.clear();
+	return <Navigate to="/login" />;
 }
 
 function App() {
-    useEffect(() => {
-        document.title = "FreeChess";
-    }, []);
+	useEffect(() => {
+		document.title = "FreeChess";
+	}, []);
 
-    return (
-        <>
-            <BrowserRouter>
-                <DndProvider backend={MultiBackend} options={HTML5toTouch}>
-                    <Routes>
-                        <Route path="/" element={<GuestHomePage />} />
-                        <Route
-                            path="/login"
-                            element={
-                                <AuthenticationRoute>
-                                    <Login />
-                                </AuthenticationRoute>
-                            }
-                        />
+	return (
+		<>
+			<BrowserRouter>
+				<ChallengeWebsocketProvider>
+					<DndProvider backend={MultiBackend} options={HTML5toTouch}>
+						<Routes>
+							<Route path="/" element={<GuestHomePage />} />
+							<Route
+								path="/login"
+								element={
+									<AuthenticationRoute>
+										<Login />
+									</AuthenticationRoute>
+								}
+							/>
 
-                        <Route
-                            path="/signup"
-                            element={
-                                <AuthenticationRoute>
-                                    <Signup />
-                                </AuthenticationRoute>
-                            }
-                        />
+							<Route
+								path="/signup"
+								element={
+									<AuthenticationRoute>
+										<Signup />
+									</AuthenticationRoute>
+								}
+							/>
 
-                        <Route path="/logout" element={<Logout />} />
+							<Route path="/logout" element={<Logout />} />
 
-                        <Route
-                            path="/home"
-                            element={
-                                <ProtectedRoute>
-                                    <Dashboard />
-                                </ProtectedRoute>
-                            }
-                        />
+							<Route
+								path="/home"
+								element={
+									<ProtectedRoute>
+										<Dashboard />
+									</ProtectedRoute>
+								}
+							/>
 
-                        <Route
-                            path="/game-setup"
-                            element={
-                                <ProtectedRoute>
-                                    <GameSetup />
-                                </ProtectedRoute>
-                            }
-                        />
+							<Route
+								path="/game-setup"
+								element={
+									<ProtectedRoute>
+										<GameSetup />
+									</ProtectedRoute>
+								}
+							/>
 
-                        <Route
-                            path="/play"
-                            element={
-                                <ProtectedRoute>
-                                    <Play />
-                                </ProtectedRoute>
-                            }
-                        />
+							<Route
+								path="/play"
+								element={
+									<ProtectedRoute>
+										<Play />
+									</ProtectedRoute>
+								}
+							/>
 
-                        <Route
-                            path="/pass-and-play"
-                            element={
-                                <ProtectedRoute>
-                                    <PassAndPlay />
-                                </ProtectedRoute>
-                            }
-                        />
+							<Route
+								path="/pass-and-play"
+								element={
+									<ProtectedRoute>
+										<PassAndPlay />
+									</ProtectedRoute>
+								}
+							/>
 
-                        <Route 
-                            path="/select-bot"
-                            element={
-                                <ProtectedRoute>
-                                    <SelectBot />
-                                </ProtectedRoute>
-                            }
-                        />
+							<Route
+								path="/select-bot"
+								element={
+									<ProtectedRoute>
+										<SelectBot />
+									</ProtectedRoute>
+								}
+							/>
 
-                        <Route path="/play-bot" element={
-                            <ProtectedRoute>
-                                <PlayBot />
-                            </ProtectedRoute>
-                        } />
+							<Route
+								path="/play-bot"
+								element={
+									<ProtectedRoute>
+										<PlayBot />
+									</ProtectedRoute>
+								}
+							/>
 
-                        <Route path="/game-history" element={
-                            <ProtectedRoute>
-                                <GameHistory />
-                            </ProtectedRoute>
-                        } />
+							<Route
+								path="/game-history"
+								element={
+									<ProtectedRoute>
+										<GameHistory />
+									</ProtectedRoute>
+								}
+							/>
 
-                        <Route path="/:gameId/view" element={
-                            <ProtectedRoute>
-                                <ViewGame />
-                            </ProtectedRoute>
-                        } />
+							<Route
+								path="/:gameId/view"
+								element={
+									<ProtectedRoute>
+										<ViewGame />
+									</ProtectedRoute>
+								}
+							/>
 
-                        <Route path="/temp" element={<TempRoute />} />
+							<Route path="/temp" element={<TempRoute />} />
 
-                        <Route path="*" element={<NotFound />} />
-                    </Routes>
-                </DndProvider>
-            </BrowserRouter>
-        </>
-    );
+							<Route path="*" element={<NotFound />} />
+						</Routes>
+					</DndProvider>
+				</ChallengeWebsocketProvider>
+			</BrowserRouter>
+		</>
+	);
 }
 
 export default App;

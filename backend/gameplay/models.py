@@ -8,6 +8,8 @@ from channels.db import database_sync_to_async
 
 from .utils.fen_parser import parse_board_placement
 
+from users.models import UserAuthModel
+
 def get_default_board_placement():
 	initial_raw_board_placement = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
 	parsed_board_placement = parse_board_placement(initial_raw_board_placement)
@@ -101,6 +103,20 @@ class ChessGame(models.Model):
 
 	position_list = models.JSONField(default=get_default_position_list, null=False, blank=False)
 	move_list = models.JSONField(default=list, null=False, blank=False)
+
+	@classmethod
+	@database_sync_to_async
+	def async_create(cls, white_player, black_player, white_player_clock, black_player_clock, white_player_increment, black_player_increment):
+		game = cls.objects.create(
+			white_player=white_player,
+			black_player=black_player,
+			white_player_clock=white_player_clock,
+			black_player_clock=black_player_clock,
+			white_player_increment=white_player_increment,
+			black_player_increment=black_player_increment
+		)
+
+		return game.id
 
 	def sync_get_position_list(self):
 		return self.position_list
@@ -275,3 +291,39 @@ class GameplayTimerTask(models.Model):
 	def async_stop(self):
 		self.is_running = False
 		self.save()
+
+class GameChallenge(models.Model):
+	challenge_sender = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="challenge_sender")
+	challenge_recepient = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="challenge_recepient")
+
+	relationship = models.CharField(max_length=50, null=False, blank=False)
+	challenge_base_time = models.IntegerField(null=False, blank=False)
+	challenge_increment = models.IntegerField(null=False, blank=False)
+
+	challenge_status = models.CharField(max_length=20, null=False, blank=False, default="pending")
+
+	@classmethod
+	@database_sync_to_async
+	def async_create(cls, challenge_sender, challenge_recepient, relationship, challenge_time_control):
+		cls.objects.create(
+			challenge_sender=challenge_sender,
+			challenge_recepient=challenge_recepient,
+			relationship=relationship,
+			challenge_base_time=challenge_time_control["baseTime"],
+			challenge_increment=challenge_time_control["increment"]
+		)
+
+	@classmethod
+	@database_sync_to_async
+	def async_get_challenge_from_sender_username(self, sender_username):
+		sender_user_model = UserAuthModel.sync_get_user_model_from_username(sender_username)
+
+		return self.objects.filter(challenge_sender=sender_user_model).first()
+	
+	@database_sync_to_async
+	def get_attr(self, attr_name):
+		return getattr(self, attr_name)
+	
+	@database_sync_to_async
+	def async_delete(self):
+		self.delete()
