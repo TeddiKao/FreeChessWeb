@@ -104,6 +104,20 @@ class ChessGame(models.Model):
 	position_list = models.JSONField(default=get_default_position_list, null=False, blank=False)
 	move_list = models.JSONField(default=list, null=False, blank=False)
 
+	@classmethod
+	@database_sync_to_async
+	def async_create(cls, white_player, black_player, white_player_clock, black_player_clock, white_player_increment, black_player_increment):
+		game = cls.objects.create(
+			white_player=white_player,
+			black_player=black_player,
+			white_player_clock=white_player_clock,
+			black_player_clock=black_player_clock,
+			white_player_increment=white_player_increment,
+			black_player_increment=black_player_increment
+		)
+
+		return game.id
+
 	def sync_get_position_list(self):
 		return self.position_list
 	
@@ -301,7 +315,7 @@ class GameChallenge(models.Model):
 
 	@classmethod
 	@database_sync_to_async
-	def get_challenge_from_sender_username(self, sender_username):
+	def async_get_challenge_from_sender_username(self, sender_username):
 		sender_user_model = UserAuthModel.sync_get_user_model_from_username(sender_username)
 
 		return self.objects.filter(challenge_sender=sender_user_model).first()
