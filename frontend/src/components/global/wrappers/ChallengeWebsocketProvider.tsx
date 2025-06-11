@@ -93,12 +93,7 @@ function ChallengeWebsocketProvider({
 		}
 	}
 
-	function handleWindowUnload() {
-		if (challengeWebsocketRef.current?.readyState == WebSocket.OPEN) {
-			challengeWebsocketRef.current.close();
-			challengeWebsocketExistsRef.current = false;
-		}
-	}
+	function handleWindowUnload() {}
 
 	return (
 		<ChallengeWebsocketContext.Provider
