@@ -11,12 +11,16 @@ import { MatchmakingEvents } from "../../../../enums/gameSetup";
 import { getAssignedColor } from "../../../../utils/matchmakingUtils";
 import MatchmakingShortcutScreen from "../MatchmakingShortcutScreen";
 import { ChallengeWebsocketContext } from "../../wrappers/ChallengeWebsocketProvider";
+import useUsername from "../../../../hooks/useUsername";
 
 type GameOverModalProps = {
 	visible: boolean;
 	gameEndCause: string;
 	gameWinner: string | null;
 	timeControlInfo: TimeControl;
+
+	whitePlayerUsername: string;
+	blackPlayerUsername: string;
 };
 
 function GameOverModal({
@@ -24,6 +28,8 @@ function GameOverModal({
 	gameEndCause,
 	gameWinner,
 	timeControlInfo,
+	whitePlayerUsername,
+	blackPlayerUsername
 }: GameOverModalProps) {
 	const [matchmakingWebsocketEnabled, setMatchmakingWebsocketEnabled] =
 		useState(false);
@@ -37,6 +43,9 @@ function GameOverModal({
 
 	const matchmakingWebsocketRef = useRef<WebSocket | null>(null);
 	const matchmakingWebsocketExists = useRef<boolean>(false);
+
+	const playerUsername = useUsername();
+	const playerUsernameRef = useRef<string | null>(playerUsername);
 
 	const { sendChallenge } = useContext(ChallengeWebsocketContext)!;
 
@@ -99,6 +108,10 @@ function GameOverModal({
 		}
 	}, [matchFound]);
 
+	useEffect(() => {
+		playerUsernameRef.current = playerUsername;
+	}, [playerUsername]);
+
 	function handleMatchFound(parsedEventData: any) {
 		matchmakingWebsocketRef.current?.close();
 
@@ -145,7 +158,7 @@ function GameOverModal({
 		setMatchmakingWebsocketEnabled(true);
 		setIsMatchmaking(true);
 	}
-	
+
 	function handleRematch() {
 		
 	}
