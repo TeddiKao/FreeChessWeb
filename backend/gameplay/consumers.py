@@ -1080,14 +1080,14 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		challenge_sender_id = await challenge_sender_user_obj.async_get_player_id()
 		
 		if random.choice([True, False]):
-			white_player: UserAuthModel = challenge_obj.get_attr("challenge_recepient")
-			black_player: UserAuthModel = challenge_obj.get_attr("challenge_sender")
+			white_player: UserAuthModel = await challenge_obj.get_attr("challenge_recepient")
+			black_player: UserAuthModel = await challenge_obj.get_attr("challenge_sender")
 
 			sender_assigned_color = "black"
 			recepient_assigned_color = "white"
 		else:
-			white_player: UserAuthModel = challenge_obj.get_attr("challenge_sender")
-			black_player: UserAuthModel = challenge_obj.get_attr("challenge_recepient")
+			white_player: UserAuthModel = await challenge_obj.get_attr("challenge_sender")
+			black_player: UserAuthModel = await challenge_obj.get_attr("challenge_recepient")
 
 			sender_assigned_color = "white"
 			recepient_assigned_color = "black"
