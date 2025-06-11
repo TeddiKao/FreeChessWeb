@@ -1095,13 +1095,16 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		white_player_username = await white_player.async_get_player_username()
 		black_player_username = await black_player.async_get_player_username()
 
+		challenge_base_time = await challenge_obj.get_attr("challenge_base_time")
+		challenge_increment = await challenge_obj.get_attr("challenge_increment")
+
 		game_id = await ChessGame.async_create(
 			white_player=white_player,
 			black_player=black_player,
-			white_player_clock=challenge_obj.get_attr("challenge_base_time"),
-			black_player_clock=challenge_obj.get_attr("challenge_base_time"),
-			white_player_increment=challenge_obj.get_attr("challenge_increment"),
-			black_player_increment=challenge_obj.get_attr("challenge_increment"),
+			white_player_clock=challenge_base_time,
+			black_player_clock=challenge_base_time,
+			white_player_increment=challenge_increment,
+			black_player_increment=challenge_increment,
 		)
 
 		await self.channel_layer.group_send(
@@ -1109,8 +1112,8 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 			{
 				"type": "challenge_accepted",
 				"game_id": game_id,
-				"base_time": challenge_obj.get_attr("challenge_base_time"),
-				"increment": challenge_obj.get_attr("challenge_increment"),
+				"base_time": challenge_base_time,
+				"increment": challenge_increment,
 				"assigned_color": recepient_assigned_color,
 
 				"white_player_username": white_player_username,
@@ -1123,8 +1126,8 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 			{
 				"type": "challenge_accepted",
 				"game_id": game_id,
-				"base_time": challenge_obj.get_attr("challenge_base_time"),
-				"increment": challenge_obj.get_attr("challenge_increment"),
+				"base_time": challenge_base_time,
+				"increment": challenge_increment,
 				"assigned_color": sender_assigned_color,
 
 				"white_player_username": white_player_username,
