@@ -16,6 +16,14 @@ class UserAuthModel(AbstractBaseUser):
 
 	objects = CustomUserManager()
 
+	@classmethod
+	@database_sync_to_async
+	def async_get_id_from_username(cls, username):
+		user_obj = cls.objects.filter(username=username).first()
+		user_id = user_obj.sync_get_player_id()
+
+		return user_id
+
 	@database_sync_to_async	
 	def async_get_player_username(self):
 		return self.username
