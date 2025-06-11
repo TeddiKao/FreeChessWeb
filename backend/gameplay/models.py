@@ -319,3 +319,7 @@ class GameChallenge(models.Model):
 		sender_user_model = UserAuthModel.sync_get_user_model_from_username(sender_username)
 
 		return self.objects.filter(challenge_sender=sender_user_model).first()
+	
+	@database_sync_to_async
+	def get_attr(self, attr_name):
+		return getattr(attr_name)
