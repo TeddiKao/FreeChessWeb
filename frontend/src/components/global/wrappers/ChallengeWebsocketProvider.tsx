@@ -78,8 +78,9 @@ function ChallengeWebsocketProvider({
 				handleChallengeReceived(data);
 				break;
 
-			case ChallengeWebsocketEventTypes.CHALLENGE_DECLINED:
+			case ChallengeWebsocketEventTypes.CHALLENGE_ACCEPTED:
 				handleChallengeAccepted(data);
+				break;
 		}
 	}
 
