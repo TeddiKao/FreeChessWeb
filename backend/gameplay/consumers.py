@@ -1135,6 +1135,8 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 			}
 		)
 
+		await challenge_obj.async_delete()
+
 	async def challenge_received(self, event):
 		await self.send(json.dumps({
 			"type": "challenge_received",
