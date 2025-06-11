@@ -19,7 +19,7 @@ from move_validation.utils.result_detection import is_checkmated_or_stalemated, 
 
 from users.models import UserAuthModel
 
-from .models import ChessGame, GameplayTimerTask
+from .models import ChessGame, GameplayTimerTask, GameChallenge
 from .utils.algebraic_notation_parser import get_algebraic_notation
 
 logger = logging.getLogger(__name__)
@@ -1042,9 +1042,17 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 	async def send_challenge(self, data):
 		recepient_username = data["challenge_recepient"]
 		recepient_user_id = await UserAuthModel.async_get_id_from_username(recepient_username)
+		recepient_useer_model = await UserAuthModel.async_get_user_model_from_username(recepient_username)
 
 		relationship = data["relationship"]
 		challenge_time_control = data["challenge_time_control"]
+
+		await GameChallenge.async_create(
+			challenge_sender=self.scope["user"],
+			challenge_recepient=recepient_useer_model,
+			relationship=relationship,
+			challenge_time_control=challenge_time_control
+		)
 
 		await self.channel_layer.group_send(
 			f"challenge_room_{recepient_user_id}",
