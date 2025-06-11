@@ -17,6 +17,8 @@ from move_validation.utils.get_move_type import get_move_type, get_is_capture
 from move_validation.utils.general import *
 from move_validation.utils.result_detection import is_checkmated_or_stalemated, is_threefold_repetiiton, check_50_move_rule_draw, has_sufficient_material
 
+from users.models import UserAuthModel
+
 from .models import ChessGame, GameplayTimerTask
 from .utils.algebraic_notation_parser import get_algebraic_notation
 
@@ -1030,6 +1032,27 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		)
 	
 	async def receive(self, text_data=None, bytes_data=None):
+		data = json.loads(text_data)
+		request_type = data["type"]
+
+		match request_type:
+			case "send_challenge":
+				await self.send_challenge(data)
+
+	async def send_challenge(self, data):
+		recepient_username = data["challenge_recepient"]
+		recepient_user_id = await UserAuthModel.async_get_id_from_username(recepient_username)
+
+		await self.channel_layer.group_send(
+			f"challenge_room_{recepient_user_id}",
+			{
+				"type": "challenge_received",
+				"challenge_sender": self.scope["user"].username
+			}
+		)
+
+	async def challenge_received(self, event):
 		await self.send(json.dumps({
-			"challenge_data": json.loads(text_data)
+			"type": "challenge_received",
+			"challenge_sender": event["challenge_sender"]
 		}))
