@@ -162,7 +162,11 @@ function GameOverModal({
 		setIsMatchmaking(true);
 	}
 
-	function handleRematch() {}
+	function handleRematch() {
+		const recepientUsername = playerUsername === whitePlayerUsername ? blackPlayerUsername : whitePlayerUsername
+
+		sendChallenge(recepientUsername);
+	}
 
 	return (
 		<>
