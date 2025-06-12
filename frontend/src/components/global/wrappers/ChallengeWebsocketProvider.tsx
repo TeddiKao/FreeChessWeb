@@ -8,7 +8,8 @@ import { ChallengeRelationships } from "../../../types/challenge";
 import { ChallengeWebsocketEventTypes } from "../../../enums/gameLogic";
 import {
 	ChallengeAcceptedWebsocketEventData,
-	ChallengeSentWebsocketEventData,
+	ChallengeReceivedWebsocketEventData,
+	ChallengeSuccessfullySentEventData,
 } from "../../../interfaces/challenge";
 import { useNavigate } from "react-router-dom";
 import ChallengeResponseWaitScreen from "../modals/ChallengeResponseWaitScreen";
@@ -43,9 +44,10 @@ function ChallengeWebsocketProvider({
 	const [challengerUsername, setChallengerUsername] = useState<string>("");
 	const [challengerRelationship, setChallengerRelationship] =
 		useState<string>("");
-	const [challengeTimeControl, setChallengeTimeControl] =
+	const [challengeReceivedTimeControl, setChallengeReceivedTimeControl] =
 		useState<TimeControl | null>(null);
 
+	const [sentTimeControl, setSentTimeControl] = useState<TimeControl | null>(null);
 	const [waitingForResponse, setWaitingForResponse] =
 		useState<boolean>(false);
 
@@ -87,20 +89,21 @@ function ChallengeWebsocketProvider({
 				break;
 
 			case ChallengeWebsocketEventTypes.CHALLENGE_SUCCESSFULLY_SENT:
-				handleChallengeSuccessfullySent();
+				handleChallengeSuccessfullySent(data);
 				break;
 		}
 	}
 
-	function handleChallengeReceived(data: ChallengeSentWebsocketEventData) {
+	function handleChallengeReceived(data: ChallengeReceivedWebsocketEventData) {
 		setChallengeReceived(true);
 		setChallengerUsername(data["challenge_sender"]);
 		setChallengerRelationship(data["relationship"]);
-		setChallengeTimeControl(data["challenge_time_control"]);
+		setChallengeReceivedTimeControl(data["challenge_time_control"]);
 	}
 
-	function handleChallengeSuccessfullySent() {
+	function handleChallengeSuccessfullySent(data: ChallengeSuccessfullySentEventData) {
 		setWaitingForResponse(true);
+		setSentTimeControl(data["time_control"]);
 	}
 
 	function handleChallengeAccepted(
@@ -190,12 +193,12 @@ function ChallengeWebsocketProvider({
 				challengerRelationship={
 					challengerRelationship as ChallengeRelationships
 				}
-				timeControl={challengeTimeControl}
+				timeControl={challengeReceivedTimeControl}
 			/>
 
 			<ChallengeResponseWaitScreen
 				visible={waitingForResponse}
-				timeControlInfo={challengeTimeControl}
+				timeControlInfo={sentTimeControl}
 			/>
 
 			{children}
