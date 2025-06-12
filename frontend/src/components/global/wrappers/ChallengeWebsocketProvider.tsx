@@ -11,6 +11,7 @@ import {
 	ChallengeSentWebsocketEventData,
 } from "../../../interfaces/challenge";
 import { useNavigate } from "react-router-dom";
+import ChallengeResponseWaitScreen from "../modals/ChallengeResponseWaitScreen";
 
 type ChallengeWebsocketProviderProps = {
 	children: ReactNode;
@@ -45,7 +46,8 @@ function ChallengeWebsocketProvider({
 	const [challengeTimeControl, setChallengeTimeControl] =
 		useState<TimeControl | null>(null);
 
-	const [waitingForResponse, setWaitingForResponse] = useState<boolean>(false);
+	const [waitingForResponse, setWaitingForResponse] =
+		useState<boolean>(false);
 
 	const challengeWebsocketRef = useRef<WebSocket | null>(null);
 	const challengeWebsocketExistsRef = useRef<boolean>(false);
@@ -103,7 +105,7 @@ function ChallengeWebsocketProvider({
 
 	function handleChallengeAccepted(
 		data: ChallengeAcceptedWebsocketEventData
-	) {	
+	) {
 		setWaitingForResponse(false);
 
 		navigate("/temp", {
@@ -189,6 +191,11 @@ function ChallengeWebsocketProvider({
 					challengerRelationship as ChallengeRelationships
 				}
 				timeControl={challengeTimeControl}
+			/>
+
+			<ChallengeResponseWaitScreen
+				visible={waitingForResponse}
+				timeControlInfo={challengeTimeControl!}
 			/>
 
 			{children}
