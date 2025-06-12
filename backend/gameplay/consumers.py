@@ -1043,6 +1043,9 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 			case "accept_challenge":
 				await self.accept_challenge(data)
 
+			case "decline_challenge":
+				await self.decline_challenge(data)
+
 	async def send_challenge(self, data):
 		recepient_username = data["challenge_recepient"]
 		recepient_user_id = await UserAuthModel.async_get_id_from_username(recepient_username)
@@ -1144,6 +1147,9 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		)
 
 		await challenge_obj.async_delete()
+
+	async def decline_challenge(self, data):
+		pass
 
 	async def challenge_received(self, event):
 		await self.send(json.dumps({
