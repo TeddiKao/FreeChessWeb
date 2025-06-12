@@ -1062,7 +1062,7 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 			self.room_group_name,
 			{
 				"type": "challenge_successfully_sent",
-				"time_control": challenge_time_control
+				"challenge_time_control": challenge_time_control
 			}
 		)
 
@@ -1168,5 +1168,5 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 	async def challenge_successfully_sent(self, event):
 		await self.send(json.dumps({
 			"type": "challenge_successfully_sent",
-			"time_control": event["time_control"]
+			"challenge_time_control": event["challenge_time_control"]
 		}))

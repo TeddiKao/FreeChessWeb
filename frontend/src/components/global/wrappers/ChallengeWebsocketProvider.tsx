@@ -103,7 +103,7 @@ function ChallengeWebsocketProvider({
 
 	function handleChallengeSuccessfullySent(data: ChallengeSuccessfullySentEventData) {
 		setWaitingForResponse(true);
-		setSentTimeControl(data["time_control"]);
+		setSentTimeControl(data["challenge_time_control"]);
 	}
 
 	function handleChallengeAccepted(

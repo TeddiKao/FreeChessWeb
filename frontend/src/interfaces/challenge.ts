@@ -10,7 +10,7 @@ interface ChallengeReceivedWebsocketEventData extends BasicWebSocketEventData {
 }
 
 interface ChallengeSuccessfullySentEventData extends BasicWebSocketEventData {
-    time_control: TimeControl
+    challenge_time_control: TimeControl
 }
 
 interface ChallengeAcceptedWebsocketEventData extends BasicWebSocketEventData {
