@@ -45,6 +45,8 @@ function ChallengeWebsocketProvider({
 	const [challengeTimeControl, setChallengeTimeControl] =
 		useState<TimeControl | null>(null);
 
+	const [waitingForResponse, setWaitingForResponse] = useState<boolean>(false);
+
 	const challengeWebsocketRef = useRef<WebSocket | null>(null);
 	const challengeWebsocketExistsRef = useRef<boolean>(false);
 
@@ -81,6 +83,10 @@ function ChallengeWebsocketProvider({
 			case ChallengeWebsocketEventTypes.CHALLENGE_ACCEPTED:
 				handleChallengeAccepted(data);
 				break;
+
+			case ChallengeWebsocketEventTypes.CHALLENGE_SUCCESSFULLY_SENT:
+				handleChallengeSuccessfullySent();
+				break;
 		}
 	}
 
@@ -91,9 +97,15 @@ function ChallengeWebsocketProvider({
 		setChallengeTimeControl(data["challenge_time_control"]);
 	}
 
+	function handleChallengeSuccessfullySent() {
+		setWaitingForResponse(true);
+	}
+
 	function handleChallengeAccepted(
 		data: ChallengeAcceptedWebsocketEventData
-	) {
+	) {	
+		setWaitingForResponse(false);
+
 		navigate("/temp", {
 			state: {
 				route: "/play",
@@ -108,6 +120,10 @@ function ChallengeWebsocketProvider({
 				},
 			},
 		});
+	}
+
+	function handleChallengeDeclined() {
+		setWaitingForResponse(false);
 	}
 
 	function sendChallenge(
