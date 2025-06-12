@@ -1149,7 +1149,23 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		await challenge_obj.async_delete()
 
 	async def decline_challenge(self, data):
-		pass
+		challenge_sender_username = data["challenge_sender"]
+		challenge_sender_user_obj: UserAuthModel = await UserAuthModel.async_get_user_model_from_username(challenge_sender_username)
+		challenge_sender_id = await challenge_sender_user_obj.async_get_player_id()
+
+		challenge_obj: GameChallenge | None = await GameChallenge.async_get_challenge_from_sender_username(challenge_sender_username)
+
+		if challenge_obj == None:
+			return
+		
+		await self.channel_layer.group_send(
+			f"challenge_room_{challenge_sender_id}",
+			{
+				"type": "challenge_declined"
+			}
+		)
+
+		await challenge_obj.async_delete()
 
 	async def challenge_received(self, event):
 		await self.send(json.dumps({
@@ -1175,4 +1191,9 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		await self.send(json.dumps({
 			"type": "challenge_successfully_sent",
 			"challenge_time_control": event["challenge_time_control"]
+		}))
+
+	async def challenge_declined(self, event):
+		await self.send(json.dumps({
+			"type": "challenge_declined"
 		}))
