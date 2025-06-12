@@ -110,6 +110,7 @@ function ChallengeWebsocketProvider({
 		data: ChallengeAcceptedWebsocketEventData
 	) {
 		setWaitingForResponse(false);
+		setSentTimeControl(null);
 
 		navigate("/temp", {
 			state: {
@@ -129,6 +130,7 @@ function ChallengeWebsocketProvider({
 
 	function handleChallengeDeclined() {
 		setWaitingForResponse(false);
+		setSentTimeControl(null);
 	}
 
 	function sendChallenge(
