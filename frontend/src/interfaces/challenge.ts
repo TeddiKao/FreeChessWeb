@@ -3,10 +3,14 @@ import { PieceColor } from "../types/gameLogic";
 import { TimeControl } from "../types/gameSetup";
 import { BasicWebSocketEventData } from "./general";
 
-interface ChallengeSentWebsocketEventData extends BasicWebSocketEventData {
+interface ChallengeReceivedWebsocketEventData extends BasicWebSocketEventData {
     challenge_sender: string;
     relationship: ChallengeRelationships;
     challenge_time_control: TimeControl;
+}
+
+interface ChallengeSuccessfullySentEventData extends BasicWebSocketEventData {
+    time_control: TimeControl
 }
 
 interface ChallengeAcceptedWebsocketEventData extends BasicWebSocketEventData {
@@ -19,4 +23,4 @@ interface ChallengeAcceptedWebsocketEventData extends BasicWebSocketEventData {
     black_player_username: string;
 }
 
-export type { ChallengeSentWebsocketEventData, ChallengeAcceptedWebsocketEventData }
+export type { ChallengeReceivedWebsocketEventData, ChallengeSuccessfullySentEventData, ChallengeAcceptedWebsocketEventData }
