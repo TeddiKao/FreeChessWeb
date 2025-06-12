@@ -195,7 +195,7 @@ function ChallengeWebsocketProvider({
 
 			<ChallengeResponseWaitScreen
 				visible={waitingForResponse}
-				timeControlInfo={challengeTimeControl!}
+				timeControlInfo={challengeTimeControl}
 			/>
 
 			{children}

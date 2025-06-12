@@ -7,7 +7,7 @@ import "../../../styles/modals/challenge-response-wait-screen.scss";
 
 type ChallengeResponseWaitScreenProps = {
     visible: boolean;
-    timeControlInfo: TimeControl
+    timeControlInfo: TimeControl | null
 }
 
 function ChallengeResponseWaitScreen({ visible, timeControlInfo }: ChallengeResponseWaitScreenProps) {
@@ -16,7 +16,10 @@ function ChallengeResponseWaitScreen({ visible, timeControlInfo }: ChallengeResp
             <div className="challenge-response-wait-screen-container">
                 <h3 className="challenge-response-status">Waiting for response</h3>
                 <LoadingSpinner />
-                <p className="challenge-time-control">{displayTimeControl(timeControlInfo)}</p>
+                
+                {timeControlInfo && (
+                    <p className="challenge-time-control">{displayTimeControl(timeControlInfo)}</p>
+                )}
             </div>
         </ModalWrapper>
     )
