@@ -1059,6 +1059,14 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		)
 
 		await self.channel_layer.group_send(
+			self.room_group_name,
+			{
+				"type": "challenge_successfully_sent",
+				"challenge_time_control": challenge_time_control
+			}
+		)
+
+		await self.channel_layer.group_send(
 			f"challenge_room_{recepient_user_id}",
 			{
 				"type": "challenge_received",
@@ -1155,4 +1163,10 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 
 			"white_player_username": event["white_player_username"],
 			"black_player_username": event["black_player_username"]
+		}))
+
+	async def challenge_successfully_sent(self, event):
+		await self.send(json.dumps({
+			"type": "challenge_successfully_sent",
+			"challenge_time_control": event["challenge_time_control"]
 		}))

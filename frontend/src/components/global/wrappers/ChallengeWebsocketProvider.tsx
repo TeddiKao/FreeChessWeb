@@ -8,9 +8,11 @@ import { ChallengeRelationships } from "../../../types/challenge";
 import { ChallengeWebsocketEventTypes } from "../../../enums/gameLogic";
 import {
 	ChallengeAcceptedWebsocketEventData,
-	ChallengeSentWebsocketEventData,
+	ChallengeReceivedWebsocketEventData,
+	ChallengeSuccessfullySentEventData,
 } from "../../../interfaces/challenge";
 import { useNavigate } from "react-router-dom";
+import ChallengeResponseWaitScreen from "../modals/ChallengeResponseWaitScreen";
 
 type ChallengeWebsocketProviderProps = {
 	children: ReactNode;
@@ -42,8 +44,12 @@ function ChallengeWebsocketProvider({
 	const [challengerUsername, setChallengerUsername] = useState<string>("");
 	const [challengerRelationship, setChallengerRelationship] =
 		useState<string>("");
-	const [challengeTimeControl, setChallengeTimeControl] =
+	const [challengeReceivedTimeControl, setChallengeReceivedTimeControl] =
 		useState<TimeControl | null>(null);
+
+	const [sentTimeControl, setSentTimeControl] = useState<TimeControl | null>(null);
+	const [waitingForResponse, setWaitingForResponse] =
+		useState<boolean>(false);
 
 	const challengeWebsocketRef = useRef<WebSocket | null>(null);
 	const challengeWebsocketExistsRef = useRef<boolean>(false);
@@ -81,19 +87,31 @@ function ChallengeWebsocketProvider({
 			case ChallengeWebsocketEventTypes.CHALLENGE_ACCEPTED:
 				handleChallengeAccepted(data);
 				break;
+
+			case ChallengeWebsocketEventTypes.CHALLENGE_SUCCESSFULLY_SENT:
+				handleChallengeSuccessfullySent(data);
+				break;
 		}
 	}
 
-	function handleChallengeReceived(data: ChallengeSentWebsocketEventData) {
+	function handleChallengeReceived(data: ChallengeReceivedWebsocketEventData) {
 		setChallengeReceived(true);
 		setChallengerUsername(data["challenge_sender"]);
 		setChallengerRelationship(data["relationship"]);
-		setChallengeTimeControl(data["challenge_time_control"]);
+		setChallengeReceivedTimeControl(data["challenge_time_control"]);
+	}
+
+	function handleChallengeSuccessfullySent(data: ChallengeSuccessfullySentEventData) {
+		setWaitingForResponse(true);
+		setSentTimeControl(data["challenge_time_control"]);
 	}
 
 	function handleChallengeAccepted(
 		data: ChallengeAcceptedWebsocketEventData
 	) {
+		setWaitingForResponse(false);
+		setSentTimeControl(null);
+
 		navigate("/temp", {
 			state: {
 				route: "/play",
@@ -108,6 +126,11 @@ function ChallengeWebsocketProvider({
 				},
 			},
 		});
+	}
+
+	function handleChallengeDeclined() {
+		setWaitingForResponse(false);
+		setSentTimeControl(null);
 	}
 
 	function sendChallenge(
@@ -172,7 +195,12 @@ function ChallengeWebsocketProvider({
 				challengerRelationship={
 					challengerRelationship as ChallengeRelationships
 				}
-				timeControl={challengeTimeControl}
+				timeControl={challengeReceivedTimeControl}
+			/>
+
+			<ChallengeResponseWaitScreen
+				visible={waitingForResponse}
+				timeControlInfo={sentTimeControl}
 			/>
 
 			{children}
