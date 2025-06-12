@@ -3,6 +3,8 @@ import { displayTimeControl } from "../../../utils/timeUtils";
 import LoadingSpinner from "../LoadingSpinner";
 import ModalWrapper from "../wrappers/ModalWrapper";
 
+import "../../../styles/modals/challenge-response-wait-screen.scss";
+
 type ChallengeResponseWaitScreenProps = {
     visible: boolean;
     timeControlInfo: TimeControl
