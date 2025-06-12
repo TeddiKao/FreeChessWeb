@@ -18,7 +18,7 @@ function ChallengeResponseWaitScreen({ visible, timeControlInfo }: ChallengeResp
                 <LoadingSpinner />
                 
                 {timeControlInfo && (
-                    <p className="challenge-time-control">{displayTimeControl(timeControlInfo)}</p>
+                    <p className="wait-screen-challenge-time-control">{displayTimeControl(timeControlInfo)}</p>
                 )}
             </div>
         </ModalWrapper>
