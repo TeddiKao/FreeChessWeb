@@ -1158,6 +1158,10 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		if challenge_obj == None:
 			return
 		
+		challenge_recepient = await challenge_obj.get_attr("challenge_recepient")
+		if challenge_recepient != self.scope["user"]:
+			return
+		
 		await self.channel_layer.group_send(
 			f"challenge_room_{challenge_sender_id}",
 			{
