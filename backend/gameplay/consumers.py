@@ -1178,10 +1178,21 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		await challenge_obj.async_delete()
 
 	async def perform_challenge_cleanup(self, user):
-		await self.reject_all_received_challenges(user)
+		await self.reject_all_received_challenges(user.username)
 
-	async def reject_all_received_challenges(self, user):
-		pass
+	async def reject_all_received_challenges(self, username):
+		received_challenges: list[GameChallenge] = await GameChallenge.get_all_received_challenges_of_user(username)
+
+		for received_challenge in received_challenges:
+			challenge_sender = await received_challenge.get_attr("challenge_sender")
+			challenge_sender_id = await UserAuthModel.async_get_player_id(challenge_sender)
+
+			await self.channel_layer.group_send(
+				f"challenge_room_{challenge_sender_id}",
+				{
+					"type": "challenge_declined"
+				}
+			)
 
 	async def challenge_received(self, event):
 		await self.send(json.dumps({
