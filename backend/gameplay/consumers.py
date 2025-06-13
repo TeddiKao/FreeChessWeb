@@ -548,6 +548,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 	async def disconnect(self, code):
 		await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
+
 	async def receive(self, text_data):
 		move_processing_start = perf_counter()
 
@@ -1031,6 +1032,8 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 			self.room_group_name,
 			self.channel_name
 		)
+
+		await self.perform_challenge_cleanup(self.scope["user"])
 	
 	async def receive(self, text_data=None, bytes_data=None):
 		data = json.loads(text_data)
@@ -1173,6 +1176,12 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		)
 
 		await challenge_obj.async_delete()
+
+	async def perform_challenge_cleanup(self, user):
+		await self.reject_all_received_challenges(user)
+
+	async def reject_all_received_challenges(self, user):
+		pass
 
 	async def challenge_received(self, event):
 		await self.send(json.dumps({
