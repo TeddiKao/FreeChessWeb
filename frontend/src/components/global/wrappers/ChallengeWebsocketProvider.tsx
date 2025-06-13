@@ -91,6 +91,10 @@ function ChallengeWebsocketProvider({
 			case ChallengeWebsocketEventTypes.CHALLENGE_SUCCESSFULLY_SENT:
 				handleChallengeSuccessfullySent(data);
 				break;
+
+			case ChallengeWebsocketEventTypes.CHALLENGE_DECLINED:
+				handleChallengeDeclined();
+				break;
 		}
 	}
 

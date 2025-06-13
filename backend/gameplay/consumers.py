@@ -1043,6 +1043,9 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 			case "accept_challenge":
 				await self.accept_challenge(data)
 
+			case "decline_challenge":
+				await self.decline_challenge(data)
+
 	async def send_challenge(self, data):
 		recepient_username = data["challenge_recepient"]
 		recepient_user_id = await UserAuthModel.async_get_id_from_username(recepient_username)
@@ -1080,13 +1083,16 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		challenge_sender = data["challenge_sender"]
 		challenge_obj: GameChallenge | None = await GameChallenge.async_get_challenge_from_sender_username(challenge_sender)
 
-
 		if challenge_obj == None:
 			return
 		
 		challenge_sender_user_obj: UserAuthModel = await UserAuthModel.async_get_user_model_from_username(challenge_sender)
 		challenge_sender_id = await challenge_sender_user_obj.async_get_player_id()
-		
+
+		challenge_recepient = await challenge_obj.get_attr("challenge_recepient")
+		if challenge_recepient != self.scope["user"]:
+			return
+
 		if random.choice([True, False]):
 			white_player: UserAuthModel = await challenge_obj.get_attr("challenge_recepient")
 			black_player: UserAuthModel = await challenge_obj.get_attr("challenge_sender")
@@ -1145,6 +1151,29 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 
 		await challenge_obj.async_delete()
 
+	async def decline_challenge(self, data):
+		challenge_sender_username = data["challenge_sender"]
+		challenge_sender_user_obj: UserAuthModel = await UserAuthModel.async_get_user_model_from_username(challenge_sender_username)
+		challenge_sender_id = await challenge_sender_user_obj.async_get_player_id()
+
+		challenge_obj: GameChallenge | None = await GameChallenge.async_get_challenge_from_sender_username(challenge_sender_username)
+
+		if challenge_obj == None:
+			return
+		
+		challenge_recepient = await challenge_obj.get_attr("challenge_recepient")
+		if challenge_recepient != self.scope["user"]:
+			return
+		
+		await self.channel_layer.group_send(
+			f"challenge_room_{challenge_sender_id}",
+			{
+				"type": "challenge_declined"
+			}
+		)
+
+		await challenge_obj.async_delete()
+
 	async def challenge_received(self, event):
 		await self.send(json.dumps({
 			"type": "challenge_received",
@@ -1169,4 +1198,9 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		await self.send(json.dumps({
 			"type": "challenge_successfully_sent",
 			"challenge_time_control": event["challenge_time_control"]
+		}))
+
+	async def challenge_declined(self, event):
+		await self.send(json.dumps({
+			"type": "challenge_declined"
 		}))
