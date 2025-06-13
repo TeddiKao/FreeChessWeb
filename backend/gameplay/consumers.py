@@ -1083,13 +1083,16 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		challenge_sender = data["challenge_sender"]
 		challenge_obj: GameChallenge | None = await GameChallenge.async_get_challenge_from_sender_username(challenge_sender)
 
-
 		if challenge_obj == None:
 			return
 		
 		challenge_sender_user_obj: UserAuthModel = await UserAuthModel.async_get_user_model_from_username(challenge_sender)
 		challenge_sender_id = await challenge_sender_user_obj.async_get_player_id()
-		
+
+		challenge_recepient = await challenge_obj.get_attr("challenge_recepient")
+		if challenge_recepient != self.scope["user"]:
+			return
+
 		if random.choice([True, False]):
 			white_player: UserAuthModel = await challenge_obj.get_attr("challenge_recepient")
 			black_player: UserAuthModel = await challenge_obj.get_attr("challenge_sender")
