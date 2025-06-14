@@ -1,0 +1,31 @@
+@use "../global/mixins" as *;
+
+.challenge-response-wait-screen-container {
+    @include page-center-xy;
+    @include flex-column-x-center;
+    @include flex-column-y-center;
+
+    background-color: white;
+
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+    border-radius: 8px;
+
+    z-index: 1000;
+}
+
+.challenge-response-status {
+    margin-top: 8px;
+    margin-bottom: 12px;
+}
+
+.wait-screen-challenge-time-control {
+    margin-top: 12px;
+    margin-bottom: 8px;
+
+    color: hsl(0, 0%, 40%);
+}
+

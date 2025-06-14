@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "../../../../styles/modals/game-over-modal.scss";
 import {
 	capitaliseFirstLetter,
@@ -10,12 +10,17 @@ import { useNavigate } from "react-router-dom";
 import { MatchmakingEvents } from "../../../../enums/gameSetup";
 import { getAssignedColor } from "../../../../utils/matchmakingUtils";
 import MatchmakingShortcutScreen from "../MatchmakingShortcutScreen";
+import { ChallengeWebsocketContext } from "../../wrappers/ChallengeWebsocketProvider";
+import useUsername from "../../../../hooks/useUsername";
 
 type GameOverModalProps = {
 	visible: boolean;
 	gameEndCause: string;
 	gameWinner: string | null;
 	timeControlInfo: TimeControl;
+
+	whitePlayerUsername: string;
+	blackPlayerUsername: string;
 };
 
 function GameOverModal({
@@ -23,6 +28,8 @@ function GameOverModal({
 	gameEndCause,
 	gameWinner,
 	timeControlInfo,
+	whitePlayerUsername,
+	blackPlayerUsername,
 }: GameOverModalProps) {
 	const [matchmakingWebsocketEnabled, setMatchmakingWebsocketEnabled] =
 		useState(false);
@@ -36,6 +43,11 @@ function GameOverModal({
 
 	const matchmakingWebsocketRef = useRef<WebSocket | null>(null);
 	const matchmakingWebsocketExists = useRef<boolean>(false);
+
+	const playerUsername = useUsername();
+	const playerUsernameRef = useRef<string | null>(playerUsername);
+
+	const { sendChallenge } = useContext(ChallengeWebsocketContext)!;
 
 	const navigate = useNavigate();
 
@@ -81,6 +93,9 @@ function GameOverModal({
 					whitePlayerRef.current!,
 					blackPlayerRef.current!
 				),
+
+				whitePlayerUsername: whitePlayerRef.current,
+				blackPlayerUsername: blackPlayerRef.current,
 			};
 
 			navigate("/temp", {
@@ -95,6 +110,10 @@ function GameOverModal({
 			handleNavigation();
 		}
 	}, [matchFound]);
+
+	useEffect(() => {
+		playerUsernameRef.current = playerUsername;
+	}, [playerUsername]);
 
 	function handleMatchFound(parsedEventData: any) {
 		matchmakingWebsocketRef.current?.close();
@@ -143,6 +162,12 @@ function GameOverModal({
 		setIsMatchmaking(true);
 	}
 
+	function handleRematch() {
+		const recepientUsername = playerUsername === whitePlayerUsername ? blackPlayerUsername : whitePlayerUsername
+
+		sendChallenge(recepientUsername, "Recent opponent", timeControlInfo);
+	}
+
 	return (
 		<>
 			<div className="game-over-modal-container">
@@ -155,7 +180,9 @@ function GameOverModal({
 					>
 						New game
 					</button>
-					<button className="rematch-button">Rematch</button>
+					<button onClick={handleRematch} className="rematch-button">
+						Rematch
+					</button>
 				</div>
 			</div>
 

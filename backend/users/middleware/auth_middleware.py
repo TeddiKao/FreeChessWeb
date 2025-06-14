@@ -9,9 +9,13 @@ from django.contrib.auth.models import AnonymousUser
 from channels.db import database_sync_to_async
 
 import jwt
+import logging
+
 from jwt import InvalidSignatureError, ExpiredSignatureError, DecodeError, InvalidTokenError
 
 User = get_user_model()
+
+logger = logging.getLogger(__name__)
 
 @database_sync_to_async
 def get_authenticated_user(user_id):
@@ -39,12 +43,13 @@ class JWTAuthenticationMiddleware:
 		decoded_query_string = query_string.decode()
 
 		access_token = parse_qs(decoded_query_string)["token"][0]
-		
 
 		if access_token == None:
 			await self.send_unauthorized_message(send)
 
 			return 
+		
+		logger.debug("Token is provided!")
 
 		authenticated_user = await self.authenticate(access_token)
 		
@@ -67,8 +72,9 @@ class JWTAuthenticationMiddleware:
 
 		try:
 			decoded_access_token = jwt.decode(access_token, secret_key, [algorithm])
-		except (InvalidSignatureError, ExpiredSignatureError, DecodeError, InvalidTokenError):
-			
+		except (InvalidSignatureError, ExpiredSignatureError, DecodeError, InvalidTokenError) as e:
+			logger.debug("Access token is invalid!")
+			logger.debug(e)
 			return AnonymousUser()
 		else:
 			user_id = decoded_access_token.get("user_id")

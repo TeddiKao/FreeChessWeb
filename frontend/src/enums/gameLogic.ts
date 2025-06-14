@@ -13,10 +13,10 @@ enum GameplayWebSocketEventTypes {
 	PROMOTED_PIECES_LIST_UPDATED = "promoted_pieces_list_updated",
 	PLAYER_STALEMATED = "player_stalemated",
 	PLAYER_CHECKMATED = "player_checkmated",
-	THREEFOLD_REPETITION_DETECTED =  "threefold_repetition_detected",
+	THREEFOLD_REPETITION_DETECTED = "threefold_repetition_detected",
 	FIFTY_MOVE_RULE_DETECTED = "50_move_rule_detected",
 	INSUFFICIENT_MATERIAL = "insufficient_material",
-	PLAYER_TIMEOUT = "player_timeout"
+	PLAYER_TIMEOUT = "player_timeout",
 }
 
 enum BotGameWebSocketEventTypes {
@@ -35,4 +35,17 @@ enum ActionWebSocketEventTypes {
 	DRAW_OFFER_DECLINED = "draw_declined",
 }
 
-export { MoveMethods, GameplayWebSocketEventTypes, ActionWebSocketEventTypes, BotGameWebSocketEventTypes }
+enum ChallengeWebsocketEventTypes {
+	CHALLENGE_RECEIVED = "challenge_received",
+	CHALLENGE_SUCCESSFULLY_SENT = "challenge_successfully_sent",
+	CHALLENGE_ACCEPTED = "challenge_accepted",
+	CHALLENGE_DECLINED = "challenge_declined",
+}
+
+export {
+	MoveMethods,
+	GameplayWebSocketEventTypes,
+	ActionWebSocketEventTypes,
+	BotGameWebSocketEventTypes,
+	ChallengeWebsocketEventTypes
+};
