@@ -1184,8 +1184,8 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		received_challenges: list[GameChallenge] = await GameChallenge.get_all_received_challenges_of_user(username)
 
 		for received_challenge in received_challenges:
-			challenge_sender = await received_challenge.get_attr("challenge_sender")
-			challenge_sender_id = await UserAuthModel.async_get_player_id(challenge_sender)
+			challenge_sender: UserAuthModel = await received_challenge.get_attr("challenge_sender")
+			challenge_sender_id = await challenge_sender.async_get_player_id()
 
 			await self.channel_layer.group_send(
 				f"challenge_room_{challenge_sender_id}",
