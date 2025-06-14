@@ -324,6 +324,13 @@ class GameChallenge(models.Model):
 	def get_attr(self, attr_name):
 		return getattr(self, attr_name)
 	
+	@classmethod
+	@database_sync_to_async
+	def get_all_received_challenges_of_user(cls, username):
+		user_model: UserAuthModel = UserAuthModel.sync_get_user_model_from_username(username)
+		
+		return list(cls.objects.filter(challenge_recepient=user_model))
+	
 	@database_sync_to_async
 	def async_delete(self):
 		self.delete()

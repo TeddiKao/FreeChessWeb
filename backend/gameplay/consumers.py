@@ -548,6 +548,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 	async def disconnect(self, code):
 		await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
+
 	async def receive(self, text_data):
 		move_processing_start = perf_counter()
 
@@ -1031,6 +1032,8 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 			self.room_group_name,
 			self.channel_name
 		)
+
+		await self.perform_challenge_cleanup(self.scope["user"])
 	
 	async def receive(self, text_data=None, bytes_data=None):
 		data = json.loads(text_data)
@@ -1173,6 +1176,25 @@ class GameChallengeConsumer(AsyncWebsocketConsumer):
 		)
 
 		await challenge_obj.async_delete()
+
+	async def perform_challenge_cleanup(self, user):
+		await self.reject_all_received_challenges(user.username)
+
+	async def reject_all_received_challenges(self, username):
+		received_challenges: list[GameChallenge] = await GameChallenge.get_all_received_challenges_of_user(username)
+
+		for received_challenge in received_challenges:
+			challenge_sender: UserAuthModel = await received_challenge.get_attr("challenge_sender")
+			challenge_sender_id = await challenge_sender.async_get_player_id()
+
+			await self.channel_layer.group_send(
+				f"challenge_room_{challenge_sender_id}",
+				{
+					"type": "challenge_declined"
+				}
+			)
+
+			await received_challenge.async_delete()
 
 	async def challenge_received(self, event):
 		await self.send(json.dumps({
