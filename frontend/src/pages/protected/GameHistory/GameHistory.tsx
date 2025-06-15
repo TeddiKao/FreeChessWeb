@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar";
 import useCompletedGames from "../../../hooks/useCompletedGames";
 
 import "../../styles/pages/game-history.scss";
@@ -8,6 +7,7 @@ import useUsername from "../../../hooks/useUsername";
 import { isNullOrUndefined } from "../../../utils/generalUtils";
 import PageNavigation from "./components/PageNavigation";
 import { getTotalPages } from "../../../utils/pageNavigationUtils";
+import DashboardNavbar from "../Dashboard/components/DashboardNavbar";
 
 function GameHistory() {
 	const initialUsername = useUsername();
