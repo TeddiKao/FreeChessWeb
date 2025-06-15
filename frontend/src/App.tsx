@@ -5,26 +5,24 @@ import { DndProvider } from "react-dnd";
 import { MultiBackend } from "react-dnd-multi-backend";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
 
-import GuestHomePage from "./pages/GuestHomePage.tsx";
-import Login from "./pages/Login.tsx";
-import Signup from "./pages/Signup.tsx";
-import NotFound from "./pages/NotFound.tsx";
-
-import Dashboard from "./pages/protected/Dashboard.tsx";
-import GameSetup from "./pages/protected/GameSetup.tsx";
-
 import "./styles/global/global.scss";
 
-import ProtectedRoute from "./components/global/routes/ProtectedRoute.tsx";
-import AuthenticationRoute from "./components/global/routes/AuthenticationRoute.tsx";
+import ProtectedRoute from "./components/wrappers/routes/ProtectedRoute.tsx";
+import AuthenticationRoute from "./components/wrappers/routes/AuthenticationRoute.tsx";
 import Play from "./pages/protected/Play.tsx";
 import PassAndPlay from "./pages/protected/PassAndPlay.tsx";
 import TempRoute from "./pages/TempRoute.tsx";
-import SelectBot from "./pages/protected/SelectBot.tsx";
+import SelectBot from "./pages/protected/SelectBot/SelectBot.tsx";
 import PlayBot from "./pages/protected/PlayBot.tsx";
-import GameHistory from "./pages/protected/GameHistory.tsx";
+import GameHistory from "./pages/protected/GameHistory/GameHistory.tsx";
 import ViewGame from "./pages/protected/ViewGame.tsx";
-import ChallengeWebsocketProvider from "./components/global/wrappers/ChallengeWebsocketProvider.tsx";
+import ChallengeWebsocketProvider from "./components/wrappers/ChallengeWebsocketProvider.tsx";
+import Login from "./pages/Login.tsx";
+import GuestHomePage from "./pages/GuestHomePage/GuestHomePage.tsx";
+import Signup from "./pages/Signup.tsx";
+import Dashboard from "./pages/protected/Dashboard/Dashboard.tsx";
+import GameSetup from "./pages/protected/GameSetup.tsx";
+import NotFound from "./pages/NotFound.tsx";
 
 function Logout() {
 	localStorage.clear();

@@ -1,8 +1,8 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
-import MultiplayerChessboard from "../../components/global/chessboards/MultiplayerChessboard.tsx";
-import Timer from "../../components/page/matchmaking/Timer.tsx";
+import MultiplayerChessboard from "../../features/gameplay/chessboards/MultiplayerChessboard.tsx";
+import Timer from "../../features/gameplay/Timer.tsx";
 
 import "../../styles/pages/play.scss";
 import "../../styles/components/chessboard/board-actions.scss";
@@ -13,9 +13,9 @@ import {
 	fetchTimer,
 } from "../../utils/apiUtils.ts";
 
-import GameOverModal from "../../components/global/modals/gameOverModals/MultiplayerModal.tsx";
-import GameplaySettings from "../../components/global/modals/GameplaySettings.tsx";
-import ModalWrapper from "../../components/global/wrappers/ModalWrapper.js";
+import GameOverModal from "../../features/modals/gameOverModals/MultiplayerModal.tsx";
+import GameplaySettings from "../../features/modals/GameplaySettings.tsx";
+import ModalWrapper from "../../components/wrappers/ModalWrapper.js";
 import { OptionalValue } from "../../types/general.js";
 import {
 	MoveInfo,
@@ -23,19 +23,22 @@ import {
 	PieceColor,
 } from "../../types/gameLogic.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
-import MoveListPanel from "../../components/global/gameplaySidePanel/MoveListPanel.tsx";
-import MoveNavigationButtons from "../../components/global/gameplaySidePanel/MoveNavigationButtons.tsx";
-import GameplayActionButtons from "../../components/global/gameplaySidePanel/GameplayActionButtons.tsx";
+import MoveListPanel from "../../features/gameplay/gameplaySidePanel/MoveListPanel.tsx";
+import MoveNavigationButtons from "../../features/gameplay/gameplaySidePanel/MoveNavigationButtons.tsx";
+import GameplayActionButtons from "../../features/gameplay/gameplaySidePanel/GameplayActionButtons.tsx";
 import { isNullOrUndefined } from "../../utils/generalUtils.ts";
-import MessageBox from "../../components/global/popups/MessageBox.tsx";
+import MessageBox from "../../components/common/MessageBox.tsx";
 import { MessageBoxTypes } from "../../types/messageBox.ts";
-import DrawOfferPopup from "../../components/global/popups/DrawOfferPopup.tsx";
+import DrawOfferPopup from "../../features/popups/DrawOfferPopup.tsx";
 import { playAudio } from "../../utils/audioUtils.ts";
-import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar.tsx";
+import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar.tsx";
 import { convertToMilliseconds } from "../../utils/timeUtils.ts";
-import { animationOffsetSync, pieceAnimationTime } from "../../constants/pieceAnimation.ts";
+import {
+	animationOffsetSync,
+	pieceAnimationTime,
+} from "../../constants/pieceAnimation.ts";
 import usePieceAnimation from "../../hooks/usePieceAnimation.ts";
-import CapturedMaterial from "../../components/global/CapturedMaterial.tsx";
+import CapturedMaterial from "../../features/gameplay/CapturedMaterial.tsx";
 import {
 	CapturedPiecesList,
 	PromotedPiecesList,
@@ -124,8 +127,8 @@ function Play() {
 
 	const actionWebSocketRef = useRef(null);
 
-	const whitePlayerUsername = location.state?.whitePlayerUsername
-	const blackPlayerUsername = location.state?.blackPlayerUsername
+	const whitePlayerUsername = location.state?.whitePlayerUsername;
+	const blackPlayerUsername = location.state?.blackPlayerUsername;
 
 	useEffect(() => {
 		updatePlayerTimers();

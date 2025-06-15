@@ -6,12 +6,13 @@ import {
 	fetchPositionList,
 } from "../../utils/apiUtils";
 import { ParsedFENString } from "../../types/gameLogic";
-import GameReplayChessboard from "../../components/global/chessboards/GameReplayChessboard";
+import GameReplayChessboard from "../../features/gameplay/chessboards/GameReplayChessboard";
+
+import MoveListPanel from "../../features/gameplay/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "../../features/gameplay/gameplaySidePanel/MoveNavigationButtons";
+import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar";
 
 import "../../styles/pages/view-game.scss";
-import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar";
-import MoveListPanel from "../../components/global/gameplaySidePanel/MoveListPanel";
-import MoveNavigationButtons from "../../components/global/gameplaySidePanel/MoveNavigationButtons";
 import { playAudio } from "../../utils/audioUtils";
 import { isNullOrUndefined } from "../../utils/generalUtils";
 import { OptionalValue } from "../../types/general";
