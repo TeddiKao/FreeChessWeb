@@ -1,4 +1,4 @@
-import { StateSetterFunction } from "../../../types/general";
+import { StateSetterFunction } from "../../../../types/general";
 import "../../../styles/features/gameHistory/page-navigation.scss";
 
 type PageNavigationProps = {
@@ -13,7 +13,9 @@ function PageNavigation({
 	totalPages,
 }: PageNavigationProps) {
 	function nextPage() {
-		setPage((prevPage) => (prevPage < totalPages ? prevPage + 1 : prevPage));
+		setPage((prevPage) =>
+			prevPage < totalPages ? prevPage + 1 : prevPage
+		);
 	}
 
 	function previousPage() {
@@ -40,7 +42,7 @@ function PageNavigation({
 		<div className="page-navigation-container">
 			<div
 				role="button"
-                onClick={previousPage}
+				onClick={previousPage}
 				className={`prev-page-button-container ${getPrevPageButtonIsHiddenClass()}`}
 			>
 				<img
@@ -56,7 +58,7 @@ function PageNavigation({
 
 			<div
 				role="button"
-                onClick={nextPage}
+				onClick={nextPage}
 				className={`next-page-button-container ${getNextPageButtonIsHiddenClass()}`}
 			>
 				<img

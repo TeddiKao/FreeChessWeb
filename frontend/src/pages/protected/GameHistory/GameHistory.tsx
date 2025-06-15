@@ -3,10 +3,10 @@ import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar";
 import useCompletedGames from "../../../hooks/useCompletedGames";
 
 import "../../styles/pages/game-history.scss";
-import CompletedGameInfo from "../../../components/page/gameHistory/CompletedGameInfo";
+import CompletedGameInfo from "./components/CompletedGameInfo";
 import useUsername from "../../../hooks/useUsername";
 import { isNullOrUndefined } from "../../../utils/generalUtils";
-import PageNavigation from "../../../components/page/gameHistory/PageNavigation";
+import PageNavigation from "./components/PageNavigation";
 import { getTotalPages } from "../../../utils/pageNavigationUtils";
 
 function GameHistory() {
