@@ -4,8 +4,8 @@ import {
 	OptionalValue,
 	RefObject,
 	StateSetterFunction,
-} from "../../types/general";
-import { ArrowKeys } from "../../enums/general";
+} from "../../../types/general";
+import { ArrowKeys } from "../../../enums/general";
 
 type MoveNavigationButtonsProps = {
 	setPositionIndex: StateSetterFunction<number>;

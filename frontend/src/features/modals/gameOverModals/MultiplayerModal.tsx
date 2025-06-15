@@ -1,17 +1,14 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import "../../../../styles/modals/game-over-modal.scss";
-import {
-	capitaliseFirstLetter,
-	parseWebsocketUrl,
-} from "../../../../utils/generalUtils";
-import useWebSocket from "../../../../hooks/useWebsocket";
-import { TimeControl } from "../../../../types/gameSetup";
+import { ChallengeWebsocketContext } from "../../../components/wrappers/ChallengeWebsocketProvider";
+import useUsername from "../../../hooks/useUsername";
 import { useNavigate } from "react-router-dom";
-import { MatchmakingEvents } from "../../../../enums/gameSetup";
-import { getAssignedColor } from "../../../../utils/matchmakingUtils";
+import { capitaliseFirstLetter, parseWebsocketUrl } from "../../../utils/generalUtils";
+import useWebSocket from "../../../hooks/useWebsocket";
+import { getAssignedColor } from "../../../utils/matchmakingUtils";
 import MatchmakingShortcutScreen from "../MatchmakingShortcutScreen";
-import { ChallengeWebsocketContext } from "../../wrappers/ChallengeWebsocketProvider";
-import useUsername from "../../../../hooks/useUsername";
+import { MatchmakingEvents } from "../../../enums/gameSetup";
+import { TimeControl } from "../../../types/gameSetup";
 
 type GameOverModalProps = {
 	visible: boolean;
