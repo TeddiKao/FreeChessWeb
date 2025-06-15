@@ -1,14 +1,14 @@
 import { useEffect, useState, useRef } from "react";
-import { displayTimeControl } from "../../../utils/timeUtils.ts";
+import { displayTimeControl } from "../../utils/timeUtils.ts";
 
-import useWebSocket from "../../../hooks/useWebsocket.ts";
+import useWebSocket from "../../hooks/useWebsocket.ts";
 
 import "../../../styles/features/gameSetup/matchmaking-screen.scss";
 import { useNavigate } from "react-router-dom";
-import { getAccessToken } from "../../../utils/tokenUtils.ts";
-import { getUsername } from "../../../utils/apiUtils.ts";
-import { MatchmakingEvents } from "../../../enums/gameSetup.ts";
-import { websocketBaseURL } from "../../../constants/urls.ts";
+import { getAccessToken } from "../../utils/tokenUtils.ts";
+import { getUsername } from "../../utils/apiUtils.ts";
+import { MatchmakingEvents } from "../../enums/gameSetup.ts";
+import { websocketBaseURL } from "../../constants/urls.ts";
 
 type timeControlInfo = {
 	baseTime: number;
@@ -42,11 +42,20 @@ function MatchmakingScreen({
 	const matchmakingWebsocketExists = useRef<boolean>(false);
 
 	const websocketURL = `${websocketBaseURL}/ws/matchmaking-server/?token=${getAccessToken()}&baseTime=${baseTime}&increment=${increment}`;
-	
-    const shouldBeginMatchmaking = isMatchmaking && !websocketConnected && !matchmakingWebsocketExists.current
-    
-	const [matchmakingWebsocketEnabled, setMatchmakingWebsocketEnabled] = useState(shouldBeginMatchmaking);
-	const matchmakingWebsocket = useWebSocket(websocketURL, onMessage, onError, matchmakingWebsocketEnabled);
+
+	const shouldBeginMatchmaking =
+		isMatchmaking &&
+		!websocketConnected &&
+		!matchmakingWebsocketExists.current;
+
+	const [matchmakingWebsocketEnabled, setMatchmakingWebsocketEnabled] =
+		useState(shouldBeginMatchmaking);
+	const matchmakingWebsocket = useWebSocket(
+		websocketURL,
+		onMessage,
+		onError,
+		matchmakingWebsocketEnabled
+	);
 
 	const navigate = useNavigate();
 
@@ -87,7 +96,7 @@ function MatchmakingScreen({
 
 		if (isMatchmaking) {
 			if (!websocketConnected) {
-				if (!matchmakingWebsocketExists.current) {   
+				if (!matchmakingWebsocketExists.current) {
 					matchmakingWebsocketRef.current = matchmakingWebsocket;
 					matchmakingWebsocketExists.current = true;
 
