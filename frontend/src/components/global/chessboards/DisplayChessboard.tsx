@@ -4,7 +4,7 @@ import {
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid";
 import "../../../styles/components/chessboard/chessboard.scss";
-import ChessboardGrid from "../chessboard/ChessboardGrid";
+import ChessboardGrid from "../../chessboard/ChessboardGrid";
 
 function DisplayChessboard({
 	parsed_fen_string,

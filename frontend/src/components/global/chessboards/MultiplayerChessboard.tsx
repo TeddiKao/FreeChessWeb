@@ -56,7 +56,7 @@ import { getOppositeColor } from "../../../utils/gameLogic/general.ts";
 import useUsername from "../../../hooks/useUsername.ts";
 import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
 import { isObjEmpty } from "../../../utils/generalUtils.ts";
-import ChessboardGrid from "../chessboard/ChessboardGrid.tsx";
+import ChessboardGrid from "../../chessboard/ChessboardGrid.tsx";
 import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,

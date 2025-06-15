@@ -64,7 +64,7 @@ import {
 import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
 import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
 import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";
-import ChessboardGrid from "../chessboard/ChessboardGrid.tsx";
+import ChessboardGrid from "../../chessboard/ChessboardGrid.tsx";
 import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,

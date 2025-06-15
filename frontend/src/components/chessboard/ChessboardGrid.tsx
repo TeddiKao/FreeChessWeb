@@ -1,12 +1,12 @@
-import { BoardPlacement } from "../../../types/gameLogic";
+import { BoardPlacement } from "../../types/gameLogic";
 
 import "../../../styles/components/chessboard/chessboard.scss";
-import { getFile, getRank, isSquareLight } from "../../../utils/boardUtils";
+import { getFile, getRank, isSquareLight } from "../../utils/boardUtils";
 import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
-} from "../../../interfaces/chessboardGrid";
-import { getPromotionRank } from "../../../utils/gameLogic/promotion";
+} from "../../interfaces/chessboardGrid";
+import { getPromotionRank } from "../../utils/gameLogic/promotion";
 
 type ChessboardGridProps = {
 	boardOrientation: string;
