@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "../../../styles/components/dashboard/dashboard-navbar.scss";
-import { dashboardNavLinks } from "../../../constants/navLinksConfig";
 import ParentLink from "./navbar/ParentLink";
 import AccountLinks from "./navbar/AccountLinks";
+import { dashboardNavLinks } from "../../../../constants/navLinksConfig";
 
 function DashboardNavbar() {
 	const [dashboardNavbarExpanded, setDashboardNavbarExpanded] =
