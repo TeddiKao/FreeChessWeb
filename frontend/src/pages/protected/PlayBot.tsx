@@ -9,7 +9,7 @@ import { MoveInfo, ParsedFENString } from "../../types/gameLogic";
 
 import "../../styles/pages/play-bot.scss";
 import useGameplaySettings from "../../hooks/useGameplaySettings";
-import GameplaySettings from "../../features/modals/GameplaySettings";
+import GameplaySettings from "../../features/modals/GameplaySettings/GameplaySettings";
 import ModalWrapper from "../../components/global/wrappers/ModalWrapper";
 import { Navigate, useLocation } from "react-router-dom";
 import { ChessboardSquareIndex, OptionalValue } from "../../types/general";
