@@ -29,7 +29,7 @@ import GameplayActionButtons from "../../features/gameplaySidePanel/GameplayActi
 import { isNullOrUndefined } from "../../utils/generalUtils.ts";
 import MessageBox from "../../components/global/popups/MessageBox.tsx";
 import { MessageBoxTypes } from "../../types/messageBox.ts";
-import DrawOfferPopup from "../../components/global/popups/DrawOfferPopup.tsx";
+import DrawOfferPopup from "../../features/popups/DrawOfferPopup.tsx";
 import { playAudio } from "../../utils/audioUtils.ts";
 import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar.tsx";
 import { convertToMilliseconds } from "../../utils/timeUtils.ts";
