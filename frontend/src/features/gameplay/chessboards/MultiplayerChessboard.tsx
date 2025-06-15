@@ -3,7 +3,7 @@ import _ from "lodash";
 
 // Basic imports like CSS files and components
 import "../../../styles/components/chessboard/chessboard.scss";
-import Square from "../Square.js";
+import Square from "../../../components/chessboard/Square.tsx";
 
 // Types, interfaces, enums
 import {

@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext, useRef } from "react";
 
 import "../../../styles/components/chessboard/chessboard.scss";
-import Square from "../Square.js";
 
 import {
 	clearSquaresStyling,
@@ -69,6 +68,7 @@ import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid.ts";
+import Square from "../../../components/chessboard/Square.tsx";
 
 function Chessboard({
 	parsed_fen_string,

@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
 import "../../../styles/components/chessboard/chessboard.scss";
-import Square from "../../../components/chessboard/Square.tsx";
 
 import {
 	clearSquaresStyling,
@@ -44,6 +43,7 @@ import {
 } from "../../../interfaces/chessboardGrid.ts";
 import ChessboardGrid from "../../../components/chessboard/ChessboardGrid.tsx";
 import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle.ts";
+import Square from "../../../components/chessboard/Square.tsx";
 function BotChessboard({
 	parsed_fen_string,
 	orientation,
