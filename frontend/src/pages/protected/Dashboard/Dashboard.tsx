@@ -1,6 +1,6 @@
-import DashboardNavbar from "../../../components/page/dashboard/DashboardNavbar.tsx";
-import DashboardSuggestions from "../../../components/page/dashboard/DashboardSuggestions.tsx";
-import UserGreeting from "../../../components/page/dashboard/UserGreeting.tsx";
+import DashboardNavbar from "./components/DashboardNavbar.tsx";
+import DashboardSuggestions from "./components/DashboardSuggestions.tsx";
+import UserGreeting from "./components/UserGreeting.tsx";
 
 import "../../styles/pages/dashboard.scss";
 
