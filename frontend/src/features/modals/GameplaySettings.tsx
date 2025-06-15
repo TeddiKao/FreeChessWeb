@@ -1,7 +1,7 @@
 import useGameplaySettings from "../../hooks/useGameplaySettings.js";
 import Setting from "../../components/settings/Setting.js";
 
-import "../../../styles/modals/gameplay-settings.scss";
+import "../../styles/modals/gameplay-settings.scss";
 import { StateSetterFunction } from "../../types/general.js";
 
 type GameplaySettingsModalProps = {

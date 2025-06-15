@@ -1,4 +1,4 @@
-import "../../../styles/popups/confirmation-popup.scss";
+import "../../styles/popups/confirmation-popup.scss";
 
 type ConfirmationPopupProps = {
     confirmationMessage: string;
@@ -8,6 +8,7 @@ type ConfirmationPopupProps = {
     setIsOpen: (isOpen: boolean) => void;
     title?: string;
 };
+
 
 function ConfirmationPopup({
     confirmationMessage,

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 import { StateSetterFunction } from "../../../types/general"
 import { convertToMilliseconds } from "../../../utils/timeUtils"
 
-import "../../../styles/popups/message-box.scss"
+import "../../styles/popups/message-box.scss"
 
 type MessageBoxProps = {
 	setVisible: StateSetterFunction<boolean>

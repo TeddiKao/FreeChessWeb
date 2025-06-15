@@ -1,6 +1,6 @@
 import { BoardPlacement } from "../../types/gameLogic";
 
-import "../../../styles/components/chessboard/chessboard.scss";
+import "../../styles/components/chessboard/chessboard.scss";
 import { getFile, getRank, isSquareLight } from "../../utils/boardUtils";
 import {
 	EmptySquareRenderParams,

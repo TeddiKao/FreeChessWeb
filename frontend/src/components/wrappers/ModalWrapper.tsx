@@ -1,4 +1,4 @@
-import "../../../styles/wrappers/modal-wrapper.scss";
+import "../../styles/wrappers/modal-wrapper.scss";
 import { ReactNode } from "react";
 import ReactDom from "react-dom";
 
