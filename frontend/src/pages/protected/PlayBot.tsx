@@ -16,7 +16,6 @@ import { isNullOrUndefined } from "../../utils/generalUtils";
 import { playAudio } from "../../utils/audioUtils";
 import { convertToMilliseconds } from "../../utils/timeUtils";
 import { pieceAnimationTime } from "../../constants/pieceAnimation";
-import useReactiveRef from "../../hooks/useReactiveRef";
 import usePieceAnimation from "../../hooks/usePieceAnimation";
 import LocalGameOverModal from "../../features/modals/gameOverModals/LocalModal";
 import MoveNavigationButtons from "../../features/gameplay/gameplaySidePanel/MoveNavigationButtons";
