@@ -8,10 +8,11 @@ import {
 import { ParsedFENString } from "../../types/gameLogic";
 import GameReplayChessboard from "../../features/gameplay/chessboards/GameReplayChessboard";
 
+import MoveListPanel from "../../features/gameplay/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "../../features/gameplay/gameplaySidePanel/MoveNavigationButtons";
+import DashboardNavbar from "./Dashboard/components/DashboardNavbar";
+
 import "../../styles/pages/view-game.scss";
-import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar";
-import MoveListPanel from "../../features/gameplaySidePanel/MoveListPanel";
-import MoveNavigationButtons from "../../features/gameplaySidePanel/MoveNavigationButtons";
 import { playAudio } from "../../utils/audioUtils";
 import { isNullOrUndefined } from "../../utils/generalUtils";
 import { OptionalValue } from "../../types/general";
