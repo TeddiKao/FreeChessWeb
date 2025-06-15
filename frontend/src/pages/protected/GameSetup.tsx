@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import DisplayChessboard from "../../components/global/chessboards/DisplayChessboard.tsx";
+import DisplayChessboard from "../../features/gameplay/chessboards/DisplayChessboard.tsx";
 
 import TimeControlTypeContainer from "../../features/gameSetup/TimeControlTypeContainer.js";
 import Timer from "../../components/page/matchmaking/Timer.tsx";

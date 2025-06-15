@@ -1,7 +1,7 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
-import MultiplayerChessboard from "../../components/global/chessboards/MultiplayerChessboard.tsx";
+import MultiplayerChessboard from "../../features/gameplay/chessboards/MultiplayerChessboard.tsx";
 import Timer from "../../components/page/matchmaking/Timer.tsx";
 
 import "../../styles/pages/play.scss";

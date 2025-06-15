@@ -5,7 +5,7 @@ import {
 } from "../../../interfaces/chessboardGrid";
 import { getSquareClass } from "../../../utils/boardUtils";
 import { capitaliseFirstLetter } from "../../../utils/generalUtils";
-import ChessboardGrid from "../../chessboard/ChessboardGrid";
+import ChessboardGrid from "../../../components/chessboard/ChessboardGrid";
 
 function GameReplayChessboard({
 	parsed_fen_string,

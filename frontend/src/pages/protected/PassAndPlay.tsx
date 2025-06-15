@@ -10,7 +10,7 @@ import {
 import "../../styles/components/chessboard/board-actions.scss";
 import "../../styles/pages/pass-and-play.scss";
 
-import Chessboard from "../../components/global/chessboards/Chessboard.tsx";
+import Chessboard from "../../features/gameplay/chessboards/Chessboard.tsx";
 import GameplaySettings from "../../features/modals/GameplaySettings.tsx";
 import ModalWrapper from "../../components/wrappers/ModalWrapper.tsx";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";

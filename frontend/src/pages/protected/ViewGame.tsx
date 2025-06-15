@@ -6,7 +6,7 @@ import {
 	fetchPositionList,
 } from "../../utils/apiUtils";
 import { ParsedFENString } from "../../types/gameLogic";
-import GameReplayChessboard from "../../components/global/chessboards/GameReplayChessboard";
+import GameReplayChessboard from "../../features/gameplay/chessboards/GameReplayChessboard";
 
 import "../../styles/pages/view-game.scss";
 import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar";

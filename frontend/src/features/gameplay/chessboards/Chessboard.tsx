@@ -6,27 +6,27 @@ import Square from "../Square.js";
 import {
 	clearSquaresStyling,
 	getSquareExists,
-} from "../../../utils/boardUtils";
+} from "../../../utils/boardUtils.ts";
 
-import { playAudio } from "../../../utils/audioUtils";
+import { playAudio } from "../../../utils/audioUtils.ts";
 
 import {
 	fetchLegalMoves,
 	fetchMoveIsValid,
 	getIsCheckmated,
 	getIsStalemated,
-} from "../../../utils/apiUtils";
+} from "../../../utils/apiUtils.ts";
 
 import {
 	disableCastling,
 	handleCastling,
 	isCastling,
-} from "../../../utils/gameLogic/castling";
+} from "../../../utils/gameLogic/castling.ts";
 
 import {
 	handleEnPassant,
 	updateEnPassantTargetSquare,
-} from "../../../utils/gameLogic/enPassant";
+} from "../../../utils/gameLogic/enPassant.ts";
 
 import {
 	GameEndedSetterContext,
@@ -38,15 +38,15 @@ import {
 	cancelPromotion,
 	handlePromotionCaptureStorage,
 	updatePromotedBoardPlacment,
-} from "../../../utils/gameLogic/promotion";
+} from "../../../utils/gameLogic/promotion.ts";
 
 import {
 	addPieceToDestinationSquare,
 	clearStartingSquare,
-} from "../../../utils/gameLogic/basicMovement";
+} from "../../../utils/gameLogic/basicMovement.ts";
 
 import { MoveMethods } from "../../../enums/gameLogic.ts";
-import { getOppositeColor } from "../../../utils/gameLogic/general";
+import { getOppositeColor } from "../../../utils/gameLogic/general.ts";
 import { ChessboardProps } from "../../../interfaces/chessboard.js";
 import {
 	ChessboardSquareIndex,
@@ -64,7 +64,7 @@ import {
 import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
 import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
 import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";
-import ChessboardGrid from "../../chessboard/ChessboardGrid.tsx";
+import ChessboardGrid from "../../../components/chessboard/ChessboardGrid.tsx";
 import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,

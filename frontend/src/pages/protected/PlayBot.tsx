@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import BotChessboard from "../../components/global/chessboards/BotChessboard";
+import BotChessboard from "../../features/gameplay/chessboards/BotChessboard";
 import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar";
 import {
 	fetchBotGameMoveList,

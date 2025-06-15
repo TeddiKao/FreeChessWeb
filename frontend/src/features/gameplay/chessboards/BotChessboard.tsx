@@ -1,21 +1,21 @@
 import { useState, useEffect, useRef } from "react";
 
 import "../../../styles/components/chessboard/chessboard.scss";
-import Square from "../../chessboard/Square.tsx";
+import Square from "../../../components/chessboard/Square.tsx";
 
 import {
 	clearSquaresStyling,
 	getRank,
 	getSquareExists,
-} from "../../../utils/boardUtils";
+} from "../../../utils/boardUtils.ts";
 
-import { fetchLegalMoves } from "../../../utils/apiUtils";
+import { fetchLegalMoves } from "../../../utils/apiUtils.ts";
 
 import {
 	cancelPromotion,
 	handlePromotionCaptureStorage,
 	preparePawnPromotion,
-} from "../../../utils/gameLogic/promotion";
+} from "../../../utils/gameLogic/promotion.ts";
 
 import {
 	BotGameWebSocketEventTypes,
@@ -42,7 +42,7 @@ import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid.ts";
-import ChessboardGrid from "../../chessboard/ChessboardGrid.tsx";
+import ChessboardGrid from "../../../components/chessboard/ChessboardGrid.tsx";
 import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle.ts";
 function BotChessboard({
 	parsed_fen_string,
