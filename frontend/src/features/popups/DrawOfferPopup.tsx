@@ -1,4 +1,4 @@
-import "../../../styles/popups/draw-offer-popup.scss";
+import "../../styles/popups/draw-offer-popup.scss";
 import { RefObject } from "../../types/general";
 
 type DrawOfferPopupProps = {
