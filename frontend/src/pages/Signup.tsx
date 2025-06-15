@@ -1,4 +1,4 @@
-import AuthForm from "../components/global/AuthForm.js";
+import AuthForm from "../features/forms/AuthForm";
 
 function Signup() {
 	return <AuthForm method="Signup" />;

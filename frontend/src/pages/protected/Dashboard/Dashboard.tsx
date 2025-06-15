@@ -2,7 +2,7 @@ import DashboardNavbar from "./components/DashboardNavbar.tsx";
 import DashboardSuggestions from "./components/DashboardSuggestions.tsx";
 import UserGreeting from "./components/UserGreeting.tsx";
 
-import "../../styles/pages/dashboard.scss";
+import "../../../styles/pages/dashboard.scss";
 
 function Dashboard() {
 	return (

@@ -1,4 +1,4 @@
-import UnauthenticatedNavbar from "../components/global/UnauthenticatedNavbar.js";
+import UnauthenticatedNavbar from "./components/UnauthenticatedNavbar";
 
 function GuestHomePage() {
 	return (
