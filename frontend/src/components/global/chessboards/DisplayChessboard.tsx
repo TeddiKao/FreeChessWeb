@@ -1,7 +1,10 @@
 import { DisplayChessboardProps } from "../../../interfaces/chessboard";
-import { EmptySquareRenderParams, FilledSquareRenderParams } from "../../../interfaces/chessboardGrid";
+import {
+	EmptySquareRenderParams,
+	FilledSquareRenderParams,
+} from "../../../interfaces/chessboardGrid";
 import "../../../styles/components/chessboard/chessboard.scss";
-import ChessboardGrid from "./ChessboardGrid";
+import ChessboardGrid from "../chessboard/ChessboardGrid";
 
 function DisplayChessboard({
 	parsed_fen_string,
@@ -31,7 +34,10 @@ function DisplayChessboard({
 		);
 	}
 
-	function renderEmptySquare({ squareIndex, squareColor }: EmptySquareRenderParams) {
+	function renderEmptySquare({
+		squareIndex,
+		squareColor,
+	}: EmptySquareRenderParams) {
 		return (
 			<div
 				key={squareIndex}
@@ -45,8 +51,8 @@ function DisplayChessboard({
 		<ChessboardGrid
 			renderFilledSquare={renderFilledSquare}
 			renderEmptySquare={renderEmptySquare}
-            boardOrientation={orientation}
-            boardPlacement={parsed_fen_string["board_placement"]}
+			boardOrientation={orientation}
+			boardPlacement={parsed_fen_string["board_placement"]}
 		/>
 	);
 }

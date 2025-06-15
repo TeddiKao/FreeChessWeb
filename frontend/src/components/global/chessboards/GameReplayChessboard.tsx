@@ -3,11 +3,9 @@ import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid";
-import {
-	getSquareClass,
-} from "../../../utils/boardUtils";
+import { getSquareClass } from "../../../utils/boardUtils";
 import { capitaliseFirstLetter } from "../../../utils/generalUtils";
-import ChessboardGrid from "./ChessboardGrid";
+import ChessboardGrid from "../chessboard/ChessboardGrid";
 
 function GameReplayChessboard({
 	parsed_fen_string,

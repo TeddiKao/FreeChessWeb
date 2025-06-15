@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 
 import "../../../styles/components/chessboard/chessboard.scss";
-import Square from "../Square.js";
+import Square from "../chessboard/Square.tsx";
 
 import {
 	clearSquaresStyling,
 	getRank,
 	getSquareExists,
 } from "../../../utils/boardUtils";
-
 
 import { fetchLegalMoves } from "../../../utils/apiUtils";
 
@@ -43,7 +42,7 @@ import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid.ts";
-import ChessboardGrid from "./ChessboardGrid.tsx";
+import ChessboardGrid from "../chessboard/ChessboardGrid.tsx";
 import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle.ts";
 function BotChessboard({
 	parsed_fen_string,
@@ -148,8 +147,10 @@ function BotChessboard({
 	}
 
 	function handleMoveMade(moveMethod: string) {
-		const startingSquare = moveMethod === "drag" ? draggedSquare : previousClickedSquare;
-		const destinationSquare = moveMethod === "drag" ? droppedSquare : clickedSquare;
+		const startingSquare =
+			moveMethod === "drag" ? draggedSquare : previousClickedSquare;
+		const destinationSquare =
+			moveMethod === "drag" ? droppedSquare : clickedSquare;
 
 		clearSquaresStyling();
 
@@ -169,7 +170,7 @@ function BotChessboard({
 
 		if (startingSquare === destinationSquare) {
 			return;
-		} 
+		}
 
 		const boardPlacement = parsedFENString["board_placement"];
 		const squareInfo = boardPlacement[`${startingSquare}`];
@@ -294,7 +295,6 @@ function BotChessboard({
 	const autoQueen = gameplaySettings["auto_queen"];
 	const showLegalMoves = gameplaySettings["show_legal_moves"];
 
-
 	function handleSquareClick(event: React.MouseEvent<HTMLElement>) {
 		if (!previousClickedSquare && !clickedSquare) {
 			setPreviousClickedSquare(event.currentTarget.id);
@@ -315,7 +315,7 @@ function BotChessboard({
 			? `${draggedSquare}`
 			: `${previousClickedSquare}`;
 
-		console.log(typeof(startingSquare));
+		console.log(typeof startingSquare);
 
 		if (!startingSquare) {
 			return;
