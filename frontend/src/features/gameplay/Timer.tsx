@@ -1,5 +1,5 @@
-import "../../../styles/features/gameplay/timer.scss";
-import { formatTime, getLowTimeThreshold } from "../../../utils/timeUtils.ts";
+import "../../styles/features/gameplay/timer.scss";
+import { formatTime, getLowTimeThreshold } from "../../utils/timeUtils.ts";
 
 type TimerProps = {
     playerColor: string;
