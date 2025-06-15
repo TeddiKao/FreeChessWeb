@@ -10,7 +10,7 @@ import Login from "./pages/Login.tsx";
 import Signup from "./pages/Signup.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
-import Dashboard from "./pages/protected/Dashboard.tsx";
+import Dashboard from "./pages/protected/Dashboard/Dashboard.tsx";
 import GameSetup from "./pages/protected/GameSetup.tsx";
 
 import "./styles/global/global.scss";
