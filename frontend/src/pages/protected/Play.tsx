@@ -38,7 +38,7 @@ import {
 	pieceAnimationTime,
 } from "../../constants/pieceAnimation.ts";
 import usePieceAnimation from "../../hooks/usePieceAnimation.ts";
-import CapturedMaterial from "../../components/global/CapturedMaterial.tsx";
+import CapturedMaterial from "../../features/gameplay/CapturedMaterial.tsx";
 import {
 	CapturedPiecesList,
 	PromotedPiecesList,
