@@ -3,7 +3,7 @@ import { displayTimeControl } from "../../utils/timeUtils";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import ModalWrapper from "../../components/wrappers/ModalWrapper";
 
-import "../../../styles/modals/challenge-response-wait-screen.scss";
+import "../../styles/modals/challenge-response-wait-screen.scss";
 
 type ChallengeResponseWaitScreenProps = {
 	visible: boolean;

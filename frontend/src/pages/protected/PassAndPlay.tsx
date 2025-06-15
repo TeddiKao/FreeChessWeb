@@ -15,8 +15,8 @@ import GameplaySettings from "../../features/modals/GameplaySettings.tsx";
 import ModalWrapper from "../../components/wrappers/ModalWrapper.tsx";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
 import { ParsedFENString } from "../../types/gameLogic.ts";
-import LocalGameOverModal from "../../components/global/modals/gameOverModals/LocalModal.tsx";
-import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar.tsx";
+import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar.tsx";
+import LocalGameOverModal from "../../features/modals/gameOverModals/LocalModal.tsx";
 
 function PassAndPlay() {
 	const [parsedFEN, setParsedFEN] = useState<ParsedFENString | null>(null);

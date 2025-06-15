@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import useCompletedGames from "../../../hooks/useCompletedGames";
 
-import "../../styles/pages/game-history.scss";
+import "../../../styles/pages/game-history.scss";
 import CompletedGameInfo from "./components/CompletedGameInfo";
 import useUsername from "../../../hooks/useUsername";
 import { isNullOrUndefined } from "../../../utils/generalUtils";

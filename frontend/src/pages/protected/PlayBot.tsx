@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import BotChessboard from "../../features/gameplay/chessboards/BotChessboard";
-import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar";
 import {
 	fetchBotGameMoveList,
 	fetchBotGamePositionList,
@@ -13,15 +12,16 @@ import GameplaySettings from "../../features/modals/GameplaySettings";
 import ModalWrapper from "../../components/wrappers/ModalWrapper";
 import { Navigate, useLocation } from "react-router-dom";
 import { ChessboardSquareIndex, OptionalValue } from "../../types/general";
-import MoveNavigationButtons from "../../features/gameplaySidePanel/MoveNavigationButtons";
-import MoveListPanel from "../../features/gameplaySidePanel/MoveListPanel";
 import { isNullOrUndefined } from "../../utils/generalUtils";
 import { playAudio } from "../../utils/audioUtils";
-import LocalGameOverModal from "../../components/global/modals/gameOverModals/LocalModal";
 import { convertToMilliseconds } from "../../utils/timeUtils";
 import { pieceAnimationTime } from "../../constants/pieceAnimation";
 import useReactiveRef from "../../hooks/useReactiveRef";
 import usePieceAnimation from "../../hooks/usePieceAnimation";
+import LocalGameOverModal from "../../features/modals/gameOverModals/LocalModal";
+import MoveNavigationButtons from "../../features/gameplay/gameplaySidePanel/MoveNavigationButtons";
+import MoveListPanel from "../../features/gameplay/gameplaySidePanel/MoveListPanel";
+import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar";
 
 function PlayBot() {
 	const initialGameplaySettings = useGameplaySettings();

@@ -2,7 +2,7 @@ import { TimeControl } from "../../types/gameSetup";
 import { displayTimeControl } from "../../utils/timeUtils";
 import ModalWrapper from "../../components/wrappers/ModalWrapper";
 
-import "../../../styles/modals/challenge-notification.scss";
+import "../../styles/modals/challenge-notification.scss";
 import { useContext } from "react";
 import { ChallengeWebsocketContext } from "../../components/wrappers/ChallengeWebsocketProvider";
 
