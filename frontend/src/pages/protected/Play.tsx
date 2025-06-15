@@ -15,7 +15,7 @@ import {
 
 import GameOverModal from "../../components/global/modals/gameOverModals/MultiplayerModal.tsx";
 import GameplaySettings from "../../features/modals/GameplaySettings.tsx";
-import ModalWrapper from "../../components/global/wrappers/ModalWrapper.js";
+import ModalWrapper from "../../components/wrappers/ModalWrapper.js";
 import { OptionalValue } from "../../types/general.js";
 import {
 	MoveInfo,

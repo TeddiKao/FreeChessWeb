@@ -15,8 +15,8 @@ import GameSetup from "./pages/protected/GameSetup.tsx";
 
 import "./styles/global/global.scss";
 
-import ProtectedRoute from "./components/global/routes/ProtectedRoute.tsx";
-import AuthenticationRoute from "./components/global/routes/AuthenticationRoute.tsx";
+import ProtectedRoute from "./components/wrappers/routes/ProtectedRoute.tsx";
+import AuthenticationRoute from "./components/wrappers/routes/AuthenticationRoute.tsx";
 import Play from "./pages/protected/Play.tsx";
 import PassAndPlay from "./pages/protected/PassAndPlay.tsx";
 import TempRoute from "./pages/TempRoute.tsx";
@@ -24,7 +24,7 @@ import SelectBot from "./pages/protected/SelectBot.tsx";
 import PlayBot from "./pages/protected/PlayBot.tsx";
 import GameHistory from "./pages/protected/GameHistory.tsx";
 import ViewGame from "./pages/protected/ViewGame.tsx";
-import ChallengeWebsocketProvider from "./components/global/wrappers/ChallengeWebsocketProvider.tsx";
+import ChallengeWebsocketProvider from "./components/wrappers/ChallengeWebsocketProvider.tsx";
 
 function Logout() {
 	localStorage.clear();

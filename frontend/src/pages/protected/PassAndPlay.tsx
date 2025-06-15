@@ -12,7 +12,7 @@ import "../../styles/pages/pass-and-play.scss";
 
 import Chessboard from "../../components/global/chessboards/Chessboard.tsx";
 import GameplaySettings from "../../features/modals/GameplaySettings.tsx";
-import ModalWrapper from "../../components/global/wrappers/ModalWrapper.tsx";
+import ModalWrapper from "../../components/wrappers/ModalWrapper.tsx";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
 import { ParsedFENString } from "../../types/gameLogic.ts";
 import LocalGameOverModal from "../../components/global/modals/gameOverModals/LocalModal.tsx";

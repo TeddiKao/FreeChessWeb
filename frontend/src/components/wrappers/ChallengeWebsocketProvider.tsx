@@ -1,18 +1,18 @@
 import { ReactNode, useEffect, useRef, useState, createContext } from "react";
-import { parseWebsocketUrl } from "../../../utils/generalUtils";
-import useWebSocket from "../../../hooks/useWebsocket";
-import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle";
-import ChallengeNotification from "../../../features/modals/ChallengeNotification";
-import { TimeControl } from "../../../types/gameSetup";
-import { ChallengeRelationships } from "../../../types/challenge";
-import { ChallengeWebsocketEventTypes } from "../../../enums/gameLogic";
+import { parseWebsocketUrl } from "../../utils/generalUtils";
+import useWebSocket from "../../hooks/useWebsocket";
+import useWebsocketLifecycle from "../../hooks/useWebsocketLifecycle";
+import ChallengeNotification from "../../features/modals/ChallengeNotification";
+import { TimeControl } from "../../types/gameSetup";
+import { ChallengeRelationships } from "../../types/challenge";
+import { ChallengeWebsocketEventTypes } from "../../enums/gameLogic";
 import {
 	ChallengeAcceptedWebsocketEventData,
 	ChallengeReceivedWebsocketEventData,
 	ChallengeSuccessfullySentEventData,
-} from "../../../interfaces/challenge";
+} from "../../interfaces/challenge";
 import { useNavigate } from "react-router-dom";
-import ChallengeResponseWaitScreen from "../../../features/modals/ChallengeResponseWaitScreen";
+import ChallengeResponseWaitScreen from "../../features/modals/ChallengeResponseWaitScreen";
 
 type ChallengeWebsocketProviderProps = {
 	children: ReactNode;
