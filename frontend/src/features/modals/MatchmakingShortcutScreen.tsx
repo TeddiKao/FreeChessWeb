@@ -1,6 +1,6 @@
 import { TimeControl } from "../../types/gameSetup";
 import { displayTimeControl } from "../../utils/timeUtils";
-import LoadingSpinner from "../../components/global/LoadingSpinner";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 import ModalWrapper from "../../components/global/wrappers/ModalWrapper";
 
 import "../../../styles/modals/matchmaking-shortcut-screen.scss";

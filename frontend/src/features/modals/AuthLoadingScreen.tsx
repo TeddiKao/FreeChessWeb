@@ -1,4 +1,4 @@
-import LoadingSpinner from "../../components/global/LoadingSpinner";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 import "../../../styles/modals/auth-loading-screen.scss";
 import ModalWrapper from "../../components/global/wrappers/ModalWrapper";
 
