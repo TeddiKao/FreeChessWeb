@@ -1,49 +1,53 @@
 import { useEffect } from "react";
 import "../../../styles/features/gameplay/side-panel-buttons.scss";
-import { OptionalValue, RefObject, StateSetterFunction } from "../../../types/general";
-import { ArrowKeys } from "../../../enums/general";
+import {
+	OptionalValue,
+	RefObject,
+	StateSetterFunction,
+} from "../../types/general";
+import { ArrowKeys } from "../../enums/general";
 
 type MoveNavigationButtonsProps = {
 	setPositionIndex: StateSetterFunction<number>;
-	previousPositionIndexRef: RefObject<OptionalValue<number>>
+	previousPositionIndexRef: RefObject<OptionalValue<number>>;
 	positionListLength: number;
 };
 
 function MoveNavigationButtons({
 	setPositionIndex,
-    positionListLength,
-	previousPositionIndexRef
+	positionListLength,
+	previousPositionIndexRef,
 }: MoveNavigationButtonsProps) {
-    function handleKeyDown(event: KeyboardEvent) {
-        switch (event.key) {
-            case ArrowKeys.ARROW_LEFT:
-                handlePreviousMove();
-                break;
+	function handleKeyDown(event: KeyboardEvent) {
+		switch (event.key) {
+			case ArrowKeys.ARROW_LEFT:
+				handlePreviousMove();
+				break;
 
-            case ArrowKeys.ARROW_RIGHT:
-                handleNextMove();
-                break;
+			case ArrowKeys.ARROW_RIGHT:
+				handleNextMove();
+				break;
 
-            case ArrowKeys.ARROW_DOWN:
-                backToCurrentPosition();
-                break;
+			case ArrowKeys.ARROW_DOWN:
+				backToCurrentPosition();
+				break;
 
-            case ArrowKeys.ARROW_UP:
-                backToStart();
-                break;
+			case ArrowKeys.ARROW_UP:
+				backToStart();
+				break;
 
-            default:
-                break;
-        }
-    }
+			default:
+				break;
+		}
+	}
 
-    useEffect(() => {
-        document.addEventListener("keydown", handleKeyDown);
+	useEffect(() => {
+		document.addEventListener("keydown", handleKeyDown);
 
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-        };
-    }, [positionListLength]);
+		return () => {
+			document.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [positionListLength]);
 
 	function backToStart() {
 		setPositionIndex((prevIndex) => {
@@ -57,25 +61,27 @@ function MoveNavigationButtons({
 		setPositionIndex((prevIndex) => {
 			previousPositionIndexRef.current = prevIndex;
 
-			return prevIndex > 0 ? prevIndex - 1 : prevIndex
+			return prevIndex > 0 ? prevIndex - 1 : prevIndex;
 		});
 	}
 
-    function handleNextMove() {
-        setPositionIndex((prevIndex) => {
+	function handleNextMove() {
+		setPositionIndex((prevIndex) => {
 			previousPositionIndexRef.current = prevIndex;
 
-            return prevIndex + 1 < positionListLength ? prevIndex + 1 : prevIndex
-        })
-    }
-
-    function backToCurrentPosition() {
-        setPositionIndex((prevIndex) => {
-			previousPositionIndexRef.current = prevIndex;
-
-			return positionListLength - 1
+			return prevIndex + 1 < positionListLength
+				? prevIndex + 1
+				: prevIndex;
 		});
-    }
+	}
+
+	function backToCurrentPosition() {
+		setPositionIndex((prevIndex) => {
+			previousPositionIndexRef.current = prevIndex;
+
+			return positionListLength - 1;
+		});
+	}
 
 	return (
 		<div className="move-navigation-container">

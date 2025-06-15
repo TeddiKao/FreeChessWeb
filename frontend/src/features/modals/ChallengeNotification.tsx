@@ -1,10 +1,10 @@
-import { TimeControl } from "../../../types/gameSetup";
-import { displayTimeControl } from "../../../utils/timeUtils";
-import ModalWrapper from "../wrappers/ModalWrapper";
+import { TimeControl } from "../../types/gameSetup";
+import { displayTimeControl } from "../../utils/timeUtils";
+import ModalWrapper from "../../components/global/wrappers/ModalWrapper";
 
 import "../../../styles/modals/challenge-notification.scss";
 import { useContext } from "react";
-import { ChallengeWebsocketContext } from "../wrappers/ChallengeWebsocketProvider";
+import { ChallengeWebsocketContext } from "../../components/global/wrappers/ChallengeWebsocketProvider";
 
 type ChallengeNotificationProps = {
 	visible: boolean;

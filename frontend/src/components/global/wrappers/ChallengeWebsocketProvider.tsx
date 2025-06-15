@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useRef, useState, createContext } from "react";
 import { parseWebsocketUrl } from "../../../utils/generalUtils";
 import useWebSocket from "../../../hooks/useWebsocket";
 import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle";
-import ChallengeNotification from "../modals/ChallengeNotification";
+import ChallengeNotification from "../../../features/modals/ChallengeNotification";
 import { TimeControl } from "../../../types/gameSetup";
 import { ChallengeRelationships } from "../../../types/challenge";
 import { ChallengeWebsocketEventTypes } from "../../../enums/gameLogic";
@@ -12,7 +12,7 @@ import {
 	ChallengeSuccessfullySentEventData,
 } from "../../../interfaces/challenge";
 import { useNavigate } from "react-router-dom";
-import ChallengeResponseWaitScreen from "../modals/ChallengeResponseWaitScreen";
+import ChallengeResponseWaitScreen from "../../../features/modals/ChallengeResponseWaitScreen";
 
 type ChallengeWebsocketProviderProps = {
 	children: ReactNode;
@@ -47,7 +47,9 @@ function ChallengeWebsocketProvider({
 	const [challengeReceivedTimeControl, setChallengeReceivedTimeControl] =
 		useState<TimeControl | null>(null);
 
-	const [sentTimeControl, setSentTimeControl] = useState<TimeControl | null>(null);
+	const [sentTimeControl, setSentTimeControl] = useState<TimeControl | null>(
+		null
+	);
 	const [waitingForResponse, setWaitingForResponse] =
 		useState<boolean>(false);
 
@@ -98,14 +100,18 @@ function ChallengeWebsocketProvider({
 		}
 	}
 
-	function handleChallengeReceived(data: ChallengeReceivedWebsocketEventData) {
+	function handleChallengeReceived(
+		data: ChallengeReceivedWebsocketEventData
+	) {
 		setChallengeReceived(true);
 		setChallengerUsername(data["challenge_sender"]);
 		setChallengerRelationship(data["relationship"]);
 		setChallengeReceivedTimeControl(data["challenge_time_control"]);
 	}
 
-	function handleChallengeSuccessfullySent(data: ChallengeSuccessfullySentEventData) {
+	function handleChallengeSuccessfullySent(
+		data: ChallengeSuccessfullySentEventData
+	) {
 		setWaitingForResponse(true);
 		setSentTimeControl(data["challenge_time_control"]);
 	}

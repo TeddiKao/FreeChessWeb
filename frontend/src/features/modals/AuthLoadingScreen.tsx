@@ -1,6 +1,6 @@
-import LoadingSpinner from "../LoadingSpinner";
+import LoadingSpinner from "../../components/global/LoadingSpinner";
 import "../../../styles/modals/auth-loading-screen.scss";
-import ModalWrapper from "../wrappers/ModalWrapper";
+import ModalWrapper from "../../components/global/wrappers/ModalWrapper";
 
 type AuthLoadingScreenProps = {
 	visible: boolean;
@@ -9,14 +9,14 @@ type AuthLoadingScreenProps = {
 
 function AuthLoadingScreen({ visible, authMethod }: AuthLoadingScreenProps) {
 	function getLoadingText() {
-        if (authMethod === "Login") {
-            return "Logging in"
-        } else {
-            return "Signing up"
-        }
-    }
-    
-    if (!visible) {
+		if (authMethod === "Login") {
+			return "Logging in";
+		} else {
+			return "Signing up";
+		}
+	}
+
+	if (!visible) {
 		return null;
 	}
 

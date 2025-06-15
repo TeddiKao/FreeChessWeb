@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { SignupErrors } from "../../enums/validationErrors/authentication.js";
 import { isNullOrUndefined } from "../../utils/generalUtils.js";
-import AuthLoadingScreen from "./modals/AuthLoadingScreen.js";
+import AuthLoadingScreen from "../../features/modals/AuthLoadingScreen.js";
 
 type AuthMethods = "Login" | "Signup";
 
@@ -40,16 +40,18 @@ function UsernameField({
 					<p key={errorIndex} className="username-error">
 						{errorName}
 					</p>
-				)
+				);
 		}
 	}
 
 	function UsernameErrors() {
 		return (
 			<div className="username-errors-container">
-				{usernameErrors!.map((errorName: string, errorIndex: number) => {
-					return getErrorElement(errorIndex, errorName)
-				})}
+				{usernameErrors!.map(
+					(errorName: string, errorIndex: number) => {
+						return getErrorElement(errorIndex, errorName);
+					}
+				)}
 			</div>
 		);
 	}

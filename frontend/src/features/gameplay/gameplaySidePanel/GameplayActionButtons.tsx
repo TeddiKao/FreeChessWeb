@@ -1,15 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 
 import "../../../styles/features/gameplay/gameplay-action-buttons.scss";
-import ConfirmationPopup from "../popups/ConfirmationPopup";
+import ConfirmationPopup from "../../components/global/popups/ConfirmationPopup";
 
-import { RefObject, StateSetterFunction } from "../../../types/general";
+import { RefObject, StateSetterFunction } from "../../types/general";
 
-import useWebSocket from "../../../hooks/useWebsocket";
-import { websocketBaseURL } from "../../../constants/urls";
-import { getAccessToken } from "../../../utils/tokenUtils";
-import { ActionWebSocketEventTypes } from "../../../enums/gameLogic";
-import useReactiveRef from "../../../hooks/useReactiveRef";
+import useWebSocket from "../../hooks/useWebsocket";
+import { websocketBaseURL } from "../../constants/urls";
+import { getAccessToken } from "../../utils/tokenUtils";
+import { ActionWebSocketEventTypes } from "../../enums/gameLogic";
+import useReactiveRef from "../../hooks/useReactiveRef";
 
 type GameplayActionButtonsProps = {
 	gameId: string | number;
@@ -32,7 +32,8 @@ function GameplayActionButtons({
 	setMessagePopupVisible,
 	setDrawOfferReceived,
 }: GameplayActionButtonsProps) {
-	const [actionWebsocketRef, actionWebsocket, setActionWebsocket] = useReactiveRef<WebSocket | null>(null);
+	const [actionWebsocketRef, actionWebsocket, setActionWebsocket] =
+		useReactiveRef<WebSocket | null>(null);
 	const actionWebsocketExists = useRef<boolean>(false);
 
 	const [resignationPopupVisible, setResignationPopupVisible] =
@@ -40,14 +41,15 @@ function GameplayActionButtons({
 
 	const [drawOfferPopupVisible, setDrawOfferPopupVisible] = useState(false);
 
-	const [actionWebsocketEnabled, setActionWebsocketEnabled] = useState<boolean>(false);
+	const [actionWebsocketEnabled, setActionWebsocketEnabled] =
+		useState<boolean>(false);
 	const actionWebsocketUrl = `${websocketBaseURL}/ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`;
 
 	const socket = useWebSocket(
 		actionWebsocketUrl,
 		handleOnMessage,
-        undefined,
-        actionWebsocketEnabled
+		undefined,
+		actionWebsocketEnabled
 	);
 
 	useEffect(() => {
@@ -167,7 +169,10 @@ function GameplayActionButtons({
 					onClick={handleResignationPopupDisplay}
 					className="resignation-container"
 				>
-					<img className="resign-icon" src="/icons/gameplay/sidePanel/resignButton.svg" />
+					<img
+						className="resign-icon"
+						src="/icons/gameplay/sidePanel/resignButton.svg"
+					/>
 					<p className="helper-text">Resign</p>
 
 					<ConfirmationPopup

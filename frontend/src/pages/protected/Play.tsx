@@ -14,7 +14,7 @@ import {
 } from "../../utils/apiUtils.ts";
 
 import GameOverModal from "../../components/global/modals/gameOverModals/MultiplayerModal.tsx";
-import GameplaySettings from "../../components/global/modals/GameplaySettings.tsx";
+import GameplaySettings from "../../features/modals/GameplaySettings.tsx";
 import ModalWrapper from "../../components/global/wrappers/ModalWrapper.js";
 import { OptionalValue } from "../../types/general.js";
 import {
@@ -23,9 +23,9 @@ import {
 	PieceColor,
 } from "../../types/gameLogic.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
-import MoveListPanel from "../../components/global/gameplaySidePanel/MoveListPanel.tsx";
-import MoveNavigationButtons from "../../components/global/gameplaySidePanel/MoveNavigationButtons.tsx";
-import GameplayActionButtons from "../../components/global/gameplaySidePanel/GameplayActionButtons.tsx";
+import MoveListPanel from "../../features/gameplaySidePanel/MoveListPanel.tsx";
+import MoveNavigationButtons from "../../features/gameplaySidePanel/MoveNavigationButtons.tsx";
+import GameplayActionButtons from "../../features/gameplaySidePanel/GameplayActionButtons.tsx";
 import { isNullOrUndefined } from "../../utils/generalUtils.ts";
 import MessageBox from "../../components/global/popups/MessageBox.tsx";
 import { MessageBoxTypes } from "../../types/messageBox.ts";
@@ -33,7 +33,10 @@ import DrawOfferPopup from "../../components/global/popups/DrawOfferPopup.tsx";
 import { playAudio } from "../../utils/audioUtils.ts";
 import DashboardNavbar from "../../components/page/dashboard/DashboardNavbar.tsx";
 import { convertToMilliseconds } from "../../utils/timeUtils.ts";
-import { animationOffsetSync, pieceAnimationTime } from "../../constants/pieceAnimation.ts";
+import {
+	animationOffsetSync,
+	pieceAnimationTime,
+} from "../../constants/pieceAnimation.ts";
 import usePieceAnimation from "../../hooks/usePieceAnimation.ts";
 import CapturedMaterial from "../../components/global/CapturedMaterial.tsx";
 import {
@@ -124,8 +127,8 @@ function Play() {
 
 	const actionWebSocketRef = useRef(null);
 
-	const whitePlayerUsername = location.state?.whitePlayerUsername
-	const blackPlayerUsername = location.state?.blackPlayerUsername
+	const whitePlayerUsername = location.state?.whitePlayerUsername;
+	const blackPlayerUsername = location.state?.blackPlayerUsername;
 
 	useEffect(() => {
 		updatePlayerTimers();
