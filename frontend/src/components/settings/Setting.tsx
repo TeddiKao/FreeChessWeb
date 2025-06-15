@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SettingsSwitch from "../../../../components/global/settings/SettingsSwitch.js";
-import api from "../../../../api.js";
+import api from "../../api.js";
 
 type SettingComponentProps = {
 	settingName: string;
