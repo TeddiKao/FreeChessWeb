@@ -1,4 +1,4 @@
-import { BotCategoryInfo } from "../../../constants/botsConfig";
+import { BotCategoryInfo } from "../../../../constants/botsConfig";
 import BotCard from "./BotCard";
 
 import "../../../styles/features/playBot/bot-category.scss";

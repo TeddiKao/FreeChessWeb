@@ -20,7 +20,7 @@ import AuthenticationRoute from "./components/wrappers/routes/AuthenticationRout
 import Play from "./pages/protected/Play.tsx";
 import PassAndPlay from "./pages/protected/PassAndPlay.tsx";
 import TempRoute from "./pages/TempRoute.tsx";
-import SelectBot from "./pages/protected/SelectBot.tsx";
+import SelectBot from "./pages/protected/SelectBot/SelectBot.tsx";
 import PlayBot from "./pages/protected/PlayBot.tsx";
 import GameHistory from "./pages/protected/GameHistory.tsx";
 import ViewGame from "./pages/protected/ViewGame.tsx";
