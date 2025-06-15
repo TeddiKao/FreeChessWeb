@@ -7,7 +7,7 @@ import useUsername from "../../../hooks/useUsername";
 import { isNullOrUndefined } from "../../../utils/generalUtils";
 import PageNavigation from "./components/PageNavigation";
 import { getTotalPages } from "../../../utils/pageNavigationUtils";
-import DashboardNavbar from "../Dashboard/components/DashboardNavbar";
+import DashboardNavbar from "../../../components/common/DashboardNavbar/DashboardNavbar";
 
 function GameHistory() {
 	const initialUsername = useUsername();

@@ -10,7 +10,7 @@ import GameReplayChessboard from "../../features/gameplay/chessboards/GameReplay
 
 import MoveListPanel from "../../features/gameplay/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../features/gameplay/gameplaySidePanel/MoveNavigationButtons";
-import DashboardNavbar from "./Dashboard/components/DashboardNavbar";
+import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar";
 
 import "../../styles/pages/view-game.scss";
 import { playAudio } from "../../utils/audioUtils";

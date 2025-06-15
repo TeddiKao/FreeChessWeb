@@ -1,4 +1,4 @@
-import DashboardNavbar from "./components/DashboardNavbar.tsx";
+import DashboardNavbar from "../../../components/common/DashboardNavbar/DashboardNavbar.tsx";
 import DashboardSuggestions from "./components/DashboardSuggestions.tsx";
 import UserGreeting from "./components/UserGreeting.tsx";
 

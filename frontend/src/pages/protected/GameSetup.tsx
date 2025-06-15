@@ -15,8 +15,8 @@ import MatchmakingScreen from "../../features/gameSetup/MatchmakingScreen.js";
 import { GameSetupStages } from "../../enums/gameSetup.js";
 import { ParsedFENString } from "../../types/gameLogic.ts";
 import CustomTimeControlScreen from "../../features/gameSetup/CustomTimeControlScreen.tsx";
-import DashboardNavbar from "./Dashboard/components/DashboardNavbar.tsx";
 import Timer from "../../features/gameplay/Timer.tsx";
+import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar.tsx";
 
 type TimeControlInfo = {
 	baseTime: number;
