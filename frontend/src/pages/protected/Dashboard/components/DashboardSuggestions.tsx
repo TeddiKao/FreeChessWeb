@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "../../../styles/components/dashboard/dashboard-suggestions.scss";
+import "../../../../styles/components/dashboard/dashboard-suggestions.scss";
 
 type DashboardSuggestionProps = {
 	suggestionName: string;
