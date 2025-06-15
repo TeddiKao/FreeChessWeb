@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import "../../../../styles/modals/game-over-modal.scss";
+import "../../../styles/modals/game-over-modal.scss";
 import { ChallengeWebsocketContext } from "../../../components/wrappers/ChallengeWebsocketProvider";
 import useUsername from "../../../hooks/useUsername";
 import { useNavigate } from "react-router-dom";
