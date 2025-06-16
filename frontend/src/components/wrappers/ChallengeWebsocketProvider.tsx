@@ -13,6 +13,7 @@ import {
 } from "../../interfaces/challenge";
 import { useNavigate } from "react-router-dom";
 import ChallengeResponseWaitScreen from "../../features/modals/ChallengeResponseWaitScreen";
+import useWebsocketWithLifecycle from "../../hooks/useWebsocketWithLifecycle";
 
 type ChallengeWebsocketProviderProps = {
 	children: ReactNode;
@@ -37,8 +38,6 @@ function ChallengeWebsocketProvider({
 	children,
 }: ChallengeWebsocketProviderProps) {
 	const websocketURL = parseWebsocketUrl("challenge-server");
-	const [challengeWebsocketEnabled, setChallengeWebsocketEnabled] =
-		useState(false);
 
 	const [challengeReceived, setChallengeReceived] = useState<boolean>(false);
 	const [challengerUsername, setChallengerUsername] = useState<string>("");
@@ -53,29 +52,14 @@ function ChallengeWebsocketProvider({
 	const [waitingForResponse, setWaitingForResponse] =
 		useState<boolean>(false);
 
-	const challengeWebsocketRef = useRef<WebSocket | null>(null);
-	const challengeWebsocketExistsRef = useRef<boolean>(false);
-
 	const navigate = useNavigate();
 
-	const socket = useWebSocket(
-		websocketURL,
-		handleOnMessage,
-		undefined,
-		challengeWebsocketEnabled
-	);
-
-	useWebsocketLifecycle({
-		websocket: socket,
-		websocketRef: challengeWebsocketRef,
-		websocketExistsRef: challengeWebsocketExistsRef,
-		setWebsocketEnabled: setChallengeWebsocketEnabled,
-		handleWindowUnload: handleWindowUnload,
-	});
-
-	useEffect(() => {
-		challengeWebsocketRef.current = socket;
-	}, [socket]);
+	const { socketRef: challengeWebsocketRef } = useWebsocketWithLifecycle({
+		url: websocketURL,
+		enabled: true,
+		onMessage: handleOnMessage,
+		closeOnUnload: false,
+	})
 
 	function handleOnMessage(event: MessageEvent) {
 		const data = JSON.parse(event.data);
@@ -187,8 +171,6 @@ function ChallengeWebsocketProvider({
 			);
 		}
 	}
-
-	function handleWindowUnload() {}
 
 	return (
 		<ChallengeWebsocketContext.Provider

@@ -44,6 +44,7 @@ import {
 import ChessboardGrid from "../../../components/chessboard/ChessboardGrid.tsx";
 import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle.ts";
 import Square from "../../../components/chessboard/Square.tsx";
+import useWebsocketWithLifecycle from "../../../hooks/useWebsocketWithLifecycle.ts";
 function BotChessboard({
 	parsed_fen_string,
 	orientation,
@@ -95,20 +96,15 @@ function BotChessboard({
 		gridTemplateColumns: `repeat(8, ${squareSize}px)`,
 	};
 
-	const [botGameWebsocketEnabled, setBotGameWebsocketEnabled] =
-		useState(false);
-	const botGameWebsocketExists = useRef(false);
-	const botGameWebsocketRef = useRef<WebSocket | null>(null);
-
 	const websocketURL = parseWebsocketUrl("bot-game-server", {
 		gameId: gameId,
 	});
-	const socket = useWebSocket(
-		websocketURL,
-		handleOnMessage,
-		undefined,
-		botGameWebsocketEnabled
-	);
+
+	const { socketRef: botGameWebsocketRef } = useWebsocketWithLifecycle({
+		url: websocketURL,
+		enabled: true,
+		onMessage: handleOnMessage
+	})
 
 	useEffect(() => {
 		setParsedFENString(parsed_fen_string);
@@ -126,25 +122,6 @@ function BotChessboard({
 		setPreviousDraggedSquare(lastDraggedSquare);
 		setPreviousDroppedSquare(lastDroppedSquare);
 	}, [lastDraggedSquare, lastDroppedSquare]);
-
-	useWebsocketLifecycle({
-		websocket: socket,
-		websocketRef: botGameWebsocketRef,
-		websocketExistsRef: botGameWebsocketExists,
-		setWebsocketEnabled: setBotGameWebsocketEnabled,
-		handleWindowUnload: handleWindowUnload,
-	});
-
-	useEffect(() => {
-		botGameWebsocketRef.current = socket;
-	}, [socket]);
-
-	function handleWindowUnload() {
-		if (botGameWebsocketRef.current?.readyState === WebSocket.OPEN) {
-			botGameWebsocketRef.current?.close();
-			botGameWebsocketExists.current = false;
-		}
-	}
 
 	function handleMoveMade(moveMethod: string) {
 		const startingSquare =

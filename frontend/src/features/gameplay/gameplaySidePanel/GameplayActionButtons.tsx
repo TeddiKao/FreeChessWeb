@@ -8,6 +8,7 @@ import { websocketBaseURL } from "../../../constants/urls";
 import { ActionWebSocketEventTypes } from "../../../enums/gameLogic";
 import ConfirmationPopup from "../../../components/common/ConfirmationPopup";
 import { getAccessToken } from "../../../utils/tokenUtils";
+import useWebsocketWithLifecycle from "../../../hooks/useWebsocketWithLifecycle";
 
 type GameplayActionButtonsProps = {
 	gameId: string | number;
@@ -30,61 +31,25 @@ function GameplayActionButtons({
 	setMessagePopupVisible,
 	setDrawOfferReceived,
 }: GameplayActionButtonsProps) {
-	const [actionWebsocketRef, actionWebsocket, setActionWebsocket] =
-		useReactiveRef<WebSocket | null>(null);
-	const actionWebsocketExists = useRef<boolean>(false);
-
 	const [resignationPopupVisible, setResignationPopupVisible] =
 		useState(false);
-
 	const [drawOfferPopupVisible, setDrawOfferPopupVisible] = useState(false);
 
-	const [actionWebsocketEnabled, setActionWebsocketEnabled] =
-		useState<boolean>(false);
 	const actionWebsocketUrl = `${websocketBaseURL}/ws/action-server/?token=${getAccessToken()}&gameId=${gameId}`;
 
-	const socket = useWebSocket(
-		actionWebsocketUrl,
-		handleOnMessage,
-		undefined,
-		actionWebsocketEnabled
-	);
-
-	useEffect(() => {
-		if (actionWebsocketExists.current === false) {
-			actionWebsocketExists.current = true;
-			setActionWebsocketEnabled(true);
-
-			parentActionWebsocket.current = actionWebsocketRef.current;
-
-			window.addEventListener("beforeunload", handleWindowUnload);
-		}
-
-		return () => {
-			if (actionWebsocketRef.current?.readyState === WebSocket.OPEN) {
-				actionWebsocketRef.current.close();
-			}
-
-			actionWebsocketExists.current = false;
-
-			window.removeEventListener("beforeunload", handleWindowUnload);
-		};
-	}, []);
+	const {
+		socketRef: actionWebsocketRef,
+		socket: actionWebsocket,
+		socketEnabled: actionWebsocketEnabled,
+	} = useWebsocketWithLifecycle({
+		url: actionWebsocketUrl,
+		enabled: true,
+		onMessage: handleOnMessage,
+	});
 
 	useEffect(() => {
 		parentActionWebsocket.current = actionWebsocket;
 	}, [actionWebsocketEnabled, actionWebsocket]);
-
-	useEffect(() => {
-		setActionWebsocket(socket);
-	}, [socket]);
-
-	function handleWindowUnload() {
-		if (actionWebsocketRef.current?.readyState === WebSocket.OPEN) {
-			actionWebsocketRef.current.close();
-			actionWebsocketExists.current = false;
-		}
-	}
 
 	function handleResignationPopupDisplay() {
 		setResignationPopupVisible(true);

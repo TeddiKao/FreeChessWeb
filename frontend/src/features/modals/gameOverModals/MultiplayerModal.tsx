@@ -9,6 +9,7 @@ import { getAssignedColor } from "../../../utils/matchmakingUtils";
 import MatchmakingShortcutScreen from "../MatchmakingShortcutScreen";
 import { MatchmakingEvents } from "../../../enums/gameSetup";
 import { TimeControl } from "../../../types/gameSetup";
+import useWebsocketWithLifecycle from "../../../hooks/useWebsocketWithLifecycle";
 
 type GameOverModalProps = {
 	visible: boolean;
@@ -38,9 +39,6 @@ function GameOverModal({
 	const whitePlayerRef = useRef<string | null>(null);
 	const blackPlayerRef = useRef<string | null>(null);
 
-	const matchmakingWebsocketRef = useRef<WebSocket | null>(null);
-	const matchmakingWebsocketExists = useRef<boolean>(false);
-
 	const playerUsername = useUsername();
 	const playerUsernameRef = useRef<string | null>(playerUsername);
 
@@ -54,24 +52,11 @@ function GameOverModal({
 		gameId: gameIdRef.current,
 	});
 
-	const matchmakingWebsocket = useWebSocket(
-		websocketUrl,
-		handleOnMessage,
-		undefined,
-		matchmakingWebsocketEnabled
-	);
-
-	useEffect(() => {
-		matchmakingWebsocketRef.current = matchmakingWebsocket;
-
-		return () => {
-			if (
-				matchmakingWebsocketRef.current?.readyState === WebSocket.OPEN
-			) {
-				matchmakingWebsocketRef.current.close();
-			}
-		};
-	}, []);
+	const { socketRef: matchmakingWebsocketRef } = useWebsocketWithLifecycle({
+		url: websocketUrl,
+		onMessage: handleOnMessage,
+		enabled: matchmakingWebsocketEnabled
+	})
 
 	useEffect(() => {
 		async function handleNavigation() {
@@ -79,7 +64,6 @@ function GameOverModal({
 				matchmakingWebsocketRef.current?.readyState === WebSocket.OPEN
 			) {
 				matchmakingWebsocketRef.current.close();
-				matchmakingWebsocketExists.current = false;
 			}
 
 			const gameSetupInfo = {
