@@ -113,7 +113,6 @@ function MultiplayerChessboard({
 
 	const [boardOrientation, setBoardOrientation] = useState(orientation);
 
-	const [gameWebsocketEnabled, _] = useState(false);
 	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
 
 	const currentUser = useUsername();
@@ -124,7 +123,7 @@ function MultiplayerChessboard({
 
 	const { socketRef: gameWebsocketRef } = useWebsocketWithLifecycle({
 		url: gameWebsocketUrl,
-		enabled: gameWebsocketEnabled,
+		enabled: true,
 		onMessage: handleOnMessage,
 	});
 
