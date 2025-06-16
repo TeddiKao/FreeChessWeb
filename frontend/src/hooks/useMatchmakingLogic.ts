@@ -49,16 +49,17 @@ function useMatchmakingLogic({
 		if (!blackPlayerRef.current) return;
 
 		const handleRedirection = async () => {
+			const assignedColor = await getAssignedColor(
+				whitePlayerRef.current!,
+				blackPlayerRef.current!
+			);
+
 			const gameSetupInfo = {
 				baseTime,
 				increment,
 				gameId: gameIdRef.current,
 
-				assignedColor: await getAssignedColor(
-					whitePlayerRef.current!,
-					blackPlayerRef.current!
-				),
-
+				assignedColor,
 				whitePlayerUsername: whitePlayerRef.current,
 				blackPlayerUsername: blackPlayerRef.current,
 			};
