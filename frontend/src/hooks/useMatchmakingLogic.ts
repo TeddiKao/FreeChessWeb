@@ -60,6 +60,14 @@ function useMatchmakingLogic({
         handleRedirection();
 	}, [matchFound, setMatchFound, navigate]);
 
+    function sendMatchmakingCancelMessage() {
+        const data = {
+            type: "cancel_matchmaking"
+        }
+
+        matchmakingWebsocketRef?.current?.send(JSON.stringify(data));
+    }
+
 	function handleOnMessage(event: MessageEvent): void {
 		const parsedEventData = JSON.parse(event.data);
 		const eventType = parsedEventData["type"];
@@ -93,7 +101,7 @@ function useMatchmakingLogic({
 		setMatchFound(true);
 	}
 
-    return { matchmakingStatus, matchFound };
+    return { matchmakingStatus, matchFound, cancelMatchmaking: sendMatchmakingCancelMessage };
 }
 
 export default useMatchmakingLogic;
