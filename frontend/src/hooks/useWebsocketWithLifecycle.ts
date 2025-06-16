@@ -20,6 +20,10 @@ function useWebsocketWithLifecycle({ url, enabled, onMessage, onError }: Websock
         socketRef.current = socket;
     }, [socket])
 
+    useEffect(() => {
+        setSocketEnabled(enabled);
+    }, [enabled])
+
     useWebsocketLifecycle({
         websocket: socket,
         websocketRef: socketRef,
