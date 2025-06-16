@@ -44,11 +44,6 @@ function useMatchmakingLogic({
 	navigateToTemp = navigateToTemp ?? false;
 
 	useEffect(() => {
-		console.log("Match found changed!")
-		console.log(`New value: ${matchFound}`);
-		console.log(whitePlayerRef.current);
-		console.log(blackPlayerRef.current)
-
 		if (!matchFound) return;
 		if (!whitePlayerRef.current) return;
 		if (!blackPlayerRef.current) return;
@@ -95,8 +90,6 @@ function useMatchmakingLogic({
 		const parsedEventData = JSON.parse(event.data);
 		const eventType = parsedEventData["type"];
 
-		console.log(parsedEventData);
-
 		switch (eventType) {
 			case MatchmakingEvents.MATCH_FOUND:
 				handleMatchFound(parsedEventData);
@@ -110,8 +103,6 @@ function useMatchmakingLogic({
 	}
 
 	function handleMatchFound(parsedEventData: any) {
-		console.log(matchFound);
-
 		matchmakingWebsocketRef.current?.close();
 
 		setMatchmakingStatus("Match found");
@@ -126,7 +117,6 @@ function useMatchmakingLogic({
 		blackPlayerRef.current = blackPlayer;
 
 		setMatchFound(true);
-		console.log("Set match found to true!")
 	}
 
 	return {
