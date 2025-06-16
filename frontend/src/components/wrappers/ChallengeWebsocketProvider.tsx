@@ -57,7 +57,8 @@ function ChallengeWebsocketProvider({
 	const { socketRef: challengeWebsocketRef } = useWebsocketWithLifecycle({
 		url: websocketURL,
 		enabled: true,
-		onMessage: handleOnMessage
+		onMessage: handleOnMessage,
+		closeOnUnload: false,
 	})
 
 	function handleOnMessage(event: MessageEvent) {
