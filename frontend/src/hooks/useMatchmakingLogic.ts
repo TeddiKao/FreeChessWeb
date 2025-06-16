@@ -12,6 +12,8 @@ interface MatchmakingLogicHookProps {
 	increment: number;
 
 	cancelSuccess: () => void;
+
+	navigateToTemp?: boolean;
 }
 
 function useMatchmakingLogic({
@@ -19,6 +21,7 @@ function useMatchmakingLogic({
 	baseTime,
 	increment,
 	cancelSuccess,
+	navigateToTemp
 }: MatchmakingLogicHookProps) {
 	const [matchmakingStatus, setMatchmakingStatus] =
 		useState<string>("Finding match");
@@ -38,10 +41,18 @@ function useMatchmakingLogic({
 
 	const navigate = useNavigate();
 
+	navigateToTemp = navigateToTemp ?? false;
+
 	useEffect(() => {
+		console.log("Match found changed!")
+		console.log(`New value: ${matchFound}`);
+		console.log(whitePlayerRef.current);
+		console.log(blackPlayerRef.current)
+
 		if (!matchFound) return;
 		if (!whitePlayerRef.current) return;
 		if (!blackPlayerRef.current) return;
+
 		const handleRedirection = async () => {
 			const gameSetupInfo = {
 				baseTime,
@@ -57,7 +68,16 @@ function useMatchmakingLogic({
 				blackPlayerUsername: blackPlayerRef.current,
 			};
 
-			navigate("/play", { state: gameSetupInfo });
+			if (navigateToTemp) {
+				navigate("/temp", {
+					state: {
+						route: "/play",
+						routeState: gameSetupInfo,
+					},
+				});
+			} else {
+				navigate("/play", { state: gameSetupInfo })
+			}
 		};
 
 		handleRedirection();
@@ -75,6 +95,8 @@ function useMatchmakingLogic({
 		const parsedEventData = JSON.parse(event.data);
 		const eventType = parsedEventData["type"];
 
+		console.log(parsedEventData);
+
 		switch (eventType) {
 			case MatchmakingEvents.MATCH_FOUND:
 				handleMatchFound(parsedEventData);
@@ -88,6 +110,8 @@ function useMatchmakingLogic({
 	}
 
 	function handleMatchFound(parsedEventData: any) {
+		console.log(matchFound);
+
 		matchmakingWebsocketRef.current?.close();
 
 		setMatchmakingStatus("Match found");
@@ -102,6 +126,7 @@ function useMatchmakingLogic({
 		blackPlayerRef.current = blackPlayer;
 
 		setMatchFound(true);
+		console.log("Set match found to true!")
 	}
 
 	return {
