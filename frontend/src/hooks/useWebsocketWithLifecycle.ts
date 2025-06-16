@@ -28,6 +28,7 @@ function useWebsocketWithLifecycle({
 
 	useEffect(() => {
 		socketRef.current = originalSocket;
+        setSocket(originalSocket);
 	}, [originalSocket]);
 
 	useEffect(() => {
