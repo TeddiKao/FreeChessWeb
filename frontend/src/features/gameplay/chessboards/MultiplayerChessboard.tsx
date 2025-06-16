@@ -113,7 +113,7 @@ function MultiplayerChessboard({
 
 	const [boardOrientation, setBoardOrientation] = useState(orientation);
 
-	const [gameWebsocketEnabled, setGameWebsocketEnabled] = useState(false);
+	const [gameWebsocketEnabled, _] = useState(false);
 	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
 
 	const currentUser = useUsername();
@@ -156,14 +156,6 @@ function MultiplayerChessboard({
 	useEffect(() => {
 		currentUserRef.current = currentUser;
 	}, [currentUser]);
-
-	// useWebsocketLifecycle({
-	// 	websocket: gameWebsocket,
-	// 	websocketRef: gameWebsocketRef,
-	// 	websocketExistsRef: gameWebsocketExists,
-	// 	setWebsocketEnabled: setGameWebsocketEnabled,
-	// 	handleWindowUnload: handleWindowUnload,
-	// });
 
 	useEffect(() => {
 		handleOnDrop();
