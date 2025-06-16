@@ -64,6 +64,7 @@ import {
 import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle.ts";
 import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
 import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";
+import useWebsocketWithLifecycle from "../../../hooks/useWebsocketWithLifecycle.ts";
 
 function MultiplayerChessboard({
 	parsed_fen_string,
@@ -112,9 +113,6 @@ function MultiplayerChessboard({
 
 	const [boardOrientation, setBoardOrientation] = useState(orientation);
 
-	const gameWebsocketRef = useRef<WebSocket | null>(null);
-	const gameWebsocketExists = useRef<boolean>(false);
-
 	const [gameWebsocketEnabled, setGameWebsocketEnabled] = useState(false);
 	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
 
@@ -124,12 +122,11 @@ function MultiplayerChessboard({
 	const [animatingPieceSquare, animatingPieceStyles, animatePiece] =
 		usePieceAnimation();
 
-	const gameWebsocket = useWebSocket(
-		gameWebsocketUrl,
-		handleOnMessage,
-		undefined,
-		gameWebsocketEnabled
-	);
+	const { socketRef: gameWebsocketRef } = useWebsocketWithLifecycle({
+		url: gameWebsocketUrl,
+		enabled: gameWebsocketEnabled,
+		onMessage: handleOnMessage,
+	});
 
 	const chessboardStyles = {
 		gridTemplateColumns: `repeat(8, ${squareSize}px`,
@@ -160,17 +157,13 @@ function MultiplayerChessboard({
 		currentUserRef.current = currentUser;
 	}, [currentUser]);
 
-	useWebsocketLifecycle({
-		websocket: gameWebsocket,
-		websocketRef: gameWebsocketRef,
-		websocketExistsRef: gameWebsocketExists,
-		setWebsocketEnabled: setGameWebsocketEnabled,
-		handleWindowUnload: handleWindowUnload,
-	});
-
-	useEffect(() => {
-		gameWebsocketRef.current = gameWebsocket;
-	}, [gameWebsocket]);
+	// useWebsocketLifecycle({
+	// 	websocket: gameWebsocket,
+	// 	websocketRef: gameWebsocketRef,
+	// 	websocketExistsRef: gameWebsocketExists,
+	// 	setWebsocketEnabled: setGameWebsocketEnabled,
+	// 	handleWindowUnload: handleWindowUnload,
+	// });
 
 	useEffect(() => {
 		handleOnDrop();
@@ -179,13 +172,6 @@ function MultiplayerChessboard({
 	useEffect(() => {
 		lastUsedMoveMethodRef.current = lastUsedMoveMethod;
 	}, [lastUsedMoveMethod]);
-
-	function handleWindowUnload() {
-		if (gameWebsocketRef.current?.readyState === WebSocket.OPEN) {
-			gameWebsocketRef.current.close();
-			gameWebsocketExists.current = false;
-		}
-	}
 
 	function handleOnMessage(event: MessageEvent) {
 		const parsedEventData = JSON.parse(event.data);
