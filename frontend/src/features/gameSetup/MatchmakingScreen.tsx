@@ -9,6 +9,7 @@ import { getAccessToken } from "../../utils/tokenUtils.ts";
 import { getUsername } from "../../utils/apiUtils.ts";
 import { MatchmakingEvents } from "../../enums/gameSetup.ts";
 import { websocketBaseURL } from "../../constants/urls.ts";
+import useWebsocketWithLifecycle from "../../hooks/useWebsocketWithLifecycle.ts";
 
 type timeControlInfo = {
 	baseTime: number;
@@ -28,9 +29,6 @@ function MatchmakingScreen({
 }: MatchmakingScreenProps) {
 	const [matchmakingStatus, setMatchmakingStatus] =
 		useState<string>("Finding match");
-	const [isMatchmaking, setIsMatchmaking] = useState<boolean>(true);
-	const [websocketConnected, setWebsocketConnected] =
-		useState<boolean>(false);
 	const [matchFound, setMatchFound] = useState<boolean>(false);
 
 	const matchFoundRef = useRef<boolean | null>(null);
@@ -38,24 +36,15 @@ function MatchmakingScreen({
 	const whitePlayerRef = useRef<string | null>(null);
 	const blackPlayerRef = useRef<string | null>(null);
 
-	const matchmakingWebsocketRef = useRef<WebSocket | null>(null);
-	const matchmakingWebsocketExists = useRef<boolean>(false);
-
 	const websocketURL = `${websocketBaseURL}/ws/matchmaking-server/?token=${getAccessToken()}&baseTime=${baseTime}&increment=${increment}`;
-
-	const shouldBeginMatchmaking =
-		isMatchmaking &&
-		!websocketConnected &&
-		!matchmakingWebsocketExists.current;
-
-	const [matchmakingWebsocketEnabled, setMatchmakingWebsocketEnabled] =
-		useState(shouldBeginMatchmaking);
-	const matchmakingWebsocket = useWebSocket(
-		websocketURL,
-		onMessage,
-		onError,
-		matchmakingWebsocketEnabled
-	);
+	const {
+		socketRef: matchmakingWebsocketRef,
+		socketExistsRef: matchmakingWebsocketExists,
+	} = useWebsocketWithLifecycle({
+		url: websocketURL,
+		enabled: true,
+		onMessage: onMessage,
+	});
 
 	const navigate = useNavigate();
 
@@ -91,43 +80,6 @@ function MatchmakingScreen({
 		onMatchFound();
 	}, [matchFound, setMatchFound, navigate]);
 
-	useEffect(() => {
-		window.addEventListener("beforeunload", handleWindowUnload);
-
-		if (isMatchmaking) {
-			if (!websocketConnected) {
-				if (!matchmakingWebsocketExists.current) {
-					matchmakingWebsocketRef.current = matchmakingWebsocket;
-					matchmakingWebsocketExists.current = true;
-
-					setMatchmakingWebsocketEnabled(true);
-				}
-			}
-		}
-
-		return () => {
-			window.removeEventListener("beforeunload", handleWindowUnload);
-
-			if (
-				matchmakingWebsocketRef.current?.readyState === WebSocket.OPEN
-			) {
-				matchmakingWebsocketRef.current.close();
-				matchmakingWebsocketExists.current = false;
-			}
-		};
-	}, []);
-
-	useEffect(() => {
-		matchmakingWebsocketRef.current = matchmakingWebsocket;
-	}, [matchmakingWebsocket]);
-
-	function handleWindowUnload() {
-		if (matchmakingWebsocketRef.current?.readyState === WebSocket.OPEN) {
-			matchmakingWebsocketRef.current.close();
-			matchmakingWebsocketExists.current = false;
-		}
-	}
-
 	function onMessage(event: MessageEvent): void {
 		const parsedEventData = JSON.parse(event.data);
 
@@ -159,9 +111,6 @@ function MatchmakingScreen({
 
 		setMatchmakingStatus("Match found");
 
-		setWebsocketConnected(() => false);
-		setIsMatchmaking(() => false);
-
 		matchFoundRef.current = true;
 		gameIdRef.current = parsedEventData["game_id"];
 
@@ -176,10 +125,7 @@ function MatchmakingScreen({
 		}, 50);
 	}
 
-	function onError() {}
-
 	function handleMatchmakingCancelSuccess(): void {
-		setIsMatchmaking(false);
 		setGameSetupStage("timeControlSelection");
 	}
 
