@@ -48,6 +48,7 @@ function GameOverModal({
 		increment: timeControlInfo.increment,
 		cancelSuccess: () => {},
 		enabled: matchmakingWebsocketEnabled,
+		navigateToTemp: true,
 	})
 
 	if (!visible) {
