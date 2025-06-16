@@ -92,6 +92,8 @@ function useMatchmakingLogic({
 
 		setMatchFound(true);
 	}
+
+    return { matchmakingStatus, matchFound };
 }
 
 export default useMatchmakingLogic;
