@@ -3,43 +3,56 @@ import useWebSocket from "./useWebsocket";
 import useWebsocketLifecycle from "./useWebsocketLifecycle";
 
 interface WebsocketWithLifecycleHookProps {
-    url: string,
-    enabled: boolean,
-    onMessage: (data: any) => void;
-    onError?: () => void
+	url: string;
+	enabled: boolean;
+	onMessage: (data: any) => void;
+	onError?: () => void;
+	closeOnUnload?: boolean;
 }
 
-function useWebsocketWithLifecycle({ url, enabled, onMessage, onError }: WebsocketWithLifecycleHookProps) {
-    const socket = useWebSocket(url, onMessage, onError, enabled);
-    const socketRef = useRef<WebSocket | null>(null);
-    const socketExistsRef = useRef<boolean>(false);
+function useWebsocketWithLifecycle({
+	url,
+	enabled,
+	onMessage,
+	onError,
+	closeOnUnload,
+}: WebsocketWithLifecycleHookProps) {
+	const socket = useWebSocket(url, onMessage, onError, enabled);
+	const socketRef = useRef<WebSocket | null>(null);
+	const socketExistsRef = useRef<boolean>(false);
 
-    const [socketEnabled, setSocketEnabled] = useState(enabled);
+	const [socketEnabled, setSocketEnabled] = useState(enabled);
 
-    useEffect(() => {
-        socketRef.current = socket;
-    }, [socket])
+    closeOnUnload = closeOnUnload ?? true;
 
-    useEffect(() => {
-        setSocketEnabled(enabled);
-    }, [enabled])
+	useEffect(() => {
+		socketRef.current = socket;
+	}, [socket]);
 
-    useWebsocketLifecycle({
-        websocket: socket,
-        websocketRef: socketRef,
-        websocketExistsRef: socketExistsRef,
-        setWebsocketEnabled: setSocketEnabled,
-        handleWindowUnload
-    })
+	useEffect(() => {
+		setSocketEnabled(enabled);
+	}, [enabled]);
 
-    function handleWindowUnload() {
-        if (socketRef.current?.readyState === WebSocket.OPEN) {
-            socketRef.current.close();
-            socketExistsRef.current = false;
+	useWebsocketLifecycle({
+		websocket: socket,
+		websocketRef: socketRef,
+		websocketExistsRef: socketExistsRef,
+		setWebsocketEnabled: setSocketEnabled,
+		handleWindowUnload,
+	});
+
+	function handleWindowUnload() {
+        if (!closeOnUnload) {
+            return;
         }
-    }
 
-    return { socketRef, socketExistsRef, socketEnabled };
+		if (socketRef.current?.readyState === WebSocket.OPEN) {
+			socketRef.current.close();
+			socketExistsRef.current = false;
+		}
+	}
+
+	return { socketRef, socketExistsRef, socketEnabled };
 }
 
 export default useWebsocketWithLifecycle;
