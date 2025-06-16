@@ -10,12 +10,15 @@ interface MatchmakingLogicHookProps {
 	enabled: boolean;
 	baseTime: number;
 	increment: number;
+
+    cancelSuccess: () => void;
 }
 
 function useMatchmakingLogic({
 	enabled,
 	baseTime,
 	increment,
+    cancelSuccess
 }: MatchmakingLogicHookProps) {
 	const [matchmakingStatus, setMatchmakingStatus] =
 		useState<string>("Finding match");
@@ -68,6 +71,7 @@ function useMatchmakingLogic({
 				break;
 
 			case MatchmakingEvents.CANCELLED_SUCCESSFULLY:
+                cancelSuccess();
 				break;
 		}
 	}
