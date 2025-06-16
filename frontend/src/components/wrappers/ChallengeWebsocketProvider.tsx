@@ -171,8 +171,6 @@ function ChallengeWebsocketProvider({
 		}
 	}
 
-	function handleWindowUnload() {}
-
 	return (
 		<ChallengeWebsocketContext.Provider
 			value={{
