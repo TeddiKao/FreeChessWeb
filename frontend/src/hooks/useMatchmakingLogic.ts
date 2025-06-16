@@ -11,14 +11,14 @@ interface MatchmakingLogicHookProps {
 	baseTime: number;
 	increment: number;
 
-    cancelSuccess: () => void;
+	cancelSuccess: () => void;
 }
 
 function useMatchmakingLogic({
 	enabled,
 	baseTime,
 	increment,
-    cancelSuccess
+	cancelSuccess,
 }: MatchmakingLogicHookProps) {
 	const [matchmakingStatus, setMatchmakingStatus] =
 		useState<string>("Finding match");
@@ -39,34 +39,37 @@ function useMatchmakingLogic({
 	const navigate = useNavigate();
 
 	useEffect(() => {
-        if (!matchFound) return;
-        if (!whitePlayerRef.current) return;
-        if (!blackPlayerRef.current) return;
+		if (!matchFound) return;
+		if (!whitePlayerRef.current) return;
+		if (!blackPlayerRef.current) return;
 		const handleRedirection = async () => {
 			const gameSetupInfo = {
 				baseTime,
 				increment,
 				gameId: gameIdRef.current,
 
-				assignedColor: await getAssignedColor(whitePlayerRef.current!, blackPlayerRef.current!),
+				assignedColor: await getAssignedColor(
+					whitePlayerRef.current!,
+					blackPlayerRef.current!
+				),
 
-                whitePlayerUsername: whitePlayerRef.current,
-                blackPlayerUsername: blackPlayerRef.current,
+				whitePlayerUsername: whitePlayerRef.current,
+				blackPlayerUsername: blackPlayerRef.current,
 			};
 
-            navigate("/play", { state: gameSetupInfo })
+			navigate("/play", { state: gameSetupInfo });
 		};
 
-        handleRedirection();
+		handleRedirection();
 	}, [matchFound, setMatchFound, navigate]);
 
-    function sendMatchmakingCancelMessage() {
-        const data = {
-            type: "cancel_matchmaking"
-        }
+	function sendMatchmakingCancelMessage() {
+		const data = {
+			type: "cancel_matchmaking",
+		};
 
-        matchmakingWebsocketRef?.current?.send(JSON.stringify(data));
-    }
+		matchmakingWebsocketRef?.current?.send(JSON.stringify(data));
+	}
 
 	function handleOnMessage(event: MessageEvent): void {
 		const parsedEventData = JSON.parse(event.data);
@@ -79,7 +82,7 @@ function useMatchmakingLogic({
 				break;
 
 			case MatchmakingEvents.CANCELLED_SUCCESSFULLY:
-                cancelSuccess();
+				cancelSuccess();
 				break;
 		}
 	}
@@ -101,7 +104,10 @@ function useMatchmakingLogic({
 		setMatchFound(true);
 	}
 
-    return { matchmakingStatus, matchFound, cancelMatchmaking: sendMatchmakingCancelMessage };
+	return {
+		matchmakingStatus,
+		cancelMatchmaking: sendMatchmakingCancelMessage,
+	};
 }
 
 export default useMatchmakingLogic;
