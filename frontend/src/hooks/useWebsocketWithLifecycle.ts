@@ -1,4 +1,6 @@
+import { useRef, useState } from "react";
 import useWebSocket from "./useWebsocket";
+import useWebsocketLifecycle from "./useWebsocketLifecycle";
 
 interface WebsocketWithLifecycleHookProps {
     url: string,
@@ -8,7 +10,28 @@ interface WebsocketWithLifecycleHookProps {
 }
 
 function useWebsocketWithLifecycle({ url, enabled, onMessage, onError }: WebsocketWithLifecycleHookProps) {
-    const websocket = useWebSocket(url, onMessage, onError, enabled);
+    const socket = useWebSocket(url, onMessage, onError, enabled);
+    const socketRef = useRef<WebSocket | null>(null);
+    const socketExistsRef = useRef<boolean>(false);
+
+    const [socketEnabled, setSocketEnabled] = useState(enabled);
+
+    useWebsocketLifecycle({
+        websocket: socket,
+        websocketRef: socketRef,
+        websocketExistsRef: socketExistsRef,
+        setWebsocketEnabled: setSocketEnabled,
+        handleWindowUnload
+    })
+
+    function handleWindowUnload() {
+        if (socketRef.current?.readyState === WebSocket.OPEN) {
+            socketRef.current.close();
+            socketExistsRef.current = false;
+        }
+    }
+
+    return { socketRef, socketExistsRef, socketEnabled };
 }
 
 export default useWebsocketWithLifecycle;
