@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useWebSocket from "./useWebsocket";
 import useWebsocketLifecycle from "./useWebsocketLifecycle";
 
@@ -15,6 +15,10 @@ function useWebsocketWithLifecycle({ url, enabled, onMessage, onError }: Websock
     const socketExistsRef = useRef<boolean>(false);
 
     const [socketEnabled, setSocketEnabled] = useState(enabled);
+
+    useEffect(() => {
+        socketRef.current = socket;
+    }, [socket])
 
     useWebsocketLifecycle({
         websocket: socket,
