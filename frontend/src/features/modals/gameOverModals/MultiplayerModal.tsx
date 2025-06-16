@@ -2,14 +2,10 @@ import { useContext, useEffect, useRef, useState } from "react";
 import "../../../styles/modals/game-over-modal.scss";
 import { ChallengeWebsocketContext } from "../../../components/wrappers/ChallengeWebsocketProvider";
 import useUsername from "../../../hooks/useUsername";
-import { useNavigate } from "react-router-dom";
-import { capitaliseFirstLetter, parseWebsocketUrl } from "../../../utils/generalUtils";
-import useWebSocket from "../../../hooks/useWebsocket";
-import { getAssignedColor } from "../../../utils/matchmakingUtils";
+import { capitaliseFirstLetter } from "../../../utils/generalUtils";
 import MatchmakingShortcutScreen from "../MatchmakingShortcutScreen";
-import { MatchmakingEvents } from "../../../enums/gameSetup";
 import { TimeControl } from "../../../types/gameSetup";
-import useWebsocketWithLifecycle from "../../../hooks/useWebsocketWithLifecycle";
+import useMatchmakingLogic from "../../../hooks/useMatchmakingLogic";
 
 type GameOverModalProps = {
 	visible: boolean;
@@ -31,103 +27,24 @@ function GameOverModal({
 }: GameOverModalProps) {
 	const [matchmakingWebsocketEnabled, setMatchmakingWebsocketEnabled] =
 		useState(false);
-
-	const [matchFound, setMatchFound] = useState(false);
 	const [isMatchmaking, setIsMatchmaking] = useState(false);
-
-	const gameIdRef = useRef<string | number | null>(null);
-	const whitePlayerRef = useRef<string | null>(null);
-	const blackPlayerRef = useRef<string | null>(null);
 
 	const playerUsername = useUsername();
 	const playerUsernameRef = useRef<string | null>(playerUsername);
 
 	const { sendChallenge } = useContext(ChallengeWebsocketContext)!;
 
-	const navigate = useNavigate();
-
-	const websocketUrl = parseWebsocketUrl("matchmaking-server", {
-		baseTime: timeControlInfo.baseTime,
-		increment: timeControlInfo.increment,
-		gameId: gameIdRef.current,
-	});
-
-	const { socketRef: matchmakingWebsocketRef } = useWebsocketWithLifecycle({
-		url: websocketUrl,
-		onMessage: handleOnMessage,
-		enabled: matchmakingWebsocketEnabled
-	})
-
-	useEffect(() => {
-		async function handleNavigation() {
-			if (
-				matchmakingWebsocketRef.current?.readyState === WebSocket.OPEN
-			) {
-				matchmakingWebsocketRef.current.close();
-			}
-
-			const gameSetupInfo = {
-				baseTime: timeControlInfo.baseTime,
-				increment: timeControlInfo.increment,
-				gameId: gameIdRef.current,
-				assignedColor: await getAssignedColor(
-					whitePlayerRef.current!,
-					blackPlayerRef.current!
-				),
-
-				whitePlayerUsername: whitePlayerRef.current,
-				blackPlayerUsername: blackPlayerRef.current,
-			};
-
-			navigate("/temp", {
-				state: {
-					route: "/play",
-					routeState: gameSetupInfo,
-				},
-			});
-		}
-
-		if (matchFound) {
-			handleNavigation();
-		}
-	}, [matchFound]);
-
 	useEffect(() => {
 		playerUsernameRef.current = playerUsername;
 	}, [playerUsername]);
 
-	function handleMatchFound(parsedEventData: any) {
-		matchmakingWebsocketRef.current?.close();
-
-		setIsMatchmaking(false);
-		setMatchmakingWebsocketEnabled(false);
-
-		gameIdRef.current = parsedEventData["game_id"];
-
-		const whitePlayer = parsedEventData["white_player"];
-		const blackPlayer = parsedEventData["black_player"];
-
-		whitePlayerRef.current = whitePlayer;
-		blackPlayerRef.current = blackPlayer;
-
-		setTimeout(() => {
-			setMatchFound(true);
-		}, 50);
-	}
-
-	function handleOnMessage(eventData: any) {
-		const parsedEventData = JSON.parse(eventData.data);
-		const eventType = parsedEventData["type"];
-
-		switch (eventType) {
-			case MatchmakingEvents.MATCH_FOUND:
-				if (parsedEventData["match_found"]) {
-					handleMatchFound(parsedEventData);
-				}
-
-				break;
-		}
-	}
+	useMatchmakingLogic({
+		baseTime: timeControlInfo.baseTime,
+		increment: timeControlInfo.increment,
+		cancelSuccess: () => {},
+		enabled: matchmakingWebsocketEnabled,
+		navigateToTemp: true,
+	})
 
 	if (!visible) {
 		return null;
