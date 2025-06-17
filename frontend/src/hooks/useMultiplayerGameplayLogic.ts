@@ -59,6 +59,8 @@ function useMultiplayerGameplayLogic(gameId: number) {
 	const [shouldShowPromotionPopup, setShouldShowPromotionPopup] =
 		useState(false);
 
+	const lastUsedMoveMethodRef = useRef<"click" | "drag" | null>(null);
+
 	const gameplaySettings = useGameplaySettings();
 
 	const [positionList, setPositionList] = useState<PositionList>([]);
@@ -122,10 +124,14 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 			if (isPawnPromotion(pieceColor, getRank(clickedSquare))) {
 				handlePawnPromotion(prevClickedSquare, clickedSquare);
+				performPostMoveCleanup("click");
+
+				return;
 			}
 		}
 
 		sendRegularMove(prevClickedSquare, clickedSquare);
+		performPostMoveCleanup("click");
 	}
 
 	async function handleOnDrop() {
@@ -161,10 +167,14 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 			if (isPawnPromotion(pieceColor, getRank(droppedSquare))) {
 				handlePawnPromotion(draggedSquare, droppedSquare);
+				performPostMoveCleanup("drag");
+
+				return;
 			}
 		}
 
 		sendRegularMove(draggedSquare, droppedSquare);
+		performPostMoveCleanup("drag");
 	}
 
 	function storeBoardStateBeforePromotion(
@@ -227,6 +237,20 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		};
 
 		gameWebsocketRef?.current?.send(JSON.stringify(moveDetails));
+	}
+
+	function performPostMoveCleanup(moveMethod: "click" | "drag") {
+		if (moveMethod === "click") {
+			setPrevClickedSquare(null);
+			setClickedSquare(null);
+
+			lastUsedMoveMethodRef.current = "click";
+		} else {
+			setDraggedSquare(null);
+			setDroppedSquare(null);
+
+			lastUsedMoveMethodRef.current = "drag";
+		}
 	}
 
 	function sendRegularMove(startingSquare: ChessboardSquareIndex, destinationSquare: ChessboardSquareIndex) {
