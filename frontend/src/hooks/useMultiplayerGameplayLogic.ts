@@ -225,6 +225,29 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		gameWebsocketRef?.current?.send(JSON.stringify(moveDetails));
 	}
 
+	function sendRegularMove(startingSquare: ChessboardSquareIndex, destinationSquare: ChessboardSquareIndex) {
+		if (!parsedFEN) return;
+
+		const boardPlacement = parsedFEN["board_placement"];
+
+		const pieceInfo = boardPlacement[startingSquare.toString()];
+		const pieceColor = pieceInfo["piece_color"];
+		const pieceType = pieceInfo["piece_type"];
+
+		const moveDetails = {
+			type: "move_made",
+
+			piece_color: pieceColor,
+			piece_type: pieceType,
+			starting_square: startingSquare.toString(),
+			destination_square: destinationSquare.toString(),
+
+			additional_info: {}
+		}
+
+		gameWebsocketRef.current?.send(JSON.stringify(moveDetails));
+	}
+
 	function updatePrePromotionBoardState(
 		startingSquare: ChessboardSquareIndex,
 		destinationSquare: ChessboardSquareIndex
