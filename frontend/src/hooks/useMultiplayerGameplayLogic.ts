@@ -188,7 +188,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		const autoQueen = gameplaySettings["auto_queen"];
 
 		if (autoQueen) {
-			// TODO: Add sending of move through websocket
+			sendPromotionMove(startingSquare, destinationSquare, "queen");
 		} else {
 			setShouldShowPromotionPopup(true);
 		}
