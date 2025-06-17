@@ -17,7 +17,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
 	const { socketRef: gameWebsocketRef } = useWebsocketWithLifecycle({
 		url: gameWebsocketUrl,
-		onMessage: () => {},
+		onMessage: handleOnMessage,
 		enabled: true,
 	});
 
