@@ -20,7 +20,8 @@ function Square({
 	pieceColor,
 	pieceType,
 	displayPromotionPopup,
-	handleSquareClick,
+	setPrevClickedSquare,
+	setClickedSquare,
 	setDraggedSquare,
 	setDroppedSquare,
 	handlePromotionCancel,
@@ -32,6 +33,8 @@ function Square({
 	squareSize,
 	animatingPieceSquare,
 	animatingPieceStyle,
+	prevClickedSquare,
+	clickedSquare
 }: SquareProps) {
 	let startingSquare: OptionalValue<string> = null;
 
@@ -138,6 +141,14 @@ function Square({
 		setDroppedSquare(droppedSquare);
 	}
 
+	function handleSquareClick() {
+		if (!prevClickedSquare && !clickedSquare) {
+			setPrevClickedSquare(squareNumber.toString());
+		} else {
+			setClickedSquare(squareNumber.toString());
+		}
+	}
+
 
 	function handleOnDrag(squareDragged: string | number) {
 		setDraggedSquare(squareDragged);
@@ -221,8 +232,8 @@ function Square({
 			className={getSquareClass()}
 			style={squareStyles}
 			id={`${squareNumber}`}
-			onClick={(event) => {
-				handleSquareClick(event, squareNumber);
+			onClick={() => {
+				handleSquareClick();
 				clearAllHighlightedSquares();
 			}}
 			onContextMenu={handleSquareHiglight}
