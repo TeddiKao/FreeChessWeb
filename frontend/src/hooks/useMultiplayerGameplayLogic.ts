@@ -53,7 +53,6 @@ function useMultiplayerGameplayLogic(gameId: number) {
 	const [gameEndedCause, setGameEndedCause] = useState<string | null>(null);
 	const [gameWinner, setGameWinner] = useState<PieceColor | null>(null);
 
-	const promotionCapturedPieceRef = useRef<PieceInfo | null>(null);
 	const boardStateBeforePromotion = useRef<BoardPlacement | null>(null);
 
 	const [positionList, setPositionList] = useState<PositionList>([]);
