@@ -65,10 +65,6 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		updatePositionList();
 		updateMoveList();
 		updatePlayerClocks();
-
-        if (!isNullOrUndefined(moveType)) {
-            playAudio(moveType);
-        }
 	}, []);
 
     useEffect(() => {
