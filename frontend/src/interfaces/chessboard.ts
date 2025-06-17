@@ -72,6 +72,10 @@ interface EmptySquareProps {
 	squareColor: string;
 	orientation: string;
 	displayPromotionPopup: boolean;
+
+	prevClickedSquare: OptionalValue<ChessboardSquareIndex>;
+	clickedSquare: OptionalValue<ChessboardSquareIndex>;
+
 	setParsedFENString: StateSetterFunction<any>;
 	setDraggedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
 	setDroppedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
