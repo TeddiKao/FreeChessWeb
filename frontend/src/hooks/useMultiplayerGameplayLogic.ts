@@ -206,6 +206,11 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		gameEnded: hasGameEnded,
 		gameWinner,
 		gameEndedCause,
+
+        clocks: {
+            whitePlayerClock,
+            blackPlayerClock
+        }
 	};
 }
 
