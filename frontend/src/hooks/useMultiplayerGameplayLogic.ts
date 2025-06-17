@@ -121,6 +121,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 			storeBoardStateBeforePromotion(pieceColor, clickedSquare);
 
 			if (isPawnPromotion(pieceColor, getRank(clickedSquare))) {
+				handlePawnPromotion(prevClickedSquare, clickedSquare);
 			}
 		}
 	}
@@ -155,6 +156,10 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 		if (pieceType.toLowerCase() === "pawn") {
 			storeBoardStateBeforePromotion(pieceColor, droppedSquare);
+
+			if (isPawnPromotion(pieceColor, getRank(droppedSquare))) {
+				handlePawnPromotion(draggedSquare, droppedSquare);
+			}
 		}
 	}
 
@@ -175,6 +180,15 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		if (!parsedFEN) return;
 		
 		updatePrePromotionBoardState(startingSquare, destinationSquare);
+
+		// @ts-ignore
+		const autoQueen = gameplaySettings["auto_queen"];
+
+		if (autoQueen) {
+			// TODO: Add sending of move through websocket
+		} else {
+			setShouldShowPromotionPopup(true);
+		}
 	}
 
 	function updatePrePromotionBoardState(
