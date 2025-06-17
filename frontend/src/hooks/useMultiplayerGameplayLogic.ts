@@ -50,6 +50,31 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
         setMoveList(moveList);
     }
+
+    return {
+        prevClickedSquare,
+        clickedSquare,
+        setPrevClickedSquare,
+        setClickedSquare,
+
+        draggedSquare,
+        droppedSquare,
+        setDraggedSquare,
+        setDroppedSquare,
+
+        parsedFEN,
+        previousDraggedSquare,
+        previousDroppedSquare,
+
+        gameStateHistory: {
+            positionList,
+            moveList,
+            positionIndex,
+        },
+
+        capturedMaterial,
+        promotedPieces
+    }
 }
 
 export default useMultiplayerGameplayLogic;
