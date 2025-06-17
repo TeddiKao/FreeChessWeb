@@ -54,6 +54,8 @@ function useMultiplayerGameplayLogic(gameId: number) {
 	const [gameWinner, setGameWinner] = useState<PieceColor | null>(null);
 
 	const boardStateBeforePromotion = useRef<BoardPlacement | null>(null);
+	const prePromotionBoardState = useRef<BoardPlacement | null>(null);
+	const [shouldShowPromotionPopup, setShouldShowPromotionPopup] = useState(false);
 
 	const [positionList, setPositionList] = useState<PositionList>([]);
 	const [positionIndex, setPositionIndex] = useState(0);
@@ -65,8 +67,6 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		positionList[positionIndex]?.["last_dragged_square"];
 	const previousDroppedSquare =
 		positionList[positionIndex]?.["last_dropped_square"];
-
-	const moveType = positionList[positionIndex]?.["move_type"];
 
 	const capturedMaterial = positionList[positionIndex]?.["captured_material"];
 	const promotedPieces = positionList[positionIndex]?.["promoted_pieces"];
