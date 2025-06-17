@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CheckmateEventData, MoveListUpdateEventData, PositionList, PositionListUpdateEventData, TimerChangedEventData } from "../interfaces/gameLogic";
+import { CheckmateEventData, MoveListUpdateEventData, MoveMadeEventData, PositionList, PositionListUpdateEventData, TimerChangedEventData } from "../interfaces/gameLogic";
 import {
 	fetchMoveList,
 	fetchPositionList,
@@ -117,17 +117,21 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		setGameEndedCause("Insufficient material");
 	}
 
-	function handleCheckmate(parsedEventData: CheckmateEventData) {
+	function handleCheckmate(eventData: CheckmateEventData) {
 		setHasGameEnded(true);
 		setGameEndedCause("Checkmate");
-		setGameWinner(parsedEventData["winning_color"] as PieceColor);
+		setGameWinner(eventData["winning_color"] as PieceColor);
 	}
 
-	function handlePlayerTimeout(parsedEventData: any) {
+	function handlePlayerTimeout(eventData: any) {
 		setHasGameEnded(true);
 		setGameEndedCause("Timeout");
-		setGameWinner(getOppositeColor(parsedEventData["timeout_color"]));
+		setGameWinner(getOppositeColor(eventData["timeout_color"]));
 	}
+
+    function handleMoveMade(eventData: MoveMadeEventData) {
+        setPositionIndex(eventData["new_position_index"]);
+    }
 
 	function handleOnMessage(event: MessageEvent) {
 		const eventData = JSON.parse(event.data);
@@ -135,6 +139,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 		switch (eventType) {
 			case GameplayWebSocketEventTypes.MOVE_MADE:
+                handleMoveMade(eventData);
 				break;
 
 			case GameplayWebSocketEventTypes.TIMER_DECREMENTED:
