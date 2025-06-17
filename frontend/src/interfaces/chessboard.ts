@@ -46,37 +46,14 @@ interface BotChessboardProps extends DisplayChessboardProps {
 }
 
 interface MultiplayerChessboardProps extends DisplayChessboardProps {
-	gameId: number | string;
-	setWhiteTimer: StateSetterFunction<OptionalValue<number>>;
-	setBlackTimer: StateSetterFunction<OptionalValue<number>>;
-	setPositionIndex: StateSetterFunction<number>;
-	setPositionList: StateSetterFunction<
-		Array<{
-			position: ParsedFENString;
-			last_dragged_square: string;
-			last_dropped_square: string;
-			move_type: string;
-			move_info: MoveInfo
-			captured_material: {
-				white: CapturedPiecesList;
-				black: CapturedPiecesList;
-			};
-			promoted_pieces: {
-				white: PromotedPiecesList;
-				black: PromotedPiecesList;
-			}
-		}>
-	>;
-	setMoveList: StateSetterFunction<Array<Array<string>>>;
+	parsedFEN: ParsedFENString | null;
+	previousDraggedSquare: ChessboardSquareIndex | null;
+	previousDroppedSquare: ChessboardSquareIndex | null;
 
-	setGameEnded: StateSetterFunction<boolean>;
-	setGameEndedCause: StateSetterFunction<string>;
-	setGameWinner: StateSetterFunction<string>;
-	isAnimatingRef: RefObject<boolean>;
-
-	lastDraggedSquare: string;
-	lastDroppedSquare: string;
-	gameplaySettings: any;
+	setDraggedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
+	setDroppedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
+	setPrevClickedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
+	setClickedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
 
 	parentAnimationSquare: OptionalValue<ChessboardSquareIndex>
 	parentAnimationStyles: Record<string, unknown>
@@ -94,14 +71,13 @@ interface EmptySquareProps {
 	squareNumber: string | number;
 	squareColor: string;
 	orientation: string;
-	handleSquareClick: (
-		event: React.MouseEvent<HTMLElement>,
-		square: ChessboardSquareIndex
-	) => void;
 	displayPromotionPopup: boolean;
 	setParsedFENString: StateSetterFunction<any>;
 	setDraggedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
 	setDroppedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
+	setPrevClickedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
+	setClickedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
+
 	handlePromotionCancel: (color: PieceColor) => void;
 	handlePawnPromotion: (
 		color: PieceColor,
