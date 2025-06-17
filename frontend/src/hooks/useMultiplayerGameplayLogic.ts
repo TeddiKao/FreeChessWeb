@@ -124,6 +124,8 @@ function useMultiplayerGameplayLogic(gameId: number) {
 				handlePawnPromotion(prevClickedSquare, clickedSquare);
 			}
 		}
+
+		sendRegularMove(prevClickedSquare, clickedSquare);
 	}
 
 	async function handleOnDrop() {
@@ -161,6 +163,8 @@ function useMultiplayerGameplayLogic(gameId: number) {
 				handlePawnPromotion(draggedSquare, droppedSquare);
 			}
 		}
+
+		sendRegularMove(draggedSquare, droppedSquare);
 	}
 
 	function storeBoardStateBeforePromotion(
