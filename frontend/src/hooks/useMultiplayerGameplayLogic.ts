@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { CheckmateEventData, MoveListUpdateEventData, MoveMadeEventData, PositionList, PositionListUpdateEventData, TimerChangedEventData } from "../interfaces/gameLogic";
 import {
+    fetchLegalMoves,
 	fetchMoveList,
 	fetchPositionList,
 	fetchTimer,
@@ -63,6 +64,67 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		updateMoveList();
 		updatePlayerClocks();
 	}, []);
+
+    useEffect(() => {
+        handleOnDrop();
+    }, [draggedSquare, droppedSquare])
+
+    useEffect(() => {
+        handleClickToMove();
+    }, [prevClickedSquare, clickedSquare])
+
+    async function handleClickToMove() {
+        if (!prevClickedSquare && !clickedSquare) return;
+
+        if (!clickedSquare) {
+            displayLegalMoves(prevClickedSquare!);
+
+            return;
+        }
+
+        if (prevClickedSquare === clickedSquare) {
+            setPrevClickedSquare(null);
+            setClickedSquare(null);
+
+            return;
+        }
+    }
+
+    async function handleOnDrop() {
+        if (!draggedSquare && !droppedSquare) return;
+
+        if (!droppedSquare) {
+            displayLegalMoves(draggedSquare!);
+
+            return;
+        }
+
+        if (draggedSquare === droppedSquare) {
+            setDraggedSquare(null);
+            setDroppedSquare(null);
+
+            return;
+        }
+    }
+
+    async function displayLegalMoves(startSquare: ChessboardSquareIndex) {
+        if (!parsedFEN) return;
+
+        const squareInfo = parsedFEN["board_placement"][startSquare.toString()];
+        const pieceType = squareInfo["piece_type"];
+        const pieceColor = squareInfo["piece_color"];
+
+        const legalMoves = await fetchLegalMoves(parsedFEN, pieceColor, pieceType, startSquare)
+
+        if (!legalMoves) return;
+
+        for (const legalMove of legalMoves) {
+            const square = document.getElementById(legalMove);
+            if (!square) return;
+
+            square.classList.add("legal-square");
+        }
+    }
 
 	async function updatePositionList() {
 		const positionList = await fetchPositionList(gameId);
