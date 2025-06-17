@@ -208,6 +208,14 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		}
 	}
 
+	function clearBoardStateBeforePromotion() {
+		boardStateBeforePromotion.current = null;
+	}
+
+	function clearPrePromotionBoardState() {
+		prePromotionBoardState.current = null;
+	}
+
 	function sendPromotionMove(
 		startingSquare: ChessboardSquareIndex,
 		destinationSquare: ChessboardSquareIndex,
@@ -237,6 +245,9 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		};
 
 		gameWebsocketRef?.current?.send(JSON.stringify(moveDetails));
+
+		clearBoardStateBeforePromotion();
+		clearPrePromotionBoardState();
 	}
 
 	function performPostMoveCleanup(moveMethod: "click" | "drag") {
