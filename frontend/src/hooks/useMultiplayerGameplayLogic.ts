@@ -18,11 +18,11 @@ import { websocketBaseURL } from "../constants/urls";
 import { getAccessToken } from "../utils/tokenUtils";
 import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
 import { ChessboardSquareIndex } from "../types/general";
-import { BoardPlacement, PieceColor, PieceInfo, PieceType } from "../types/gameLogic";
+import { BoardPlacement, PieceColor, PieceType } from "../types/gameLogic";
 import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
 import { getOppositeColor } from "../utils/gameLogic/general";
-import { isPawnCapture, isPawnPromotion } from "../utils/moveUtils";
-import { getFile, getRank } from "../utils/boardUtils";
+import { isPawnPromotion } from "../utils/moveUtils";
+import { getRank } from "../utils/boardUtils";
 import useGameplaySettings from "./useGameplaySettings";
 
 function useMultiplayerGameplayLogic(gameId: number) {
