@@ -46,9 +46,10 @@ interface BotChessboardProps extends DisplayChessboardProps {
 }
 
 interface MultiplayerChessboardProps extends DisplayChessboardProps {
-	parsedFEN: ParsedFENString | null;
 	previousDraggedSquare: ChessboardSquareIndex | null;
 	previousDroppedSquare: ChessboardSquareIndex | null;
+	prevClickedSquare: OptionalValue<ChessboardSquareIndex>;
+	clickedSquare: OptionalValue<ChessboardSquareIndex>;
 
 	setDraggedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
 	setDroppedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
@@ -76,7 +77,6 @@ interface EmptySquareProps {
 	prevClickedSquare: OptionalValue<ChessboardSquareIndex>;
 	clickedSquare: OptionalValue<ChessboardSquareIndex>;
 
-	setParsedFENString: StateSetterFunction<any>;
 	setDraggedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
 	setDroppedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
 	setPrevClickedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
