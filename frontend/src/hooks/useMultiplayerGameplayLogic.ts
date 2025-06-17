@@ -23,6 +23,7 @@ import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
 import { getOppositeColor } from "../utils/gameLogic/general";
 import { isPawnCapture, isPawnPromotion } from "../utils/moveUtils";
 import { getFile, getRank } from "../utils/boardUtils";
+import useGameplaySettings from "./useGameplaySettings";
 
 function useMultiplayerGameplayLogic(gameId: number) {
 	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
@@ -55,7 +56,10 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 	const boardStateBeforePromotion = useRef<BoardPlacement | null>(null);
 	const prePromotionBoardState = useRef<BoardPlacement | null>(null);
-	const [shouldShowPromotionPopup, setShouldShowPromotionPopup] = useState(false);
+	const [shouldShowPromotionPopup, setShouldShowPromotionPopup] =
+		useState(false);
+
+	const gameplaySettings = useGameplaySettings();
 
 	const [positionList, setPositionList] = useState<PositionList>([]);
 	const [positionIndex, setPositionIndex] = useState(0);
@@ -108,14 +112,17 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 		if (!isValidMove) return;
 
-        const boardPlacement = parsedFEN["board_placement"];
-        const pieceInfo = boardPlacement[prevClickedSquare.toString()];
-        const pieceColor = pieceInfo["piece_color"];
-        const pieceType = pieceInfo["piece_type"];
+		const boardPlacement = parsedFEN["board_placement"];
+		const pieceInfo = boardPlacement[prevClickedSquare.toString()];
+		const pieceColor = pieceInfo["piece_color"];
+		const pieceType = pieceInfo["piece_type"];
 
-        if (pieceType.toLowerCase() === "pawn") {
-            storeBoardStateBeforePromotion(pieceColor, clickedSquare);
-        }
+		if (pieceType.toLowerCase() === "pawn") {
+			storeBoardStateBeforePromotion(pieceColor, clickedSquare);
+
+			if (isPawnPromotion(pieceColor, getRank(clickedSquare))) {
+			}
+		}
 	}
 
 	async function handleOnDrop() {
@@ -141,26 +148,52 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 		if (!isValidMove) return;
 
-        const boardPlacement = parsedFEN["board_placement"];
-        const pieceInfo = boardPlacement[draggedSquare.toString()];
-        const pieceColor = pieceInfo["piece_color"];
-        const pieceType = pieceInfo["piece_type"];
+		const boardPlacement = parsedFEN["board_placement"];
+		const pieceInfo = boardPlacement[draggedSquare.toString()];
+		const pieceColor = pieceInfo["piece_color"];
+		const pieceType = pieceInfo["piece_type"];
 
-        if (pieceType.toLowerCase() === "pawn") {
-            storeBoardStateBeforePromotion(pieceColor, droppedSquare);
-        }
-
-
+		if (pieceType.toLowerCase() === "pawn") {
+			storeBoardStateBeforePromotion(pieceColor, droppedSquare);
+		}
 	}
 
-	function storeBoardStateBeforePromotion(color: PieceColor, destinationSquare: ChessboardSquareIndex) {
+	function storeBoardStateBeforePromotion(
+		color: PieceColor,
+		destinationSquare: ChessboardSquareIndex
+	) {
 		if (!parsedFEN) return;
-	
-		const isPromotion = isPawnPromotion(color, getRank(destinationSquare))
+
+		const isPromotion = isPawnPromotion(color, getRank(destinationSquare));
 
 		if (!isPromotion) return;
 
 		boardStateBeforePromotion.current = parsedFEN["board_placement"];
+	}
+
+	function handlePawnPromotion(startingSquare: ChessboardSquareIndex, destinationSquare: ChessboardSquareIndex) {
+		if (!parsedFEN) return;
+		
+		updatePrePromotionBoardState(startingSquare, destinationSquare);
+	}
+
+	function updatePrePromotionBoardState(
+		startingSquare: ChessboardSquareIndex,
+		destinationSquare: ChessboardSquareIndex
+	) {
+		if (!parsedFEN) return;
+
+		const currentBoardPlacement = parsedFEN["board_placement"];
+		const pawnInfo = currentBoardPlacement[startingSquare.toString()];
+		
+		const prePromotionBoardPlacement = structuredClone(
+			currentBoardPlacement
+		);
+
+		delete prePromotionBoardPlacement[startingSquare.toString()]
+		prePromotionBoardPlacement[destinationSquare.toString()] = pawnInfo;
+
+		prePromotionBoardState.current = prePromotionBoardPlacement;
 	}
 
 	async function performMoveValidation(
