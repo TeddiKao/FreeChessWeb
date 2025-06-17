@@ -18,7 +18,7 @@ import { websocketBaseURL } from "../constants/urls";
 import { getAccessToken } from "../utils/tokenUtils";
 import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
 import { ChessboardSquareIndex } from "../types/general";
-import { BoardPlacement, PieceColor, PieceInfo } from "../types/gameLogic";
+import { BoardPlacement, PieceColor, PieceInfo, PieceType } from "../types/gameLogic";
 import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
 import { getOppositeColor } from "../utils/gameLogic/general";
 import { isPawnCapture, isPawnPromotion } from "../utils/moveUtils";
@@ -176,9 +176,12 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		boardStateBeforePromotion.current = parsedFEN["board_placement"];
 	}
 
-	function handlePawnPromotion(startingSquare: ChessboardSquareIndex, destinationSquare: ChessboardSquareIndex) {
+	function handlePawnPromotion(
+		startingSquare: ChessboardSquareIndex,
+		destinationSquare: ChessboardSquareIndex
+	) {
 		if (!parsedFEN) return;
-		
+
 		updatePrePromotionBoardState(startingSquare, destinationSquare);
 
 		// @ts-ignore
@@ -191,6 +194,37 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		}
 	}
 
+	function sendPromotionMove(
+		startingSquare: ChessboardSquareIndex,
+		destinationSquare: ChessboardSquareIndex,
+		promotedPiece: PieceType,
+	) {
+		if (!parsedFEN) return;
+
+		const boardPlacement = prePromotionBoardState.current;
+
+		if (!boardPlacement) return;
+
+		const pieceInfo = boardPlacement[startingSquare.toString()];
+		const pieceColor = pieceInfo["piece_color"];
+		const pieceType = pieceInfo["piece_type"];
+
+		const moveDetails = {
+			type: "move_made",
+
+			piece_color: pieceColor,
+			piece_type: pieceType,
+			starting_square: startingSquare.toString(),
+			destination_square: destinationSquare.toString(),
+
+			additional_info: {
+				promoted_piece: promotedPiece,
+			},
+		};
+
+		gameWebsocketRef?.current?.send(JSON.stringify(moveDetails));
+	}
+
 	function updatePrePromotionBoardState(
 		startingSquare: ChessboardSquareIndex,
 		destinationSquare: ChessboardSquareIndex
@@ -199,12 +233,12 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 		const currentBoardPlacement = parsedFEN["board_placement"];
 		const pawnInfo = currentBoardPlacement[startingSquare.toString()];
-		
+
 		const prePromotionBoardPlacement = structuredClone(
 			currentBoardPlacement
 		);
 
-		delete prePromotionBoardPlacement[startingSquare.toString()]
+		delete prePromotionBoardPlacement[startingSquare.toString()];
 		prePromotionBoardPlacement[destinationSquare.toString()] = pawnInfo;
 
 		prePromotionBoardState.current = prePromotionBoardPlacement;
