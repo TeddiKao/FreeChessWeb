@@ -13,6 +13,8 @@ import { ChessboardSquareIndex } from "../types/general";
 import { PieceColor } from "../types/gameLogic";
 import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
 import { getOppositeColor } from "../utils/gameLogic/general";
+import { isNullOrUndefined } from "../utils/generalUtils";
+import { playAudio } from "../utils/audioUtils";
 
 function useMultiplayerGameplayLogic(gameId: number) {
 	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
@@ -63,6 +65,10 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		updatePositionList();
 		updateMoveList();
 		updatePlayerClocks();
+
+        if (!isNullOrUndefined(moveType)) {
+            playAudio(moveType);
+        }
 	}, []);
 
     useEffect(() => {
