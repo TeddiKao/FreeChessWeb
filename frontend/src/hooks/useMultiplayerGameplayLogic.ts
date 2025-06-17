@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { PositionList } from "../interfaces/gameLogic";
-import { fetchMoveList, fetchPositionList } from "../utils/apiUtils";
+import { fetchMoveList, fetchPositionList, fetchTimer } from "../utils/apiUtils";
 import { websocketBaseURL } from "../constants/urls";
 import { getAccessToken } from "../utils/tokenUtils";
 import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
@@ -14,11 +14,14 @@ function useMultiplayerGameplayLogic(gameId: number) {
         enabled: true,
     })
 
-    const [prevClickedSquare, setPrevClickedSquare] = useState<ChessboardSquareIndex>(null);
-    const [clickedSquare, setClickedSquare] = useState<ChessboardSquareIndex>(null);
+    const [prevClickedSquare, setPrevClickedSquare] = useState<ChessboardSquareIndex | null>(null);
+    const [clickedSquare, setClickedSquare] = useState<ChessboardSquareIndex | null>(null);
 
-    const [draggedSquare, setDraggedSquare] = useState<ChessboardSquareIndex>(null);
-    const [droppedSquare, setDroppedSquare] = useState<ChessboardSquareIndex>(null);
+    const [draggedSquare, setDraggedSquare] = useState<ChessboardSquareIndex | null>(null);
+    const [droppedSquare, setDroppedSquare] = useState<ChessboardSquareIndex | null>(null);
+
+    const [whitePlayerClock, setWhitePlayerClock] = useState<number | null>(null);
+    const [blackPlayerClock, setBlackPlayerClock] = useState<number | null>(null);
 
     const [positionList, setPositionList] = useState<PositionList>([]);
     const [positionIndex, setPositionIndex] = useState(0);
@@ -37,6 +40,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
     useEffect(() => {
         updatePositionList();
         updateMoveList();
+        updatePlayerClocks();
     }, []);
 
     async function updatePositionList() {
@@ -49,6 +53,14 @@ function useMultiplayerGameplayLogic(gameId: number) {
         const moveList = await fetchMoveList(gameId);
 
         setMoveList(moveList);
+    }
+
+    async function updatePlayerClocks() {
+        const whitePlayerClock = await fetchTimer(gameId, "white");
+        const blackPlayerClock = await fetchTimer(gameId, "black");
+
+        setWhitePlayerClock(whitePlayerClock);
+        setBlackPlayerClock(blackPlayerClock);
     }
 
     return {
