@@ -1,7 +1,15 @@
-import { useEffect, useState } from "react";
-import { CheckmateEventData, MoveListUpdateEventData, MoveMadeEventData, PositionList, PositionListUpdateEventData, TimerChangedEventData } from "../interfaces/gameLogic";
+import { useEffect, useRef, useState } from "react";
 import {
-    fetchLegalMoves,
+	CheckmateEventData,
+	MoveListUpdateEventData,
+	MoveMadeEventData,
+	PositionList,
+	PositionListUpdateEventData,
+	TimerChangedEventData,
+} from "../interfaces/gameLogic";
+import {
+	fetchLegalMoves,
+	fetchMoveIsValid,
 	fetchMoveList,
 	fetchPositionList,
 	fetchTimer,
@@ -10,11 +18,11 @@ import { websocketBaseURL } from "../constants/urls";
 import { getAccessToken } from "../utils/tokenUtils";
 import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
 import { ChessboardSquareIndex } from "../types/general";
-import { PieceColor } from "../types/gameLogic";
+import { BoardPlacement, PieceColor, PieceInfo } from "../types/gameLogic";
 import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
 import { getOppositeColor } from "../utils/gameLogic/general";
-import { isNullOrUndefined } from "../utils/generalUtils";
-import { playAudio } from "../utils/audioUtils";
+import { isPawnCapture, isPawnPromotion } from "../utils/moveUtils";
+import { getFile, getRank } from "../utils/boardUtils";
 
 function useMultiplayerGameplayLogic(gameId: number) {
 	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
@@ -45,6 +53,9 @@ function useMultiplayerGameplayLogic(gameId: number) {
 	const [gameEndedCause, setGameEndedCause] = useState<string | null>(null);
 	const [gameWinner, setGameWinner] = useState<PieceColor | null>(null);
 
+	const promotionCapturedPieceRef = useRef<PieceInfo | null>(null);
+	const boardStateBeforePromotion = useRef<BoardPlacement | null>(null);
+
 	const [positionList, setPositionList] = useState<PositionList>([]);
 	const [positionIndex, setPositionIndex] = useState(0);
 
@@ -67,66 +78,137 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		updatePlayerClocks();
 	}, []);
 
-    useEffect(() => {
-        handleOnDrop();
-    }, [draggedSquare, droppedSquare])
+	useEffect(() => {
+		handleOnDrop();
+	}, [draggedSquare, droppedSquare]);
 
-    useEffect(() => {
-        handleClickToMove();
-    }, [prevClickedSquare, clickedSquare])
+	useEffect(() => {
+		handleClickToMove();
+	}, [prevClickedSquare, clickedSquare]);
 
-    async function handleClickToMove() {
-        if (!prevClickedSquare && !clickedSquare) return;
+	async function handleClickToMove() {
+		if (!prevClickedSquare) return;
 
-        if (!clickedSquare) {
-            displayLegalMoves(prevClickedSquare!);
+		if (!clickedSquare) {
+			displayLegalMoves(prevClickedSquare!);
 
-            return;
+			return;
+		}
+
+		if (prevClickedSquare === clickedSquare) {
+			setPrevClickedSquare(null);
+			setClickedSquare(null);
+
+			return;
+		}
+
+		const isValidMove = await performMoveValidation(
+			prevClickedSquare!,
+			clickedSquare!
+		);
+
+		if (!isValidMove) return;
+
+        const boardPlacement = parsedFEN["board_placement"];
+        const pieceInfo = boardPlacement[prevClickedSquare.toString()];
+        const pieceColor = pieceInfo["piece_color"];
+        const pieceType = pieceInfo["piece_type"];
+
+        if (pieceType.toLowerCase() === "pawn") {
+            storeBoardStateBeforePromotion(pieceColor, clickedSquare);
+        }
+	}
+
+	async function handleOnDrop() {
+		if (!draggedSquare) return;
+
+		if (!droppedSquare) {
+			displayLegalMoves(draggedSquare!);
+
+			return;
+		}
+
+		if (draggedSquare === droppedSquare) {
+			setDraggedSquare(null);
+			setDroppedSquare(null);
+
+			return;
+		}
+
+		const isValidMove = await performMoveValidation(
+			draggedSquare!,
+			droppedSquare!
+		);
+
+		if (!isValidMove) return;
+
+        const boardPlacement = parsedFEN["board_placement"];
+        const pieceInfo = boardPlacement[draggedSquare.toString()];
+        const pieceColor = pieceInfo["piece_color"];
+        const pieceType = pieceInfo["piece_type"];
+
+        if (pieceType.toLowerCase() === "pawn") {
+            storeBoardStateBeforePromotion(pieceColor, droppedSquare);
         }
 
-        if (prevClickedSquare === clickedSquare) {
-            setPrevClickedSquare(null);
-            setClickedSquare(null);
 
-            return;
-        }
-    }
+	}
 
-    async function handleOnDrop() {
-        if (!draggedSquare && !droppedSquare) return;
+	function storeBoardStateBeforePromotion(color: PieceColor, destinationSquare: ChessboardSquareIndex) {
+		if (!parsedFEN) return;
+	
+		const isPromotion = isPawnPromotion(color, getRank(destinationSquare))
 
-        if (!droppedSquare) {
-            displayLegalMoves(draggedSquare!);
+		if (!isPromotion) return;
 
-            return;
-        }
+		boardStateBeforePromotion.current = parsedFEN["board_placement"];
+	}
 
-        if (draggedSquare === droppedSquare) {
-            setDraggedSquare(null);
-            setDroppedSquare(null);
+	async function performMoveValidation(
+		startSquare: ChessboardSquareIndex,
+		destinationSquare: ChessboardSquareIndex
+	) {
+		if (!parsedFEN) return;
 
-            return;
-        }
-    }
+		const boardPlacement = parsedFEN["board_placement"];
+		const squareInfo = boardPlacement[startSquare.toString()];
+		const pieceColor = squareInfo["piece_color"];
+		const pieceType = squareInfo["piece_type"];
 
-    async function displayLegalMoves(startSquare: ChessboardSquareIndex) {
-        if (!parsedFEN) return;
+		const [isValidMove, _] = await fetchMoveIsValid(
+			parsedFEN,
+			pieceColor,
+			pieceType,
+			startSquare,
+			destinationSquare
+		);
 
-        const squareInfo = parsedFEN["board_placement"][startSquare.toString()];
-        const pieceType = squareInfo["piece_type"];
-        const pieceColor = squareInfo["piece_color"];
+		return isValidMove;
+	}
 
-        const legalMoves = await fetchLegalMoves(parsedFEN, pieceColor, pieceType, startSquare)
+	async function displayLegalMoves(startSquare: ChessboardSquareIndex) {
+		if (!parsedFEN) return;
 
-        if (!legalMoves) return;
+		const squareInfo = parsedFEN["board_placement"][startSquare.toString()];
+		const pieceType = squareInfo["piece_type"];
+		const pieceColor = squareInfo["piece_color"];
 
-        for (const legalMove of legalMoves) {
-            const square = document.getElementById(legalMove);
-            if (!square) return;
+		const legalMoves = await fetchLegalMoves(
+			parsedFEN,
+			pieceColor,
+			pieceType,
+			startSquare
+		);
 
-            square.classList.add("legal-square");
-        }
-    }
+		if (!legalMoves) return;
+
+		for (const legalMove of legalMoves) {
+			const square = document.getElementById(legalMove);
+			if (!square) return;
+
+			square.classList.add("legal-square");
+		}
+	}
 
 	async function updatePositionList() {
 		const positionList = await fetchPositionList(gameId);
@@ -148,20 +230,20 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		setBlackPlayerClock(blackPlayerClock);
 	}
 
-    function handleTimerChanged(eventData: TimerChangedEventData) {
-        setWhitePlayerClock(eventData["white_player_clock"]);
-        setBlackPlayerClock(eventData["black_player_clock"]);
-    }
+	function handleTimerChanged(eventData: TimerChangedEventData) {
+		setWhitePlayerClock(eventData["white_player_clock"]);
+		setBlackPlayerClock(eventData["black_player_clock"]);
+	}
 
-    function handlePositionListUpdated(eventData: PositionListUpdateEventData) {
-        setPositionList(eventData["new_position_list"]);
-    }
+	function handlePositionListUpdated(eventData: PositionListUpdateEventData) {
+		setPositionList(eventData["new_position_list"]);
+	}
 
-    function handleMoveListUpdated(eventData: MoveListUpdateEventData) {
-        setMoveList(eventData["new_move_list"]);
-    }
+	function handleMoveListUpdated(eventData: MoveListUpdateEventData) {
+		setMoveList(eventData["new_move_list"]);
+	}
 
-    function handleStalemate() {
+	function handleStalemate() {
 		setHasGameEnded(true);
 		setGameEndedCause("Stalemate");
 	}
@@ -193,9 +275,9 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		setGameWinner(getOppositeColor(eventData["timeout_color"]));
 	}
 
-    function handleMoveMade(eventData: MoveMadeEventData) {
-        setPositionIndex(eventData["new_position_index"]);
-    }
+	function handleMoveMade(eventData: MoveMadeEventData) {
+		setPositionIndex(eventData["new_position_index"]);
+	}
 
 	function handleOnMessage(event: MessageEvent) {
 		const eventData = JSON.parse(event.data);
@@ -203,44 +285,44 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 		switch (eventType) {
 			case GameplayWebSocketEventTypes.MOVE_MADE:
-                handleMoveMade(eventData);
+				handleMoveMade(eventData);
 				break;
 
 			case GameplayWebSocketEventTypes.TIMER_DECREMENTED:
-            case GameplayWebSocketEventTypes.TIMER_INCREMENTED:
-                handleTimerChanged(eventData);
+			case GameplayWebSocketEventTypes.TIMER_INCREMENTED:
+				handleTimerChanged(eventData);
 				break;
 
 			case GameplayWebSocketEventTypes.POSITION_LIST_UPDATED:
 				handlePositionListUpdated(eventData);
-                break;
+				break;
 
 			case GameplayWebSocketEventTypes.MOVE_LIST_UPDATED:
-                handleMoveListUpdated(eventData);
+				handleMoveListUpdated(eventData);
 				break;
 
 			case GameplayWebSocketEventTypes.PLAYER_CHECKMATED:
-                handleCheckmate(eventData);
+				handleCheckmate(eventData);
 				break;
 
 			case GameplayWebSocketEventTypes.PLAYER_STALEMATED:
-                handleStalemate();
+				handleStalemate();
 				break;
 
 			case GameplayWebSocketEventTypes.THREEFOLD_REPETITION_DETECTED:
-                handleThreefoldRepetition();
+				handleThreefoldRepetition();
 				break;
 
 			case GameplayWebSocketEventTypes.FIFTY_MOVE_RULE_DETECTED:
-                handle50MoveRule();
+				handle50MoveRule();
 				break;
 
 			case GameplayWebSocketEventTypes.INSUFFICIENT_MATERIAL:
-                handleInsufficientMaterial();
+				handleInsufficientMaterial();
 				break;
 
 			case GameplayWebSocketEventTypes.PLAYER_TIMEOUT:
-                handlePlayerTimeout(eventData);
+				handlePlayerTimeout(eventData);
 				break;
 
 			default:
@@ -276,10 +358,10 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		gameWinner,
 		gameEndedCause,
 
-        clocks: {
-            whitePlayerClock,
-            blackPlayerClock
-        }
+		clocks: {
+			whitePlayerClock,
+			blackPlayerClock,
+		},
 	};
 }
 
