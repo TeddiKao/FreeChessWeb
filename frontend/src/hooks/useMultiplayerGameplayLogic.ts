@@ -57,7 +57,10 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 	const boardStateBeforePromotion = useRef<BoardPlacement | null>(null);
 	const prePromotionBoardState = useRef<BoardPlacement | null>(null);
+	
 	const promotionSquareRef = useRef<ChessboardSquareIndex | null>(null);
+	const originalPawnSquareRef = useRef<ChessboardSquareIndex | null>(null);
+
 	const [shouldShowPromotionPopup, setShouldShowPromotionPopup] =
 		useState(false);
 
@@ -200,6 +203,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 		updatePrePromotionBoardState(startingSquare, destinationSquare);
 		updatePromotionSquare(destinationSquare);
+		updateOriginalPawnSquare(startingSquare);
 
 		// @ts-ignore
 		const autoQueen = gameplaySettings["auto_queen"];
@@ -224,6 +228,8 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 		clearPrePromotionBoardState();
 		clearBoardStateBeforePromotion();
+		clearPromotionSquare();
+		clearOriginalPawnSquare();
 	}
 
 	function sendPromotionMove(
@@ -259,6 +265,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		clearBoardStateBeforePromotion();
 		clearPrePromotionBoardState();
 		clearPromotionSquare();
+		clearOriginalPawnSquare();
 	}
 
 	function performPostMoveCleanup(moveMethod: "click" | "drag") {
@@ -300,6 +307,14 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 	function updatePromotionSquare(square: ChessboardSquareIndex) {
 		promotionSquareRef.current = square;
+	}
+
+	function updateOriginalPawnSquare(square: ChessboardSquareIndex) {
+		originalPawnSquareRef.current = square;
+	}
+
+	function clearOriginalPawnSquare() {
+		originalPawnSquareRef.current = null;
 	}
 
 	function clearPromotionSquare() {
