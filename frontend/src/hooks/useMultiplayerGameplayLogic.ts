@@ -26,7 +26,7 @@ import { getRank } from "../utils/boardUtils";
 import useGameplaySettings from "./useGameplaySettings";
 import { clear } from "console";
 
-function useMultiplayerGameplayLogic(gameId: number) {
+function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
 	const { socketRef: gameWebsocketRef } = useWebsocketWithLifecycle({
 		url: gameWebsocketUrl,
@@ -44,12 +44,8 @@ function useMultiplayerGameplayLogic(gameId: number) {
 	const [droppedSquare, setDroppedSquare] =
 		useState<ChessboardSquareIndex | null>(null);
 
-	const [whitePlayerClock, setWhitePlayerClock] = useState<number | null>(
-		null
-	);
-	const [blackPlayerClock, setBlackPlayerClock] = useState<number | null>(
-		null
-	);
+	const [whitePlayerClock, setWhitePlayerClock] = useState<number>(baseTime);
+	const [blackPlayerClock, setBlackPlayerClock] = useState<number>(baseTime);
 
 	const [hasGameEnded, setHasGameEnded] = useState<boolean>(false);
 	const [gameEndedCause, setGameEndedCause] = useState<string>("");
@@ -67,6 +63,8 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		useState(false);
 
 	const lastUsedMoveMethodRef = useRef<"click" | "drag" | null>(null);
+
+	const animationRef = useRef<HTMLDivElement | null>(null);
 
 	const gameplaySettings = useGameplaySettings();
 
@@ -578,6 +576,8 @@ function useMultiplayerGameplayLogic(gameId: number) {
 				promotedPiece
 			);
 		},
+
+		animationRef
 	};
 }
 
