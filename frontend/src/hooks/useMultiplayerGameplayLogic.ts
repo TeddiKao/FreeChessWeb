@@ -22,7 +22,7 @@ import { BoardPlacement, PieceColor, PieceType } from "../types/gameLogic";
 import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
 import { getOppositeColor } from "../utils/gameLogic/general";
 import { isPawnPromotion } from "../utils/moveUtils";
-import { getRank } from "../utils/boardUtils";
+import { clearSquaresStyling, getRank } from "../utils/boardUtils";
 import useGameplaySettings from "./useGameplaySettings";
 import { clear } from "console";
 
@@ -98,7 +98,7 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 	}, [prevClickedSquare, clickedSquare]);
 
 	async function handleClickToMove() {
-		console.log(prevClickedSquare, clickedSquare);
+		clearSquaresStyling();
 
 		if (!prevClickedSquare) return;
 
@@ -143,7 +143,7 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 	}
 
 	async function handleOnDrop() {
-		console.log(draggedSquare, droppedSquare);
+		clearSquaresStyling();
 
 		if (!draggedSquare) return;
 
