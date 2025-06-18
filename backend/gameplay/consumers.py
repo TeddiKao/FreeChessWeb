@@ -571,6 +571,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if not move_is_valid:
 			return
 		
+		previous_move_number = await chess_game_model.async_get_game_attribute("current_move")
+		
 		previous_game_state_fetch_start = perf_counter()
 		previous_game_state = await chess_game_model.async_get_attributes(["parsed_board_placement", "en_passant_target_square"])
 		previous_game_state_fetch_end = perf_counter()
@@ -634,7 +636,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 		new_board_placement = new_parsed_fen["board_placement"]
 		new_side_to_move = new_parsed_fen["side_to_move"]
 		updated_halfmove_clock = new_parsed_fen["halfmove_clock"]
-		current_move_number = new_parsed_fen["fullmove_number"]
 
 		new_captured_white_material, new_captured_black_material, new_promoted_white_pieces, new_promoted_black_pieces = await asyncio.gather(
 			chess_game_model.async_get_game_attribute("captured_white_material"),
@@ -646,7 +647,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		is_checkmated, is_stalemated = is_checkmated_or_stalemated(new_parsed_fen, opposing_color)
 
 		position_index = calculate_position_index(
-			piece_color, current_move_number)
+			piece_color, previous_move_number)
 		
 		await self.channel_layer.group_send(
 			self.room_group_name,
