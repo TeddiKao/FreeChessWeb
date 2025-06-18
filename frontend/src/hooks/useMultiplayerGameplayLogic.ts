@@ -128,7 +128,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 			storeBoardStateBeforePromotion(pieceColor, clickedSquare);
 
 			if (isPawnPromotion(pieceColor, getRank(clickedSquare))) {
-				handlePawnPromotion(prevClickedSquare, clickedSquare);
+				preparePromotion(prevClickedSquare, clickedSquare);
 				performPostMoveCleanup("click");
 
 				return;
@@ -171,7 +171,8 @@ function useMultiplayerGameplayLogic(gameId: number) {
 			storeBoardStateBeforePromotion(pieceColor, droppedSquare);
 
 			if (isPawnPromotion(pieceColor, getRank(droppedSquare))) {
-				handlePawnPromotion(draggedSquare, droppedSquare);
+				preparePromotion(draggedSquare, droppedSquare);
+				handlePawnPromotion();
 				performPostMoveCleanup("drag");
 
 				return;
@@ -196,23 +197,29 @@ function useMultiplayerGameplayLogic(gameId: number) {
 	}
 
 	function handlePawnPromotion(
-		startingSquare: ChessboardSquareIndex,
-		destinationSquare: ChessboardSquareIndex
 	) {
 		if (!parsedFEN) return;
 
-		updatePrePromotionBoardState(startingSquare, destinationSquare);
-		updatePromotionSquare(destinationSquare);
-		updateOriginalPawnSquare(startingSquare);
+		if (!originalPawnSquareRef.current) return;
+		if (!promotionSquareRef.current) return;
+
+		const originalPawnSquare = originalPawnSquareRef.current;
+		const promotionSquare = promotionSquareRef.current;
 
 		// @ts-ignore
 		const autoQueen = gameplaySettings["auto_queen"];
 
 		if (autoQueen) {
-			sendPromotionMove(startingSquare, destinationSquare, "queen");
+			sendPromotionMove(originalPawnSquare, promotionSquare, "queen");
 		} else {
 			setShouldShowPromotionPopup(true);
 		}
+	}
+
+	function preparePromotion(startingSquare: ChessboardSquareIndex, destinationSquare: ChessboardSquareIndex) {
+		updatePrePromotionBoardState(startingSquare, destinationSquare);
+		updatePromotionSquare(destinationSquare);
+		updateOriginalPawnSquare(startingSquare);
 	}
 
 	function clearBoardStateBeforePromotion() {
