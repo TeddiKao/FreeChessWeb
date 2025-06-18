@@ -65,6 +65,7 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 	const lastUsedMoveMethodRef = useRef<"click" | "drag" | null>(null);
 
 	const animationRef = useRef<HTMLDivElement | null>(null);
+	const animationSquareRef = useRef<ChessboardSquareIndex | null>(null);
 
 	const gameplaySettings = useGameplaySettings();
 
@@ -577,7 +578,8 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 			);
 		},
 
-		animationRef
+		animationRef,
+		animationSquare: animationSquareRef.current,
 	};
 }
 
