@@ -652,13 +652,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.channel_layer.group_send(
 			self.room_group_name,
 			{
-				"type": "move_received",
-				"move_data": json.loads(text_data),
-				"move_made_by": self.scope["user"].username,
-				"move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
-				"new_parsed_fen": new_parsed_fen,
-				"new_position_index": position_index,
-				"new_side_to_move": new_side_to_move
+				"type": "position_list_updated",
+				"new_position_list": new_position_list,
 			}
 		),
 		
@@ -666,8 +661,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.channel_layer.group_send(
 				self.room_group_name,
 				{
-					"type": "position_list_updated",
-					"new_position_list": new_position_list,
+					"type": "move_received",
+					"move_data": json.loads(text_data),
+					"move_made_by": self.scope["user"].username,
+					"move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
+					"new_parsed_fen": new_parsed_fen,
+					"new_position_index": position_index,
+					"new_side_to_move": new_side_to_move
 				}
 			),
 
