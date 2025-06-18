@@ -801,6 +801,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			"move_made_by": event["move_made_by"],
 			"new_parsed_fen": event["new_parsed_fen"],
 			"new_position_index": event["new_position_index"],
+			"new_side_to_move": event["new_side_to_move"]
 		}))
 
 	async def captured_material_list_updated(self, event):
