@@ -57,7 +57,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 	const boardStateBeforePromotion = useRef<BoardPlacement | null>(null);
 	const prePromotionBoardState = useRef<BoardPlacement | null>(null);
-	
+
 	const promotionSquareRef = useRef<ChessboardSquareIndex | null>(null);
 	const originalPawnSquareRef = useRef<ChessboardSquareIndex | null>(null);
 
@@ -196,8 +196,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		boardStateBeforePromotion.current = parsedFEN["board_placement"];
 	}
 
-	function handlePawnPromotion(
-	) {
+	function handlePawnPromotion() {
 		if (!parsedFEN) return;
 
 		if (!originalPawnSquareRef.current) return;
@@ -216,7 +215,10 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		}
 	}
 
-	function preparePromotion(startingSquare: ChessboardSquareIndex, destinationSquare: ChessboardSquareIndex) {
+	function preparePromotion(
+		startingSquare: ChessboardSquareIndex,
+		destinationSquare: ChessboardSquareIndex
+	) {
 		updatePrePromotionBoardState(startingSquare, destinationSquare);
 		updatePromotionSquare(destinationSquare);
 		updateOriginalPawnSquare(startingSquare);
@@ -242,7 +244,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 	function sendPromotionMove(
 		startingSquare: ChessboardSquareIndex,
 		destinationSquare: ChessboardSquareIndex,
-		promotedPiece: PieceType,
+		promotedPiece: PieceType
 	) {
 		if (!parsedFEN) return;
 
@@ -289,7 +291,10 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		}
 	}
 
-	function sendRegularMove(startingSquare: ChessboardSquareIndex, destinationSquare: ChessboardSquareIndex) {
+	function sendRegularMove(
+		startingSquare: ChessboardSquareIndex,
+		destinationSquare: ChessboardSquareIndex
+	) {
 		if (!parsedFEN) return;
 
 		const boardPlacement = parsedFEN["board_placement"];
@@ -306,8 +311,8 @@ function useMultiplayerGameplayLogic(gameId: number) {
 			starting_square: startingSquare.toString(),
 			destination_square: destinationSquare.toString(),
 
-			additional_info: {}
-		}
+			additional_info: {},
+		};
 
 		gameWebsocketRef.current?.send(JSON.stringify(moveDetails));
 	}
