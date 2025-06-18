@@ -151,7 +151,7 @@ function calculateReplayXYTransform(
 }
 
 function animatePieceImage(
-	ref: RefObject<HTMLImageElement>,
+	ref: RefObject<HTMLDivElement>,
 	startSquare: ChessboardSquareIndex,
 	destinationSquare: ChessboardSquareIndex,
 	orientation: PieceColor,
