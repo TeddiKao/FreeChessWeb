@@ -9,13 +9,14 @@ import { ActionWebSocketEventTypes } from "../../../enums/gameLogic";
 import ConfirmationPopup from "../../../components/common/ConfirmationPopup";
 import { getAccessToken } from "../../../utils/tokenUtils";
 import useWebsocketWithLifecycle from "../../../hooks/useWebsocketWithLifecycle";
+import { PieceColor } from "../../../types/gameLogic";
 
 type GameplayActionButtonsProps = {
 	gameId: string | number;
 	parentActionWebsocket: RefObject<WebSocket | null>;
 	setGameEnded: StateSetterFunction<boolean>;
 	setGameEndedCause: StateSetterFunction<string>;
-	setGameWinner: StateSetterFunction<string>;
+	setGameWinner: StateSetterFunction<PieceColor | "">;
 	setMessagePopupVisible: StateSetterFunction<boolean>;
 	setMessageToDisplay: StateSetterFunction<string>;
 	setDrawOfferReceived: StateSetterFunction<boolean>;
