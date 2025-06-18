@@ -120,6 +120,8 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 			clickedSquare!
 		);
 
+		console.log(isValidMove);
+
 		if (!isValidMove) return;
 
 		const boardPlacement = parsedFEN["board_placement"];
@@ -372,8 +374,8 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 			parsedFEN,
 			pieceColor,
 			pieceType,
-			startSquare,
-			destinationSquare
+			startSquare.toString(),
+			destinationSquare.toString(),
 		);
 
 		return isValidMove;
@@ -473,7 +475,7 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 
 	function handleMoveMade(eventData: MoveMadeEventData) {
 		setPositionIndex(eventData["new_position_index"]);
-		setSideToMove((prevSideToMove) => getOppositeColor(prevSideToMove));
+		setSideToMove(eventData["new_side_to_move"]);
 	}
 
 	function handleOnMessage(event: MessageEvent) {
