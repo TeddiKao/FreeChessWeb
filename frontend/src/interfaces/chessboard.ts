@@ -58,15 +58,21 @@ interface DragAndDropSquaresState {
 	setDroppedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
 }
 
+interface AnimationInfo {
+	animationSquare: OptionalValue<ChessboardSquareIndex>
+	animationStyles: Record<string, unknown>
+}
+
 interface MultiplayerChessboardProps extends DisplayChessboardProps {
 	clickedSquaresState: ClickedSquaresState;
 	dragAndDropSquaresState: DragAndDropSquaresState;
 
 	cancelPromotion: () => void;
+	onPromotion: (color: PieceColor, promotedPiece: PieceType) => void;
+	
 	shouldShowPromotionPopup: boolean;
 
-	parentAnimationSquare: OptionalValue<ChessboardSquareIndex>
-	parentAnimationStyles: Record<string, unknown>
+	animationInfo: AnimationInfo;
 }
 
 interface GameReplayChessboardProps extends DisplayChessboardProps {
