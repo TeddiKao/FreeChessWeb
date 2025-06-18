@@ -67,6 +67,9 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
 	clickedSquaresState: ClickedSquaresState;
 	dragAndDropSquaresState: DragAndDropSquaresState;
 
+	previousDraggedSquare: ChessboardSquareIndex
+	previousDroppedSquare: ChessboardSquareIndex;
+
 	cancelPromotion: () => void;
 	onPromotion: (color: PieceColor, promotedPiece: PieceType) => void;
 	
