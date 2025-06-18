@@ -75,7 +75,9 @@ async function fetchSideToMove(gameId: number) {
 	let sideToMove = null;
 
 	try {
-		const response = await api.post("/gameplay_api/get-side-to-move/");
+		const response = await api.post("/gameplay_api/get-side-to-move/", {
+			game_id: gameId
+		});
 
 		if (response.status === 200) {
 			sideToMove = response.data;
