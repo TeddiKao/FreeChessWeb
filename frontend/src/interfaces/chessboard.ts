@@ -104,12 +104,10 @@ interface EmptySquareProps {
 	handlePawnPromotion: (
 		color: PieceColor,
 		promotedPiece: PieceType,
-		moveMethod: string,
-		autoQueen?: boolean
 	) => Promise<void> | void;
 	previousDraggedSquare: OptionalValue<ChessboardSquareIndex>;
 	previousDroppedSquare: OptionalValue<ChessboardSquareIndex>;
-	
+
 	squareSize?: number;
 	animatingPieceStyle: Record<string, unknown>;
 	animatingPieceSquare: OptionalValue<ChessboardSquareIndex>;

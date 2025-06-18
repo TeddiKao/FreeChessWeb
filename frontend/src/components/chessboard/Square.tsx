@@ -29,7 +29,6 @@ function Square({
 	previousDraggedSquare,
 	previousDroppedSquare,
 	orientation,
-	moveMethod,
 	squareSize,
 	animatingPieceSquare,
 	animatingPieceStyle,
@@ -171,7 +170,6 @@ function Square({
 					handlePromotionCancel={handlePromotionCancel}
 					handlePawnPromotion={handlePawnPromotion}
 					boardOrientation={orientation}
-					moveMethod={moveMethod}
 				/>
 			);
 		} else {
