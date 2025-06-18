@@ -104,8 +104,9 @@ interface EmptySquareProps {
 	previousDroppedSquare: OptionalValue<ChessboardSquareIndex>;
 
 	squareSize?: number;
-	animatingPieceStyle: Record<string, unknown>;
+	animatingPieceStyle?: Record<string, unknown>;
 	animatingPieceSquare: OptionalValue<ChessboardSquareIndex>;
+	animationRef: RefObject<HTMLDivElement | null>;
 }
 
 interface FilledSquareProps {
