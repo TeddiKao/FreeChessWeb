@@ -12,6 +12,7 @@ import {
 	fetchMoveIsValid,
 	fetchMoveList,
 	fetchPositionList,
+	fetchSideToMove,
 	fetchTimer,
 } from "../utils/apiUtils";
 import { websocketBaseURL } from "../constants/urls";
@@ -84,9 +85,11 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 	const promotedPieces = positionList[positionIndex]?.["promoted_pieces"];
 
 	useEffect(() => {
-		updatePositionList();
+		updatePositionList()
 		updateMoveList();
 		updatePlayerClocks();
+		updateSideToMove();
+		synchronisePositionIndex();
 	}, []);
 
 	useEffect(() => {
@@ -188,6 +191,11 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 
 		sendRegularMove(draggedSquare, droppedSquare);
 		performPostMoveCleanup("drag");
+	}
+
+	async function synchronisePositionIndex() {
+		const positionList = await fetchPositionList(gameId);
+		setPositionIndex(positionList.length - 1);
 	}
 
 	function storeBoardStateBeforePromotion(
@@ -418,6 +426,12 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 		const moveList = await fetchMoveList(gameId);
 
 		setMoveList(moveList);
+	}
+
+	async function updateSideToMove() {
+		const sideToMove = await fetchSideToMove(gameId);
+
+		setSideToMove(sideToMove);
 	}
 
 	async function updatePlayerClocks() {
