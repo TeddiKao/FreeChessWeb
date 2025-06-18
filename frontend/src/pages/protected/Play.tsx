@@ -7,19 +7,11 @@ import Timer from "../../features/gameplay/Timer.tsx";
 import "../../styles/pages/play.scss";
 import "../../styles/components/chessboard/board-actions.scss";
 
-import {
-	fetchMoveList,
-	fetchPositionList,
-	fetchTimer,
-} from "../../utils/apiUtils.ts";
 
 import GameOverModal from "../../features/modals/gameOverModals/MultiplayerModal.tsx";
 import GameplaySettings from "../../features/modals/GameplaySettings.tsx";
 import ModalWrapper from "../../components/wrappers/ModalWrapper.js";
-import { OptionalValue } from "../../types/general.js";
 import {
-	MoveInfo,
-	ParsedFENString,
 	PieceColor,
 } from "../../types/gameLogic.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
@@ -30,57 +22,50 @@ import { isNullOrUndefined } from "../../utils/generalUtils.ts";
 import MessageBox from "../../components/common/MessageBox.tsx";
 import { MessageBoxTypes } from "../../types/messageBox.ts";
 import DrawOfferPopup from "../../features/popups/DrawOfferPopup.tsx";
-import { playAudio } from "../../utils/audioUtils.ts";
 import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar.tsx";
-import { convertToMilliseconds } from "../../utils/timeUtils.ts";
-import {
-	animationOffsetSync,
-	pieceAnimationTime,
-} from "../../constants/pieceAnimation.ts";
-import usePieceAnimation from "../../hooks/usePieceAnimation.ts";
 import CapturedMaterial from "../../features/gameplay/CapturedMaterial.tsx";
-import {
-	CapturedPiecesList,
-	PromotedPiecesList,
-} from "../../interfaces/materialCalculation.ts";
 import { getOppositeColor } from "../../utils/gameLogic/general.ts";
+import useMultiplayerGameplayLogic from "../../hooks/useMultiplayerGameplayLogic.ts";
 
 function Play() {
 	const location = useLocation();
 
-	const [whitePlayerTimer, setWhitePlayerTimer] = useState<
-		OptionalValue<number>
-	>(location.state?.baseTime);
-	const [blackPlayerTimer, setBlackPlayerTimer] = useState<
-		OptionalValue<number>
-	>(location.state?.baseTime);
+	const {
+		parsedFEN,
+		gameStateHistory: { positionList, moveList, setPositionIndex },
+		clocks: { whitePlayerClock, blackPlayerClock },
+		capturedMaterial: capturedMaterialList,
+		promotedPieces: promotedPiecesList,
+		gameEnded: hasGameEnded,
+		gameEndedCause,
+		gameWinner,
+		setGameEndedCause,
+		setGameWinner,
+		setHasGameEnded,
+		sideToMove,
 
-	const [positionList, setPositionList] = useState<
-		Array<{
-			position: ParsedFENString;
-			last_dragged_square: string;
-			last_dropped_square: string;
-			move_type: string;
-			move_info: MoveInfo;
-			captured_material: {
-				white: CapturedPiecesList;
-				black: CapturedPiecesList;
-			};
-			promoted_pieces: {
-				white: PromotedPiecesList;
-				black: PromotedPiecesList;
-			};
-		}>
-	>([]);
+		previousDraggedSquare,
+		previousDroppedSquare,
+		prevClickedSquare,
+		setPrevClickedSquare,
+		clickedSquare,
+		setClickedSquare,
+
+		draggedSquare,
+		setDraggedSquare,
+		droppedSquare,
+		setDroppedSquare,
+
+		shouldShowPromotionPopup,
+		promotionSquare,
+		cancelPromotion,
+		handlePromotionPieceSelected,
+
+		animationRef,
+		animationSquare
+	} = useMultiplayerGameplayLogic(location.state?.gameId, location.state?.baseTime);
 
 	const previousPositionIndexRef = useRef(null);
-	const [positionIndex, setPositionIndex] = useState<number>(0);
-
-	const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
-
-	const [hasGameEnded, setHasGameEnded] = useState<boolean>(false);
-	const [gameEndedCause, setGameEndedCause] = useState<string>("");
-	const [gameWinner, setGameWinner] = useState<string>("");
 
 	const [messageBoxVisible, setMessageBoxVisible] = useState<boolean>(false);
 	const [messageToDisplay, setMessageToDisplay] = useState<string>("");
@@ -88,35 +73,9 @@ function Play() {
 
 	const [drawOfferReceived, setDrawOfferReceived] = useState<boolean>(false);
 
-	const [parsedFEN, setParsedFEN] = useState(
-		positionList[positionIndex]?.["position"]
-	);
-	const [lastDraggedSquare, setLastDraggedSquare] = useState(
-		positionList[positionIndex]?.["last_dragged_square"]
-	);
-	const [lastDroppedSquare, setLastDroppedSquare] = useState(
-		positionList[positionIndex]?.["last_dropped_square"]
-	);
-
-	const moveType = positionList[positionIndex]?.["move_type"];
-	const sideToMove = parsedFEN?.["side_to_move"];
-
-	const capturedMaterialList =
-		positionList[positionIndex]?.["captured_material"];
-	const promotedPiecesList = positionList[positionIndex]?.["promoted_pieces"];
-
 	const [boardOrientation, setBoardOrientation] = useState(
 		location.state?.assignedColor || "White"
 	);
-
-	const isAnimatingRef = useRef<boolean>(false);
-
-	const [
-		pieceAnimationSquare,
-		pieceAnimationStyles,
-		animatePiece,
-		animateMoveReplay,
-	] = usePieceAnimation();
 
 	const [settingsVisible, setSettingsVisible] = useState(false);
 
@@ -129,62 +88,6 @@ function Play() {
 
 	const whitePlayerUsername = location.state?.whitePlayerUsername;
 	const blackPlayerUsername = location.state?.blackPlayerUsername;
-
-	useEffect(() => {
-		updatePlayerTimers();
-		updatePositionList();
-		updateMoveList();
-	}, []);
-
-	useEffect(() => {
-		let animationTimeout: NodeJS.Timeout | undefined;
-		if (isAnimatingRef.current) {
-			animationTimeout = setTimeout(() => {
-				setPositionIndex(positionList.length - 1);
-			}, convertToMilliseconds(pieceAnimationTime) - convertToMilliseconds(animationOffsetSync));
-		} else {
-			setPositionIndex(positionList.length - 1);
-		}
-
-		return () => {
-			if (animationTimeout) {
-				clearTimeout(animationTimeout);
-			}
-		};
-	}, [positionList]);
-
-	useEffect(() => {
-		if (!isNullOrUndefined(previousPositionIndexRef.current)) {
-			if (previousPositionIndexRef.current! + 1 === positionIndex) {
-				handleFastForwardMoveAnimation();
-			} else if (
-				previousPositionIndexRef.current! - 1 ===
-				positionIndex
-			) {
-				handleReplayMoveAnimation();
-			} else {
-				setParsedFEN(positionList[positionIndex]?.["position"]);
-				setLastDraggedSquare(
-					positionList[positionIndex]?.last_dragged_square
-				);
-				setLastDroppedSquare(
-					positionList[positionIndex]?.last_dropped_square
-				);
-			}
-		} else {
-			setParsedFEN(positionList[positionIndex]?.["position"]);
-			setLastDraggedSquare(
-				positionList[positionIndex]?.last_dragged_square
-			);
-			setLastDroppedSquare(
-				positionList[positionIndex]?.last_dropped_square
-			);
-		}
-
-		if (!isNullOrUndefined(moveType)) {
-			playAudio(moveType);
-		}
-	}, [positionIndex]);
 
 	useEffect(() => {
 		setGameplaySettings(initialGameplaySettings);
@@ -206,41 +109,6 @@ function Play() {
 	function handleSettingsDisplay() {
 		setSettingsVisible(true);
 	}
-	async function updatePlayerTimers(): Promise<void> {
-		const whitePlayerTimer = await fetchTimer(
-			Number(location.state?.gameId),
-			"white"
-		);
-		const blackPlayerTimer = await fetchTimer(
-			Number(location.state?.gameId),
-			"black"
-		);
-
-		setWhitePlayerTimer(whitePlayerTimer);
-		setBlackPlayerTimer(blackPlayerTimer);
-	}
-
-	async function updatePositionList(): Promise<void> {
-		if (!location.state?.gameId) {
-			return;
-		}
-
-		const positionList = await fetchPositionList(
-			Number(location.state?.gameId)
-		);
-
-		setPositionList(positionList);
-	}
-
-	async function updateMoveList(): Promise<void> {
-		if (!location.state?.gameId) {
-			return;
-		}
-
-		const moveList = await fetchMoveList(Number(location.state?.gameId));
-
-		setMoveList(moveList);
-	}
 
 	function toggleBoardOrientation() {
 		const isWhite = boardOrientation.toLowerCase() === "white";
@@ -251,54 +119,6 @@ function Play() {
 
 	function handleSettingsClose() {
 		setSettingsVisible(false);
-	}
-
-	function handleFastForwardMoveAnimation() {
-		const moveInfo = positionList[positionIndex]["move_info"];
-
-		const startingSquare = moveInfo["starting_square"];
-		const destinationSquare = moveInfo["destination_square"];
-
-		// @ts-ignore
-		animatePiece(
-			startingSquare,
-			destinationSquare,
-			boardOrientation.toLowerCase()
-		);
-
-		setTimeout(() => {
-			setParsedFEN(positionList[positionIndex]?.["position"]);
-			setLastDraggedSquare(
-				positionList[positionIndex]?.last_dragged_square
-			);
-			setLastDroppedSquare(
-				positionList[positionIndex]?.last_dropped_square
-			);
-		}, convertToMilliseconds(pieceAnimationTime));
-	}
-
-	function handleReplayMoveAnimation() {
-		const moveInfo = positionList[positionIndex + 1]["move_info"];
-
-		const startingSquare = moveInfo["starting_square"];
-		const destinationSquare = moveInfo["destination_square"];
-
-		// @ts-ignore
-		animateMoveReplay(
-			startingSquare,
-			destinationSquare,
-			boardOrientation.toLowerCase()
-		);
-
-		setTimeout(() => {
-			setParsedFEN(positionList[positionIndex]?.["position"]);
-			setLastDraggedSquare(
-				positionList[positionIndex]?.last_dragged_square
-			);
-			setLastDroppedSquare(
-				positionList[positionIndex]?.last_dropped_square
-			);
-		}, convertToMilliseconds(pieceAnimationTime));
 	}
 
 	function getTimerColor(timerPosition: string) {
@@ -315,9 +135,9 @@ function Play() {
 
 	function getTimeAmount(color: PieceColor) {
 		if (color === "white") {
-			return whitePlayerTimer;
+			return whitePlayerClock;
 		} else {
-			return blackPlayerTimer;
+			return blackPlayerClock;
 		}
 	}
 
@@ -328,6 +148,7 @@ function Play() {
 		isNullOrUndefined(topTimerAmount) ||
 		isNullOrUndefined(bottomTimerAmount)
 	) {
+		console.log("No top or bottom timer amount!")
 		return <Navigate to="/game-setup" />;
 	}
 
@@ -369,24 +190,28 @@ function Play() {
 						<MultiplayerChessboard
 							parsed_fen_string={parsedFEN}
 							orientation={boardOrientation}
-							gameId={gameId}
-							setMoveList={setMoveList}
-							setWhiteTimer={setWhitePlayerTimer}
-							setBlackTimer={setBlackPlayerTimer}
-							setPositionIndex={setPositionIndex}
-							setPositionList={setPositionList}
-							gameplaySettings={gameplaySettings}
-							lastDraggedSquare={lastDraggedSquare}
-							lastDroppedSquare={lastDroppedSquare}
-							setGameEnded={setHasGameEnded}
-							setGameEndedCause={setGameEndedCause}
-							setGameWinner={setGameWinner}
-							squareSize={58}
-							// @ts-ignore
-							parentAnimationSquare={pieceAnimationSquare}
-							// @ts-ignore
-							parentAnimationStyles={pieceAnimationStyles}
-							isAnimatingRef={isAnimatingRef}
+							previousDraggedSquare={previousDraggedSquare}
+							previousDroppedSquare={previousDroppedSquare}
+							shouldShowPromotionPopup={shouldShowPromotionPopup}
+							cancelPromotion={cancelPromotion}
+							onPromotion={handlePromotionPieceSelected}
+							clickedSquaresState={{
+								clickedSquare,
+								setClickedSquare,
+								prevClickedSquare,
+								setPrevClickedSquare,
+							}}
+
+							dragAndDropSquaresState={{
+								draggedSquare,
+								setDraggedSquare,
+								droppedSquare,
+								setDroppedSquare
+							}}
+
+							promotionSquare={promotionSquare}
+							animationRef={animationRef}
+							animationSquare={animationSquare}
 						/>
 					</div>
 

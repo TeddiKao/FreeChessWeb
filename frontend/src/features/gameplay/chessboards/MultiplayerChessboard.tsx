@@ -40,10 +40,8 @@ function MultiplayerChessboard({
 		setDroppedSquare
 	},
 
-	animationInfo: {
-		animationSquare,
-		animationStyles
-	},
+	animationRef,
+	animationSquare,
 
 	cancelPromotion,
 	onPromotion,
@@ -82,12 +80,11 @@ function MultiplayerChessboard({
 				squareSize={squareSize}
 				// @ts-ignore
 				animatingPieceSquare={animationSquare}
-				// @ts-ignore
-				animatingPieceStyle={animationStyles}
 				clickedSquare={clickedSquare}
 				prevClickedSquare={prevClickedSquare}
 				setClickedSquare={setClickedSquare}
 				setPrevClickedSquare={setPrevClickedSquare}
+				animationRef={animationRef}
 			/>
 		);
 	}
@@ -114,12 +111,11 @@ function MultiplayerChessboard({
 				squareSize={squareSize}
 				// @ts-ignore
 				animatingPieceSquare={animationSquare}
-				// @ts-ignore
-				animatingPieceStyle={animationStyles}
 				setClickedSquare={setClickedSquare}
 				setPrevClickedSquare={setPrevClickedSquare}
 				clickedSquare={clickedSquare}
 				prevClickedSquare={prevClickedSquare}
+				animationRef={animationRef}
 			/>
 		);
 	}
