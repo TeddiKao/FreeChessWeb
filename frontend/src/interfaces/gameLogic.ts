@@ -1,4 +1,4 @@
-import { MoveInfo, ParsedFENString } from "../types/gameLogic";
+import { MoveInfo, ParsedFENString, PieceColor } from "../types/gameLogic";
 import { BasicWebSocketEventData } from "./general.ts";
 import {
 	CapturedPiecesList,
@@ -11,6 +11,7 @@ interface MoveMadeEventData extends BasicWebSocketEventData {
 	move_made_by: string;
 	move_type: string;
 	new_position_index: number;
+	new_side_to_move: PieceColor;
 }
 
 interface TimerChangedEventData extends BasicWebSocketEventData {
