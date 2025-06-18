@@ -109,7 +109,7 @@ interface EmptySquareProps {
 	) => Promise<void> | void;
 	previousDraggedSquare: OptionalValue<ChessboardSquareIndex>;
 	previousDroppedSquare: OptionalValue<ChessboardSquareIndex>;
-	moveMethod: OptionalValue<string>;
+	
 	squareSize?: number;
 	animatingPieceStyle: Record<string, unknown>;
 	animatingPieceSquare: OptionalValue<ChessboardSquareIndex>;
