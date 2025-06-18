@@ -2,7 +2,7 @@ import { DragPreviewImage, useDrag, useDrop } from "react-dnd";
 
 import "../../styles/components/chessboard/square.scss";
 import PromotionPopup from "./PromotionPopup.tsx";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
 	getFile,
 	getRank,
@@ -33,7 +33,8 @@ function Square({
 	animatingPieceSquare,
 	animatingPieceStyle,
 	prevClickedSquare,
-	clickedSquare
+	clickedSquare,
+	animationRef
 }: SquareProps) {
 	let startingSquare: OptionalValue<string> = null;
 
@@ -62,7 +63,9 @@ function Square({
 	function getSquareClass() {
 		if (squareNumber.toString() === previousDraggedSquare?.toString()) {
 			return "previous-dragged-square";
-		} else if (squareNumber.toString() === previousDroppedSquare?.toString()) {
+		} else if (
+			squareNumber.toString() === previousDroppedSquare?.toString()
+		) {
 			return "previous-dropped-square";
 		} else {
 			return `chessboard-square ${squareColor}`;
@@ -148,7 +151,6 @@ function Square({
 		}
 	}
 
-
 	function handleOnDrag(squareDragged: string | number) {
 		setDraggedSquare(squareDragged);
 	}
@@ -186,23 +188,33 @@ function Square({
 						connect={preview}
 						src={draggingPieceImageSrc}
 					/>
-					<img
-						style={
-							Number(animatingPieceSquare) ===
-							Number(squareNumber)
-								? animatingPieceStyle
+					<div
+						ref={
+							Number(squareNumber) ===
+							Number(animatingPieceSquare)
+								? animationRef
 								: undefined
 						}
-						ref={drag}
-						onDragStart={() => {
-							handleOnDrag(squareNumber);
-						}}
-						onTouchStart={() => {
-							handleOnDrag(squareNumber);
-						}}
-						className="piece-image"
-						src={pieceImageSrc}
-					/>
+						className="piece-image-container"
+					>
+						<img
+							style={
+								Number(animatingPieceSquare) ===
+								Number(squareNumber)
+									? animatingPieceStyle
+									: undefined
+							}
+							ref={drag}
+							onDragStart={() => {
+								handleOnDrag(squareNumber);
+							}}
+							onTouchStart={() => {
+								handleOnDrag(squareNumber);
+							}}
+							className="piece-image"
+							src={pieceImageSrc}
+						/>
+					</div>
 				</>
 			);
 		}
