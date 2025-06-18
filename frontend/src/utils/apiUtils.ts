@@ -71,6 +71,22 @@ async function fetchMoveList(gameId: number) {
 	return moveList;
 }
 
+async function fetchSideToMove(gameId: number) {
+	let sideToMove = null;
+
+	try {
+		const response = await api.post("/gameplay_api/get-side-to-move/");
+
+		if (response.status === 200) {
+			sideToMove = response.data;
+		}
+	} catch (error) {
+		console.log(error);
+	}
+
+	return sideToMove;
+}
+
 async function fetchLegalMoves(
 	parsedFENString: object,
 	pieceType: string,
@@ -247,7 +263,6 @@ async function createBotGame(botId: string) {
 
 		gameId = response.data["game_id"];
 		assignedColor = response.data["assigned_color"];
-
 	} catch (error) {
 		console.error(error);
 	}
@@ -311,9 +326,9 @@ async function fetchCompletedGames(currentPage: number) {
 	let completedGames = null;
 	try {
 		const response = await api.post("/game-history/get-completed-games/", {
-			current_page: currentPage
+			current_page: currentPage,
 		});
-		
+
 		completedGames = response.data;
 	} catch (error) {
 		console.error(error);
@@ -325,8 +340,10 @@ async function fetchCompletedGames(currentPage: number) {
 async function fetchTotalCompletedGames() {
 	let totalCompletedGames = null;
 	try {
-		const response = await api.post("/game-history/get-total-completed-games/");
-		
+		const response = await api.post(
+			"/game-history/get-total-completed-games/"
+		);
+
 		totalCompletedGames = response.data;
 	} catch (error) {
 		console.error(error);
@@ -339,9 +356,9 @@ async function fetchGameWinner(gameId: number) {
 	let gameWinner = null;
 	try {
 		const response = await api.post("/game-history/get-game-winner/", {
-			game_id: gameId
+			game_id: gameId,
 		});
-		
+
 		gameWinner = response.data;
 	} catch (error) {
 		console.error(error);
@@ -368,5 +385,6 @@ export {
 	fetchBotGamePositionList,
 	fetchCompletedGames,
 	fetchGameWinner,
-	fetchTotalCompletedGames
+	fetchTotalCompletedGames,
+	fetchSideToMove
 };
