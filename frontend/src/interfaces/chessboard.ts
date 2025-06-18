@@ -70,7 +70,7 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
 	promotionSquare: OptionalValue<ChessboardSquareIndex>;
 
 	animationSquare: OptionalValue<ChessboardSquareIndex>;
-	animationRef: RefObject<HTMLDivElement>;
+	animationRef: RefObject<HTMLDivElement | null>;
 }
 
 interface GameReplayChessboardProps extends DisplayChessboardProps {
