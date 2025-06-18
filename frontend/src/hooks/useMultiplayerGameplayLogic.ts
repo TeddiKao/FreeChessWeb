@@ -143,6 +143,8 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 	}
 
 	async function handleOnDrop() {
+		console.log(draggedSquare, droppedSquare);
+
 		if (!draggedSquare) return;
 
 		if (!droppedSquare) {
@@ -388,7 +390,7 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 			parsedFEN,
 			pieceType,
 			pieceColor,
-			startSquare
+			startSquare.toString()
 		);
 
 		console.log(legalMoves);
