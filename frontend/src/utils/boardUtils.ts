@@ -1,9 +1,12 @@
+import { pieceAnimationTime } from "../constants/pieceAnimation";
 import { PieceColor } from "../types/gameLogic";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,
+	RefObject,
 	StateSetterFunction,
 } from "../types/general";
+import { convertToMilliseconds } from "./timeUtils";
 
 function clearSquaresStyling(): void {
 	for (let square = 0; square <= 63; square++) {
@@ -147,6 +150,45 @@ function calculateReplayXYTransform(
 	return [xTransform, yTransform];
 }
 
+function animatePieceImage(
+	ref: RefObject<HTMLImageElement>,
+	startSquare: ChessboardSquareIndex,
+	destinationSquare: ChessboardSquareIndex,
+	orientation: PieceColor,
+	postAnimationAction: () => void,
+	squareWidth: number = 55
+) {
+	if (!ref.current) return;
+
+	const [totalXTransform, totalYTransform] = calculateXYTransform(
+		startSquare,
+		destinationSquare,
+		orientation,
+		squareWidth
+	);
+
+	const animationTimeMilliseconds = convertToMilliseconds(pieceAnimationTime);
+	const animationStartTime = performance.now();
+
+	function animationFrame(currentTime: number) {
+		const timeElapsed = currentTime - animationStartTime;
+		const progress = Math.min(timeElapsed / animationTimeMilliseconds, 1);
+
+		const xTransform = totalXTransform * progress;
+		const yTransform = totalYTransform * progress;
+
+		ref.current.style.transform = `translate(${xTransform}px, ${yTransform}px)`;
+
+		if (timeElapsed < animationTimeMilliseconds) {
+			requestAnimationFrame(animationFrame);
+		} else {
+			postAnimationAction();
+		}
+	}
+
+	requestAnimationFrame(animationFrame);
+}
+
 export {
 	clearSquaresStyling,
 	getRank,
@@ -159,5 +201,6 @@ export {
 	isSquareOnFileEdge,
 	getSquareClass,
 	calculateXYTransform,
-	calculateReplayXYTransform
+	calculateReplayXYTransform,
+	animatePieceImage,
 };
