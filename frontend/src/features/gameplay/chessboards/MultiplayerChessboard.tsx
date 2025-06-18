@@ -6,10 +6,13 @@ import Square from "../../../components/chessboard/Square.tsx";
 
 // Types, interfaces, enums
 import { MultiplayerChessboardProps } from "../../../interfaces/chessboard.js";
-import { PieceColor, PieceType } from "../../../types/gameLogic.ts";
+import {
+	PieceColor,
+	PieceType,
+} from "../../../types/gameLogic.ts";
+
 
 // Utils
-import { isObjEmpty } from "../../../utils/generalUtils.ts";
 import ChessboardGrid from "../../../components/chessboard/ChessboardGrid.tsx";
 import {
 	EmptySquareRenderParams,
@@ -18,26 +21,38 @@ import {
 
 function MultiplayerChessboard({
 	parsed_fen_string,
-	orientation,
-
 	squareSize,
-
-	setPrevClickedSquare,
-	setClickedSquare,
-	setDraggedSquare,
-	setDroppedSquare,
+	orientation,
 
 	previousDraggedSquare,
 	previousDroppedSquare,
-	prevClickedSquare,
-	clickedSquare,
 
-	parentAnimationSquare,
-	parentAnimationStyles,
+	clickedSquaresState: {
+		clickedSquare,
+		setClickedSquare,
+		prevClickedSquare,
+		setPrevClickedSquare,
+	},
+	dragAndDropSquaresState: {
+		draggedSquare,
+		droppedSquare,
+		setDraggedSquare,
+		setDroppedSquare
+	},
+
+	animationInfo: {
+		animationSquare,
+		animationStyles
+	},
+
+	cancelPromotion,
+	onPromotion,
+	shouldShowPromotionPopup,
+	promotionSquare
 }: MultiplayerChessboardProps) {
 	const chessboardStyles = {
-		gridTemplateColumns: `repeat(8, ${squareSize}px)`,
-	};
+		gridTemplateColums: `repeat(8, ${squareSize}px)`
+	}
 
 	function renderFilledSquare({
 		squareIndex,
@@ -47,6 +62,8 @@ function MultiplayerChessboard({
 		pieceColor,
 		pieceType,
 	}: FilledSquareRenderParams) {
+		const isPromotionSquare = Number(squareIndex) === Number(promotionSquare)
+
 		return (
 			<Square
 				key={squareIndex}
@@ -54,33 +71,23 @@ function MultiplayerChessboard({
 				squareColor={squareColor}
 				pieceColor={pieceColor as PieceColor}
 				pieceType={pieceType as PieceType}
-				displayPromotionPopup={
-					pieceType.toLowerCase() === "pawn" &&
-					promotionRank === pieceRank
-				}
+				displayPromotionPopup={shouldShowPromotionPopup && isPromotionSquare}
 				setDraggedSquare={setDraggedSquare}
 				setDroppedSquare={setDroppedSquare}
-				setPrevClickedSquare={setPrevClickedSquare}
-				setClickedSquare={setClickedSquare}
-				handlePromotionCancel={handlePromotionCancel}
-				handlePawnPromotion={handlePawnPromotion}
+				handlePromotionCancel={cancelPromotion}
+				handlePawnPromotion={onPromotion}
 				previousDraggedSquare={previousDraggedSquare}
 				previousDroppedSquare={previousDroppedSquare}
 				orientation={orientation}
-				moveMethod={lastUsedMoveMethod}
 				squareSize={squareSize}
 				// @ts-ignore
-				animatingPieceSquare={
-					// @ts-ignore
-					parentAnimationSquare
-				}
+				animatingPieceSquare={animationSquare}
 				// @ts-ignore
-				animatingPieceStyle={
-					// @ts-ignore
-					parentAnimationStyles
-				}
-				prevClickedSquare={prevClickedSquare}
+				animatingPieceStyle={animationStyles}
 				clickedSquare={clickedSquare}
+				prevClickedSquare={prevClickedSquare}
+				setClickedSquare={setClickedSquare}
+				setPrevClickedSquare={setPrevClickedSquare}
 			/>
 		);
 	}
@@ -89,32 +96,30 @@ function MultiplayerChessboard({
 		squareIndex,
 		squareColor,
 	}: EmptySquareRenderParams) {
+		const isPromotionSquare = Number(squareIndex) === Number(promotionSquare)
+
 		return (
 			<Square
 				key={squareIndex}
 				squareNumber={squareIndex}
 				squareColor={squareColor}
-				setPrevClickedSquare={setPrevClickedSquare}
-				setClickedSquare={setClickedSquare}
-				displayPromotionPopup={false}
+				displayPromotionPopup={shouldShowPromotionPopup && isPromotionSquare}
 				setDraggedSquare={setDraggedSquare}
 				setDroppedSquare={setDroppedSquare}
-				handlePromotionCancel={handlePromotionCancel}
-				handlePawnPromotion={handlePawnPromotion}
+				handlePromotionCancel={cancelPromotion}
+				handlePawnPromotion={onPromotion}
 				previousDraggedSquare={previousDraggedSquare}
 				previousDroppedSquare={previousDroppedSquare}
 				orientation={orientation}
-				moveMethod={lastUsedMoveMethod}
 				squareSize={squareSize}
 				// @ts-ignore
-				animatingPieceSquare={parentAnimationSquare}
+				animatingPieceSquare={animationSquare}
 				// @ts-ignore
-				animatingPieceStyle={
-					// @ts-ignore
-					parentAnimationStyles
-				}
-				prevClickedSquare={prevClickedSquare}
+				animatingPieceStyle={animationStyles}
+				setClickedSquare={setClickedSquare}
+				setPrevClickedSquare={setPrevClickedSquare}
 				clickedSquare={clickedSquare}
+				prevClickedSquare={prevClickedSquare}
 			/>
 		);
 	}
