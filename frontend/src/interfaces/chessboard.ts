@@ -1,6 +1,7 @@
 import {
 	ChessboardSquareIndex,
 	OptionalValue,
+	RefObject,
 	StateSetterFunction,
 } from "../types/general.ts";
 import { MoveInfo, ParsedFENString, PieceColor, PieceType } from "../types/gameLogic.ts";
@@ -56,11 +57,6 @@ interface DragAndDropSquaresState {
 	setDroppedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
 }
 
-interface AnimationInfo {
-	animationSquare: OptionalValue<ChessboardSquareIndex>
-	animationStyles: Record<string, unknown>
-}
-
 interface MultiplayerChessboardProps extends DisplayChessboardProps {
 	clickedSquaresState: ClickedSquaresState;
 	dragAndDropSquaresState: DragAndDropSquaresState;
@@ -73,7 +69,8 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
 	shouldShowPromotionPopup: boolean;
 	promotionSquare: OptionalValue<ChessboardSquareIndex>;
 
-	animationInfo: AnimationInfo;
+	animationSquare: OptionalValue<ChessboardSquareIndex>;
+	animationRef: RefObject<HTMLDivElement>;
 }
 
 interface GameReplayChessboardProps extends DisplayChessboardProps {
