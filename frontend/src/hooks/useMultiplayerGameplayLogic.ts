@@ -540,8 +540,9 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		},
 
 		shouldShowPromotionPopup,
-		prePromotionBoardState,
-		promotionSquare: promotionSquareRef,
+		prePromotionBoardState: prePromotionBoardState.current,
+		promotionSquare: promotionSquareRef.current,
+		originalPawnSquare: originalPawnSquareRef.current,
 		cancelPromotion,
 	};
 }
