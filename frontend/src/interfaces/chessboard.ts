@@ -6,7 +6,6 @@ import {
 	StateSetterFunction,
 } from "../types/general.ts";
 import { MoveInfo, ParsedFENString, PieceColor, PieceType } from "../types/gameLogic.ts";
-import { CapturedPiecesList, PromotedPiecesList } from "./materialCalculation.ts";
 
 interface DisplayChessboardProps {
 	parsed_fen_string: ParsedFENString;
@@ -45,16 +44,26 @@ interface BotChessboardProps extends DisplayChessboardProps {
 	parentAnimationStyles: Record<string, unknown>
 }
 
-interface MultiplayerChessboardProps extends DisplayChessboardProps {
-	previousDraggedSquare: ChessboardSquareIndex | null;
-	previousDroppedSquare: ChessboardSquareIndex | null;
+interface ClickedSquaresState {
 	prevClickedSquare: OptionalValue<ChessboardSquareIndex>;
 	clickedSquare: OptionalValue<ChessboardSquareIndex>;
-
-	setDraggedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
-	setDroppedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
 	setPrevClickedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
 	setClickedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
+}
+
+interface DragAndDropSquaresState {
+	draggedSquare: OptionalValue<ChessboardSquareIndex>;
+	droppedSquare: OptionalValue<ChessboardSquareIndex>;
+	setDraggedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
+	setDroppedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
+}
+
+interface MultiplayerChessboardProps extends DisplayChessboardProps {
+	clickedSquaresState: ClickedSquaresState;
+	dragAndDropSquaresState: DragAndDropSquaresState;
+
+	cancelPromotion: () => void;
+	shouldShowPromotionPopup: boolean;
 
 	parentAnimationSquare: OptionalValue<ChessboardSquareIndex>
 	parentAnimationStyles: Record<string, unknown>
