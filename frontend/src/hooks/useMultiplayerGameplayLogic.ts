@@ -52,8 +52,10 @@ function useMultiplayerGameplayLogic(gameId: number) {
 	);
 
 	const [hasGameEnded, setHasGameEnded] = useState<boolean>(false);
-	const [gameEndedCause, setGameEndedCause] = useState<string | null>(null);
-	const [gameWinner, setGameWinner] = useState<PieceColor | null>(null);
+	const [gameEndedCause, setGameEndedCause] = useState<string>("");
+	const [gameWinner, setGameWinner] = useState<PieceColor | "">("");
+
+	const [sideToMove, setSideToMove] = useState<PieceColor>("white");
 
 	const boardStateBeforePromotion = useRef<BoardPlacement | null>(null);
 	const prePromotionBoardState = useRef<BoardPlacement | null>(null);
@@ -537,6 +539,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 			positionList,
 			moveList,
 			positionIndex,
+			setPositionIndex,
 		},
 
 		capturedMaterial,
@@ -545,6 +548,10 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		gameEnded: hasGameEnded,
 		gameWinner,
 		gameEndedCause,
+
+		setHasGameEnded: setGameEndedCause,
+		setGameEndedCause,
+		setGameWinner,
 
 		clocks: {
 			whitePlayerClock,
