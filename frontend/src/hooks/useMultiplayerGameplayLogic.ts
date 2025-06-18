@@ -98,6 +98,8 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 	}, [prevClickedSquare, clickedSquare]);
 
 	async function handleClickToMove() {
+		console.log(prevClickedSquare, clickedSquare);
+
 		if (!prevClickedSquare) return;
 
 		if (!clickedSquare) {
@@ -384,10 +386,12 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 
 		const legalMoves = await fetchLegalMoves(
 			parsedFEN,
-			pieceColor,
 			pieceType,
+			pieceColor,
 			startSquare
 		);
+
+		console.log(legalMoves);
 
 		if (!legalMoves) return;
 
@@ -396,6 +400,7 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 			if (!square) return;
 
 			square.classList.add("legal-square");
+			console.log("Added!")
 		}
 	}
 
