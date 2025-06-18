@@ -467,6 +467,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 	function handleMoveMade(eventData: MoveMadeEventData) {
 		setPositionIndex(eventData["new_position_index"]);
+		setSideToMove((prevSideToMove) => getOppositeColor(prevSideToMove));
 	}
 
 	function handleOnMessage(event: MessageEvent) {
@@ -534,6 +535,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		parsedFEN,
 		previousDraggedSquare,
 		previousDroppedSquare,
+		sideToMove,
 
 		gameStateHistory: {
 			positionList,
@@ -549,7 +551,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		gameWinner,
 		gameEndedCause,
 
-		setHasGameEnded: setGameEndedCause,
+		setHasGameEnded: setHasGameEnded,
 		setGameEndedCause,
 		setGameWinner,
 
@@ -563,6 +565,19 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		promotionSquare: promotionSquareRef.current,
 		originalPawnSquare: originalPawnSquareRef.current,
 		cancelPromotion,
+		handlePromotionPieceSelected: (
+			color: PieceColor,
+			promotedPiece: PieceType
+		) => {
+			if (!originalPawnSquareRef.current) return;
+			if (!promotionSquareRef.current) return;
+
+			sendPromotionMove(
+				originalPawnSquareRef.current,
+				promotionSquareRef.current,
+				promotedPiece
+			);
+		},
 	};
 }
 
