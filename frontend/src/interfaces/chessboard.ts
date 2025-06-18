@@ -73,7 +73,7 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
 	cancelPromotion: () => void;
 	onPromotion: (color: PieceColor, promotedPiece: PieceType) => void;
 	shouldShowPromotionPopup: boolean;
-	promotionSquare: OptionalValue<ChessboardSquareIndex>
+	promotionSquare: OptionalValue<ChessboardSquareIndex>;
 
 	animationInfo: AnimationInfo;
 }
