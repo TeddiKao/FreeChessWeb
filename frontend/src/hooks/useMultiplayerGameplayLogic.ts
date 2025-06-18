@@ -24,6 +24,7 @@ import { getOppositeColor } from "../utils/gameLogic/general";
 import { isPawnPromotion } from "../utils/moveUtils";
 import { getRank } from "../utils/boardUtils";
 import useGameplaySettings from "./useGameplaySettings";
+import { clear } from "console";
 
 function useMultiplayerGameplayLogic(gameId: number) {
 	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
@@ -214,6 +215,13 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 	function clearPrePromotionBoardState() {
 		prePromotionBoardState.current = null;
+	}
+
+	function cancelPromotion() {
+		setShouldShowPromotionPopup(false);
+
+		clearPrePromotionBoardState();
+		clearBoardStateBeforePromotion();
 	}
 
 	function sendPromotionMove(
@@ -504,6 +512,10 @@ function useMultiplayerGameplayLogic(gameId: number) {
 			whitePlayerClock,
 			blackPlayerClock,
 		},
+
+		shouldShowPromotionPopup,
+		prePromotionBoardState,
+		cancelPromotion,
 	};
 }
 
