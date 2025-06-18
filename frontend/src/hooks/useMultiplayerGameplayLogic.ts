@@ -57,6 +57,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 	const boardStateBeforePromotion = useRef<BoardPlacement | null>(null);
 	const prePromotionBoardState = useRef<BoardPlacement | null>(null);
+	const promotionSquareRef = useRef<ChessboardSquareIndex | null>(null);
 	const [shouldShowPromotionPopup, setShouldShowPromotionPopup] =
 		useState(false);
 
@@ -198,6 +199,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		if (!parsedFEN) return;
 
 		updatePrePromotionBoardState(startingSquare, destinationSquare);
+		updatePromotionSquare(destinationSquare);
 
 		// @ts-ignore
 		const autoQueen = gameplaySettings["auto_queen"];
@@ -256,6 +258,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 		clearBoardStateBeforePromotion();
 		clearPrePromotionBoardState();
+		clearPromotionSquare();
 	}
 
 	function performPostMoveCleanup(moveMethod: "click" | "drag") {
@@ -293,6 +296,14 @@ function useMultiplayerGameplayLogic(gameId: number) {
 		}
 
 		gameWebsocketRef.current?.send(JSON.stringify(moveDetails));
+	}
+
+	function updatePromotionSquare(square: ChessboardSquareIndex) {
+		promotionSquareRef.current = square;
+	}
+
+	function clearPromotionSquare() {
+		promotionSquareRef.current = null;
 	}
 
 	function updatePrePromotionBoardState(
@@ -515,6 +526,7 @@ function useMultiplayerGameplayLogic(gameId: number) {
 
 		shouldShowPromotionPopup,
 		prePromotionBoardState,
+		promotionSquare: promotionSquareRef,
 		cancelPromotion,
 	};
 }
