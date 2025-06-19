@@ -249,6 +249,30 @@ function useMultiplayerGameplayLogic(
 		);
 	}
 
+	function updateAnimationStartingSquare(square: ChessboardSquareIndex) {
+		animationStartingSquareRef.current = square;
+	}
+
+	function updateAnimationDestinationSquare(square: ChessboardSquareIndex) {
+		animationDestinationSquareRef.current = square;
+	}
+
+	function updatePostAnimationCallback(callbackFn: () => void) {
+		postAnimationActionRef.current = callbackFn;
+	}
+
+	function clearPostAnimationCallback() {
+		postAnimationActionRef.current = null;
+	}
+
+	function clearAnimationStartingSquare() {
+		animationStartingSquareRef.current = null;
+	}
+
+	function clearAnimationDestinationSquare() {
+		animationDestinationSquareRef.current = null;
+	}
+
 	function storeBoardStateBeforePromotion(
 		color: PieceColor,
 		destinationSquare: ChessboardSquareIndex
@@ -363,9 +387,9 @@ function useMultiplayerGameplayLogic(
 	}
 
 	function performPostAnimationCleanup() {
-		postAnimationActionRef.current = null;
-		animationStartingSquareRef.current = null;
-		animationDestinationSquareRef.current = null;
+		clearPostAnimationCallback();
+		clearAnimationStartingSquare();
+		clearAnimationDestinationSquare();
 
 		setAnimationSquare(null);
 	}
@@ -561,14 +585,15 @@ function useMultiplayerGameplayLogic(
 	}
 
 	function prepareAnimationData(eventData: MoveMadeEventData, startingSquare: ChessboardSquareIndex, destinationSquare: ChessboardSquareIndex) {
-		postAnimationActionRef.current = () => {
+		const postAnimationCallback = () => {
 			performPostAnimationCleanup();
 			setPositionIndex(eventData["new_position_index"]);
 			setSideToMove(eventData["new_side_to_move"]);
 		};
 
-		animationStartingSquareRef.current = startingSquare;
-		animationDestinationSquareRef.current = destinationSquare;
+		updatePostAnimationCallback(postAnimationCallback);
+		updateAnimationStartingSquare(startingSquare);
+		updateAnimationDestinationSquare(destinationSquare);
 
 		setAnimationSquare(startingSquare);
 	}
