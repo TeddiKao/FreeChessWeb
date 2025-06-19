@@ -78,16 +78,37 @@ function MoveNavigationButtons({
 	}
 
 	function handlePreviousMove() {
-		setPositionIndex((prevIndex) => {
-			previousPositionIndexRef.current = prevIndex;
+		if (!positionList || !positionIndex) {
+			setPositionIndex((prevIndex) => {
+				previousPositionIndexRef.current = prevIndex;
 
-			return prevIndex > 0 ? prevIndex - 1 : prevIndex;
-		});
+				return prevIndex > 0 ? prevIndex - 1 : prevIndex;
+			});
+
+			return;
+		}
+
+		const postAnimationCallback = () => {
+			setPositionIndex((prevIndex) => {
+				previousPositionIndexRef.current = prevIndex;
+
+				return prevIndex > 0 ? prevIndex - 1 : prevIndex;
+			});
+		};
+
+		const targetPosition = positionList?.[positionIndex];
+		const startingSquare = targetPosition["move_info"]["starting_square"];
+		const destinationSquare =
+			targetPosition["move_info"]["destination_square"];
+
+		updatePostAnimationCallback?.(postAnimationCallback);
+		updateAnimationStartingSquare?.(destinationSquare);
+		updateAnimationDestinationSquare?.(startingSquare);
+
+		setAnimationSquare?.(destinationSquare);
 	}
 
 	function handleNextMove() {
-		console.log(positionList, positionIndex);
-
 		if (!positionList || !positionIndex) {
 			setPositionIndex((prevIndex) => {
 				previousPositionIndexRef.current = prevIndex;
