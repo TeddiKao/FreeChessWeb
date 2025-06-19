@@ -151,7 +151,7 @@ function calculateReplayXYTransform(
 }
 
 function animatePieceImage(
-	ref: RefObject<HTMLDivElement>,
+	ref: RefObject<HTMLDivElement | null>,
 	startSquare: ChessboardSquareIndex,
 	destinationSquare: ChessboardSquareIndex,
 	orientation: PieceColor,
@@ -171,6 +171,8 @@ function animatePieceImage(
 	const animationStartTime = performance.now();
 
 	function animationFrame(currentTime: number) {
+		if (!ref.current) return;
+
 		const timeElapsed = currentTime - animationStartTime;
 		const progress = Math.min(timeElapsed / animationTimeMilliseconds, 1);
 

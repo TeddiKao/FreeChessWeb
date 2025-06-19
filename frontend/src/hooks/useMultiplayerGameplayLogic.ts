@@ -19,14 +19,29 @@ import { websocketBaseURL } from "../constants/urls";
 import { getAccessToken } from "../utils/tokenUtils";
 import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
 import { ChessboardSquareIndex } from "../types/general";
-import { BoardPlacement, ParsedFENString, PieceColor, PieceType } from "../types/gameLogic";
+import {
+	BoardPlacement,
+	MoveInfo,
+	ParsedFENString,
+	PieceColor,
+	PieceType,
+} from "../types/gameLogic";
 import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
 import { getOppositeColor } from "../utils/gameLogic/general";
 import { isPawnPromotion } from "../utils/moveUtils";
-import { clearSquaresStyling, getRank, getSquareExists } from "../utils/boardUtils";
+import {
+	animatePieceImage,
+	clearSquaresStyling,
+	getRank,
+	getSquareExists,
+} from "../utils/boardUtils";
 import useGameplaySettings from "./useGameplaySettings";
 
-function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
+function useMultiplayerGameplayLogic(
+	gameId: number,
+	baseTime: number,
+	orientation: PieceColor
+) {
 	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
 	const { socketRef: gameWebsocketRef } = useWebsocketWithLifecycle({
 		url: gameWebsocketUrl,
@@ -84,7 +99,7 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 	const promotedPieces = positionList[positionIndex]?.["promoted_pieces"];
 
 	useEffect(() => {
-		updatePositionList()
+		updatePositionList();
 		updateMoveList();
 		updatePlayerClocks();
 		updateSideToMove();
@@ -99,11 +114,31 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 		handleClickToMove();
 	}, [prevClickedSquare, clickedSquare]);
 
+	function handleMoveAnimation(
+		moveData: MoveInfo,
+		onAnimationFinish: () => void
+	) {
+		if (!animationRef) return;
+		if (!animationRef.current) return;
+
+		const startingSquare = moveData["starting_square"];
+		const destinationSquare = moveData["destination_square"];
+
+		animatePieceImage(
+			animationRef,
+			startingSquare,
+			destinationSquare,
+			orientation,
+			onAnimationFinish
+		);
+	}
+
 	async function handleClickToMove() {
 		clearSquaresStyling();
 
 		if (!prevClickedSquare) return;
-		if (!getSquareExists(prevClickedSquare, parsedFEN["board_placement"])) return;
+		if (!getSquareExists(prevClickedSquare, parsedFEN["board_placement"]))
+			return;
 
 		if (!clickedSquare) {
 			displayLegalMoves(prevClickedSquare!);
@@ -361,7 +396,7 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 		if (!parsedFEN) return;
 
 		const prePromotionParsedFEN = structuredClone(parsedFEN);
-		const currentBoardPlacement = prePromotionParsedFEN["board_placement"]
+		const currentBoardPlacement = prePromotionParsedFEN["board_placement"];
 		const pawnInfo = currentBoardPlacement[startingSquare.toString()];
 
 		const prePromotionBoardPlacement = structuredClone(
@@ -391,7 +426,7 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 			pieceColor,
 			pieceType,
 			startSquare.toString(),
-			destinationSquare.toString(),
+			destinationSquare.toString()
 		);
 
 		return isValidMove;
@@ -420,7 +455,7 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 			if (!square) return;
 
 			square.classList.add("legal-square");
-			console.log("Added!")
+			console.log("Added!");
 		}
 	}
 
@@ -496,9 +531,10 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 	}
 
 	function handleMoveMade(eventData: MoveMadeEventData) {
-		console.log("Move made!");
-		setPositionIndex(eventData["new_position_index"]);
-		setSideToMove(eventData["new_side_to_move"]);
+		handleMoveAnimation(eventData["move_data"], () => {
+			setPositionIndex(eventData["new_position_index"]);
+			setSideToMove(eventData["new_side_to_move"]);
+		});
 	}
 
 	function handleOnMessage(event: MessageEvent) {
