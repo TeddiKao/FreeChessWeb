@@ -7,13 +7,10 @@ import Timer from "../../features/gameplay/Timer.tsx";
 import "../../styles/pages/play.scss";
 import "../../styles/components/chessboard/board-actions.scss";
 
-
 import GameOverModal from "../../features/modals/gameOverModals/MultiplayerModal.tsx";
 import GameplaySettings from "../../features/modals/GameplaySettings.tsx";
 import ModalWrapper from "../../components/wrappers/ModalWrapper.js";
-import {
-	PieceColor,
-} from "../../types/gameLogic.js";
+import { PieceColor } from "../../types/gameLogic.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
 import MoveListPanel from "../../features/gameplay/gameplaySidePanel/MoveListPanel.tsx";
 import MoveNavigationButtons from "../../features/gameplay/gameplaySidePanel/MoveNavigationButtons.tsx";
@@ -58,12 +55,16 @@ function Play() {
 
 		shouldShowPromotionPopup,
 		promotionSquare,
+		prePromotionBoardState,
 		cancelPromotion,
 		handlePromotionPieceSelected,
 
 		animationRef,
-		animationSquare
-	} = useMultiplayerGameplayLogic(location.state?.gameId, location.state?.baseTime);
+		animationSquare,
+	} = useMultiplayerGameplayLogic(
+		location.state?.gameId,
+		location.state?.baseTime
+	);
 
 	const previousPositionIndexRef = useRef(null);
 
@@ -148,7 +149,7 @@ function Play() {
 		isNullOrUndefined(topTimerAmount) ||
 		isNullOrUndefined(bottomTimerAmount)
 	) {
-		console.log("No top or bottom timer amount!")
+		console.log("No top or bottom timer amount!");
 		return <Navigate to="/game-setup" />;
 	}
 
@@ -188,7 +189,9 @@ function Play() {
 
 					<div className="chessboard-info">
 						<MultiplayerChessboard
-							parsed_fen_string={parsedFEN}
+							parsed_fen_string={
+								prePromotionBoardState ?? parsedFEN
+							}
 							orientation={boardOrientation}
 							previousDraggedSquare={previousDraggedSquare}
 							previousDroppedSquare={previousDroppedSquare}
@@ -201,14 +204,12 @@ function Play() {
 								prevClickedSquare,
 								setPrevClickedSquare,
 							}}
-
 							dragAndDropSquaresState={{
 								draggedSquare,
 								setDraggedSquare,
 								droppedSquare,
-								setDroppedSquare
+								setDroppedSquare,
 							}}
-
 							promotionSquare={promotionSquare}
 							animationRef={animationRef}
 							animationSquare={animationSquare}
