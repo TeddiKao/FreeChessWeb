@@ -364,6 +364,9 @@ function useMultiplayerGameplayLogic(
 
 	function performPostAnimationCleanup() {
 		postAnimationActionRef.current = null;
+		animationStartingSquareRef.current = null;
+		animationDestinationSquareRef.current = null;
+
 		setAnimationSquare(null);
 	}
 
@@ -552,14 +555,22 @@ function useMultiplayerGameplayLogic(
 
 	function handleMoveMade(eventData: MoveMadeEventData) {
 		const startingSquare = eventData["move_data"]["starting_square"];
+		const destinationSquare = eventData["move_data"]["destination_square"];
 
-		setAnimationSquare(startingSquare);
+		prepareAnimationData(eventData, startingSquare, destinationSquare);
+	}
 
+	function prepareAnimationData(eventData: MoveMadeEventData, startingSquare: ChessboardSquareIndex, destinationSquare: ChessboardSquareIndex) {
 		postAnimationActionRef.current = () => {
 			performPostAnimationCleanup();
 			setPositionIndex(eventData["new_position_index"]);
 			setSideToMove(eventData["new_side_to_move"]);
 		};
+
+		animationStartingSquareRef.current = startingSquare;
+		animationDestinationSquareRef.current = destinationSquare;
+
+		setAnimationSquare(startingSquare);
 	}
 
 	function handleOnMessage(event: MessageEvent) {
