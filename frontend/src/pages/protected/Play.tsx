@@ -27,6 +27,30 @@ import useMultiplayerGameplayLogic from "../../hooks/useMultiplayerGameplayLogic
 function Play() {
 	const location = useLocation();
 
+	const previousPositionIndexRef = useRef(null);
+
+	const [messageBoxVisible, setMessageBoxVisible] = useState<boolean>(false);
+	const [messageToDisplay, setMessageToDisplay] = useState<string>("");
+	const [messageType, setMessageType] = useState<MessageBoxTypes>("info");
+
+	const [drawOfferReceived, setDrawOfferReceived] = useState<boolean>(false);
+
+	const [boardOrientation, setBoardOrientation] = useState(
+		location.state?.assignedColor || "White"
+	);
+
+	const [settingsVisible, setSettingsVisible] = useState(false);
+
+	const initialGameplaySettings = useGameplaySettings();
+	const [gameplaySettings, setGameplaySettings] = useState(
+		initialGameplaySettings
+	);
+
+	const actionWebSocketRef = useRef(null);
+
+	const whitePlayerUsername = location.state?.whitePlayerUsername;
+	const blackPlayerUsername = location.state?.blackPlayerUsername;
+
 	const {
 		parsedFEN,
 		gameStateHistory: { positionList, moveList, setPositionIndex },
@@ -63,32 +87,9 @@ function Play() {
 		animationSquare,
 	} = useMultiplayerGameplayLogic(
 		location.state?.gameId,
-		location.state?.baseTime
+		location.state?.baseTime,
+		boardOrientation
 	);
-
-	const previousPositionIndexRef = useRef(null);
-
-	const [messageBoxVisible, setMessageBoxVisible] = useState<boolean>(false);
-	const [messageToDisplay, setMessageToDisplay] = useState<string>("");
-	const [messageType, setMessageType] = useState<MessageBoxTypes>("info");
-
-	const [drawOfferReceived, setDrawOfferReceived] = useState<boolean>(false);
-
-	const [boardOrientation, setBoardOrientation] = useState(
-		location.state?.assignedColor || "White"
-	);
-
-	const [settingsVisible, setSettingsVisible] = useState(false);
-
-	const initialGameplaySettings = useGameplaySettings();
-	const [gameplaySettings, setGameplaySettings] = useState(
-		initialGameplaySettings
-	);
-
-	const actionWebSocketRef = useRef(null);
-
-	const whitePlayerUsername = location.state?.whitePlayerUsername;
-	const blackPlayerUsername = location.state?.blackPlayerUsername;
 
 	useEffect(() => {
 		setGameplaySettings(initialGameplaySettings);
