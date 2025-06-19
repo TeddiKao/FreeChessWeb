@@ -80,7 +80,13 @@ function useMultiplayerGameplayLogic(
 	const lastUsedMoveMethodRef = useRef<"click" | "drag" | null>(null);
 
 	const animationRef = useRef<HTMLDivElement | null>(null);
-	const animationSquareRef = useRef<ChessboardSquareIndex | null>(null);
+	const postAnimationActionRef = useRef<(() => void) | null>(null);
+	
+	const animationStartingSquareRef = useRef<ChessboardSquareIndex | null>(null);
+	const animationDestinationSquareRef = useRef<ChessboardSquareIndex | null>(null);
+
+	const [animationSquare, setAnimationSquare] =
+		useState<ChessboardSquareIndex | null>(null);
 
 	const gameplaySettings = useGameplaySettings();
 
@@ -114,24 +120,9 @@ function useMultiplayerGameplayLogic(
 		handleClickToMove();
 	}, [prevClickedSquare, clickedSquare]);
 
-	function handleMoveAnimation(
-		moveData: MoveInfo,
-		onAnimationFinish: () => void
-	) {
-		if (!animationRef) return;
-		if (!animationRef.current) return;
-
-		const startingSquare = moveData["starting_square"];
-		const destinationSquare = moveData["destination_square"];
-
-		animatePieceImage(
-			animationRef,
-			startingSquare,
-			destinationSquare,
-			orientation,
-			onAnimationFinish
-		);
-	}
+	useEffect(() => {
+		handlePieceAnimation();
+	}, [animationSquare]);
 
 	async function handleClickToMove() {
 		clearSquaresStyling();
@@ -232,6 +223,10 @@ function useMultiplayerGameplayLogic(
 	async function synchronisePositionIndex() {
 		const positionList = await fetchPositionList(gameId);
 		setPositionIndex(positionList.length - 1);
+	}
+
+	function handlePieceAnimation() {
+
 	}
 
 	function storeBoardStateBeforePromotion(
@@ -345,6 +340,11 @@ function useMultiplayerGameplayLogic(
 
 			lastUsedMoveMethodRef.current = "drag";
 		}
+	}
+
+	function performPostAnimationCleanup() {
+		postAnimationActionRef.current = null;
+		setAnimationSquare(null);
 	}
 
 	function sendRegularMove(
@@ -531,10 +531,15 @@ function useMultiplayerGameplayLogic(
 	}
 
 	function handleMoveMade(eventData: MoveMadeEventData) {
-		handleMoveAnimation(eventData["move_data"], () => {
+		const startingSquare = eventData["move_data"]["starting_square"];
+		
+		setAnimationSquare(startingSquare);
+
+		postAnimationActionRef.current = () => {
+			performPostAnimationCleanup();
 			setPositionIndex(eventData["new_position_index"]);
 			setSideToMove(eventData["new_side_to_move"]);
-		});
+		}
 	}
 
 	function handleOnMessage(event: MessageEvent) {
@@ -647,7 +652,7 @@ function useMultiplayerGameplayLogic(
 		},
 
 		animationRef,
-		animationSquare: animationSquareRef.current,
+		animationSquare,
 	};
 }
 
