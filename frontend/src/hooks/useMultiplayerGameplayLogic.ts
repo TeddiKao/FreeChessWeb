@@ -23,7 +23,7 @@ import { BoardPlacement, ParsedFENString, PieceColor, PieceType } from "../types
 import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
 import { getOppositeColor } from "../utils/gameLogic/general";
 import { isPawnPromotion } from "../utils/moveUtils";
-import { clearSquaresStyling, getRank } from "../utils/boardUtils";
+import { clearSquaresStyling, getRank, getSquareExists } from "../utils/boardUtils";
 import useGameplaySettings from "./useGameplaySettings";
 
 function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
@@ -103,6 +103,7 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 		clearSquaresStyling();
 
 		if (!prevClickedSquare) return;
+		if (!getSquareExists(prevClickedSquare, parsedFEN["board_placement"])) return;
 
 		if (!clickedSquare) {
 			displayLegalMoves(prevClickedSquare!);
@@ -136,6 +137,7 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 
 			if (isPawnPromotion(pieceColor, getRank(clickedSquare))) {
 				preparePromotion(prevClickedSquare, clickedSquare);
+				handlePawnPromotion();
 				performPostMoveCleanup("click");
 
 				return;
