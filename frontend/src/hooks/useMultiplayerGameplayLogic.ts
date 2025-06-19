@@ -81,9 +81,13 @@ function useMultiplayerGameplayLogic(
 
 	const animationRef = useRef<HTMLDivElement | null>(null);
 	const postAnimationActionRef = useRef<(() => void) | null>(null);
-	
-	const animationStartingSquareRef = useRef<ChessboardSquareIndex | null>(null);
-	const animationDestinationSquareRef = useRef<ChessboardSquareIndex | null>(null);
+
+	const animationStartingSquareRef = useRef<ChessboardSquareIndex | null>(
+		null
+	);
+	const animationDestinationSquareRef = useRef<ChessboardSquareIndex | null>(
+		null
+	);
 
 	const [animationSquare, setAnimationSquare] =
 		useState<ChessboardSquareIndex | null>(null);
@@ -226,7 +230,23 @@ function useMultiplayerGameplayLogic(
 	}
 
 	function handlePieceAnimation() {
+		if (!animationSquare) return;
+		if (!animationStartingSquareRef.current) return;
+		if (!animationDestinationSquareRef.current) return;
+		if (!animationRef) return;
 
+		const startingSquare = animationStartingSquareRef.current;
+		const destinationSquare = animationDestinationSquareRef.current;
+
+		const fallbackPostAnimationFunction = () => {}
+
+		animatePieceImage(
+			animationRef,
+			startingSquare,
+			destinationSquare,
+			orientation,
+			postAnimationActionRef.current ?? fallbackPostAnimationFunction
+		);
 	}
 
 	function storeBoardStateBeforePromotion(
@@ -532,14 +552,14 @@ function useMultiplayerGameplayLogic(
 
 	function handleMoveMade(eventData: MoveMadeEventData) {
 		const startingSquare = eventData["move_data"]["starting_square"];
-		
+
 		setAnimationSquare(startingSquare);
 
 		postAnimationActionRef.current = () => {
 			performPostAnimationCleanup();
 			setPositionIndex(eventData["new_position_index"]);
 			setSideToMove(eventData["new_side_to_move"]);
-		}
+		};
 	}
 
 	function handleOnMessage(event: MessageEvent) {
