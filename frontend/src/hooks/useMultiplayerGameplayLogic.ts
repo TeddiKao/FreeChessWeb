@@ -125,6 +125,7 @@ function useMultiplayerGameplayLogic(
 	}, [prevClickedSquare, clickedSquare]);
 
 	useEffect(() => {
+		console.log(animationSquare);
 		handlePieceAnimation();
 	}, [animationSquare]);
 
@@ -230,6 +231,11 @@ function useMultiplayerGameplayLogic(
 	}
 
 	function handlePieceAnimation() {
+		console.log(animationSquare);
+		console.log(animationRef);
+		console.log(animationStartingSquareRef.current);
+		console.log(animationDestinationSquareRef.current);
+
 		if (!animationSquare) return;
 		if (!animationStartingSquareRef.current) return;
 		if (!animationDestinationSquareRef.current) return;
@@ -239,13 +245,17 @@ function useMultiplayerGameplayLogic(
 		const destinationSquare = animationDestinationSquareRef.current;
 
 		const fallbackPostAnimationFunction = () => {}
+		const postAnimationFunction = () => {
+			postAnimationActionRef.current?.();
+			performPostAnimationCleanup();
+		}
 
 		animatePieceImage(
 			animationRef,
 			startingSquare,
 			destinationSquare,
 			orientation,
-			postAnimationActionRef.current ?? fallbackPostAnimationFunction
+			postAnimationActionRef.current ? postAnimationFunction : fallbackPostAnimationFunction
 		);
 	}
 
@@ -271,6 +281,10 @@ function useMultiplayerGameplayLogic(
 
 	function clearAnimationDestinationSquare() {
 		animationDestinationSquareRef.current = null;
+	}
+
+	function clearAnimationRef() {
+		animationRef.current = null;
 	}
 
 	function storeBoardStateBeforePromotion(
@@ -390,6 +404,7 @@ function useMultiplayerGameplayLogic(
 		clearPostAnimationCallback();
 		clearAnimationStartingSquare();
 		clearAnimationDestinationSquare();
+		clearAnimationRef();
 
 		setAnimationSquare(null);
 	}
@@ -586,7 +601,6 @@ function useMultiplayerGameplayLogic(
 
 	function prepareAnimationData(eventData: MoveMadeEventData, startingSquare: ChessboardSquareIndex, destinationSquare: ChessboardSquareIndex) {
 		const postAnimationCallback = () => {
-			performPostAnimationCleanup();
 			setPositionIndex(eventData["new_position_index"]);
 			setSideToMove(eventData["new_side_to_move"]);
 		};
@@ -709,6 +723,16 @@ function useMultiplayerGameplayLogic(
 
 		animationRef,
 		animationSquare,
+
+		animationDataUpdaters: {
+			updateAnimationStartingSquare,
+			updateAnimationDestinationSquare,
+			updatePostAnimationCallback,
+			setAnimationSquare,
+		},
+
+		handlePieceAnimation,
+		performPostAnimationCleanup,
 	};
 }
 
