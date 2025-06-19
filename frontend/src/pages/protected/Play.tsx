@@ -53,7 +53,7 @@ function Play() {
 
 	const {
 		parsedFEN,
-		gameStateHistory: { positionList, moveList, setPositionIndex },
+		gameStateHistory: { positionList, moveList, setPositionIndex, positionIndex },
 		clocks: { whitePlayerClock, blackPlayerClock },
 		capturedMaterial: capturedMaterialList,
 		promotedPieces: promotedPiecesList,
@@ -85,6 +85,13 @@ function Play() {
 
 		animationRef,
 		animationSquare,
+
+		animationDataUpdaters: {
+			updateAnimationStartingSquare,
+			updateAnimationDestinationSquare,
+			updatePostAnimationCallback,
+			setAnimationSquare
+		},
 	} = useMultiplayerGameplayLogic(
 		location.state?.gameId,
 		location.state?.baseTime,
@@ -287,6 +294,12 @@ function Play() {
 						setPositionIndex={setPositionIndex}
 						previousPositionIndexRef={previousPositionIndexRef}
 						positionListLength={positionList.length}
+						positionList={positionList}
+						positionIndex={positionIndex}
+						updateAnimationDestinationSquare={updateAnimationDestinationSquare}
+						updateAnimationStartingSquare={updateAnimationStartingSquare}
+						updatePostAnimationCallback={updatePostAnimationCallback}
+						setAnimationSquare={setAnimationSquare}
 					/>
 
 					<GameplayActionButtons
