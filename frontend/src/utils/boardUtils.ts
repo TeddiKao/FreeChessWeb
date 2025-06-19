@@ -163,7 +163,7 @@ function animatePieceImage(
 	const [totalXTransform, totalYTransform] = calculateXYTransform(
 		startSquare,
 		destinationSquare,
-		orientation,
+		orientation.toLowerCase() as PieceColor,
 		squareWidth
 	);
 
