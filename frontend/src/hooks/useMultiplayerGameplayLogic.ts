@@ -19,7 +19,7 @@ import { websocketBaseURL } from "../constants/urls";
 import { getAccessToken } from "../utils/tokenUtils";
 import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
 import { ChessboardSquareIndex } from "../types/general";
-import { BoardPlacement, PieceColor, PieceType } from "../types/gameLogic";
+import { BoardPlacement, ParsedFENString, PieceColor, PieceType } from "../types/gameLogic";
 import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
 import { getOppositeColor } from "../utils/gameLogic/general";
 import { isPawnPromotion } from "../utils/moveUtils";
@@ -55,7 +55,7 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 	const [sideToMove, setSideToMove] = useState<PieceColor>("white");
 
 	const boardStateBeforePromotion = useRef<BoardPlacement | null>(null);
-	const prePromotionBoardState = useRef<BoardPlacement | null>(null);
+	const prePromotionBoardState = useRef<ParsedFENString | null>(null);
 
 	const promotionSquareRef = useRef<ChessboardSquareIndex | null>(null);
 	const originalPawnSquareRef = useRef<ChessboardSquareIndex | null>(null);
@@ -263,9 +263,12 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 	) {
 		if (!parsedFEN) return;
 
-		const boardPlacement = prePromotionBoardState.current;
+		const boardPlacement = parsedFEN["board_placement"];
 
 		if (!boardPlacement) return;
+
+		console.log(startingSquare.toString());
+		console.log(boardPlacement);
 
 		const pieceInfo = boardPlacement[startingSquare.toString()];
 		const pieceColor = pieceInfo["piece_color"];
@@ -354,7 +357,8 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 	) {
 		if (!parsedFEN) return;
 
-		const currentBoardPlacement = parsedFEN["board_placement"];
+		const prePromotionParsedFEN = structuredClone(parsedFEN);
+		const currentBoardPlacement = prePromotionParsedFEN["board_placement"]
 		const pawnInfo = currentBoardPlacement[startingSquare.toString()];
 
 		const prePromotionBoardPlacement = structuredClone(
@@ -364,7 +368,8 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 		delete prePromotionBoardPlacement[startingSquare.toString()];
 		prePromotionBoardPlacement[destinationSquare.toString()] = pawnInfo;
 
-		prePromotionBoardState.current = prePromotionBoardPlacement;
+		prePromotionParsedFEN["board_placement"] = prePromotionBoardPlacement;
+		prePromotionBoardState.current = prePromotionParsedFEN;
 	}
 
 	async function performMoveValidation(
@@ -488,6 +493,7 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 	}
 
 	function handleMoveMade(eventData: MoveMadeEventData) {
+		console.log("Move made!");
 		setPositionIndex(eventData["new_position_index"]);
 		setSideToMove(eventData["new_side_to_move"]);
 	}
