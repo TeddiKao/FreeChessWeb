@@ -25,7 +25,6 @@ import { getOppositeColor } from "../utils/gameLogic/general";
 import { isPawnPromotion } from "../utils/moveUtils";
 import { clearSquaresStyling, getRank } from "../utils/boardUtils";
 import useGameplaySettings from "./useGameplaySettings";
-import { clear } from "console";
 
 function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
@@ -293,6 +292,8 @@ function useMultiplayerGameplayLogic(gameId: number, baseTime: number) {
 		clearPrePromotionBoardState();
 		clearPromotionSquare();
 		clearOriginalPawnSquare();
+
+		setShouldShowPromotionPopup(false);
 	}
 
 	function performPostMoveCleanup(moveMethod: "click" | "drag") {
