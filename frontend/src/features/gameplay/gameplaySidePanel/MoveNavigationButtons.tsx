@@ -1,22 +1,42 @@
 import { useEffect } from "react";
 import "../../../styles/features/gameplay/side-panel-buttons.scss";
 import {
+	ChessboardSquareIndex,
 	OptionalValue,
 	RefObject,
 	StateSetterFunction,
 } from "../../../types/general";
 import { ArrowKeys } from "../../../enums/general";
+import { PositionList } from "../../../interfaces/gameLogic";
 
 type MoveNavigationButtonsProps = {
 	setPositionIndex: StateSetterFunction<number>;
 	previousPositionIndexRef: RefObject<OptionalValue<number>>;
 	positionListLength: number;
+
+	positionList?: PositionList;
+	positionIndex?: number;
+	updateAnimationStartingSquare?: (
+		startingSquare: ChessboardSquareIndex
+	) => void;
+	updateAnimationDestinationSquare?: (
+		destinationSquare: ChessboardSquareIndex
+	) => void;
+	updatePostAnimationCallback?: (callbackFn: () => void) => void;
+	setAnimationSquare: StateSetterFunction<ChessboardSquareIndex | null>;
 };
 
 function MoveNavigationButtons({
 	setPositionIndex,
 	positionListLength,
 	previousPositionIndexRef,
+
+	updateAnimationStartingSquare,
+	updateAnimationDestinationSquare,
+	updatePostAnimationCallback,
+	setAnimationSquare,
+	positionList,
+	positionIndex,
 }: MoveNavigationButtonsProps) {
 	function handleKeyDown(event: KeyboardEvent) {
 		switch (event.key) {
@@ -47,7 +67,7 @@ function MoveNavigationButtons({
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [positionListLength]);
+	}, [positionListLength, positionList, positionIndex]);
 
 	function backToStart() {
 		setPositionIndex((prevIndex) => {
@@ -66,13 +86,40 @@ function MoveNavigationButtons({
 	}
 
 	function handleNextMove() {
-		setPositionIndex((prevIndex) => {
-			previousPositionIndexRef.current = prevIndex;
+		console.log(positionList, positionIndex);
 
-			return prevIndex + 1 < positionListLength
-				? prevIndex + 1
-				: prevIndex;
-		});
+		if (!positionList || !positionIndex) {
+			setPositionIndex((prevIndex) => {
+				previousPositionIndexRef.current = prevIndex;
+
+				return prevIndex + 1 < positionListLength
+					? prevIndex + 1
+					: prevIndex;
+			});
+
+			return;
+		}
+
+		const postAnimationCallback = () => {
+			setPositionIndex((prevIndex) => {
+				previousPositionIndexRef.current = prevIndex;
+
+				return prevIndex + 1 < positionListLength
+					? prevIndex + 1
+					: prevIndex;
+			});
+		};
+
+		const targetPosition = positionList?.[positionIndex + 1];
+		const startingSquare = targetPosition["move_info"]["starting_square"];
+		const destinationSquare =
+			targetPosition["move_info"]["destination_square"];
+
+		updatePostAnimationCallback?.(postAnimationCallback);
+		updateAnimationStartingSquare?.(startingSquare);
+		updateAnimationDestinationSquare?.(destinationSquare);
+
+		setAnimationSquare?.(startingSquare);
 	}
 
 	function backToCurrentPosition() {
