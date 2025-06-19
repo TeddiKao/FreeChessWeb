@@ -6,11 +6,7 @@ import Square from "../../../components/chessboard/Square.tsx";
 
 // Types, interfaces, enums
 import { MultiplayerChessboardProps } from "../../../interfaces/chessboard.js";
-import {
-	PieceColor,
-	PieceType,
-} from "../../../types/gameLogic.ts";
-
+import { PieceColor, PieceType } from "../../../types/gameLogic.ts";
 
 // Utils
 import ChessboardGrid from "../../../components/chessboard/ChessboardGrid.tsx";
@@ -18,6 +14,7 @@ import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid.ts";
+import { isNullOrUndefined } from "../../../utils/generalUtils.ts";
 
 function MultiplayerChessboard({
 	parsed_fen_string,
@@ -37,7 +34,7 @@ function MultiplayerChessboard({
 		draggedSquare,
 		droppedSquare,
 		setDraggedSquare,
-		setDroppedSquare
+		setDroppedSquare,
 	},
 
 	animationRef,
@@ -46,11 +43,11 @@ function MultiplayerChessboard({
 	cancelPromotion,
 	onPromotion,
 	shouldShowPromotionPopup,
-	promotionSquare
+	promotionSquare,
 }: MultiplayerChessboardProps) {
 	const chessboardStyles = {
-		gridTemplateColums: `repeat(8, ${squareSize}px)`
-	}
+		gridTemplateColums: `repeat(8, ${squareSize}px)`,
+	};
 
 	function renderFilledSquare({
 		squareIndex,
@@ -60,7 +57,13 @@ function MultiplayerChessboard({
 		pieceColor,
 		pieceType,
 	}: FilledSquareRenderParams) {
-		const isPromotionSquare = Number(squareIndex) === Number(promotionSquare)
+		const isPromotionSquareDefined = !isNullOrUndefined(promotionSquare);
+		const isPromotionSquare =
+			Number(squareIndex) === Number(promotionSquare);
+		const shouldDisplayPromotionPopup =
+			isPromotionSquareDefined &&
+			isPromotionSquare &&
+			shouldShowPromotionPopup;
 
 		return (
 			<Square
@@ -69,7 +72,7 @@ function MultiplayerChessboard({
 				squareColor={squareColor}
 				pieceColor={pieceColor as PieceColor}
 				pieceType={pieceType as PieceType}
-				displayPromotionPopup={shouldShowPromotionPopup && isPromotionSquare}
+				displayPromotionPopup={shouldDisplayPromotionPopup}
 				setDraggedSquare={setDraggedSquare}
 				setDroppedSquare={setDroppedSquare}
 				handlePromotionCancel={cancelPromotion}
@@ -93,14 +96,20 @@ function MultiplayerChessboard({
 		squareIndex,
 		squareColor,
 	}: EmptySquareRenderParams) {
-		const isPromotionSquare = Number(squareIndex) === Number(promotionSquare)
+		const isPromotionSquareDefined = !isNullOrUndefined(promotionSquare);
+		const isPromotionSquare =
+			Number(squareIndex) === Number(promotionSquare);
+		const shouldDisplayPromotionPopup =
+			isPromotionSquareDefined &&
+			isPromotionSquare &&
+			shouldShowPromotionPopup;
 
 		return (
 			<Square
 				key={squareIndex}
 				squareNumber={squareIndex}
 				squareColor={squareColor}
-				displayPromotionPopup={shouldShowPromotionPopup && isPromotionSquare}
+				displayPromotionPopup={shouldDisplayPromotionPopup}
 				setDraggedSquare={setDraggedSquare}
 				setDroppedSquare={setDroppedSquare}
 				handlePromotionCancel={cancelPromotion}
