@@ -4,6 +4,7 @@
 .chessboard-square, .previous-dropped-square, .previous-dragged-square {
 	height: 55px;
 	position: relative;
+	
 }
 
 .piece-image {
@@ -12,17 +13,24 @@
 	transition: transform $piece-animation-time ease;
 }
 
+.piece-image-container {
+	z-index: 1000;
+	position: relative;
+}
+
 .piece-image:hover {
 	cursor: pointer;
 }
 
 .light {
 	background-color: $light-square-color;
+	position: relative;
 }
 
 .dark {
 	background-color: $dark-square-color;
 	border: none;
+	position: relative;
 }
 
 .previous-dragged-square {
