@@ -19,7 +19,7 @@ function useAnimationLogic(orientation: PieceColor) {
 
 	useEffect(() => {
 		handlePieceAnimation();
-	}, [animationSquare]);
+	}, [animationSquare, orientation]);
 
 	function handlePieceAnimation() {
 		if (!animationSquare) return;
