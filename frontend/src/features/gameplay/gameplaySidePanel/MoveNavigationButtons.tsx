@@ -19,8 +19,12 @@ type MoveNavigationButtonsProps = {
 	positionList?: PositionList;
 	positionIndex?: number;
 
-	orientation: PieceColor;
-}
+	prepareAnimationData: (
+		startingSquare: ChessboardSquareIndex,
+		destinationSquare: ChessboardSquareIndex,
+		postAnimationCallback: () => void
+	) => void;
+};
 
 function MoveNavigationButtons({
 	setPositionIndex,
@@ -30,10 +34,8 @@ function MoveNavigationButtons({
 	positionList,
 	positionIndex,
 
-	orientation
+	prepareAnimationData
 }: MoveNavigationButtonsProps) {
-	const { prepareAnimationData } = useAnimationLogic(orientation)
-
 	function handleKeyDown(event: KeyboardEvent) {
 		switch (event.key) {
 			case ArrowKeys.ARROW_LEFT:
@@ -97,7 +99,11 @@ function MoveNavigationButtons({
 		const destinationSquare =
 			targetPosition["move_info"]["destination_square"];
 
-		prepareAnimationData(startingSquare, destinationSquare, postAnimationCallback);
+		prepareAnimationData(
+			startingSquare,
+			destinationSquare,
+			postAnimationCallback
+		);
 	}
 
 	function handleNextMove() {
@@ -128,7 +134,11 @@ function MoveNavigationButtons({
 		const destinationSquare =
 			targetPosition["move_info"]["destination_square"];
 
-		prepareAnimationData(startingSquare, destinationSquare, postAnimationCallback);
+		prepareAnimationData(
+			startingSquare,
+			destinationSquare,
+			postAnimationCallback
+		);
 	}
 
 	function backToCurrentPosition() {

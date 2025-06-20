@@ -290,7 +290,7 @@ function Play() {
 						positionListLength={positionList.length}
 						positionList={positionList}
 						positionIndex={positionIndex}
-						orientation={boardOrientation}
+						prepareAnimationData={prepareAnimationData}
 					/>
 
 					<GameplayActionButtons
