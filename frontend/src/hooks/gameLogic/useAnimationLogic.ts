@@ -4,7 +4,7 @@ import { animatePieceImage } from "../../utils/boardUtils";
 import { PieceColor } from "../../types/gameLogic";
 
 function useAnimationLogic(orientation: PieceColor) {
-    const animationRef = useRef<HTMLDivElement | null>(null);
+	const animationRef = useRef<HTMLDivElement | null>(null);
 	const postAnimationActionRef = useRef<(() => void) | null>(null);
 
 	const animationStartingSquareRef = useRef<ChessboardSquareIndex | null>(
@@ -17,11 +17,11 @@ function useAnimationLogic(orientation: PieceColor) {
 	const [animationSquare, setAnimationSquare] =
 		useState<ChessboardSquareIndex | null>(null);
 
-    useEffect(() => {
-        handlePieceAnimation();
-    }, [animationSquare]);
+	useEffect(() => {
+		handlePieceAnimation();
+	}, [animationSquare]);
 
-    function handlePieceAnimation() {
+	function handlePieceAnimation() {
 		if (!animationSquare) return;
 		if (!animationStartingSquareRef.current) return;
 		if (!animationDestinationSquareRef.current) return;
@@ -30,22 +30,24 @@ function useAnimationLogic(orientation: PieceColor) {
 		const startingSquare = animationStartingSquareRef.current;
 		const destinationSquare = animationDestinationSquareRef.current;
 
-		const fallbackPostAnimationFunction = () => {}
+		const fallbackPostAnimationFunction = () => {};
 		const postAnimationFunction = () => {
 			postAnimationActionRef.current?.();
 			performPostAnimationCleanup();
-		}
+		};
 
 		animatePieceImage(
 			animationRef,
 			startingSquare,
 			destinationSquare,
 			orientation,
-			postAnimationActionRef.current ? postAnimationFunction : fallbackPostAnimationFunction
+			postAnimationActionRef.current
+				? postAnimationFunction
+				: fallbackPostAnimationFunction
 		);
 	}
 
-    function performPostAnimationCleanup() {
+	function performPostAnimationCleanup() {
 		clearPostAnimationCallback();
 		clearAnimationStartingSquare();
 		clearAnimationDestinationSquare();
@@ -54,8 +56,19 @@ function useAnimationLogic(orientation: PieceColor) {
 		setAnimationSquare(null);
 	}
 
+	function prepareAnimationData(
+		startingSquare: ChessboardSquareIndex,
+		destinationSquare: ChessboardSquareIndex,
+        postAnimationCallback: () => void
+	) {
+		updatePostAnimationCallback(postAnimationCallback);
+		updateAnimationStartingSquare(startingSquare);
+		updateAnimationDestinationSquare(destinationSquare);
 
-    function updateAnimationStartingSquare(square: ChessboardSquareIndex) {
+		setAnimationSquare(startingSquare);
+	}
+
+	function updateAnimationStartingSquare(square: ChessboardSquareIndex) {
 		animationStartingSquareRef.current = square;
 	}
 
