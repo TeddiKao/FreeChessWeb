@@ -209,8 +209,6 @@ function Play() {
 								setDroppedSquare,
 							}}
 							promotionSquare={promotionSquare}
-							animationRef={animationRef}
-							animationSquare={animationSquare}
 						/>
 					</div>
 
