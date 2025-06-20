@@ -76,6 +76,7 @@ function useMultiplayerGameplayLogic(
 		setGameWinner,
 		handleDraw,
 		handleCheckmate,
+		handlePlayerTimeout,
 	} = useGameEndState();
 
 	const [sideToMove, setSideToMove] = useState<PieceColor>("white");
@@ -467,12 +468,6 @@ function useMultiplayerGameplayLogic(
 
 	function handleMoveListUpdated(eventData: MoveListUpdateEventData) {
 		setMoveList(eventData["new_move_list"]);
-	}
-
-	function handlePlayerTimeout(eventData: any) {
-		setHasGameEnded(true);
-		setGameEndedCause("Timeout");
-		setGameWinner(getOppositeColor(eventData["timeout_color"]));
 	}
 
 	function handleMoveMade(eventData: MoveMadeEventData) {

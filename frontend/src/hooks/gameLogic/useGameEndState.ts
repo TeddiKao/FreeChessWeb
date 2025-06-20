@@ -1,31 +1,12 @@
 import { useState } from "react";
 import { PieceColor } from "../../types/gameLogic";
 import { CheckmateEventData } from "../../interfaces/gameLogic";
+import { getOppositeColor } from "../../utils/gameLogic/general";
 
 function useGameEndState() {
 	const [hasGameEnded, setHasGameEnded] = useState<boolean>(false);
 	const [gameEndedCause, setGameEndedCause] = useState<string>("");
 	const [gameWinner, setGameWinner] = useState<PieceColor | "">("");
-
-	function handleStalemate() {
-		setHasGameEnded(true);
-		setGameEndedCause("Stalemate");
-	}
-
-	function handleThreefoldRepetition() {
-		setHasGameEnded(true);
-		setGameEndedCause("Repetition");
-	}
-
-	function handle50MoveRule() {
-		setHasGameEnded(true);
-		setGameEndedCause("50-move-rule");
-	}
-
-	function handleInsufficientMaterial() {
-		setHasGameEnded(true);
-		setGameEndedCause("Insufficient material");
-	}
 
 	function handleDraw(drawCause: string) {
 		setHasGameEnded(true);
@@ -38,6 +19,12 @@ function useGameEndState() {
 		setGameWinner(eventData["winning_color"] as PieceColor);
 	}
 
+    function handlePlayerTimeout(eventData: any) {
+		setHasGameEnded(true);
+		setGameEndedCause("Timeout");
+		setGameWinner(getOppositeColor(eventData["timeout_color"]));
+	}
+
 	return {
 		hasGameEnded,
 		setHasGameEnded,
@@ -48,6 +35,7 @@ function useGameEndState() {
 
         handleDraw,
         handleCheckmate,
+        handlePlayerTimeout,
 	};
 }
 
