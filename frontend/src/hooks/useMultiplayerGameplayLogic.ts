@@ -75,6 +75,7 @@ function useMultiplayerGameplayLogic(
 		setGameEndedCause,
 		setGameWinner,
 		handleDraw,
+		handleCheckmate,
 	} = useGameEndState();
 
 	const [sideToMove, setSideToMove] = useState<PieceColor>("white");
@@ -466,32 +467,6 @@ function useMultiplayerGameplayLogic(
 
 	function handleMoveListUpdated(eventData: MoveListUpdateEventData) {
 		setMoveList(eventData["new_move_list"]);
-	}
-
-	function handleStalemate() {
-		setHasGameEnded(true);
-		setGameEndedCause("Stalemate");
-	}
-
-	function handleThreefoldRepetition() {
-		setHasGameEnded(true);
-		setGameEndedCause("Repetition");
-	}
-
-	function handle50MoveRule() {
-		setHasGameEnded(true);
-		setGameEndedCause("50-move-rule");
-	}
-
-	function handleInsufficientMaterial() {
-		setHasGameEnded(true);
-		setGameEndedCause("Insufficient material");
-	}
-
-	function handleCheckmate(eventData: CheckmateEventData) {
-		setHasGameEnded(true);
-		setGameEndedCause("Checkmate");
-		setGameWinner(eventData["winning_color"] as PieceColor);
 	}
 
 	function handlePlayerTimeout(eventData: any) {
