@@ -39,6 +39,7 @@ import useGameplaySettings from "./useGameplaySettings";
 import useAnimationLogic from "./gameLogic/useAnimationLogic";
 import usePlayerClocks from "./gameLogic/usePlayerClocks";
 import useClickedSquaresState from "./gameLogic/useClickedSquaresState";
+import useDraggedSquaresState from "./gameLogic/useDraggedSquaresState";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
@@ -59,10 +60,8 @@ function useMultiplayerGameplayLogic(
 		setClickedSquare,
 	} = useClickedSquaresState(handleClickToMove);
 
-	const [draggedSquare, setDraggedSquare] =
-		useState<ChessboardSquareIndex | null>(null);
-	const [droppedSquare, setDroppedSquare] =
-		useState<ChessboardSquareIndex | null>(null);
+	const { draggedSquare, setDraggedSquare, droppedSquare, setDroppedSquare } =
+		useDraggedSquaresState(handleOnDrop);
 
 	const { whitePlayerClock, blackPlayerClock, handleTimerChanged } =
 		usePlayerClocks(gameId, baseTime);
