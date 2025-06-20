@@ -8,6 +8,8 @@ import {
 } from "../../../types/general";
 import { ArrowKeys } from "../../../enums/general";
 import { PositionList } from "../../../interfaces/gameLogic";
+import useAnimationLogic from "../../../hooks/gameLogic/useAnimationLogic";
+import { PieceColor } from "../../../types/gameLogic";
 
 type MoveNavigationButtonsProps = {
 	setPositionIndex: StateSetterFunction<number>;
@@ -16,14 +18,12 @@ type MoveNavigationButtonsProps = {
 
 	positionList?: PositionList;
 	positionIndex?: number;
-	updateAnimationStartingSquare?: (
-		startingSquare: ChessboardSquareIndex
+
+	prepareAnimationData: (
+		startingSquare: ChessboardSquareIndex,
+		destinationSquare: ChessboardSquareIndex,
+		postAnimationCallback: () => void
 	) => void;
-	updateAnimationDestinationSquare?: (
-		destinationSquare: ChessboardSquareIndex
-	) => void;
-	updatePostAnimationCallback?: (callbackFn: () => void) => void;
-	setAnimationSquare: StateSetterFunction<ChessboardSquareIndex | null>;
 };
 
 function MoveNavigationButtons({
@@ -31,12 +31,10 @@ function MoveNavigationButtons({
 	positionListLength,
 	previousPositionIndexRef,
 
-	updateAnimationStartingSquare,
-	updateAnimationDestinationSquare,
-	updatePostAnimationCallback,
-	setAnimationSquare,
 	positionList,
 	positionIndex,
+
+	prepareAnimationData
 }: MoveNavigationButtonsProps) {
 	function handleKeyDown(event: KeyboardEvent) {
 		switch (event.key) {
@@ -88,6 +86,16 @@ function MoveNavigationButtons({
 			return;
 		}
 
+		if (positionIndex - 1 < 0) {
+			setPositionIndex((prevIndex) => {
+				previousPositionIndexRef.current = prevIndex;
+
+				return prevIndex;
+			});
+
+			return;
+		}
+
 		const postAnimationCallback = () => {
 			setPositionIndex((prevIndex) => {
 				previousPositionIndexRef.current = prevIndex;
@@ -101,11 +109,11 @@ function MoveNavigationButtons({
 		const destinationSquare =
 			targetPosition["move_info"]["destination_square"];
 
-		updatePostAnimationCallback?.(postAnimationCallback);
-		updateAnimationStartingSquare?.(destinationSquare);
-		updateAnimationDestinationSquare?.(startingSquare);
-
-		setAnimationSquare?.(destinationSquare);
+		prepareAnimationData(
+			destinationSquare,
+			startingSquare,
+			postAnimationCallback
+		);
 	}
 
 	function handleNextMove() {
@@ -116,6 +124,16 @@ function MoveNavigationButtons({
 				return prevIndex + 1 < positionListLength
 					? prevIndex + 1
 					: prevIndex;
+			});
+
+			return;
+		}
+
+		if (positionIndex + 1 >= positionListLength) {
+			setPositionIndex((prevIndex) => {
+				previousPositionIndexRef.current = prevIndex;
+
+				return prevIndex;
 			});
 
 			return;
@@ -136,11 +154,11 @@ function MoveNavigationButtons({
 		const destinationSquare =
 			targetPosition["move_info"]["destination_square"];
 
-		updatePostAnimationCallback?.(postAnimationCallback);
-		updateAnimationStartingSquare?.(startingSquare);
-		updateAnimationDestinationSquare?.(destinationSquare);
-
-		setAnimationSquare?.(startingSquare);
+		prepareAnimationData(
+			startingSquare,
+			destinationSquare,
+			postAnimationCallback
+		);
 	}
 
 	function backToCurrentPosition() {

@@ -36,14 +36,14 @@ function MultiplayerChessboard({
 		setDraggedSquare,
 		setDroppedSquare,
 	},
-
-	animationRef,
-	animationSquare,
-
+	
 	cancelPromotion,
 	onPromotion,
 	shouldShowPromotionPopup,
 	promotionSquare,
+
+	animationRef,
+	animationSquare
 }: MultiplayerChessboardProps) {
 	const chessboardStyles = {
 		gridTemplateColums: `repeat(8, ${squareSize}px)`,
@@ -81,13 +81,12 @@ function MultiplayerChessboard({
 				previousDroppedSquare={previousDroppedSquare}
 				orientation={orientation}
 				squareSize={squareSize}
-				// @ts-ignore
-				animatingPieceSquare={animationSquare}
 				clickedSquare={clickedSquare}
 				prevClickedSquare={prevClickedSquare}
 				setClickedSquare={setClickedSquare}
 				setPrevClickedSquare={setPrevClickedSquare}
 				animationRef={animationRef}
+				animatingPieceSquare={animationSquare}
 			/>
 		);
 	}
@@ -118,13 +117,12 @@ function MultiplayerChessboard({
 				previousDroppedSquare={previousDroppedSquare}
 				orientation={orientation}
 				squareSize={squareSize}
-				// @ts-ignore
-				animatingPieceSquare={animationSquare}
 				setClickedSquare={setClickedSquare}
 				setPrevClickedSquare={setPrevClickedSquare}
 				clickedSquare={clickedSquare}
 				prevClickedSquare={prevClickedSquare}
 				animationRef={animationRef}
+				animatingPieceSquare={animationSquare}
 			/>
 		);
 	}

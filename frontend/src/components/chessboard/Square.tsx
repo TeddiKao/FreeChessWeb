@@ -13,6 +13,8 @@ import {
 import { SquareProps } from "../../interfaces/chessboard.ts";
 import { OptionalValue } from "../../types/general.ts";
 import { capitaliseFirstLetter } from "../../utils/generalUtils.ts";
+import useAnimationLogic from "../../hooks/gameLogic/useAnimationLogic.ts";
+import { PieceColor } from "../../types/gameLogic.ts";
 
 function Square({
 	squareNumber,
@@ -30,11 +32,11 @@ function Square({
 	previousDroppedSquare,
 	orientation,
 	squareSize,
-	animatingPieceSquare,
 	animatingPieceStyle,
 	prevClickedSquare,
 	clickedSquare,
-	animationRef
+	animationRef,
+	animatingPieceSquare: animationSquare,
 }: SquareProps) {
 	let startingSquare: OptionalValue<string> = null;
 
@@ -182,6 +184,8 @@ function Square({
 				pieceType
 			)}-dragging.svg`;
 
+			console.log(squareNumber, animationSquare);
+
 			squareHTML = (
 				<>
 					<DragPreviewImage
@@ -191,7 +195,7 @@ function Square({
 					<div
 						ref={
 							Number(squareNumber) ===
-							Number(animatingPieceSquare)
+							Number(animationSquare)
 								? animationRef
 								: undefined
 						}
@@ -199,7 +203,7 @@ function Square({
 					>
 						<img
 							style={
-								Number(animatingPieceSquare) ===
+								Number(animationSquare) ===
 								Number(squareNumber)
 									? animatingPieceStyle
 									: undefined

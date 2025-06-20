@@ -82,16 +82,9 @@ function Play() {
 		prePromotionBoardState,
 		cancelPromotion,
 		handlePromotionPieceSelected,
-
 		animationRef,
 		animationSquare,
-
-		animationDataUpdaters: {
-			updateAnimationStartingSquare,
-			updateAnimationDestinationSquare,
-			updatePostAnimationCallback,
-			setAnimationSquare
-		},
+		prepareAnimationData,
 	} = useMultiplayerGameplayLogic(
 		location.state?.gameId,
 		location.state?.baseTime,
@@ -219,6 +212,7 @@ function Play() {
 								setDroppedSquare,
 							}}
 							promotionSquare={promotionSquare}
+
 							animationRef={animationRef}
 							animationSquare={animationSquare}
 						/>
@@ -296,10 +290,7 @@ function Play() {
 						positionListLength={positionList.length}
 						positionList={positionList}
 						positionIndex={positionIndex}
-						updateAnimationDestinationSquare={updateAnimationDestinationSquare}
-						updateAnimationStartingSquare={updateAnimationStartingSquare}
-						updatePostAnimationCallback={updatePostAnimationCallback}
-						setAnimationSquare={setAnimationSquare}
+						prepareAnimationData={prepareAnimationData}
 					/>
 
 					<GameplayActionButtons
