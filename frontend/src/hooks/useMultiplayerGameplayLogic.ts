@@ -125,7 +125,6 @@ function useMultiplayerGameplayLogic(
 	}, [prevClickedSquare, clickedSquare]);
 
 	useEffect(() => {
-		console.log(animationSquare);
 		handlePieceAnimation();
 	}, [animationSquare]);
 
