@@ -35,10 +35,10 @@ function Square({
 	animatingPieceStyle,
 	prevClickedSquare,
 	clickedSquare,
+	animationRef,
+	animatingPieceSquare: animationSquare,
 }: SquareProps) {
 	let startingSquare: OptionalValue<string> = null;
-
-	const { animationRef, animationSquare } = useAnimationLogic(orientation as PieceColor);
 
 	const [popupIsOpen, setPopupIsOpen] = useState<boolean>(
 		displayPromotionPopup
@@ -183,6 +183,8 @@ function Square({
 			const draggingPieceImageSrc = `/icons/chessPieces/dragging/${pieceColor.toLowerCase()}${capitaliseFirstLetter(
 				pieceType
 			)}-dragging.svg`;
+
+			console.log(squareNumber, animationSquare);
 
 			squareHTML = (
 				<>

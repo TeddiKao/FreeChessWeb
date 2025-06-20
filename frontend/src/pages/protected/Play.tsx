@@ -82,6 +82,9 @@ function Play() {
 		prePromotionBoardState,
 		cancelPromotion,
 		handlePromotionPieceSelected,
+		animationRef,
+		animationSquare,
+		prepareAnimationData,
 	} = useMultiplayerGameplayLogic(
 		location.state?.gameId,
 		location.state?.baseTime,
@@ -209,6 +212,9 @@ function Play() {
 								setDroppedSquare,
 							}}
 							promotionSquare={promotionSquare}
+
+							animationRef={animationRef}
+							animationSquare={animationSquare}
 						/>
 					</div>
 

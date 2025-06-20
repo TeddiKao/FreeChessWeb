@@ -80,7 +80,7 @@ function useMultiplayerGameplayLogic(
 
 	const lastUsedMoveMethodRef = useRef<"click" | "drag" | null>(null);
 
-	const { prepareAnimationData } = useAnimationLogic(orientation);
+	const { prepareAnimationData, animationRef, animationSquare } = useAnimationLogic(orientation);
 
 	const gameplaySettings = useGameplaySettings();
 
@@ -631,6 +631,10 @@ function useMultiplayerGameplayLogic(
 				promotedPiece
 			);
 		},
+
+		animationRef,
+		animationSquare,
+		prepareAnimationData,
 	};
 }
 
