@@ -37,6 +37,7 @@ import {
 } from "../utils/boardUtils";
 import useGameplaySettings from "./useGameplaySettings";
 import useAnimationLogic from "./gameLogic/useAnimationLogic";
+import usePlayerClocks from "./gameLogic/usePlayerClocks";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
@@ -60,8 +61,8 @@ function useMultiplayerGameplayLogic(
 	const [droppedSquare, setDroppedSquare] =
 		useState<ChessboardSquareIndex | null>(null);
 
-	const [whitePlayerClock, setWhitePlayerClock] = useState<number>(baseTime);
-	const [blackPlayerClock, setBlackPlayerClock] = useState<number>(baseTime);
+	const { whitePlayerClock, blackPlayerClock, handleTimerChanged } =
+		usePlayerClocks(gameId, baseTime);
 
 	const [hasGameEnded, setHasGameEnded] = useState<boolean>(false);
 	const [gameEndedCause, setGameEndedCause] = useState<string>("");
@@ -80,7 +81,8 @@ function useMultiplayerGameplayLogic(
 
 	const lastUsedMoveMethodRef = useRef<"click" | "drag" | null>(null);
 
-	const { prepareAnimationData, animationRef, animationSquare } = useAnimationLogic(orientation);
+	const { prepareAnimationData, animationRef, animationSquare } =
+		useAnimationLogic(orientation);
 
 	const gameplaySettings = useGameplaySettings();
 
@@ -101,7 +103,6 @@ function useMultiplayerGameplayLogic(
 	useEffect(() => {
 		updatePositionList();
 		updateMoveList();
-		updatePlayerClocks();
 		updateSideToMove();
 		synchronisePositionIndex();
 	}, []);
@@ -458,19 +459,6 @@ function useMultiplayerGameplayLogic(
 		setSideToMove(sideToMove);
 	}
 
-	async function updatePlayerClocks() {
-		const whitePlayerClock = await fetchTimer(gameId, "white");
-		const blackPlayerClock = await fetchTimer(gameId, "black");
-
-		setWhitePlayerClock(whitePlayerClock);
-		setBlackPlayerClock(blackPlayerClock);
-	}
-
-	function handleTimerChanged(eventData: TimerChangedEventData) {
-		setWhitePlayerClock(eventData["white_player_clock"]);
-		setBlackPlayerClock(eventData["black_player_clock"]);
-	}
-
 	function handlePositionListUpdated(eventData: PositionListUpdateEventData) {
 		setPositionList(eventData["new_position_list"]);
 	}
@@ -518,9 +506,13 @@ function useMultiplayerGameplayLogic(
 		const postAnimationCallback = () => {
 			setPositionIndex(eventData["new_position_index"]);
 			setSideToMove(eventData["new_side_to_move"]);
-		}
+		};
 
-		prepareAnimationData(startingSquare, destinationSquare, postAnimationCallback);
+		prepareAnimationData(
+			startingSquare,
+			destinationSquare,
+			postAnimationCallback
+		);
 	}
 
 	function handleOnMessage(event: MessageEvent) {
