@@ -3,11 +3,11 @@ import { PieceColor } from "../../types/gameLogic";
 import { CheckmateEventData } from "../../interfaces/gameLogic";
 
 function useGameEndState() {
-    const [hasGameEnded, setHasGameEnded] = useState<boolean>(false);
+	const [hasGameEnded, setHasGameEnded] = useState<boolean>(false);
 	const [gameEndedCause, setGameEndedCause] = useState<string>("");
 	const [gameWinner, setGameWinner] = useState<PieceColor | "">("");
 
-    function handleStalemate() {
+	function handleStalemate() {
 		setHasGameEnded(true);
 		setGameEndedCause("Stalemate");
 	}
@@ -27,16 +27,28 @@ function useGameEndState() {
 		setGameEndedCause("Insufficient material");
 	}
 
-    function handleDraw(drawCause: string) {
-        setHasGameEnded(true);
-        setGameEndedCause(drawCause);
-    }
+	function handleDraw(drawCause: string) {
+		setHasGameEnded(true);
+		setGameEndedCause(drawCause);
+	}
 
 	function handleCheckmate(eventData: CheckmateEventData) {
 		setHasGameEnded(true);
 		setGameEndedCause("Checkmate");
 		setGameWinner(eventData["winning_color"] as PieceColor);
 	}
+
+	return {
+		hasGameEnded,
+		setHasGameEnded,
+		gameEndedCause,
+		setGameEndedCause,
+		gameWinner,
+        setGameWinner,
+
+        handleDraw,
+        handleCheckmate,
+	};
 }
 
 export default useGameEndState;
