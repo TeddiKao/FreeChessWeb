@@ -95,6 +95,8 @@ function useAnimationLogic(orientation: PieceColor) {
 	function clearAnimationRef() {
 		animationRef.current = null;
 	}
+
+    return { animationRef, prepareAnimationData }
 }
 
 export default useAnimationLogic;
