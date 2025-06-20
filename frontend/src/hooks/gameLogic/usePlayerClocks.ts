@@ -8,7 +8,7 @@ function usePlayerClocks(gameId: number, baseTime: number) {
 
     useEffect(() => {
         updatePlayerClocks();
-    }, []);
+    }, [gameId]);
 
     async function updatePlayerClocks() {
 		const whitePlayerClock = await fetchTimer(gameId, "white");
