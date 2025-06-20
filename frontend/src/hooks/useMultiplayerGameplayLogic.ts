@@ -109,10 +109,6 @@ function useMultiplayerGameplayLogic(
 		synchronisePositionIndex();
 	}, []);
 
-	useEffect(() => {
-		handleOnDrop();
-	}, [draggedSquare, droppedSquare]);
-
 	async function handleClickToMove() {
 		clearSquaresStyling();
 
