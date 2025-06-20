@@ -25,7 +25,7 @@ function useAnimationLogic(orientation: PieceColor) {
 		if (!animationSquare) return;
 		if (!animationStartingSquareRef.current) return;
 		if (!animationDestinationSquareRef.current) return;
-		if (!animationRef) return;
+		if (!animationRef.current) return;
 
 		const startingSquare = animationStartingSquareRef.current;
 		const destinationSquare = animationDestinationSquareRef.current;
