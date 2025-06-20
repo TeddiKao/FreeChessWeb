@@ -96,7 +96,7 @@ function useAnimationLogic(orientation: PieceColor) {
 		animationRef.current = null;
 	}
 
-    return { animationRef, prepareAnimationData }
+    return { animationRef, prepareAnimationData, animationSquare }
 }
 
 export default useAnimationLogic;
