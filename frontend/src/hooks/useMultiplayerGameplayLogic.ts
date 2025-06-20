@@ -36,6 +36,7 @@ import {
 	getSquareExists,
 } from "../utils/boardUtils";
 import useGameplaySettings from "./useGameplaySettings";
+import useAnimationLogic from "./gameLogic/useAnimationLogic";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
@@ -79,18 +80,7 @@ function useMultiplayerGameplayLogic(
 
 	const lastUsedMoveMethodRef = useRef<"click" | "drag" | null>(null);
 
-	const animationRef = useRef<HTMLDivElement | null>(null);
-	const postAnimationActionRef = useRef<(() => void) | null>(null);
-
-	const animationStartingSquareRef = useRef<ChessboardSquareIndex | null>(
-		null
-	);
-	const animationDestinationSquareRef = useRef<ChessboardSquareIndex | null>(
-		null
-	);
-
-	const [animationSquare, setAnimationSquare] =
-		useState<ChessboardSquareIndex | null>(null);
+	const { prepareAnimationData } = useAnimationLogic(orientation);
 
 	const gameplaySettings = useGameplaySettings();
 
@@ -123,10 +113,6 @@ function useMultiplayerGameplayLogic(
 	useEffect(() => {
 		handleClickToMove();
 	}, [prevClickedSquare, clickedSquare]);
-
-	useEffect(() => {
-		handlePieceAnimation();
-	}, [animationSquare]);
 
 	async function handleClickToMove() {
 		clearSquaresStyling();
@@ -227,63 +213,6 @@ function useMultiplayerGameplayLogic(
 	async function synchronisePositionIndex() {
 		const positionList = await fetchPositionList(gameId);
 		setPositionIndex(positionList.length - 1);
-	}
-
-	function handlePieceAnimation() {
-		console.log(animationSquare);
-		console.log(animationRef);
-		console.log(animationStartingSquareRef.current);
-		console.log(animationDestinationSquareRef.current);
-
-		if (!animationSquare) return;
-		if (!animationStartingSquareRef.current) return;
-		if (!animationDestinationSquareRef.current) return;
-		if (!animationRef) return;
-
-		const startingSquare = animationStartingSquareRef.current;
-		const destinationSquare = animationDestinationSquareRef.current;
-
-		const fallbackPostAnimationFunction = () => {}
-		const postAnimationFunction = () => {
-			postAnimationActionRef.current?.();
-			performPostAnimationCleanup();
-		}
-
-		animatePieceImage(
-			animationRef,
-			startingSquare,
-			destinationSquare,
-			orientation,
-			postAnimationActionRef.current ? postAnimationFunction : fallbackPostAnimationFunction
-		);
-	}
-
-	function updateAnimationStartingSquare(square: ChessboardSquareIndex) {
-		animationStartingSquareRef.current = square;
-	}
-
-	function updateAnimationDestinationSquare(square: ChessboardSquareIndex) {
-		animationDestinationSquareRef.current = square;
-	}
-
-	function updatePostAnimationCallback(callbackFn: () => void) {
-		postAnimationActionRef.current = callbackFn;
-	}
-
-	function clearPostAnimationCallback() {
-		postAnimationActionRef.current = null;
-	}
-
-	function clearAnimationStartingSquare() {
-		animationStartingSquareRef.current = null;
-	}
-
-	function clearAnimationDestinationSquare() {
-		animationDestinationSquareRef.current = null;
-	}
-
-	function clearAnimationRef() {
-		animationRef.current = null;
 	}
 
 	function storeBoardStateBeforePromotion(
@@ -397,15 +326,6 @@ function useMultiplayerGameplayLogic(
 
 			lastUsedMoveMethodRef.current = "drag";
 		}
-	}
-
-	function performPostAnimationCleanup() {
-		clearPostAnimationCallback();
-		clearAnimationStartingSquare();
-		clearAnimationDestinationSquare();
-		clearAnimationRef();
-
-		setAnimationSquare(null);
 	}
 
 	function sendRegularMove(
@@ -595,20 +515,12 @@ function useMultiplayerGameplayLogic(
 		const startingSquare = eventData["move_data"]["starting_square"];
 		const destinationSquare = eventData["move_data"]["destination_square"];
 
-		prepareAnimationData(eventData, startingSquare, destinationSquare);
-	}
-
-	function prepareAnimationData(eventData: MoveMadeEventData, startingSquare: ChessboardSquareIndex, destinationSquare: ChessboardSquareIndex) {
 		const postAnimationCallback = () => {
 			setPositionIndex(eventData["new_position_index"]);
 			setSideToMove(eventData["new_side_to_move"]);
-		};
+		}
 
-		updatePostAnimationCallback(postAnimationCallback);
-		updateAnimationStartingSquare(startingSquare);
-		updateAnimationDestinationSquare(destinationSquare);
-
-		setAnimationSquare(startingSquare);
+		prepareAnimationData(startingSquare, destinationSquare, postAnimationCallback);
 	}
 
 	function handleOnMessage(event: MessageEvent) {
@@ -719,19 +631,6 @@ function useMultiplayerGameplayLogic(
 				promotedPiece
 			);
 		},
-
-		animationRef,
-		animationSquare,
-
-		animationDataUpdaters: {
-			updateAnimationStartingSquare,
-			updateAnimationDestinationSquare,
-			updatePostAnimationCallback,
-			setAnimationSquare,
-		},
-
-		handlePieceAnimation,
-		performPostAnimationCleanup,
 	};
 }
 
