@@ -86,7 +86,7 @@ function MoveNavigationButtons({
 			return;
 		}
 
-		if (positionIndex - 1 <= 0) {
+		if (positionIndex - 1 < 0) {
 			setPositionIndex((prevIndex) => {
 				previousPositionIndexRef.current = prevIndex;
 
