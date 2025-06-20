@@ -38,6 +38,7 @@ import {
 import useGameplaySettings from "./useGameplaySettings";
 import useAnimationLogic from "./gameLogic/useAnimationLogic";
 import usePlayerClocks from "./gameLogic/usePlayerClocks";
+import useClickedSquaresState from "./gameLogic/useClickedSquaresState";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
@@ -51,10 +52,12 @@ function useMultiplayerGameplayLogic(
 		enabled: true,
 	});
 
-	const [prevClickedSquare, setPrevClickedSquare] =
-		useState<ChessboardSquareIndex | null>(null);
-	const [clickedSquare, setClickedSquare] =
-		useState<ChessboardSquareIndex | null>(null);
+	const {
+		prevClickedSquare,
+		clickedSquare,
+		setPrevClickedSquare,
+		setClickedSquare,
+	} = useClickedSquaresState(handleClickToMove);
 
 	const [draggedSquare, setDraggedSquare] =
 		useState<ChessboardSquareIndex | null>(null);
@@ -110,10 +113,6 @@ function useMultiplayerGameplayLogic(
 	useEffect(() => {
 		handleOnDrop();
 	}, [draggedSquare, droppedSquare]);
-
-	useEffect(() => {
-		handleClickToMove();
-	}, [prevClickedSquare, clickedSquare]);
 
 	async function handleClickToMove() {
 		clearSquaresStyling();
