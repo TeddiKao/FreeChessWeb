@@ -9,7 +9,7 @@ function useClickedSquaresState(onClickCallback: () => void) {
 
 	useEffect(() => {
 		onClickCallback();
-	}, [prevClickedSquare, clickedSquare]);
+	}, [prevClickedSquare, clickedSquare, onClickCallback]);
 
 	return {
 		prevClickedSquare,
