@@ -27,6 +27,11 @@ function useGameEndState() {
 		setGameEndedCause("Insufficient material");
 	}
 
+    function handleDraw(drawCause: string) {
+        setHasGameEnded(true);
+        setGameEndedCause(drawCause);
+    }
+
 	function handleCheckmate(eventData: CheckmateEventData) {
 		setHasGameEnded(true);
 		setGameEndedCause("Checkmate");
