@@ -1,7 +1,9 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChessboardSquareIndex } from "../../types/general";
+import { animatePieceImage } from "../../utils/boardUtils";
+import { PieceColor } from "../../types/gameLogic";
 
-function useAnimationLogic() {
+function useAnimationLogic(orientation: PieceColor) {
     const animationRef = useRef<HTMLDivElement | null>(null);
 	const postAnimationActionRef = useRef<(() => void) | null>(null);
 
@@ -14,6 +16,34 @@ function useAnimationLogic() {
 
 	const [animationSquare, setAnimationSquare] =
 		useState<ChessboardSquareIndex | null>(null);
+
+    useEffect(() => {
+        handlePieceAnimation();
+    }, [animationSquare]);
+
+    function handlePieceAnimation() {
+		if (!animationSquare) return;
+		if (!animationStartingSquareRef.current) return;
+		if (!animationDestinationSquareRef.current) return;
+		if (!animationRef) return;
+
+		const startingSquare = animationStartingSquareRef.current;
+		const destinationSquare = animationDestinationSquareRef.current;
+
+		const fallbackPostAnimationFunction = () => {}
+		const postAnimationFunction = () => {
+			postAnimationActionRef.current?.();
+			performPostAnimationCleanup();
+		}
+
+		animatePieceImage(
+			animationRef,
+			startingSquare,
+			destinationSquare,
+			orientation,
+			postAnimationActionRef.current ? postAnimationFunction : fallbackPostAnimationFunction
+		);
+	}
 
     function performPostAnimationCleanup() {
 		clearPostAnimationCallback();
