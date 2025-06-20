@@ -86,6 +86,16 @@ function MoveNavigationButtons({
 			return;
 		}
 
+		if (positionIndex - 1 <= 0) {
+			setPositionIndex((prevIndex) => {
+				previousPositionIndexRef.current = prevIndex;
+
+				return prevIndex;
+			});
+
+			return;
+		}
+
 		const postAnimationCallback = () => {
 			setPositionIndex((prevIndex) => {
 				previousPositionIndexRef.current = prevIndex;
@@ -100,8 +110,8 @@ function MoveNavigationButtons({
 			targetPosition["move_info"]["destination_square"];
 
 		prepareAnimationData(
-			startingSquare,
 			destinationSquare,
+			startingSquare,
 			postAnimationCallback
 		);
 	}
@@ -114,6 +124,16 @@ function MoveNavigationButtons({
 				return prevIndex + 1 < positionListLength
 					? prevIndex + 1
 					: prevIndex;
+			});
+
+			return;
+		}
+
+		if (positionIndex + 1 >= positionListLength) {
+			setPositionIndex((prevIndex) => {
+				previousPositionIndexRef.current = prevIndex;
+
+				return prevIndex;
 			});
 
 			return;
