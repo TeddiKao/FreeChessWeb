@@ -13,6 +13,8 @@ import {
 import { SquareProps } from "../../interfaces/chessboard.ts";
 import { OptionalValue } from "../../types/general.ts";
 import { capitaliseFirstLetter } from "../../utils/generalUtils.ts";
+import useAnimationLogic from "../../hooks/gameLogic/useAnimationLogic.ts";
+import { PieceColor } from "../../types/gameLogic.ts";
 
 function Square({
 	squareNumber,
@@ -30,13 +32,13 @@ function Square({
 	previousDroppedSquare,
 	orientation,
 	squareSize,
-	animatingPieceSquare,
 	animatingPieceStyle,
 	prevClickedSquare,
 	clickedSquare,
-	animationRef
 }: SquareProps) {
 	let startingSquare: OptionalValue<string> = null;
+
+	const { animationRef, animationSquare } = useAnimationLogic(orientation as PieceColor);
 
 	const [popupIsOpen, setPopupIsOpen] = useState<boolean>(
 		displayPromotionPopup
@@ -191,7 +193,7 @@ function Square({
 					<div
 						ref={
 							Number(squareNumber) ===
-							Number(animatingPieceSquare)
+							Number(animationSquare)
 								? animationRef
 								: undefined
 						}
@@ -199,7 +201,7 @@ function Square({
 					>
 						<img
 							style={
-								Number(animatingPieceSquare) ===
+								Number(animationSquare) ===
 								Number(squareNumber)
 									? animatingPieceStyle
 									: undefined
