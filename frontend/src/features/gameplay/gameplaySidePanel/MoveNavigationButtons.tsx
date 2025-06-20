@@ -8,6 +8,8 @@ import {
 } from "../../../types/general";
 import { ArrowKeys } from "../../../enums/general";
 import { PositionList } from "../../../interfaces/gameLogic";
+import useAnimationLogic from "../../../hooks/gameLogic/useAnimationLogic";
+import { PieceColor } from "../../../types/gameLogic";
 
 type MoveNavigationButtonsProps = {
 	setPositionIndex: StateSetterFunction<number>;
@@ -16,28 +18,22 @@ type MoveNavigationButtonsProps = {
 
 	positionList?: PositionList;
 	positionIndex?: number;
-	updateAnimationStartingSquare?: (
-		startingSquare: ChessboardSquareIndex
-	) => void;
-	updateAnimationDestinationSquare?: (
-		destinationSquare: ChessboardSquareIndex
-	) => void;
-	updatePostAnimationCallback?: (callbackFn: () => void) => void;
-	setAnimationSquare: StateSetterFunction<ChessboardSquareIndex | null>;
-};
+
+	orientation: PieceColor;
+}
 
 function MoveNavigationButtons({
 	setPositionIndex,
 	positionListLength,
 	previousPositionIndexRef,
 
-	updateAnimationStartingSquare,
-	updateAnimationDestinationSquare,
-	updatePostAnimationCallback,
-	setAnimationSquare,
 	positionList,
 	positionIndex,
+
+	orientation
 }: MoveNavigationButtonsProps) {
+	const { prepareAnimationData } = useAnimationLogic(orientation)
+
 	function handleKeyDown(event: KeyboardEvent) {
 		switch (event.key) {
 			case ArrowKeys.ARROW_LEFT:
@@ -101,11 +97,7 @@ function MoveNavigationButtons({
 		const destinationSquare =
 			targetPosition["move_info"]["destination_square"];
 
-		updatePostAnimationCallback?.(postAnimationCallback);
-		updateAnimationStartingSquare?.(destinationSquare);
-		updateAnimationDestinationSquare?.(startingSquare);
-
-		setAnimationSquare?.(destinationSquare);
+		prepareAnimationData(startingSquare, destinationSquare, postAnimationCallback);
 	}
 
 	function handleNextMove() {
@@ -136,11 +128,7 @@ function MoveNavigationButtons({
 		const destinationSquare =
 			targetPosition["move_info"]["destination_square"];
 
-		updatePostAnimationCallback?.(postAnimationCallback);
-		updateAnimationStartingSquare?.(startingSquare);
-		updateAnimationDestinationSquare?.(destinationSquare);
-
-		setAnimationSquare?.(startingSquare);
+		prepareAnimationData(startingSquare, destinationSquare, postAnimationCallback);
 	}
 
 	function backToCurrentPosition() {
