@@ -68,9 +68,6 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
 	onPromotion: (color: PieceColor, promotedPiece: PieceType) => void;
 	shouldShowPromotionPopup: boolean;
 	promotionSquare: OptionalValue<ChessboardSquareIndex>;
-
-	animationSquare: OptionalValue<ChessboardSquareIndex>;
-	animationRef: RefObject<HTMLDivElement | null>;
 }
 
 interface GameReplayChessboardProps extends DisplayChessboardProps {
@@ -105,8 +102,6 @@ interface EmptySquareProps {
 
 	squareSize?: number;
 	animatingPieceStyle?: Record<string, unknown>;
-	animatingPieceSquare: OptionalValue<ChessboardSquareIndex>;
-	animationRef: RefObject<HTMLDivElement | null>;
 }
 
 interface FilledSquareProps {
