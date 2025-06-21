@@ -1,7 +1,7 @@
 import { websocketBaseURL } from "../constants/urls";
 import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
 import { CheckmateEventData, MoveListUpdateEventData, MoveMadeEventData, PositionListUpdateEventData, TimerChangedEventData } from "../interfaces/gameLogic";
-import { ParsedFENString } from "../types/gameLogic";
+import { ParsedFENString, PieceType } from "../types/gameLogic";
 import { ChessboardSquareIndex } from "../types/general";
 import { getAccessToken } from "../utils/tokenUtils";
 import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
@@ -16,6 +16,8 @@ interface MultiplayerGameplayWebsocketHookProps {
 	handleDraw: (drawCause: string) => void;
 	handlePlayerTimeout: (eventData: any) => void;
 	handleTimerChanged: (eventData: TimerChangedEventData) => void;
+
+    performPostPromotionCleanup: () => void;
 }
 
 function useMultiplayerGameplayWebsocket({
@@ -28,6 +30,7 @@ function useMultiplayerGameplayWebsocket({
 	handlePlayerTimeout,
 	handleTimerChanged,
 	handleDraw,
+    performPostPromotionCleanup
 }: MultiplayerGameplayWebsocketHookProps) {
 	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
 	const { socketRef: gameWebsocketRef } = useWebsocketWithLifecycle({
@@ -60,6 +63,42 @@ function useMultiplayerGameplayWebsocket({
 		};
 
 		gameWebsocketRef.current?.send(JSON.stringify(moveDetails));
+	}
+
+    function sendPromotionMove(
+		startingSquare: ChessboardSquareIndex,
+		destinationSquare: ChessboardSquareIndex,
+		promotedPiece: PieceType
+	) {
+		if (!parsedFEN) return;
+
+		const boardPlacement = parsedFEN["board_placement"];
+
+		if (!boardPlacement) return;
+
+		console.log(startingSquare.toString());
+		console.log(boardPlacement);
+
+		const pieceInfo = boardPlacement[startingSquare.toString()];
+		const pieceColor = pieceInfo["piece_color"];
+		const pieceType = pieceInfo["piece_type"];
+
+		const moveDetails = {
+			type: "move_made",
+
+			piece_color: pieceColor,
+			piece_type: pieceType,
+			starting_square: startingSquare.toString(),
+			destination_square: destinationSquare.toString(),
+
+			additional_info: {
+				promoted_piece: promotedPiece,
+			},
+		};
+
+		gameWebsocketRef?.current?.send(JSON.stringify(moveDetails));
+
+		performPostPromotionCleanup();
 	}
 
 	function handleOnMessage(event: MessageEvent) {
