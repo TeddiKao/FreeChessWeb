@@ -12,9 +12,6 @@ import {
 	fetchPositionList,
 	fetchSideToMove,
 } from "../utils/apiUtils";
-import { websocketBaseURL } from "../constants/urls";
-import { getAccessToken } from "../utils/tokenUtils";
-import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
 import { ChessboardSquareIndex } from "../types/general";
 import {
 	BoardPlacement,
@@ -22,7 +19,6 @@ import {
 	PieceColor,
 	PieceType,
 } from "../types/gameLogic";
-import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
 import { isPawnPromotion } from "../utils/moveUtils";
 import {
 	clearSquaresStyling,
