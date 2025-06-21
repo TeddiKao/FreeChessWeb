@@ -98,6 +98,8 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 	function clearPromotionSquare() {
 		promotionSquareRef.current = null;
 	}
+
+    return { preparePromotion, cancelPromotion, performPostPromotionCleanup };
 }
 
 export default usePromotionLogic;
