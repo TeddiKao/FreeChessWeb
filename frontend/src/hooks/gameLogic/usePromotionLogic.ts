@@ -1,11 +1,16 @@
 import { useRef, useState } from "react";
-import { BoardPlacement, ParsedFENString, PieceColor } from "../../types/gameLogic";
+import {
+	BoardPlacement,
+	ParsedFENString,
+	PieceColor,
+	PieceType,
+} from "../../types/gameLogic";
 import { ChessboardSquareIndex } from "../../types/general";
 import { getRank } from "../../utils/boardUtils";
 import { isPawnPromotion } from "../../utils/moveUtils";
 
 function usePromotionLogic(parsedFEN: ParsedFENString) {
-    const boardStateBeforePromotion = useRef<BoardPlacement | null>(null);
+	const boardStateBeforePromotion = useRef<BoardPlacement | null>(null);
 	const prePromotionBoardState = useRef<ParsedFENString | null>(null);
 
 	const promotionSquareRef = useRef<ChessboardSquareIndex | null>(null);
@@ -14,7 +19,7 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 	const [shouldShowPromotionPopup, setShouldShowPromotionPopup] =
 		useState(false);
 
-    function storeBoardStateBeforePromotion(
+	function storeBoardStateBeforePromotion(
 		color: PieceColor,
 		destinationSquare: ChessboardSquareIndex
 	) {
@@ -27,7 +32,7 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 		boardStateBeforePromotion.current = parsedFEN["board_placement"];
 	}
 
-    function cancelPromotion() {
+	function cancelPromotion() {
 		setShouldShowPromotionPopup(false);
 
 		clearPrePromotionBoardState();
@@ -54,7 +59,7 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 		updateOriginalPawnSquare(startingSquare);
 	}
 
-    function updatePrePromotionBoardState(
+	function updatePrePromotionBoardState(
 		startingSquare: ChessboardSquareIndex,
 		destinationSquare: ChessboardSquareIndex
 	) {
@@ -75,7 +80,7 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 		prePromotionBoardState.current = prePromotionParsedFEN;
 	}
 
-    function updatePromotionSquare(square: ChessboardSquareIndex) {
+	function updatePromotionSquare(square: ChessboardSquareIndex) {
 		promotionSquareRef.current = square;
 	}
 
@@ -99,7 +104,32 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 		promotionSquareRef.current = null;
 	}
 
-    return { preparePromotion, cancelPromotion, performPostPromotionCleanup };
+	function handlePawnPromotion(
+		sendPromotionMove: (
+			originalPawnSquare: ChessboardSquareIndex,
+			promotionSquare: ChessboardSquareIndex,
+			pieceType: PieceType
+		) => void
+	) {
+		if (!parsedFEN) return;
+
+		if (!originalPawnSquareRef.current) return;
+		if (!promotionSquareRef.current) return;
+
+		const originalPawnSquare = originalPawnSquareRef.current;
+		const promotionSquare = promotionSquareRef.current;
+
+		// @ts-ignore
+		const autoQueen = gameplaySettings["auto_queen"];
+
+		if (autoQueen) {
+			sendPromotionMove(originalPawnSquare, promotionSquare, "queen");
+		} else {
+			setShouldShowPromotionPopup(true);
+		}
+	}
+
+	return { preparePromotion, cancelPromotion, performPostPromotionCleanup, handlePawnPromotion };
 }
 
 export default usePromotionLogic;
