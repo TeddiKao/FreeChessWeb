@@ -214,6 +214,55 @@ function useMultiplayerGameplayLogic(
 		performPostMoveCleanup("drag");
 	}
 
+	async function processMove(moveMethod: "click" | "drag") {
+		clearSquaresStyling();
+
+		const usingDrag = moveMethod === "drag";
+		const startingSquare = usingDrag ? draggedSquare : prevClickedSquare;
+		const destinationSquare = usingDrag ? droppedSquare : clickedSquare;
+
+		if (!startingSquare) return;
+
+		if (!destinationSquare) {
+			displayLegalMoves(startingSquare);
+
+			return;
+		}
+
+		if (startingSquare === destinationSquare) {
+			performPostMoveCleanup(moveMethod);
+
+			return;
+		}
+
+		const isValidMove = await performMoveValidation(
+			startingSquare,
+			destinationSquare
+		);
+
+		if (!isValidMove) return;
+
+		const boardPlacement = parsedFEN["board_placement"];
+		const pieceInfo = boardPlacement[startingSquare.toString()];
+		const pieceColor = pieceInfo["piece_color"];
+		const pieceType = pieceInfo["piece_type"];
+
+		if (pieceType.toLowerCase() === "pawn") {
+			storeBoardStateBeforePromotion(pieceColor, destinationSquare);
+
+			if (isPawnPromotion(pieceColor, getRank(destinationSquare))) {
+				preparePromotion(startingSquare, destinationSquare);
+				handlePawnPromotion();
+				performPostMoveCleanup(moveMethod);
+
+				return;
+			}
+		}
+
+		sendRegularMove(startingSquare, destinationSquare);
+		performPostMoveCleanup(moveMethod);
+	}
+
 	async function synchronisePositionIndex() {
 		const positionList = await fetchPositionList(gameId);
 		setPositionIndex(positionList.length - 1);
