@@ -1,11 +1,14 @@
 import { websocketBaseURL } from "../constants/urls";
 import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
 import { CheckmateEventData, MoveListUpdateEventData, MoveMadeEventData, PositionListUpdateEventData, TimerChangedEventData } from "../interfaces/gameLogic";
+import { ParsedFENString } from "../types/gameLogic";
+import { ChessboardSquareIndex } from "../types/general";
 import { getAccessToken } from "../utils/tokenUtils";
 import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
 
 interface MultiplayerGameplayWebsocketHookProps {
     gameId: number;
+    parsedFEN: ParsedFENString;
 	handleMoveMade: (eventData: MoveMadeEventData) => void;
 	handleMoveListUpdated: (eventData: MoveListUpdateEventData) => void;
 	handlePositionListUpdated: (eventData: PositionListUpdateEventData) => void;
@@ -17,6 +20,7 @@ interface MultiplayerGameplayWebsocketHookProps {
 
 function useMultiplayerGameplayWebsocket({
     gameId,
+    parsedFEN,
 	handleMoveMade,
 	handlePositionListUpdated,
 	handleMoveListUpdated,
@@ -31,6 +35,32 @@ function useMultiplayerGameplayWebsocket({
 		onMessage: handleOnMessage,
 		enabled: true,
 	});
+
+    function sendRegularMove(
+		startingSquare: ChessboardSquareIndex,
+		destinationSquare: ChessboardSquareIndex
+	) {
+		if (!parsedFEN) return;
+
+		const boardPlacement = parsedFEN["board_placement"];
+
+		const pieceInfo = boardPlacement[startingSquare.toString()];
+		const pieceColor = pieceInfo["piece_color"];
+		const pieceType = pieceInfo["piece_type"];
+
+		const moveDetails = {
+			type: "move_made",
+
+			piece_color: pieceColor,
+			piece_type: pieceType,
+			starting_square: startingSquare.toString(),
+			destination_square: destinationSquare.toString(),
+
+			additional_info: {},
+		};
+
+		gameWebsocketRef.current?.send(JSON.stringify(moveDetails));
+	}
 
 	function handleOnMessage(event: MessageEvent) {
 		const eventData = JSON.parse(event.data);
@@ -82,6 +112,8 @@ function useMultiplayerGameplayWebsocket({
 				break;
 		}
 	}
+
+    return { sendRegularMove };
 }
 
 export default useMultiplayerGameplayWebsocket;
