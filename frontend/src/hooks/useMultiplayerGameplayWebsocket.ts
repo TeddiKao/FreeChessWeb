@@ -1,19 +1,22 @@
 import { websocketBaseURL } from "../constants/urls";
 import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
+import { CheckmateEventData, MoveListUpdateEventData, MoveMadeEventData, PositionListUpdateEventData, TimerChangedEventData } from "../interfaces/gameLogic";
 import { getAccessToken } from "../utils/tokenUtils";
 import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
 
 interface MultiplayerGameplayWebsocketHookProps {
-	handleMoveMade: () => void;
-	handleMoveListUpdated: () => void;
-	handlePositionListUpdated: () => void;
-	handleCheckmate: () => void;
-	handleDraw: () => void;
-	handlePlayerTimeout: () => void;
-	handleTimerChanged: () => void;
+    gameId: number;
+	handleMoveMade: (eventData: MoveMadeEventData) => void;
+	handleMoveListUpdated: (eventData: MoveListUpdateEventData) => void;
+	handlePositionListUpdated: (eventData: PositionListUpdateEventData) => void;
+	handleCheckmate: (eventData: CheckmateEventData) => void;
+	handleDraw: (drawCause: string) => void;
+	handlePlayerTimeout: (eventData: any) => void;
+	handleTimerChanged: (eventData: TimerChangedEventData) => void;
 }
 
 function useMultiplayerGameplayWebsocket({
+    gameId,
 	handleMoveMade,
 	handlePositionListUpdated,
 	handleMoveListUpdated,
