@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import {
-	CheckmateEventData,
 	MoveListUpdateEventData,
 	MoveMadeEventData,
 	PositionList,
 	PositionListUpdateEventData,
-	TimerChangedEventData,
 } from "../interfaces/gameLogic";
 import {
 	fetchLegalMoves,
@@ -13,7 +11,6 @@ import {
 	fetchMoveList,
 	fetchPositionList,
 	fetchSideToMove,
-	fetchTimer,
 } from "../utils/apiUtils";
 import { websocketBaseURL } from "../constants/urls";
 import { getAccessToken } from "../utils/tokenUtils";
@@ -21,19 +18,15 @@ import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
 import { ChessboardSquareIndex } from "../types/general";
 import {
 	BoardPlacement,
-	MoveInfo,
 	ParsedFENString,
 	PieceColor,
 	PieceType,
 } from "../types/gameLogic";
 import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
-import { getOppositeColor } from "../utils/gameLogic/general";
 import { isPawnPromotion } from "../utils/moveUtils";
 import {
-	animatePieceImage,
 	clearSquaresStyling,
 	getRank,
-	getSquareExists,
 } from "../utils/boardUtils";
 import useGameplaySettings from "./useGameplaySettings";
 import useAnimationLogic from "./gameLogic/useAnimationLogic";
@@ -59,10 +52,14 @@ function useMultiplayerGameplayLogic(
 		clickedSquare,
 		setPrevClickedSquare,
 		setClickedSquare,
-	} = useClickedSquaresState(handleClickToMove);
+	} = useClickedSquaresState(() => {
+		processMove("click");
+	});
 
 	const { draggedSquare, setDraggedSquare, droppedSquare, setDroppedSquare } =
-		useDraggedSquaresState(handleOnDrop);
+		useDraggedSquaresState(() => {
+			processMove("drag");
+		});
 
 	const { whitePlayerClock, blackPlayerClock, handleTimerChanged } =
 		usePlayerClocks(gameId, baseTime);
@@ -117,102 +114,6 @@ function useMultiplayerGameplayLogic(
 		updateSideToMove();
 		synchronisePositionIndex();
 	}, []);
-
-	async function handleClickToMove() {
-		clearSquaresStyling();
-
-		if (!prevClickedSquare) return;
-		if (!getSquareExists(prevClickedSquare, parsedFEN["board_placement"]))
-			return;
-
-		if (!clickedSquare) {
-			displayLegalMoves(prevClickedSquare!);
-
-			return;
-		}
-
-		if (prevClickedSquare === clickedSquare) {
-			setPrevClickedSquare(null);
-			setClickedSquare(null);
-
-			return;
-		}
-
-		const isValidMove = await performMoveValidation(
-			prevClickedSquare!,
-			clickedSquare!
-		);
-
-		console.log(isValidMove);
-
-		if (!isValidMove) return;
-
-		const boardPlacement = parsedFEN["board_placement"];
-		const pieceInfo = boardPlacement[prevClickedSquare.toString()];
-		const pieceColor = pieceInfo["piece_color"];
-		const pieceType = pieceInfo["piece_type"];
-
-		if (pieceType.toLowerCase() === "pawn") {
-			storeBoardStateBeforePromotion(pieceColor, clickedSquare);
-
-			if (isPawnPromotion(pieceColor, getRank(clickedSquare))) {
-				preparePromotion(prevClickedSquare, clickedSquare);
-				handlePawnPromotion();
-				performPostMoveCleanup("click");
-
-				return;
-			}
-		}
-
-		sendRegularMove(prevClickedSquare, clickedSquare);
-		performPostMoveCleanup("click");
-	}
-
-	async function handleOnDrop() {
-		clearSquaresStyling();
-
-		if (!draggedSquare) return;
-
-		if (!droppedSquare) {
-			displayLegalMoves(draggedSquare!);
-
-			return;
-		}
-
-		if (draggedSquare === droppedSquare) {
-			setDraggedSquare(null);
-			setDroppedSquare(null);
-
-			return;
-		}
-
-		const isValidMove = await performMoveValidation(
-			draggedSquare!,
-			droppedSquare!
-		);
-
-		if (!isValidMove) return;
-
-		const boardPlacement = parsedFEN["board_placement"];
-		const pieceInfo = boardPlacement[draggedSquare.toString()];
-		const pieceColor = pieceInfo["piece_color"];
-		const pieceType = pieceInfo["piece_type"];
-
-		if (pieceType.toLowerCase() === "pawn") {
-			storeBoardStateBeforePromotion(pieceColor, droppedSquare);
-
-			if (isPawnPromotion(pieceColor, getRank(droppedSquare))) {
-				preparePromotion(draggedSquare, droppedSquare);
-				handlePawnPromotion();
-				performPostMoveCleanup("drag");
-
-				return;
-			}
-		}
-
-		sendRegularMove(draggedSquare, droppedSquare);
-		performPostMoveCleanup("drag");
-	}
 
 	async function processMove(moveMethod: "click" | "drag") {
 		clearSquaresStyling();
