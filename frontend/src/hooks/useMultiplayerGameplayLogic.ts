@@ -34,19 +34,13 @@ import usePlayerClocks from "./gameLogic/usePlayerClocks";
 import useClickedSquaresState from "./gameLogic/useClickedSquaresState";
 import useDraggedSquaresState from "./gameLogic/useDraggedSquaresState";
 import useGameEndState from "./gameLogic/useGameEndState";
+import useMultiplayerGameplayWebsocket from "./useMultiplayerGameplayWebsocket";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
 	baseTime: number,
 	orientation: PieceColor
 ) {
-	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
-	const { socketRef: gameWebsocketRef } = useWebsocketWithLifecycle({
-		url: gameWebsocketUrl,
-		onMessage: handleOnMessage,
-		enabled: true,
-	});
-
 	const {
 		prevClickedSquare,
 		clickedSquare,
@@ -107,6 +101,19 @@ function useMultiplayerGameplayLogic(
 
 	const capturedMaterial = positionList[positionIndex]?.["captured_material"];
 	const promotedPieces = positionList[positionIndex]?.["promoted_pieces"];
+
+	const { sendPromotionMove, sendRegularMove } = useMultiplayerGameplayWebsocket({
+		gameId,
+		parsedFEN,
+		handleMoveMade,
+		handleMoveListUpdated,
+		handlePositionListUpdated,
+		handleCheckmate,
+		handlePlayerTimeout,
+		handleTimerChanged,
+		handleDraw,
+		performPostPromotionCleanup,
+	})
 
 	useEffect(() => {
 		updatePositionList();
@@ -227,42 +234,6 @@ function useMultiplayerGameplayLogic(
 		clearOriginalPawnSquare();
 	}
 
-	function sendPromotionMove(
-		startingSquare: ChessboardSquareIndex,
-		destinationSquare: ChessboardSquareIndex,
-		promotedPiece: PieceType
-	) {
-		if (!parsedFEN) return;
-
-		const boardPlacement = parsedFEN["board_placement"];
-
-		if (!boardPlacement) return;
-
-		console.log(startingSquare.toString());
-		console.log(boardPlacement);
-
-		const pieceInfo = boardPlacement[startingSquare.toString()];
-		const pieceColor = pieceInfo["piece_color"];
-		const pieceType = pieceInfo["piece_type"];
-
-		const moveDetails = {
-			type: "move_made",
-
-			piece_color: pieceColor,
-			piece_type: pieceType,
-			starting_square: startingSquare.toString(),
-			destination_square: destinationSquare.toString(),
-
-			additional_info: {
-				promoted_piece: promotedPiece,
-			},
-		};
-
-		gameWebsocketRef?.current?.send(JSON.stringify(moveDetails));
-
-		performPostPromotionCleanup();
-	}
-
 	function performPostPromotionCleanup() {
 		clearBoardStateBeforePromotion();
 		clearPrePromotionBoardState();
@@ -284,32 +255,6 @@ function useMultiplayerGameplayLogic(
 
 			lastUsedMoveMethodRef.current = "drag";
 		}
-	}
-
-	function sendRegularMove(
-		startingSquare: ChessboardSquareIndex,
-		destinationSquare: ChessboardSquareIndex
-	) {
-		if (!parsedFEN) return;
-
-		const boardPlacement = parsedFEN["board_placement"];
-
-		const pieceInfo = boardPlacement[startingSquare.toString()];
-		const pieceColor = pieceInfo["piece_color"];
-		const pieceType = pieceInfo["piece_type"];
-
-		const moveDetails = {
-			type: "move_made",
-
-			piece_color: pieceColor,
-			piece_type: pieceType,
-			starting_square: startingSquare.toString(),
-			destination_square: destinationSquare.toString(),
-
-			additional_info: {},
-		};
-
-		gameWebsocketRef.current?.send(JSON.stringify(moveDetails));
 	}
 
 	function updatePromotionSquare(square: ChessboardSquareIndex) {
@@ -438,57 +383,6 @@ function useMultiplayerGameplayLogic(
 			destinationSquare,
 			postAnimationCallback
 		);
-	}
-
-	function handleOnMessage(event: MessageEvent) {
-		const eventData = JSON.parse(event.data);
-		const eventType = eventData["type"];
-
-		switch (eventType) {
-			case GameplayWebSocketEventTypes.MOVE_MADE:
-				handleMoveMade(eventData);
-				break;
-
-			case GameplayWebSocketEventTypes.TIMER_DECREMENTED:
-			case GameplayWebSocketEventTypes.TIMER_INCREMENTED:
-				handleTimerChanged(eventData);
-				break;
-
-			case GameplayWebSocketEventTypes.POSITION_LIST_UPDATED:
-				handlePositionListUpdated(eventData);
-				break;
-
-			case GameplayWebSocketEventTypes.MOVE_LIST_UPDATED:
-				handleMoveListUpdated(eventData);
-				break;
-
-			case GameplayWebSocketEventTypes.PLAYER_CHECKMATED:
-				handleCheckmate(eventData);
-				break;
-
-			case GameplayWebSocketEventTypes.PLAYER_STALEMATED:
-				handleDraw("Stalemate");
-				break;
-
-			case GameplayWebSocketEventTypes.THREEFOLD_REPETITION_DETECTED:
-				handleDraw("Repetition")
-				break;
-
-			case GameplayWebSocketEventTypes.FIFTY_MOVE_RULE_DETECTED:
-				handleDraw("50-move-rule")
-				break;
-
-			case GameplayWebSocketEventTypes.INSUFFICIENT_MATERIAL:
-				handleDraw("Insufficient material")
-				break;
-
-			case GameplayWebSocketEventTypes.PLAYER_TIMEOUT:
-				handlePlayerTimeout(eventData);
-				break;
-
-			default:
-				break;
-		}
 	}
 
 	return {
