@@ -22,19 +22,6 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 
     const gameplaySettings = useGameplaySettings();
 
-	function storeBoardStateBeforePromotion(
-		color: PieceColor,
-		destinationSquare: ChessboardSquareIndex
-	) {
-		if (!parsedFEN) return;
-
-		const isPromotion = isPawnPromotion(color, getRank(destinationSquare));
-
-		if (!isPromotion) return;
-
-		boardStateBeforePromotion.current = parsedFEN["board_placement"];
-	}
-
 	function cancelPromotion() {
 		setShouldShowPromotionPopup(false);
 
