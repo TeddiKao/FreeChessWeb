@@ -152,7 +152,7 @@ function useMultiplayerGameplayWebsocket({
 		}
 	}
 
-    return { sendRegularMove };
+    return { sendRegularMove, sendPromotionMove };
 }
 
 export default useMultiplayerGameplayWebsocket;
