@@ -184,8 +184,6 @@ function Square({
 				pieceType
 			)}-dragging.svg`;
 
-			console.log(squareNumber, animationSquare);
-
 			squareHTML = (
 				<>
 					<DragPreviewImage

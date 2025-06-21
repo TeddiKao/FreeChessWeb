@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
 	MoveListUpdateEventData,
 	MoveMadeEventData,
@@ -37,19 +37,22 @@ function useMultiplayerGameplayLogic(
 	baseTime: number,
 	orientation: PieceColor
 ) {
+	const dragMoveCallback = useCallback(() => {
+		processMove("drag");
+	}, [processMove])
+
+	const clickMoveCallback = useCallback(() => {
+		processMove("click");
+	}, [processMove]);
+
 	const {
 		prevClickedSquare,
 		clickedSquare,
 		setPrevClickedSquare,
 		setClickedSquare,
-	} = useClickedSquaresState(() => {
-		processMove("click");
-	});
-
+	} = useClickedSquaresState(clickMoveCallback);
 	const { draggedSquare, setDraggedSquare, droppedSquare, setDroppedSquare } =
-		useDraggedSquaresState(() => {
-			processMove("drag");
-		});
+		useDraggedSquaresState(dragMoveCallback);
 
 	const { whitePlayerClock, blackPlayerClock, handleTimerChanged } =
 		usePlayerClocks(gameId, baseTime);
