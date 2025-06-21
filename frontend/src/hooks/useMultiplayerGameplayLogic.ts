@@ -14,14 +14,11 @@ import {
 } from "../utils/apiUtils";
 import { ChessboardSquareIndex } from "../types/general";
 import {
-	BoardPlacement,
-	ParsedFENString,
 	PieceColor,
 	PieceType,
 } from "../types/gameLogic";
 import { isPawnPromotion } from "../utils/moveUtils";
 import { clearSquaresStyling, getRank } from "../utils/boardUtils";
-import useGameplaySettings from "./useGameplaySettings";
 import useAnimationLogic from "./gameLogic/useAnimationLogic";
 import usePlayerClocks from "./gameLogic/usePlayerClocks";
 import useClickedSquaresState from "./gameLogic/useClickedSquaresState";
@@ -67,8 +64,6 @@ function useMultiplayerGameplayLogic(
 
 	const { prepareAnimationData, animationRef, animationSquare } =
 		useAnimationLogic(orientation);
-
-	const gameplaySettings = useGameplaySettings();
 
 	const [positionList, setPositionList] = useState<PositionList>([]);
 	const [positionIndex, setPositionIndex] = useState(0);
