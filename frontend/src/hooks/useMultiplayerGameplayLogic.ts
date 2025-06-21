@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
 	MoveListUpdateEventData,
 	MoveMadeEventData,
@@ -28,6 +28,8 @@ import useClickedSquaresState from "./gameLogic/useClickedSquaresState";
 import useDraggedSquaresState from "./gameLogic/useDraggedSquaresState";
 import useGameEndState from "./gameLogic/useGameEndState";
 import useMultiplayerGameplayWebsocket from "./useMultiplayerGameplayWebsocket";
+import useClickMoveEffect from "./gameLogic/useClickMoveEffect";
+import useDragMoveEffect from "./gameLogic/useDragMoveEffect";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
@@ -111,62 +113,80 @@ function useMultiplayerGameplayLogic(
 		synchronisePositionIndex();
 	}, []);
 
-	const processMove = useCallback(async (moveMethod: "click" | "drag") => {
-		clearSquaresStyling();
+	const processMove = useCallback(
+		async (moveMethod: "click" | "drag") => {
+			clearSquaresStyling();
 
-		const usingDrag = moveMethod === "drag";
-		const startingSquare = usingDrag ? draggedSquare : prevClickedSquare;
-		const destinationSquare = usingDrag ? droppedSquare : clickedSquare;
+			const usingDrag = moveMethod === "drag";
+			const startingSquare = usingDrag
+				? draggedSquare
+				: prevClickedSquare;
+			const destinationSquare = usingDrag ? droppedSquare : clickedSquare;
 
-		if (!startingSquare) return;
+			if (!startingSquare) return;
 
-		if (!destinationSquare) {
-			displayLegalMoves(startingSquare);
+			if (!destinationSquare) {
+				displayLegalMoves(startingSquare);
 
-			return;
-		}
+				return;
+			}
 
-		if (startingSquare === destinationSquare) {
-			performPostMoveCleanup(moveMethod);
-
-			return;
-		}
-
-		const isValidMove = await performMoveValidation(
-			startingSquare,
-			destinationSquare
-		);
-
-		if (!isValidMove) return;
-
-		const boardPlacement = parsedFEN["board_placement"];
-		const pieceInfo = boardPlacement[startingSquare.toString()];
-		const pieceColor = pieceInfo["piece_color"];
-		const pieceType = pieceInfo["piece_type"];
-
-		if (pieceType.toLowerCase() === "pawn") {
-			storeBoardStateBeforePromotion(pieceColor, destinationSquare);
-
-			if (isPawnPromotion(pieceColor, getRank(destinationSquare))) {
-				preparePromotion(startingSquare, destinationSquare);
-				handlePawnPromotion();
+			if (startingSquare === destinationSquare) {
 				performPostMoveCleanup(moveMethod);
 
 				return;
 			}
-		}
 
-		sendRegularMove(startingSquare, destinationSquare);
-		performPostMoveCleanup(moveMethod);
-	}, [prevClickedSquare, clickedSquare, draggedSquare, droppedSquare]);
+			const isValidMove = await performMoveValidation(
+				startingSquare,
+				destinationSquare
+			);
 
-	useEffect(() => {
+			if (!isValidMove) return;
+
+			const boardPlacement = parsedFEN["board_placement"];
+			const pieceInfo = boardPlacement[startingSquare.toString()];
+			const pieceColor = pieceInfo["piece_color"];
+			const pieceType = pieceInfo["piece_type"];
+
+			if (pieceType.toLowerCase() === "pawn") {
+				storeBoardStateBeforePromotion(pieceColor, destinationSquare);
+
+				if (isPawnPromotion(pieceColor, getRank(destinationSquare))) {
+					preparePromotion(startingSquare, destinationSquare);
+					handlePawnPromotion();
+					performPostMoveCleanup(moveMethod);
+
+					return;
+				}
+			}
+
+			sendRegularMove(startingSquare, destinationSquare);
+			performPostMoveCleanup(moveMethod);
+		},
+		[prevClickedSquare, clickedSquare, draggedSquare, droppedSquare]
+	);
+
+	const dragMoveCallback = useCallback(() => {
 		processMove("drag");
-	}, [draggedSquare, droppedSquare, processMove]);
+	}, [processMove]);
 
-	useEffect(() => {
+	const clickMoveCallback = useCallback(() => {
 		processMove("click");
-	}, [prevClickedSquare, clickedSquare, processMove]);
+	}, [processMove]);
+
+	const clickDeps = useMemo(
+		() => [prevClickedSquare, clickedSquare],
+		[prevClickedSquare, clickedSquare]
+	);
+
+	const dragDeps = useMemo(
+		() => [draggedSquare, droppedSquare],
+		[draggedSquare, droppedSquare]
+	)
+
+	useClickMoveEffect(clickDeps, clickMoveCallback);
+	useDragMoveEffect(dragDeps, dragMoveCallback);
 
 	async function synchronisePositionIndex() {
 		const positionList = await fetchPositionList(gameId);
