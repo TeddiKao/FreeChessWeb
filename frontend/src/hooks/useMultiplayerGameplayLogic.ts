@@ -40,6 +40,7 @@ import useAnimationLogic from "./gameLogic/useAnimationLogic";
 import usePlayerClocks from "./gameLogic/usePlayerClocks";
 import useClickedSquaresState from "./gameLogic/useClickedSquaresState";
 import useDraggedSquaresState from "./gameLogic/useDraggedSquaresState";
+import useGameEndState from "./gameLogic/useGameEndState";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
@@ -66,9 +67,17 @@ function useMultiplayerGameplayLogic(
 	const { whitePlayerClock, blackPlayerClock, handleTimerChanged } =
 		usePlayerClocks(gameId, baseTime);
 
-	const [hasGameEnded, setHasGameEnded] = useState<boolean>(false);
-	const [gameEndedCause, setGameEndedCause] = useState<string>("");
-	const [gameWinner, setGameWinner] = useState<PieceColor | "">("");
+	const {
+		hasGameEnded,
+		gameEndedCause,
+		gameWinner,
+		setHasGameEnded,
+		setGameEndedCause,
+		setGameWinner,
+		handleDraw,
+		handleCheckmate,
+		handlePlayerTimeout,
+	} = useGameEndState();
 
 	const [sideToMove, setSideToMove] = useState<PieceColor>("white");
 
@@ -461,38 +470,6 @@ function useMultiplayerGameplayLogic(
 		setMoveList(eventData["new_move_list"]);
 	}
 
-	function handleStalemate() {
-		setHasGameEnded(true);
-		setGameEndedCause("Stalemate");
-	}
-
-	function handleThreefoldRepetition() {
-		setHasGameEnded(true);
-		setGameEndedCause("Repetition");
-	}
-
-	function handle50MoveRule() {
-		setHasGameEnded(true);
-		setGameEndedCause("50-move-rule");
-	}
-
-	function handleInsufficientMaterial() {
-		setHasGameEnded(true);
-		setGameEndedCause("Insufficient material");
-	}
-
-	function handleCheckmate(eventData: CheckmateEventData) {
-		setHasGameEnded(true);
-		setGameEndedCause("Checkmate");
-		setGameWinner(eventData["winning_color"] as PieceColor);
-	}
-
-	function handlePlayerTimeout(eventData: any) {
-		setHasGameEnded(true);
-		setGameEndedCause("Timeout");
-		setGameWinner(getOppositeColor(eventData["timeout_color"]));
-	}
-
 	function handleMoveMade(eventData: MoveMadeEventData) {
 		const startingSquare = eventData["move_data"]["starting_square"];
 		const destinationSquare = eventData["move_data"]["destination_square"];
@@ -536,19 +513,19 @@ function useMultiplayerGameplayLogic(
 				break;
 
 			case GameplayWebSocketEventTypes.PLAYER_STALEMATED:
-				handleStalemate();
+				handleDraw("Stalemate");
 				break;
 
 			case GameplayWebSocketEventTypes.THREEFOLD_REPETITION_DETECTED:
-				handleThreefoldRepetition();
+				handleDraw("Repetition")
 				break;
 
 			case GameplayWebSocketEventTypes.FIFTY_MOVE_RULE_DETECTED:
-				handle50MoveRule();
+				handleDraw("50-move-rule")
 				break;
 
 			case GameplayWebSocketEventTypes.INSUFFICIENT_MATERIAL:
-				handleInsufficientMaterial();
+				handleDraw("Insufficient material")
 				break;
 
 			case GameplayWebSocketEventTypes.PLAYER_TIMEOUT:
