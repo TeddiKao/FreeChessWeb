@@ -23,12 +23,7 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
     const gameplaySettings = useGameplaySettings();
 
 	function cancelPromotion() {
-		setShouldShowPromotionPopup(false);
-
-		clearPrePromotionBoardState();
-		clearBoardStateBeforePromotion();
-		clearPromotionSquare();
-		clearOriginalPawnSquare();
+		performPostPromotionCleanup();
 	}
 
 	function performPostPromotionCleanup() {
