@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
 import { ChessboardSquareIndex } from "../../types/general";
 
-function useClickedSquaresState(onClickCallback: () => void) {
+function useClickedSquaresState() {
 	const [prevClickedSquare, setPrevClickedSquare] =
 		useState<ChessboardSquareIndex | null>(null);
 	const [clickedSquare, setClickedSquare] =
 		useState<ChessboardSquareIndex | null>(null);
-
-	useEffect(() => {
-		onClickCallback();
-	}, [prevClickedSquare, clickedSquare, onClickCallback]);
 
 	return {
 		prevClickedSquare,

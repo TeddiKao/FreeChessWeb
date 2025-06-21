@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
 	MoveListUpdateEventData,
 	MoveMadeEventData,
@@ -20,10 +20,7 @@ import {
 	PieceType,
 } from "../types/gameLogic";
 import { isPawnPromotion } from "../utils/moveUtils";
-import {
-	clearSquaresStyling,
-	getRank,
-} from "../utils/boardUtils";
+import { clearSquaresStyling, getRank } from "../utils/boardUtils";
 import useGameplaySettings from "./useGameplaySettings";
 import useAnimationLogic from "./gameLogic/useAnimationLogic";
 import usePlayerClocks from "./gameLogic/usePlayerClocks";
@@ -31,6 +28,8 @@ import useClickedSquaresState from "./gameLogic/useClickedSquaresState";
 import useDraggedSquaresState from "./gameLogic/useDraggedSquaresState";
 import useGameEndState from "./gameLogic/useGameEndState";
 import useMultiplayerGameplayWebsocket from "./useMultiplayerGameplayWebsocket";
+import useClickMoveEffect from "./gameLogic/useClickMoveEffect";
+import useDragMoveEffect from "./gameLogic/useDragMoveEffect";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
@@ -42,14 +41,9 @@ function useMultiplayerGameplayLogic(
 		clickedSquare,
 		setPrevClickedSquare,
 		setClickedSquare,
-	} = useClickedSquaresState(() => {
-		processMove("click");
-	});
-
+	} = useClickedSquaresState();
 	const { draggedSquare, setDraggedSquare, droppedSquare, setDroppedSquare } =
-		useDraggedSquaresState(() => {
-			processMove("drag");
-		});
+		useDraggedSquaresState();
 
 	const { whitePlayerClock, blackPlayerClock, handleTimerChanged } =
 		usePlayerClocks(gameId, baseTime);
@@ -98,18 +92,19 @@ function useMultiplayerGameplayLogic(
 	const capturedMaterial = positionList[positionIndex]?.["captured_material"];
 	const promotedPieces = positionList[positionIndex]?.["promoted_pieces"];
 
-	const { sendPromotionMove, sendRegularMove } = useMultiplayerGameplayWebsocket({
-		gameId,
-		parsedFEN,
-		handleMoveMade,
-		handleMoveListUpdated,
-		handlePositionListUpdated,
-		handleCheckmate,
-		handlePlayerTimeout,
-		handleTimerChanged,
-		handleDraw,
-		performPostPromotionCleanup,
-	})
+	const { sendPromotionMove, sendRegularMove } =
+		useMultiplayerGameplayWebsocket({
+			gameId,
+			parsedFEN,
+			handleMoveMade,
+			handleMoveListUpdated,
+			handlePositionListUpdated,
+			handleCheckmate,
+			handlePlayerTimeout,
+			handleTimerChanged,
+			handleDraw,
+			performPostPromotionCleanup,
+		});
 
 	useEffect(() => {
 		updatePositionList();
@@ -118,54 +113,80 @@ function useMultiplayerGameplayLogic(
 		synchronisePositionIndex();
 	}, []);
 
-	async function processMove(moveMethod: "click" | "drag") {
-		clearSquaresStyling();
+	const processMove = useCallback(
+		async (moveMethod: "click" | "drag") => {
+			clearSquaresStyling();
 
-		const usingDrag = moveMethod === "drag";
-		const startingSquare = usingDrag ? draggedSquare : prevClickedSquare;
-		const destinationSquare = usingDrag ? droppedSquare : clickedSquare;
+			const usingDrag = moveMethod === "drag";
+			const startingSquare = usingDrag
+				? draggedSquare
+				: prevClickedSquare;
+			const destinationSquare = usingDrag ? droppedSquare : clickedSquare;
 
-		if (!startingSquare) return;
+			if (!startingSquare) return;
 
-		if (!destinationSquare) {
-			displayLegalMoves(startingSquare);
+			if (!destinationSquare) {
+				displayLegalMoves(startingSquare);
 
-			return;
-		}
+				return;
+			}
 
-		if (startingSquare === destinationSquare) {
-			performPostMoveCleanup(moveMethod);
-
-			return;
-		}
-
-		const isValidMove = await performMoveValidation(
-			startingSquare,
-			destinationSquare
-		);
-
-		if (!isValidMove) return;
-
-		const boardPlacement = parsedFEN["board_placement"];
-		const pieceInfo = boardPlacement[startingSquare.toString()];
-		const pieceColor = pieceInfo["piece_color"];
-		const pieceType = pieceInfo["piece_type"];
-
-		if (pieceType.toLowerCase() === "pawn") {
-			storeBoardStateBeforePromotion(pieceColor, destinationSquare);
-
-			if (isPawnPromotion(pieceColor, getRank(destinationSquare))) {
-				preparePromotion(startingSquare, destinationSquare);
-				handlePawnPromotion();
+			if (startingSquare === destinationSquare) {
 				performPostMoveCleanup(moveMethod);
 
 				return;
 			}
-		}
 
-		sendRegularMove(startingSquare, destinationSquare);
-		performPostMoveCleanup(moveMethod);
-	}
+			const isValidMove = await performMoveValidation(
+				startingSquare,
+				destinationSquare
+			);
+
+			if (!isValidMove) return;
+
+			const boardPlacement = parsedFEN["board_placement"];
+			const pieceInfo = boardPlacement[startingSquare.toString()];
+			const pieceColor = pieceInfo["piece_color"];
+			const pieceType = pieceInfo["piece_type"];
+
+			if (pieceType.toLowerCase() === "pawn") {
+				storeBoardStateBeforePromotion(pieceColor, destinationSquare);
+
+				if (isPawnPromotion(pieceColor, getRank(destinationSquare))) {
+					preparePromotion(startingSquare, destinationSquare);
+					handlePawnPromotion();
+					performPostMoveCleanup(moveMethod);
+
+					return;
+				}
+			}
+
+			sendRegularMove(startingSquare, destinationSquare);
+			performPostMoveCleanup(moveMethod);
+		},
+		[prevClickedSquare, clickedSquare, draggedSquare, droppedSquare]
+	);
+
+	const dragMoveCallback = useCallback(() => {
+		processMove("drag");
+	}, [processMove]);
+
+	const clickMoveCallback = useCallback(() => {
+		processMove("click");
+	}, [processMove]);
+
+	const clickDeps = useMemo(
+		() => [prevClickedSquare, clickedSquare],
+		[prevClickedSquare, clickedSquare]
+	);
+
+	const dragDeps = useMemo(
+		() => [draggedSquare, droppedSquare],
+		[draggedSquare, droppedSquare]
+	)
+
+	useClickMoveEffect(clickDeps, clickMoveCallback);
+	useDragMoveEffect(dragDeps, dragMoveCallback);
 
 	async function synchronisePositionIndex() {
 		const positionList = await fetchPositionList(gameId);

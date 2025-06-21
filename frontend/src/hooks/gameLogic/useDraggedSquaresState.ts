@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
 import { ChessboardSquareIndex } from "../../types/general";
 
-function useDraggedSquaresState(onDragDropCallback: () => void) {
+function useDraggedSquaresState() {
     const [draggedSquare, setDraggedSquare] =
 		useState<ChessboardSquareIndex | null>(null);
 	const [droppedSquare, setDroppedSquare] =
 		useState<ChessboardSquareIndex | null>(null);
-
-    useEffect(() => {
-        onDragDropCallback();
-    }, [draggedSquare, droppedSquare, onDragDropCallback]);
-
+        
     return {
         draggedSquare,
         setDraggedSquare,
