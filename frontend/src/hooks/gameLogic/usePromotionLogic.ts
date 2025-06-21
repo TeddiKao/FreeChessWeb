@@ -129,7 +129,16 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 		}
 	}
 
-	return { preparePromotion, cancelPromotion, performPostPromotionCleanup, handlePawnPromotion };
+	return {
+		preparePromotion,
+		cancelPromotion,
+		performPostPromotionCleanup,
+		handlePawnPromotion,
+        shouldShowPromotionPopup,
+        promotionSquareRef,
+        prePromotionBoardState,
+        originalPawnSquareRef,
+	};
 }
 
 export default usePromotionLogic;
