@@ -30,6 +30,7 @@ import useGameEndState from "./gameLogic/useGameEndState";
 import useMultiplayerGameplayWebsocket from "./useMultiplayerGameplayWebsocket";
 import useClickMoveEffect from "./gameLogic/useClickMoveEffect";
 import useDragMoveEffect from "./gameLogic/useDragMoveEffect";
+import usePromotionLogic from "./gameLogic/usePromotionLogic";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
@@ -62,15 +63,6 @@ function useMultiplayerGameplayLogic(
 
 	const [sideToMove, setSideToMove] = useState<PieceColor>("white");
 
-	const boardStateBeforePromotion = useRef<BoardPlacement | null>(null);
-	const prePromotionBoardState = useRef<ParsedFENString | null>(null);
-
-	const promotionSquareRef = useRef<ChessboardSquareIndex | null>(null);
-	const originalPawnSquareRef = useRef<ChessboardSquareIndex | null>(null);
-
-	const [shouldShowPromotionPopup, setShouldShowPromotionPopup] =
-		useState(false);
-
 	const lastUsedMoveMethodRef = useRef<"click" | "drag" | null>(null);
 
 	const { prepareAnimationData, animationRef, animationSquare } =
@@ -91,6 +83,17 @@ function useMultiplayerGameplayLogic(
 
 	const capturedMaterial = positionList[positionIndex]?.["captured_material"];
 	const promotedPieces = positionList[positionIndex]?.["promoted_pieces"];
+
+	const {
+		preparePromotion,
+		cancelPromotion,
+		performPostPromotionCleanup,
+		handlePawnPromotion,
+		promotionSquareRef,
+		originalPawnSquareRef,
+		prePromotionBoardState,
+		shouldShowPromotionPopup,
+	} = usePromotionLogic(parsedFEN);
 
 	const { sendPromotionMove, sendRegularMove } =
 		useMultiplayerGameplayWebsocket({
@@ -150,11 +153,9 @@ function useMultiplayerGameplayLogic(
 			const pieceType = pieceInfo["piece_type"];
 
 			if (pieceType.toLowerCase() === "pawn") {
-				storeBoardStateBeforePromotion(pieceColor, destinationSquare);
-
 				if (isPawnPromotion(pieceColor, getRank(destinationSquare))) {
 					preparePromotion(startingSquare, destinationSquare);
-					handlePawnPromotion();
+					handlePawnPromotion(sendPromotionMove);
 					performPostMoveCleanup(moveMethod);
 
 					return;
@@ -183,7 +184,7 @@ function useMultiplayerGameplayLogic(
 	const dragDeps = useMemo(
 		() => [draggedSquare, droppedSquare],
 		[draggedSquare, droppedSquare]
-	)
+	);
 
 	useClickMoveEffect(clickDeps, clickMoveCallback);
 	useDragMoveEffect(dragDeps, dragMoveCallback);
@@ -191,73 +192,6 @@ function useMultiplayerGameplayLogic(
 	async function synchronisePositionIndex() {
 		const positionList = await fetchPositionList(gameId);
 		setPositionIndex(positionList.length - 1);
-	}
-
-	function storeBoardStateBeforePromotion(
-		color: PieceColor,
-		destinationSquare: ChessboardSquareIndex
-	) {
-		if (!parsedFEN) return;
-
-		const isPromotion = isPawnPromotion(color, getRank(destinationSquare));
-
-		if (!isPromotion) return;
-
-		boardStateBeforePromotion.current = parsedFEN["board_placement"];
-	}
-
-	function handlePawnPromotion() {
-		if (!parsedFEN) return;
-
-		if (!originalPawnSquareRef.current) return;
-		if (!promotionSquareRef.current) return;
-
-		const originalPawnSquare = originalPawnSquareRef.current;
-		const promotionSquare = promotionSquareRef.current;
-
-		// @ts-ignore
-		const autoQueen = gameplaySettings["auto_queen"];
-
-		if (autoQueen) {
-			sendPromotionMove(originalPawnSquare, promotionSquare, "queen");
-		} else {
-			setShouldShowPromotionPopup(true);
-		}
-	}
-
-	function preparePromotion(
-		startingSquare: ChessboardSquareIndex,
-		destinationSquare: ChessboardSquareIndex
-	) {
-		updatePrePromotionBoardState(startingSquare, destinationSquare);
-		updatePromotionSquare(destinationSquare);
-		updateOriginalPawnSquare(startingSquare);
-	}
-
-	function clearBoardStateBeforePromotion() {
-		boardStateBeforePromotion.current = null;
-	}
-
-	function clearPrePromotionBoardState() {
-		prePromotionBoardState.current = null;
-	}
-
-	function cancelPromotion() {
-		setShouldShowPromotionPopup(false);
-
-		clearPrePromotionBoardState();
-		clearBoardStateBeforePromotion();
-		clearPromotionSquare();
-		clearOriginalPawnSquare();
-	}
-
-	function performPostPromotionCleanup() {
-		clearBoardStateBeforePromotion();
-		clearPrePromotionBoardState();
-		clearPromotionSquare();
-		clearOriginalPawnSquare();
-
-		setShouldShowPromotionPopup(false);
 	}
 
 	function performPostMoveCleanup(moveMethod: "click" | "drag") {
@@ -272,43 +206,6 @@ function useMultiplayerGameplayLogic(
 
 			lastUsedMoveMethodRef.current = "drag";
 		}
-	}
-
-	function updatePromotionSquare(square: ChessboardSquareIndex) {
-		promotionSquareRef.current = square;
-	}
-
-	function updateOriginalPawnSquare(square: ChessboardSquareIndex) {
-		originalPawnSquareRef.current = square;
-	}
-
-	function clearOriginalPawnSquare() {
-		originalPawnSquareRef.current = null;
-	}
-
-	function clearPromotionSquare() {
-		promotionSquareRef.current = null;
-	}
-
-	function updatePrePromotionBoardState(
-		startingSquare: ChessboardSquareIndex,
-		destinationSquare: ChessboardSquareIndex
-	) {
-		if (!parsedFEN) return;
-
-		const prePromotionParsedFEN = structuredClone(parsedFEN);
-		const currentBoardPlacement = prePromotionParsedFEN["board_placement"];
-		const pawnInfo = currentBoardPlacement[startingSquare.toString()];
-
-		const prePromotionBoardPlacement = structuredClone(
-			currentBoardPlacement
-		);
-
-		delete prePromotionBoardPlacement[startingSquare.toString()];
-		prePromotionBoardPlacement[destinationSquare.toString()] = pawnInfo;
-
-		prePromotionParsedFEN["board_placement"] = prePromotionBoardPlacement;
-		prePromotionBoardState.current = prePromotionParsedFEN;
 	}
 
 	async function performMoveValidation(
