@@ -20,10 +20,7 @@ import {
 	PieceType,
 } from "../types/gameLogic";
 import { isPawnPromotion } from "../utils/moveUtils";
-import {
-	clearSquaresStyling,
-	getRank,
-} from "../utils/boardUtils";
+import { clearSquaresStyling, getRank } from "../utils/boardUtils";
 import useGameplaySettings from "./useGameplaySettings";
 import useAnimationLogic from "./gameLogic/useAnimationLogic";
 import usePlayerClocks from "./gameLogic/usePlayerClocks";
@@ -37,22 +34,14 @@ function useMultiplayerGameplayLogic(
 	baseTime: number,
 	orientation: PieceColor
 ) {
-	const dragMoveCallback = useCallback(() => {
-		processMove("drag");
-	}, [processMove])
-
-	const clickMoveCallback = useCallback(() => {
-		processMove("click");
-	}, [processMove]);
-
 	const {
 		prevClickedSquare,
 		clickedSquare,
 		setPrevClickedSquare,
 		setClickedSquare,
-	} = useClickedSquaresState(clickMoveCallback);
+	} = useClickedSquaresState();
 	const { draggedSquare, setDraggedSquare, droppedSquare, setDroppedSquare } =
-		useDraggedSquaresState(dragMoveCallback);
+		useDraggedSquaresState();
 
 	const { whitePlayerClock, blackPlayerClock, handleTimerChanged } =
 		usePlayerClocks(gameId, baseTime);
@@ -101,18 +90,19 @@ function useMultiplayerGameplayLogic(
 	const capturedMaterial = positionList[positionIndex]?.["captured_material"];
 	const promotedPieces = positionList[positionIndex]?.["promoted_pieces"];
 
-	const { sendPromotionMove, sendRegularMove } = useMultiplayerGameplayWebsocket({
-		gameId,
-		parsedFEN,
-		handleMoveMade,
-		handleMoveListUpdated,
-		handlePositionListUpdated,
-		handleCheckmate,
-		handlePlayerTimeout,
-		handleTimerChanged,
-		handleDraw,
-		performPostPromotionCleanup,
-	})
+	const { sendPromotionMove, sendRegularMove } =
+		useMultiplayerGameplayWebsocket({
+			gameId,
+			parsedFEN,
+			handleMoveMade,
+			handleMoveListUpdated,
+			handlePositionListUpdated,
+			handleCheckmate,
+			handlePlayerTimeout,
+			handleTimerChanged,
+			handleDraw,
+			performPostPromotionCleanup,
+		});
 
 	useEffect(() => {
 		updatePositionList();
@@ -121,7 +111,7 @@ function useMultiplayerGameplayLogic(
 		synchronisePositionIndex();
 	}, []);
 
-	async function processMove(moveMethod: "click" | "drag") {
+	const processMove = useCallback(async (moveMethod: "click" | "drag") => {
 		clearSquaresStyling();
 
 		const usingDrag = moveMethod === "drag";
@@ -168,7 +158,15 @@ function useMultiplayerGameplayLogic(
 
 		sendRegularMove(startingSquare, destinationSquare);
 		performPostMoveCleanup(moveMethod);
-	}
+	}, [prevClickedSquare, clickedSquare, draggedSquare, droppedSquare]);
+
+	useEffect(() => {
+		processMove("drag");
+	}, [draggedSquare, droppedSquare, processMove]);
+
+	useEffect(() => {
+		processMove("click");
+	}, [prevClickedSquare, clickedSquare, processMove]);
 
 	async function synchronisePositionIndex() {
 		const positionList = await fetchPositionList(gameId);
