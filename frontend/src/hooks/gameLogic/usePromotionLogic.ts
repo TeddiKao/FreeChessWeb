@@ -8,6 +8,7 @@ import {
 import { ChessboardSquareIndex } from "../../types/general";
 import { getRank } from "../../utils/boardUtils";
 import { isPawnPromotion } from "../../utils/moveUtils";
+import useGameplaySettings from "../useGameplaySettings";
 
 function usePromotionLogic(parsedFEN: ParsedFENString) {
 	const boardStateBeforePromotion = useRef<BoardPlacement | null>(null);
@@ -18,6 +19,8 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 
 	const [shouldShowPromotionPopup, setShouldShowPromotionPopup] =
 		useState(false);
+
+    const gameplaySettings = useGameplaySettings();
 
 	function storeBoardStateBeforePromotion(
 		color: PieceColor,
@@ -125,6 +128,7 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 		if (autoQueen) {
 			sendPromotionMove(originalPawnSquare, promotionSquare, "queen");
 		} else {
+            console.log("Showing promotion popup!")
 			setShouldShowPromotionPopup(true);
 		}
 	}
