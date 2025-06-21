@@ -260,6 +260,10 @@ function useMultiplayerGameplayLogic(
 
 		gameWebsocketRef?.current?.send(JSON.stringify(moveDetails));
 
+		performPostPromotionCleanup();
+	}
+
+	function performPostPromotionCleanup() {
 		clearBoardStateBeforePromotion();
 		clearPrePromotionBoardState();
 		clearPromotionSquare();
