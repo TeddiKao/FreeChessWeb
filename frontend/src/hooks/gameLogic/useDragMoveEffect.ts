@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 
-function useClickMoveEffect(dragDeps: any[], dragMoveCallback: () => void) {
+function useDragMoveEffect(dragDeps: any[], dragMoveCallback: () => void) {
     useEffect(() => {
         dragMoveCallback();
     }, [...dragDeps, dragMoveCallback]);
 }   
 
-export default useClickMoveEffect;
+export default useDragMoveEffect;
