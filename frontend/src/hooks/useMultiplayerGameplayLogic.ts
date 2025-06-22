@@ -66,8 +66,8 @@ function useMultiplayerGameplayLogic(
 		positionList,
 		positionIndex,
 		parsedFEN,
-		setPositionList,
 		setPositionIndex,
+		handlePositionListUpdated,
 		capturedMaterial,
 		promotedPieces,
 		previousDraggedSquare,
@@ -252,10 +252,6 @@ function useMultiplayerGameplayLogic(
 		const sideToMove = await fetchSideToMove(gameId);
 
 		setSideToMove(sideToMove);
-	}
-
-	function handlePositionListUpdated(eventData: PositionListUpdateEventData) {
-		setPositionList(eventData["new_position_list"]);
 	}
 
 	function handleMoveListUpdated(eventData: MoveListUpdateEventData) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PositionList } from "../../interfaces/gameLogic";
+import { PositionList, PositionListUpdateEventData } from "../../interfaces/gameLogic";
 import { fetchPositionList } from "../../utils/apiUtils";
 
 function usePositionList(gameId: number) {
@@ -31,6 +31,10 @@ function usePositionList(gameId: number) {
 		setPositionIndex(positionList.length - 1);
 	}
 
+	function handlePositionListUpdated(eventData: PositionListUpdateEventData) {
+		setPositionList(eventData["new_position_list"]);
+	}
+
 	return {
 		positionList,
 		setPositionList,
@@ -41,6 +45,7 @@ function usePositionList(gameId: number) {
 		previousDroppedSquare,
 		capturedMaterial,
 		promotedPieces,
+		handlePositionListUpdated,
 	};
 }
 
