@@ -2,23 +2,19 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
 	MoveListUpdateEventData,
 	MoveMadeEventData,
-	PositionList,
 	PositionListUpdateEventData,
 } from "../interfaces/gameLogic";
 import {
 	fetchLegalMoves,
 	fetchMoveIsValid,
 	fetchMoveList,
-	fetchPositionList,
 	fetchSideToMove,
 } from "../utils/apiUtils";
 import { ChessboardSquareIndex } from "../types/general";
-import {
-	PieceColor,
-	PieceType,
-} from "../types/gameLogic";
+import { PieceColor, PieceType } from "../types/gameLogic";
 import { isPawnPromotion } from "../utils/moveUtils";
 import { clearSquaresStyling, getRank } from "../utils/boardUtils";
+
 import useAnimationLogic from "./gameLogic/useAnimationLogic";
 import usePlayerClocks from "./gameLogic/usePlayerClocks";
 import useClickedSquaresState from "./gameLogic/useClickedSquaresState";
@@ -28,6 +24,7 @@ import useMultiplayerGameplayWebsocket from "./useMultiplayerGameplayWebsocket";
 import useClickMoveEffect from "./gameLogic/useClickMoveEffect";
 import useDragMoveEffect from "./gameLogic/useDragMoveEffect";
 import usePromotionLogic from "./gameLogic/usePromotionLogic";
+import usePositionList from "./gameLogic/usePositionList";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
@@ -65,19 +62,19 @@ function useMultiplayerGameplayLogic(
 	const { prepareAnimationData, animationRef, animationSquare } =
 		useAnimationLogic(orientation);
 
-	const [positionList, setPositionList] = useState<PositionList>([]);
-	const [positionIndex, setPositionIndex] = useState(0);
+	const {
+		positionList,
+		positionIndex,
+		parsedFEN,
+		setPositionList,
+		setPositionIndex,
+		capturedMaterial,
+		promotedPieces,
+		previousDraggedSquare,
+		previousDroppedSquare,
+	} = usePositionList(gameId);
 
 	const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
-
-	const parsedFEN = positionList[positionIndex]?.["position"];
-	const previousDraggedSquare =
-		positionList[positionIndex]?.["last_dragged_square"];
-	const previousDroppedSquare =
-		positionList[positionIndex]?.["last_dropped_square"];
-
-	const capturedMaterial = positionList[positionIndex]?.["captured_material"];
-	const promotedPieces = positionList[positionIndex]?.["promoted_pieces"];
 
 	const {
 		preparePromotion,
@@ -105,10 +102,8 @@ function useMultiplayerGameplayLogic(
 		});
 
 	useEffect(() => {
-		updatePositionList();
 		updateMoveList();
 		updateSideToMove();
-		synchronisePositionIndex();
 	}, []);
 
 	const processMove = useCallback(
@@ -184,11 +179,6 @@ function useMultiplayerGameplayLogic(
 	useClickMoveEffect(clickDeps, clickMoveCallback);
 	useDragMoveEffect(dragDeps, dragMoveCallback);
 
-	async function synchronisePositionIndex() {
-		const positionList = await fetchPositionList(gameId);
-		setPositionIndex(positionList.length - 1);
-	}
-
 	function performPostMoveCleanup(moveMethod: "click" | "drag") {
 		if (moveMethod === "click") {
 			setPrevClickedSquare(null);
@@ -250,12 +240,6 @@ function useMultiplayerGameplayLogic(
 			square.classList.add("legal-square");
 			console.log("Added!");
 		}
-	}
-
-	async function updatePositionList() {
-		const positionList = await fetchPositionList(gameId);
-
-		setPositionList(positionList);
 	}
 
 	async function updateMoveList() {
