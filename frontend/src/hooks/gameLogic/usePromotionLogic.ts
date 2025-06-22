@@ -1,17 +1,12 @@
 import { useRef, useState } from "react";
 import {
-	BoardPlacement,
 	ParsedFENString,
-	PieceColor,
 	PieceType,
 } from "../../types/gameLogic";
 import { ChessboardSquareIndex } from "../../types/general";
-import { getRank } from "../../utils/boardUtils";
-import { isPawnPromotion } from "../../utils/moveUtils";
 import useGameplaySettings from "../useGameplaySettings";
 
 function usePromotionLogic(parsedFEN: ParsedFENString) {
-	const boardStateBeforePromotion = useRef<BoardPlacement | null>(null);
 	const prePromotionBoardState = useRef<ParsedFENString | null>(null);
 
 	const promotionSquareRef = useRef<ChessboardSquareIndex | null>(null);
@@ -27,7 +22,6 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 	}
 
 	function performPostPromotionCleanup() {
-		clearBoardStateBeforePromotion();
 		clearPrePromotionBoardState();
 		clearPromotionSquare();
 		clearOriginalPawnSquare();
@@ -71,10 +65,6 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 
 	function updateOriginalPawnSquare(square: ChessboardSquareIndex) {
 		originalPawnSquareRef.current = square;
-	}
-
-	function clearBoardStateBeforePromotion() {
-		boardStateBeforePromotion.current = null;
 	}
 
 	function clearPrePromotionBoardState() {
