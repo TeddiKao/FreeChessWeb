@@ -17,6 +17,7 @@ function usePositionList(gameId: number) {
 
     useEffect(() => {
         updatePositionList();
+        synchronisePositionIndex();
     }, [gameId]);
 
     async function updatePositionList() {
@@ -24,6 +25,12 @@ function usePositionList(gameId: number) {
 
 		setPositionList(positionList);
 	}
+
+    async function synchronisePositionIndex() {
+		const positionList = await fetchPositionList(gameId);
+		setPositionIndex(positionList.length - 1);
+	}
+
 }
 
 export default usePositionList;
