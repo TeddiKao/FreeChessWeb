@@ -1,13 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-	MoveListUpdateEventData,
 	MoveMadeEventData,
-	PositionListUpdateEventData,
 } from "../interfaces/gameLogic";
 import {
 	fetchLegalMoves,
 	fetchMoveIsValid,
-	fetchMoveList,
 	fetchSideToMove,
 } from "../utils/apiUtils";
 import { ChessboardSquareIndex } from "../types/general";
@@ -25,6 +22,7 @@ import useClickMoveEffect from "./gameLogic/useClickMoveEffect";
 import useDragMoveEffect from "./gameLogic/useDragMoveEffect";
 import usePromotionLogic from "./gameLogic/usePromotionLogic";
 import usePositionList from "./gameLogic/usePositionList";
+import useMoveList from "./gameLogic/useMoveList";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
@@ -74,7 +72,7 @@ function useMultiplayerGameplayLogic(
 		previousDroppedSquare,
 	} = usePositionList(gameId);
 
-	const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
+	const { moveList, handleMoveListUpdated } = useMoveList(gameId);
 
 	const {
 		preparePromotion,
@@ -102,7 +100,6 @@ function useMultiplayerGameplayLogic(
 		});
 
 	useEffect(() => {
-		updateMoveList();
 		updateSideToMove();
 	}, []);
 
@@ -241,21 +238,10 @@ function useMultiplayerGameplayLogic(
 			console.log("Added!");
 		}
 	}
-
-	async function updateMoveList() {
-		const moveList = await fetchMoveList(gameId);
-
-		setMoveList(moveList);
-	}
-
 	async function updateSideToMove() {
 		const sideToMove = await fetchSideToMove(gameId);
 
 		setSideToMove(sideToMove);
-	}
-
-	function handleMoveListUpdated(eventData: MoveListUpdateEventData) {
-		setMoveList(eventData["new_move_list"]);
 	}
 
 	function handleMoveMade(eventData: MoveMadeEventData) {
