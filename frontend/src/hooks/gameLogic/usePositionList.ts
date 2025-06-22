@@ -3,10 +3,10 @@ import { PositionList } from "../../interfaces/gameLogic";
 import { fetchPositionList } from "../../utils/apiUtils";
 
 function usePositionList(gameId: number) {
-    const [positionList, setPositionList] = useState<PositionList>([]);
-    const [positionIndex, setPositionIndex] = useState(0);
+	const [positionList, setPositionList] = useState<PositionList>([]);
+	const [positionIndex, setPositionIndex] = useState(0);
 
-    const parsedFEN = positionList[positionIndex]?.["position"];
+	const parsedFEN = positionList[positionIndex]?.["position"];
 	const previousDraggedSquare =
 		positionList[positionIndex]?.["last_dragged_square"];
 	const previousDroppedSquare =
@@ -15,22 +15,33 @@ function usePositionList(gameId: number) {
 	const capturedMaterial = positionList[positionIndex]?.["captured_material"];
 	const promotedPieces = positionList[positionIndex]?.["promoted_pieces"];
 
-    useEffect(() => {
-        updatePositionList();
-        synchronisePositionIndex();
-    }, [gameId]);
+	useEffect(() => {
+		updatePositionList();
+		synchronisePositionIndex();
+	}, [gameId]);
 
-    async function updatePositionList() {
+	async function updatePositionList() {
 		const positionList = await fetchPositionList(gameId);
 
 		setPositionList(positionList);
 	}
 
-    async function synchronisePositionIndex() {
+	async function synchronisePositionIndex() {
 		const positionList = await fetchPositionList(gameId);
 		setPositionIndex(positionList.length - 1);
 	}
 
+	return {
+		positionList,
+		setPositionList,
+		positionIndex,
+		setPositionIndex,
+		parsedFEN,
+		previousDraggedSquare,
+		previousDroppedSquare,
+		capturedMaterial,
+		promotedPieces,
+	};
 }
 
 export default usePositionList;
