@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import {
 	MoveMadeEventData,
 } from "../interfaces/gameLogic";
 import {
 	fetchLegalMoves,
 	fetchMoveIsValid,
-	fetchSideToMove,
 } from "../utils/apiUtils";
 import { ChessboardSquareIndex } from "../types/general";
 import { PieceColor, PieceType } from "../types/gameLogic";
@@ -23,6 +22,7 @@ import useDragMoveEffect from "./gameLogic/useDragMoveEffect";
 import usePromotionLogic from "./gameLogic/usePromotionLogic";
 import usePositionList from "./gameLogic/usePositionList";
 import useMoveList from "./gameLogic/useMoveList";
+import useSideToMove from "./gameLogic/useSideToMove";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
@@ -53,7 +53,7 @@ function useMultiplayerGameplayLogic(
 		handlePlayerTimeout,
 	} = useGameEndState();
 
-	const [sideToMove, setSideToMove] = useState<PieceColor>("white");
+	const { sideToMove, setSideToMove } = useSideToMove(gameId);
 
 	const lastUsedMoveMethodRef = useRef<"click" | "drag" | null>(null);
 
@@ -98,10 +98,6 @@ function useMultiplayerGameplayLogic(
 			handleDraw,
 			performPostPromotionCleanup,
 		});
-
-	useEffect(() => {
-		updateSideToMove();
-	}, []);
 
 	const processMove = useCallback(
 		async (moveMethod: "click" | "drag") => {
@@ -237,11 +233,6 @@ function useMultiplayerGameplayLogic(
 			square.classList.add("legal-square");
 			console.log("Added!");
 		}
-	}
-	async function updateSideToMove() {
-		const sideToMove = await fetchSideToMove(gameId);
-
-		setSideToMove(sideToMove);
 	}
 
 	function handleMoveMade(eventData: MoveMadeEventData) {
