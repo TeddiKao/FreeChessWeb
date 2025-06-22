@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchMoveList } from "../../utils/apiUtils";
+import { MoveListUpdateEventData } from "../../interfaces/gameLogic";
 
 function useMoveList(gameId: number) {
     const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
@@ -17,6 +18,8 @@ function useMoveList(gameId: number) {
     function handleMoveListUpdated(eventData: MoveListUpdateEventData) {
 		setMoveList(eventData["new_move_list"]);
 	}
+
+    return { moveList, handleMoveListUpdated }
 }
 
 export default useMoveList;
