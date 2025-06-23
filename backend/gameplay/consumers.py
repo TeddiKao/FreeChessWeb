@@ -528,7 +528,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		timer_task_in_db = await GameplayTimerTask.async_get_timer_task_from_room_id(self.room_group_name)
 		if not timer_task_in_db:
 			await GameplayTimerTask.async_create_timer(is_timer_running=True, game_room_id=self.room_group_name)
-			asyncio.create_task(self.handle_timer_decrement())
+			self.timer_task = asyncio.create_task(self.handle_timer_decrement())
 
 		await self.update_game_attribute(self.chess_game_model, "is_timer_running", True)
 
