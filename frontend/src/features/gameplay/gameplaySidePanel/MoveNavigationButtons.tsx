@@ -1,22 +1,40 @@
 import { useEffect } from "react";
 import "../../../styles/features/gameplay/side-panel-buttons.scss";
 import {
+	ChessboardSquareIndex,
 	OptionalValue,
 	RefObject,
 	StateSetterFunction,
 } from "../../../types/general";
 import { ArrowKeys } from "../../../enums/general";
+import { PositionList } from "../../../interfaces/gameLogic";
+import useAnimationLogic from "../../../hooks/gameLogic/useAnimationLogic";
+import { PieceColor } from "../../../types/gameLogic";
 
 type MoveNavigationButtonsProps = {
 	setPositionIndex: StateSetterFunction<number>;
 	previousPositionIndexRef: RefObject<OptionalValue<number>>;
 	positionListLength: number;
+
+	positionList?: PositionList;
+	positionIndex?: number;
+
+	prepareAnimationData: (
+		startingSquare: ChessboardSquareIndex,
+		destinationSquare: ChessboardSquareIndex,
+		postAnimationCallback: () => void
+	) => void;
 };
 
 function MoveNavigationButtons({
 	setPositionIndex,
 	positionListLength,
 	previousPositionIndexRef,
+
+	positionList,
+	positionIndex,
+
+	prepareAnimationData
 }: MoveNavigationButtonsProps) {
 	function handleKeyDown(event: KeyboardEvent) {
 		switch (event.key) {
@@ -47,7 +65,7 @@ function MoveNavigationButtons({
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [positionListLength]);
+	}, [positionListLength, positionList, positionIndex]);
 
 	function backToStart() {
 		setPositionIndex((prevIndex) => {
@@ -58,21 +76,89 @@ function MoveNavigationButtons({
 	}
 
 	function handlePreviousMove() {
-		setPositionIndex((prevIndex) => {
-			previousPositionIndexRef.current = prevIndex;
+		if (!positionList || !positionIndex) {
+			setPositionIndex((prevIndex) => {
+				previousPositionIndexRef.current = prevIndex;
 
-			return prevIndex > 0 ? prevIndex - 1 : prevIndex;
-		});
+				return prevIndex > 0 ? prevIndex - 1 : prevIndex;
+			});
+
+			return;
+		}
+
+		if (positionIndex - 1 < 0) {
+			setPositionIndex((prevIndex) => {
+				previousPositionIndexRef.current = prevIndex;
+
+				return prevIndex;
+			});
+
+			return;
+		}
+
+		const postAnimationCallback = () => {
+			setPositionIndex((prevIndex) => {
+				previousPositionIndexRef.current = prevIndex;
+
+				return prevIndex > 0 ? prevIndex - 1 : prevIndex;
+			});
+		};
+
+		const targetPosition = positionList?.[positionIndex];
+		const startingSquare = targetPosition["move_info"]["starting_square"];
+		const destinationSquare =
+			targetPosition["move_info"]["destination_square"];
+
+		prepareAnimationData(
+			destinationSquare,
+			startingSquare,
+			postAnimationCallback
+		);
 	}
 
 	function handleNextMove() {
-		setPositionIndex((prevIndex) => {
-			previousPositionIndexRef.current = prevIndex;
+		if (!positionList || !positionIndex) {
+			setPositionIndex((prevIndex) => {
+				previousPositionIndexRef.current = prevIndex;
 
-			return prevIndex + 1 < positionListLength
-				? prevIndex + 1
-				: prevIndex;
-		});
+				return prevIndex + 1 < positionListLength
+					? prevIndex + 1
+					: prevIndex;
+			});
+
+			return;
+		}
+
+		if (positionIndex + 1 >= positionListLength) {
+			setPositionIndex((prevIndex) => {
+				previousPositionIndexRef.current = prevIndex;
+
+				return prevIndex;
+			});
+
+			return;
+		}
+
+		const postAnimationCallback = () => {
+			setPositionIndex((prevIndex) => {
+				previousPositionIndexRef.current = prevIndex;
+
+				return prevIndex + 1 < positionListLength
+					? prevIndex + 1
+					: prevIndex;
+			});
+		};
+
+		const targetPosition = positionList?.[positionIndex + 1];
+		const startingSquare = targetPosition["move_info"]["starting_square"];
+		const destinationSquare =
+			targetPosition["move_info"]["destination_square"];
+
+		prepareAnimationData(
+			startingSquare,
+			destinationSquare,
+			postAnimationCallback
+		);
 	}
 
 	function backToCurrentPosition() {

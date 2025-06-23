@@ -2,7 +2,7 @@ import { DragPreviewImage, useDrag, useDrop } from "react-dnd";
 
 import "../../styles/components/chessboard/square.scss";
 import PromotionPopup from "./PromotionPopup.tsx";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
 	getFile,
 	getRank,
@@ -13,6 +13,8 @@ import {
 import { SquareProps } from "../../interfaces/chessboard.ts";
 import { OptionalValue } from "../../types/general.ts";
 import { capitaliseFirstLetter } from "../../utils/generalUtils.ts";
+import useAnimationLogic from "../../hooks/gameLogic/useAnimationLogic.ts";
+import { PieceColor } from "../../types/gameLogic.ts";
 
 function Square({
 	squareNumber,
@@ -20,7 +22,8 @@ function Square({
 	pieceColor,
 	pieceType,
 	displayPromotionPopup,
-	handleSquareClick,
+	setPrevClickedSquare,
+	setClickedSquare,
 	setDraggedSquare,
 	setDroppedSquare,
 	handlePromotionCancel,
@@ -28,10 +31,12 @@ function Square({
 	previousDraggedSquare,
 	previousDroppedSquare,
 	orientation,
-	moveMethod,
 	squareSize,
-	animatingPieceSquare,
 	animatingPieceStyle,
+	prevClickedSquare,
+	clickedSquare,
+	animationRef,
+	animatingPieceSquare: animationSquare,
 }: SquareProps) {
 	let startingSquare: OptionalValue<string> = null;
 
@@ -60,7 +65,9 @@ function Square({
 	function getSquareClass() {
 		if (squareNumber.toString() === previousDraggedSquare?.toString()) {
 			return "previous-dragged-square";
-		} else if (squareNumber.toString() === previousDroppedSquare?.toString()) {
+		} else if (
+			squareNumber.toString() === previousDroppedSquare?.toString()
+		) {
 			return "previous-dropped-square";
 		} else {
 			return `chessboard-square ${squareColor}`;
@@ -138,6 +145,13 @@ function Square({
 		setDroppedSquare(droppedSquare);
 	}
 
+	function handleSquareClick() {
+		if (!prevClickedSquare && !clickedSquare) {
+			setPrevClickedSquare(squareNumber.toString());
+		} else {
+			setClickedSquare(squareNumber.toString());
+		}
+	}
 
 	function handleOnDrag(squareDragged: string | number) {
 		setDraggedSquare(squareDragged);
@@ -160,7 +174,6 @@ function Square({
 					handlePromotionCancel={handlePromotionCancel}
 					handlePawnPromotion={handlePawnPromotion}
 					boardOrientation={orientation}
-					moveMethod={moveMethod}
 				/>
 			);
 		} else {
@@ -177,23 +190,33 @@ function Square({
 						connect={preview}
 						src={draggingPieceImageSrc}
 					/>
-					<img
-						style={
-							Number(animatingPieceSquare) ===
-							Number(squareNumber)
-								? animatingPieceStyle
+					<div
+						ref={
+							Number(squareNumber) ===
+							Number(animationSquare)
+								? animationRef
 								: undefined
 						}
-						ref={drag}
-						onDragStart={() => {
-							handleOnDrag(squareNumber);
-						}}
-						onTouchStart={() => {
-							handleOnDrag(squareNumber);
-						}}
-						className="piece-image"
-						src={pieceImageSrc}
-					/>
+						className="piece-image-container"
+					>
+						<img
+							style={
+								Number(animationSquare) ===
+								Number(squareNumber)
+									? animatingPieceStyle
+									: undefined
+							}
+							ref={drag}
+							onDragStart={() => {
+								handleOnDrag(squareNumber);
+							}}
+							onTouchStart={() => {
+								handleOnDrag(squareNumber);
+							}}
+							className="piece-image"
+							src={pieceImageSrc}
+						/>
+					</div>
 				</>
 			);
 		}
@@ -221,8 +244,8 @@ function Square({
 			className={getSquareClass()}
 			style={squareStyles}
 			id={`${squareNumber}`}
-			onClick={(event) => {
-				handleSquareClick(event, squareNumber);
+			onClick={() => {
+				handleSquareClick();
 				clearAllHighlightedSquares();
 			}}
 			onContextMenu={handleSquareHiglight}
