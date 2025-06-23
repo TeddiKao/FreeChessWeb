@@ -528,7 +528,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		timer_task_in_db = await GameplayTimerTask.async_get_timer_task_from_room_id(self.room_group_name)
 		if not timer_task_in_db:
 			await GameplayTimerTask.async_create_timer(is_timer_running=True, game_room_id=self.room_group_name)
-			asyncio.create_task(self.handle_timer_decrement())
+			self.timer_task = asyncio.create_task(self.handle_timer_decrement())
 
 		await self.update_game_attribute(self.chess_game_model, "is_timer_running", True)
 
@@ -559,6 +559,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if timer_task_exists:
 			timer_task: GameplayTimerTask = await GameplayTimerTask.async_get_timer_task_from_room_id(self.room_group_name)
 			await timer_task.async_stop()
+
+		if hasattr(self, "timer_task"):
+			self.timer_task.cancel()
 
 		move_is_valid: bool
 		chess_game_model: ChessGame
@@ -763,8 +766,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 				}
 			)
 
-		if not timer_task.is_timer_running():
-			asyncio.create_task(self.handle_timer_decrement())
+		if not timer_task.is_timer_running() and hasattr(self, "timer_task"):
+			await timer_task.async_start()
+			self.timer_task = asyncio.create_task(self.handle_timer_decrement())
 
 		move_processing_end = perf_counter() 
 
