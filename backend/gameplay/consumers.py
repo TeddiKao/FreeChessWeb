@@ -571,8 +571,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if not move_is_valid:
 			return
 		
-		previous_move_number = await chess_game_model.async_get_game_attribute("current_move")
-		
 		previous_game_state_fetch_start = perf_counter()
 		previous_game_state = await chess_game_model.async_get_attributes(["parsed_board_placement", "en_passant_target_square"])
 		previous_game_state_fetch_end = perf_counter()
@@ -636,6 +634,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		new_board_placement = new_parsed_fen["board_placement"]
 		new_side_to_move = new_parsed_fen["side_to_move"]
 		updated_halfmove_clock = new_parsed_fen["halfmove_clock"]
+		current_move_number = new_parsed_fen["fullmove_number"]
 
 		new_captured_white_material, new_captured_black_material, new_promoted_white_pieces, new_promoted_black_pieces = await asyncio.gather(
 			chess_game_model.async_get_game_attribute("captured_white_material"),
@@ -647,13 +646,18 @@ class GameConsumer(AsyncWebsocketConsumer):
 		is_checkmated, is_stalemated = is_checkmated_or_stalemated(new_parsed_fen, opposing_color)
 
 		position_index = calculate_position_index(
-			piece_color, previous_move_number)
+			piece_color, current_move_number)
 		
 		await self.channel_layer.group_send(
 			self.room_group_name,
 			{
-				"type": "position_list_updated",
-				"new_position_list": new_position_list,
+				"type": "move_received",
+				"move_data": json.loads(text_data),
+				"move_made_by": self.scope["user"].username,
+				"move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
+				"new_parsed_fen": new_parsed_fen,
+				"new_position_index": position_index,
+				"new_side_to_move": new_side_to_move
 			}
 		),
 		
@@ -661,13 +665,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.channel_layer.group_send(
 				self.room_group_name,
 				{
-					"type": "move_received",
-					"move_data": json.loads(text_data),
-					"move_made_by": self.scope["user"].username,
-					"move_type": get_move_type(previous_position, en_passant_target_square, parsed_move_data),
-					"new_parsed_fen": new_parsed_fen,
-					"new_position_index": position_index,
-					"new_side_to_move": new_side_to_move
+					"type": "position_list_updated",
+					"new_position_list": new_position_list,
 				}
 			),
 
@@ -801,7 +800,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 			"move_made_by": event["move_made_by"],
 			"new_parsed_fen": event["new_parsed_fen"],
 			"new_position_index": event["new_position_index"],
-			"new_side_to_move": event["new_side_to_move"]
 		}))
 
 	async def captured_material_list_updated(self, event):

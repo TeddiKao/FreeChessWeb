@@ -9,6 +9,8 @@ type PromotionCancelFunction = (color: PieceColor) => void;
 type PawnPromotionFunction = (
     color: PieceColor,
     promotedPiece: PieceType,
+    moveMethod: string,
+    autoQueen?: boolean
 ) => void;
 
 type PromotionPopupProps = {
@@ -18,6 +20,7 @@ type PromotionPopupProps = {
     handlePromotionCancel: PromotionCancelFunction;
     handlePawnPromotion: PawnPromotionFunction;
     boardOrientation: string;
+    moveMethod: OptionalValue<string>;
 };
 
 function PromotionPopup({
@@ -27,9 +30,8 @@ function PromotionPopup({
     handlePromotionCancel,
     handlePawnPromotion,
     boardOrientation,
+    moveMethod,
 }: PromotionPopupProps) {
-    console.log(boardOrientation.toLowerCase(), color.toLowerCase());
-
     const positionClass: string =
         boardOrientation.toLowerCase() === color.toLowerCase()
             ? "top"
@@ -47,7 +49,11 @@ function PromotionPopup({
     }
 
     function handlePieceClick(pieceType: PieceType) {
-        handlePawnPromotion(color, pieceType);
+        if (!moveMethod) {
+            return;
+        }
+
+        handlePawnPromotion(color, pieceType, moveMethod);
     }
 
     useEffect(() => {
