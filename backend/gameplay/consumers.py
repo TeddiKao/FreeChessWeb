@@ -764,7 +764,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			)
 
 		if not timer_task.is_timer_running():
-			asyncio.create_task(self.handle_timer_decrement())
+			self.timer_task = asyncio.create_task(self.handle_timer_decrement())
 
 		move_processing_end = perf_counter() 
 
