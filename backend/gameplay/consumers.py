@@ -561,7 +561,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await timer_task.async_stop()
 
 		if hasattr(self, "timer_task"):
-			self.timer_task.cancel();
+			self.timer_task.cancel()
 
 		move_is_valid: bool
 		chess_game_model: ChessGame
@@ -767,7 +767,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			)
 
 		if not timer_task.is_timer_running() and hasattr(self, "timer_task"):
-			await timer_task.async_start();
+			await timer_task.async_start()
 			self.timer_task = asyncio.create_task(self.handle_timer_decrement())
 
 		move_processing_end = perf_counter() 
