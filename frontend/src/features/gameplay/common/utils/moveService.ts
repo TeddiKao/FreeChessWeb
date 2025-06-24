@@ -1,6 +1,6 @@
-import { ParsedFENString } from "../types/gameLogic";
-import { ChessboardSquareIndex } from "../types/general";
-import { fetchLegalMoves, fetchMoveIsValid } from "./apiUtils";
+import { ParsedFENString } from "../../../../types/gameLogic";
+import { ChessboardSquareIndex } from "../../../../types/general";
+import { fetchLegalMoves, fetchMoveIsValid } from "../../../../utils/apiUtils";
 
 async function displayLegalMoves(
 	parsedFEN: ParsedFENString,
