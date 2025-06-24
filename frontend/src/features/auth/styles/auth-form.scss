@@ -1,0 +1,141 @@
+@use "./global/mixins.scss" as *;
+@use "./global/variables.scss";
+
+.auth-form-container {
+	@include flex-column-x-center;
+	position: fixed;
+
+	top: 50%;
+	left: 50%;
+
+	transform: translate(-50%, -50%);
+
+	padding-top: 40px;
+	padding-bottom: 40px;
+	padding-left: 80px;
+	padding-right: 80px;
+
+	box-shadow: 5px 5px 5px hsl(0, 0%, 80%);
+	border-radius: 8px;
+
+	background-color: white;
+}
+
+.auth-form-heading {
+	margin-top: 0;
+}
+
+.email-input, .password-input, .username-input {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	padding-left: 12px;
+	padding-right: 15px;
+
+	width: 250px;
+
+	background-color: hsl(0, 0%, 90%);
+	border: none;
+	border-radius: 4px;
+
+	font-size: 0.9rem
+}
+
+.email-input-container, .username-field-container {
+	margin-bottom: 12px;
+}
+
+.auth-input-helper-text {
+	font-size: 0.9rem;
+	font-weight: bold;
+
+	margin-top: 0;
+	margin-bottom: 4px;
+	margin-left: 4px;
+}
+
+.error-password-input {
+	@extend .password-input;
+	
+	border-color: variables.$error-input-color;
+	border-style: solid;
+	border-width: variables.$error-input-border-width;
+}
+
+.error-username-input {
+	@extend .username-input;
+
+	border-color: variables.$error-input-color;
+	border-style: solid;
+	border-width: variables.$error-input-border-width;
+}
+
+.error-email-input {
+	@extend .email-input;
+
+	border-color: variables.$error-input-color;
+	border-style: solid;
+	border-width: variables.$error-input-border-width;
+}
+
+.password-errors-container, .email-errors-container, .username-errors-container {
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+.password-error, .email-error, .username-error {
+	margin-top: 4px;
+	margin-bottom: 4px;
+
+	width: 250px;
+
+	color: variables.$error-input-color;
+	font-size: 0.9rem;
+}
+
+.password-input {
+	margin-bottom: 4px;
+}
+
+.show-password-container p {
+	margin-top: 4px;
+	margin-bottom: 0;
+
+	font-size: 0.9rem;
+	font-weight: bold;
+	color: hsl(200, 100%, 40%)
+}
+
+.show-password-container p:hover {
+	cursor: pointer;
+}
+
+.password-items-container {
+	margin-bottom: 12px;
+}
+
+.form-subtitle {
+	margin-top: 0;
+	margin-bottom: 8px;
+}
+
+.form-subtitle a {
+	color: hsl(200, 100%, 50%);
+	text-decoration: underline;
+}
+
+.auth-form-submit {
+	width: 275px;
+
+	padding-top: 10px;
+	padding-bottom: 10px;
+
+	background-color: variables.$accent-color;
+	color: white;
+
+	border-radius: 4px;
+	border: none;
+}
+
+.show-password-container p {
+	display: inline-block;
+}
