@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import "../../../styles/features/gameplay/side-panel-buttons.scss";
+import "../../styles/gameplaySidePanel/move-navigation-buttons.scss";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,

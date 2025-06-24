@@ -1,0 +1,38 @@
+@use "../../global/mixins" as *;
+
+.gameplay-side-panel-buttons-container {
+	@include flex-row-y-center;
+	padding-left: 20px;
+}
+
+.move-navigation-header {
+	margin-top: 0;
+	margin-bottom: 4px;
+
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 8px;
+
+	background-color: hsl(0, 0%, 85%)
+}
+
+.move-navigation-buttons-container {
+	@include flex-row-space-between;
+
+	margin-left: 8px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+
+	button {
+		padding-top: 4px;
+		padding-bottom: 4px;
+		padding-left: 12px;
+		padding-right: 12px;
+
+		margin-right: 8px;
+	}
+}
+
+.offer-action-buttons {
+	@include flex-row-y-center;
+}
