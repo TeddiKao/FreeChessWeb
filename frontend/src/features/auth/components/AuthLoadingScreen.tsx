@@ -1,6 +1,6 @@
-import LoadingSpinner from "../../components/common/LoadingSpinner";
-import "../../styles/modals/auth-loading-screen.scss";
-import ModalWrapper from "../../components/wrappers/ModalWrapper";
+import LoadingSpinner from "../../../components/common/LoadingSpinner";
+import "../styles/auth-loading-screen.scss";
+import ModalWrapper from "../../../components/wrappers/ModalWrapper";
 
 type AuthLoadingScreenProps = {
 	visible: boolean;

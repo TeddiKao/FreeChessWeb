@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 
 import api from "../../../api.ts";
-import "../../styles/auth-form.scss";
+import "../styles/auth-form.scss";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants.ts";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";

@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import api from "../../api.ts";
 
 import { ACCESS_TOKEN } from "./constants.ts";
-import { getAccessToken, getRefreshToken } from "../../utils/tokenUtils.ts";
+import { getAccessToken, getRefreshToken } from "./utils.ts";
 
 function useIsAuthenticated() {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(
