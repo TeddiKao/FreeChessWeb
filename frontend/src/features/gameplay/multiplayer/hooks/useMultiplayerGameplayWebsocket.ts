@@ -1,16 +1,16 @@
-import { websocketBaseURL } from "../constants/urls";
-import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
+import { websocketBaseURL } from "../../../../constants/urls";
+import { GameplayWebSocketEventTypes } from "../../../../enums/gameLogic";
 import {
 	CheckmateEventData,
 	MoveListUpdateEventData,
 	MoveMadeEventData,
 	PositionListUpdateEventData,
 	TimerChangedEventData,
-} from "../interfaces/gameLogic";
-import { ParsedFENString, PieceType } from "../types/gameLogic";
-import { ChessboardSquareIndex } from "../types/general";
-import { getAccessToken } from "../features/auth/utils";
-import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
+} from "../../../../interfaces/gameLogic";
+import { ParsedFENString, PieceType } from "../../../../types/gameLogic";
+import { ChessboardSquareIndex } from "../../../../types/general";
+import { getAccessToken } from "../../../auth/utils";
+import useWebsocketWithLifecycle from "../../../../hooks/useWebsocketWithLifecycle";
 
 interface MultiplayerGameplayWebsocketHookProps {
 	gameId: number;

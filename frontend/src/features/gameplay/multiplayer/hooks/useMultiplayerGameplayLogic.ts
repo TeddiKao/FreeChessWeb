@@ -1,27 +1,27 @@
 import { useCallback, useMemo, useRef } from "react";
-import { MoveMadeEventData } from "../interfaces/gameLogic";
-import { fetchLegalMoves, fetchMoveIsValid } from "../utils/apiUtils";
-import { ChessboardSquareIndex } from "../types/general";
-import { PieceColor, PieceType } from "../types/gameLogic";
-import { isPawnPromotion } from "../utils/moveUtils";
-import { clearSquaresStyling, getRank } from "../utils/boardUtils";
+import { MoveMadeEventData } from "../../../../interfaces/gameLogic";
+import { fetchLegalMoves, fetchMoveIsValid } from "../../../../utils/apiUtils";
+import { ChessboardSquareIndex } from "../../../../types/general";
+import { PieceColor, PieceType } from "../../../../types/gameLogic";
+import { isPawnPromotion } from "../../../../utils/moveUtils";
+import { clearSquaresStyling, getRank } from "../../../../utils/boardUtils";
 
-import useAnimationLogic from "./gameLogic/useAnimationLogic";
-import usePlayerClocks from "./gameLogic/usePlayerClocks";
-import useClickedSquaresState from "./gameLogic/useClickedSquaresState";
-import useDraggedSquaresState from "./gameLogic/useDraggedSquaresState";
-import useGameEndState from "./gameLogic/useGameEndState";
-import useMultiplayerGameplayWebsocket from "./useMultiplayerGameplayWebsocket";
-import useClickMoveEffect from "./gameLogic/useClickMoveEffect";
-import useDragMoveEffect from "./gameLogic/useDragMoveEffect";
-import usePromotionLogic from "./gameLogic/usePromotionLogic";
-import usePositionList from "./gameLogic/usePositionList";
-import useMoveList from "./gameLogic/useMoveList";
-import useSideToMove from "./gameLogic/useSideToMove";
+import useAnimationLogic from "./useAnimationLogic";
+import usePlayerClocks from "./usePlayerClocks";
+import useClickedSquaresState from "./useClickedSquaresState";
+import useDraggedSquaresState from "./useDraggedSquaresState";
+import useGameEndState from "./useGameEndState";
+import useMultiplayerGameplayWebsocket from "../../../../hooks/useMultiplayerGameplayWebsocket";
+import useClickMoveEffect from "./useClickMoveEffect";
+import useDragMoveEffect from "./useDragMoveEffect";
+import usePromotionLogic from "./usePromotionLogic";
+import usePositionList from "./usePositionList";
+import useMoveList from "./useMoveList";
+import useSideToMove from "./useSideToMove";
 import {
 	displayLegalMoves,
 	performMoveValidation,
-} from "../features/gameplay/common/utils/moveService";
+} from "../../common/utils/moveService";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
