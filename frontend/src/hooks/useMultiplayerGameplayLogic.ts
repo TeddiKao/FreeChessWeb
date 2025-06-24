@@ -23,6 +23,7 @@ import usePromotionLogic from "./gameLogic/usePromotionLogic";
 import usePositionList from "./gameLogic/usePositionList";
 import useMoveList from "./gameLogic/useMoveList";
 import useSideToMove from "./gameLogic/useSideToMove";
+import { displayLegalMoves, performMoveValidation } from "../utils/moveService";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
@@ -112,7 +113,7 @@ function useMultiplayerGameplayLogic(
 			if (!startingSquare) return;
 
 			if (!destinationSquare) {
-				displayLegalMoves(startingSquare);
+				displayLegalMoves(parsedFEN, startingSquare);
 
 				return;
 			}
@@ -124,6 +125,7 @@ function useMultiplayerGameplayLogic(
 			}
 
 			const isValidMove = await performMoveValidation(
+				parsedFEN,
 				startingSquare,
 				destinationSquare
 			);
@@ -183,55 +185,6 @@ function useMultiplayerGameplayLogic(
 			setDroppedSquare(null);
 
 			lastUsedMoveMethodRef.current = "drag";
-		}
-	}
-
-	async function performMoveValidation(
-		startSquare: ChessboardSquareIndex,
-		destinationSquare: ChessboardSquareIndex
-	) {
-		if (!parsedFEN) return;
-
-		const boardPlacement = parsedFEN["board_placement"];
-		const squareInfo = boardPlacement[startSquare.toString()];
-		const pieceColor = squareInfo["piece_color"];
-		const pieceType = squareInfo["piece_type"];
-
-		const [isValidMove, _] = await fetchMoveIsValid(
-			parsedFEN,
-			pieceColor,
-			pieceType,
-			startSquare.toString(),
-			destinationSquare.toString()
-		);
-
-		return isValidMove;
-	}
-
-	async function displayLegalMoves(startSquare: ChessboardSquareIndex) {
-		if (!parsedFEN) return;
-
-		const squareInfo = parsedFEN["board_placement"][startSquare.toString()];
-		const pieceType = squareInfo["piece_type"];
-		const pieceColor = squareInfo["piece_color"];
-
-		const legalMoves = await fetchLegalMoves(
-			parsedFEN,
-			pieceType,
-			pieceColor,
-			startSquare.toString()
-		);
-
-		console.log(legalMoves);
-
-		if (!legalMoves) return;
-
-		for (const legalMove of legalMoves) {
-			const square = document.getElementById(legalMove);
-			if (!square) return;
-
-			square.classList.add("legal-square");
-			console.log("Added!");
 		}
 	}
 
