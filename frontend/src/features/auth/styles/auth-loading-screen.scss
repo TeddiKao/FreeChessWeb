@@ -1,4 +1,4 @@
-@use "../global/mixins" as *;
+@use "../../../styles/global/mixins" as *;
 
 .auth-loading-screen-container {
     @include page-center-xy;
