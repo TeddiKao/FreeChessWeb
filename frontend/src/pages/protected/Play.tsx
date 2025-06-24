@@ -7,8 +7,8 @@ import Timer from "../../features/gameplay/Timer.tsx";
 import "../../styles/pages/play.scss";
 import "../../styles/components/chessboard/board-actions.scss";
 
-import GameOverModal from "../../features/modals/gameOverModals/MultiplayerModal.tsx";
-import GameplaySettings from "../../features/modals/GameplaySettings.tsx";
+import GameOverModal from "../../features1/modals/gameOverModals/MultiplayerModal.tsx";
+import GameplaySettings from "../../features1/modals/GameplaySettings.tsx";
 import ModalWrapper from "../../components/wrappers/ModalWrapper.js";
 import { PieceColor } from "../../types/gameLogic.js";
 import useGameplaySettings from "../../hooks/useGameplaySettings.ts";
@@ -18,7 +18,7 @@ import GameplayActionButtons from "../../features/gameplay/gameplaySidePanel/Gam
 import { isNullOrUndefined } from "../../utils/generalUtils.ts";
 import MessageBox from "../../components/common/MessageBox.tsx";
 import { MessageBoxTypes } from "../../types/messageBox.ts";
-import DrawOfferPopup from "../../features/popups/DrawOfferPopup.tsx";
+import DrawOfferPopup from "../../features1/popups/DrawOfferPopup.tsx";
 import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar.tsx";
 import CapturedMaterial from "../../features/gameplay/CapturedMaterial.tsx";
 import { getOppositeColor } from "../../utils/gameLogic/general.ts";
@@ -53,7 +53,12 @@ function Play() {
 
 	const {
 		parsedFEN,
-		gameStateHistory: { positionList, moveList, setPositionIndex, positionIndex },
+		gameStateHistory: {
+			positionList,
+			moveList,
+			setPositionIndex,
+			positionIndex,
+		},
 		clocks: { whitePlayerClock, blackPlayerClock },
 		capturedMaterial: capturedMaterialList,
 		promotedPieces: promotedPiecesList,
@@ -212,7 +217,6 @@ function Play() {
 								setDroppedSquare,
 							}}
 							promotionSquare={promotionSquare}
-
 							animationRef={animationRef}
 							animationSquare={animationSquare}
 						/>

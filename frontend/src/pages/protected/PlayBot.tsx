@@ -8,7 +8,7 @@ import { MoveInfo, ParsedFENString } from "../../types/gameLogic";
 
 import "../../styles/pages/play-bot.scss";
 import useGameplaySettings from "../../hooks/useGameplaySettings";
-import GameplaySettings from "../../features/modals/GameplaySettings";
+import GameplaySettings from "../../features1/modals/GameplaySettings";
 import ModalWrapper from "../../components/wrappers/ModalWrapper";
 import { Navigate, useLocation } from "react-router-dom";
 import { ChessboardSquareIndex, OptionalValue } from "../../types/general";
@@ -17,7 +17,7 @@ import { playAudio } from "../../utils/audioUtils";
 import { convertToMilliseconds } from "../../utils/timeUtils";
 import { pieceAnimationTime } from "../../constants/pieceAnimation";
 import usePieceAnimation from "../../hooks/usePieceAnimation";
-import LocalGameOverModal from "../../features/modals/gameOverModals/LocalModal";
+import LocalGameOverModal from "../../features1/modals/gameOverModals/LocalModal";
 import MoveNavigationButtons from "../../features/gameplay/gameplaySidePanel/MoveNavigationButtons";
 import MoveListPanel from "../../features/gameplay/gameplaySidePanel/MoveListPanel";
 import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar";
