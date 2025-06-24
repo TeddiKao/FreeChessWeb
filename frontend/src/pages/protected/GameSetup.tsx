@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import DisplayChessboard from "../../features/gameplay/chessboards/DisplayChessboard.tsx";
-
 import TimeControlTypeContainer from "../../features/gameSetup/TimeControlTypeContainer.js";
 import TimeControlSelection from "../../features/gameSetup/TimeControlSelection.js";
 
@@ -15,8 +13,9 @@ import MatchmakingScreen from "../../features/gameSetup/MatchmakingScreen.js";
 import { GameSetupStages } from "../../enums/gameSetup.js";
 import { ParsedFENString } from "../../types/gameLogic.ts";
 import CustomTimeControlScreen from "../../features/gameSetup/CustomTimeControlScreen.tsx";
-import Timer from "../../features/gameplay/Timer.tsx";
 import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar.tsx";
+import DisplayChessboard from "../../features1/gameplay/chessboards/DisplayChessboard.tsx";
+import Timer from "../../features1/gameplay/Timer.tsx";
 
 type TimeControlInfo = {
 	baseTime: number;

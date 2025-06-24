@@ -7,8 +7,8 @@ import {
 	GameWinnerSetterContext,
 } from "../../../../contexts/chessboardContexts.js";
 
-import "../../styles/components/chessboard/board-actions.scss";
-import "../../styles/pages/pass-and-play.scss";
+import "../../../../styles/components/chessboard/board-actions.scss";
+import "../styles/pass-and-play.scss";
 
 import Chessboard from "../Chessboard.tsx";
 import GameplaySettings from "../../../../features1/modals/GameplaySettings.tsx";
