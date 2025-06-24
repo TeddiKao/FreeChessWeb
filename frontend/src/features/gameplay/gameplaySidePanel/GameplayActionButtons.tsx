@@ -7,7 +7,7 @@ import useWebSocket from "../../../hooks/useWebsocket";
 import { websocketBaseURL } from "../../../constants/urls";
 import { ActionWebSocketEventTypes } from "../../../enums/gameLogic";
 import ConfirmationPopup from "../../../components/common/ConfirmationPopup";
-import { getAccessToken } from "../../../utils/tokenUtils";
+import { getAccessToken } from "../../auth/utils";
 import useWebsocketWithLifecycle from "../../../hooks/useWebsocketWithLifecycle";
 import { PieceColor } from "../../../types/gameLogic";
 

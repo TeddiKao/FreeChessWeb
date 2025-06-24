@@ -1,13 +1,13 @@
 import React, { ChangeEvent, useState } from "react";
 
-import api from "../../api.js";
-import "../../styles/auth-form.scss";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants/tokens.js";
+import api from "../../../api.ts";
+import "../styles/auth-form.scss";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants.ts";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
-import { SignupErrors } from "../../enums/validationErrors/authentication.js";
-import { isNullOrUndefined } from "../../utils/generalUtils.js";
-import AuthLoadingScreen from "../../features/modals/AuthLoadingScreen.js";
+import { SignupErrors } from "../validationErrors.ts";
+import { isNullOrUndefined } from "../../../utils/generalUtils.ts";
+import AuthLoadingScreen from "../components/AuthLoadingScreen.tsx";
 
 type AuthMethods = "Login" | "Signup";
 

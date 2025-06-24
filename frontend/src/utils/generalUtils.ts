@@ -1,6 +1,6 @@
 import { isEqual } from "lodash";
 import { websocketBaseURL } from "../constants/urls";
-import { getAccessToken } from "./tokenUtils";
+import { getAccessToken } from "../features/auth/utils";
 
 function capitaliseFirstLetter(string: string): string {
 	const capitalisedFirstLetter = string.charAt(0).toUpperCase();
@@ -9,7 +9,10 @@ function capitaliseFirstLetter(string: string): string {
 	return `${capitalisedFirstLetter}${remainingLetters}`;
 }
 
-function compareObjects(objectA: object | null, objectB: object | null): boolean {
+function compareObjects(
+	objectA: object | null,
+	objectB: object | null
+): boolean {
 	return isEqual(objectA, objectB);
 }
 
@@ -18,7 +21,7 @@ function isNullOrUndefined(value: any): boolean {
 }
 
 function padZero(value: number): string | number {
-    if (value >= 10) {
+	if (value >= 10) {
 		return value;
 	} else {
 		return `0${value}`;
@@ -26,16 +29,19 @@ function padZero(value: number): string | number {
 }
 
 function isTouchDevice() {
-	return ("ontouchstart" in window) || navigator.maxTouchPoints > 0;
+	return "ontouchstart" in window || navigator.maxTouchPoints > 0;
 }
 
 function isObjEmpty(obj: object) {
-	return Object.keys(obj).length === 0 && obj.constructor === Object
+	return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
 
-function parseWebsocketUrl(websocketRoute: string, extraParams?: Record<string, any>) {
+function parseWebsocketUrl(
+	websocketRoute: string,
+	extraParams?: Record<string, any>
+) {
 	const accessToken = getAccessToken();
-	const urlWithTokenOnly = `${websocketBaseURL}/ws/${websocketRoute}/?token=${accessToken}`
+	const urlWithTokenOnly = `${websocketBaseURL}/ws/${websocketRoute}/?token=${accessToken}`;
 
 	let websocketUrl = urlWithTokenOnly;
 
@@ -45,7 +51,7 @@ function parseWebsocketUrl(websocketRoute: string, extraParams?: Record<string, 
 
 	for (const paramName of Object.keys(extraParams)) {
 		const paramValue = extraParams[paramName];
-		const paramUrl = `&${paramName}=${paramValue}`
+		const paramUrl = `&${paramName}=${paramValue}`;
 
 		websocketUrl += paramUrl;
 	}
@@ -60,5 +66,5 @@ export {
 	isTouchDevice,
 	isNullOrUndefined,
 	parseWebsocketUrl,
-	isObjEmpty
-}
+	isObjEmpty,
+};
