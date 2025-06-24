@@ -17,8 +17,6 @@ async function displayLegalMoves(
 		startSquare.toString()
 	);
 
-	console.log(legalMoves);
-
 	if (!legalMoves) return;
 
 	for (const legalMove of legalMoves) {
@@ -26,7 +24,6 @@ async function displayLegalMoves(
 		if (!square) return;
 
 		square.classList.add("legal-square");
-		console.log("Added!");
 	}
 }
 
