@@ -10,7 +10,7 @@ import {
 	ParsedFENString,
 	PieceColor,
 	SquareInfo,
-} from "../../features/gameplay/multiplayer/gameLogic.types.ts";
+} from "../../types/gameLogic.ts";
 import { capitaliseFirstLetter } from "../generalUtils.ts";
 
 function getKingStartingSquare(color: string): number {
