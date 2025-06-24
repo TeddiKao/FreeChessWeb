@@ -4,7 +4,7 @@ import {
 	ParsedFENString,
 	PieceColor,
 	PieceType,
-} from "../../features/gameplay/multiplayer/gameLogic.types.ts";
+} from "../../types/gameLogic.ts";
 import { ChessboardSquareIndex, OptionalValue } from "../../types/general.ts";
 import { getRank } from "../boardUtils.ts";
 

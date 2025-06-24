@@ -1,4 +1,4 @@
-import { PieceColor } from "../../features/gameplay/multiplayer/gameLogic.types";
+import { PieceColor } from "../../types/gameLogic.ts";
 
 function getOppositeColor(color: PieceColor): PieceColor {
 	color = color.toLowerCase() as PieceColor;

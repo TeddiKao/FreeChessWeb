@@ -2,7 +2,7 @@ import {
 	BoardPlacement,
 	ParsedFENString,
 	PieceInfo,
-} from "../../features/gameplay/multiplayer/gameLogic.types";
+} from "../../types/gameLogic.ts";
 
 function clearStartingSquare(
 	fenString: ParsedFENString,

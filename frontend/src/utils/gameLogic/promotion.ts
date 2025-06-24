@@ -5,7 +5,7 @@ import {
 	PieceColor,
 	PieceInfo,
 	PieceType,
-} from "../../features/gameplay/multiplayer/gameLogic.types.ts";
+} from "../../types/gameLogic.ts";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,
