@@ -1,4 +1,4 @@
-@use "../../../../styles//global/mixins" as *;
+@use "../../../../styles/global/mixins" as *;
 
 @mixin timer-active-styling {
 	&.active-timer {
