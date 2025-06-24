@@ -69,6 +69,7 @@ import {
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid.ts";
 import Square from "../../../components/chessboard/Square.tsx";
+import { displayLegalMoves } from "../../../utils/moveService.ts";
 
 function Chessboard({
 	parsed_fen_string,
@@ -536,34 +537,6 @@ function Chessboard({
 		setLastUsedMoveMethod("click");
 	}
 
-	async function displayLegalMoves(
-		pieceType: string,
-		pieceColor: string,
-		startingSquare: ChessboardSquareIndex
-	) {
-		if (!parsedFENString) {
-			return;
-		}
-
-		const legalMoves = await fetchLegalMoves(
-			parsedFENString,
-			pieceType.toLowerCase(),
-			pieceColor.toLowerCase(),
-			startingSquare.toString()
-		);
-
-		if (!legalMoves) {
-			return;
-		}
-
-		for (const legalMove of legalMoves) {
-			const square = document.getElementById(legalMove);
-			if (square) {
-				square.classList.add("legal-square");
-			}
-		}
-	}
-
 	if (!parsedFENString) {
 		return null;
 	}
@@ -599,16 +572,11 @@ function Chessboard({
 			return;
 		}
 
-		const boardPlacement = parsedFENString["board_placement"];
-		const squareInfo = boardPlacement[`${startingSquare}`];
-		const pieceType = squareInfo["piece_type"];
-		const pieceColor = squareInfo["piece_color"];
-
 		if (!showLegalMoves) {
 			return;
 		}
 
-		displayLegalMoves(pieceType, pieceColor, startingSquare);
+		displayLegalMoves(parsedFENString, startingSquare);
 	}
 
 	function handlePromotionCancel(color: PieceColor) {
