@@ -69,7 +69,7 @@ import {
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid.ts";
 import Square from "../../../components/chessboard/Square.tsx";
-import { displayLegalMoves } from "../../../utils/moveService.ts";
+import { displayLegalMoves } from "../common/utils/moveService.ts";
 
 function Chessboard({
 	parsed_fen_string,

@@ -15,7 +15,7 @@ import { ParsedFENString } from "../../types/gameLogic.ts";
 import CustomTimeControlScreen from "../../features/gameSetup/CustomTimeControlScreen.tsx";
 import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar.tsx";
 import DisplayChessboard from "../../features1/gameplay/chessboards/DisplayChessboard.tsx";
-import Timer from "../../features1/gameplay/Timer.tsx";
+import Timer from "../../features/gameplay/common/components/Timer.tsx";
 
 type TimeControlInfo = {
 	baseTime: number;

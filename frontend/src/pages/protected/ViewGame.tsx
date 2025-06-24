@@ -17,8 +17,8 @@ import { convertToMilliseconds } from "../../utils/timeUtils";
 import { pieceAnimationTime } from "../../constants/pieceAnimation";
 import usePieceAnimation from "../../hooks/usePieceAnimation";
 import GameReplayChessboard from "../../features1/gameplay/chessboards/GameReplayChessboard";
-import MoveListPanel from "../../features1/gameplay/gameplaySidePanel/MoveListPanel";
-import MoveNavigationButtons from "../../features1/gameplay/gameplaySidePanel/MoveNavigationButtons";
+import MoveListPanel from "../../features/gameplay/common/components/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "../../features/gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
 
 function ViewGame() {
 	const { gameId } = useParams();

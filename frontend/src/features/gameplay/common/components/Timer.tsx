@@ -1,4 +1,4 @@
-import "../../styles/features/gameplay/timer.scss";
+import "../styles/timer.scss";
 import {
 	formatTime,
 	getLowTimeThreshold,
