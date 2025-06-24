@@ -6,7 +6,7 @@ import {
 	CapturablePiece,
 	CapturablePiecePlural,
 	PieceColor,
-} from "../../multiplayer/gameLogic.types";
+} from "../../../../types/gameLogic";
 import { capitaliseFirstLetter } from "../../../../utils/generalUtils";
 
 import "../styles/captured-material.scss";
