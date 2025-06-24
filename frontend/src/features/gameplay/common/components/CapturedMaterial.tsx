@@ -1,16 +1,16 @@
 import {
 	CapturedPiecesList,
 	PromotedPiecesList,
-} from "../../interfaces/materialCalculation";
+} from "../../../../interfaces/materialCalculation";
 import {
 	CapturablePiece,
 	CapturablePiecePlural,
 	PieceColor,
-} from "../../types/gameLogic";
-import { capitaliseFirstLetter } from "../../utils/generalUtils";
+} from "../../../../types/gameLogic";
+import { capitaliseFirstLetter } from "../../../../utils/generalUtils";
 
-import "../../styles/components/chessboard/captured-material.scss";
-import { pluralToSingularPieceMap } from "../../constants/pieceMappings";
+import "../styles/captured-material.scss";
+import { pluralToSingularPieceMap } from "../../../../constants/pieceMappings";
 
 type CapturedMaterialProps = {
 	capturedPiecesList: CapturedPiecesList;
@@ -35,7 +35,11 @@ function CapturedMaterial({
 			const isFirstPiece = pieceIndex === 0;
 			capturedMaterialElements.push(
 				<img
-					className={isFirstPiece ? "first-captured-piece-image" : "captured-piece-image"}
+					className={
+						isFirstPiece
+							? "first-captured-piece-image"
+							: "captured-piece-image"
+					}
 					key={pieceIndex}
 					src={pieceFileName}
 				/>

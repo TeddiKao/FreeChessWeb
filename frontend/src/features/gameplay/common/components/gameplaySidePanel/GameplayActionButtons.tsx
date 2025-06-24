@@ -1,15 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 
-import "../../../styles/features/gameplay/gameplay-action-buttons.scss";
-import { RefObject, StateSetterFunction } from "../../../types/general";
-import useReactiveRef from "../../../hooks/useReactiveRef";
-import useWebSocket from "../../../hooks/useWebsocket";
-import { websocketBaseURL } from "../../../constants/urls";
-import { ActionWebSocketEventTypes } from "../../../enums/gameLogic";
-import ConfirmationPopup from "../../../components/common/ConfirmationPopup";
-import useWebsocketWithLifecycle from "../../../hooks/useWebsocketWithLifecycle";
-import { PieceColor } from "../../../types/gameLogic";
-import { getAccessToken } from "../../../features/auth/utils";
+import "../../styles/gameplaySidePanel/gameplay-action-buttons.scss";
+import { RefObject, StateSetterFunction } from "../../../../../types/general";
+import useReactiveRef from "../../../../../hooks/useReactiveRef";
+import useWebSocket from "../../../../../hooks/useWebsocket";
+import { websocketBaseURL } from "../../../../../constants/urls";
+import { ActionWebSocketEventTypes } from "../../../../../enums/gameLogic";
+import ConfirmationPopup from "../../../../../components/common/ConfirmationPopup";
+import useWebsocketWithLifecycle from "../../../../../hooks/useWebsocketWithLifecycle";
+import { PieceColor } from "../../../../../types/gameLogic";
+import { getAccessToken } from "../../../../auth/utils";
 
 type GameplayActionButtonsProps = {
 	gameId: string | number;

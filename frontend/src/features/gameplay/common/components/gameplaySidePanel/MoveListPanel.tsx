@@ -1,5 +1,5 @@
-import "../../../styles/features/gameplay/move-list-panel.scss";
-import { StateSetterFunction } from "../../../types/general";
+import "../../styles/gameplaySidePanel/move-list-panel.scss";
+import { StateSetterFunction } from "../../../../../types/general";
 
 type MoveListPanelProps = {
 	moveList: Array<Array<string>>;

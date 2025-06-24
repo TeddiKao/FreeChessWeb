@@ -18,8 +18,8 @@ import { pieceAnimationTime } from "../../constants/pieceAnimation";
 import usePieceAnimation from "../../hooks/usePieceAnimation";
 import LocalGameOverModal from "../../features1/modals/gameOverModals/LocalModal";
 import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar";
-import MoveListPanel from "../../features1/gameplay/gameplaySidePanel/MoveListPanel";
-import MoveNavigationButtons from "../../features1/gameplay/gameplaySidePanel/MoveNavigationButtons";
+import MoveListPanel from "../../features/gameplay/common/components/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "../../features/gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
 import BotChessboard from "../../features1/gameplay/chessboards/BotChessboard";
 
 function PlayBot() {

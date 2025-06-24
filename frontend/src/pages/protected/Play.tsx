@@ -16,12 +16,12 @@ import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNa
 import { getOppositeColor } from "../../utils/gameLogic/general.ts";
 import useMultiplayerGameplayLogic from "../../hooks/useMultiplayerGameplayLogic.ts";
 import { isNullOrUndefined } from "../../utils/generalUtils.ts";
-import CapturedMaterial from "../../features1/gameplay/CapturedMaterial.tsx";
+import CapturedMaterial from "../../features/gameplay/common/components/CapturedMaterial.tsx";
 import MultiplayerChessboard from "../../features1/gameplay/chessboards/MultiplayerChessboard.tsx";
-import GameplayActionButtons from "../../features1/gameplay/gameplaySidePanel/GameplayActionButtons.tsx";
-import MoveListPanel from "../../features1/gameplay/gameplaySidePanel/MoveListPanel.tsx";
-import MoveNavigationButtons from "../../features1/gameplay/gameplaySidePanel/MoveNavigationButtons.tsx";
-import Timer from "../../features1/gameplay/Timer.tsx";
+import GameplayActionButtons from "../../features/gameplay/common/components/gameplaySidePanel/GameplayActionButtons.tsx";
+import MoveListPanel from "../../features/gameplay/common/components/gameplaySidePanel/MoveListPanel.tsx";
+import MoveNavigationButtons from "../../features/gameplay/common/components/gameplaySidePanel/MoveNavigationButtons.tsx";
+import Timer from "../../features/gameplay/common/components/Timer.tsx";
 
 function Play() {
 	const location = useLocation();
