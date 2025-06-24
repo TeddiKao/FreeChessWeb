@@ -1,16 +1,16 @@
 import {
 	CapturedPiecesList,
 	PromotedPiecesList,
-} from "../../../interfaces/materialCalculation";
+} from "../../../../interfaces/materialCalculation";
 import {
 	CapturablePiece,
 	CapturablePiecePlural,
 	PieceColor,
-} from "../../../types/gameLogic";
-import { capitaliseFirstLetter } from "../../../utils/generalUtils";
+} from "../../../../types/gameLogic";
+import { capitaliseFirstLetter } from "../../../../utils/generalUtils";
 
 import "../../styles/components/chessboard/captured-material.scss";
-import { pluralToSingularPieceMap } from "../../../constants/pieceMappings";
+import { pluralToSingularPieceMap } from "../../../../constants/pieceMappings";
 
 type CapturedMaterialProps = {
 	capturedPiecesList: CapturedPiecesList;

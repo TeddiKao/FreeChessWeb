@@ -5,11 +5,11 @@ import {
 	OptionalValue,
 	RefObject,
 	StateSetterFunction,
-} from "../../../types/general";
-import { ArrowKeys } from "../../../enums/general";
-import { PositionList } from "../../../interfaces/gameLogic";
-import useAnimationLogic from "../../../hooks/gameLogic/useAnimationLogic";
-import { PieceColor } from "../../../types/gameLogic";
+} from "../../../../../types/general";
+import { ArrowKeys } from "../../../../../enums/general";
+import { PositionList } from "../../../../../interfaces/gameLogic";
+import useAnimationLogic from "../../../../../hooks/gameLogic/useAnimationLogic";
+import { PieceColor } from "../../../../../types/gameLogic";
 
 type MoveNavigationButtonsProps = {
 	setPositionIndex: StateSetterFunction<number>;
@@ -34,7 +34,7 @@ function MoveNavigationButtons({
 	positionList,
 	positionIndex,
 
-	prepareAnimationData
+	prepareAnimationData,
 }: MoveNavigationButtonsProps) {
 	function handleKeyDown(event: KeyboardEvent) {
 		switch (event.key) {
