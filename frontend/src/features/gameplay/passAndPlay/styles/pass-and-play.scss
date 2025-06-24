@@ -1,0 +1,18 @@
+@use "../../../../styles/global/mixins" as *;
+
+.chessboard-wrapper {
+	display: flex;
+	flex-direction: row;
+}
+
+.playing-interface-container {
+	@include page-center-xy;
+
+	@include flex-row;
+	justify-content: center;
+}
+
+.main-chessboard {
+	@include flex-column;
+	justify-content: center;
+}
