@@ -1,4 +1,4 @@
-import { BoardPlacement } from "../../types/gameLogic";
+import { BoardPlacement } from "../../features/gameplay/multiplayer/gameLogic.types";
 
 import "../../styles/components/chessboard/chessboard.scss";
 import { getFile, getRank, isSquareLight } from "../../utils/boardUtils";

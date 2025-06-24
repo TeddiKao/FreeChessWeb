@@ -1,34 +1,38 @@
-import { BoardPlacement, ParsedFENString, PieceInfo } from "../../types/gameLogic";
+import {
+	BoardPlacement,
+	ParsedFENString,
+	PieceInfo,
+} from "../../features/gameplay/multiplayer/gameLogic.types";
 
 function clearStartingSquare(
-    fenString: ParsedFENString,
-    startingSquare: number | string
+	fenString: ParsedFENString,
+	startingSquare: number | string
 ): ParsedFENString {
-    const updatedFEN: ParsedFENString = structuredClone(fenString);
-    const updatedBoardPlacement: BoardPlacement = structuredClone(
-        updatedFEN["board_placement"]
-    );
+	const updatedFEN: ParsedFENString = structuredClone(fenString);
+	const updatedBoardPlacement: BoardPlacement = structuredClone(
+		updatedFEN["board_placement"]
+	);
 
-    delete updatedBoardPlacement[`${startingSquare}`];
+	delete updatedBoardPlacement[`${startingSquare}`];
 
-    updatedFEN["board_placement"] = updatedBoardPlacement;
+	updatedFEN["board_placement"] = updatedBoardPlacement;
 
-    return updatedFEN;
+	return updatedFEN;
 }
 
 function addPieceToDestinationSquare(
-    fenString: ParsedFENString,
-    destinationSquare: string | number,
-    pieceInfo: PieceInfo
+	fenString: ParsedFENString,
+	destinationSquare: string | number,
+	pieceInfo: PieceInfo
 ): ParsedFENString {
-    const updatedFEN: ParsedFENString = structuredClone(fenString);
-    const updatedBoardPlacement: BoardPlacement = structuredClone(
-        updatedFEN["board_placement"]
-    );
+	const updatedFEN: ParsedFENString = structuredClone(fenString);
+	const updatedBoardPlacement: BoardPlacement = structuredClone(
+		updatedFEN["board_placement"]
+	);
 
-    updatedBoardPlacement[`${destinationSquare}`] = pieceInfo;
-    updatedFEN["board_placement"] = updatedBoardPlacement;
-    return updatedFEN;
+	updatedBoardPlacement[`${destinationSquare}`] = pieceInfo;
+	updatedFEN["board_placement"] = updatedBoardPlacement;
+	return updatedFEN;
 }
 
 export { clearStartingSquare, addPieceToDestinationSquare };

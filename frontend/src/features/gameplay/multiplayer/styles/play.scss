@@ -1,4 +1,4 @@
-@use "../global/mixins.scss" as *;
+@use "../../../../styles//global/mixins" as *;
 
 .multiplayer-playing-interface-container {
 	@include flex-row-x-center;

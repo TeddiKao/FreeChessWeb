@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { ParsedFENString, PieceType } from "../../../../types/gameLogic";
+import { ParsedFENString, PieceType } from "../gameLogic.types";
 import { ChessboardSquareIndex } from "../../../../types/general";
 import useGameplaySettings from "../../../../hooks/useGameplaySettings";
 

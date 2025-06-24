@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PieceColor } from "../../../../types/gameLogic";
+import { PieceColor } from "../gameLogic.types";
 import { CheckmateEventData } from "../../../../interfaces/gameLogic";
 import { getOppositeColor } from "../../../../utils/gameLogic/general";
 

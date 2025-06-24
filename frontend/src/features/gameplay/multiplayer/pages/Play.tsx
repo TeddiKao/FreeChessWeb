@@ -1,20 +1,20 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
-import "../../styles/pages/play.scss";
-import "../../styles/components/chessboard/board-actions.scss";
+import "../styles/play.scss";
+import "../../../../styles/components/chessboard/board-actions.scss";
 
 import GameOverModal from "../../../../features1/modals/gameOverModals/MultiplayerModal.tsx";
 import GameplaySettings from "../../../../features1/modals/GameplaySettings.tsx";
 import ModalWrapper from "../../../../components/wrappers/ModalWrapper.js";
-import { PieceColor } from "../../../../types/gameLogic.js";
+import { PieceColor } from "../../../../types/gameLogic.ts";
 import useGameplaySettings from "../../../../hooks/useGameplaySettings.ts";
 import MessageBox from "../../../../components/common/MessageBox.tsx";
 import { MessageBoxTypes } from "../../../../types/messageBox.ts";
 import DrawOfferPopup from "../../../../features1/popups/DrawOfferPopup.tsx";
 import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar.tsx";
 import { getOppositeColor } from "../../../../utils/gameLogic/general.ts";
-import useMultiplayerGameplayLogic from "../../../../hooks/useMultiplayerGameplayLogic.ts";
+import useMultiplayerGameplayLogic from "../hooks/useMultiplayerGameplayLogic.ts";
 import { isNullOrUndefined } from "../../../../utils/generalUtils.ts";
 import CapturedMaterial from "../../common/components/CapturedMaterial.tsx";
 import MultiplayerChessboard from "../../../../features1/gameplay/chessboards/MultiplayerChessboard.tsx";

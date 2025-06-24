@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PieceColor } from "../../../../types/gameLogic";
+import { PieceColor } from "../gameLogic.types";
 import { fetchSideToMove } from "../../../../utils/apiUtils";
 
 function useSideToMove(gameId: number) {

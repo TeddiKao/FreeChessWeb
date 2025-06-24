@@ -7,7 +7,7 @@ import {
 	PositionListUpdateEventData,
 	TimerChangedEventData,
 } from "../../../../interfaces/gameLogic";
-import { ParsedFENString, PieceType } from "../../../../types/gameLogic";
+import { ParsedFENString, PieceType } from "../gameLogic.types";
 import { ChessboardSquareIndex } from "../../../../types/general";
 import { getAccessToken } from "../../../auth/utils";
 import useWebsocketWithLifecycle from "../../../../hooks/useWebsocketWithLifecycle";

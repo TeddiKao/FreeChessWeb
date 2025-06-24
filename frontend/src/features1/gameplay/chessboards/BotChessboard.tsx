@@ -32,7 +32,7 @@ import {
 	PieceColor,
 	PieceInfo,
 	PieceType,
-} from "../../../types/gameLogic.js";
+} from "../../../features/gameplay/multiplayer/gameLogic.types.js";
 import { isPawnPromotion } from "../../../utils/moveUtils.ts";
 import useWebSocket from "../../../hooks/useWebsocket.ts";
 import { isObjEmpty, parseWebsocketUrl } from "../../../utils/generalUtils.ts";
@@ -103,8 +103,8 @@ function BotChessboard({
 	const { socketRef: botGameWebsocketRef } = useWebsocketWithLifecycle({
 		url: websocketURL,
 		enabled: true,
-		onMessage: handleOnMessage
-	})
+		onMessage: handleOnMessage,
+	});
 
 	useEffect(() => {
 		setParsedFENString(parsed_fen_string);

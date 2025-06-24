@@ -11,7 +11,7 @@ import usePlayerClocks from "./usePlayerClocks";
 import useClickedSquaresState from "./useClickedSquaresState";
 import useDraggedSquaresState from "./useDraggedSquaresState";
 import useGameEndState from "./useGameEndState";
-import useMultiplayerGameplayWebsocket from "../../../../hooks/useMultiplayerGameplayWebsocket";
+import useMultiplayerGameplayWebsocket from "./useMultiplayerGameplayWebsocket";
 import useClickMoveEffect from "./useClickMoveEffect";
 import useDragMoveEffect from "./useDragMoveEffect";
 import usePromotionLogic from "./usePromotionLogic";

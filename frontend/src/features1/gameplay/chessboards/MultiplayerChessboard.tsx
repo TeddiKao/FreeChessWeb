@@ -6,7 +6,10 @@ import Square from "../../../components/chessboard/Square.tsx";
 
 // Types, interfaces, enums
 import { MultiplayerChessboardProps } from "../../../interfaces/chessboard.js";
-import { PieceColor, PieceType } from "../../../types/gameLogic.ts";
+import {
+	PieceColor,
+	PieceType,
+} from "../../../features/gameplay/multiplayer/gameLogic.types.ts";
 
 // Utils
 import ChessboardGrid from "../../../components/chessboard/ChessboardGrid.tsx";
@@ -36,14 +39,14 @@ function MultiplayerChessboard({
 		setDraggedSquare,
 		setDroppedSquare,
 	},
-	
+
 	cancelPromotion,
 	onPromotion,
 	shouldShowPromotionPopup,
 	promotionSquare,
 
 	animationRef,
-	animationSquare
+	animationSquare,
 }: MultiplayerChessboardProps) {
 	const chessboardStyles = {
 		gridTemplateColums: `repeat(8, ${squareSize}px)`,

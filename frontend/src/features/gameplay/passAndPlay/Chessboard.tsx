@@ -59,7 +59,7 @@ import {
 	PieceColor,
 	PieceInfo,
 	PieceType,
-} from "../../../types/gameLogic.js";
+} from "../multiplayer/gameLogic.types.js";
 import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
 import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
 import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";

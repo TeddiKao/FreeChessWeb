@@ -5,7 +5,7 @@ import {
 	fetchMoveList,
 	fetchPositionList,
 } from "../../utils/apiUtils";
-import { ParsedFENString } from "../../types/gameLogic";
+import { ParsedFENString } from "../../features/gameplay/multiplayer/gameLogic.types";
 
 import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar";
 

@@ -9,7 +9,7 @@ import "./styles/global/global.scss";
 
 import ProtectedRoute from "./features/auth/components/routes/ProtectedRoute.tsx";
 import AuthenticationRoute from "./features/auth/components/routes/AuthenticationRoute.tsx";
-import Play from "./pages/protected/Play.tsx";
+import Play from "./features/gameplay/multiplayer/pages/Play.tsx";
 import PassAndPlay from "./features/gameplay/passAndPlay/pages/PassAndPlay.tsx";
 import TempRoute from "./pages/TempRoute.tsx";
 import SelectBot from "./pages/protected/SelectBot/SelectBot.tsx";
