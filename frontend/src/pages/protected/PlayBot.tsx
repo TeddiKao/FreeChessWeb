@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import BotChessboard from "../../features/gameplay/chessboards/BotChessboard";
 import {
 	fetchBotGameMoveList,
 	fetchBotGamePositionList,
@@ -18,9 +17,10 @@ import { convertToMilliseconds } from "../../utils/timeUtils";
 import { pieceAnimationTime } from "../../constants/pieceAnimation";
 import usePieceAnimation from "../../hooks/usePieceAnimation";
 import LocalGameOverModal from "../../features1/modals/gameOverModals/LocalModal";
-import MoveNavigationButtons from "../../features/gameplay/gameplaySidePanel/MoveNavigationButtons";
-import MoveListPanel from "../../features/gameplay/gameplaySidePanel/MoveListPanel";
 import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar";
+import MoveListPanel from "../../features1/gameplay/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "../../features1/gameplay/gameplaySidePanel/MoveNavigationButtons";
+import BotChessboard from "../../features1/gameplay/chessboards/BotChessboard";
 
 function PlayBot() {
 	const initialGameplaySettings = useGameplaySettings();

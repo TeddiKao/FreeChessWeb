@@ -6,10 +6,7 @@ import {
 	fetchPositionList,
 } from "../../utils/apiUtils";
 import { ParsedFENString } from "../../types/gameLogic";
-import GameReplayChessboard from "../../features/gameplay/chessboards/GameReplayChessboard";
 
-import MoveListPanel from "../../features/gameplay/gameplaySidePanel/MoveListPanel";
-import MoveNavigationButtons from "../../features/gameplay/gameplaySidePanel/MoveNavigationButtons";
 import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar";
 
 import "../../styles/pages/view-game.scss";
@@ -19,6 +16,9 @@ import { OptionalValue } from "../../types/general";
 import { convertToMilliseconds } from "../../utils/timeUtils";
 import { pieceAnimationTime } from "../../constants/pieceAnimation";
 import usePieceAnimation from "../../hooks/usePieceAnimation";
+import GameReplayChessboard from "../../features1/gameplay/chessboards/GameReplayChessboard";
+import MoveListPanel from "../../features1/gameplay/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "../../features1/gameplay/gameplaySidePanel/MoveNavigationButtons";
 
 function ViewGame() {
 	const { gameId } = useParams();
