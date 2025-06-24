@@ -21,7 +21,7 @@ async function displayLegalMoves(
 
 	for (const legalMove of legalMoves) {
 		const square = document.getElementById(legalMove);
-		if (!square) return;
+		if (!square) continue;
 
 		square.classList.add("legal-square");
 	}
