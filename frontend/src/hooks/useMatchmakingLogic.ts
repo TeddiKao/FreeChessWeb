@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { websocketBaseURL } from "../constants/urls";
-import { getAccessToken } from "../utils/tokenUtils";
+import { getAccessToken } from "../features/auth/utils";
 import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
 import { MatchmakingEvents } from "../enums/gameSetup";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +21,7 @@ function useMatchmakingLogic({
 	baseTime,
 	increment,
 	cancelSuccess,
-	navigateToTemp
+	navigateToTemp,
 }: MatchmakingLogicHookProps) {
 	const [matchmakingStatus, setMatchmakingStatus] =
 		useState<string>("Finding match");
@@ -72,7 +72,7 @@ function useMatchmakingLogic({
 					},
 				});
 			} else {
-				navigate("/play", { state: gameSetupInfo })
+				navigate("/play", { state: gameSetupInfo });
 			}
 		};
 

@@ -7,8 +7,8 @@ import { HTML5toTouch } from "rdndmb-html5-to-touch";
 
 import "./styles/global/global.scss";
 
-import ProtectedRoute from "./components/wrappers/routes/ProtectedRoute.tsx";
-import AuthenticationRoute from "./components/wrappers/routes/AuthenticationRoute.tsx";
+import ProtectedRoute from "./features/auth/components/routes/ProtectedRoute.tsx";
+import AuthenticationRoute from "./features/auth/components/routes/AuthenticationRoute.tsx";
 import Play from "./pages/protected/Play.tsx";
 import PassAndPlay from "./pages/protected/PassAndPlay.tsx";
 import TempRoute from "./pages/TempRoute.tsx";

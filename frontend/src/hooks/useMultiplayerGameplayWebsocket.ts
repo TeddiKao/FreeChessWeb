@@ -1,14 +1,20 @@
 import { websocketBaseURL } from "../constants/urls";
 import { GameplayWebSocketEventTypes } from "../enums/gameLogic";
-import { CheckmateEventData, MoveListUpdateEventData, MoveMadeEventData, PositionListUpdateEventData, TimerChangedEventData } from "../interfaces/gameLogic";
+import {
+	CheckmateEventData,
+	MoveListUpdateEventData,
+	MoveMadeEventData,
+	PositionListUpdateEventData,
+	TimerChangedEventData,
+} from "../interfaces/gameLogic";
 import { ParsedFENString, PieceType } from "../types/gameLogic";
 import { ChessboardSquareIndex } from "../types/general";
-import { getAccessToken } from "../utils/tokenUtils";
+import { getAccessToken } from "../features/auth/utils";
 import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
 
 interface MultiplayerGameplayWebsocketHookProps {
-    gameId: number;
-    parsedFEN: ParsedFENString;
+	gameId: number;
+	parsedFEN: ParsedFENString;
 	handleMoveMade: (eventData: MoveMadeEventData) => void;
 	handleMoveListUpdated: (eventData: MoveListUpdateEventData) => void;
 	handlePositionListUpdated: (eventData: PositionListUpdateEventData) => void;
@@ -17,12 +23,12 @@ interface MultiplayerGameplayWebsocketHookProps {
 	handlePlayerTimeout: (eventData: any) => void;
 	handleTimerChanged: (eventData: TimerChangedEventData) => void;
 
-    performPostPromotionCleanup: () => void;
+	performPostPromotionCleanup: () => void;
 }
 
 function useMultiplayerGameplayWebsocket({
-    gameId,
-    parsedFEN,
+	gameId,
+	parsedFEN,
 	handleMoveMade,
 	handlePositionListUpdated,
 	handleMoveListUpdated,
@@ -30,7 +36,7 @@ function useMultiplayerGameplayWebsocket({
 	handlePlayerTimeout,
 	handleTimerChanged,
 	handleDraw,
-    performPostPromotionCleanup
+	performPostPromotionCleanup,
 }: MultiplayerGameplayWebsocketHookProps) {
 	const gameWebsocketUrl = `${websocketBaseURL}/ws/game-server/?token=${getAccessToken()}&gameId=${gameId}`;
 	const { socketRef: gameWebsocketRef } = useWebsocketWithLifecycle({
@@ -39,7 +45,7 @@ function useMultiplayerGameplayWebsocket({
 		enabled: true,
 	});
 
-    function sendRegularMove(
+	function sendRegularMove(
 		startingSquare: ChessboardSquareIndex,
 		destinationSquare: ChessboardSquareIndex
 	) {
@@ -65,7 +71,7 @@ function useMultiplayerGameplayWebsocket({
 		gameWebsocketRef.current?.send(JSON.stringify(moveDetails));
 	}
 
-    function sendPromotionMove(
+	function sendPromotionMove(
 		startingSquare: ChessboardSquareIndex,
 		destinationSquare: ChessboardSquareIndex,
 		promotedPiece: PieceType
@@ -152,7 +158,7 @@ function useMultiplayerGameplayWebsocket({
 		}
 	}
 
-    return { sendRegularMove, sendPromotionMove };
+	return { sendRegularMove, sendPromotionMove };
 }
 
 export default useMultiplayerGameplayWebsocket;
