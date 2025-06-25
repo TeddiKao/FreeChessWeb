@@ -1,6 +1,4 @@
 import api from "../api.ts";
-import { MoveInfo, ParsedFEN } from "../features/gameplay/common/types/gameState.types.ts";
-import { PieceColor } from "../features/gameplay/common/types/pieces.types.ts";
 
 async function fetchLegalMoves(
 	parsedFENString: object,
@@ -124,75 +122,6 @@ async function getUsername() {
 	return username;
 }
 
-async function createBotGame(botId: string) {
-	let gameId = null;
-	let assignedColor = null;
-
-	try {
-		const response = await api.post("/bots/create-bot-game/", {
-			bot: botId,
-		});
-
-		gameId = response.data["game_id"];
-		assignedColor = response.data["assigned_color"];
-	} catch (error) {
-		console.error(error);
-	}
-
-	return [gameId, assignedColor];
-}
-
-async function makeMoveInBotGame(
-	gameId: number,
-	bot: string,
-	moveInfo: MoveInfo
-) {
-	let positionData = null;
-
-	try {
-		const response = await api.post("/bots/make-move/", {
-			game_id: gameId,
-			bot: bot,
-			move_info: moveInfo,
-		});
-
-		positionData = response.data;
-	} catch (error) {
-		console.error(error);
-	}
-
-	return positionData;
-}
-
-async function fetchBotGamePositionList(gameId: number) {
-	let positionList = null;
-	try {
-		const response = await api.post("/bots/get-position-list/", {
-			game_id: gameId,
-		});
-
-		positionList = response.data["position_list"];
-	} catch (error) {
-		console.error(error);
-	}
-
-	return positionList;
-}
-
-async function fetchBotGameMoveList(gameId: number) {
-	let moveList = null;
-	try {
-		const response = await api.post("/bots/get-move-list/", {
-			game_id: gameId,
-		});
-
-		moveList = response.data["move_list"];
-	} catch (error) {
-		console.error(error);
-	}
-
-	return moveList;
-}
 
 async function fetchCompletedGames(currentPage: number) {
 	let completedGames = null;
@@ -230,10 +159,6 @@ export {
 	fetchLegalMoves,
 	fetchMoveIsValid,
 	getUsername,
-	createBotGame,
-	makeMoveInBotGame,
-	fetchBotGameMoveList,
-	fetchBotGamePositionList,
 	fetchCompletedGames,
 	fetchTotalCompletedGames,
 };
