@@ -1,5 +1,5 @@
+import api from "../../../../api";
 import { ChessboardSquareIndex } from "../../../../types/general";
-import { fetchLegalMoves, fetchMoveIsValid } from "../../../../utils/apiUtils";
 import { ParsedFEN } from "../types/gameState.types";
 
 async function displayLegalMoves(
@@ -49,5 +49,71 @@ async function performMoveValidation(
 
 	return isValidMove;
 }
+
+async function fetchLegalMoves(
+	parsedFENString: object,
+	pieceType: string,
+	pieceColor: string,
+	startingSquare: string | number
+) {
+	let legalMoves = [];
+
+	try {
+		const response = await api.post(
+			"/move_validation_api/show-legal-moves/",
+			{
+				parsed_fen_string: parsedFENString,
+				move_info: {
+					piece_color: pieceColor,
+					piece_type: pieceType,
+					starting_square: startingSquare,
+				},
+			}
+		);
+
+		if (response.status === 200) {
+			legalMoves = response.data;
+		}
+	} catch (error) {
+		console.log(error);
+	}
+
+	return legalMoves;
+}
+
+async function fetchMoveIsValid(
+	parsedFENString: object,
+	piece_color: string,
+	piece_type: string,
+	starting_square: number | string,
+	destination_square: number | string,
+	additional_info: object = {}
+) {
+	let isMoveLegal = false;
+	let moveType = null;
+
+	try {
+		const response = await api.post("/move_validation_api/validate-move/", {
+			parsed_fen_string: parsedFENString,
+			move_info: {
+				piece_color: piece_color,
+				piece_type: piece_type,
+				starting_square: starting_square,
+				destination_square: destination_square,
+				additional_info: additional_info,
+			},
+		});
+
+		if (response.status === 200) {
+			isMoveLegal = response.data.is_valid;
+			moveType = response.data.move_type;
+		}
+	} catch (error) {
+		console.log(error);
+	}
+
+	return [isMoveLegal, moveType];
+}
+
 
 export { displayLegalMoves, performMoveValidation };
