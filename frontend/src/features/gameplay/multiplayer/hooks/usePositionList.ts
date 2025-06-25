@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-	PositionList,
-	PositionListUpdateEventData,
-} from "../../../../interfaces/gameLogic";
 import { fetchPositionList } from "../../../../utils/apiUtils";
+import { PositionList } from "../../common/types/gameState.types";
+import { PositionListUpdateEventData } from "../types/gameEvents.types";
 
 function usePositionList(gameId: number) {
 	const [positionList, setPositionList] = useState<PositionList>([]);

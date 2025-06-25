@@ -1,14 +1,11 @@
-import {
-	BoardPlacement,
-	ParsedFENString,
-	PieceInfo,
-} from "../../types/gameLogic.ts";
+import { BoardPlacement, ParsedFEN } from "../../features/gameplay/common/types/gameState.types.ts";
+import { PieceInfo } from "../../features/gameplay/common/types/pieces.types.ts";
 
 function clearStartingSquare(
-	fenString: ParsedFENString,
+	fenString: ParsedFEN,
 	startingSquare: number | string
-): ParsedFENString {
-	const updatedFEN: ParsedFENString = structuredClone(fenString);
+): ParsedFEN {
+	const updatedFEN: ParsedFEN = structuredClone(fenString);
 	const updatedBoardPlacement: BoardPlacement = structuredClone(
 		updatedFEN["board_placement"]
 	);
@@ -21,11 +18,11 @@ function clearStartingSquare(
 }
 
 function addPieceToDestinationSquare(
-	fenString: ParsedFENString,
+	fenString: ParsedFEN,
 	destinationSquare: string | number,
 	pieceInfo: PieceInfo
-): ParsedFENString {
-	const updatedFEN: ParsedFENString = structuredClone(fenString);
+): ParsedFEN {
+	const updatedFEN: ParsedFEN = structuredClone(fenString);
 	const updatedBoardPlacement: BoardPlacement = structuredClone(
 		updatedFEN["board_placement"]
 	);

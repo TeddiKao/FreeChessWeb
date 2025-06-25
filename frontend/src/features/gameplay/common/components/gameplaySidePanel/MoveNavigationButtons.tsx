@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import "../../styles/gameplaySidePanel/gameplay-action-buttons.scss";
 import {
-	ChessboardSquareIndex,
 	OptionalValue,
 	RefObject,
 	StateSetterFunction,
 } from "../../../../../types/general";
 import { ArrowKeys } from "../../../../../enums/general";
-import { PositionList } from "../../../../../interfaces/gameLogic";
+import { PositionList } from "../../types/gameState.types";
+import { ChessboardSquareIndex } from "../../types/board.types";
 
 type MoveNavigationButtonsProps = {
 	setPositionIndex: StateSetterFunction<number>;

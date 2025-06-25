@@ -14,12 +14,12 @@ import Chessboard from "../Chessboard.tsx";
 import GameplaySettings from "../../../../features1/modals/GameplaySettings.tsx";
 import ModalWrapper from "../../../../components/wrappers/ModalWrapper.tsx";
 import useGameplaySettings from "../../../../hooks/useGameplaySettings.ts";
-import { ParsedFENString } from "../../multiplayer/gameLogic.types.ts";
 import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar.tsx";
 import LocalGameOverModal from "../../../../features1/modals/gameOverModals/LocalModal.tsx";
+import { ParsedFEN } from "../../common/types/gameState.types.ts";
 
 function PassAndPlay() {
-	const [parsedFEN, setParsedFEN] = useState<ParsedFENString | null>(null);
+	const [parsedFEN, setParsedFEN] = useState<ParsedFEN | null>(null);
 
 	const [gameEnded, setGameEnded] = useState<boolean>(false);
 	const [gameEndedCause, setGameEndedCause] = useState<string>("");
@@ -84,7 +84,7 @@ function PassAndPlay() {
 							<div className="chessboard-wrapper">
 								<Chessboard
 									parsed_fen_string={
-										parsedFEN as ParsedFENString
+										parsedFEN as ParsedFEN
 									}
 									orientation={boardOrientation}
 									setBoardOrientation={setBoardOrientation}

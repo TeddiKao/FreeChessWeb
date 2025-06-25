@@ -51,15 +51,6 @@ import {
 	ChessboardSquareIndex,
 	OptionalValue,
 } from "../../../types/general.js";
-import {
-	BoardPlacement,
-	CastlingSide,
-	MoveInfo,
-	ParsedFENString,
-	PieceColor,
-	PieceInfo,
-	PieceType,
-} from "../multiplayer/gameLogic.types.js";
 import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
 import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
 import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";
@@ -70,6 +61,8 @@ import {
 } from "../../../interfaces/chessboardGrid.ts";
 import Square from "../../../components/chessboard/Square.tsx";
 import { displayLegalMoves } from "../common/utils/moveService.ts";
+import { BoardPlacement, CastlingSide, MoveInfo, ParsedFEN } from "../common/types/gameState.types.ts";
+import { PieceColor, PieceInfo, PieceType } from "../common/types/pieces.types.ts";
 
 function Chessboard({
 	parsed_fen_string,
@@ -83,8 +76,8 @@ function Chessboard({
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
 	const [clickedSquare, setClickedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
-	const [parsedFENString, setParsedFENString] =
-		useState<OptionalValue<ParsedFENString>>(parsed_fen_string);
+	const [parsedFENString, setParsedFEN] =
+		useState<OptionalValue<ParsedFEN>>(parsed_fen_string);
 
 	const [draggedSquare, setDraggedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -113,14 +106,14 @@ function Chessboard({
 	const isFirstRender = useRef<boolean>(false);
 	const selectingPromotionRef = useRef<boolean>(false);
 	const unpromotedBoardPlacementRef =
-		useRef<OptionalValue<ParsedFENString>>(null);
+		useRef<OptionalValue<ParsedFEN>>(null);
 
 	const chessboardStyles = {
 		gridTemplateColumns: `repeat(8, ${squareSize}px)`,
 	};
 
 	useEffect(() => {
-		setParsedFENString(parsed_fen_string);
+		setParsedFEN(parsed_fen_string);
 	}, [parsed_fen_string]);
 
 	useEffect(() => {
@@ -209,8 +202,8 @@ function Chessboard({
 			);
 		}
 
-		setParsedFENString(
-			(previousFENString: OptionalValue<ParsedFENString>) => {
+		setParsedFEN(
+			(previousFENString: OptionalValue<ParsedFEN>) => {
 				if (!previousFENString) {
 					return parsedFENString;
 				}
@@ -225,7 +218,7 @@ function Chessboard({
 
 				const initialSquare = draggedSquareInfo["starting_square"];
 
-				let newPiecePlacements: ParsedFENString =
+				let newPiecePlacements: ParsedFEN =
 					addPieceToDestinationSquare(
 						previousFENString,
 						droppedSquare,
@@ -411,8 +404,8 @@ function Chessboard({
 		);
 
 		setTimeout(() => {
-			setParsedFENString(
-				(previousFENString: OptionalValue<ParsedFENString>) => {
+			setParsedFEN(
+				(previousFENString: OptionalValue<ParsedFEN>) => {
 					if (!previousFENString) {
 						return parsedFENString;
 					}
@@ -429,7 +422,7 @@ function Chessboard({
 							"piece_color"
 						];
 
-					let newPiecePlacements: ParsedFENString =
+					let newPiecePlacements: ParsedFEN =
 						addPieceToDestinationSquare(
 							previousFENString,
 							clickedSquare,
@@ -588,7 +581,7 @@ function Chessboard({
 			return;
 		}
 
-		setParsedFENString((prevFENString: OptionalValue<ParsedFENString>) => {
+		setParsedFEN((prevFENString: OptionalValue<ParsedFEN>) => {
 			if (!prevFENString) {
 				return parsedFENString;
 			}
@@ -609,7 +602,7 @@ function Chessboard({
 	}
 
 	async function handleGameEndDetection(
-		fenString: ParsedFENString,
+		fenString: ParsedFEN,
 		color: PieceColor
 	): Promise<void> {
 		const kingColor = getOppositeColor(color);
@@ -638,7 +631,7 @@ function Chessboard({
 	}
 
 	async function checkIsCheckmated(
-		currentFEN: ParsedFENString,
+		currentFEN: ParsedFEN,
 		kingColor: string
 	) {
 		const isCheckmated = await getIsCheckmated(currentFEN, kingColor);
@@ -647,7 +640,7 @@ function Chessboard({
 	}
 
 	async function checkIsStalemated(
-		currentFEN: ParsedFENString,
+		currentFEN: ParsedFEN,
 		kingColor: string
 	) {
 		const isStalemated = await getIsStalemated(currentFEN, kingColor);
@@ -726,7 +719,7 @@ function Chessboard({
 				unpromotedBoardPlacementRef
 			);
 
-		setParsedFENString(updatedBoardPlacement);
+		setParsedFEN(updatedBoardPlacement);
 
 		playAudio(moveType);
 		selectingPromotionRef.current = false;
@@ -765,7 +758,7 @@ function Chessboard({
 				}
 				orientation={orientation}
 				handleSquareClick={handleSquareClick}
-				setParsedFENString={setParsedFENString}
+				setParsedFEN={setParsedFEN}
 				setDraggedSquare={setDraggedSquare}
 				setDroppedSquare={setDroppedSquare}
 				handlePromotionCancel={handlePromotionCancel}
@@ -794,7 +787,7 @@ function Chessboard({
 				orientation={orientation}
 				handleSquareClick={handleSquareClick}
 				displayPromotionPopup={false}
-				setParsedFENString={setParsedFENString}
+				setParsedFEN={setParsedFEN}
 				setDraggedSquare={setDraggedSquare}
 				setDroppedSquare={setDroppedSquare}
 				handlePromotionCancel={handlePromotionCancel}

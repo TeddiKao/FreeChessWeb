@@ -1,11 +1,9 @@
 import api from "../api.ts";
-import {
-	MoveInfo,
-	ParsedFENString,
-	PieceColor,
-} from "../features/gameplay/multiplayer/gameLogic.types.js";
+import { MoveInfo, ParsedFEN } from "../features/gameplay/common/types/gameState.types.ts";
+import { PieceColor } from "../features/gameplay/common/types/pieces.types.ts";
 
-async function fetchCurrentPosition(gameId: number): Promise<ParsedFENString> {
+
+async function fetchCurrentPosition(gameId: number): Promise<ParsedFEN> {
 	let currentPosition = null;
 
 	try {
@@ -203,7 +201,7 @@ async function fetchKingIsInCheck(
 	return isKingInCheck;
 }
 
-async function getIsStalemated(currentFEN: ParsedFENString, kingColor: string) {
+async function getIsStalemated(currentFEN: ParsedFEN, kingColor: string) {
 	let isStalemated = false;
 	try {
 		const response = await api.post(

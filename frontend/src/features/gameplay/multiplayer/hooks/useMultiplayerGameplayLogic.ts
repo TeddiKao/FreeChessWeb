@@ -1,8 +1,4 @@
 import { useCallback, useMemo, useRef } from "react";
-import { MoveMadeEventData } from "../../../../interfaces/gameLogic";
-import { fetchLegalMoves, fetchMoveIsValid } from "../../../../utils/apiUtils";
-import { ChessboardSquareIndex } from "../../../../types/general";
-import { PieceColor, PieceType } from "../../../../types/gameLogic";
 import { isPawnPromotion } from "../../../../utils/moveUtils";
 import { clearSquaresStyling, getRank } from "../../../../utils/boardUtils";
 
@@ -22,6 +18,8 @@ import {
 	displayLegalMoves,
 	performMoveValidation,
 } from "../../common/utils/moveService";
+import { PieceColor, PieceType } from "../../common/types/pieces.types";
+import { MoveMadeEventData } from "../types/gameEvents.types";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,

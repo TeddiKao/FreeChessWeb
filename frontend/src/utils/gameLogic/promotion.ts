@@ -1,11 +1,5 @@
-import {
-	BoardPlacement,
-	MoveInfo,
-	ParsedFENString,
-	PieceColor,
-	PieceInfo,
-	PieceType,
-} from "../../types/gameLogic.ts";
+import { BoardPlacement, MoveInfo, ParsedFEN } from "../../features/gameplay/common/types/gameState.types.ts";
+import { PieceColor, PieceInfo, PieceType } from "../../features/gameplay/common/types/pieces.types.ts";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,
@@ -41,13 +35,13 @@ function restoreCapturedPiece(
 }
 
 function cancelPromotion(
-	fenString: ParsedFENString,
+	fenString: ParsedFEN,
 	color: PieceColor,
 	previousDraggedSquare: ChessboardSquareIndex,
 	previousDroppedSquare: ChessboardSquareIndex,
 	promotionCapturedPiece?: PieceInfo
-): ParsedFENString {
-	const updatedFENString: ParsedFENString = structuredClone(fenString);
+): ParsedFEN {
+	const updatedFENString: ParsedFEN = structuredClone(fenString);
 	let updatedBoardPlacement = structuredClone(
 		updatedFENString["board_placement"]
 	);
@@ -85,10 +79,10 @@ function getPromotionRank(color: PieceColor): number {
 }
 
 function preparePawnPromotion(
-	structuredFEN: ParsedFENString,
+	structuredFEN: ParsedFEN,
 	moveInfo: MoveInfo
 ) {
-	const updatedStructuredFEN: ParsedFENString =
+	const updatedStructuredFEN: ParsedFEN =
 		structuredClone(structuredFEN);
 
 	const startingSquare = moveInfo["starting_square"];
@@ -106,13 +100,13 @@ function preparePawnPromotion(
 }
 
 function handlePromotionCaptureStorage(
-	fenString: ParsedFENString,
+	fenString: ParsedFEN,
 	pieceColor: PieceColor,
 	startingSquare: ChessboardSquareIndex,
 	destinationSquare: ChessboardSquareIndex,
 	setPromotionCapturedPiece: StateSetterFunction<OptionalValue<PieceInfo>>,
 	selectingPromotionRef: RefObject<boolean>,
-	unpromotedBoardPlacementRef: RefObject<OptionalValue<ParsedFENString>>,
+	unpromotedBoardPlacementRef: RefObject<OptionalValue<ParsedFEN>>,
 	handlePawnPromotion: (
 		color: PieceColor,
 		promotedPiece: PieceType,
@@ -125,7 +119,7 @@ function handlePromotionCaptureStorage(
 ): void {
 	const autoQueen: boolean = gameplaySettings["auto_queen"];
 
-	const updatedFENString: ParsedFENString = structuredClone(fenString);
+	const updatedFENString: ParsedFEN = structuredClone(fenString);
 	const updatedBoardPlacement: BoardPlacement = structuredClone(
 		updatedFENString["board_placement"]
 	);
@@ -159,13 +153,13 @@ function handlePromotionCaptureStorage(
 }
 
 async function updatePromotedBoardPlacment(
-	fenString: ParsedFENString,
+	fenString: ParsedFEN,
 	color: string,
 	promotedPiece: string,
 	autoQueen: boolean,
 	originalPawnSquare: string | number,
 	promotionSquare: string | number,
-	unpromotedBoardPlacementRef: RefObject<OptionalValue<ParsedFENString>>
+	unpromotedBoardPlacementRef: RefObject<OptionalValue<ParsedFEN>>
 ): Promise<object> {
 	if (!unpromotedBoardPlacementRef.current) {
 		return fenString;

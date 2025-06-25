@@ -25,14 +25,6 @@ import {
 	ChessboardSquareIndex,
 	OptionalValue,
 } from "../../../types/general.js";
-import {
-	BoardPlacement,
-	MoveInfo,
-	ParsedFENString,
-	PieceColor,
-	PieceInfo,
-	PieceType,
-} from "../../../features/gameplay/multiplayer/gameLogic.types.js";
 import { isPawnPromotion } from "../../../utils/moveUtils.ts";
 import useWebSocket from "../../../hooks/useWebsocket.ts";
 import { isObjEmpty, parseWebsocketUrl } from "../../../utils/generalUtils.ts";
@@ -45,6 +37,8 @@ import ChessboardGrid from "../../../components/chessboard/ChessboardGrid.tsx";
 import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle.ts";
 import Square from "../../../components/chessboard/Square.tsx";
 import useWebsocketWithLifecycle from "../../../hooks/useWebsocketWithLifecycle.ts";
+import { PieceColor, PieceInfo, PieceType } from "../../../features/gameplay/common/types/pieces.types.ts";
+import { MoveInfo, ParsedFEN } from "../../../features/gameplay/common/types/gameState.types.ts";
 function BotChessboard({
 	parsed_fen_string,
 	orientation,
@@ -66,8 +60,8 @@ function BotChessboard({
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
 	const [clickedSquare, setClickedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
-	const [parsedFENString, setParsedFENString] =
-		useState<OptionalValue<ParsedFENString>>(parsed_fen_string);
+	const [parsedFENString, setParsedFEN] =
+		useState<OptionalValue<ParsedFEN>>(parsed_fen_string);
 
 	const [draggedSquare, setDraggedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
@@ -90,7 +84,7 @@ function BotChessboard({
 
 	const selectingPromotionRef = useRef<boolean>(false);
 	const unpromotedBoardPlacementRef =
-		useRef<OptionalValue<ParsedFENString>>(null);
+		useRef<OptionalValue<ParsedFEN>>(null);
 
 	const chessboardStyles = {
 		gridTemplateColumns: `repeat(8, ${squareSize}px)`,
@@ -107,7 +101,7 @@ function BotChessboard({
 	});
 
 	useEffect(() => {
-		setParsedFENString(parsed_fen_string);
+		setParsedFEN(parsed_fen_string);
 	}, [parsed_fen_string]);
 
 	useEffect(() => {
@@ -192,7 +186,7 @@ function BotChessboard({
 			);
 
 			if (isPawnPromotion(pieceColor, getRank(destinationSquare))) {
-				setParsedFENString((prevFENString) => {
+				setParsedFEN((prevFENString) => {
 					const moveInfo = {
 						starting_square: startingSquare,
 						destination_square: destinationSquare,
@@ -315,7 +309,7 @@ function BotChessboard({
 			return;
 		}
 
-		setParsedFENString((prevFENString: OptionalValue<ParsedFENString>) => {
+		setParsedFEN((prevFENString: OptionalValue<ParsedFEN>) => {
 			if (!prevFENString) {
 				return parsedFENString;
 			}
@@ -529,7 +523,7 @@ function BotChessboard({
 				}
 				orientation={orientation}
 				handleSquareClick={handleSquareClick}
-				setParsedFENString={setParsedFENString}
+				setParsedFEN={setParsedFEN}
 				setDraggedSquare={setDraggedSquare}
 				setDroppedSquare={setDroppedSquare}
 				handlePromotionCancel={handlePromotionCancel}
@@ -565,7 +559,7 @@ function BotChessboard({
 				orientation={orientation}
 				handleSquareClick={handleSquareClick}
 				displayPromotionPopup={false}
-				setParsedFENString={setParsedFENString}
+				setParsedFEN={setParsedFEN}
 				setDraggedSquare={setDraggedSquare}
 				setDroppedSquare={setDroppedSquare}
 				handlePromotionCancel={handlePromotionCancel}

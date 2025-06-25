@@ -1,18 +1,13 @@
+import { MoveInfo, ParsedFEN } from "../features/gameplay/common/types/gameState.types.ts";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,
 	RefObject,
 	StateSetterFunction,
 } from "../types/general.ts";
-import {
-	MoveInfo,
-	ParsedFENString,
-	PieceColor,
-	PieceType,
-} from "../features/gameplay/multiplayer/gameLogic.types.ts";
 
 interface DisplayChessboardProps {
-	parsed_fen_string: ParsedFENString;
+	parsed_fen_string: ParsedFEN;
 	orientation: string;
 	squareSize?: number;
 }
@@ -30,7 +25,7 @@ interface BotChessboardProps extends DisplayChessboardProps {
 	setMoveList: StateSetterFunction<Array<Array<string>>>;
 	setPositionList: StateSetterFunction<
 		Array<{
-			position: ParsedFENString;
+			position: ParsedFEN;
 			move_type: string;
 			last_dragged_square: ChessboardSquareIndex;
 			last_dropped_square: ChessboardSquareIndex;
@@ -48,36 +43,6 @@ interface BotChessboardProps extends DisplayChessboardProps {
 	parentAnimationStyles: Record<string, unknown>;
 }
 
-interface ClickedSquaresState {
-	prevClickedSquare: OptionalValue<ChessboardSquareIndex>;
-	clickedSquare: OptionalValue<ChessboardSquareIndex>;
-	setPrevClickedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
-	setClickedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
-}
-
-interface DragAndDropSquaresState {
-	draggedSquare: OptionalValue<ChessboardSquareIndex>;
-	droppedSquare: OptionalValue<ChessboardSquareIndex>;
-	setDraggedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
-	setDroppedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
-}
-
-interface MultiplayerChessboardProps extends DisplayChessboardProps {
-	clickedSquaresState: ClickedSquaresState;
-	dragAndDropSquaresState: DragAndDropSquaresState;
-
-	previousDraggedSquare: ChessboardSquareIndex;
-	previousDroppedSquare: ChessboardSquareIndex;
-
-	cancelPromotion: () => void;
-	onPromotion: (color: PieceColor, promotedPiece: PieceType) => void;
-	shouldShowPromotionPopup: boolean;
-	promotionSquare: OptionalValue<ChessboardSquareIndex>;
-
-	animationSquare: OptionalValue<ChessboardSquareIndex>;
-	animationRef: RefObject<HTMLDivElement | null>;
-}
-
 interface GameReplayChessboardProps extends DisplayChessboardProps {
 	lastDraggedSquare: string;
 	lastDroppedSquare: string;
@@ -86,48 +51,9 @@ interface GameReplayChessboardProps extends DisplayChessboardProps {
 	animationStyles: Record<string, unknown>;
 }
 
-interface EmptySquareProps {
-	squareNumber: string | number;
-	squareColor: string;
-	orientation: string;
-	displayPromotionPopup: boolean;
-
-	prevClickedSquare: OptionalValue<ChessboardSquareIndex>;
-	clickedSquare: OptionalValue<ChessboardSquareIndex>;
-
-	setDraggedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
-	setDroppedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
-	setPrevClickedSquare: StateSetterFunction<
-		OptionalValue<ChessboardSquareIndex>
-	>;
-	setClickedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
-
-	handlePromotionCancel: (color: PieceColor) => void;
-	handlePawnPromotion: (
-		color: PieceColor,
-		promotedPiece: PieceType
-	) => Promise<void> | void;
-	previousDraggedSquare: OptionalValue<ChessboardSquareIndex>;
-	previousDroppedSquare: OptionalValue<ChessboardSquareIndex>;
-
-	squareSize?: number;
-	animatingPieceStyle?: Record<string, unknown>;
-	animatingPieceSquare: OptionalValue<ChessboardSquareIndex>;
-	animationRef: RefObject<HTMLDivElement | null>;
-}
-
-interface FilledSquareProps {
-	pieceColor?: PieceColor;
-	pieceType?: PieceType;
-}
-
-interface SquareProps extends EmptySquareProps, FilledSquareProps {}
-
 export type {
 	DisplayChessboardProps,
 	ChessboardProps,
-	MultiplayerChessboardProps,
 	BotChessboardProps,
 	GameReplayChessboardProps,
-	SquareProps,
 };
