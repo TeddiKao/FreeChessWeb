@@ -1,4 +1,4 @@
-import { capitaliseFirstLetter } from "../../../utils/generalUtils";
+import { capitaliseFirstLetter } from "../../../../utils/generalUtils";
 
 type LocalGameOverModalProps = {
 	visible: boolean;
