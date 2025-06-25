@@ -37,7 +37,7 @@ async function getIsStalemated(currentFEN: ParsedFEN, kingColor: string) {
 	return isStalemated;
 }
 
-async function getIsCheckmated(currentFEN: object, kingColor: string) {
+async function getIsCheckmated(currentFEN: ParsedFEN, kingColor: string) {
 	let isCheckmated = false;
 
 	try {
