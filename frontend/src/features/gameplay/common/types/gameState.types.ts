@@ -72,5 +72,8 @@ export type {
 	CastlingRights,
 	SquareInfo,
 	PositionList,
-    MoveList
+    MoveList,
+    MoveInfo,
+    CapturedPiecesList,
+    PromotedPiecesList
 };
