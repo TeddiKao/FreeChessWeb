@@ -1,4 +1,4 @@
-import { bots as botsTable } from "../../../../constants/botsConfig";
+import { bots as botsTable } from "../botsConfig";
 import BotCategory from "../components/BotCategory";
 
 import "../styles/select-bot.scss";
