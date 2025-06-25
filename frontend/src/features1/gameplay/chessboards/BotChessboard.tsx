@@ -14,7 +14,7 @@ import {
 	cancelPromotion,
 	handlePromotionCaptureStorage,
 	preparePawnPromotion,
-} from "../../../utils/gameLogic/promotion.ts";
+} from "../../../features/gameplay/passAndPlay/utils/promotion.ts";
 
 import {
 	BotGameWebSocketEventTypes,
@@ -37,8 +37,15 @@ import ChessboardGrid from "../../../components/chessboard/ChessboardGrid.tsx";
 import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle.ts";
 import Square from "../../../components/chessboard/Square.tsx";
 import useWebsocketWithLifecycle from "../../../hooks/useWebsocketWithLifecycle.ts";
-import { PieceColor, PieceInfo, PieceType } from "../../../features/gameplay/common/types/pieces.types.ts";
-import { MoveInfo, ParsedFEN } from "../../../features/gameplay/common/types/gameState.types.ts";
+import {
+	PieceColor,
+	PieceInfo,
+	PieceType,
+} from "../../../features/gameplay/common/types/pieces.types.ts";
+import {
+	MoveInfo,
+	ParsedFEN,
+} from "../../../features/gameplay/common/types/gameState.types.ts";
 function BotChessboard({
 	parsed_fen_string,
 	orientation,
@@ -83,8 +90,7 @@ function BotChessboard({
 	const [sideToMove, setSideToMove] = useState<string>("white");
 
 	const selectingPromotionRef = useRef<boolean>(false);
-	const unpromotedBoardPlacementRef =
-		useRef<OptionalValue<ParsedFEN>>(null);
+	const unpromotedBoardPlacementRef = useRef<OptionalValue<ParsedFEN>>(null);
 
 	const chessboardStyles = {
 		gridTemplateColumns: `repeat(8, ${squareSize}px)`,

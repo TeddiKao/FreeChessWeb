@@ -20,12 +20,12 @@ import {
 	disableCastling,
 	handleCastling,
 	isCastling,
-} from "../../../utils/gameLogic/castling.ts";
+} from "./utils/castling.ts";
 
 import {
 	handleEnPassant,
 	updateEnPassantTargetSquare,
-} from "../../../utils/gameLogic/enPassant.ts";
+} from "./utils/enPassant.ts";
 
 import {
 	GameEndedSetterContext,
@@ -37,15 +37,15 @@ import {
 	cancelPromotion,
 	handlePromotionCaptureStorage,
 	updatePromotedBoardPlacment,
-} from "../../../utils/gameLogic/promotion.ts";
+} from "./utils/promotion.ts";
 
 import {
 	addPieceToDestinationSquare,
 	clearStartingSquare,
-} from "../../../utils/gameLogic/basicMovement.ts";
+} from "./utils/basicMovement.ts";
 
 import { MoveMethods } from "../../../enums/gameLogic.ts";
-import { getOppositeColor } from "../../../utils/gameLogic/general.ts";
+import { getOppositeColor } from "./utils/general.ts";
 import { ChessboardProps } from "../../../interfaces/chessboard.js";
 import {
 	ChessboardSquareIndex,
@@ -61,8 +61,17 @@ import {
 } from "../../../interfaces/chessboardGrid.ts";
 import Square from "../../../components/chessboard/Square.tsx";
 import { displayLegalMoves } from "../common/utils/moveService.ts";
-import { BoardPlacement, CastlingSide, MoveInfo, ParsedFEN } from "../common/types/gameState.types.ts";
-import { PieceColor, PieceInfo, PieceType } from "../common/types/pieces.types.ts";
+import {
+	BoardPlacement,
+	CastlingSide,
+	MoveInfo,
+	ParsedFEN,
+} from "../common/types/gameState.types.ts";
+import {
+	PieceColor,
+	PieceInfo,
+	PieceType,
+} from "../common/types/pieces.types.ts";
 
 function Chessboard({
 	parsed_fen_string,
@@ -105,8 +114,7 @@ function Chessboard({
 
 	const isFirstRender = useRef<boolean>(false);
 	const selectingPromotionRef = useRef<boolean>(false);
-	const unpromotedBoardPlacementRef =
-		useRef<OptionalValue<ParsedFEN>>(null);
+	const unpromotedBoardPlacementRef = useRef<OptionalValue<ParsedFEN>>(null);
 
 	const chessboardStyles = {
 		gridTemplateColumns: `repeat(8, ${squareSize}px)`,
@@ -202,113 +210,106 @@ function Chessboard({
 			);
 		}
 
-		setParsedFEN(
-			(previousFENString: OptionalValue<ParsedFEN>) => {
-				if (!previousFENString) {
-					return parsedFENString;
-				}
+		setParsedFEN((previousFENString: OptionalValue<ParsedFEN>) => {
+			if (!previousFENString) {
+				return parsedFENString;
+			}
 
-				const originalBoardPlacements =
-					previousFENString["board_placement"];
+			const originalBoardPlacements =
+				previousFENString["board_placement"];
 
-				const draggedSquareInfo =
-					originalBoardPlacements[`${draggedSquare}`];
-				const pieceType = draggedSquareInfo["piece_type"];
-				const pieceColor: PieceColor = draggedSquareInfo["piece_color"];
+			const draggedSquareInfo =
+				originalBoardPlacements[`${draggedSquare}`];
+			const pieceType = draggedSquareInfo["piece_type"];
+			const pieceColor: PieceColor = draggedSquareInfo["piece_color"];
 
-				const initialSquare = draggedSquareInfo["starting_square"];
+			const initialSquare = draggedSquareInfo["starting_square"];
 
-				let newPiecePlacements: ParsedFEN =
-					addPieceToDestinationSquare(
-						previousFENString,
-						droppedSquare,
-						{
-							piece_type: pieceType,
-							piece_color: pieceColor,
-							starting_square: initialSquare,
-						}
-					);
-
-				newPiecePlacements = clearStartingSquare(
-					newPiecePlacements,
-					draggedSquare
-				);
-
-				if (pieceTypeToValidate.toLowerCase() === "pawn") {
-					newPiecePlacements = handleEnPassant(
-						newPiecePlacements,
-						droppedSquare
-					);
-				}
-
-				const enPassantMoveInfo: MoveInfo = {
-					starting_square: draggedSquare,
-					destination_square: droppedSquare,
+			let newPiecePlacements: ParsedFEN = addPieceToDestinationSquare(
+				previousFENString,
+				droppedSquare,
+				{
 					piece_type: pieceType,
 					piece_color: pieceColor,
-				};
+					starting_square: initialSquare,
+				}
+			);
 
-				newPiecePlacements = updateEnPassantTargetSquare(
+			newPiecePlacements = clearStartingSquare(
+				newPiecePlacements,
+				draggedSquare
+			);
+
+			if (pieceTypeToValidate.toLowerCase() === "pawn") {
+				newPiecePlacements = handleEnPassant(
 					newPiecePlacements,
-					enPassantMoveInfo
+					droppedSquare
 				);
+			}
 
-				if (pieceTypeToValidate.toLowerCase() === "rook") {
-					const kingsideRookSquares = [7, 63];
+			const enPassantMoveInfo: MoveInfo = {
+				starting_square: draggedSquare,
+				destination_square: droppedSquare,
+				piece_type: pieceType,
+				piece_color: pieceColor,
+			};
 
-					const initialSquareExists = initialSquare !== undefined;
-					const kingsideRookMoved =
-						initialSquareExists &&
-						kingsideRookSquares.includes(Number(initialSquare));
-					const sideToDisable: CastlingSide = kingsideRookMoved
+			newPiecePlacements = updateEnPassantTargetSquare(
+				newPiecePlacements,
+				enPassantMoveInfo
+			);
+
+			if (pieceTypeToValidate.toLowerCase() === "rook") {
+				const kingsideRookSquares = [7, 63];
+
+				const initialSquareExists = initialSquare !== undefined;
+				const kingsideRookMoved =
+					initialSquareExists &&
+					kingsideRookSquares.includes(Number(initialSquare));
+				const sideToDisable: CastlingSide = kingsideRookMoved
+					? "kingside"
+					: "queenside";
+
+				newPiecePlacements["castling_rights"] = disableCastling(
+					pieceColorToValidate,
+					newPiecePlacements["castling_rights"],
+					[sideToDisable]
+				);
+			}
+
+			if (pieceTypeToValidate.toLowerCase() === "king") {
+				if (isCastling(draggedSquare, droppedSquare)) {
+					const isKingside =
+						Number(draggedSquare) - Number(droppedSquare) === -2;
+
+					const castlingSide: CastlingSide = isKingside
 						? "kingside"
 						: "queenside";
 
-					newPiecePlacements["castling_rights"] = disableCastling(
+					newPiecePlacements = handleCastling(
+						previousFENString,
 						pieceColorToValidate,
-						newPiecePlacements["castling_rights"],
-						[sideToDisable]
+						castlingSide
 					);
 				}
 
-				if (pieceTypeToValidate.toLowerCase() === "king") {
-					if (isCastling(draggedSquare, droppedSquare)) {
-						const isKingside =
-							Number(draggedSquare) - Number(droppedSquare) ===
-							-2;
-
-						const castlingSide: CastlingSide = isKingside
-							? "kingside"
-							: "queenside";
-
-						newPiecePlacements = handleCastling(
-							previousFENString,
-							pieceColorToValidate,
-							castlingSide
-						);
-					}
-
-					const originalCastlingRights = structuredClone(
-						newPiecePlacements["castling_rights"]
-					);
-
-					const newCastlingRights = disableCastling(
-						pieceColorToValidate,
-						originalCastlingRights,
-						["kingside", "queenside"]
-					);
-
-					newPiecePlacements["castling_rights"] = newCastlingRights;
-				}
-
-				handleGameEndDetection(
-					newPiecePlacements,
-					pieceColorToValidate
+				const originalCastlingRights = structuredClone(
+					newPiecePlacements["castling_rights"]
 				);
 
-				return newPiecePlacements;
+				const newCastlingRights = disableCastling(
+					pieceColorToValidate,
+					originalCastlingRights,
+					["kingside", "queenside"]
+				);
+
+				newPiecePlacements["castling_rights"] = newCastlingRights;
 			}
-		);
+
+			handleGameEndDetection(newPiecePlacements, pieceColorToValidate);
+
+			return newPiecePlacements;
+		});
 
 		const newSideToMove = getOppositeColor(pieceColorToValidate);
 
@@ -404,117 +405,113 @@ function Chessboard({
 		);
 
 		setTimeout(() => {
-			setParsedFEN(
-				(previousFENString: OptionalValue<ParsedFEN>) => {
-					if (!previousFENString) {
-						return parsedFENString;
+			setParsedFEN((previousFENString: OptionalValue<ParsedFEN>) => {
+				if (!previousFENString) {
+					return parsedFENString;
+				}
+
+				const oringinalBoardPlacements =
+					previousFENString["board_placement"];
+
+				const pieceType =
+					oringinalBoardPlacements[`${previousClickedSquare}`][
+						"piece_type"
+					];
+				const pieceColor =
+					oringinalBoardPlacements[`${previousClickedSquare}`][
+						"piece_color"
+					];
+
+				let newPiecePlacements: ParsedFEN = addPieceToDestinationSquare(
+					previousFENString,
+					clickedSquare,
+					{
+						piece_type: pieceType,
+						piece_color: pieceColor,
+						starting_square: initialSquare,
 					}
+				);
 
-					const oringinalBoardPlacements =
-						previousFENString["board_placement"];
+				newPiecePlacements = clearStartingSquare(
+					newPiecePlacements,
+					previousClickedSquare
+				);
 
-					const pieceType =
-						oringinalBoardPlacements[`${previousClickedSquare}`][
-							"piece_type"
-						];
-					const pieceColor =
-						oringinalBoardPlacements[`${previousClickedSquare}`][
-							"piece_color"
-						];
-
-					let newPiecePlacements: ParsedFEN =
-						addPieceToDestinationSquare(
-							previousFENString,
-							clickedSquare,
-							{
-								piece_type: pieceType,
-								piece_color: pieceColor,
-								starting_square: initialSquare,
-							}
-						);
-
-					newPiecePlacements = clearStartingSquare(
+				if (pieceTypeToValidate.toLowerCase() === "pawn") {
+					newPiecePlacements = handleEnPassant(
 						newPiecePlacements,
-						previousClickedSquare
+						clickedSquare
 					);
+				}
 
-					if (pieceTypeToValidate.toLowerCase() === "pawn") {
-						newPiecePlacements = handleEnPassant(
-							newPiecePlacements,
-							clickedSquare
-						);
-					}
+				const enPassantMoveInfo: MoveInfo = {
+					starting_square: previousClickedSquare,
+					destination_square: clickedSquare,
+					piece_type: pieceTypeToValidate,
+					piece_color: pieceColorToValidate,
+				};
 
-					const enPassantMoveInfo: MoveInfo = {
-						starting_square: previousClickedSquare,
-						destination_square: clickedSquare,
-						piece_type: pieceTypeToValidate,
-						piece_color: pieceColorToValidate,
-					};
+				newPiecePlacements = updateEnPassantTargetSquare(
+					newPiecePlacements,
+					enPassantMoveInfo
+				);
 
-					newPiecePlacements = updateEnPassantTargetSquare(
-						newPiecePlacements,
-						enPassantMoveInfo
+				if (pieceTypeToValidate === "pawn") {
+					const kingsideRookSquares = [7, 63];
+					const initialSquareExists = initialSquare !== undefined;
+
+					const kingsideRookMoved =
+						initialSquareExists &&
+						kingsideRookSquares.includes(Number(initialSquare));
+
+					const sideToDisable: CastlingSide = kingsideRookMoved
+						? "kingside"
+						: "queenside";
+
+					newPiecePlacements["castling_rights"] = disableCastling(
+						pieceColorToValidate,
+						newPiecePlacements["castling_rights"],
+						[sideToDisable]
 					);
+				}
 
-					if (pieceTypeToValidate === "pawn") {
-						const kingsideRookSquares = [7, 63];
-						const initialSquareExists = initialSquare !== undefined;
-
-						const kingsideRookMoved =
-							initialSquareExists &&
-							kingsideRookSquares.includes(Number(initialSquare));
-
-						const sideToDisable: CastlingSide = kingsideRookMoved
+				if (pieceTypeToValidate.toLowerCase() === "king") {
+					if (isCastling(previousClickedSquare, clickedSquare)) {
+						const isKingside =
+							Number(previousClickedSquare) -
+								Number(clickedSquare) ===
+							-2;
+						const castlingSide: CastlingSide = isKingside
 							? "kingside"
 							: "queenside";
 
-						newPiecePlacements["castling_rights"] = disableCastling(
+						newPiecePlacements = handleCastling(
+							previousFENString,
 							pieceColorToValidate,
-							newPiecePlacements["castling_rights"],
-							[sideToDisable]
+							castlingSide
 						);
 					}
 
-					if (pieceTypeToValidate.toLowerCase() === "king") {
-						if (isCastling(previousClickedSquare, clickedSquare)) {
-							const isKingside =
-								Number(previousClickedSquare) -
-									Number(clickedSquare) ===
-								-2;
-							const castlingSide: CastlingSide = isKingside
-								? "kingside"
-								: "queenside";
-
-							newPiecePlacements = handleCastling(
-								previousFENString,
-								pieceColorToValidate,
-								castlingSide
-							);
-						}
-
-						const originalCastlingRights = structuredClone(
-							newPiecePlacements["castling_rights"]
-						);
-
-						const newCastlingRights = disableCastling(
-							pieceColorToValidate,
-							originalCastlingRights,
-							["kingside", "queenside"]
-						);
-
-						newPiecePlacements["castling_rights"] =
-							newCastlingRights;
-					}
-
-					handleGameEndDetection(
-						newPiecePlacements,
-						pieceColorToValidate
+					const originalCastlingRights = structuredClone(
+						newPiecePlacements["castling_rights"]
 					);
 
-					return newPiecePlacements;
+					const newCastlingRights = disableCastling(
+						pieceColorToValidate,
+						originalCastlingRights,
+						["kingside", "queenside"]
+					);
+
+					newPiecePlacements["castling_rights"] = newCastlingRights;
 				}
-			);
+
+				handleGameEndDetection(
+					newPiecePlacements,
+					pieceColorToValidate
+				);
+
+				return newPiecePlacements;
+			});
 		}, convertToMilliseconds(pieceAnimationTime));
 
 		const newSideToMove = getOppositeColor(pieceColorToValidate);
@@ -630,19 +627,13 @@ function Chessboard({
 		setGameWinner(gameWinner);
 	}
 
-	async function checkIsCheckmated(
-		currentFEN: ParsedFEN,
-		kingColor: string
-	) {
+	async function checkIsCheckmated(currentFEN: ParsedFEN, kingColor: string) {
 		const isCheckmated = await getIsCheckmated(currentFEN, kingColor);
 
 		return isCheckmated;
 	}
 
-	async function checkIsStalemated(
-		currentFEN: ParsedFEN,
-		kingColor: string
-	) {
+	async function checkIsStalemated(currentFEN: ParsedFEN, kingColor: string) {
 		const isStalemated = await getIsStalemated(currentFEN, kingColor);
 
 		return isStalemated;

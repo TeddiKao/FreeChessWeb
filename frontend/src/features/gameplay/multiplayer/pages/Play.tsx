@@ -12,7 +12,7 @@ import MessageBox from "../../../../components/common/MessageBox.tsx";
 import { MessageBoxTypes } from "../../../../types/messageBox.ts";
 import DrawOfferPopup from "../../../../features1/popups/DrawOfferPopup.tsx";
 import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar.tsx";
-import { getOppositeColor } from "../../../../utils/gameLogic/general.ts";
+import { getOppositeColor } from "../../passAndPlay/utils/general.ts";
 import useMultiplayerGameplayLogic from "../hooks/useMultiplayerGameplayLogic.ts";
 import { isNullOrUndefined } from "../../../../utils/generalUtils.ts";
 import CapturedMaterial from "../../common/components/CapturedMaterial.tsx";
