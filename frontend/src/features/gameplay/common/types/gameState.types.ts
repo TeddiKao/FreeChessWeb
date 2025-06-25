@@ -1,3 +1,4 @@
+import { ChessboardSquareIndex } from "./board.types";
 import { PieceColor, PieceType } from "./pieces.types";
 
 interface ParsedFEN {
@@ -21,8 +22,8 @@ interface CastlingRights {
 
 interface SquareInfo {
 	piece_color: PieceColor;
-	piece_type: string;
-	starting_square?: string;
+	piece_type: PieceType;
+	starting_square?: ChessboardSquareIndex;
 }
 
 interface PromotedPiecesList {
@@ -66,6 +67,8 @@ interface PositionInfo {
 type PositionList = PositionInfo[];
 type MoveList = string[][]
 
+type CastlingSide = "kingside" | "queenside"
+
 export type {
 	ParsedFEN,
 	BoardPlacement,
@@ -75,5 +78,6 @@ export type {
     MoveList,
     MoveInfo,
     CapturedPiecesList,
-    PromotedPiecesList
+    PromotedPiecesList,
+	CastlingSide,
 };
