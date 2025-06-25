@@ -1,0 +1,1 @@
+type ChessboardSquareIndex = string | number;
