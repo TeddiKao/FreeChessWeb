@@ -37,7 +37,7 @@ function DrawOfferPopup({
 	}
 
 	if (!visible) {
-		return;
+		return null;
 	}
 
 	return (
