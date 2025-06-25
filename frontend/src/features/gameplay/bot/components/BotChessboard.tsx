@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 
-import "../../../styles/components/chessboard/chessboard.scss";
+import "../../../../styles/components/chessboard/chessboard.scss";
 
 import {
 	clearSquaresStyling,
 	getRank,
-	getSquareExists,
 } from "../../../../utils/boardUtils.ts";
 
 import { fetchLegalMoves } from "../../../../utils/apiUtils.ts";

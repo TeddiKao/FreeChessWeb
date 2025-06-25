@@ -21,7 +21,7 @@ import LocalGameOverModal from "../../passAndPlay/modals/GameOverModal";
 import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar";
 import MoveListPanel from "../../common/components/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../common/components/gameplaySidePanel/MoveNavigationButtons";
-import BotChessboard from "../../../../features1/gameplay/chessboards/BotChessboard";
+import BotChessboard from "../components/BotChessboard";
 import { MoveInfo, ParsedFEN } from "../../common/types/gameState.types";
 
 function PlayBot() {
