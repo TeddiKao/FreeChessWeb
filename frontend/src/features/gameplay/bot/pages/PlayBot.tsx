@@ -1,8 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import {
-	fetchBotGameMoveList,
-	fetchBotGamePositionList,
-} from "../../../../utils/apiUtils";
 import "../styles/play-bot.scss";
 import useGameplaySettings from "../../../../hooks/useGameplaySettings";
 import GameplaySettings from "../../../../features1/modals/GameplaySettings";
@@ -23,6 +19,7 @@ import MoveListPanel from "../../common/components/gameplaySidePanel/MoveListPan
 import MoveNavigationButtons from "../../common/components/gameplaySidePanel/MoveNavigationButtons";
 import BotChessboard from "../components/BotChessboard";
 import { MoveInfo, ParsedFEN } from "../../common/types/gameState.types";
+import { fetchBotGamePositionList, fetchBotGameMoveList } from "../botGameApiService";
 
 function PlayBot() {
 	const initialGameplaySettings = useGameplaySettings();
