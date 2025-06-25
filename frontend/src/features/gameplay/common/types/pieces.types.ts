@@ -12,6 +12,12 @@ type CapturablePiecePlural =
 type PromotionPiece = "rook" | "bishop" | "knight" | "queen";
 type PromotionPiecePlural = "rooks" | "bishops" | "knights" | "queens";
 
+interface PieceInfo {
+    piece_color: PieceColor;
+    piece_type: PieceType;
+	starting_square?: string | number;
+}
+
 export type {
 	PieceColor,
 	PieceType,
@@ -19,4 +25,5 @@ export type {
 	CapturablePiecePlural,
 	PromotionPiece,
 	PromotionPiecePlural,
+    PieceInfo
 };
