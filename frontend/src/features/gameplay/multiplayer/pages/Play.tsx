@@ -10,7 +10,7 @@ import ModalWrapper from "../../../../components/wrappers/ModalWrapper.js";
 import useGameplaySettings from "../../../../hooks/useGameplaySettings.ts";
 import MessageBox from "../../../../components/common/MessageBox.tsx";
 import { MessageBoxTypes } from "../../../../types/messageBox.ts";
-import DrawOfferPopup from "../../../../features1/popups/DrawOfferPopup.tsx";
+import DrawOfferPopup from "../popups/DrawOfferPopup.tsx";
 import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar.tsx";
 import { getOppositeColor } from "../../passAndPlay/utils/general.ts";
 import useMultiplayerGameplayLogic from "../hooks/useMultiplayerGameplayLogic.ts";
