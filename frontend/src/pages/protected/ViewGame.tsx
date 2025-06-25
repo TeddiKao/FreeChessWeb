@@ -1,10 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-	fetchGameWinner,
-	fetchMoveList,
-	fetchPositionList,
-} from "../../utils/apiUtils";
 
 import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar";
 
@@ -19,6 +14,8 @@ import GameReplayChessboard from "../../features1/gameplay/chessboards/GameRepla
 import MoveListPanel from "../../features/gameplay/common/components/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../features/gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
 import { ParsedFEN } from "../../features/gameplay/common/types/gameState.types";
+import { fetchPositionList, fetchMoveList } from "../../features/gameplay/common/utils/gameStateFetchService";
+import { fetchGameWinner } from "../../utils/apiUtils";
 
 function ViewGame() {
 	const { gameId } = useParams();
