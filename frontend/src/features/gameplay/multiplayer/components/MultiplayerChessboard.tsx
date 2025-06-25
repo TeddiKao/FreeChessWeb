@@ -9,7 +9,6 @@ import { PieceColor, PieceType } from "../../common/types/pieces.types";
 import { MultiplayerChessboardProps } from "../types/chessboardProps.types";
 
 // Utils
-import _ from "lodash";
 import { isNullOrUndefined } from "../../../../utils/generalUtils";
 
 function MultiplayerChessboard({
