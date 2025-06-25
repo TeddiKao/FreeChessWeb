@@ -1,8 +1,8 @@
-import { bots as botsTable } from "../../../constants/botsConfig";
+import { bots as botsTable } from "../../../../constants/botsConfig";
 import BotCategory from "./components/BotCategory";
 
 import "../../../styles/pages/select-bot.scss";
-import DashboardNavbar from "../../../components/common/DashboardNavbar/DashboardNavbar";
+import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar";
 
 function SelectBot() {
 	return (
