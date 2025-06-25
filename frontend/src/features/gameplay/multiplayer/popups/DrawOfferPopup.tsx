@@ -1,5 +1,5 @@
-import "../../styles/popups/draw-offer-popup.scss";
-import { RefObject } from "../../types/general";
+import "../styles/draw-offer-popup.scss";
+import { RefObject } from "../../../../types/general";
 
 type DrawOfferPopupProps = {
 	visible: boolean;
@@ -37,7 +37,7 @@ function DrawOfferPopup({
 	}
 
 	if (!visible) {
-		return;
+		return null;
 	}
 
 	return (
