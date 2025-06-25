@@ -1,10 +1,7 @@
 import { useRef, useState } from "react";
-import {
-	ParsedFENString,
-	PieceType,
-} from "../../types/gameLogic";
-import { ChessboardSquareIndex } from "../../types/general";
-import useGameplaySettings from "../useGameplaySettings";
+import { ParsedFENString, PieceType } from "../gameLogic.types";
+import { ChessboardSquareIndex } from "../../../../types/general";
+import useGameplaySettings from "../../../../hooks/useGameplaySettings";
 
 function usePromotionLogic(parsedFEN: ParsedFENString) {
 	const prePromotionBoardState = useRef<ParsedFENString | null>(null);
@@ -15,7 +12,7 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 	const [shouldShowPromotionPopup, setShouldShowPromotionPopup] =
 		useState(false);
 
-    const gameplaySettings = useGameplaySettings();
+	const gameplaySettings = useGameplaySettings();
 
 	function cancelPromotion() {
 		performPostPromotionCleanup();
@@ -100,7 +97,7 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 		if (autoQueen) {
 			sendPromotionMove(originalPawnSquare, promotionSquare, "queen");
 		} else {
-            console.log("Showing promotion popup!")
+			console.log("Showing promotion popup!");
 			setShouldShowPromotionPopup(true);
 		}
 	}
@@ -110,10 +107,10 @@ function usePromotionLogic(parsedFEN: ParsedFENString) {
 		cancelPromotion,
 		performPostPromotionCleanup,
 		handlePawnPromotion,
-        shouldShowPromotionPopup,
-        promotionSquareRef,
-        prePromotionBoardState,
-        originalPawnSquareRef,
+		shouldShowPromotionPopup,
+		promotionSquareRef,
+		prePromotionBoardState,
+		originalPawnSquareRef,
 	};
 }
 

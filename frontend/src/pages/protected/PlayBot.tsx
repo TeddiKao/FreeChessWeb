@@ -3,7 +3,10 @@ import {
 	fetchBotGameMoveList,
 	fetchBotGamePositionList,
 } from "../../utils/apiUtils";
-import { MoveInfo, ParsedFENString } from "../../types/gameLogic";
+import {
+	MoveInfo,
+	ParsedFENString,
+} from "../../features/gameplay/multiplayer/gameLogic.types";
 
 import "../../styles/pages/play-bot.scss";
 import useGameplaySettings from "../../hooks/useGameplaySettings";

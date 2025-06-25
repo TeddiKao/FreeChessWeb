@@ -1,5 +1,9 @@
 import api from "../api.ts";
-import { MoveInfo, ParsedFENString, PieceColor } from "../types/gameLogic.js";
+import {
+	MoveInfo,
+	ParsedFENString,
+	PieceColor,
+} from "../features/gameplay/multiplayer/gameLogic.types.js";
 
 async function fetchCurrentPosition(gameId: number): Promise<ParsedFENString> {
 	let currentPosition = null;
@@ -76,7 +80,7 @@ async function fetchSideToMove(gameId: number) {
 
 	try {
 		const response = await api.post("/gameplay_api/get-side-to-move/", {
-			game_id: gameId
+			game_id: gameId,
 		});
 
 		if (response.status === 200) {
@@ -388,5 +392,5 @@ export {
 	fetchCompletedGames,
 	fetchGameWinner,
 	fetchTotalCompletedGames,
-	fetchSideToMove
+	fetchSideToMove,
 };

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { PieceColor } from "../../types/gameLogic";
-import { CheckmateEventData } from "../../interfaces/gameLogic";
-import { getOppositeColor } from "../../utils/gameLogic/general";
+import { PieceColor } from "../gameLogic.types";
+import { CheckmateEventData } from "../../../../interfaces/gameLogic";
+import { getOppositeColor } from "../../../../utils/gameLogic/general";
 
 function useGameEndState() {
 	const [hasGameEnded, setHasGameEnded] = useState<boolean>(false);
@@ -19,7 +19,7 @@ function useGameEndState() {
 		setGameWinner(eventData["winning_color"] as PieceColor);
 	}
 
-    function handlePlayerTimeout(eventData: any) {
+	function handlePlayerTimeout(eventData: any) {
 		setHasGameEnded(true);
 		setGameEndedCause("Timeout");
 		setGameWinner(getOppositeColor(eventData["timeout_color"]));
@@ -31,11 +31,11 @@ function useGameEndState() {
 		gameEndedCause,
 		setGameEndedCause,
 		gameWinner,
-        setGameWinner,
+		setGameWinner,
 
-        handleDraw,
-        handleCheckmate,
-        handlePlayerTimeout,
+		handleDraw,
+		handleCheckmate,
+		handlePlayerTimeout,
 	};
 }
 

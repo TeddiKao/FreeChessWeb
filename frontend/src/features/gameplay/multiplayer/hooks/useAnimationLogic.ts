@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { ChessboardSquareIndex } from "../../types/general";
-import { animatePieceImage } from "../../utils/boardUtils";
-import { PieceColor } from "../../types/gameLogic";
+import { ChessboardSquareIndex } from "../../../../types/general";
+import { animatePieceImage } from "../../../../utils/boardUtils";
+import { PieceColor } from "../../../../types/gameLogic";
 
 function useAnimationLogic(orientation: PieceColor) {
 	const animationRef = useRef<HTMLDivElement | null>(null);
@@ -59,7 +59,7 @@ function useAnimationLogic(orientation: PieceColor) {
 	function prepareAnimationData(
 		startingSquare: ChessboardSquareIndex,
 		destinationSquare: ChessboardSquareIndex,
-        postAnimationCallback: () => void
+		postAnimationCallback: () => void
 	) {
 		updatePostAnimationCallback(postAnimationCallback);
 		updateAnimationStartingSquare(startingSquare);
@@ -96,7 +96,7 @@ function useAnimationLogic(orientation: PieceColor) {
 		animationRef.current = null;
 	}
 
-    return { animationRef, prepareAnimationData, animationSquare }
+	return { animationRef, prepareAnimationData, animationSquare };
 }
 
 export default useAnimationLogic;

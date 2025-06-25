@@ -11,7 +11,7 @@ import { fetchFen } from "../../utils/apiUtils.ts";
 
 import MatchmakingScreen from "../../features/gameSetup/MatchmakingScreen.js";
 import { GameSetupStages } from "../../enums/gameSetup.js";
-import { ParsedFENString } from "../../types/gameLogic.ts";
+import { ParsedFENString } from "../../features/gameplay/multiplayer/gameLogic.types.ts";
 import CustomTimeControlScreen from "../../features/gameSetup/CustomTimeControlScreen.tsx";
 import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar.tsx";
 import DisplayChessboard from "../../features1/gameplay/chessboards/DisplayChessboard.tsx";

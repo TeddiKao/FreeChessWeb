@@ -4,7 +4,12 @@ import {
 	RefObject,
 	StateSetterFunction,
 } from "../types/general.ts";
-import { MoveInfo, ParsedFENString, PieceColor, PieceType } from "../types/gameLogic.ts";
+import {
+	MoveInfo,
+	ParsedFENString,
+	PieceColor,
+	PieceType,
+} from "../features/gameplay/multiplayer/gameLogic.types.ts";
 
 interface DisplayChessboardProps {
 	parsed_fen_string: ParsedFENString;
@@ -29,7 +34,7 @@ interface BotChessboardProps extends DisplayChessboardProps {
 			move_type: string;
 			last_dragged_square: ChessboardSquareIndex;
 			last_dropped_square: ChessboardSquareIndex;
-			move_info: MoveInfo
+			move_info: MoveInfo;
 		}>
 	>;
 	lastDraggedSquare: ChessboardSquareIndex;
@@ -39,8 +44,8 @@ interface BotChessboardProps extends DisplayChessboardProps {
 	setGameEndedCause: StateSetterFunction<string>;
 	setGameWinner: StateSetterFunction<string>;
 
-	parentAnimationSquare: OptionalValue<ChessboardSquareIndex>
-	parentAnimationStyles: Record<string, unknown>
+	parentAnimationSquare: OptionalValue<ChessboardSquareIndex>;
+	parentAnimationStyles: Record<string, unknown>;
 }
 
 interface ClickedSquaresState {
@@ -61,7 +66,7 @@ interface MultiplayerChessboardProps extends DisplayChessboardProps {
 	clickedSquaresState: ClickedSquaresState;
 	dragAndDropSquaresState: DragAndDropSquaresState;
 
-	previousDraggedSquare: ChessboardSquareIndex
+	previousDraggedSquare: ChessboardSquareIndex;
 	previousDroppedSquare: ChessboardSquareIndex;
 
 	cancelPromotion: () => void;
@@ -78,7 +83,7 @@ interface GameReplayChessboardProps extends DisplayChessboardProps {
 	lastDroppedSquare: string;
 
 	animationSquare: OptionalValue<ChessboardSquareIndex>;
-	animationStyles: Record<string, unknown>
+	animationStyles: Record<string, unknown>;
 }
 
 interface EmptySquareProps {
@@ -92,13 +97,15 @@ interface EmptySquareProps {
 
 	setDraggedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
 	setDroppedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
-	setPrevClickedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
+	setPrevClickedSquare: StateSetterFunction<
+		OptionalValue<ChessboardSquareIndex>
+	>;
 	setClickedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
 
 	handlePromotionCancel: (color: PieceColor) => void;
 	handlePawnPromotion: (
 		color: PieceColor,
-		promotedPiece: PieceType,
+		promotedPiece: PieceType
 	) => Promise<void> | void;
 	previousDraggedSquare: OptionalValue<ChessboardSquareIndex>;
 	previousDroppedSquare: OptionalValue<ChessboardSquareIndex>;

@@ -14,7 +14,7 @@ import Chessboard from "../Chessboard.tsx";
 import GameplaySettings from "../../../../features1/modals/GameplaySettings.tsx";
 import ModalWrapper from "../../../../components/wrappers/ModalWrapper.tsx";
 import useGameplaySettings from "../../../../hooks/useGameplaySettings.ts";
-import { ParsedFENString } from "../../../../types/gameLogic.ts";
+import { ParsedFENString } from "../../multiplayer/gameLogic.types.ts";
 import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar.tsx";
 import LocalGameOverModal from "../../../../features1/modals/gameOverModals/LocalModal.tsx";
 

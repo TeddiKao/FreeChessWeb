@@ -1,4 +1,4 @@
-import { ParsedFENString } from "../../../../types/gameLogic";
+import { ParsedFENString } from "../../multiplayer/gameLogic.types";
 import { ChessboardSquareIndex } from "../../../../types/general";
 import { fetchLegalMoves, fetchMoveIsValid } from "../../../../utils/apiUtils";
 

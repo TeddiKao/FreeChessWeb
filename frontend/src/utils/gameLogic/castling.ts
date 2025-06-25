@@ -1,181 +1,181 @@
 import {
-    whiteKingStartingSquare,
-    blackKingStartingSquare,
-    rookStartingSquares,
+	whiteKingStartingSquare,
+	blackKingStartingSquare,
+	rookStartingSquares,
 } from "../../constants/castlingSquares.ts";
 import {
-    BoardPlacement,
-    CastlingRights,
-    CastlingSide,
-    ParsedFENString,
-    PieceColor,
-    SquareInfo,
+	BoardPlacement,
+	CastlingRights,
+	CastlingSide,
+	ParsedFENString,
+	PieceColor,
+	SquareInfo,
 } from "../../types/gameLogic.ts";
 import { capitaliseFirstLetter } from "../generalUtils.ts";
 
 function getKingStartingSquare(color: string): number {
-    color = color.toLowerCase();
+	color = color.toLowerCase();
 
-    if (color === "white") {
-        return whiteKingStartingSquare;
-    } else {
-        return blackKingStartingSquare;
-    }
+	if (color === "white") {
+		return whiteKingStartingSquare;
+	} else {
+		return blackKingStartingSquare;
+	}
 }
 
 function getKingCastledSquare(
-    color: PieceColor,
-    castlingSide: CastlingSide
+	color: PieceColor,
+	castlingSide: CastlingSide
 ): number {
-    castlingSide = castlingSide.toLowerCase() as CastlingSide;
+	castlingSide = castlingSide.toLowerCase() as CastlingSide;
 
-    const startingSquare: number = getKingStartingSquare(color);
-    const isCastlingKinsgside: boolean = castlingSide === "kingside";
+	const startingSquare: number = getKingStartingSquare(color);
+	const isCastlingKinsgside: boolean = castlingSide === "kingside";
 
-    // Offset from original king square
-    const squareOffset: number = isCastlingKinsgside ? 2 : -2;
+	// Offset from original king square
+	const squareOffset: number = isCastlingKinsgside ? 2 : -2;
 
-    return startingSquare + squareOffset;
+	return startingSquare + squareOffset;
 }
 
 function getCastledRookSquare(
-    color: PieceColor,
-    castlingSide: CastlingSide
+	color: PieceColor,
+	castlingSide: CastlingSide
 ): number {
-    color = color.toLowerCase() as PieceColor;
-    castlingSide = castlingSide.toLowerCase() as CastlingSide;
+	color = color.toLowerCase() as PieceColor;
+	castlingSide = castlingSide.toLowerCase() as CastlingSide;
 
-    const rookStartingSquare: number = getRookStartingSquare(
-        color,
-        castlingSide
-    );
-    const isCastlingKinsgside: boolean = castlingSide === "kingside";
+	const rookStartingSquare: number = getRookStartingSquare(
+		color,
+		castlingSide
+	);
+	const isCastlingKinsgside: boolean = castlingSide === "kingside";
 
-    // Offset from original rook square
-    const squareOffset: number = isCastlingKinsgside ? -2 : 3;
+	// Offset from original rook square
+	const squareOffset: number = isCastlingKinsgside ? -2 : 3;
 
-    return rookStartingSquare + squareOffset;
+	return rookStartingSquare + squareOffset;
 }
 
 function getRookStartingSquare(
-    color: PieceColor,
-    castlingSide: CastlingSide
+	color: PieceColor,
+	castlingSide: CastlingSide
 ): number {
-    color = color.toLowerCase() as PieceColor;
-    castlingSide = castlingSide.toLowerCase() as CastlingSide;
+	color = color.toLowerCase() as PieceColor;
+	castlingSide = castlingSide.toLowerCase() as CastlingSide;
 
-    return rookStartingSquares[color][castlingSide];
+	return rookStartingSquares[color][castlingSide];
 }
 
 function disableCastling(
-    color: string,
-    castlingRights: CastlingRights,
-    castlingSides: Array<CastlingSide>
+	color: string,
+	castlingRights: CastlingRights,
+	castlingSides: Array<CastlingSide>
 ): CastlingRights {
-    const updatedCastlingRights: CastlingRights =
-        structuredClone(castlingRights);
+	const updatedCastlingRights: CastlingRights =
+		structuredClone(castlingRights);
 
-    color = color.toLowerCase();
+	color = color.toLowerCase();
 
-    for (const castlingSide of castlingSides) {
-        updatedCastlingRights[capitaliseFirstLetter(color)][castlingSide] =
-            false;
-    }
+	for (const castlingSide of castlingSides) {
+		updatedCastlingRights[capitaliseFirstLetter(color)][castlingSide] =
+			false;
+	}
 
-    return updatedCastlingRights;
+	return updatedCastlingRights;
 }
 
 function canCastleKingside(
-    color: string,
-    castlingRights: CastlingRights
+	color: string,
+	castlingRights: CastlingRights
 ): boolean {
-    return castlingRights[capitaliseFirstLetter(color)]["Kingside"];
+	return castlingRights[capitaliseFirstLetter(color)]["Kingside"];
 }
 
 function canCastleQueenside(
-    color: string,
-    castlingRights: CastlingRights
+	color: string,
+	castlingRights: CastlingRights
 ): boolean {
-    return castlingRights[capitaliseFirstLetter(color)]["Queenside"];
+	return castlingRights[capitaliseFirstLetter(color)]["Queenside"];
 }
 
 function canCastle(
-    color: string,
-    castlingSide: string,
-    castlingRights: CastlingRights
+	color: string,
+	castlingSide: string,
+	castlingRights: CastlingRights
 ) {
-    color = color.toLowerCase();
-    castlingSide = castlingSide.toLowerCase();
+	color = color.toLowerCase();
+	castlingSide = castlingSide.toLowerCase();
 
-    if (castlingSide === "kingside") {
-        return canCastleKingside(color, castlingRights);
-    } else {
-        return canCastleQueenside(color, castlingRights);
-    }
+	if (castlingSide === "kingside") {
+		return canCastleKingside(color, castlingRights);
+	} else {
+		return canCastleQueenside(color, castlingRights);
+	}
 }
 
 function handleCastling(
-    fenString: ParsedFENString,
-    color: PieceColor,
-    castlingSide: CastlingSide
+	fenString: ParsedFENString,
+	color: PieceColor,
+	castlingSide: CastlingSide
 ): ParsedFENString {
-    color = color.toLowerCase() as PieceColor;
-    castlingSide = castlingSide.toLowerCase() as CastlingSide;
+	color = color.toLowerCase() as PieceColor;
+	castlingSide = castlingSide.toLowerCase() as CastlingSide;
 
-    const updatedFEN: ParsedFENString = structuredClone(fenString);
-    const boardPlacement: BoardPlacement = structuredClone(
-        updatedFEN["board_placement"]
-    );
-    const castlingRights: CastlingRights = structuredClone(
-        updatedFEN["castling_rights"]
-    );
+	const updatedFEN: ParsedFENString = structuredClone(fenString);
+	const boardPlacement: BoardPlacement = structuredClone(
+		updatedFEN["board_placement"]
+	);
+	const castlingRights: CastlingRights = structuredClone(
+		updatedFEN["castling_rights"]
+	);
 
-    const disabledCastlingRights = disableCastling(color, castlingRights, [
-        "kingside",
-        "queenside",
-    ]);
+	const disabledCastlingRights = disableCastling(color, castlingRights, [
+		"kingside",
+		"queenside",
+	]);
 
-    const kingStartingSquare = getKingStartingSquare(color);
-    const kingCastledSquare = getKingCastledSquare(color, castlingSide);
-    const rookStartingSquare = getRookStartingSquare(color, castlingSide);
-    const rookCastledSquare = getCastledRookSquare(color, castlingSide);
+	const kingStartingSquare = getKingStartingSquare(color);
+	const kingCastledSquare = getKingCastledSquare(color, castlingSide);
+	const rookStartingSquare = getRookStartingSquare(color, castlingSide);
+	const rookCastledSquare = getCastledRookSquare(color, castlingSide);
 
-    if (!canCastle(color, castlingSide, castlingRights)) {
-        return updatedFEN;
-    }
+	if (!canCastle(color, castlingSide, castlingRights)) {
+		return updatedFEN;
+	}
 
-    const castledKingSquareInfo: SquareInfo = {
-        piece_type: "king",
-        piece_color: color,
-        starting_square: kingStartingSquare,
-    };
+	const castledKingSquareInfo: SquareInfo = {
+		piece_type: "king",
+		piece_color: color,
+		starting_square: kingStartingSquare,
+	};
 
-    const castledRookSquareInfo: SquareInfo = {
-        piece_type: "rook",
-        piece_color: color,
-        starting_square: rookStartingSquare,
-    };
+	const castledRookSquareInfo: SquareInfo = {
+		piece_type: "rook",
+		piece_color: color,
+		starting_square: rookStartingSquare,
+	};
 
-    delete boardPlacement[`${kingStartingSquare}`];
-    delete boardPlacement[`${rookStartingSquare}`];
+	delete boardPlacement[`${kingStartingSquare}`];
+	delete boardPlacement[`${rookStartingSquare}`];
 
-    boardPlacement[`${kingCastledSquare}`] = castledKingSquareInfo;
-    boardPlacement[`${rookCastledSquare}`] = castledRookSquareInfo;
+	boardPlacement[`${kingCastledSquare}`] = castledKingSquareInfo;
+	boardPlacement[`${rookCastledSquare}`] = castledRookSquareInfo;
 
-    updatedFEN["board_placement"] = boardPlacement;
-    updatedFEN["castling_rights"] = disabledCastlingRights;
+	updatedFEN["board_placement"] = boardPlacement;
+	updatedFEN["castling_rights"] = disabledCastlingRights;
 
-    return updatedFEN;
+	return updatedFEN;
 }
 
 function isCastling(
-    startingSquare: string | number,
-    destinationSquare: string | number
+	startingSquare: string | number,
+	destinationSquare: string | number
 ): boolean {
-    startingSquare = Number(startingSquare);
-    destinationSquare = Number(destinationSquare);
+	startingSquare = Number(startingSquare);
+	destinationSquare = Number(destinationSquare);
 
-    return Math.abs(destinationSquare - startingSquare) === 2;
+	return Math.abs(destinationSquare - startingSquare) === 2;
 }
 
 export { handleCastling, isCastling, disableCastling };

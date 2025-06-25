@@ -8,8 +8,6 @@ import {
 } from "../../../../../types/general";
 import { ArrowKeys } from "../../../../../enums/general";
 import { PositionList } from "../../../../../interfaces/gameLogic";
-import useAnimationLogic from "../../../../../hooks/gameLogic/useAnimationLogic";
-import { PieceColor } from "../../../../../types/gameLogic";
 
 type MoveNavigationButtonsProps = {
 	setPositionIndex: StateSetterFunction<number>;
