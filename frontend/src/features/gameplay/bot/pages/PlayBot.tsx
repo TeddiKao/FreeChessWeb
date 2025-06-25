@@ -17,7 +17,7 @@ import { playAudio } from "../../../../utils/audioUtils";
 import { convertToMilliseconds } from "../../../../utils/timeUtils";
 import { pieceAnimationTime } from "../../../../constants/pieceAnimation";
 import usePieceAnimation from "../../../../hooks/usePieceAnimation";
-import LocalGameOverModal from "../../../../features1/modals/gameOverModals/LocalModal";
+import LocalGameOverModal from "../../passAndPlay/modals/GameOverModal";
 import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar";
 import MoveListPanel from "../../common/components/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../common/components/gameplaySidePanel/MoveNavigationButtons";

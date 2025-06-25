@@ -1,11 +1,11 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import "../../../styles/modals/game-over-modal.scss";
-import { ChallengeWebsocketContext } from "../../../components/wrappers/ChallengeWebsocketProvider";
-import useUsername from "../../../hooks/useUsername";
-import { capitaliseFirstLetter } from "../../../utils/generalUtils";
-import MatchmakingShortcutScreen from "../MatchmakingShortcutScreen";
-import { TimeControl } from "../../../types/gameSetup";
-import useMatchmakingLogic from "../../../hooks/useMatchmakingLogic";
+import "../../common/styles/game-over-modal.scss";
+import { ChallengeWebsocketContext } from "../../../../components/wrappers/ChallengeWebsocketProvider";
+import useUsername from "../../../../hooks/useUsername";
+import { capitaliseFirstLetter } from "../../../../utils/generalUtils";
+import MatchmakingShortcutScreen from "../../../../features1/modals/MatchmakingShortcutScreen";
+import { TimeControl } from "../../../../types/gameSetup";
+import useMatchmakingLogic from "../../../../hooks/useMatchmakingLogic";
 
 type GameOverModalProps = {
 	visible: boolean;
@@ -44,7 +44,7 @@ function GameOverModal({
 		cancelSuccess: () => {},
 		enabled: matchmakingWebsocketEnabled,
 		navigateToTemp: true,
-	})
+	});
 
 	if (!visible) {
 		return null;
@@ -61,7 +61,10 @@ function GameOverModal({
 	}
 
 	function handleRematch() {
-		const recepientUsername = playerUsername === whitePlayerUsername ? blackPlayerUsername : whitePlayerUsername
+		const recepientUsername =
+			playerUsername === whitePlayerUsername
+				? blackPlayerUsername
+				: whitePlayerUsername;
 
 		sendChallenge(recepientUsername, "Recent opponent", timeControlInfo);
 	}
