@@ -15,9 +15,15 @@ interface BoardPlacement {
 }
 
 interface CastlingRights {
-	[key: string]: {
-		[key: string]: boolean;
-	};
+	White: {
+		Kingside: boolean;
+		Queenside: boolean;
+	},
+
+	Black: {
+		Kingside: boolean;
+		Queenside: boolean;
+	}
 }
 
 interface SquareInfo {
