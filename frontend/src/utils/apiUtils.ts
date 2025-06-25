@@ -112,49 +112,6 @@ async function fetchKingIsInCheck(
 	return isKingInCheck;
 }
 
-async function getIsStalemated(currentFEN: ParsedFEN, kingColor: string) {
-	let isStalemated = false;
-	try {
-		const response = await api.post(
-			"/move_validation_api/get-is-stalemated/",
-			{
-				current_fen: currentFEN,
-				king_color: kingColor,
-			}
-		);
-
-		if (response.status === 200) {
-			isStalemated = response.data;
-		}
-	} catch (error) {
-		console.log(error);
-	}
-
-	return isStalemated;
-}
-
-async function getIsCheckmated(currentFEN: object, kingColor: string) {
-	let isCheckmated = false;
-
-	try {
-		const response = await api.post(
-			"/move_validation_api/get-is-checkmated/",
-			{
-				current_fen: currentFEN,
-				king_color: kingColor,
-			}
-		);
-
-		if (response.status === 200) {
-			isCheckmated = response.data;
-		}
-	} catch (error) {
-		console.log(error);
-	}
-
-	return isCheckmated;
-}
-
 async function getUsername() {
 	let username = null;
 	try {
@@ -267,34 +224,16 @@ async function fetchTotalCompletedGames() {
 	return totalCompletedGames;
 }
 
-async function fetchGameWinner(gameId: number) {
-	let gameWinner = null;
-	try {
-		const response = await api.post("/game-history/get-game-winner/", {
-			game_id: gameId,
-		});
-
-		gameWinner = response.data;
-	} catch (error) {
-		console.error(error);
-	}
-
-	return gameWinner;
-}
-
 export {
 	fetchFen,
 	fetchKingIsInCheck,
 	fetchLegalMoves,
 	fetchMoveIsValid,
-	getIsCheckmated,
-	getIsStalemated,
 	getUsername,
 	createBotGame,
 	makeMoveInBotGame,
 	fetchBotGameMoveList,
 	fetchBotGamePositionList,
 	fetchCompletedGames,
-	fetchGameWinner,
 	fetchTotalCompletedGames,
 };
