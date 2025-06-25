@@ -1,5 +1,5 @@
 import { PieceColor } from "../features/gameplay/multiplayer/gameLogic.types";
-import { getPromotionRank } from "./gameLogic/promotion";
+import { getPromotionRank } from "../features/gameplay/passAndPlay/utils/promotion";
 
 function isPawnPromotion(color: PieceColor, destinationRank: number): boolean {
 	return destinationRank === getPromotionRank(color);

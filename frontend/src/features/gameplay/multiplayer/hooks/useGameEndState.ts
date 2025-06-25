@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CheckmateEventData } from "../../../../interfaces/gameLogic";
-import { getOppositeColor } from "../../../../utils/gameLogic/general";
+import { getOppositeColor } from "../../passAndPlay/utils/general";
 import { PieceColor } from "../../common/types/pieces.types";
 
 function useGameEndState() {
