@@ -12,8 +12,8 @@ import AuthenticationRoute from "./features/auth/components/routes/Authenticatio
 import Play from "./features/gameplay/multiplayer/pages/Play.tsx";
 import PassAndPlay from "./features/gameplay/passAndPlay/pages/PassAndPlay.tsx";
 import TempRoute from "./pages/TempRoute.tsx";
-import SelectBot from "./pages/protected/SelectBot/SelectBot.tsx";
-import PlayBot from "./pages/protected/PlayBot.tsx";
+import SelectBot from "./features/gameplay/bot/pages/SelectBot.tsx";
+import PlayBot from "./features/gameplay/bot/pages/PlayBot.tsx";
 import GameHistory from "./pages/protected/GameHistory/GameHistory.tsx";
 import ViewGame from "./pages/protected/ViewGame.tsx";
 import ChallengeWebsocketProvider from "./components/wrappers/ChallengeWebsocketProvider.tsx";

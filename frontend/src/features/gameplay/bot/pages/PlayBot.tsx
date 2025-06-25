@@ -3,7 +3,7 @@ import {
 	fetchBotGameMoveList,
 	fetchBotGamePositionList,
 } from "../../../../utils/apiUtils";
-import "../../styles/pages/play-bot.scss";
+import "../styles/play-bot.scss";
 import useGameplaySettings from "../../../../hooks/useGameplaySettings";
 import GameplaySettings from "../../../../features1/modals/GameplaySettings";
 import ModalWrapper from "../../../../components/wrappers/ModalWrapper";

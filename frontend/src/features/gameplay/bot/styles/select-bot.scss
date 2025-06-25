@@ -1,4 +1,4 @@
-@use "../global/mixins" as *;
+@use "../../../../styles/global/mixins" as *;
 
 .select-bot-interface-container {
     @include flex-column;
