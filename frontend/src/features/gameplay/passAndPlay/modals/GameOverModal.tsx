@@ -1,4 +1,5 @@
 import { capitaliseFirstLetter } from "../../../../utils/generalUtils";
+import "../../common/styles/game-over-modal.scss";
 
 type LocalGameOverModalProps = {
 	visible: boolean;

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import "../styles/play.scss";
 import "../../../../styles/components/chessboard/board-actions.scss";
 
-import GameOverModal from "../../../../features1/modals/gameOverModals/MultiplayerModal.tsx";
+import GameOverModal from "../modals/GameOverModal.tsx";
 import GameplaySettings from "../../../../features1/modals/GameplaySettings.tsx";
 import ModalWrapper from "../../../../components/wrappers/ModalWrapper.js";
 import useGameplaySettings from "../../../../hooks/useGameplaySettings.ts";

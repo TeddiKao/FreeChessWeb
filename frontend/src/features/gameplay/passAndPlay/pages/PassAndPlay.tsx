@@ -15,7 +15,7 @@ import GameplaySettings from "../../../../features1/modals/GameplaySettings.tsx"
 import ModalWrapper from "../../../../components/wrappers/ModalWrapper.tsx";
 import useGameplaySettings from "../../../../hooks/useGameplaySettings.ts";
 import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar.tsx";
-import LocalGameOverModal from "../../../../features1/modals/gameOverModals/LocalModal.tsx";
+import LocalGameOverModal from "../modals/GameOverModal.tsx";
 import { ParsedFEN } from "../../common/types/gameState.types.ts";
 
 function PassAndPlay() {
@@ -83,9 +83,7 @@ function PassAndPlay() {
 						<div className="main-chessboard">
 							<div className="chessboard-wrapper">
 								<Chessboard
-									parsed_fen_string={
-										parsedFEN as ParsedFEN
-									}
+									parsed_fen_string={parsedFEN as ParsedFEN}
 									orientation={boardOrientation}
 									setBoardOrientation={setBoardOrientation}
 									flipOnMove={false}
