@@ -7,7 +7,6 @@ import "../../../../styles/components/chessboard/board-actions.scss";
 import GameOverModal from "../../../../features1/modals/gameOverModals/MultiplayerModal.tsx";
 import GameplaySettings from "../../../../features1/modals/GameplaySettings.tsx";
 import ModalWrapper from "../../../../components/wrappers/ModalWrapper.js";
-import { PieceColor } from "../../../../types/gameLogic.ts";
 import useGameplaySettings from "../../../../hooks/useGameplaySettings.ts";
 import MessageBox from "../../../../components/common/MessageBox.tsx";
 import { MessageBoxTypes } from "../../../../types/messageBox.ts";
@@ -22,6 +21,7 @@ import GameplayActionButtons from "../../common/components/gameplaySidePanel/Gam
 import MoveListPanel from "../../common/components/gameplaySidePanel/MoveListPanel.tsx";
 import MoveNavigationButtons from "../../common/components/gameplaySidePanel/MoveNavigationButtons.tsx";
 import Timer from "../../common/components/Timer.tsx";
+import { PieceColor } from "../../common/types/pieces.types.ts";
 
 function Play() {
 	const location = useLocation();

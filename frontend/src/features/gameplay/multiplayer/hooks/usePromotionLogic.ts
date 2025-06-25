@@ -1,10 +1,11 @@
 import { useRef, useState } from "react";
-import { ParsedFENString, PieceType } from "../gameLogic.types";
-import { ChessboardSquareIndex } from "../../../../types/general";
 import useGameplaySettings from "../../../../hooks/useGameplaySettings";
+import { ParsedFEN } from "../../common/types/gameState.types";
+import { ChessboardSquareIndex } from "../../common/types/board.types";
+import { PieceType } from "../../common/types/pieces.types";
 
-function usePromotionLogic(parsedFEN: ParsedFENString) {
-	const prePromotionBoardState = useRef<ParsedFENString | null>(null);
+function usePromotionLogic(parsedFEN: ParsedFEN) {
+	const prePromotionBoardState = useRef<ParsedFEN | null>(null);
 
 	const promotionSquareRef = useRef<ChessboardSquareIndex | null>(null);
 	const originalPawnSquareRef = useRef<ChessboardSquareIndex | null>(null);

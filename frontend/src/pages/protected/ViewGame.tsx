@@ -5,7 +5,6 @@ import {
 	fetchMoveList,
 	fetchPositionList,
 } from "../../utils/apiUtils";
-import { ParsedFENString } from "../../features/gameplay/multiplayer/gameLogic.types";
 
 import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar";
 
@@ -19,6 +18,7 @@ import usePieceAnimation from "../../hooks/usePieceAnimation";
 import GameReplayChessboard from "../../features1/gameplay/chessboards/GameReplayChessboard";
 import MoveListPanel from "../../features/gameplay/common/components/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../features/gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
+import { ParsedFEN } from "../../features/gameplay/common/types/gameState.types";
 
 function ViewGame() {
 	const { gameId } = useParams();
@@ -34,7 +34,7 @@ function ViewGame() {
 
 	const [gameWinner, setGameWinner] = useState("");
 
-	const [parsedFEN, setParsedFEN] = useState<ParsedFENString>(
+	const [parsedFEN, setParsedFEN] = useState<ParsedFEN>(
 		positionList[positionIndex]?.["position"]
 	);
 

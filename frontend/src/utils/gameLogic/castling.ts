@@ -3,14 +3,8 @@ import {
 	blackKingStartingSquare,
 	rookStartingSquares,
 } from "../../constants/castlingSquares.ts";
-import {
-	BoardPlacement,
-	CastlingRights,
-	CastlingSide,
-	ParsedFENString,
-	PieceColor,
-	SquareInfo,
-} from "../../types/gameLogic.ts";
+import { BoardPlacement, CastlingRights, CastlingSide, ParsedFEN, SquareInfo } from "../../features/gameplay/common/types/gameState.types.ts";
+import { PieceColor } from "../../features/gameplay/common/types/pieces.types.ts";
 import { capitaliseFirstLetter } from "../generalUtils.ts";
 
 function getKingStartingSquare(color: string): number {
@@ -78,7 +72,7 @@ function disableCastling(
 	color = color.toLowerCase();
 
 	for (const castlingSide of castlingSides) {
-		updatedCastlingRights[capitaliseFirstLetter(color)][castlingSide] =
+		updatedCastlingRights[capitaliseFirstLetter(color) as "White" | "Black"][capitaliseFirstLetter(castlingSide) as "Kingside" | "Queenside"] =
 			false;
 	}
 
@@ -89,14 +83,14 @@ function canCastleKingside(
 	color: string,
 	castlingRights: CastlingRights
 ): boolean {
-	return castlingRights[capitaliseFirstLetter(color)]["Kingside"];
+	return castlingRights[capitaliseFirstLetter(color) as "White" | "Black"]["Kingside"];
 }
 
 function canCastleQueenside(
 	color: string,
 	castlingRights: CastlingRights
 ): boolean {
-	return castlingRights[capitaliseFirstLetter(color)]["Queenside"];
+	return castlingRights[capitaliseFirstLetter(color) as "White" | "Black"]["Queenside"];
 }
 
 function canCastle(
@@ -115,14 +109,14 @@ function canCastle(
 }
 
 function handleCastling(
-	fenString: ParsedFENString,
+	fenString: ParsedFEN,
 	color: PieceColor,
 	castlingSide: CastlingSide
-): ParsedFENString {
+): ParsedFEN {
 	color = color.toLowerCase() as PieceColor;
 	castlingSide = castlingSide.toLowerCase() as CastlingSide;
 
-	const updatedFEN: ParsedFENString = structuredClone(fenString);
+	const updatedFEN: ParsedFEN = structuredClone(fenString);
 	const boardPlacement: BoardPlacement = structuredClone(
 		updatedFEN["board_placement"]
 	);

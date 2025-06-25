@@ -1,9 +1,9 @@
-import { ParsedFENString } from "../../multiplayer/gameLogic.types";
 import { ChessboardSquareIndex } from "../../../../types/general";
 import { fetchLegalMoves, fetchMoveIsValid } from "../../../../utils/apiUtils";
+import { ParsedFEN } from "../types/gameState.types";
 
 async function displayLegalMoves(
-	parsedFEN: ParsedFENString,
+	parsedFEN: ParsedFEN,
 	startSquare: ChessboardSquareIndex
 ) {
 	const squareInfo = parsedFEN["board_placement"][startSquare.toString()];
@@ -28,7 +28,7 @@ async function displayLegalMoves(
 }
 
 async function performMoveValidation(
-	parsedFEN: ParsedFENString,
+	parsedFEN: ParsedFEN,
 	startSquare: ChessboardSquareIndex,
 	destinationSquare: ChessboardSquareIndex
 ) {

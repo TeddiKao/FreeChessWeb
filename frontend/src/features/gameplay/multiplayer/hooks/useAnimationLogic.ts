@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChessboardSquareIndex } from "../../../../types/general";
 import { animatePieceImage } from "../../../../utils/boardUtils";
-import { PieceColor } from "../../../../types/gameLogic";
+import { PieceColor } from "../../common/types/pieces.types";
 
 function useAnimationLogic(orientation: PieceColor) {
 	const animationRef = useRef<HTMLDivElement | null>(null);

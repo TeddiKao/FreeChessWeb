@@ -3,11 +3,6 @@ import {
 	fetchBotGameMoveList,
 	fetchBotGamePositionList,
 } from "../../utils/apiUtils";
-import {
-	MoveInfo,
-	ParsedFENString,
-} from "../../features/gameplay/multiplayer/gameLogic.types";
-
 import "../../styles/pages/play-bot.scss";
 import useGameplaySettings from "../../hooks/useGameplaySettings";
 import GameplaySettings from "../../features1/modals/GameplaySettings";
@@ -24,6 +19,7 @@ import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNa
 import MoveListPanel from "../../features/gameplay/common/components/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../features/gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
 import BotChessboard from "../../features1/gameplay/chessboards/BotChessboard";
+import { MoveInfo, ParsedFEN } from "../../features/gameplay/common/types/gameState.types";
 
 function PlayBot() {
 	const initialGameplaySettings = useGameplaySettings();
@@ -39,7 +35,7 @@ function PlayBot() {
 
 	const [positionList, setPositionList] = useState<
 		Array<{
-			position: ParsedFENString;
+			position: ParsedFEN;
 			move_type: string;
 			last_dragged_square: ChessboardSquareIndex;
 			last_dropped_square: ChessboardSquareIndex;

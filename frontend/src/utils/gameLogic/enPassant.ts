@@ -1,30 +1,26 @@
-import {
-	BoardPlacement,
-	MoveInfo,
-	ParsedFENString,
-	PieceColor,
-	PieceType,
-} from "../../types/gameLogic.ts";
-import { ChessboardSquareIndex, OptionalValue } from "../../types/general.ts";
+import { ChessboardSquareIndex } from "../../features/gameplay/common/types/board.types.ts";
+import { BoardPlacement, MoveInfo, ParsedFEN } from "../../features/gameplay/common/types/gameState.types.ts";
+import { PieceColor, PieceType } from "../../features/gameplay/common/types/pieces.types.ts";
+import { OptionalValue } from "../../types/general.ts";
 import { getRank } from "../boardUtils.ts";
 
 function resetEnPassantTargetSquare(
-	fenString: ParsedFENString
-): ParsedFENString {
-	const updatedFENString: ParsedFENString = structuredClone(fenString);
+	fenString: ParsedFEN
+): ParsedFEN {
+	const updatedFENString: ParsedFEN = structuredClone(fenString);
 	updatedFENString["en_passant_target_square"] = null;
 
 	return updatedFENString;
 }
 
 function updateEnPassantTargetSquare(
-	fenString: ParsedFENString,
+	fenString: ParsedFEN,
 	{ starting_square, destination_square, piece_type, piece_color }: MoveInfo
-): ParsedFENString {
+): ParsedFEN {
 	piece_type = piece_type.toLowerCase() as PieceType;
 	piece_color = piece_color.toLowerCase() as PieceColor;
 
-	const updatedFEN: ParsedFENString = structuredClone(fenString);
+	const updatedFEN: ParsedFEN = structuredClone(fenString);
 
 	if (piece_type !== "pawn") {
 		return resetEnPassantTargetSquare(updatedFEN);
@@ -63,9 +59,9 @@ function getEnPassantPawnLocation(enPassantSquare: number): number {
 }
 
 function handleEnPassant(
-	fenString: ParsedFENString,
+	fenString: ParsedFEN,
 	destinationSquare: ChessboardSquareIndex
-): ParsedFENString {
+): ParsedFEN {
 	const enPassantSquare: OptionalValue<number> =
 		fenString["en_passant_target_square"];
 
@@ -77,7 +73,7 @@ function handleEnPassant(
 		return fenString;
 	}
 
-	const updatedFEN: ParsedFENString = structuredClone(fenString);
+	const updatedFEN: ParsedFEN = structuredClone(fenString);
 	const updatedBoardPlacement: BoardPlacement = structuredClone(
 		fenString["board_placement"]
 	);
