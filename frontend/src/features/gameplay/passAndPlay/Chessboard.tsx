@@ -12,8 +12,6 @@ import { playAudio } from "../../../utils/audioUtils.ts";
 import {
 	fetchLegalMoves,
 	fetchMoveIsValid,
-	getIsCheckmated,
-	getIsStalemated,
 } from "../../../utils/apiUtils.ts";
 
 import {
@@ -72,6 +70,7 @@ import {
 	PieceInfo,
 	PieceType,
 } from "../common/types/pieces.types.ts";
+import { getIsCheckmated, getIsStalemated } from "../common/utils/gameResultFetchService.ts";
 
 function Chessboard({
 	parsed_fen_string,

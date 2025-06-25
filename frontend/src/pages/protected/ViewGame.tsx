@@ -15,7 +15,7 @@ import MoveListPanel from "../../features/gameplay/common/components/gameplaySid
 import MoveNavigationButtons from "../../features/gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
 import { ParsedFEN } from "../../features/gameplay/common/types/gameState.types";
 import { fetchPositionList, fetchMoveList } from "../../features/gameplay/common/utils/gameStateFetchService";
-import { fetchGameWinner } from "../../utils/apiUtils";
+import { fetchGameWinner } from "../../features/gameplay/common/utils/gameResultFetchService";
 
 function ViewGame() {
 	const { gameId } = useParams();
