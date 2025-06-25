@@ -1,51 +1,50 @@
 import { useState, useEffect, useRef } from "react";
 
-import "../../../styles/components/chessboard/chessboard.scss";
+import "../../../../styles/components/chessboard/chessboard.scss";
 
 import {
 	clearSquaresStyling,
 	getRank,
-	getSquareExists,
-} from "../../../utils/boardUtils.ts";
+} from "../../../../utils/boardUtils.ts";
 
-import { fetchLegalMoves } from "../../../utils/apiUtils.ts";
+import { fetchLegalMoves } from "../../../../utils/apiUtils.ts";
 
 import {
 	cancelPromotion,
 	handlePromotionCaptureStorage,
 	preparePawnPromotion,
-} from "../../../features/gameplay/passAndPlay/utils/promotion.ts";
+} from "../../passAndPlay/utils/promotion.ts";
 
 import {
 	BotGameWebSocketEventTypes,
 	MoveMethods,
-} from "../../../enums/gameLogic.ts";
-import { BotChessboardProps } from "../../../interfaces/chessboard.js";
+} from "../../../../enums/gameLogic.ts";
+import { BotChessboardProps } from "../../../../interfaces/chessboard.js";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,
-} from "../../../types/general.js";
-import { isPawnPromotion } from "../../../utils/moveUtils.ts";
-import useWebSocket from "../../../hooks/useWebsocket.ts";
-import { isObjEmpty, parseWebsocketUrl } from "../../../utils/generalUtils.ts";
-import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
+} from "../../../../types/general.js";
+import { isPawnPromotion } from "../../../../utils/moveUtils.ts";
+import useWebSocket from "../../../../hooks/useWebsocket.ts";
+import {
+	isObjEmpty,
+	parseWebsocketUrl,
+} from "../../../../utils/generalUtils.ts";
+import usePieceAnimation from "../../../../hooks/usePieceAnimation.ts";
 import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
-} from "../../../interfaces/chessboardGrid.ts";
-import ChessboardGrid from "../../../components/chessboard/ChessboardGrid.tsx";
-import useWebsocketLifecycle from "../../../hooks/useWebsocketLifecycle.ts";
-import Square from "../../../components/chessboard/Square.tsx";
-import useWebsocketWithLifecycle from "../../../hooks/useWebsocketWithLifecycle.ts";
+} from "../../../../interfaces/chessboardGrid.ts";
+import ChessboardGrid from "../../../../components/chessboard/ChessboardGrid.tsx";
+import useWebsocketLifecycle from "../../../../hooks/useWebsocketLifecycle.ts";
+import Square from "../../../../components/chessboard/Square.tsx";
+import useWebsocketWithLifecycle from "../../../../hooks/useWebsocketWithLifecycle.ts";
 import {
 	PieceColor,
 	PieceInfo,
 	PieceType,
-} from "../../../features/gameplay/common/types/pieces.types.ts";
-import {
-	MoveInfo,
-	ParsedFEN,
-} from "../../../features/gameplay/common/types/gameState.types.ts";
+} from "../../common/types/pieces.types.ts";
+import { MoveInfo, ParsedFEN } from "../../common/types/gameState.types.ts";
 function BotChessboard({
 	parsed_fen_string,
 	orientation,
