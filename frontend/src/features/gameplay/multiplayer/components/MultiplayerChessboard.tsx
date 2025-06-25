@@ -1,17 +1,16 @@
-import _ from "lodash";
-
 // Basic imports like CSS files and components
 import "../../../../styles/components/chessboard/chessboard.scss";
 import ChessboardGrid from "../../../../components/chessboard/ChessboardGrid";
 import Square from "../../../../components/chessboard/Square";
+
+// Types, interfaces, enums
 import { FilledSquareRenderParams, EmptySquareRenderParams } from "../../../../interfaces/chessboardGrid";
 import { PieceColor, PieceType } from "../../common/types/pieces.types";
 import { MultiplayerChessboardProps } from "../types/chessboardProps.types";
-import { isNullOrUndefined } from "../../../../utils/generalUtils";
-
-// Types, interfaces, enums
 
 // Utils
+import _ from "lodash";
+import { isNullOrUndefined } from "../../../../utils/generalUtils";
 
 function MultiplayerChessboard({
 	parsed_fen_string,
