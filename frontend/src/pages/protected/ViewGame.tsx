@@ -14,8 +14,11 @@ import GameReplayChessboard from "../../features1/gameplay/chessboards/GameRepla
 import MoveListPanel from "../../features/gameplay/common/components/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../features/gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
 import { ParsedFEN } from "../../features/gameplay/common/types/gameState.types";
-import { fetchPositionList, fetchMoveList } from "../../features/gameplay/common/utils/gameStateFetchService";
-import { fetchGameWinner } from "../../utils/apiUtils";
+import {
+	fetchPositionList,
+	fetchMoveList,
+} from "../../features/gameplay/common/utils/gameStateFetchApi";
+import { fetchGameWinner } from "../../features/gameplay/common/utils/gameResultFetchApi";
 
 function ViewGame() {
 	const { gameId } = useParams();
