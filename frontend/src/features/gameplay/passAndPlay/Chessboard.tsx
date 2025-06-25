@@ -9,10 +9,7 @@ import {
 
 import { playAudio } from "../../../utils/audioUtils.ts";
 
-import {
-	fetchLegalMoves,
-	fetchMoveIsValid,
-} from "../../../utils/apiUtils.ts";
+import { fetchLegalMoves, fetchMoveIsValid } from "../../../utils/apiUtils.ts";
 
 import {
 	disableCastling,
@@ -70,7 +67,10 @@ import {
 	PieceInfo,
 	PieceType,
 } from "../common/types/pieces.types.ts";
-import { getIsCheckmated, getIsStalemated } from "../common/utils/gameResultFetchService.ts";
+import {
+	getIsCheckmated,
+	getIsStalemated,
+} from "../common/utils/gameResultFetchApi.ts";
 
 function Chessboard({
 	parsed_fen_string,

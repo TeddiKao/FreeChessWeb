@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { PieceColor } from "../../common/types/pieces.types";
-import { fetchSideToMove } from "../../common/utils/gameStateFetchService";
+import { fetchSideToMove } from "../../common/utils/gameStateFetchApi";
 
 function useSideToMove(gameId: number) {
 	const [sideToMove, setSideToMove] = useState<PieceColor>("white");

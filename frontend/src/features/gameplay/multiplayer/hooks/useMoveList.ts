@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { MoveListUpdateEventData } from "../types/gameEvents.types";
 import { MoveList } from "../../common/types/gameState.types";
-import { fetchMoveList } from "../../common/utils/gameStateFetchService";
+import { fetchMoveList } from "../../common/utils/gameStateFetchApi";
 
 function useMoveList(gameId: number) {
 	const [moveList, setMoveList] = useState<MoveList>([]);
