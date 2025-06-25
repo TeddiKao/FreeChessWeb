@@ -1,4 +1,4 @@
-import { PieceColor } from "../../../../types/gameLogic";
+import { PieceColor, PieceType } from "./pieces.types";
 
 interface ParsedFEN {
 	board_placement: BoardPlacement;
