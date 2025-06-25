@@ -1,23 +1,15 @@
-import _ from "lodash";
-
 // Basic imports like CSS files and components
-import "../../../styles/components/chessboard/chessboard.scss";
-import Square from "../../../components/chessboard/Square.tsx";
+import "../../../../styles/components/chessboard/chessboard.scss";
+import ChessboardGrid from "../../../../components/chessboard/ChessboardGrid";
+import Square from "../../../../components/chessboard/Square";
 
 // Types, interfaces, enums
-import { MultiplayerChessboardProps } from "../../../interfaces/chessboard.js";
-import {
-	PieceColor,
-	PieceType,
-} from "../../../features/gameplay/multiplayer/gameLogic.types.ts";
+import { FilledSquareRenderParams, EmptySquareRenderParams } from "../../../../interfaces/chessboardGrid";
+import { PieceColor, PieceType } from "../../common/types/pieces.types";
+import { MultiplayerChessboardProps } from "../types/chessboardProps.types";
 
 // Utils
-import ChessboardGrid from "../../../components/chessboard/ChessboardGrid.tsx";
-import {
-	EmptySquareRenderParams,
-	FilledSquareRenderParams,
-} from "../../../interfaces/chessboardGrid.ts";
-import { isNullOrUndefined } from "../../../utils/generalUtils.ts";
+import { isNullOrUndefined } from "../../../../utils/generalUtils";
 
 function MultiplayerChessboard({
 	parsed_fen_string,

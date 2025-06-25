@@ -16,12 +16,12 @@ import { getOppositeColor } from "../../passAndPlay/utils/general.ts";
 import useMultiplayerGameplayLogic from "../hooks/useMultiplayerGameplayLogic.ts";
 import { isNullOrUndefined } from "../../../../utils/generalUtils.ts";
 import CapturedMaterial from "../../common/components/CapturedMaterial.tsx";
-import MultiplayerChessboard from "../../../../features1/gameplay/chessboards/MultiplayerChessboard.tsx";
 import GameplayActionButtons from "../../common/components/gameplaySidePanel/GameplayActionButtons.tsx";
 import MoveListPanel from "../../common/components/gameplaySidePanel/MoveListPanel.tsx";
 import MoveNavigationButtons from "../../common/components/gameplaySidePanel/MoveNavigationButtons.tsx";
 import Timer from "../../common/components/Timer.tsx";
 import { PieceColor } from "../../common/types/pieces.types.ts";
+import MultiplayerChessboard from "../components/MultiplayerChessboard.tsx";
 
 function Play() {
 	const location = useLocation();
