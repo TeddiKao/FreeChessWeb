@@ -1,7 +1,7 @@
-import { BotCategoryInfo } from "../../../../constants/botsConfig";
+import { BotCategoryInfo } from "../botsConfig";
 import BotCard from "./BotCard";
 
-import "../../../../styles/features/playBot/bot-category.scss";
+import "../styles/bot-category.scss";
 
 type BotCategoryProps = {
 	categoryInfo: BotCategoryInfo;

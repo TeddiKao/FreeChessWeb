@@ -2,24 +2,27 @@ import { useEffect, useRef, useState } from "react";
 import {
 	fetchBotGameMoveList,
 	fetchBotGamePositionList,
-} from "../../utils/apiUtils";
-import "../../styles/pages/play-bot.scss";
-import useGameplaySettings from "../../hooks/useGameplaySettings";
-import GameplaySettings from "../../features1/modals/GameplaySettings";
-import ModalWrapper from "../../components/wrappers/ModalWrapper";
+} from "../../../../utils/apiUtils";
+import "../styles/play-bot.scss";
+import useGameplaySettings from "../../../../hooks/useGameplaySettings";
+import GameplaySettings from "../../../../features1/modals/GameplaySettings";
+import ModalWrapper from "../../../../components/wrappers/ModalWrapper";
 import { Navigate, useLocation } from "react-router-dom";
-import { ChessboardSquareIndex, OptionalValue } from "../../types/general";
-import { isNullOrUndefined } from "../../utils/generalUtils";
-import { playAudio } from "../../utils/audioUtils";
-import { convertToMilliseconds } from "../../utils/timeUtils";
-import { pieceAnimationTime } from "../../constants/pieceAnimation";
-import usePieceAnimation from "../../hooks/usePieceAnimation";
-import LocalGameOverModal from "../../features1/modals/gameOverModals/LocalModal";
-import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar";
-import MoveListPanel from "../../features/gameplay/common/components/gameplaySidePanel/MoveListPanel";
-import MoveNavigationButtons from "../../features/gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
-import BotChessboard from "../../features1/gameplay/chessboards/BotChessboard";
-import { MoveInfo, ParsedFEN } from "../../features/gameplay/common/types/gameState.types";
+import {
+	ChessboardSquareIndex,
+	OptionalValue,
+} from "../../../../types/general";
+import { isNullOrUndefined } from "../../../../utils/generalUtils";
+import { playAudio } from "../../../../utils/audioUtils";
+import { convertToMilliseconds } from "../../../../utils/timeUtils";
+import { pieceAnimationTime } from "../../../../constants/pieceAnimation";
+import usePieceAnimation from "../../../../hooks/usePieceAnimation";
+import LocalGameOverModal from "../../../../features1/modals/gameOverModals/LocalModal";
+import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar";
+import MoveListPanel from "../../common/components/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "../../common/components/gameplaySidePanel/MoveNavigationButtons";
+import BotChessboard from "../../../../features1/gameplay/chessboards/BotChessboard";
+import { MoveInfo, ParsedFEN } from "../../common/types/gameState.types";
 
 function PlayBot() {
 	const initialGameplaySettings = useGameplaySettings();

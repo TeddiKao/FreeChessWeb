@@ -1,4 +1,4 @@
-@use "../../global/mixins" as *;
+@use "../../../../styles/global/mixins" as *;
 
 .bot-category-container {
     @include flex-column-y-center;

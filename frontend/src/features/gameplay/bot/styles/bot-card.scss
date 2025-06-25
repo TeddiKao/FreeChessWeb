@@ -1,4 +1,4 @@
-@use "../../global/mixins" as *;
+@use "../../../../styles/global/mixins" as *;
 
 .bot-card-container {
     @include flex-column-x-center;
