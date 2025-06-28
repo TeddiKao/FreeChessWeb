@@ -7,8 +7,6 @@ import {
 	getRank,
 } from "../../../../utils/boardUtils.ts";
 
-import { fetchLegalMoves } from "../../../../utils/apiUtils.ts";
-
 import {
 	cancelPromotion,
 	handlePromotionCaptureStorage,
@@ -45,6 +43,7 @@ import {
 	PieceType,
 } from "../../common/types/pieces.types.ts";
 import { MoveInfo, ParsedFEN } from "../../common/types/gameState.types.ts";
+import { fetchLegalMoves } from "../../common/utils/moveService.ts";
 function BotChessboard({
 	parsed_fen_string,
 	orientation,
