@@ -9,8 +9,6 @@ import {
 
 import { playAudio } from "../../../utils/audioUtils.ts";
 
-import { fetchLegalMoves, fetchMoveIsValid } from "../../../utils/apiUtils.ts";
-
 import {
 	disableCastling,
 	handleCastling,
@@ -55,7 +53,7 @@ import {
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid.ts";
 import Square from "../../../components/chessboard/Square.tsx";
-import { displayLegalMoves } from "../common/utils/moveService.ts";
+import { displayLegalMoves, fetchMoveIsValid } from "../common/utils/moveService.ts";
 import {
 	BoardPlacement,
 	CastlingSide,

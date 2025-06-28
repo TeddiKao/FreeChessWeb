@@ -116,4 +116,4 @@ async function fetchMoveIsValid(
 }
 
 
-export { displayLegalMoves, performMoveValidation };
+export { displayLegalMoves, performMoveValidation, fetchLegalMoves, fetchMoveIsValid };
