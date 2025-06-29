@@ -14,7 +14,6 @@ import PassAndPlay from "./features/gameplay/passAndPlay/pages/PassAndPlay.tsx";
 import TempRoute from "./pages/TempRoute.tsx";
 import SelectBot from "./features/gameplay/bot/pages/SelectBot.tsx";
 import PlayBot from "./features/gameplay/bot/pages/PlayBot.tsx";
-import GameHistory from "./pages/protected/GameHistory/GameHistory.tsx";
 import ViewGame from "./pages/protected/ViewGame.tsx";
 import ChallengeWebsocketProvider from "./components/wrappers/ChallengeWebsocketProvider.tsx";
 import Login from "./features/auth/pages/Login.tsx";
@@ -23,6 +22,7 @@ import Signup from "./features/auth/pages/Signup.tsx";
 import Dashboard from "./pages/protected/Dashboard/Dashboard.tsx";
 import GameSetup from "./pages/protected/GameSetup.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import GameHistory from "./features/gameHistory/pages/GameHistory.tsx";
 
 function Logout() {
 	localStorage.clear();
