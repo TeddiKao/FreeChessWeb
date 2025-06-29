@@ -7,6 +7,8 @@ import { getTotalPages } from "../../../utils/pageNavigationUtils";
 import CompletedGameInfo from "../components/CompletedGameInfo";
 import PageNavigation from "../components/PageNavigation";
 
+import "../styles/game-history.scss";
+
 function GameHistory() {
 	const initialUsername = useUsername();
 
