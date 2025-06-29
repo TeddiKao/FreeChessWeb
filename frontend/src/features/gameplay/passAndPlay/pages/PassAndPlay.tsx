@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { fetchFen } from "../../../../utils/apiUtils.js";
 
 import {
 	GameEndedSetterContext,
@@ -17,6 +16,7 @@ import useGameplaySettings from "../../../../hooks/useGameplaySettings.ts";
 import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar.tsx";
 import LocalGameOverModal from "../modals/GameOverModal.tsx";
 import { ParsedFEN } from "../../common/types/gameState.types.ts";
+import { fetchFen } from "../utils/passAndPlayApi.ts";
 
 function PassAndPlay() {
 	const [parsedFEN, setParsedFEN] = useState<ParsedFEN | null>(null);
