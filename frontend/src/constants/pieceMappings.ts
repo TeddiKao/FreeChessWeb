@@ -1,27 +1,30 @@
-import { CapturablePiece, CapturablePiecePlural } from "../types/gameLogic"
+import {
+	CapturablePiece,
+	CapturablePiecePlural,
+} from "../features/gameplay/multiplayer/gameLogic.types";
 
 interface PluralToSingularPieceMap {
-    [key: string]: CapturablePiece
+	[key: string]: CapturablePiece;
 }
 
 interface SingularToPluralPieceMap {
-    [key: string]: CapturablePiecePlural
+	[key: string]: CapturablePiecePlural;
 }
 
 const pluralToSingularPieceMap: PluralToSingularPieceMap = {
-    pawns: "pawn",
-    knights: "knight",
-    bishops: "bishop",
-    rooks: "rook",
-    queens: "queen"
-}
+	pawns: "pawn",
+	knights: "knight",
+	bishops: "bishop",
+	rooks: "rook",
+	queens: "queen",
+};
 
 const singularToPluralPieceMap: SingularToPluralPieceMap = {
-    pawn: "pawns",
-    knight: "knights",
-    bishop: "bishops",
-    rook: "rooks",
-    queen: "queens"
-}
+	pawn: "pawns",
+	knight: "knights",
+	bishop: "bishops",
+	rook: "rooks",
+	queen: "queens",
+};
 
-export { pluralToSingularPieceMap, singularToPluralPieceMap }
+export { pluralToSingularPieceMap, singularToPluralPieceMap };

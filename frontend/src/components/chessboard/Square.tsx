@@ -13,8 +13,8 @@ import {
 import { SquareProps } from "../../interfaces/chessboard.ts";
 import { OptionalValue } from "../../types/general.ts";
 import { capitaliseFirstLetter } from "../../utils/generalUtils.ts";
-import useAnimationLogic from "../../hooks/gameLogic/useAnimationLogic.ts";
-import { PieceColor } from "../../types/gameLogic.ts";
+import useAnimationLogic from "../../features/gameplay/multiplayer/hooks/useAnimationLogic.ts";
+import { PieceColor } from "../../features/gameplay/multiplayer/gameLogic.types.ts";
 
 function Square({
 	squareNumber,
@@ -192,8 +192,7 @@ function Square({
 					/>
 					<div
 						ref={
-							Number(squareNumber) ===
-							Number(animationSquare)
+							Number(squareNumber) === Number(animationSquare)
 								? animationRef
 								: undefined
 						}
@@ -201,8 +200,7 @@ function Square({
 					>
 						<img
 							style={
-								Number(animationSquare) ===
-								Number(squareNumber)
+								Number(animationSquare) === Number(squareNumber)
 									? animatingPieceStyle
 									: undefined
 							}

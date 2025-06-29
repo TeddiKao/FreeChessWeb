@@ -1,4 +1,7 @@
-import { pluralToSingularPieceMap, singularToPluralPieceMap } from "../constants/pieceMappings";
+import {
+	pluralToSingularPieceMap,
+	singularToPluralPieceMap,
+} from "../constants/pieceMappings";
 import { pieceValueMapping } from "../constants/pieceValues";
 import {
 	CapturedPiecesList,
@@ -10,7 +13,7 @@ import {
 	PieceType,
 	PromotionPiece,
 	PromotionPiecePlural,
-} from "../types/gameLogic";
+} from "../features/gameplay/multiplayer/gameLogic.types";
 
 function calculateTotalCapturedPiecesValue(
 	capturedPiecesList: CapturedPiecesList

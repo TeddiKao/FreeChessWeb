@@ -1,5 +1,5 @@
 import { pieceAnimationTime } from "../constants/pieceAnimation";
-import { PieceColor } from "../types/gameLogic";
+import { PieceColor } from "../features/gameplay/multiplayer/gameLogic.types";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,

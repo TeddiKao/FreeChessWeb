@@ -1,15 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-	fetchGameWinner,
-	fetchMoveList,
-	fetchPositionList,
-} from "../../utils/apiUtils";
-import { ParsedFENString } from "../../types/gameLogic";
-import GameReplayChessboard from "../../features/gameplay/chessboards/GameReplayChessboard";
 
-import MoveListPanel from "../../features/gameplay/gameplaySidePanel/MoveListPanel";
-import MoveNavigationButtons from "../../features/gameplay/gameplaySidePanel/MoveNavigationButtons";
 import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar";
 
 import "../../styles/pages/view-game.scss";
@@ -19,6 +10,15 @@ import { OptionalValue } from "../../types/general";
 import { convertToMilliseconds } from "../../utils/timeUtils";
 import { pieceAnimationTime } from "../../constants/pieceAnimation";
 import usePieceAnimation from "../../hooks/usePieceAnimation";
+import GameReplayChessboard from "../../features1/gameplay/chessboards/GameReplayChessboard";
+import MoveListPanel from "../../features/gameplay/common/components/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "../../features/gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
+import { ParsedFEN } from "../../features/gameplay/common/types/gameState.types";
+import {
+	fetchPositionList,
+	fetchMoveList,
+} from "../../features/gameplay/common/utils/gameStateFetchApi";
+import { fetchGameWinner } from "../../features/gameplay/common/utils/gameResultFetchApi";
 
 function ViewGame() {
 	const { gameId } = useParams();
@@ -34,7 +34,7 @@ function ViewGame() {
 
 	const [gameWinner, setGameWinner] = useState("");
 
-	const [parsedFEN, setParsedFEN] = useState<ParsedFENString>(
+	const [parsedFEN, setParsedFEN] = useState<ParsedFEN>(
 		positionList[positionIndex]?.["position"]
 	);
 
