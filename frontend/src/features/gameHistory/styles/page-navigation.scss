@@ -1,4 +1,4 @@
-@use "../../global/mixins" as *;
+@use "../../../styles/global/mixins" as *;
 
 .page-navigation-container {
     @include flex-row-x-center;

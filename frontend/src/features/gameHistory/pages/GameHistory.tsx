@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import useCompletedGames from "../../../hooks/useCompletedGames";
-
-import "../../../styles/pages/game-history.scss";
-import CompletedGameInfo from "./components/CompletedGameInfo";
-import useUsername from "../../../hooks/useUsername";
 import { isNullOrUndefined } from "../../../utils/generalUtils";
-import PageNavigation from "./components/PageNavigation";
-import { getTotalPages } from "../../../utils/pageNavigationUtils";
 import DashboardNavbar from "../../../components/common/DashboardNavbar/DashboardNavbar";
+import useCompletedGames from "../../../hooks/useCompletedGames";
+import useUsername from "../../../hooks/useUsername";
+import { getTotalPages } from "../../../utils/pageNavigationUtils";
+import CompletedGameInfo from "../components/CompletedGameInfo";
+import PageNavigation from "../components/PageNavigation";
+
+import "../styles/game-history.scss";
 
 function GameHistory() {
 	const initialUsername = useUsername();

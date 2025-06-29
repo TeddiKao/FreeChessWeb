@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import "../../../../styles/features/gameHistory/completed-game-info.scss";
+import "../styles/completed-game-info.scss";
 import { useNavigate } from "react-router-dom";
 
 type CompletedGameInfoProps = {
