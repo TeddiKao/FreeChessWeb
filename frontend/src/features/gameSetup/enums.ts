@@ -12,4 +12,4 @@ enum TimeControls {
 	CLASSICAL = "classical"
 }
 
-export type { GameSetupStages, TimeControls }
+export { GameSetupStages, TimeControls }
