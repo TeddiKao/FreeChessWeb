@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import useCompletedGames from "../../../hooks/useCompletedGames";
 
 import "../../../styles/pages/game-history.scss";
-import CompletedGameInfo from "./components/CompletedGameInfo";
+import CompletedGameInfo from "../../../features/gameHistory/components/CompletedGameInfo";
 import useUsername from "../../../hooks/useUsername";
 import { isNullOrUndefined } from "../../../utils/generalUtils";
-import PageNavigation from "./components/PageNavigation";
+import PageNavigation from "../../../features/gameHistory/components/PageNavigation";
 import { getTotalPages } from "../../../utils/pageNavigationUtils";
 import DashboardNavbar from "../../../components/common/DashboardNavbar/DashboardNavbar";
 
