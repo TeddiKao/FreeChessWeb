@@ -6,7 +6,7 @@ import TimeControlSelection from "../../features/gameSetup/TimeControlSelection.
 import "../../styles/features/gameSetup/select-time-control.scss";
 
 import { capitaliseFirstLetter } from "../../utils/generalUtils.ts";
-import { displayTimeControl } from "../../utils/timeUtils.ts";;
+import { displayTimeControl } from "../../utils/timeUtils.ts";
 
 import MatchmakingScreen from "../../features/gameSetup/MatchmakingScreen.js";
 import { GameSetupStages } from "../../enums/gameSetup.js";
