@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchTimer } from "../../../../utils/apiUtils";
 import { TimerChangedEventData } from "../types/gameEvents.types";
+import { fetchTimer } from "../../common/utils/gameStateFetchApi";
 
 function usePlayerClocks(gameId: number, baseTime: number) {
 	const [whitePlayerClock, setWhitePlayerClock] = useState<number>(baseTime);

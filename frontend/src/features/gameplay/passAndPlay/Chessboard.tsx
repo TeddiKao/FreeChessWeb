@@ -10,13 +10,6 @@ import {
 import { playAudio } from "../../../utils/audioUtils.ts";
 
 import {
-	fetchLegalMoves,
-	fetchMoveIsValid,
-	getIsCheckmated,
-	getIsStalemated,
-} from "../../../utils/apiUtils.ts";
-
-import {
 	disableCastling,
 	handleCastling,
 	isCastling,
@@ -60,7 +53,7 @@ import {
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid.ts";
 import Square from "../../../components/chessboard/Square.tsx";
-import { displayLegalMoves } from "../common/utils/moveService.ts";
+import { displayLegalMoves, fetchMoveIsValid } from "../common/utils/moveService.ts";
 import {
 	BoardPlacement,
 	CastlingSide,
@@ -72,6 +65,10 @@ import {
 	PieceInfo,
 	PieceType,
 } from "../common/types/pieces.types.ts";
+import {
+	getIsCheckmated,
+	getIsStalemated,
+} from "../common/utils/gameResultFetchApi.ts";
 
 function Chessboard({
 	parsed_fen_string,

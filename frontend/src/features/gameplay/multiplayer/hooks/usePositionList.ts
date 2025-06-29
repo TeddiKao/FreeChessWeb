@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { fetchPositionList } from "../../../../utils/apiUtils";
 import { PositionList } from "../../common/types/gameState.types";
 import { PositionListUpdateEventData } from "../types/gameEvents.types";
+import { fetchPositionList } from "../../common/utils/gameStateFetchApi";
 
 function usePositionList(gameId: number) {
 	const [positionList, setPositionList] = useState<PositionList>([]);
