@@ -20,7 +20,7 @@ import Login from "./features/auth/pages/Login.tsx";
 import GuestHomePage from "./pages/GuestHomePage/GuestHomePage.tsx";
 import Signup from "./features/auth/pages/Signup.tsx";
 import Dashboard from "./pages/protected/Dashboard/Dashboard.tsx";
-import GameSetup from "./pages/protected/GameSetup.tsx";
+import GameSetup from "./features/gameSetup/pages/GameSetup.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import GameHistory from "./features/gameHistory/pages/GameHistory.tsx";
 
