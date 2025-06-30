@@ -1,5 +1,5 @@
 import { displayTimeControl } from "../../../utils/timeUtils";
-import "../../styles/features/gameSetup/matchmaking-screen.scss";
+import "../styles/matchmaking-screen.scss";
 import useMatchmakingLogic from "../hooks/useMatchmakingLogic";
 
 type timeControlInfo = {
