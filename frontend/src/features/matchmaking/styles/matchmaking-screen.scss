@@ -1,5 +1,5 @@
-@use "../../global/mixins.scss" as *;
-@use "../../global/variables.scss";
+@use "../../../styles/global/mixins" as *;
+@use "../../../styles/global/variables";
 
 .matchmaking-screen-container {
 	@include flex-column;
