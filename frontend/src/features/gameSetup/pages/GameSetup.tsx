@@ -5,7 +5,6 @@ import "../styles/select-time-control.scss";
 import { capitaliseFirstLetter } from "../../../utils/generalUtils.ts";
 import { displayTimeControl } from "../../../utils/timeUtils.ts";
 
-import MatchmakingScreen from "../../../features1/gameSetup/MatchmakingScreen.js";
 import DashboardNavbar from "../../../components/common/DashboardNavbar/DashboardNavbar.tsx";
 import DisplayChessboard from "../components/DisplayChessboard.tsx";
 import Timer from "../../gameplay/common/components/Timer.tsx";
@@ -15,6 +14,7 @@ import CustomTimeControlScreen from "../components/CustomTimeControlScreen.tsx";
 import TimeControlSelection from "../components/TimeControlSelection.tsx";
 import TimeControlTypeContainer from "../components/TimeControlTypeContainer.tsx";
 import { GameSetupStages } from "../enums.ts";
+import MatchmakingScreen from "../../matchmaking/components/MatchmakingScreen.tsx";
 
 type TimeControlInfo = {
 	baseTime: number;

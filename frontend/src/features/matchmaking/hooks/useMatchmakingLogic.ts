@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { websocketBaseURL } from "../constants/urls";
-import { getAccessToken } from "../features/auth/utils";
-import useWebsocketWithLifecycle from "./useWebsocketWithLifecycle";
-import { MatchmakingEvents } from "../enums/gameSetup";
+import { websocketBaseURL } from "../../../constants/urls";
+import { getAccessToken } from "../../auth/utils";
+import useWebsocketWithLifecycle from "../../../hooks/useWebsocketWithLifecycle";
+import { MatchmakingEvents } from "../../../enums/gameSetup";
 import { useNavigate } from "react-router-dom";
-import { getAssignedColor } from "../utils/matchmakingUtils";
+import { getAssignedColor } from "../utils";
 
 interface MatchmakingLogicHookProps {
 	enabled: boolean;

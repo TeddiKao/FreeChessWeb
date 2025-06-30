@@ -3,9 +3,9 @@ import "../../common/styles/game-over-modal.scss";
 import { ChallengeWebsocketContext } from "../../../../components/wrappers/ChallengeWebsocketProvider";
 import useUsername from "../../../../hooks/useUsername";
 import { capitaliseFirstLetter } from "../../../../utils/generalUtils";
-import MatchmakingShortcutScreen from "../../../../features1/modals/MatchmakingShortcutScreen";
 import { TimeControl } from "../../../../types/gameSetup";
-import useMatchmakingLogic from "../../../../hooks/useMatchmakingLogic";
+import useMatchmakingLogic from "../../../matchmaking/hooks/useMatchmakingLogic";
+import MatchmakingShortcutScreen from "../../../matchmaking/components/MatchmakingShortcutScreen";
 
 type GameOverModalProps = {
 	visible: boolean;

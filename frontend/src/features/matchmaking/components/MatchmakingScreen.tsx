@@ -1,7 +1,6 @@
-import { displayTimeControl } from "../../utils/timeUtils.ts";
-
-import "../../styles/features/gameSetup/matchmaking-screen.scss";
-import useMatchmakingLogic from "../../hooks/useMatchmakingLogic.ts";
+import { displayTimeControl } from "../../../utils/timeUtils";
+import "../styles/matchmaking-screen.scss";
+import useMatchmakingLogic from "../hooks/useMatchmakingLogic";
 
 type timeControlInfo = {
 	baseTime: number;
