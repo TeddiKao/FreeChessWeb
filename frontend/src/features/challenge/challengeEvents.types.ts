@@ -1,7 +1,7 @@
-import { ChallengeRelationships } from "../types/challenge";
-import { PieceColor } from "../features/gameplay/multiplayer/gameLogic.types";
-import { TimeControl } from "../types/gameSetup";
-import { BasicWebSocketEventData } from "./general";
+import { BasicWebSocketEventData } from "../../interfaces/general";
+import { TimeControl } from "../../types/gameSetup";
+import { PieceColor } from "../gameplay/common/types/pieces.types";
+import { ChallengeRelationships } from "./challengerInfo.types";
 
 interface ChallengeReceivedWebsocketEventData extends BasicWebSocketEventData {
 	challenge_sender: string;

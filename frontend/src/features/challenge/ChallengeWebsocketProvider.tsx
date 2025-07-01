@@ -4,13 +4,13 @@ import useWebSocket from "../../hooks/useWebsocket";
 import useWebsocketLifecycle from "../../hooks/useWebsocketLifecycle";
 import ChallengeNotification from "./components/ChallengeNotification";
 import { TimeControl } from "../../types/gameSetup";
-import { ChallengeRelationships } from "../../types/challenge";
+import { ChallengeRelationships } from "./challengerInfo.types";
 import { ChallengeWebsocketEventTypes } from "../../enums/gameLogic";
 import {
 	ChallengeAcceptedWebsocketEventData,
 	ChallengeReceivedWebsocketEventData,
 	ChallengeSuccessfullySentEventData,
-} from "../../interfaces/challenge";
+} from "./challengeEvents.types";
 import { useNavigate } from "react-router-dom";
 import ChallengeResponseWaitScreen from "./components/ChallengeResponseWaitScreen";
 import useWebsocketWithLifecycle from "../../hooks/useWebsocketWithLifecycle";
