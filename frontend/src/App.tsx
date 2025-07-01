@@ -15,7 +15,7 @@ import TempRoute from "./pages/TempRoute.tsx";
 import SelectBot from "./features/gameplay/bot/pages/SelectBot.tsx";
 import PlayBot from "./features/gameplay/bot/pages/PlayBot.tsx";
 import ViewGame from "./pages/protected/ViewGame.tsx";
-import ChallengeWebsocketProvider from "./components/wrappers/ChallengeWebsocketProvider.tsx";
+import ChallengeWebsocketProvider from "./features/challenge/ChallengeWebsocketProvider.tsx";
 import Login from "./features/auth/pages/Login.tsx";
 import GuestHomePage from "./pages/GuestHomePage/GuestHomePage.tsx";
 import Signup from "./features/auth/pages/Signup.tsx";
