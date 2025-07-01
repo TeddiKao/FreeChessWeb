@@ -2,7 +2,7 @@ import {
 	whiteKingStartingSquare,
 	blackKingStartingSquare,
 	rookStartingSquares,
-} from "../../../../constants/castlingSquares.ts";
+} from "../constants/castlingSquares.ts";
 import {
 	BoardPlacement,
 	CastlingRights,
