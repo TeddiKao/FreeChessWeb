@@ -32,17 +32,6 @@ interface SquareInfo {
 	starting_square?: ChessboardSquareIndex;
 }
 
-interface PromotedPiecesList {
-	queens: number;
-	rooks: number;
-	bishops: number;
-	knights: number;
-}
-
-interface CapturedPiecesList extends PromotedPiecesList {
-	pawns: number;
-}
-
 interface MoveInfo {
 	piece_color: PieceColor;
 	piece_type: PieceType;
