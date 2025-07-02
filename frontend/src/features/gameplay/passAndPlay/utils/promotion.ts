@@ -15,8 +15,11 @@ import {
 	StateSetterFunction,
 } from "../../../../types/general.ts";
 import { getFile, getRank } from "../../../../utils/boardUtils.ts";
-import { isPawnCapture, isPawnPromotion } from "../../../../utils/moveUtils.ts";
 import { fetchMoveIsValid } from "../../common/utils/moveService.ts";
+import {
+	isPawnPromotion,
+	isPawnCapture,
+} from "../../common/utils/moveTypeDetection.ts";
 
 function clearUnpromotedPawn(
 	boardPlacement: BoardPlacement,

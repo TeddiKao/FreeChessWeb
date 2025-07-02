@@ -22,8 +22,6 @@ import {
 	ChessboardSquareIndex,
 	OptionalValue,
 } from "../../../../types/general.js";
-import { isPawnPromotion } from "../../../../utils/moveUtils.ts";
-import useWebSocket from "../../../../hooks/useWebsocket.ts";
 import {
 	isObjEmpty,
 	parseWebsocketUrl,
@@ -44,6 +42,7 @@ import {
 } from "../../common/types/pieces.types.ts";
 import { MoveInfo, ParsedFEN } from "../../common/types/gameState.types.ts";
 import { fetchLegalMoves } from "../../common/utils/moveService.ts";
+import { isPawnPromotion } from "../../common/utils/moveTypeDetection.ts";
 function BotChessboard({
 	parsed_fen_string,
 	orientation,
