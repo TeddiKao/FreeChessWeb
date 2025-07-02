@@ -1,16 +1,16 @@
 import {
 	pluralToSingularPieceMap,
 	singularToPluralPieceMap,
-} from "../constants/pieceMappings";
-import { pieceValueMapping } from "../constants/pieceValues";
+} from "../../../../constants/pieceMappings";
+import { pieceValueMapping } from "../../../../constants/pieceValues";
 import {
 	CapturedPiecesList,
 	PromotedPiecesList,
-} from "../features/gameplay/common/types/gameState.types";
+} from "../types/gameState.types";
 import {
 	CapturablePiecePlural,
 	PromotionPiecePlural,
-} from "../features/gameplay/common/types/pieces.types";
+} from "../types/pieces.types";
 
 function calculateTotalCapturedPiecesValue(
 	capturedPiecesList: CapturedPiecesList
