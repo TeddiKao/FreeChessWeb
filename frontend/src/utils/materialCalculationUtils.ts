@@ -6,14 +6,11 @@ import { pieceValueMapping } from "../constants/pieceValues";
 import {
 	CapturedPiecesList,
 	PromotedPiecesList,
-} from "../interfaces/materialCalculation";
+} from "../features/gameplay/common/types/gameState.types";
 import {
-	CapturablePiece,
 	CapturablePiecePlural,
-	PieceType,
-	PromotionPiece,
 	PromotionPiecePlural,
-} from "../features/gameplay/multiplayer/gameLogic.types";
+} from "../features/gameplay/common/types/pieces.types";
 
 function calculateTotalCapturedPiecesValue(
 	capturedPiecesList: CapturedPiecesList
