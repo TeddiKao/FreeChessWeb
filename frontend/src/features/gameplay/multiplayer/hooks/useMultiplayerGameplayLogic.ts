@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useRef } from "react";
-import { isPawnPromotion } from "../../../../utils/moveUtils";
 import { clearSquaresStyling, getRank } from "../../../../utils/boardUtils";
 
 import useAnimationLogic from "./useAnimationLogic";
@@ -20,6 +19,7 @@ import {
 } from "../../common/utils/moveService";
 import { PieceColor, PieceType } from "../../common/types/pieces.types";
 import { MoveMadeEventData } from "../types/gameEvents.types";
+import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,
