@@ -1,4 +1,4 @@
-import api from "../../../../api";
+import api from "../../../../app/api";
 import { ParsedFEN } from "../types/gameState.types";
 
 async function fetchGameWinner(gameId: number) {

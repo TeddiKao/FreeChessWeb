@@ -1,4 +1,4 @@
-import api from "../../../../api";
+import api from "../../../../app/api";
 import { ChessboardSquareIndex } from "../../../../types/general";
 import { ParsedFEN } from "../types/gameState.types";
 
