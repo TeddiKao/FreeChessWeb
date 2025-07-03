@@ -14,7 +14,7 @@ import PassAndPlay from "./features/gameplay/passAndPlay/pages/PassAndPlay.tsx";
 import TempRoute from "./pages/TempRoute.tsx";
 import SelectBot from "./features/gameplay/bot/pages/SelectBot.tsx";
 import PlayBot from "./features/gameplay/bot/pages/PlayBot.tsx";
-import ViewGame from "./pages/protected/ViewGame.tsx";
+import ViewGame from "./features/gameReplay/pages/ViewGame.tsx";
 import ChallengeWebsocketProvider from "./features/challenge/ChallengeWebsocketProvider.tsx";
 import Login from "./features/auth/pages/Login.tsx";
 import GuestHomePage from "./pages/GuestHomePage/GuestHomePage.tsx";

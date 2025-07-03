@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import DashboardNavbar from "../../../components/common/DashboardNavbar/DashboardNavbar";
 
-import "../../styles/pages/view-game.scss";
+import "../styles/view-game.scss";
 import { playAudio } from "../../../utils/audioUtils";
 import { isNullOrUndefined } from "../../../utils/generalUtils";
 import { OptionalValue } from "../../../types/general";
