@@ -2,17 +2,17 @@ import { ReactNode, useEffect, useRef, useState, createContext } from "react";
 import { parseWebsocketUrl } from "../../utils/generalUtils";
 import useWebSocket from "../../hooks/useWebsocket";
 import useWebsocketLifecycle from "../../hooks/useWebsocketLifecycle";
-import ChallengeNotification from "./components/ChallengeNotification";
+import ChallengeNotification from "../../features/challenge/components/ChallengeNotification";
 import { TimeControl } from "../../types/gameSetup";
-import { ChallengeRelationships } from "./challengerInfo.types";
+import { ChallengeRelationships } from "../../features/challenge/challengerInfo.types";
 import { ChallengeWebsocketEventTypes } from "../../enums/gameLogic";
 import {
 	ChallengeAcceptedWebsocketEventData,
 	ChallengeReceivedWebsocketEventData,
 	ChallengeSuccessfullySentEventData,
-} from "./challengeEvents.types";
+} from "../../features/challenge/challengeEvents.types";
 import { useNavigate } from "react-router-dom";
-import ChallengeResponseWaitScreen from "./components/ChallengeResponseWaitScreen";
+import ChallengeResponseWaitScreen from "../../features/challenge/components/ChallengeResponseWaitScreen";
 import useWebsocketWithLifecycle from "../../hooks/useWebsocketWithLifecycle";
 
 type ChallengeWebsocketProviderProps = {
