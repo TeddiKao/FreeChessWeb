@@ -5,9 +5,9 @@ import "../styles/play.scss";
 import "../../../../styles/components/chessboard/board-actions.scss";
 
 import GameOverModal from "../modals/GameOverModal.tsx";
-import GameplaySettings from "../../../../features1/modals/GameplaySettings.tsx";
+import GameplaySettings from "../../../settings/gameplay/GameplaySettings.tsx";
 import ModalWrapper from "../../../../components/wrappers/ModalWrapper.js";
-import useGameplaySettings from "../../../../hooks/useGameplaySettings.ts";
+import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings.ts";
 import MessageBox from "../../../../components/common/MessageBox.tsx";
 import { MessageBoxTypes } from "../../../../types/messageBox.ts";
 import DrawOfferPopup from "../popups/DrawOfferPopup.tsx";
