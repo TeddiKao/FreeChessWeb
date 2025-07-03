@@ -5,24 +5,23 @@ import { DndProvider } from "react-dnd";
 import { MultiBackend } from "react-dnd-multi-backend";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
 
-import "./styles/global/global.scss";
-
-import ProtectedRoute from "./features/auth/components/routes/ProtectedRoute.tsx";
-import AuthenticationRoute from "./features/auth/components/routes/AuthenticationRoute.tsx";
-import Play from "./features/gameplay/multiplayer/pages/Play.tsx";
-import PassAndPlay from "./features/gameplay/passAndPlay/pages/PassAndPlay.tsx";
-import TempRoute from "./pages/TempRoute.tsx";
-import SelectBot from "./features/gameplay/bot/pages/SelectBot.tsx";
-import PlayBot from "./features/gameplay/bot/pages/PlayBot.tsx";
-import ViewGame from "./features/gameReplay/pages/ViewGame.tsx";
-import ChallengeWebsocketProvider from "./features/challenge/ChallengeWebsocketProvider.tsx";
-import Login from "./features/auth/pages/Login.tsx";
-import GuestHomePage from "./pages/GuestHomePage/GuestHomePage.tsx";
-import Signup from "./features/auth/pages/Signup.tsx";
-import Dashboard from "./pages/protected/Dashboard/Dashboard.tsx";
-import GameSetup from "./features/gameSetup/pages/GameSetup.tsx";
-import NotFound from "./pages/NotFound.tsx";
-import GameHistory from "./features/gameHistory/pages/GameHistory.tsx";
+import "../styles/global/global.scss";
+import Login from "../features/auth/pages/Login";
+import Signup from "../features/auth/pages/Signup";
+import GameHistory from "../features/gameHistory/pages/GameHistory";
+import PlayBot from "../features/gameplay/bot/pages/PlayBot";
+import SelectBot from "../features/gameplay/bot/pages/SelectBot";
+import Play from "../features/gameplay/multiplayer/pages/Play";
+import PassAndPlay from "../features/gameplay/passAndPlay/pages/PassAndPlay";
+import ViewGame from "../features/gameReplay/pages/ViewGame";
+import GameSetup from "../features/gameSetup/pages/GameSetup";
+import GuestHomePage from "../pages/GuestHomePage/GuestHomePage";
+import NotFound from "../pages/NotFound";
+import Dashboard from "../pages/protected/Dashboard/Dashboard";
+import TempRoute from "../pages/TempRoute";
+import ChallengeWebsocketProvider from "./providers/ChallengeWebsocketProvider";
+import AuthenticationRoute from "./routing/AuthenticationRoute";
+import ProtectedRoute from "./routing/ProtectedRoute";
 
 function Logout() {
 	localStorage.clear();

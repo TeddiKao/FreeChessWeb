@@ -4,7 +4,7 @@ import ModalWrapper from "../../../components/wrappers/ModalWrapper";
 
 import "../styles/challenge-notification.scss";
 import { useContext } from "react";
-import { ChallengeWebsocketContext } from "../ChallengeWebsocketProvider";
+import { ChallengeWebsocketContext } from "../../../app/providers/ChallengeWebsocketProvider";
 
 type ChallengeNotificationProps = {
 	visible: boolean;
