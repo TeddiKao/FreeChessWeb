@@ -1,4 +1,4 @@
-import api from "../../../api";
+import api from "../../../app/api";
 import { MoveInfo } from "../common/types/gameState.types";
 
 async function createBotGame(botId: string) {

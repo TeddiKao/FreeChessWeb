@@ -1,5 +1,4 @@
-import api from "../api.ts";
-
+import api from "../app/api";
 
 async function getUsername() {
 	let username = null;
