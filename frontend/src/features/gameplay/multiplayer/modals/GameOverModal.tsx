@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import "../../common/styles/game-over-modal.scss";
-import { ChallengeWebsocketContext } from "../../../challenge/ChallengeWebsocketProvider";
+import { ChallengeWebsocketContext } from "../../../../app/providers/ChallengeWebsocketProvider";
 import useUsername from "../../../../hooks/useUsername";
 import { capitaliseFirstLetter } from "../../../../utils/generalUtils";
 import { TimeControl } from "../../../../types/gameSetup";
