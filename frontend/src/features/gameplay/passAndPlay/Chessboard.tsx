@@ -21,12 +21,6 @@ import {
 } from "./utils/enPassant.ts";
 
 import {
-	GameEndedSetterContext,
-	GameEndedCauseSetterContext,
-	GameWinnerSetterContext,
-} from "../../../contexts/chessboardContexts.ts";
-
-import {
 	cancelPromotion,
 	handlePromotionCaptureStorage,
 	updatePromotedBoardPlacment,
@@ -69,6 +63,7 @@ import {
 	getIsCheckmated,
 	getIsStalemated,
 } from "../common/utils/gameResultFetchApi.ts";
+import { GameEndedSetterContext, GameEndedCauseSetterContext, GameWinnerSetterContext } from "./contexts/gameEndStateSetters.ts";
 
 function Chessboard({
 	parsed_fen_string,

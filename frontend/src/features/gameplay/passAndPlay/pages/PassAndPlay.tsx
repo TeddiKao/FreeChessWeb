@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import {
-	GameEndedSetterContext,
-	GameEndedCauseSetterContext,
-	GameWinnerSetterContext,
-} from "../../../../contexts/chessboardContexts.js";
-
 import "../../../../styles/components/chessboard/board-actions.scss";
 import "../styles/pass-and-play.scss";
 
@@ -17,6 +11,11 @@ import DashboardNavbar from "../../../../components/common/DashboardNavbar/Dashb
 import LocalGameOverModal from "../modals/GameOverModal.tsx";
 import { ParsedFEN } from "../../common/types/gameState.types.ts";
 import { fetchFen } from "../utils/passAndPlayApi.ts";
+import {
+	GameEndedCauseSetterContext,
+	GameEndedSetterContext,
+	GameWinnerSetterContext,
+} from "../contexts/gameEndStateSetters.ts";
 
 function PassAndPlay() {
 	const [parsedFEN, setParsedFEN] = useState<ParsedFEN | null>(null);
