@@ -4,7 +4,7 @@ import { getAccessToken } from "../../auth/utils";
 import useWebsocketWithLifecycle from "../../../hooks/useWebsocketWithLifecycle";
 import { useNavigate } from "react-router-dom";
 import { getAssignedColor } from "../utils";
-import { MatchmakingEvents } from "../enums";
+import { MatchmakingEvents } from "../matchmaking.enums";
 
 interface MatchmakingLogicHookProps {
 	enabled: boolean;
