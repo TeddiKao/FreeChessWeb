@@ -1,24 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import DashboardNavbar from "../../components/common/DashboardNavbar/DashboardNavbar";
+import DashboardNavbar from "../../../components/common/DashboardNavbar/DashboardNavbar";
 
-import "../../styles/pages/view-game.scss";
-import { playAudio } from "../../utils/audioUtils";
-import { isNullOrUndefined } from "../../utils/generalUtils";
-import { OptionalValue } from "../../types/general";
-import { convertToMilliseconds } from "../../utils/timeUtils";
-import { pieceAnimationTime } from "../../constants/pieceAnimation";
-import usePieceAnimation from "../../hooks/usePieceAnimation";
-import GameReplayChessboard from "../../features1/gameplay/chessboards/GameReplayChessboard";
-import MoveListPanel from "../../features/gameplay/common/components/gameplaySidePanel/MoveListPanel";
-import MoveNavigationButtons from "../../features/gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
-import { ParsedFEN } from "../../features/gameplay/common/types/gameState.types";
+import "../styles/view-game.scss";
+import { playAudio } from "../../../utils/audioUtils";
+import { isNullOrUndefined } from "../../../utils/generalUtils";
+import { OptionalValue } from "../../../types/general";
+import { convertToMilliseconds } from "../../../utils/timeUtils";
+import { pieceAnimationTime } from "../../../constants/pieceAnimation";
+import usePieceAnimation from "../../../hooks/usePieceAnimation";
+import GameReplayChessboard from "../components/GameReplayChessboard";
+import MoveListPanel from "../../gameplay/common/components/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "../../gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
+import { ParsedFEN } from "../../gameplay/common/types/gameState.types";
 import {
 	fetchPositionList,
 	fetchMoveList,
-} from "../../features/gameplay/common/utils/gameStateFetchApi";
-import { fetchGameWinner } from "../../features/gameplay/common/utils/gameResultFetchApi";
+} from "../../gameplay/common/utils/gameStateFetchApi";
+import { fetchGameWinner } from "../../gameplay/common/utils/gameResultFetchApi";
 
 function ViewGame() {
 	const { gameId } = useParams();
