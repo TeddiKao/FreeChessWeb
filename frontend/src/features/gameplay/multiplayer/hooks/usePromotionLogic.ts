@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import useGameplaySettings from "../../../../hooks/useGameplaySettings";
+import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings";
 import { ParsedFEN } from "../../common/types/gameState.types";
 import { ChessboardSquareIndex } from "../../common/types/board.types";
 import { PieceType } from "../../common/types/pieces.types";

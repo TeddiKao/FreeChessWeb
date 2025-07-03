@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import SettingsSwitch from "../settings/SettingsSwitch";
+import SettingsSwitch from "../components/SettingsSwitch.tsx";
 import api from "../../../../api.js";
 
 type SettingComponentProps = {

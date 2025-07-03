@@ -10,9 +10,9 @@ import "../../../../styles/components/chessboard/board-actions.scss";
 import "../styles/pass-and-play.scss";
 
 import Chessboard from "../Chessboard.tsx";
-import GameplaySettings from "../../../../features1/modals/GameplaySettings.tsx";
+import GameplaySettings from "../../../settings/gameplay/GameplaySettings.tsx";
 import ModalWrapper from "../../../../components/wrappers/ModalWrapper.tsx";
-import useGameplaySettings from "../../../../hooks/useGameplaySettings.ts";
+import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings.ts";
 import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar.tsx";
 import LocalGameOverModal from "../modals/GameOverModal.tsx";
 import { ParsedFEN } from "../../common/types/gameState.types.ts";
