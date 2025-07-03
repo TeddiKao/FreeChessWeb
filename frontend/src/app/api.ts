@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAccessToken } from "./features/auth/utils.ts";
+import { getAccessToken } from "../features/auth/utils";
 
 const api = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
