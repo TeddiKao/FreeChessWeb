@@ -5,11 +5,11 @@ import { RefObject, StateSetterFunction } from "../../../../../types/general";
 import useReactiveRef from "../../../../../hooks/useReactiveRef";
 import useWebSocket from "../../../../../hooks/useWebsocket";
 import { websocketBaseURL } from "../../../../../constants/urls";
-import { ActionWebSocketEventTypes } from "../../../../../enums/gameLogic";
 import ConfirmationPopup from "../../../../../components/common/ConfirmationPopup";
 import useWebsocketWithLifecycle from "../../../../../hooks/useWebsocketWithLifecycle";
-import { PieceColor } from "../../../multiplayer/gameLogic.types";
 import { getAccessToken } from "../../../../auth/utils";
+import { ActionWebSocketEventTypes } from "../../../multiplayer/types/gameEvents.enums";
+import { PieceColor } from "../../types/pieces.types";
 
 type GameplayActionButtonsProps = {
 	gameId: string | number;
