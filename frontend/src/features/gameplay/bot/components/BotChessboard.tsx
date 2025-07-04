@@ -13,9 +13,6 @@ import {
 	preparePawnPromotion,
 } from "../../passAndPlay/utils/promotion.ts";
 
-import {
-	BotGameWebSocketEventTypes,
-} from "../../../../enums/gameLogic.ts";
 import { BotChessboardProps } from "../../../../interfaces/chessboard.js";
 import {
 	ChessboardSquareIndex,
@@ -43,6 +40,7 @@ import { MoveInfo, ParsedFEN } from "../../common/types/gameState.types.ts";
 import { fetchLegalMoves } from "../../common/utils/moveService.ts";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection.ts";
 import { MoveMethods } from "../../common/types/moveMethods.enums.ts";
+import { BotGameWebSocketEventTypes } from "../botGameEvents.enums.ts";
 function BotChessboard({
 	parsed_fen_string,
 	orientation,
