@@ -1,8 +1,3 @@
-enum MoveMethods {
-	"CLICK" = "click",
-	"DRAG" = "drag",
-}
-
 enum BotGameWebSocketEventTypes {
 	MOVE_REGISTERED = "move_registered",
 	CHECKMATE_OCCURRED = "checkmate_occurred",
@@ -13,6 +8,5 @@ enum BotGameWebSocketEventTypes {
 }
 
 export {
-	MoveMethods,
 	BotGameWebSocketEventTypes,
 };

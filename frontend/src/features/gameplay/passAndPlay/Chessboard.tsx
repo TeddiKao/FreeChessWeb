@@ -31,7 +31,6 @@ import {
 	clearStartingSquare,
 } from "./utils/basicMovement.ts";
 
-import { MoveMethods } from "../../../enums/gameLogic.ts";
 import { getOppositeColor } from "./utils/general.ts";
 import { ChessboardProps } from "../../../interfaces/chessboard.js";
 import {
@@ -64,6 +63,7 @@ import {
 	getIsStalemated,
 } from "../common/utils/gameResultFetchApi.ts";
 import { GameEndedSetterContext, GameEndedCauseSetterContext, GameWinnerSetterContext } from "./contexts/gameEndStateSetters.ts";
+import { MoveMethods } from "../common/types/moveMethods.enums.ts";
 
 function Chessboard({
 	parsed_fen_string,
