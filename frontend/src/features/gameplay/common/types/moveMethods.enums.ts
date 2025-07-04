@@ -3,4 +3,4 @@ enum MoveMethods {
 	"DRAG" = "drag",
 }
 
-export { MoveMethods }
+export { MoveMethods };
