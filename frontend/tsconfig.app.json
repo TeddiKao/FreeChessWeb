@@ -1,41 +1,41 @@
 {
-    "compilerOptions": {
-        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-        "target": "ES2020",
-        "useDefineForClassFields": true,
-        "lib": ["ES2020", "DOM", "DOM.Iterable"],
-        "module": "ESNext",
-        "skipLibCheck": true,
+	"compilerOptions": {
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.appbuildinfo",
+		"target": "ES2020",
+		"useDefineForClassFields": true,
+		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"module": "ESNext",
+		"skipLibCheck": true,
 
-        /* Bundler mode */
-        "moduleResolution": "bundler",
-        "allowImportingTsExtensions": true,
-        "isolatedModules": true,
-        "moduleDetection": "force",
-        "noEmit": true,
-        "jsx": "react-jsx",
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"isolatedModules": true,
+		"moduleDetection": "force",
+		"noEmit": true,
+		"jsx": "react-jsx",
 
-        /* Linting */
-        "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true,
-        "noUncheckedSideEffectImports": true,
+		/* Linting */
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedSideEffectImports": true
 
-        /* Aliases */
-        // "baseUrl": "./",
-        // "paths": {
-        //     "@globalComponents/*": ["src/globalComponents"],
-        //     "@pageComponents/*": ["src/pageComponents"],
-        //     "@utils/*": ["src/utils"],
-        //     "@pages/*": ["src/pages"],
-        //     "@styles/*": ["src/styles"],
-        //     "@types/*": ["src/types"],
-        //     "@interfaces/*": ["src/interfaces"],
-        //     "@hooks/*": ["src/hooks"],
-        //     "@constants/*": ["src/constants"],
-        //     "@enums/*": ["src/enums"]
-        // }
-    },
-    "include": ["src/**/*"]
+		/* Aliases */
+		// "baseUrl": "./",
+		// "paths": {
+		//     "@globalComponents/*": ["src/globalComponents"],
+		//     "@pageComponents/*": ["src/pageComponents"],
+		//     "@utils/*": ["src/utils"],
+		//     "@pages/*": ["src/pages"],
+		//     "@styles/*": ["src/styles"],
+		//     "@types/*": ["src/types"],
+		//     "@interfaces/*": ["src/interfaces"],
+		//     "@hooks/*": ["src/hooks"],
+		//     "@constants/*": ["src/constants"],
+		//     "@enums/*": ["src/enums"]
+		// }
+	},
+	"include": ["src/**/*"]
 }

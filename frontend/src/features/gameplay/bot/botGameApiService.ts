@@ -1,5 +1,5 @@
 import api from "../../../app/api";
-import { MoveInfo } from "../common/types/gameState.types";
+import { MoveInfo } from "../../../shared/types/chessTypes/gameState.types";
 
 async function createBotGame(botId: string) {
 	let gameId = null;
@@ -72,8 +72,8 @@ async function fetchBotGameMoveList(gameId: number) {
 }
 
 export {
-    createBotGame,
-    makeMoveInBotGame,
-    fetchBotGamePositionList,
-    fetchBotGameMoveList,
+	createBotGame,
+	makeMoveInBotGame,
+	fetchBotGamePositionList,
+	fetchBotGameMoveList,
 };

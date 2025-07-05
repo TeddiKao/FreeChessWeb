@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/custom-time-control-screen.scss";
-import { TimeControl, TimeDuration } from "../../../types/gameSetup";
-import { StateSetterFunction } from "../../../types/general";
+import { TimeControl, TimeDuration } from "../../../shared/types/time.types";
+import { StateSetterFunction } from "../../../shared/types/utility.types";
 import { convertTimeControlToSeconds } from "../../../utils/timeUtils";
 
 type CustomTimeControlScreenProps = {

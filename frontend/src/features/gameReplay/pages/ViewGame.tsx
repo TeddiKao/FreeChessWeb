@@ -6,14 +6,14 @@ import DashboardNavbar from "../../../shared/components/DashboardNavbar/Dashboar
 import "../styles/view-game.scss";
 import { playAudio } from "../../../utils/audioUtils";
 import { isNullOrUndefined } from "../../../utils/generalUtils";
-import { OptionalValue } from "../../../types/general";
+import { OptionalValue } from "../../../shared/types/utility.types";
 import { convertToMilliseconds } from "../../../utils/timeUtils";
 import { pieceAnimationTime } from "../../../constants/pieceAnimation";
 import usePieceAnimation from "../../../shared/hooks/usePieceAnimation";
 import GameReplayChessboard from "../components/GameReplayChessboard";
 import MoveListPanel from "../../gameplay/common/components/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
-import { ParsedFEN } from "../../gameplay/common/types/gameState.types";
+import { ParsedFEN } from "../../../shared/types/chessTypes/gameState.types";
 import {
 	fetchPositionList,
 	fetchMoveList,

@@ -1,4 +1,4 @@
-import { StateSetterFunction } from "../../../types/general";
+import { StateSetterFunction } from "../../../shared/types/utility.types";
 import "../styles/page-navigation.scss";
 
 type PageNavigationProps = {

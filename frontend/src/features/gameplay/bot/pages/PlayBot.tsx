@@ -7,7 +7,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,
-} from "../../../../types/general";
+} from "../../../../shared/types/utility.types";
 import { isNullOrUndefined } from "../../../../utils/generalUtils";
 import { playAudio } from "../../../../utils/audioUtils";
 import { convertToMilliseconds } from "../../../../utils/timeUtils";
@@ -18,7 +18,10 @@ import DashboardNavbar from "../../../../shared/components/DashboardNavbar/Dashb
 import MoveListPanel from "../../common/components/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../common/components/gameplaySidePanel/MoveNavigationButtons";
 import BotChessboard from "../components/BotChessboard";
-import { MoveInfo, ParsedFEN } from "../../common/types/gameState.types";
+import {
+	MoveInfo,
+	ParsedFEN,
+} from "../../../../shared/types/chessTypes/gameState.types";
 import {
 	fetchBotGamePositionList,
 	fetchBotGameMoveList,

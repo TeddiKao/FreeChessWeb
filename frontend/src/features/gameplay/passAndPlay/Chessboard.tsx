@@ -3,72 +3,66 @@ import { useState, useEffect, useContext, useRef } from "react";
 import {
 	clearSquaresStyling,
 	getSquareExists,
-} from "../../../utils/boardUtils.ts";
+} from "../../../utils/boardUtils";
 
-import { playAudio } from "../../../utils/audioUtils.ts";
+import { playAudio } from "../../../utils/audioUtils";
 
-import {
-	disableCastling,
-	handleCastling,
-	isCastling,
-} from "./utils/castling.ts";
+import { disableCastling, handleCastling, isCastling } from "./utils/castling";
 
 import {
 	handleEnPassant,
 	updateEnPassantTargetSquare,
-} from "./utils/enPassant.ts";
+} from "./utils/enPassant";
 
 import {
 	cancelPromotion,
 	handlePromotionCaptureStorage,
 	updatePromotedBoardPlacment,
-} from "./utils/promotion.ts";
+} from "./utils/promotion";
 
 import {
 	addPieceToDestinationSquare,
 	clearStartingSquare,
-} from "./utils/basicMovement.ts";
+} from "./utils/basicMovement";
 
-import { getOppositeColor } from "./utils/general.ts";
+import { getOppositeColor } from "./utils/general";
 import { ChessboardProps } from "../../../interfaces/chessboard.js";
-import {
-	ChessboardSquareIndex,
-	OptionalValue,
-} from "../../../types/general.js";
-import usePieceAnimation from "../../../shared/hooks/usePieceAnimation.ts";
-import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
-import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";
-import ChessboardGrid from "../../../shared/components/chessboard/ChessboardGrid.tsx";
+import usePieceAnimation from "../../../shared/hooks/usePieceAnimation";
+import { convertToMilliseconds } from "../../../utils/timeUtils";
+import { pieceAnimationTime } from "../../../constants/pieceAnimation";
+import ChessboardGrid from "../../../shared/components/chessboard/ChessboardGrid";
 import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
-} from "../../../interfaces/chessboardGrid.ts";
-import Square from "../../../shared/components/chessboard/Square.tsx";
+} from "../../../interfaces/chessboardGrid";
+import Square from "../../../shared/components/chessboard/Square";
 import {
 	displayLegalMoves,
 	fetchMoveIsValid,
-} from "../common/utils/moveService.ts";
+} from "../common/utils/moveService";
 import {
 	BoardPlacement,
 	CastlingSide,
 	MoveInfo,
 	ParsedFEN,
-} from "../common/types/gameState.types.ts";
+} from "../../../shared/types/chessTypes/gameState.types";
 import {
 	PieceColor,
 	PieceInfo,
 	PieceType,
-} from "../common/types/pieces.types.ts";
+} from "../../../shared/types/chessTypes/pieces.types";
 import {
 	getIsCheckmated,
 	getIsStalemated,
-} from "../common/utils/gameResultFetchApi.ts";
+} from "../common/utils/gameResultFetchApi";
 import {
 	GameEndedSetterContext,
 	GameEndedCauseSetterContext,
 	GameWinnerSetterContext,
-} from "./contexts/gameEndStateSetters.ts";
-import { MoveMethods } from "../common/types/moveMethods.enums.ts";
+} from "./contexts/gameEndStateSetters";
+import { ChessboardSquareIndex } from "../../../shared/types/chessTypes/board.types";
+import { OptionalValue } from "../../../shared/types/utility.types";
+import { MoveMethods } from "../../../shared/types/chessTypes/moveMethods.enums";
 
 function Chessboard({
 	parsed_fen_string,

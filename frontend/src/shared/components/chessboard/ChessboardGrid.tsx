@@ -5,7 +5,7 @@ import {
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid";
 import { getPromotionRank } from "../../../features/gameplay/passAndPlay/utils/promotion";
-import { BoardPlacement } from "../../../features/gameplay/common/types/gameState.types";
+import { BoardPlacement } from "../../types/gameState.types";
 
 type ChessboardGridProps = {
 	boardOrientation: string;

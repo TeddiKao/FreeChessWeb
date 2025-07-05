@@ -1,4 +1,4 @@
-import { OptionalValue, RefObject, StateSetterFunction } from "../../../../types/general";
+import { OptionalValue, RefObject, StateSetterFunction } from "../utility.types";
 import { ChessboardSquareIndex } from "./board.types";
 import { PieceColor, PieceType } from "./pieces.types";
 
@@ -37,4 +37,4 @@ interface FilledSquareProps extends EmptySquareProps {
 	pieceType?: PieceType;
 }
 
-export type { EmptySquareProps, FilledSquareProps }
+export type { EmptySquareProps, FilledSquareProps };
