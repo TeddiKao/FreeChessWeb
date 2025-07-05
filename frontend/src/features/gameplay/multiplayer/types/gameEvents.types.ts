@@ -1,4 +1,4 @@
-import { BasicWebSocketEventData } from "../../../../interfaces/general";
+import { BaseWebsocketEventData } from "../../../../shared/types/websocket.types";
 import {
 	CapturedPiecesList,
 	MoveInfo,
@@ -7,7 +7,7 @@ import {
 } from "../../common/types/gameState.types";
 import { PieceColor } from "../../common/types/pieces.types";
 
-interface MoveMadeEventData extends BasicWebSocketEventData {
+interface MoveMadeEventData extends BaseWebsocketEventData {
 	move_data: MoveInfo;
 	new_parsed_fen: ParsedFEN;
 	move_made_by: string;
@@ -16,12 +16,12 @@ interface MoveMadeEventData extends BasicWebSocketEventData {
 	new_side_to_move: PieceColor;
 }
 
-interface TimerChangedEventData extends BasicWebSocketEventData {
+interface TimerChangedEventData extends BaseWebsocketEventData {
 	white_player_clock: number;
 	black_player_clock: number;
 }
 
-interface PositionListUpdateEventData extends BasicWebSocketEventData {
+interface PositionListUpdateEventData extends BaseWebsocketEventData {
 	new_position_list: Array<{
 		position: ParsedFEN;
 		last_dragged_square: string;
@@ -39,11 +39,11 @@ interface PositionListUpdateEventData extends BasicWebSocketEventData {
 	}>;
 }
 
-interface CheckmateEventData extends BasicWebSocketEventData {
+interface CheckmateEventData extends BaseWebsocketEventData {
 	winning_color: string;
 }
 
-interface MoveListUpdateEventData extends BasicWebSocketEventData {
+interface MoveListUpdateEventData extends BaseWebsocketEventData {
 	new_move_list: Array<Array<string>>;
 }
 
