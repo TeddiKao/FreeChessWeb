@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-	fetchCompletedGames,
-	fetchTotalCompletedGames,
-} from "../../../utils/apiUtils";
 import { OptionalValue } from "../../../types/general";
+import { fetchCompletedGames, fetchTotalCompletedGames } from "../gameHistoryApi";
 
 function useCompletedGames(currentPage: number) {
 	const [completedGames, setCompletedGames] = useState([]);
