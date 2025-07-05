@@ -1,0 +1,7 @@
+.chessboard-container {
+	display: grid;
+	grid-template-columns: repeat(8, 55px);
+
+	box-shadow: 5px 5px 5px hsl(0, 0, 70%);
+}
+

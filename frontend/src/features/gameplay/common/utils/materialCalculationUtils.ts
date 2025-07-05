@@ -1,16 +1,16 @@
 import {
 	pluralToSingularPieceMap,
 	singularToPluralPieceMap,
-} from "../../../../constants/pieceMappings";
-import { pieceValueMapping } from "../../../../constants/pieceValues";
+} from "../../../../shared/constants/pieceMappings";
+import { pieceValueMapping } from "../../../../shared/constants/pieceValues";
 import {
 	CapturedPiecesList,
 	PromotedPiecesList,
-} from "../types/gameState.types";
+} from "../../../../shared/types/chessTypes/gameState.types";
 import {
 	CapturablePiecePlural,
 	PromotionPiecePlural,
-} from "../types/pieces.types";
+} from "../../../../shared/types/chessTypes/pieces.types";
 
 function calculateTotalCapturedPiecesValue(
 	capturedPiecesList: CapturedPiecesList

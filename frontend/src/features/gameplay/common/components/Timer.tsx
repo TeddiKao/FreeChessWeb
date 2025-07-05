@@ -2,7 +2,7 @@ import "../styles/timer.scss";
 import {
 	formatTime,
 	getLowTimeThreshold,
-} from "../../../../utils/timeUtils.ts";
+} from "../../../../shared/utils/timeUtils";
 
 type TimerProps = {
 	playerColor: string;

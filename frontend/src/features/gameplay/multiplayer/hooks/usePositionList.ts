@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PositionList } from "../../common/types/gameState.types";
+import { PositionList } from "../../../../shared/types/chessTypes/gameState.types";
 import { PositionListUpdateEventData } from "../types/gameEvents.types";
 import { fetchPositionList } from "../../common/utils/gameStateFetchApi";
 

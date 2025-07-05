@@ -3,8 +3,7 @@ import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid";
-import "../../../styles/components/chessboard/chessboard.scss";
-import ChessboardGrid from "../../../components/chessboard/ChessboardGrid";
+import ChessboardGrid from "../../../shared/components/chessboard/ChessboardGrid";
 
 function DisplayChessboard({
 	parsed_fen_string,

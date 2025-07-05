@@ -2,23 +2,26 @@ import { useEffect, useRef, useState } from "react";
 import "../styles/play-bot.scss";
 import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings";
 import GameplaySettings from "../../../settings/gameplay/GameplaySettings";
-import ModalWrapper from "../../../../components/wrappers/ModalWrapper";
+import BaseModal from "../../../../shared/components/layout/BaseModal";
 import { Navigate, useLocation } from "react-router-dom";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,
-} from "../../../../types/general";
-import { isNullOrUndefined } from "../../../../utils/generalUtils";
-import { playAudio } from "../../../../utils/audioUtils";
-import { convertToMilliseconds } from "../../../../utils/timeUtils";
-import { pieceAnimationTime } from "../../../../constants/pieceAnimation";
-import usePieceAnimation from "../../../../hooks/usePieceAnimation";
+} from "../../../../shared/types/utility.types";
+import { isNullOrUndefined } from "../../../../shared/utils/generalUtils";
+import { playAudio } from "../../../../shared/utils/audioUtils";
+import { convertToMilliseconds } from "../../../../shared/utils/timeUtils";
+import { pieceAnimationTime } from "../../../../shared/constants/pieceAnimation";
+import usePieceAnimation from "../../../../shared/hooks/usePieceAnimation";
 import LocalGameOverModal from "../../passAndPlay/modals/GameOverModal";
-import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar";
+import DashboardNavbar from "../../../../shared/components/DashboardNavbar/DashboardNavbar";
 import MoveListPanel from "../../common/components/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../common/components/gameplaySidePanel/MoveNavigationButtons";
 import BotChessboard from "../components/BotChessboard";
-import { MoveInfo, ParsedFEN } from "../../common/types/gameState.types";
+import {
+	MoveInfo,
+	ParsedFEN,
+} from "../../../../shared/types/chessTypes/gameState.types";
 import {
 	fetchBotGamePositionList,
 	fetchBotGameMoveList,
@@ -273,12 +276,12 @@ function PlayBot() {
 				</div>
 			</div>
 
-			<ModalWrapper visible={gameplaySettingsVisible}>
+			<BaseModal visible={gameplaySettingsVisible}>
 				<GameplaySettings
 					onClose={handleSettingsModalClose}
 					setGameplaySettings={setGameplaySettings}
 				/>
-			</ModalWrapper>
+			</BaseModal>
 
 			<LocalGameOverModal
 				gameEndCause={gameEndedCause}

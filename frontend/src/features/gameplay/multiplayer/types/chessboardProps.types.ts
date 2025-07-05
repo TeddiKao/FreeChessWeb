@@ -1,7 +1,11 @@
-import { OptionalValue, RefObject, StateSetterFunction } from "../../../../types/general";
-import { ChessboardSquareIndex } from "../../common/types/board.types";
-import { BaseChessboardProps } from "../../common/types/chessboardProps.types";
-import { PieceColor, PieceType } from "../../common/types/pieces.types";
+import { ChessboardSquareIndex } from "../../../../shared/types/chessTypes/board.types";
+import { BaseChessboardProps } from "../../../../shared/types/chessTypes/chessboardProps.types";
+import { PieceColor, PieceType } from "../../../../shared/types/chessTypes/pieces.types";
+import {
+	OptionalValue,
+	RefObject,
+	StateSetterFunction,
+} from "../../../../shared/types/utility.types";
 
 interface ClickedSquaresState {
 	prevClickedSquare: OptionalValue<ChessboardSquareIndex>;
@@ -33,4 +37,4 @@ interface MultiplayerChessboardProps extends BaseChessboardProps {
 	animationRef: RefObject<HTMLDivElement | null>;
 }
 
-export type { MultiplayerChessboardProps }
+export type { MultiplayerChessboardProps };

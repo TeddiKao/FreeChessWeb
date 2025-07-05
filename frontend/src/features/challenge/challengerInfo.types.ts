@@ -1,4 +1,4 @@
-import { TimeControl } from "../../types/gameSetup";
+import { TimeControl } from "../../shared/types/time.types";
 
 type ChallengeRelationships = "Recent opponent" | "Unknown";
 

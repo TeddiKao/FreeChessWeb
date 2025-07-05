@@ -1,5 +1,8 @@
 import { useCallback, useMemo, useRef } from "react";
-import { clearSquaresStyling, getRank } from "../../../../utils/boardUtils";
+import {
+	clearSquaresStyling,
+	getRank,
+} from "../../../../shared/utils/boardUtils";
 
 import useAnimationLogic from "./useAnimationLogic";
 import usePlayerClocks from "./usePlayerClocks";
@@ -17,7 +20,10 @@ import {
 	displayLegalMoves,
 	performMoveValidation,
 } from "../../common/utils/moveService";
-import { PieceColor, PieceType } from "../../common/types/pieces.types";
+import {
+	PieceColor,
+	PieceType,
+} from "../../../../shared/types/chessTypes/pieces.types";
 import { MoveMadeEventData } from "../types/gameEvents.types";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
 

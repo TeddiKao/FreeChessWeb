@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ChessboardSquareIndex } from "../../common/types/board.types";
+import { ChessboardSquareIndex } from "../../../../shared/types/board.types";
 
 function useClickedSquaresState() {
 	const [prevClickedSquare, setPrevClickedSquare] =

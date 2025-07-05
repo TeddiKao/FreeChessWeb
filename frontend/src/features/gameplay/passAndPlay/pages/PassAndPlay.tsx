@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
-import "../../../../styles/components/chessboard/board-actions.scss";
+import "../../../../shared/styles/chessboard/board-actions.scss";
 import "../styles/pass-and-play.scss";
 
-import Chessboard from "../Chessboard.tsx";
-import GameplaySettings from "../../../settings/gameplay/GameplaySettings.tsx";
-import ModalWrapper from "../../../../components/wrappers/ModalWrapper.tsx";
-import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings.ts";
-import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar.tsx";
-import LocalGameOverModal from "../modals/GameOverModal.tsx";
-import { ParsedFEN } from "../../common/types/gameState.types.ts";
-import { fetchFen } from "../utils/passAndPlayApi.ts";
+import Chessboard from "../Chessboard";
+import GameplaySettings from "../../../settings/gameplay/GameplaySettings";
+import BaseModal from "../../../../shared/components/layout/BaseModal";
+import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings";
+import DashboardNavbar from "../../../../shared/components/DashboardNavbar/DashboardNavbar";
+import LocalGameOverModal from "../modals/GameOverModal";
+import { ParsedFEN } from "../../../../shared/types/chessTypes/gameState.types";
+import { fetchFen } from "../utils/passAndPlayApi";
 import {
 	GameEndedCauseSetterContext,
 	GameEndedSetterContext,
 	GameWinnerSetterContext,
-} from "../contexts/gameEndStateSetters.ts";
+} from "../contexts/gameEndStateSetters";
 
 function PassAndPlay() {
 	const [parsedFEN, setParsedFEN] = useState<ParsedFEN | null>(null);
@@ -91,12 +91,12 @@ function PassAndPlay() {
 								/>
 							</div>
 
-							<ModalWrapper visible={gameplaySettingsVisible}>
+							<BaseModal visible={gameplaySettingsVisible}>
 								<GameplaySettings
 									onClose={handleSettingsClose}
 									setGameplaySettings={setGameplaySettings}
 								/>
-							</ModalWrapper>
+							</BaseModal>
 
 							<LocalGameOverModal
 								visible={gameEnded}

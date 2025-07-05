@@ -1,0 +1,22 @@
+@use "../../../styles/global/mixins" as *;
+@use "../../../styles/global/variables" as *;
+
+
+.dashboard-navbar-parent-link-container {
+    @include flex-column-y-center;
+}
+
+.dashboard-navbar-parent-link-container:hover {
+    cursor: pointer;
+}
+
+.dashboard-navbar-parent-link-info {
+    @include flex-row-y-center;
+    margin-bottom: 8px;
+}
+
+.dashboard-navbar-parent-link-name {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 8px;
+}

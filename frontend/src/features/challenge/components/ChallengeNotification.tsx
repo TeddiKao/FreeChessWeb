@@ -1,6 +1,6 @@
-import { TimeControl } from "../../../types/gameSetup";
-import { displayTimeControl } from "../../../utils/timeUtils";
-import ModalWrapper from "../../../components/wrappers/ModalWrapper";
+import { TimeControl } from "../../../shared/types/time.types";
+import { displayTimeControl } from "../../../shared/utils/timeUtils";
+import BaseModal from "../../../shared/components/layout/BaseModal";
 
 import "../styles/challenge-notification.scss";
 import { useContext } from "react";
@@ -36,7 +36,7 @@ function ChallengeNotification({
 	}
 
 	return (
-		<ModalWrapper visible={visible}>
+		<BaseModal visible={visible}>
 			<div className="challenge-notification-modal-container">
 				<h2 className="challenge-notification-modal-title">
 					Challenge received
@@ -75,7 +75,7 @@ function ChallengeNotification({
 					</button>
 				</div>
 			</div>
-		</ModalWrapper>
+		</BaseModal>
 	);
 }
 

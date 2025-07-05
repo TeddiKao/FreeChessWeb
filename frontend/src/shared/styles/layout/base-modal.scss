@@ -1,0 +1,13 @@
+@use "../../../styles/global/mixins" as *;
+
+.modal-wrapper {
+	position: relative;
+}
+
+.modal-overlay {
+	@include cover-entire-page;
+
+	z-index: 1000;
+	background-color: hsl(0, 0%, 30%);
+	opacity: 0.75;
+}
