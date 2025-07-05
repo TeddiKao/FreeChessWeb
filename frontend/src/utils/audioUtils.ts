@@ -1,4 +1,4 @@
-import useAudio from "../shared/hooks/useAudio.ts";
+import useAudio from "../shared/hooks/useAudio";
 
 function playAudio(moveType: string) {
 	const moveAudio = useAudio("/sounds/move-self.mp3");
