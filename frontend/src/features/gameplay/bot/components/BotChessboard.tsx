@@ -11,7 +11,6 @@ import {
 	preparePawnPromotion,
 } from "../../passAndPlay/utils/promotion";
 
-import { BotChessboardProps } from "../../../../interfaces/chessboard.js";
 import {
 	isObjEmpty,
 	parseWebsocketUrl,
@@ -22,7 +21,6 @@ import {
 	FilledSquareRenderParams,
 } from "../../../../interfaces/chessboardGrid";
 import ChessboardGrid from "../../../../shared/components/chessboard/ChessboardGrid";
-import useWebsocketLifecycle from "../../../../shared/hooks/websocket/useWebsocketLifecycle";
 import Square from "../../../../shared/components/chessboard/Square";
 import useWebsocketWithLifecycle from "../../../../shared/hooks/websocket/useWebsocketWithLifecycle";
 import { fetchLegalMoves } from "../../common/utils/moveService";
@@ -40,6 +38,7 @@ import {
 	PieceType,
 } from "../../../../shared/types/chessTypes/pieces.types";
 import { OptionalValue } from "../../../../shared/types/utility.types";
+import { BotChessboardProps } from "../types/botChessboardProps.types.js";
 function BotChessboard({
 	parsed_fen_string,
 	orientation,
