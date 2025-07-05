@@ -1,13 +1,10 @@
-import {
-	EmptySquareRenderParams,
-	FilledSquareRenderParams,
-} from "../../../interfaces/chessboardGrid";
 import { getSquareClass } from "../../../shared/utils/boardUtils";
 import { capitaliseFirstLetter } from "../../../shared/utils/generalUtils";
 import ChessboardGrid from "../../../shared/components/chessboard/ChessboardGrid";
 import { BaseChessboardProps } from "../../../shared/types/chessTypes/chessboardProps.types";
 import { ChessboardSquareIndex } from "../../../shared/types/chessTypes/board.types";
 import { OptionalValue } from "../../../shared/types/utility.types";
+import { EmptySquareRenderParams, FilledSquareRenderParams } from "../../../shared/types/chessTypes/chessboardGrid.types";
 
 interface GameReplayChessboardProps extends BaseChessboardProps {
 	lastDraggedSquare: string;
