@@ -13,7 +13,7 @@ import usePieceAnimation from "../../../shared/hooks/usePieceAnimation";
 import GameReplayChessboard from "../components/GameReplayChessboard";
 import MoveListPanel from "../../gameplay/common/components/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
-import { ParsedFEN } from "../../gameplay/common/types/gameState.types";
+import { ParsedFEN } from "../../../shared/types/gameState.types";
 import {
 	fetchPositionList,
 	fetchMoveList,

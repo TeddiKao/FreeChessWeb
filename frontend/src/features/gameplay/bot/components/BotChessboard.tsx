@@ -30,11 +30,14 @@ import {
 	PieceColor,
 	PieceInfo,
 	PieceType,
-} from "../../common/types/pieces.types.ts";
-import { MoveInfo, ParsedFEN } from "../../common/types/gameState.types.ts";
+} from "../../../../shared/types/pieces.types.ts";
+import {
+	MoveInfo,
+	ParsedFEN,
+} from "../../../../shared/types/gameState.types.ts";
 import { fetchLegalMoves } from "../../common/utils/moveService.ts";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection.ts";
-import { MoveMethods } from "../../common/types/moveMethods.enums.ts";
+import { MoveMethods } from "../../../../shared/types/moveMethods.enums.ts";
 import { BotGameWebSocketEventTypes } from "../botGameEvents.enums.ts";
 function BotChessboard({
 	parsed_fen_string,

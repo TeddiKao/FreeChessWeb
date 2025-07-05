@@ -1,7 +1,4 @@
-import {
-	MoveInfo,
-	ParsedFEN,
-} from "../features/gameplay/common/types/gameState.types.ts";
+import { MoveInfo, ParsedFEN } from "../shared/types/gameState.types.ts";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,

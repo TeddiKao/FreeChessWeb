@@ -53,12 +53,12 @@ import {
 	CastlingSide,
 	MoveInfo,
 	ParsedFEN,
-} from "../common/types/gameState.types.ts";
+} from "../../../shared/types/gameState.types.ts";
 import {
 	PieceColor,
 	PieceInfo,
 	PieceType,
-} from "../common/types/pieces.types.ts";
+} from "../../../shared/types/pieces.types.ts";
 import {
 	getIsCheckmated,
 	getIsStalemated,
@@ -68,7 +68,7 @@ import {
 	GameEndedCauseSetterContext,
 	GameWinnerSetterContext,
 } from "./contexts/gameEndStateSetters.ts";
-import { MoveMethods } from "../common/types/moveMethods.enums.ts";
+import { MoveMethods } from "../../../shared/types/moveMethods.enums.ts";
 
 function Chessboard({
 	parsed_fen_string,

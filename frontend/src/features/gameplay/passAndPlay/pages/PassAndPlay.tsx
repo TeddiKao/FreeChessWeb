@@ -9,7 +9,7 @@ import BaseModal from "../../../../shared/components/layout/BaseModal.tsx";
 import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings.ts";
 import DashboardNavbar from "../../../../shared/components/DashboardNavbar/DashboardNavbar.tsx";
 import LocalGameOverModal from "../modals/GameOverModal.tsx";
-import { ParsedFEN } from "../../common/types/gameState.types.ts";
+import { ParsedFEN } from "../../../../shared/types/gameState.types.ts";
 import { fetchFen } from "../utils/passAndPlayApi.ts";
 import {
 	GameEndedCauseSetterContext,

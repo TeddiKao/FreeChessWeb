@@ -1,10 +1,13 @@
-import { ChessboardSquareIndex } from "../../common/types/board.types.ts";
+import { ChessboardSquareIndex } from "../../../../shared/types/board.types.ts";
 import {
 	BoardPlacement,
 	MoveInfo,
 	ParsedFEN,
-} from "../../common/types/gameState.types.ts";
-import { PieceColor, PieceType } from "../../common/types/pieces.types.ts";
+} from "../../../../shared/types/gameState.types.ts";
+import {
+	PieceColor,
+	PieceType,
+} from "../../../../shared/types/pieces.types.ts";
 import { OptionalValue } from "../../../../shared/types/utility.types.ts";
 import { getRank } from "../../../../utils/boardUtils.ts";
 

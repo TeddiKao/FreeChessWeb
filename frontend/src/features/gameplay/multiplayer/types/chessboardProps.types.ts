@@ -3,9 +3,9 @@ import {
 	RefObject,
 	StateSetterFunction,
 } from "../../../../shared/types/utility.types";
-import { ChessboardSquareIndex } from "../../common/types/board.types";
-import { BaseChessboardProps } from "../../common/types/chessboardProps.types";
-import { PieceColor, PieceType } from "../../common/types/pieces.types";
+import { ChessboardSquareIndex } from "../../../../shared/types/board.types";
+import { BaseChessboardProps } from "../../../../shared/types/chessboardProps.types";
+import { PieceColor, PieceType } from "../../../../shared/types/pieces.types";
 
 interface ClickedSquaresState {
 	prevClickedSquare: OptionalValue<ChessboardSquareIndex>;

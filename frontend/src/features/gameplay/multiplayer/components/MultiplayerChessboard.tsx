@@ -7,7 +7,7 @@ import {
 	FilledSquareRenderParams,
 	EmptySquareRenderParams,
 } from "../../../../interfaces/chessboardGrid";
-import { PieceColor, PieceType } from "../../common/types/pieces.types";
+import { PieceColor, PieceType } from "../../../../shared/types/pieces.types";
 import { MultiplayerChessboardProps } from "../types/chessboardProps.types";
 
 // Utils

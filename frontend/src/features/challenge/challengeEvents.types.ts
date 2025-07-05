@@ -1,6 +1,6 @@
 import { BaseWebsocketEventData } from "../../shared/types/websocket.types";
 import { TimeControl } from "../../shared/types/time.types";
-import { PieceColor } from "../gameplay/common/types/pieces.types";
+import { PieceColor } from "../../shared/types/pieces.types";
 import { ChallengeRelationships } from "./challengerInfo.types";
 
 interface ChallengeReceivedWebsocketEventData extends BaseWebsocketEventData {

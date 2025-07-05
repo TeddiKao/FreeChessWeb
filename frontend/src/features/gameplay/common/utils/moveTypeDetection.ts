@@ -1,4 +1,4 @@
-import { PieceColor } from "../types/pieces.types";
+import { PieceColor } from "../../../../shared/types/pieces.types";
 import { getPromotionRank } from "../../passAndPlay/utils/promotion";
 
 function isPawnPromotion(color: PieceColor, destinationRank: number): boolean {
