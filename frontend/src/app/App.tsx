@@ -16,7 +16,7 @@ import PassAndPlay from "../features/gameplay/passAndPlay/pages/PassAndPlay";
 import ViewGame from "../features/gameReplay/pages/ViewGame";
 import GameSetup from "../features/gameSetup/pages/GameSetup";
 import HomePage from "../pages/Home/HomePage";
-import NotFound from "../pages/NotFound";
+import NotFoundPage from "../pages/NotFound/NotFoundPage";
 import Dashboard from "../pages/protected/Dashboard/DashboardPage";
 import TempRoute from "../pages/TempRoute";
 import ChallengeWebsocketProvider from "./providers/ChallengeWebsocketProvider";
@@ -134,7 +134,7 @@ function App() {
 
 							<Route path="/temp" element={<TempRoute />} />
 
-							<Route path="*" element={<NotFound />} />
+							<Route path="*" element={<NotFoundPage />} />
 						</Routes>
 					</DndProvider>
 				</ChallengeWebsocketProvider>
