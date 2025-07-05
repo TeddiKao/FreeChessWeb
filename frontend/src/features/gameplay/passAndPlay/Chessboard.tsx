@@ -1,7 +1,5 @@
 import { useState, useEffect, useContext, useRef } from "react";
 
-import "../../../styles/components/chessboard/chessboard.scss";
-
 import {
 	clearSquaresStyling,
 	getSquareExists,
@@ -40,13 +38,16 @@ import {
 import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
 import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
 import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";
-import ChessboardGrid from "../../../components/chessboard/ChessboardGrid.tsx";
+import ChessboardGrid from "../../../shared/components/chessboard/ChessboardGrid.tsx";
 import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid.ts";
-import Square from "../../../components/chessboard/Square.tsx";
-import { displayLegalMoves, fetchMoveIsValid } from "../common/utils/moveService.ts";
+import Square from "../../../shared/components/chessboard/Square.tsx";
+import {
+	displayLegalMoves,
+	fetchMoveIsValid,
+} from "../common/utils/moveService.ts";
 import {
 	BoardPlacement,
 	CastlingSide,
@@ -62,7 +63,11 @@ import {
 	getIsCheckmated,
 	getIsStalemated,
 } from "../common/utils/gameResultFetchApi.ts";
-import { GameEndedSetterContext, GameEndedCauseSetterContext, GameWinnerSetterContext } from "./contexts/gameEndStateSetters.ts";
+import {
+	GameEndedSetterContext,
+	GameEndedCauseSetterContext,
+	GameWinnerSetterContext,
+} from "./contexts/gameEndStateSetters.ts";
 import { MoveMethods } from "../common/types/moveMethods.enums.ts";
 
 function Chessboard({

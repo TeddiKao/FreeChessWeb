@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
-import "../../../../styles/components/chessboard/board-actions.scss";
+import "../../../../shared/styles/chessboard/board-actions.scss";
 import "../styles/pass-and-play.scss";
 
 import Chessboard from "../Chessboard.tsx";
