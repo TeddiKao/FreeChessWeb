@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import useWebSocket from "./useWebsocket";
 import useWebsocketLifecycle from "./useWebsocketLifecycle";
-import useReactiveRef from "./useReactiveRef";
+import useReactiveRef from "../useReactiveRef";
 
 interface WebsocketWithLifecycleHookProps {
 	url: string;
@@ -19,16 +19,18 @@ function useWebsocketWithLifecycle({
 	closeOnUnload,
 }: WebsocketWithLifecycleHookProps) {
 	const originalSocket = useWebSocket(url, onMessage, onError, enabled);
-	const [socketRef, socket, setSocket] = useReactiveRef<WebSocket | null>(null);
+	const [socketRef, socket, setSocket] = useReactiveRef<WebSocket | null>(
+		null
+	);
 	const socketExistsRef = useRef<boolean>(false);
 
 	const [socketEnabled, setSocketEnabled] = useState(enabled);
 
-    closeOnUnload = closeOnUnload ?? true;
+	closeOnUnload = closeOnUnload ?? true;
 
 	useEffect(() => {
 		socketRef.current = originalSocket;
-        setSocket(originalSocket);
+		setSocket(originalSocket);
 	}, [originalSocket]);
 
 	useEffect(() => {
@@ -44,9 +46,9 @@ function useWebsocketWithLifecycle({
 	});
 
 	function handleWindowUnload() {
-        if (!closeOnUnload) {
-            return;
-        }
+		if (!closeOnUnload) {
+			return;
+		}
 
 		if (socketRef.current?.readyState === WebSocket.OPEN) {
 			socketRef.current.close();
