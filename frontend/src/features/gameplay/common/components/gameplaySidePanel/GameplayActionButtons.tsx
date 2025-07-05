@@ -5,7 +5,7 @@ import { RefObject, StateSetterFunction } from "../../../../../types/general";
 import useReactiveRef from "../../../../../hooks/useReactiveRef";
 import useWebSocket from "../../../../../hooks/useWebsocket";
 import { websocketBaseURL } from "../../../../../constants/urls";
-import ConfirmationPopup from "../../../../../components/common/ConfirmationPopup";
+import ConfirmationPopup from "../../../../../shared/components/ConfirmationPopup";
 import useWebsocketWithLifecycle from "../../../../../hooks/useWebsocketWithLifecycle";
 import { getAccessToken } from "../../../../auth/utils";
 import { ActionWebSocketEventTypes } from "../../../multiplayer/types/gameEvents.enums";

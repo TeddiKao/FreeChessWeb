@@ -7,7 +7,7 @@ import Chessboard from "../Chessboard.tsx";
 import GameplaySettings from "../../../settings/gameplay/GameplaySettings.tsx";
 import ModalWrapper from "../../../../components/wrappers/ModalWrapper.tsx";
 import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings.ts";
-import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar.tsx";
+import DashboardNavbar from "../../../../shared/components/DashboardNavbar/DashboardNavbar.tsx";
 import LocalGameOverModal from "../modals/GameOverModal.tsx";
 import { ParsedFEN } from "../../common/types/gameState.types.ts";
 import { fetchFen } from "../utils/passAndPlayApi.ts";

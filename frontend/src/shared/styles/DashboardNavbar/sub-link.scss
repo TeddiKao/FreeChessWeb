@@ -1,5 +1,6 @@
-@use "../../../global/mixins" as *;
-@use "../../../global/variables" as *;
+@use "../../../styles/global/mixins" as *;
+@use "../../../styles/global/variables" as *;
+
 
 .dashboard-navbar-sublink-container {
     @include flex-row-y-center;

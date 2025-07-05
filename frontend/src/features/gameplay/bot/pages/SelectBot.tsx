@@ -2,7 +2,7 @@ import { bots as botsTable } from "../botsConfig";
 import BotCategory from "../components/BotCategory";
 
 import "../styles/select-bot.scss";
-import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar";
+import DashboardNavbar from "../../../../shared/components/DashboardNavbar/DashboardNavbar";
 
 function SelectBot() {
 	return (

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { isNullOrUndefined } from "../../../utils/generalUtils";
-import DashboardNavbar from "../../../components/common/DashboardNavbar/DashboardNavbar";
+import DashboardNavbar from "../../../shared/components/DashboardNavbar/DashboardNavbar";
 import useCompletedGames from "../hooks/useCompletedGames";
 import useUsername from "../../../hooks/useUsername";
 import { getTotalPages } from "../../../utils/pageNavigationUtils";
