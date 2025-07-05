@@ -1,9 +1,11 @@
-import { DisplayChessboardProps } from "../../../interfaces/chessboard";
 import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid";
 import ChessboardGrid from "../../../shared/components/chessboard/ChessboardGrid";
+import { BaseChessboardProps } from "../../../shared/types/chessTypes/chessboardProps.types";
+
+interface DisplayChessboardProps extends BaseChessboardProps {}
 
 function DisplayChessboard({
 	parsed_fen_string,
