@@ -5,7 +5,7 @@ import {
 	RefObject,
 	StateSetterFunction,
 } from "../../../../../shared/types/utility.types";
-import { ArrowKeys } from "../../../../../enums/general";
+import { ArrowKeys } from "../../../../../shared/enums/keyboardKeys";
 import { PositionList } from "../../../../../shared/types/chessTypes/gameState.types";
 import { ChessboardSquareIndex } from "../../../../../shared/types/board.types";
 
