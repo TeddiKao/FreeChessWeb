@@ -4,7 +4,7 @@ import {
 	OptionalValue,
 	RefObject,
 	StateSetterFunction,
-} from "../../../../../types/general";
+} from "../../../../../shared/types/utility.types";
 import { ArrowKeys } from "../../../../../enums/general";
 import { PositionList } from "../../types/gameState.types";
 import { ChessboardSquareIndex } from "../../types/board.types";

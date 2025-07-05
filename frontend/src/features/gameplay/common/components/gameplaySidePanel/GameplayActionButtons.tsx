@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 
 import "../../styles/gameplaySidePanel/gameplay-action-buttons.scss";
-import { RefObject, StateSetterFunction } from "../../../../../types/general";
+import {
+	RefObject,
+	StateSetterFunction,
+} from "../../../../../shared/types/utility.types";
 import useReactiveRef from "../../../../../shared/hooks/useReactiveRef";
 import useWebSocket from "../../../../../shared/hooks/websocket/useWebsocket";
 import { websocketBaseURL } from "../../../../../constants/urls";

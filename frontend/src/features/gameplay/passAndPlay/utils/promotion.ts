@@ -13,7 +13,7 @@ import {
 	OptionalValue,
 	RefObject,
 	StateSetterFunction,
-} from "../../../../types/general.ts";
+} from "../../../../shared/types/utility.types.ts";
 import { getFile, getRank } from "../../../../utils/boardUtils.ts";
 import { fetchMoveIsValid } from "../../common/utils/moveService.ts";
 import {

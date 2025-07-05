@@ -1,5 +1,5 @@
 import api from "../../../../app/api";
-import { ChessboardSquareIndex } from "../../../../types/general";
+import { ChessboardSquareIndex } from "../../../../shared/types/utility.types";
 import { ParsedFEN } from "../types/gameState.types";
 
 async function displayLegalMoves(
@@ -115,5 +115,9 @@ async function fetchMoveIsValid(
 	return [isMoveLegal, moveType];
 }
 
-
-export { displayLegalMoves, performMoveValidation, fetchLegalMoves, fetchMoveIsValid };
+export {
+	displayLegalMoves,
+	performMoveValidation,
+	fetchLegalMoves,
+	fetchMoveIsValid,
+};

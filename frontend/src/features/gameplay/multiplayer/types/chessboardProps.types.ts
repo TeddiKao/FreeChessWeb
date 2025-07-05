@@ -1,4 +1,8 @@
-import { OptionalValue, RefObject, StateSetterFunction } from "../../../../types/general";
+import {
+	OptionalValue,
+	RefObject,
+	StateSetterFunction,
+} from "../../../../shared/types/utility.types";
 import { ChessboardSquareIndex } from "../../common/types/board.types";
 import { BaseChessboardProps } from "../../common/types/chessboardProps.types";
 import { PieceColor, PieceType } from "../../common/types/pieces.types";
@@ -33,4 +37,4 @@ interface MultiplayerChessboardProps extends BaseChessboardProps {
 	animationRef: RefObject<HTMLDivElement | null>;
 }
 
-export type { MultiplayerChessboardProps }
+export type { MultiplayerChessboardProps };

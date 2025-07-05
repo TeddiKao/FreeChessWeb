@@ -5,7 +5,7 @@ import {
 	ParsedFEN,
 } from "../../common/types/gameState.types.ts";
 import { PieceColor, PieceType } from "../../common/types/pieces.types.ts";
-import { OptionalValue } from "../../../../types/general.ts";
+import { OptionalValue } from "../../../../shared/types/utility.types.ts";
 import { getRank } from "../../../../utils/boardUtils.ts";
 
 function resetEnPassantTargetSquare(fenString: ParsedFEN): ParsedFEN {

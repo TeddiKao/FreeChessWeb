@@ -1,5 +1,5 @@
 import { websocketBaseURL } from "../../../../constants/urls";
-import { ChessboardSquareIndex } from "../../../../types/general";
+import { ChessboardSquareIndex } from "../../../../shared/types/utility.types";
 import { getAccessToken } from "../../../auth/utils";
 import useWebsocketWithLifecycle from "../../../../shared/hooks/websocket/useWebsocketWithLifecycle";
 import { ParsedFEN } from "../../common/types/gameState.types";

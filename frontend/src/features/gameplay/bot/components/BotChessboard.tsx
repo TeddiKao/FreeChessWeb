@@ -12,7 +12,7 @@ import { BotChessboardProps } from "../../../../interfaces/chessboard.js";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,
-} from "../../../../types/general.js";
+} from "../../../../shared/types/utility.types.js";
 import {
 	isObjEmpty,
 	parseWebsocketUrl,
