@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { websocketBaseURL } from "../../../constants/urls";
+import { websocketBaseURL } from "../../../shared/constants/urls";
 import { getAccessToken } from "../../auth/utils";
 import useWebsocketWithLifecycle from "../../../shared/hooks/websocket/useWebsocketWithLifecycle";
 import { useNavigate } from "react-router-dom";

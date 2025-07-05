@@ -1,5 +1,5 @@
 import { isEqual } from "lodash";
-import { websocketBaseURL } from "../constants/urls";
+import { websocketBaseURL } from "../shared/constants/urls";
 import { getAccessToken } from "../features/auth/utils";
 
 function capitaliseFirstLetter(string: string): string {

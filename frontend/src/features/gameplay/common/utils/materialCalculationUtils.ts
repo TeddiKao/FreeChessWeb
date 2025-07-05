@@ -1,8 +1,8 @@
 import {
 	pluralToSingularPieceMap,
 	singularToPluralPieceMap,
-} from "../../../../constants/pieceMappings";
-import { pieceValueMapping } from "../../../../constants/pieceValues";
+} from "../../../../shared/constants/pieceMappings";
+import { pieceValueMapping } from "../../../../shared/constants/pieceValues";
 import {
 	CapturedPiecesList,
 	PromotedPiecesList,

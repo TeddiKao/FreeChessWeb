@@ -7,7 +7,7 @@ import {
 } from "../../../../../shared/types/utility.types";
 import useReactiveRef from "../../../../../shared/hooks/useReactiveRef";
 import useWebSocket from "../../../../../shared/hooks/websocket/useWebsocket";
-import { websocketBaseURL } from "../../../../../constants/urls";
+import { websocketBaseURL } from "../../../../../shared/constants/urls";
 import ConfirmationPopup from "../../../../../shared/components/ConfirmationPopup";
 import useWebsocketWithLifecycle from "../../../../../shared/hooks/websocket/useWebsocketWithLifecycle";
 import { getAccessToken } from "../../../../auth/utils";

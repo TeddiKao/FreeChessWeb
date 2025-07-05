@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../../styles/DashboardNavbar/dashboard-navbar.scss";
-import { dashboardNavLinks } from "../../../constants/navLinksConfig";
+import { dashboardNavLinks } from "../../constants/navLinksConfig";
 import ParentLink from "./components/ParentLink";
 import AccountLinks from "./components/AccountLinks";
 

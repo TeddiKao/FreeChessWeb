@@ -1,4 +1,4 @@
-import { websocketBaseURL } from "../../../../constants/urls";
+import { websocketBaseURL } from "../../../../shared/constants/urls";
 import { ChessboardSquareIndex } from "../../../../shared/types/utility.types";
 import { getAccessToken } from "../../../auth/utils";
 import useWebsocketWithLifecycle from "../../../../shared/hooks/websocket/useWebsocketWithLifecycle";
