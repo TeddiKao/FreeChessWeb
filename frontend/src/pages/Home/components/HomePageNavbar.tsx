@@ -1,5 +1,5 @@
 import { githubLink } from "../../../shared/constants/urls";
-import "../../../styles/navbar.scss";
+import "../styles/navbar.scss";
 
 function HomePageNavbar() {
 	return (
