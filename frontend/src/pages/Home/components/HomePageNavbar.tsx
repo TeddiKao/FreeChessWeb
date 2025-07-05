@@ -1,7 +1,7 @@
 import { githubLink } from "../../../shared/constants/urls";
-import "../../../styles/navbar.scss";
+import "../styles/navbar.scss";
 
-function UnauthenticatedNavbar() {
+function HomePageNavbar() {
 	return (
 		<div className="unauthenticated-navbar-container">
 			<div className="site-links">
@@ -24,4 +24,4 @@ function UnauthenticatedNavbar() {
 	);
 }
 
-export default UnauthenticatedNavbar;
+export default HomePageNavbar;
