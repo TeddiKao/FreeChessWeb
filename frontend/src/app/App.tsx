@@ -17,7 +17,7 @@ import ViewGame from "../features/gameReplay/pages/ViewGame";
 import GameSetup from "../features/gameSetup/pages/GameSetup";
 import GuestHomePage from "../pages/GuestHomePage/GuestHomePage";
 import NotFound from "../pages/NotFound";
-import Dashboard from "../pages/protected/Dashboard/Dashboard";
+import Dashboard from "../pages/protected/Dashboard/DashboardPage";
 import TempRoute from "../pages/TempRoute";
 import ChallengeWebsocketProvider from "./providers/ChallengeWebsocketProvider";
 import AuthenticationRoute from "./routing/AuthenticationRoute";
