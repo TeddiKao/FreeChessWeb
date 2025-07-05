@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "../../../../styles/components/dashboard/navbar/sub-link.scss";
+import "../../../styles/DashboardNavbar/sub-link.scss";
 
 type SubLinkProps = {
     name: string,

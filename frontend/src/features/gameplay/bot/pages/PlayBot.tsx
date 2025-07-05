@@ -14,7 +14,7 @@ import { convertToMilliseconds } from "../../../../utils/timeUtils";
 import { pieceAnimationTime } from "../../../../constants/pieceAnimation";
 import usePieceAnimation from "../../../../hooks/usePieceAnimation";
 import LocalGameOverModal from "../../passAndPlay/modals/GameOverModal";
-import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar";
+import DashboardNavbar from "../../../../shared/components/DashboardNavbar/DashboardNavbar";
 import MoveListPanel from "../../common/components/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../common/components/gameplaySidePanel/MoveNavigationButtons";
 import BotChessboard from "../components/BotChessboard";

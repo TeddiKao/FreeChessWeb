@@ -9,7 +9,7 @@ type ParentLinkProps = {
 	dashboardNavbarExpanded: boolean;
 };
 
-import "../../../../styles/components/dashboard/navbar/parent-link.scss";
+import "../../../styles/DashboardNavbar/parent-link.scss";
 import { useNavigate } from "react-router-dom";
 
 function ParentLink({

@@ -1,4 +1,4 @@
-import LoadingSpinner from "../../../components/common/LoadingSpinner";
+import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import ModalWrapper from "../../../components/wrappers/ModalWrapper";
 import { TimeControl } from "../../../types/gameSetup";
 import { displayTimeControl } from "../../../utils/timeUtils";

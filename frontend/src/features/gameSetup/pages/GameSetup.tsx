@@ -5,7 +5,7 @@ import "../styles/select-time-control.scss";
 import { capitaliseFirstLetter } from "../../../utils/generalUtils.ts";
 import { displayTimeControl } from "../../../utils/timeUtils.ts";
 
-import DashboardNavbar from "../../../components/common/DashboardNavbar/DashboardNavbar.tsx";
+import DashboardNavbar from "../../../shared/components/DashboardNavbar/DashboardNavbar.tsx";
 import DisplayChessboard from "../components/DisplayChessboard.tsx";
 import Timer from "../../gameplay/common/components/Timer.tsx";
 import { ParsedFEN } from "../../gameplay/common/types/gameState.types.ts";

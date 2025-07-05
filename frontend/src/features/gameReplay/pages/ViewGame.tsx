@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import DashboardNavbar from "../../../components/common/DashboardNavbar/DashboardNavbar";
+import DashboardNavbar from "../../../shared/components/DashboardNavbar/DashboardNavbar";
 
 import "../styles/view-game.scss";
 import { playAudio } from "../../../utils/audioUtils";
