@@ -1,11 +1,21 @@
 import "../../styles/chessboard/chessboard.scss";
 import { getFile, getRank, isSquareLight } from "../../utils/boardUtils";
-import {
-	EmptySquareRenderParams,
-	FilledSquareRenderParams,
-} from "../../../interfaces/chessboardGrid";
 import { getPromotionRank } from "../../../features/gameplay/passAndPlay/utils/promotion";
-import { BoardPlacement } from "../../types/gameState.types";
+import { BoardPlacement } from "../../types/chessTypes/gameState.types";
+
+interface EmptySquareRenderParams {
+    row: number;
+	column: number;
+	squareColor: string;
+    squareIndex: number;
+}
+
+interface FilledSquareRenderParams extends EmptySquareRenderParams {
+	pieceType: string;
+	pieceColor: string;
+	pieceRank: number;
+	promotionRank: number;
+}
 
 type ChessboardGridProps = {
 	boardOrientation: string;
