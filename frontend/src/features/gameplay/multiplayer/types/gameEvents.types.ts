@@ -1,4 +1,4 @@
-import { BasicWebSocketEventData } from "../../../../interfaces/general";
+import { BasicWebSocketEventData } from "../../../../shared/types/websocket.types";
 import {
 	CapturedPiecesList,
 	MoveInfo,
