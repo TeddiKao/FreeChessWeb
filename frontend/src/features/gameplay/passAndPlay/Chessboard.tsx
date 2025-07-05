@@ -30,10 +30,6 @@ import usePieceAnimation from "../../../shared/hooks/usePieceAnimation";
 import { convertToMilliseconds } from "../../../shared/utils/timeUtils.js";
 import { pieceAnimationTime } from "../../../shared/constants/pieceAnimation.js";
 import ChessboardGrid from "../../../shared/components/chessboard/ChessboardGrid";
-import {
-	EmptySquareRenderParams,
-	FilledSquareRenderParams,
-} from "../../../interfaces/chessboardGrid";
 import Square from "../../../shared/components/chessboard/Square";
 import {
 	displayLegalMoves,
@@ -63,6 +59,7 @@ import { ChessboardSquareIndex } from "../../../shared/types/chessTypes/board.ty
 import { OptionalValue, StateSetterFunction } from "../../../shared/types/utility.types";
 import { MoveMethods } from "../../../shared/types/chessTypes/moveMethods.enums";
 import { BaseChessboardProps } from "../../../shared/types/chessTypes/chessboardProps.types.js";
+import { FilledSquareRenderParams, EmptySquareRenderParams } from "../../../shared/types/chessTypes/chessboardGrid.types.js";
 
 interface ChessboardProps extends BaseChessboardProps {
 	setBoardOrientation: StateSetterFunction<string>;

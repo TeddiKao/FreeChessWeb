@@ -2,20 +2,7 @@ import "../../styles/chessboard/chessboard.scss";
 import { getFile, getRank, isSquareLight } from "../../utils/boardUtils";
 import { getPromotionRank } from "../../../features/gameplay/passAndPlay/utils/promotion";
 import { BoardPlacement } from "../../types/chessTypes/gameState.types";
-
-interface EmptySquareRenderParams {
-    row: number;
-	column: number;
-	squareColor: string;
-    squareIndex: number;
-}
-
-interface FilledSquareRenderParams extends EmptySquareRenderParams {
-	pieceType: string;
-	pieceColor: string;
-	pieceRank: number;
-	promotionRank: number;
-}
+import { EmptySquareRenderParams, FilledSquareRenderParams } from "../../types/chessTypes/chessboardGrid.types";
 
 type ChessboardGridProps = {
 	boardOrientation: string;

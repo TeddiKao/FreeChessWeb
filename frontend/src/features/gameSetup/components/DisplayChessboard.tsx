@@ -1,8 +1,5 @@
-import {
-	EmptySquareRenderParams,
-	FilledSquareRenderParams,
-} from "../../../interfaces/chessboardGrid";
 import ChessboardGrid from "../../../shared/components/chessboard/ChessboardGrid";
+import { FilledSquareRenderParams, EmptySquareRenderParams } from "../../../shared/types/chessTypes/chessboardGrid.types";
 import { BaseChessboardProps } from "../../../shared/types/chessTypes/chessboardProps.types";
 
 interface DisplayChessboardProps extends BaseChessboardProps {}
