@@ -1,0 +1,24 @@
+.promotion-popup-container {
+	background-color: white;
+
+	width: 55px;
+	height: 240px;
+
+	position: absolute;
+
+	z-index: 1000;
+}
+
+.top {
+	top: 0;
+	left: 0;
+}
+
+.bottom {
+	bottom: 0;
+	left: 0;
+}
+
+.promotion-popup-container img:hover {
+	cursor: pointer;
+}
