@@ -1,5 +1,5 @@
-@use "./global/mixins.scss" as *;
-@use "./global/variables.scss";
+@use "../app/styles/mixins" as *;
+@use "../app/styles/variables";
 
 .unauthenticated-navbar-container {
 	@include flex-row;

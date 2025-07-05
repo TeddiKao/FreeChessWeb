@@ -1,4 +1,4 @@
-@use "../../../../styles/global/mixins" as *;
+@use "../../../../app/styles/mixins" as *;
 
 .multiplayer-playing-interface-container {
 	@include flex-row-x-center;
@@ -9,11 +9,12 @@
 	flex-direction: column;
 }
 
-.top-player-info, .bottom-player-info {
+.top-player-info,
+.bottom-player-info {
 	@include flex-row-space-between;
 	@include flex-row-y-center;
 
-	width: 464px
+	width: 464px;
 }
 
 .chessboard-info {

@@ -1,74 +1,75 @@
-@use "../../../styles/global/mixins" as *;
+@use "../../../app/styles/mixins" as *;
 
 .completed-game-info-container {
-    display: grid;
-    grid-template-columns: 200px 50px;
+	display: grid;
+	grid-template-columns: 200px 50px;
 
-    padding-top: 12px;
-    padding-bottom: 12px;
+	padding-top: 12px;
+	padding-bottom: 12px;
 
-    position: relative;
+	position: relative;
 }
 
 .completed-game-info-container:hover {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .players-container {
-    margin-left: 12px;
+	margin-left: 12px;
 
-    p {
-        margin-top: 4px;
-        margin-bottom: 4px;
-        margin-left: 8px;
-    }
+	p {
+		margin-top: 4px;
+		margin-bottom: 4px;
+		margin-left: 8px;
+	}
 
-    .white-player-container, .black-player-container {
-        @include flex-row-y-center;
-    }
+	.white-player-container,
+	.black-player-container {
+		@include flex-row-y-center;
+	}
 
-    .white-player-color-icon {
-        width: 20px;
-        height: 20px;
+	.white-player-color-icon {
+		width: 20px;
+		height: 20px;
 
-        background-color: white;
-        border-radius: 4px;
-    }
+		background-color: white;
+		border-radius: 4px;
+	}
 
-    .black-player-color-icon {
-        @extend .white-player-color-icon;
-        background-color: black;
-    }
+	.black-player-color-icon {
+		@extend .white-player-color-icon;
+		background-color: black;
+	}
 }
 
 .result-container {
-    margin-left: 12px;
-    
-    @include flex-column-x-center;
-    @include flex-column-y-center;
+	margin-left: 12px;
+
+	@include flex-column-x-center;
+	@include flex-column-y-center;
 }
 
 .result-icon {
-    width: 28px;
-    height: 28px;
+	width: 28px;
+	height: 28px;
 }
 
 .view-game-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 
-    @include flex-column-x-center;
-    @include flex-column-y-center;
+	@include flex-column-x-center;
+	@include flex-column-y-center;
 
-    background-color: hsl(120, 100%, 30%);
-    opacity: 0.8;
+	background-color: hsl(120, 100%, 30%);
+	opacity: 0.8;
 }
 
 .view-overlay-text {
-    margin-top: 4px;
-    margin-bottom: 0;
-    color: white;
+	margin-top: 4px;
+	margin-bottom: 0;
+	color: white;
 }

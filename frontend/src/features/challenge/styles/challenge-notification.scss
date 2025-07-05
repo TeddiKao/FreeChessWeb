@@ -1,4 +1,4 @@
-@use "../../../styles/global/mixins" as *;
+@use "../../../app/styles/mixins" as *;
 
 .challenge-notification-modal-container {
 	@include page-center-xy;

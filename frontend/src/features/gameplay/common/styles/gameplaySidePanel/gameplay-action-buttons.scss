@@ -1,4 +1,4 @@
-@use "../../../../../styles/global/mixins" as *;
+@use "../../../../../app/styles/mixins" as *;
 
 .gameplay-action-buttons-container {
 	@include flex-column;
@@ -9,19 +9,20 @@
 
 .gameplay-action-buttons-header {
 	margin-top: 0;
-    margin-bottom: 4px;
+	margin-bottom: 4px;
 
-    padding-top: 4px;
+	padding-top: 4px;
 	padding-bottom: 4px;
 	padding-left: 8px;
 
-	background-color: hsl(0, 0%, 85%)
+	background-color: hsl(0, 0%, 85%);
 }
 
 .gameplay-action-buttons {
 	@include flex-row;
 
-	.resignation-container, .draw-offer-container {
+	.resignation-container,
+	.draw-offer-container {
 		@include flex-row-y-center;
 		margin-left: 4px;
 		padding-right: 4px;
@@ -33,8 +34,12 @@
 		}
 	}
 
-	.resignation-container:hover, .draw-offer-container:hover {
+	.resignation-container:hover,
+	.draw-offer-container:hover {
 		cursor: pointer;
-		background-color: darken($color: (hsl(0, 0%, 85%)), $amount: 10%);
+		background-color: darken(
+			$color: hsl(0, 0%, 85%),
+			$amount: 10%
+		);
 	}
 }

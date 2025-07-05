@@ -1,31 +1,30 @@
-@use "../../../styles/global/mixins" as *;
+@use "../../../app/styles/mixins" as *;
 
 .matchmaking-shortcut-screen-container {
-    @include page-center-xy;
-    @include flex-column-x-center;
-    @include flex-column-y-center;
+	@include page-center-xy;
+	@include flex-column-x-center;
+	@include flex-column-y-center;
 
-    background-color: white;
+	background-color: white;
 
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 12px;
-    padding-bottom: 12px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 12px;
+	padding-bottom: 12px;
 
-    border-radius: 8px;
+	border-radius: 8px;
 
-    z-index: 1000;
+	z-index: 1000;
 }
 
 .matchmaking-status {
-    margin-top: 8px;
-    margin-bottom: 12px;
+	margin-top: 8px;
+	margin-bottom: 12px;
 }
 
 .time-control-info {
-    margin-top: 12px;
-    margin-bottom: 8px;
+	margin-top: 12px;
+	margin-bottom: 8px;
 
-    color: hsl(0, 0%, 40%);
+	color: hsl(0, 0%, 40%);
 }
-

@@ -1,94 +1,94 @@
-@use "../../../styles/global/mixins" as *;
-@use "../../../styles/global/variables";
+@use "../../../app/styles/mixins" as *;
+@use "../../../app/styles/variables";
 
 .time-control-selection-interface-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 
-    position: absolute;
-    left: 15%;
+	position: absolute;
+	left: 15%;
 
-    margin-top: 20px;
+	margin-top: 20px;
 }
 
 .display-chessboard-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .time-control-selection-container {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-    margin-left: 24px;
+	margin-left: 24px;
 
-    box-shadow: 5px 5px 10px hsl(0, 0%, 60%);
+	box-shadow: 5px 5px 10px hsl(0, 0%, 60%);
 
-    padding-top: 12px;
-    padding-bottom: 12px;
-    padding-left: 16px;
-    padding-right: 16px;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	padding-left: 16px;
+	padding-right: 16px;
 
-    border-radius: 8px;
+	border-radius: 8px;
 }
 
 .time-control-type-container {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .time-control-type-container div {
-    background-color: hsl(0, 0%, 85%);
-    margin-bottom: 8px;
+	background-color: hsl(0, 0%, 85%);
+	margin-bottom: 8px;
 
-    padding: 12px;
+	padding: 12px;
 
-    border-radius: 8px;
+	border-radius: 8px;
 }
 
 .time-control-type-container div:hover {
-    cursor: pointer;
-    background-color: hsl(0, 0%, 70%);
-    transition: 0.25s ease;
+	cursor: pointer;
+	background-color: hsl(0, 0%, 70%);
+	transition: 0.25s ease;
 }
 
 .time-control-type-container div h1 {
-    margin-top: 4px;
-    margin-bottom: 4px;
+	margin-top: 4px;
+	margin-bottom: 4px;
 
-    font-size: 1.5rem;
+	font-size: 1.5rem;
 }
 
 .time-control-type-container div p {
-    margin-bottom: 4px;
-    margin-top: 4px;
+	margin-bottom: 4px;
+	margin-top: 4px;
 }
 
 .time-control-type-header {
-    margin-top: 8px;
-    margin-bottom: 8px;
+	margin-top: 8px;
+	margin-bottom: 8px;
 }
 
 .time-controls-container {
-    display: grid;
-    grid-template-columns: 100px 100px 100px;
+	display: grid;
+	grid-template-columns: 100px 100px 100px;
 }
 
 .time-control-container p,
 .selected-time-control-container p {
-    margin-top: 8px;
-    margin-bottom: 8px;
-    margin-left: 4px;
-    margin-right: 4px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	margin-left: 4px;
+	margin-right: 4px;
 
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-left: 4px;
-    padding-right: 4px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	padding-left: 4px;
+	padding-right: 4px;
 
-    text-align: center;
+	text-align: center;
 }
 
 .time-control-container p {
@@ -101,73 +101,73 @@
 }
 
 .time-control-container p:hover {
-    background-color: hsl(0, 0%, 70%);
-    transform: 0.25s ease;
+	background-color: hsl(0, 0%, 70%);
+	transform: 0.25s ease;
 }
 
 .time-control-container p:hover,
 .selected-time-control-container p:hover {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .continue-button {
-    padding-top: 8px;
-    padding-bottom: 8px;
+	padding-top: 8px;
+	padding-bottom: 8px;
 
-    width: 100%;
+	width: 100%;
 
-    margin-top: 8px;
+	margin-top: 8px;
 
-    background-color: variables.$accent-color;
-    color: white;
+	background-color: variables.$accent-color;
+	color: white;
 
-    border: none;
-    border-radius: 4px;
+	border: none;
+	border-radius: 4px;
 }
 
 .time-control {
-    text-align: center;
-    background-color: hsl(0, 0%, 85%);
+	text-align: center;
+	background-color: hsl(0, 0%, 85%);
 
-    padding-left: 12px;
-    padding-right: 12px;
-    padding-top: 6px;
-    padding-bottom: 6px;
+	padding-left: 12px;
+	padding-right: 12px;
+	padding-top: 6px;
+	padding-bottom: 6px;
 }
 
 .start-game-button {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    
-    padding-left: 120px;
-    padding-right: 120px;
+	padding-top: 8px;
+	padding-bottom: 8px;
 
-    background-color: variables.$accent-color;
-    color: white;
+	padding-left: 120px;
+	padding-right: 120px;
 
-    border: none;
-    border-radius: 4px;
+	background-color: variables.$accent-color;
+	color: white;
+
+	border: none;
+	border-radius: 4px;
 }
 
 .go-back-button {
-    margin-top: 12px;
-    margin-bottom: 4px;
+	margin-top: 12px;
+	margin-bottom: 4px;
 
-    color: hsl(200, 100%, 50%);
-    text-align: center;
+	color: hsl(200, 100%, 50%);
+	text-align: center;
 }
 
 .go-back-button:hover {
-    cursor: pointer;
-    color: hsl(200, 100%, 45%);
+	cursor: pointer;
+	color: hsl(200, 100%, 45%);
 }
 
 @media screen and (max-width: 752px) {
-    .time-control-selection-interface-container {
-        @include flex-column;
-    }
+	.time-control-selection-interface-container {
+		@include flex-column;
+	}
 
-    .display-chessboard-container {
-        margin-bottom: 12px;
-    }
+	.display-chessboard-container {
+		margin-bottom: 12px;
+	}
 }

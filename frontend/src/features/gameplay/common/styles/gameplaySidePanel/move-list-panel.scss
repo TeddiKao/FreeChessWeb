@@ -1,4 +1,4 @@
-@use "../../../../../styles/global/mixins.scss" as *;
+@use "../../../../../app/styles/mixins.scss" as *;
 
 .move-list-panel-container {
 	@include flex-column;
