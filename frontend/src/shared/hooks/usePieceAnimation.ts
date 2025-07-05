@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { ChessboardSquareIndex, OptionalValue } from "../types/general";
+import { ChessboardSquareIndex, OptionalValue } from "../../types/general";
 import {
 	calculateReplayXYTransform,
 	calculateXYTransform,
-} from "../utils/boardUtils";
-import { convertToMilliseconds } from "../utils/timeUtils";
-import { pieceAnimationTime } from "../constants/pieceAnimation";
+} from "../../utils/boardUtils";
+import { convertToMilliseconds } from "../../utils/timeUtils";
+import { pieceAnimationTime } from "../../constants/pieceAnimation";
 import { PieceColor } from "../features/gameplay/multiplayer/gameLogic.types";
 
 function usePieceAnimation() {

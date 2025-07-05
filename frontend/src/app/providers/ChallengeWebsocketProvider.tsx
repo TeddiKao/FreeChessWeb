@@ -10,7 +10,7 @@ import {
 } from "../../features/challenge/challengeEvents.types";
 import { useNavigate } from "react-router-dom";
 import ChallengeResponseWaitScreen from "../../features/challenge/components/ChallengeResponseWaitScreen";
-import useWebsocketWithLifecycle from "../../hooks/useWebsocketWithLifecycle";
+import useWebsocketWithLifecycle from "../../shared/hooks/websocket/useWebsocketWithLifecycle";
 import { ChallengeWebsocketEventTypes } from "../../features/challenge/challengeEvents.enums";
 
 type ChallengeWebsocketProviderProps = {

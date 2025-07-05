@@ -2,11 +2,11 @@ import { useState, useEffect, useRef } from "react";
 
 import "../../styles/gameplaySidePanel/gameplay-action-buttons.scss";
 import { RefObject, StateSetterFunction } from "../../../../../types/general";
-import useReactiveRef from "../../../../../hooks/useReactiveRef";
-import useWebSocket from "../../../../../hooks/useWebsocket";
+import useReactiveRef from "../../../../../shared/hooks/useReactiveRef";
+import useWebSocket from "../../../../../shared/hooks/websocket/useWebsocket";
 import { websocketBaseURL } from "../../../../../constants/urls";
 import ConfirmationPopup from "../../../../../shared/components/ConfirmationPopup";
-import useWebsocketWithLifecycle from "../../../../../hooks/useWebsocketWithLifecycle";
+import useWebsocketWithLifecycle from "../../../../../shared/hooks/websocket/useWebsocketWithLifecycle";
 import { getAccessToken } from "../../../../auth/utils";
 import { ActionWebSocketEventTypes } from "../../../multiplayer/types/gameEvents.enums";
 import { PieceColor } from "../../types/pieces.types";

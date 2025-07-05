@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { websocketBaseURL } from "../../../constants/urls";
 import { getAccessToken } from "../../auth/utils";
-import useWebsocketWithLifecycle from "../../../hooks/useWebsocketWithLifecycle";
+import useWebsocketWithLifecycle from "../../../shared/hooks/websocket/useWebsocketWithLifecycle";
 import { useNavigate } from "react-router-dom";
 import { getAssignedColor } from "../utils";
 import { MatchmakingEvents } from "../matchmaking.enums";

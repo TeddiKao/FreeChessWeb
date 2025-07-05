@@ -9,7 +9,7 @@ import { isNullOrUndefined } from "../../../utils/generalUtils";
 import { OptionalValue } from "../../../types/general";
 import { convertToMilliseconds } from "../../../utils/timeUtils";
 import { pieceAnimationTime } from "../../../constants/pieceAnimation";
-import usePieceAnimation from "../../../hooks/usePieceAnimation";
+import usePieceAnimation from "../../../shared/hooks/usePieceAnimation";
 import GameReplayChessboard from "../components/GameReplayChessboard";
 import MoveListPanel from "../../gameplay/common/components/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
