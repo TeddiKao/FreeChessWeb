@@ -2,12 +2,12 @@ import {
 	BoardPlacement,
 	MoveInfo,
 	ParsedFEN,
-} from "../../../../shared/types/gameState.types.ts";
+} from "../../../../shared/types/chessTypes/gameState.types.ts";
 import {
 	PieceColor,
 	PieceInfo,
 	PieceType,
-} from "../../../../shared/types/pieces.types.ts";
+} from "../../../../shared/types/chessTypes/pieces.types.ts";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,

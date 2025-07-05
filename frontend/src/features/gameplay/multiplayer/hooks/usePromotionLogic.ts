@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings";
-import { ParsedFEN } from "../../../../shared/types/gameState.types";
+import { ParsedFEN } from "../../../../shared/types/chessTypes/gameState.types";
 import { ChessboardSquareIndex } from "../../../../shared/types/board.types";
-import { PieceType } from "../../../../shared/types/pieces.types";
+import { PieceType } from "../../../../shared/types/chessTypes/pieces.types";
 
 function usePromotionLogic(parsedFEN: ParsedFEN) {
 	const prePromotionBoardState = useRef<ParsedFEN | null>(null);

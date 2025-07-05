@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { animatePieceImage } from "../../../../utils/boardUtils";
-import { PieceColor } from "../../../../shared/types/pieces.types";
+import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
 import { ChessboardSquareIndex } from "../../../../shared/types/board.types";
 
 function useAnimationLogic(orientation: PieceColor) {

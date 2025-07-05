@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { MoveListUpdateEventData } from "../types/gameEvents.types";
-import { MoveList } from "../../../../shared/types/gameState.types";
+import { MoveList } from "../../../../shared/types/chessTypes/gameState.types";
 import { fetchMoveList } from "../../common/utils/gameStateFetchApi";
 
 function useMoveList(gameId: number) {

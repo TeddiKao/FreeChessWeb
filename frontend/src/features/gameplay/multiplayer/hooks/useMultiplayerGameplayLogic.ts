@@ -17,7 +17,10 @@ import {
 	displayLegalMoves,
 	performMoveValidation,
 } from "../../common/utils/moveService";
-import { PieceColor, PieceType } from "../../../../shared/types/pieces.types";
+import {
+	PieceColor,
+	PieceType,
+} from "../../../../shared/types/chessTypes/pieces.types";
 import { MoveMadeEventData } from "../types/gameEvents.types";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
 

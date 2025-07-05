@@ -3,11 +3,11 @@ import {
 	BoardPlacement,
 	MoveInfo,
 	ParsedFEN,
-} from "../../../../shared/types/gameState.types.ts";
+} from "../../../../shared/types/chessTypes/gameState.types.ts";
 import {
 	PieceColor,
 	PieceType,
-} from "../../../../shared/types/pieces.types.ts";
+} from "../../../../shared/types/chessTypes/pieces.types.ts";
 import { OptionalValue } from "../../../../shared/types/utility.types.ts";
 import { getRank } from "../../../../utils/boardUtils.ts";
 

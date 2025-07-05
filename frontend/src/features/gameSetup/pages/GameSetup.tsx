@@ -8,7 +8,7 @@ import { displayTimeControl } from "../../../utils/timeUtils.ts";
 import DashboardNavbar from "../../../shared/components/DashboardNavbar/DashboardNavbar.tsx";
 import DisplayChessboard from "../components/DisplayChessboard.tsx";
 import Timer from "../../gameplay/common/components/Timer.tsx";
-import { ParsedFEN } from "../../../shared/types/gameState.types.ts";
+import { ParsedFEN } from "../../../shared/types/chessTypes/gameState.types.ts";
 import { fetchFen } from "../../gameplay/passAndPlay/utils/passAndPlayApi.ts";
 import CustomTimeControlScreen from "../components/CustomTimeControlScreen.tsx";
 import TimeControlSelection from "../components/TimeControlSelection.tsx";

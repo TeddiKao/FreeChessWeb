@@ -9,8 +9,8 @@ import {
 	CastlingSide,
 	ParsedFEN,
 	SquareInfo,
-} from "../../../../shared/types/gameState.types.ts";
-import { PieceColor } from "../../../../shared/types/pieces.types.ts";
+} from "../../../../shared/types/chessTypes/gameState.types.ts";
+import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types.ts";
 import { capitaliseFirstLetter } from "../../../../utils/generalUtils.ts";
 
 function getKingStartingSquare(color: string): number {

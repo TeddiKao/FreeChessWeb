@@ -6,7 +6,7 @@ import {
 	StateSetterFunction,
 } from "../../../../../shared/types/utility.types";
 import { ArrowKeys } from "../../../../../enums/general";
-import { PositionList } from "../../../../../shared/types/gameState.types";
+import { PositionList } from "../../../../../shared/types/chessTypes/gameState.types";
 import { ChessboardSquareIndex } from "../../../../../shared/types/board.types";
 
 type MoveNavigationButtonsProps = {

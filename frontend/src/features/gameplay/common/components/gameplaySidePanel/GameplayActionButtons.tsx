@@ -12,7 +12,7 @@ import ConfirmationPopup from "../../../../../shared/components/ConfirmationPopu
 import useWebsocketWithLifecycle from "../../../../../shared/hooks/websocket/useWebsocketWithLifecycle";
 import { getAccessToken } from "../../../../auth/utils";
 import { ActionWebSocketEventTypes } from "../../../multiplayer/types/gameEvents.enums";
-import { PieceColor } from "../../../../../shared/types/pieces.types";
+import { PieceColor } from "../../../../../shared/types/chessTypes/pieces.types";
 
 type GameplayActionButtonsProps = {
 	gameId: string | number;

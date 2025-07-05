@@ -1,4 +1,4 @@
-import { PieceColor } from "../../../../shared/types/pieces.types";
+import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
 
 function getOppositeColor(color: PieceColor): PieceColor {
 	color = color.toLowerCase() as PieceColor;

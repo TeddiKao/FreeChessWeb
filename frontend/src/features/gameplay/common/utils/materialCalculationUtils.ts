@@ -6,11 +6,11 @@ import { pieceValueMapping } from "../../../../constants/pieceValues";
 import {
 	CapturedPiecesList,
 	PromotedPiecesList,
-} from "../../../../shared/types/gameState.types";
+} from "../../../../shared/types/chessTypes/gameState.types";
 import {
 	CapturablePiecePlural,
 	PromotionPiecePlural,
-} from "../../../../shared/types/pieces.types";
+} from "../../../../shared/types/chessTypes/pieces.types";
 
 function calculateTotalCapturedPiecesValue(
 	capturedPiecesList: CapturedPiecesList

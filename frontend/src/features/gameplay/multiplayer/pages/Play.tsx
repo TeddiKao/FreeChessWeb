@@ -20,7 +20,7 @@ import GameplayActionButtons from "../../common/components/gameplaySidePanel/Gam
 import MoveListPanel from "../../common/components/gameplaySidePanel/MoveListPanel.tsx";
 import MoveNavigationButtons from "../../common/components/gameplaySidePanel/MoveNavigationButtons.tsx";
 import Timer from "../../common/components/Timer.tsx";
-import { PieceColor } from "../../../../shared/types/pieces.types.ts";
+import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types.ts";
 import MultiplayerChessboard from "../components/MultiplayerChessboard.tsx";
 
 function Play() {

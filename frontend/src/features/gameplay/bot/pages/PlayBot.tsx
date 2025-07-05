@@ -18,7 +18,10 @@ import DashboardNavbar from "../../../../shared/components/DashboardNavbar/Dashb
 import MoveListPanel from "../../common/components/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "../../common/components/gameplaySidePanel/MoveNavigationButtons";
 import BotChessboard from "../components/BotChessboard";
-import { MoveInfo, ParsedFEN } from "../../../../shared/types/gameState.types";
+import {
+	MoveInfo,
+	ParsedFEN,
+} from "../../../../shared/types/chessTypes/gameState.types";
 import {
 	fetchBotGamePositionList,
 	fetchBotGameMoveList,

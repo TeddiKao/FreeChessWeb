@@ -2,8 +2,8 @@ import { websocketBaseURL } from "../../../../constants/urls";
 import { ChessboardSquareIndex } from "../../../../shared/types/utility.types";
 import { getAccessToken } from "../../../auth/utils";
 import useWebsocketWithLifecycle from "../../../../shared/hooks/websocket/useWebsocketWithLifecycle";
-import { ParsedFEN } from "../../../../shared/types/gameState.types";
-import { PieceType } from "../../../../shared/types/pieces.types";
+import { ParsedFEN } from "../../../../shared/types/chessTypes/gameState.types";
+import { PieceType } from "../../../../shared/types/chessTypes/pieces.types";
 import {
 	CheckmateEventData,
 	MoveListUpdateEventData,

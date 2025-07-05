@@ -1,6 +1,6 @@
 import api from "../../../../app/api";
-import { ParsedFEN } from "../../../../shared/types/gameState.types";
-import { PieceColor } from "../../../../shared/types/pieces.types";
+import { ParsedFEN } from "../../../../shared/types/chessTypes/gameState.types";
+import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
 
 async function fetchCurrentPosition(gameId: number): Promise<ParsedFEN> {
 	let currentPosition = null;

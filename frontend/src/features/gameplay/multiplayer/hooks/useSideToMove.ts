@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PieceColor } from "../../../../shared/types/pieces.types";
+import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
 import { fetchSideToMove } from "../../common/utils/gameStateFetchApi";
 
 function useSideToMove(gameId: number) {

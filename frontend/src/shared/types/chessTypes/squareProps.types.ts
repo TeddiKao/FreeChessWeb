@@ -1,4 +1,4 @@
-import { OptionalValue, RefObject, StateSetterFunction } from "./utility.types";
+import { OptionalValue, RefObject, StateSetterFunction } from "../utility.types";
 import { ChessboardSquareIndex } from "./board.types";
 import { PieceColor, PieceType } from "./pieces.types";
 
