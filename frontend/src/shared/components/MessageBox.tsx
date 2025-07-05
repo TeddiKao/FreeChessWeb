@@ -3,13 +3,14 @@ import { StateSetterFunction } from "../../types/general"
 import { convertToMilliseconds } from "../../utils/timeUtils"
 
 import "../styles/message-box.scss"
+import { MessageBoxTypes, XAlignment, YAlignment } from "../types/messageBox.types"
 
 type MessageBoxProps = {
 	setVisible: StateSetterFunction<boolean>
 
-	type: "info" | "error" | "warning" | "success",
-	xAlignment: "left" | "center" | "right",
-	yAlignment: "top" | "center" | "bottom",
+	type: MessageBoxTypes,
+	xAlignment: XAlignment,
+	yAlignment: YAlignment,
 	text: string,
 	icon?: string,
 	disappearAfterSeconds: number,
