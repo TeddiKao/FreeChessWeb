@@ -1,6 +1,6 @@
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import BaseModal from "../../../shared/components/layout/BaseModal";
-import { TimeControl } from "../../../types/gameSetup";
+import { TimeControl } from "../../../shared/types/time.types";
 import { displayTimeControl } from "../../../utils/timeUtils";
 import "../styles/matchmaking-shortcut-screen.scss";
 

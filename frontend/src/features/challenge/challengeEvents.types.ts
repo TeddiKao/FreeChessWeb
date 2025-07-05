@@ -1,5 +1,5 @@
 import { BasicWebSocketEventData } from "../../interfaces/general";
-import { TimeControl } from "../../types/gameSetup";
+import { TimeControl } from "../../shared/types/time.types";
 import { PieceColor } from "../gameplay/common/types/pieces.types";
 import { ChallengeRelationships } from "./challengerInfo.types";
 
