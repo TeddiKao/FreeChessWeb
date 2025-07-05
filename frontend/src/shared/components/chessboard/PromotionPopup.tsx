@@ -5,7 +5,7 @@ import {
 	PieceColor,
 	PieceType,
 } from "../../features/gameplay/multiplayer/gameLogic.types";
-import { OptionalValue } from "../../types/general";
+import { OptionalValue } from "../../../types/general";
 
 type PromotionCancelFunction = (color: PieceColor) => void;
 

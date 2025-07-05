@@ -9,11 +9,11 @@ import {
 	isSquareLight,
 	isSquareOnFileEdge,
 	isSquareOnRankEdge,
-} from "../../utils/boardUtils";
-import { SquareProps } from "../../interfaces/chessboard.ts";
-import { OptionalValue } from "../../types/general.ts";
-import { capitaliseFirstLetter } from "../../utils/generalUtils.ts";
-import useAnimationLogic from "../../features/gameplay/multiplayer/hooks/useAnimationLogic.ts";
+} from "../../../utils/boardUtils.ts";
+import { SquareProps } from "../../../interfaces/chessboard.ts";
+import { OptionalValue } from "../../../types/general.ts";
+import { capitaliseFirstLetter } from "../../../utils/generalUtils.ts";
+import useAnimationLogic from "../../../features/gameplay/multiplayer/hooks/useAnimationLogic.ts";
 import { PieceColor } from "../../features/gameplay/multiplayer/gameLogic.types.ts";
 
 function Square({
