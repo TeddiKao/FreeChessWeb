@@ -26,7 +26,6 @@ import {
 } from "./utils/basicMovement";
 
 import { getOppositeColor } from "./utils/general";
-import { ChessboardProps } from "../../../interfaces/chessboard.js";
 import usePieceAnimation from "../../../shared/hooks/usePieceAnimation";
 import { convertToMilliseconds } from "../../../shared/utils/timeUtils.js";
 import { pieceAnimationTime } from "../../../shared/constants/pieceAnimation.js";
@@ -61,8 +60,15 @@ import {
 	GameWinnerSetterContext,
 } from "./contexts/gameEndStateSetters";
 import { ChessboardSquareIndex } from "../../../shared/types/chessTypes/board.types";
-import { OptionalValue } from "../../../shared/types/utility.types";
+import { OptionalValue, StateSetterFunction } from "../../../shared/types/utility.types";
 import { MoveMethods } from "../../../shared/types/chessTypes/moveMethods.enums";
+import { BaseChessboardProps } from "../../../shared/types/chessTypes/chessboardProps.types.js";
+
+interface ChessboardProps extends BaseChessboardProps {
+	setBoardOrientation: StateSetterFunction<string>;
+	flipOnMove: boolean;
+	gameplaySettings: any;
+}
 
 function Chessboard({
 	parsed_fen_string,

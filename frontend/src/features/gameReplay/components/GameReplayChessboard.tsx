@@ -1,4 +1,3 @@
-import { GameReplayChessboardProps } from "../../../interfaces/chessboard";
 import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
@@ -6,6 +5,17 @@ import {
 import { getSquareClass } from "../../../shared/utils/boardUtils";
 import { capitaliseFirstLetter } from "../../../shared/utils/generalUtils";
 import ChessboardGrid from "../../../shared/components/chessboard/ChessboardGrid";
+import { BaseChessboardProps } from "../../../shared/types/chessTypes/chessboardProps.types";
+import { ChessboardSquareIndex } from "../../../shared/types/chessTypes/board.types";
+import { OptionalValue } from "../../../shared/types/utility.types";
+
+interface GameReplayChessboardProps extends BaseChessboardProps {
+	lastDraggedSquare: string;
+	lastDroppedSquare: string;
+
+	animationSquare: OptionalValue<ChessboardSquareIndex>;
+	animationStyles: Record<string, unknown>;
+}
 
 function GameReplayChessboard({
 	parsed_fen_string,
