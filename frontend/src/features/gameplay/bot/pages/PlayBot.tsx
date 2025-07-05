@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "../styles/play-bot.scss";
 import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings";
 import GameplaySettings from "../../../settings/gameplay/GameplaySettings";
-import ModalWrapper from "../../../../components/wrappers/ModalWrapper";
+import BaseModal from "../../../../shared/components/layout/BaseModal";
 import { Navigate, useLocation } from "react-router-dom";
 import {
 	ChessboardSquareIndex,
@@ -273,12 +273,12 @@ function PlayBot() {
 				</div>
 			</div>
 
-			<ModalWrapper visible={gameplaySettingsVisible}>
+			<BaseModal visible={gameplaySettingsVisible}>
 				<GameplaySettings
 					onClose={handleSettingsModalClose}
 					setGameplaySettings={setGameplaySettings}
 				/>
-			</ModalWrapper>
+			</BaseModal>
 
 			<LocalGameOverModal
 				gameEndCause={gameEndedCause}

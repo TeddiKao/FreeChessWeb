@@ -6,7 +6,7 @@ import "../../../../shared/styles/chessboard/board-actions.scss";
 
 import GameOverModal from "../modals/GameOverModal.tsx";
 import GameplaySettings from "../../../settings/gameplay/GameplaySettings.tsx";
-import ModalWrapper from "../../../../components/wrappers/ModalWrapper.js";
+import BaseModal from "../../../../shared/components/layout/BaseModal.js";
 import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings.ts";
 import MessageBox from "../../../../shared/components/MessageBox.tsx";
 import { MessageBoxTypes } from "../../../../types/messageBox.ts";
@@ -233,12 +233,12 @@ function Play() {
 						blackPlayerUsername={blackPlayerUsername}
 					/>
 
-					<ModalWrapper visible={settingsVisible}>
+					<BaseModal visible={settingsVisible}>
 						<GameplaySettings
 							onClose={handleSettingsClose}
 							setGameplaySettings={setGameplaySettings}
 						/>
-					</ModalWrapper>
+					</BaseModal>
 
 					<div className="bottom-player-info">
 						<div className="bottom-player-captured-material">
