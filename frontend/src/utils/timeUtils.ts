@@ -1,7 +1,7 @@
 import { floor } from "lodash";
-import { padZero } from "./generalUtils.ts";
-import { TimeDuration, TimeControl } from "../shared/types/time.types.ts";
-import { roundToNearest } from "./numberUtils.ts";
+import { padZero } from "./generalUtils";
+import { TimeDuration, TimeControl } from "../shared/types/time.types";
+import { roundToNearest } from "./numberUtils";
 
 function convertTimeControlTime(time: number) {
 	return time / 60;

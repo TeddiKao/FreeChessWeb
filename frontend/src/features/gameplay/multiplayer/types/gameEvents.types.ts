@@ -4,8 +4,8 @@ import {
 	MoveInfo,
 	ParsedFEN,
 	PromotedPiecesList,
-} from "../../common/types/gameState.types";
-import { PieceColor } from "../../common/types/pieces.types";
+} from "../../../../shared/types/chessTypes/gameState.types";
+import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
 
 interface MoveMadeEventData extends BaseWebsocketEventData {
 	move_data: MoveInfo;

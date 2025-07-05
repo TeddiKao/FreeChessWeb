@@ -1,8 +1,8 @@
 import {
 	BoardPlacement,
 	ParsedFEN,
-} from "../../common/types/gameState.types.ts";
-import { PieceInfo } from "../../common/types/pieces.types.ts";
+} from "../../../../shared/types/chessTypes/gameState.types";
+import { PieceInfo } from "../../../../shared/types/chessTypes/pieces.types";
 
 function clearStartingSquare(
 	fenString: ParsedFEN,

@@ -1,41 +1,39 @@
 import { useState, useEffect, useRef } from "react";
 
-import { clearSquaresStyling, getRank } from "../../../../utils/boardUtils.ts";
+import { clearSquaresStyling, getRank } from "../../../../utils/boardUtils";
 
 import {
 	cancelPromotion,
 	handlePromotionCaptureStorage,
 	preparePawnPromotion,
-} from "../../passAndPlay/utils/promotion.ts";
+} from "../../passAndPlay/utils/promotion";
 
 import { BotChessboardProps } from "../../../../interfaces/chessboard.js";
-import {
-	ChessboardSquareIndex,
-	OptionalValue,
-} from "../../../../shared/types/utility.types.js";
-import {
-	isObjEmpty,
-	parseWebsocketUrl,
-} from "../../../../utils/generalUtils.ts";
-import usePieceAnimation from "../../../../shared/hooks/usePieceAnimation.ts";
+import { isObjEmpty, parseWebsocketUrl } from "../../../../utils/generalUtils";
+import usePieceAnimation from "../../../../shared/hooks/usePieceAnimation";
 import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
-} from "../../../../interfaces/chessboardGrid.ts";
-import ChessboardGrid from "../../../../shared/components/chessboard/ChessboardGrid.tsx";
-import useWebsocketLifecycle from "../../../../shared/hooks/websocket/useWebsocketLifecycle.ts";
-import Square from "../../../../shared/components/chessboard/Square.tsx";
-import useWebsocketWithLifecycle from "../../../../shared/hooks/websocket/useWebsocketWithLifecycle.ts";
+} from "../../../../interfaces/chessboardGrid";
+import ChessboardGrid from "../../../../shared/components/chessboard/ChessboardGrid";
+import useWebsocketLifecycle from "../../../../shared/hooks/websocket/useWebsocketLifecycle";
+import Square from "../../../../shared/components/chessboard/Square";
+import useWebsocketWithLifecycle from "../../../../shared/hooks/websocket/useWebsocketWithLifecycle";
+import { fetchLegalMoves } from "../../common/utils/moveService";
+import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
+import { BotGameWebSocketEventTypes } from "../botGameEvents.enums";
+import { ChessboardSquareIndex } from "../../../../shared/types/chessTypes/board.types";
 import {
-	PieceColor,
+	ParsedFEN,
+	MoveInfo,
+} from "../../../../shared/types/chessTypes/gameState.types";
+import { MoveMethods } from "../../../../shared/types/chessTypes/moveMethods.enums";
+import {
 	PieceInfo,
+	PieceColor,
 	PieceType,
-} from "../../common/types/pieces.types.ts";
-import { MoveInfo, ParsedFEN } from "../../common/types/gameState.types.ts";
-import { fetchLegalMoves } from "../../common/utils/moveService.ts";
-import { isPawnPromotion } from "../../common/utils/moveTypeDetection.ts";
-import { MoveMethods } from "../../common/types/moveMethods.enums.ts";
-import { BotGameWebSocketEventTypes } from "../botGameEvents.enums.ts";
+} from "../../../../shared/types/chessTypes/pieces.types";
+import { OptionalValue } from "../../../../shared/types/utility.types";
 function BotChessboard({
 	parsed_fen_string,
 	orientation,
