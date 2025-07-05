@@ -17,15 +17,15 @@ import {
 	isObjEmpty,
 	parseWebsocketUrl,
 } from "../../../../utils/generalUtils.ts";
-import usePieceAnimation from "../../../../hooks/usePieceAnimation.ts";
+import usePieceAnimation from "../../../../shared/hooks/usePieceAnimation.ts";
 import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
 } from "../../../../interfaces/chessboardGrid.ts";
 import ChessboardGrid from "../../../../shared/components/chessboard/ChessboardGrid.tsx";
-import useWebsocketLifecycle from "../../../../hooks/useWebsocketLifecycle.ts";
+import useWebsocketLifecycle from "../../../../shared/hooks/websocket/useWebsocketLifecycle.ts";
 import Square from "../../../../shared/components/chessboard/Square.tsx";
-import useWebsocketWithLifecycle from "../../../../hooks/useWebsocketWithLifecycle.ts";
+import useWebsocketWithLifecycle from "../../../../shared/hooks/websocket/useWebsocketWithLifecycle.ts";
 import {
 	PieceColor,
 	PieceInfo,

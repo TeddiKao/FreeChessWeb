@@ -35,7 +35,7 @@ import {
 	ChessboardSquareIndex,
 	OptionalValue,
 } from "../../../types/general.js";
-import usePieceAnimation from "../../../hooks/usePieceAnimation.ts";
+import usePieceAnimation from "../../../shared/hooks/usePieceAnimation.ts";
 import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
 import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";
 import ChessboardGrid from "../../../shared/components/chessboard/ChessboardGrid.tsx";
