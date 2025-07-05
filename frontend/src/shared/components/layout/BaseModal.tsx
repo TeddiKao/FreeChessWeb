@@ -2,12 +2,12 @@ import "../../styles/layout/base-modal.scss";
 import { ReactNode } from "react";
 import ReactDom from "react-dom";
 
-type ModalWrapperProps = {
+type BaseModalProps = {
 	children: ReactNode;
 	visible: boolean;
 };
 
-function BaseModal({ children, visible }: ModalWrapperProps) {
+function BaseModal({ children, visible }: BaseModalProps) {
 	const portalRoot = document.getElementById("portal");
 	if (!portalRoot) {
 		return null;
