@@ -31,10 +31,6 @@ import {
 
 import { getOppositeColor } from "./utils/general.ts";
 import { ChessboardProps } from "../../../interfaces/chessboard.js";
-import {
-	ChessboardSquareIndex,
-	OptionalValue,
-} from "../../../shared/types/utility.types.js";
 import usePieceAnimation from "../../../shared/hooks/usePieceAnimation.ts";
 import { convertToMilliseconds } from "../../../utils/timeUtils.ts";
 import { pieceAnimationTime } from "../../../constants/pieceAnimation.ts";
@@ -53,12 +49,12 @@ import {
 	CastlingSide,
 	MoveInfo,
 	ParsedFEN,
-} from "../../../shared/types/gameState.types.ts";
+} from "../../../shared/types/chessTypes/gameState.types.ts";
 import {
 	PieceColor,
 	PieceInfo,
 	PieceType,
-} from "../../../shared/types/pieces.types.ts";
+} from "../../../shared/types/chessTypes/pieces.types.ts";
 import {
 	getIsCheckmated,
 	getIsStalemated,
@@ -68,7 +64,9 @@ import {
 	GameEndedCauseSetterContext,
 	GameWinnerSetterContext,
 } from "./contexts/gameEndStateSetters.ts";
-import { MoveMethods } from "../../../shared/types/moveMethods.enums.ts";
+import { ChessboardSquareIndex } from "../../../shared/types/chessTypes/board.types.ts";
+import { OptionalValue } from "../../../shared/types/utility.types.ts";
+import { MoveMethods } from "../../../shared/types/chessTypes/moveMethods.enums.ts";
 
 function Chessboard({
 	parsed_fen_string,
