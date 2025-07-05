@@ -1,5 +1,5 @@
 import "../../styles/chessboard/chessboard.scss";
-import { getFile, getRank, isSquareLight } from "../../../utils/boardUtils";
+import { getFile, getRank, isSquareLight } from "../../utils/boardUtils";
 import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,

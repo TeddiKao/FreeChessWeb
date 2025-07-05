@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import "../styles/select-time-control.scss";
 
-import { capitaliseFirstLetter } from "../../../utils/generalUtils";
-import { displayTimeControl } from "../../../utils/timeUtils";
+import { capitaliseFirstLetter } from "../../../shared/utils/generalUtils";
+import { displayTimeControl } from "../../../shared/utils/timeUtils";
 
 import DashboardNavbar from "../../../shared/components/DashboardNavbar/DashboardNavbar";
 import DisplayChessboard from "../components/DisplayChessboard";

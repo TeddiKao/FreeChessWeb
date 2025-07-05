@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { StateSetterFunction } from "../types/utility.types";
-import { convertToMilliseconds } from "../../utils/timeUtils";
+import { convertToMilliseconds } from "../utils/timeUtils";
 
 import "../styles/message-box.scss";
 import {

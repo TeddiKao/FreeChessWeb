@@ -11,7 +11,7 @@ import {
 	SquareInfo,
 } from "../../../../shared/types/chessTypes/gameState.types";
 import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
-import { capitaliseFirstLetter } from "../../../../utils/generalUtils";
+import { capitaliseFirstLetter } from "../../../../shared/utils/generalUtils";
 
 function getKingStartingSquare(color: string): number {
 	color = color.toLowerCase();

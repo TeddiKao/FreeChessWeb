@@ -1,5 +1,5 @@
 import { ReactNode, useState, createContext } from "react";
-import { parseWebsocketUrl } from "../../utils/generalUtils";
+import { parseWebsocketUrl } from "../../shared/utils/generalUtils";
 import ChallengeNotification from "../../features/challenge/components/ChallengeNotification";
 import { TimeControl } from "../../shared/types/time.types";
 import { ChallengeRelationships } from "../../features/challenge/challengerInfo.types";

@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 
-import { clearSquaresStyling, getRank } from "../../../../utils/boardUtils";
+import {
+	clearSquaresStyling,
+	getRank,
+} from "../../../../shared/utils/boardUtils.js";
 
 import {
 	cancelPromotion,
@@ -9,7 +12,10 @@ import {
 } from "../../passAndPlay/utils/promotion";
 
 import { BotChessboardProps } from "../../../../interfaces/chessboard.js";
-import { isObjEmpty, parseWebsocketUrl } from "../../../../utils/generalUtils";
+import {
+	isObjEmpty,
+	parseWebsocketUrl,
+} from "../../../../shared/utils/generalUtils.js";
 import usePieceAnimation from "../../../../shared/hooks/usePieceAnimation";
 import {
 	EmptySquareRenderParams,

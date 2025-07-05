@@ -1,4 +1,4 @@
-import { capitaliseFirstLetter } from "../../../../utils/generalUtils";
+import { capitaliseFirstLetter } from "../../../../shared/utils/generalUtils";
 import "../../common/styles/game-over-modal.scss";
 
 type LocalGameOverModalProps = {

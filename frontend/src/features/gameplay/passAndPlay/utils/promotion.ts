@@ -14,7 +14,7 @@ import {
 	RefObject,
 	StateSetterFunction,
 } from "../../../../shared/types/utility.types";
-import { getFile, getRank } from "../../../../utils/boardUtils";
+import { getFile, getRank } from "../../../../shared/utils/boardUtils";
 import { fetchMoveIsValid } from "../../common/utils/moveService";
 import {
 	isPawnPromotion,

@@ -1,5 +1,8 @@
 import { useCallback, useMemo, useRef } from "react";
-import { clearSquaresStyling, getRank } from "../../../../utils/boardUtils";
+import {
+	clearSquaresStyling,
+	getRank,
+} from "../../../../shared/utils/boardUtils";
 
 import useAnimationLogic from "./useAnimationLogic";
 import usePlayerClocks from "./usePlayerClocks";

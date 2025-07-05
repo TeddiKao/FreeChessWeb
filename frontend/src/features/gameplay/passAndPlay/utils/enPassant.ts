@@ -9,7 +9,7 @@ import {
 	PieceType,
 } from "../../../../shared/types/chessTypes/pieces.types";
 import { OptionalValue } from "../../../../shared/types/utility.types";
-import { getRank } from "../../../../utils/boardUtils";
+import { getRank } from "../../../../shared/utils/boardUtils";
 
 function resetEnPassantTargetSquare(fenString: ParsedFEN): ParsedFEN {
 	const updatedFENString: ParsedFEN = structuredClone(fenString);

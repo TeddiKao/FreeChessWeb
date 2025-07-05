@@ -1,5 +1,5 @@
 import { TimeControl } from "../../../shared/types/time.types";
-import { displayTimeControl } from "../../../utils/timeUtils";
+import { displayTimeControl } from "../../../shared/utils/timeUtils";
 import BaseModal from "../../../shared/components/layout/BaseModal";
 
 import "../styles/challenge-notification.scss";

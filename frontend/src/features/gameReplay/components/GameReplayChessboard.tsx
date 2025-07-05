@@ -3,8 +3,8 @@ import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
 } from "../../../interfaces/chessboardGrid";
-import { getSquareClass } from "../../../utils/boardUtils";
-import { capitaliseFirstLetter } from "../../../utils/generalUtils";
+import { getSquareClass } from "../../../shared/utils/boardUtils";
+import { capitaliseFirstLetter } from "../../../shared/utils/generalUtils";
 import ChessboardGrid from "../../../shared/components/chessboard/ChessboardGrid";
 
 function GameReplayChessboard({

@@ -4,10 +4,10 @@ import { useParams } from "react-router-dom";
 import DashboardNavbar from "../../../shared/components/DashboardNavbar/DashboardNavbar";
 
 import "../styles/view-game.scss";
-import { playAudio } from "../../../utils/audioUtils";
-import { isNullOrUndefined } from "../../../utils/generalUtils";
+import { playAudio } from "../../../shared/utils/audioUtils";
+import { isNullOrUndefined } from "../../../shared/utils/generalUtils";
 import { OptionalValue } from "../../../shared/types/utility.types";
-import { convertToMilliseconds } from "../../../utils/timeUtils";
+import { convertToMilliseconds } from "../../../shared/utils/timeUtils";
 import { pieceAnimationTime } from "../../../shared/constants/pieceAnimation";
 import usePieceAnimation from "../../../shared/hooks/usePieceAnimation";
 import GameReplayChessboard from "../components/GameReplayChessboard";

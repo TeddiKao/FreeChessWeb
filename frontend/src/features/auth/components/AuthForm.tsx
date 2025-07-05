@@ -5,7 +5,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { SignupErrors } from "../validationErrors";
-import { isNullOrUndefined } from "../../../utils/generalUtils";
+import { isNullOrUndefined } from "../../../shared/utils/generalUtils";
 import AuthLoadingScreen from "../components/AuthLoadingScreen";
 import api from "../../../app/api";
 
