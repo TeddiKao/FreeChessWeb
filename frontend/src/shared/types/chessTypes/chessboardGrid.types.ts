@@ -1,8 +1,8 @@
 interface EmptySquareRenderParams {
-    row: number;
+	row: number;
 	column: number;
 	squareColor: string;
-    squareIndex: number;
+	squareIndex: number;
 }
 
 interface FilledSquareRenderParams extends EmptySquareRenderParams {
@@ -13,4 +13,4 @@ interface FilledSquareRenderParams extends EmptySquareRenderParams {
 }
 
 
-export type { EmptySquareRenderParams, FilledSquareRenderParams }
+export type { EmptySquareRenderParams, FilledSquareRenderParams };
