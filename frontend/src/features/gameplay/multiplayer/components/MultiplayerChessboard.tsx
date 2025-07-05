@@ -1,10 +1,12 @@
 // Basic imports like CSS files and components
-import "../../../../styles/components/chessboard/chessboard.scss";
-import ChessboardGrid from "../../../../components/chessboard/ChessboardGrid";
-import Square from "../../../../components/chessboard/Square";
+import ChessboardGrid from "../../../../shared/components/chessboard/ChessboardGrid";
+import Square from "../../../../shared/components/chessboard/Square";
 
 // Types, interfaces, enums
-import { FilledSquareRenderParams, EmptySquareRenderParams } from "../../../../interfaces/chessboardGrid";
+import {
+	FilledSquareRenderParams,
+	EmptySquareRenderParams,
+} from "../../../../interfaces/chessboardGrid";
 import { PieceColor, PieceType } from "../../common/types/pieces.types";
 import { MultiplayerChessboardProps } from "../types/chessboardProps.types";
 

@@ -1,7 +1,7 @@
 import { TimeControl } from "../../../types/gameSetup";
 import { displayTimeControl } from "../../../utils/timeUtils";
-import LoadingSpinner from "../../../components/common/LoadingSpinner";
-import ModalWrapper from "../../../components/wrappers/ModalWrapper";
+import LoadingSpinner from "../../../shared/components/LoadingSpinner";
+import BaseModal from "../../../shared/components/layout/BaseModal";
 
 import "../styles/challenge-response-wait-screen.scss";
 
@@ -15,7 +15,7 @@ function ChallengeResponseWaitScreen({
 	timeControlInfo,
 }: ChallengeResponseWaitScreenProps) {
 	return (
-		<ModalWrapper visible={visible}>
+		<BaseModal visible={visible}>
 			<div className="challenge-response-wait-screen-container">
 				<h3 className="challenge-response-status">
 					Waiting for response
@@ -28,7 +28,7 @@ function ChallengeResponseWaitScreen({
 					</p>
 				)}
 			</div>
-		</ModalWrapper>
+		</BaseModal>
 	);
 }
 

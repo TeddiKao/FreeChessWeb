@@ -1,5 +1,5 @@
-import LoadingSpinner from "../../../components/common/LoadingSpinner";
-import ModalWrapper from "../../../components/wrappers/ModalWrapper";
+import LoadingSpinner from "../../../shared/components/LoadingSpinner";
+import BaseModal from "../../../shared/components/layout/BaseModal";
 import { TimeControl } from "../../../types/gameSetup";
 import { displayTimeControl } from "../../../utils/timeUtils";
 import "../styles/matchmaking-shortcut-screen.scss";
@@ -14,7 +14,7 @@ function MatchmakingShortcutScreen({
 	timeControlInfo,
 }: MatchmakingShortcutScreenProps) {
 	return (
-		<ModalWrapper visible={visible}>
+		<BaseModal visible={visible}>
 			<div className="matchmaking-shortcut-screen-container">
 				<h3 className="matchmaking-status">Finding match</h3>
 				<LoadingSpinner />
@@ -22,7 +22,7 @@ function MatchmakingShortcutScreen({
 					{displayTimeControl(timeControlInfo)}
 				</p>
 			</div>
-		</ModalWrapper>
+		</BaseModal>
 	);
 }
 

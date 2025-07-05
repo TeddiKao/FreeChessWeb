@@ -1,6 +1,6 @@
-import LoadingSpinner from "../../../components/common/LoadingSpinner";
+import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import "../styles/auth-loading-screen.scss";
-import ModalWrapper from "../../../components/wrappers/ModalWrapper";
+import BaseModal from "../../../shared/components/layout/BaseModal";
 
 type AuthLoadingScreenProps = {
 	visible: boolean;
@@ -21,13 +21,13 @@ function AuthLoadingScreen({ visible, authMethod }: AuthLoadingScreenProps) {
 	}
 
 	return (
-		<ModalWrapper visible={visible}>
+		<BaseModal visible={visible}>
 			<div className="auth-loading-screen-container">
 				<h3 className="auth-method">{getLoadingText()}</h3>
 				<LoadingSpinner />
 				<p className="please-wait-text">Please wait</p>
 			</div>
-		</ModalWrapper>
+		</BaseModal>
 	);
 }
 

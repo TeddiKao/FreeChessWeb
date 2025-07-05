@@ -1,11 +1,7 @@
 import { useEffect, useRef } from "react";
 
-import "../../styles/components/chessboard/promotion-popup.scss";
-import {
-	PieceColor,
-	PieceType,
-} from "../../features/gameplay/multiplayer/gameLogic.types";
-import { OptionalValue } from "../../types/general";
+import "../../styles/chessboard/promotion-popup.scss";
+import { PieceColor, PieceType } from "../../../features/gameplay/common/types/pieces.types";
 
 type PromotionCancelFunction = (color: PieceColor) => void;
 

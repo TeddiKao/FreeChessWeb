@@ -2,16 +2,16 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
 import "../styles/play.scss";
-import "../../../../styles/components/chessboard/board-actions.scss";
+import "../../../../shared/styles/chessboard/board-actions.scss";
 
 import GameOverModal from "../modals/GameOverModal.tsx";
 import GameplaySettings from "../../../settings/gameplay/GameplaySettings.tsx";
-import ModalWrapper from "../../../../components/wrappers/ModalWrapper.js";
+import BaseModal from "../../../../shared/components/layout/BaseModal.js";
 import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings.ts";
-import MessageBox from "../../../../components/common/MessageBox.tsx";
+import MessageBox from "../../../../shared/components/MessageBox.tsx";
 import { MessageBoxTypes } from "../../../../types/messageBox.ts";
 import DrawOfferPopup from "../popups/DrawOfferPopup.tsx";
-import DashboardNavbar from "../../../../components/common/DashboardNavbar/DashboardNavbar.tsx";
+import DashboardNavbar from "../../../../shared/components/DashboardNavbar/DashboardNavbar.tsx";
 import { getOppositeColor } from "../../passAndPlay/utils/general.ts";
 import useMultiplayerGameplayLogic from "../hooks/useMultiplayerGameplayLogic.ts";
 import { isNullOrUndefined } from "../../../../utils/generalUtils.ts";
@@ -233,12 +233,12 @@ function Play() {
 						blackPlayerUsername={blackPlayerUsername}
 					/>
 
-					<ModalWrapper visible={settingsVisible}>
+					<BaseModal visible={settingsVisible}>
 						<GameplaySettings
 							onClose={handleSettingsClose}
 							setGameplaySettings={setGameplaySettings}
 						/>
-					</ModalWrapper>
+					</BaseModal>
 
 					<div className="bottom-player-info">
 						<div className="bottom-player-captured-material">
