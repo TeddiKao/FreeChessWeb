@@ -1,12 +1,13 @@
-@use "../../../styles/global/mixins" as *;
-@use "../../../styles/global/variables";
+@use "../../../app/styles/mixins" as *;
+@use "../../../app/styles/variables";
 
 .screen-header {
 	margin-top: 8px;
 	margin-bottom: 8px;
 }
 
-.base-time-header, .increment-header {
+.base-time-header,
+.increment-header {
 	margin-top: 12px;
 	margin-bottom: 8px;
 }

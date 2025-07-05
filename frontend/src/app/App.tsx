@@ -5,7 +5,7 @@ import { DndProvider } from "react-dnd";
 import { MultiBackend } from "react-dnd-multi-backend";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
 
-import "../styles/global/global.scss";
+import "./styles/global.scss";
 import Login from "../features/auth/pages/Login";
 import Signup from "../features/auth/pages/Signup";
 import GameHistory from "../features/gameHistory/pages/GameHistory";

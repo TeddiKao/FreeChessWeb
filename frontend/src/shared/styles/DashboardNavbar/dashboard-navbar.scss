@@ -1,5 +1,4 @@
-@use "../../../styles/global/mixins" as *;
-@use "../../../styles/global/variables";
+@use "../../../app/styles/mixins" as *;
 
 .dashboard-navbar-container {
 	@include flex-column;
@@ -47,7 +46,7 @@
 
 .logout-option-container:hover {
 	cursor: pointer;
-    transition: background-color 0.25s ease;
+	transition: background-color 0.25s ease;
 	background-color: darken($color: hsl(0, 0%, 100%), $amount: 20%);
 }
 

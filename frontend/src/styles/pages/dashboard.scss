@@ -1,5 +1,5 @@
-@use "../global/mixins" as *;
-@use "../global/variables" as *;
+@use "../../app/styles/mixins" as *;
+@use "../../app/styles/variables";
 
 .dashboard-interface-container {
     margin-left: 64px;

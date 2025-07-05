@@ -1,10 +1,11 @@
-@use "../../../styles/global/mixins" as *;
-@use "../../../styles/global/variables" as *;
+@use "../../../app/styles/mixins" as *;
+@use "../../../app/styles/variables" as *;
 
-.chessboard-square, .previous-dropped-square, .previous-dragged-square {
+.chessboard-square,
+.previous-dropped-square,
+.previous-dragged-square {
 	height: 55px;
 	position: relative;
-	
 }
 
 .piece-image {

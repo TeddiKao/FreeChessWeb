@@ -1,5 +1,5 @@
-@use "../global/mixins.scss" as *;
-@use "../global/variables";
+@use "../../app/styles/mixins" as *;
+@use "../../app/styles/variables";
 
 .not-found-page-container {
 	@include flex-column;

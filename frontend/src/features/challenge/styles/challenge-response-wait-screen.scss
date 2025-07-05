@@ -1,4 +1,4 @@
-@use "../../../styles/global/mixins" as *;
+@use "../../../app/styles/mixins" as *;
 
 .challenge-response-wait-screen-container {
     @include page-center-xy;
