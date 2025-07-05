@@ -2,7 +2,7 @@ import DashboardNavbar from "../../../shared/components/DashboardNavbar/Dashboar
 import DashboardSuggestions from "./components/DashboardSuggestions";
 import UserGreeting from "./components/UserGreeting";
 
-import "../../../styles/pages/dashboard.scss";
+import "./styles/dashboard.scss";
 
 function Dashboard() {
 	return (
