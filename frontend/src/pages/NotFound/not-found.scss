@@ -1,0 +1,21 @@
+@use "../../app/styles/mixins" as *;
+@use "../../app/styles/variables";
+
+.not-found-page-container {
+	@include flex-column;
+	align-items: center;
+}
+
+.not-found-heading {
+	margin-bottom: 6px;
+}
+
+.home-page-link {
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 12px;
+	padding-bottom: 12px;
+
+	background-color: variables.$accent-color;
+	color: white;
+}
