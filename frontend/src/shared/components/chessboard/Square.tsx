@@ -10,7 +10,7 @@ import {
 	isSquareOnFileEdge,
 	isSquareOnRankEdge,
 } from "../../../utils/boardUtils.ts";
-import { OptionalValue } from "../../../types/general.ts";
+import { OptionalValue } from "../../types/utility.types.ts";
 import { capitaliseFirstLetter } from "../../../utils/generalUtils.ts";
 import { FilledSquareProps } from "../../../features/gameplay/common/types/squareProps.types.ts";
 

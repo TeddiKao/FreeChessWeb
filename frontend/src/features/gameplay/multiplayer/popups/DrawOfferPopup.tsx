@@ -1,5 +1,5 @@
 import "../styles/draw-offer-popup.scss";
-import { RefObject } from "../../../../types/general";
+import { RefObject } from "../../../../shared/types/utility.types";
 
 type DrawOfferPopupProps = {
 	visible: boolean;

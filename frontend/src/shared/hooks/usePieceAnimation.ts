@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChessboardSquareIndex, OptionalValue } from "../../types/general";
+import { ChessboardSquareIndex, OptionalValue } from "../types/utility.types";
 import {
 	calculateReplayXYTransform,
 	calculateXYTransform,

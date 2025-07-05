@@ -7,7 +7,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,
-} from "../../../../types/general";
+} from "../../../../shared/types/utility.types";
 import { isNullOrUndefined } from "../../../../utils/generalUtils";
 import { playAudio } from "../../../../utils/audioUtils";
 import { convertToMilliseconds } from "../../../../utils/timeUtils";

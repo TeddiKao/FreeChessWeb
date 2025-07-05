@@ -1,10 +1,13 @@
-import { MoveInfo, ParsedFEN } from "../features/gameplay/common/types/gameState.types.ts";
+import {
+	MoveInfo,
+	ParsedFEN,
+} from "../features/gameplay/common/types/gameState.types.ts";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,
 	RefObject,
 	StateSetterFunction,
-} from "../types/general.ts";
+} from "../shared/types/utility.types.ts";
 
 interface DisplayChessboardProps {
 	parsed_fen_string: ParsedFEN;

@@ -5,7 +5,7 @@ import {
 	OptionalValue,
 	RefObject,
 	StateSetterFunction,
-} from "../types/general";
+} from "../shared/types/utility.types";
 import { convertToMilliseconds } from "./timeUtils";
 
 function clearSquaresStyling(): void {

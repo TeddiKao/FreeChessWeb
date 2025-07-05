@@ -6,7 +6,7 @@ import DashboardNavbar from "../../../shared/components/DashboardNavbar/Dashboar
 import "../styles/view-game.scss";
 import { playAudio } from "../../../utils/audioUtils";
 import { isNullOrUndefined } from "../../../utils/generalUtils";
-import { OptionalValue } from "../../../types/general";
+import { OptionalValue } from "../../../shared/types/utility.types";
 import { convertToMilliseconds } from "../../../utils/timeUtils";
 import { pieceAnimationTime } from "../../../constants/pieceAnimation";
 import usePieceAnimation from "../../../shared/hooks/usePieceAnimation";
