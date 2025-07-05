@@ -1,5 +1,5 @@
-interface BasicWebSocketEventData {
+interface BaseWebsocketEventData {
 	type: string;
 }
 
-export type { BasicWebSocketEventData }
+export type { BaseWebsocketEventData }
