@@ -15,7 +15,7 @@ import Play from "../features/gameplay/multiplayer/pages/Play";
 import PassAndPlay from "../features/gameplay/passAndPlay/pages/PassAndPlay";
 import ViewGame from "../features/gameReplay/pages/ViewGame";
 import GameSetup from "../features/gameSetup/pages/GameSetup";
-import GuestHomePage from "../pages/GuestHomePage/GuestHomePage";
+import HomePage from "../pages/Home/HomePage";
 import NotFound from "../pages/NotFound";
 import Dashboard from "../pages/protected/Dashboard/DashboardPage";
 import TempRoute from "../pages/TempRoute";
@@ -39,7 +39,7 @@ function App() {
 				<ChallengeWebsocketProvider>
 					<DndProvider backend={MultiBackend} options={HTML5toTouch}>
 						<Routes>
-							<Route path="/" element={<GuestHomePage />} />
+							<Route path="/" element={<HomePage />} />
 							<Route
 								path="/login"
 								element={
