@@ -1,5 +1,5 @@
 import useUsername from "../../../../shared/hooks/useUsername";
-import { getLocalTimeHours } from "../../../../utils/timeUtils";
+import { getLocalTimeHours } from "../../../../shared/utils/timeUtils";
 import "../../../../styles/components/dashboard/user-greeting.scss";
 
 function UserGreeting() {

@@ -8,9 +8,9 @@ import {
 	ChessboardSquareIndex,
 	OptionalValue,
 } from "../../../../shared/types/utility.types";
-import { isNullOrUndefined } from "../../../../utils/generalUtils";
-import { playAudio } from "../../../../utils/audioUtils";
-import { convertToMilliseconds } from "../../../../utils/timeUtils";
+import { isNullOrUndefined } from "../../../../shared/utils/generalUtils";
+import { playAudio } from "../../../../shared/utils/audioUtils";
+import { convertToMilliseconds } from "../../../../shared/utils/timeUtils";
 import { pieceAnimationTime } from "../../../../shared/constants/pieceAnimation";
 import usePieceAnimation from "../../../../shared/hooks/usePieceAnimation";
 import LocalGameOverModal from "../../passAndPlay/modals/GameOverModal";

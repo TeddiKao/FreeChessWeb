@@ -1,4 +1,4 @@
-import { displayTimeControl } from "../../../utils/timeUtils";
+import { displayTimeControl } from "../../../shared/utils/timeUtils";
 import "../styles/matchmaking-screen.scss";
 import useMatchmakingLogic from "../hooks/useMatchmakingLogic";
 
@@ -35,10 +35,7 @@ function MatchmakingScreen({
 			<p className="matchmaking-time-control">
 				{displayTimeControl({ baseTime, increment })}
 			</p>
-			<button
-				onClick={cancelMatchmaking}
-				className="cancel-matchmaking"
-			>
+			<button onClick={cancelMatchmaking} className="cancel-matchmaking">
 				Cancel
 			</button>
 		</div>

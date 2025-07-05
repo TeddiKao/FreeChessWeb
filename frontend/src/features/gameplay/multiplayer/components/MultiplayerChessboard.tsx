@@ -14,7 +14,7 @@ import {
 import { MultiplayerChessboardProps } from "../types/chessboardProps.types";
 
 // Utils
-import { isNullOrUndefined } from "../../../../utils/generalUtils";
+import { isNullOrUndefined } from "../../../../shared/utils/generalUtils";
 
 function MultiplayerChessboard({
 	parsed_fen_string,

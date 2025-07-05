@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getUsername } from "../../utils/apiUtils";
+import { getUsername } from "../utils/apiUtils";
 
 function useUsername() {
 	const [username, setUsername] = useState<string | null>(null);

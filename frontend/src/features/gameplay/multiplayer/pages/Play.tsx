@@ -14,7 +14,7 @@ import DrawOfferPopup from "../popups/DrawOfferPopup";
 import DashboardNavbar from "../../../../shared/components/DashboardNavbar/DashboardNavbar";
 import { getOppositeColor } from "../../passAndPlay/utils/general";
 import useMultiplayerGameplayLogic from "../hooks/useMultiplayerGameplayLogic";
-import { isNullOrUndefined } from "../../../../utils/generalUtils";
+import { isNullOrUndefined } from "../../../../shared/utils/generalUtils.js";
 import CapturedMaterial from "../../common/components/CapturedMaterial";
 import GameplayActionButtons from "../../common/components/gameplaySidePanel/GameplayActionButtons";
 import MoveListPanel from "../../common/components/gameplaySidePanel/MoveListPanel";

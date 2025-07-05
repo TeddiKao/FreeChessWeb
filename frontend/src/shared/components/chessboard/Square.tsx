@@ -9,9 +9,9 @@ import {
 	isSquareLight,
 	isSquareOnFileEdge,
 	isSquareOnRankEdge,
-} from "../../../utils/boardUtils";
+} from "../../utils/boardUtils";
 import { OptionalValue } from "../../types/utility.types";
-import { capitaliseFirstLetter } from "../../../utils/generalUtils";
+import { capitaliseFirstLetter } from "../../utils/generalUtils";
 import { FilledSquareProps } from "../../types/squareProps.types";
 
 function Square({

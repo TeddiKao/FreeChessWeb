@@ -7,7 +7,7 @@ import {
 	CapturablePiecePlural,
 	PieceColor,
 } from "../../../../types/gameLogic";
-import { capitaliseFirstLetter } from "../../../../utils/generalUtils";
+import { capitaliseFirstLetter } from "../../../../shared/utils/generalUtils";
 
 import "../styles/captured-material.scss";
 import { pluralToSingularPieceMap } from "../../../../shared/constants/pieceMappings";

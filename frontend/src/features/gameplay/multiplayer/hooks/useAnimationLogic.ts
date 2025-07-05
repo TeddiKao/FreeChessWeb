@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { animatePieceImage } from "../../../../utils/boardUtils";
+import { animatePieceImage } from "../../../../shared/utils/boardUtils";
 import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
 import { ChessboardSquareIndex } from "../../../../shared/types/board.types";
 

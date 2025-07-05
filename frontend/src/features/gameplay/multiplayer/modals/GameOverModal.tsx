@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import "../../common/styles/game-over-modal.scss";
 import { ChallengeWebsocketContext } from "../../../../app/providers/ChallengeWebsocketProvider";
 import useUsername from "../../../../shared/hooks/useUsername";
-import { capitaliseFirstLetter } from "../../../../utils/generalUtils";
+import { capitaliseFirstLetter } from "../../../../shared/utils/generalUtils";
 import { TimeControl } from "../../../../shared/types/time.types";
 import useMatchmakingLogic from "../../../matchmaking/hooks/useMatchmakingLogic";
 import MatchmakingShortcutScreen from "../../../matchmaking/components/MatchmakingShortcutScreen";

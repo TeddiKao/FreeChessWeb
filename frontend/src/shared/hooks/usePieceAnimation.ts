@@ -3,8 +3,8 @@ import { ChessboardSquareIndex, OptionalValue } from "../types/utility.types";
 import {
 	calculateReplayXYTransform,
 	calculateXYTransform,
-} from "../../utils/boardUtils";
-import { convertToMilliseconds } from "../../utils/timeUtils";
+} from "../utils/boardUtils";
+import { convertToMilliseconds } from "../utils/timeUtils";
 import { pieceAnimationTime } from "../constants/pieceAnimation";
 import { PieceColor } from "../features/gameplay/multiplayer/gameLogic.types";
 

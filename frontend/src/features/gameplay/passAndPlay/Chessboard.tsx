@@ -3,9 +3,9 @@ import { useState, useEffect, useContext, useRef } from "react";
 import {
 	clearSquaresStyling,
 	getSquareExists,
-} from "../../../utils/boardUtils";
+} from "../../../shared/utils/boardUtils.js";
 
-import { playAudio } from "../../../utils/audioUtils";
+import { playAudio } from "../../../shared/utils/audioUtils.js";
 
 import { disableCastling, handleCastling, isCastling } from "./utils/castling";
 
@@ -28,7 +28,7 @@ import {
 import { getOppositeColor } from "./utils/general";
 import { ChessboardProps } from "../../../interfaces/chessboard.js";
 import usePieceAnimation from "../../../shared/hooks/usePieceAnimation";
-import { convertToMilliseconds } from "../../../utils/timeUtils";
+import { convertToMilliseconds } from "../../../shared/utils/timeUtils.js";
 import { pieceAnimationTime } from "../../../shared/constants/pieceAnimation.js";
 import ChessboardGrid from "../../../shared/components/chessboard/ChessboardGrid";
 import {
