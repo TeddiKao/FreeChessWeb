@@ -11,7 +11,7 @@ import {
 import { isNullOrUndefined } from "../../../../utils/generalUtils";
 import { playAudio } from "../../../../utils/audioUtils";
 import { convertToMilliseconds } from "../../../../utils/timeUtils";
-import { pieceAnimationTime } from "../../../../constants/pieceAnimation";
+import { pieceAnimationTime } from "../../../../shared/constants/pieceAnimation";
 import usePieceAnimation from "../../../../shared/hooks/usePieceAnimation";
 import LocalGameOverModal from "../../passAndPlay/modals/GameOverModal";
 import DashboardNavbar from "../../../../shared/components/DashboardNavbar/DashboardNavbar";

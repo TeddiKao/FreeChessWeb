@@ -10,7 +10,7 @@ import {
 import { capitaliseFirstLetter } from "../../../../utils/generalUtils";
 
 import "../styles/captured-material.scss";
-import { pluralToSingularPieceMap } from "../../../../constants/pieceMappings";
+import { pluralToSingularPieceMap } from "../../../../shared/constants/pieceMappings";
 
 type CapturedMaterialProps = {
 	capturedPiecesList: CapturedPiecesList;

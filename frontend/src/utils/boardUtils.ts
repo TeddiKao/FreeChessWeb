@@ -1,4 +1,4 @@
-import { pieceAnimationTime } from "../constants/pieceAnimation";
+import { pieceAnimationTime } from "../shared/constants/pieceAnimation";
 import { PieceColor } from "../features/gameplay/multiplayer/gameLogic.types";
 import {
 	ChessboardSquareIndex,

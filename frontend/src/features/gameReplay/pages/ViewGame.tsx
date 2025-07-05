@@ -8,7 +8,7 @@ import { playAudio } from "../../../utils/audioUtils";
 import { isNullOrUndefined } from "../../../utils/generalUtils";
 import { OptionalValue } from "../../../shared/types/utility.types";
 import { convertToMilliseconds } from "../../../utils/timeUtils";
-import { pieceAnimationTime } from "../../../constants/pieceAnimation";
+import { pieceAnimationTime } from "../../../shared/constants/pieceAnimation";
 import usePieceAnimation from "../../../shared/hooks/usePieceAnimation";
 import GameReplayChessboard from "../components/GameReplayChessboard";
 import MoveListPanel from "../../gameplay/common/components/gameplaySidePanel/MoveListPanel";

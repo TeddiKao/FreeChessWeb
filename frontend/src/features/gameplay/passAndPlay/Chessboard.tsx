@@ -29,7 +29,7 @@ import { getOppositeColor } from "./utils/general";
 import { ChessboardProps } from "../../../interfaces/chessboard.js";
 import usePieceAnimation from "../../../shared/hooks/usePieceAnimation";
 import { convertToMilliseconds } from "../../../utils/timeUtils";
-import { pieceAnimationTime } from "../../../constants/pieceAnimation";
+import { pieceAnimationTime } from "../../../shared/constants/pieceAnimation.js";
 import ChessboardGrid from "../../../shared/components/chessboard/ChessboardGrid";
 import {
 	EmptySquareRenderParams,
