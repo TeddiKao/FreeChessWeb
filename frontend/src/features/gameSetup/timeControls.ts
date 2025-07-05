@@ -1,4 +1,4 @@
-import { TimeControl } from "../../types/gameSetup.ts";
+import { TimeControl } from "../../shared/types/time.types.ts";
 
 const bulletTimeControls: Array<TimeControl> = [
 	{

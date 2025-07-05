@@ -1,4 +1,4 @@
-import { TimeControl } from "../../../types/gameSetup";
+import { TimeControl } from "../../../shared/types/time.types";
 import { displayTimeControl } from "../../../utils/timeUtils";
 import BaseModal from "../../../shared/components/layout/BaseModal";
 

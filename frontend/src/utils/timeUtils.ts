@@ -1,6 +1,6 @@
 import { floor } from "lodash";
 import { padZero } from "./generalUtils.ts";
-import { TimeDuration, TimeControl } from "../types/gameSetup.ts";
+import { TimeDuration, TimeControl } from "../shared/types/time.types.ts";
 import { roundToNearest } from "./numberUtils.ts";
 
 function convertTimeControlTime(time: number) {
@@ -75,5 +75,5 @@ export {
 	convertTimeControlToSeconds,
 	convertToMilliseconds,
 	getLocalTimeHours,
-	getLowTimeThreshold
+	getLowTimeThreshold,
 };
