@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";;
+import { useState, useEffect, useRef } from "react";
 
 import { clearSquaresStyling, getRank } from "../../../../utils/boardUtils.ts";
 
