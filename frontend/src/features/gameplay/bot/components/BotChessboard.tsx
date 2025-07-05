@@ -1,11 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-import "../../../../styles/components/chessboard/chessboard.scss";
-
-import {
-	clearSquaresStyling,
-	getRank,
-} from "../../../../utils/boardUtils.ts";
+import { clearSquaresStyling, getRank } from "../../../../utils/boardUtils.ts";
 
 import {
 	cancelPromotion,
@@ -27,9 +22,9 @@ import {
 	EmptySquareRenderParams,
 	FilledSquareRenderParams,
 } from "../../../../interfaces/chessboardGrid.ts";
-import ChessboardGrid from "../../../../components/chessboard/ChessboardGrid.tsx";
+import ChessboardGrid from "../../../../shared/components/chessboard/ChessboardGrid.tsx";
 import useWebsocketLifecycle from "../../../../hooks/useWebsocketLifecycle.ts";
-import Square from "../../../../components/chessboard/Square.tsx";
+import Square from "../../../../shared/components/chessboard/Square.tsx";
 import useWebsocketWithLifecycle from "../../../../hooks/useWebsocketWithLifecycle.ts";
 import {
 	PieceColor,

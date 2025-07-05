@@ -1,20 +1,18 @@
 import { DragPreviewImage, useDrag, useDrop } from "react-dnd";
 
-import "../../styles/components/chessboard/square.scss";
+import "../../styles/chessboard/square.scss";
 import PromotionPopup from "./PromotionPopup.tsx";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	getFile,
 	getRank,
 	isSquareLight,
 	isSquareOnFileEdge,
 	isSquareOnRankEdge,
-} from "../../utils/boardUtils";
-import { SquareProps } from "../../interfaces/chessboard.ts";
-import { OptionalValue } from "../../types/general.ts";
-import { capitaliseFirstLetter } from "../../utils/generalUtils.ts";
-import useAnimationLogic from "../../features/gameplay/multiplayer/hooks/useAnimationLogic.ts";
-import { PieceColor } from "../../features/gameplay/multiplayer/gameLogic.types.ts";
+} from "../../../utils/boardUtils.ts";
+import { OptionalValue } from "../../../types/general.ts";
+import { capitaliseFirstLetter } from "../../../utils/generalUtils.ts";
+import { FilledSquareProps } from "../../../features/gameplay/common/types/squareProps.types.ts";
 
 function Square({
 	squareNumber,
@@ -37,7 +35,7 @@ function Square({
 	clickedSquare,
 	animationRef,
 	animatingPieceSquare: animationSquare,
-}: SquareProps) {
+}: FilledSquareProps) {
 	let startingSquare: OptionalValue<string> = null;
 
 	const [popupIsOpen, setPopupIsOpen] = useState<boolean>(

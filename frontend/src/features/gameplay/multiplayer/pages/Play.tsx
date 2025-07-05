@@ -2,7 +2,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
 import "../styles/play.scss";
-import "../../../../styles/components/chessboard/board-actions.scss";
+import "../../../../shared/styles/chessboard/board-actions.scss";
 
 import GameOverModal from "../modals/GameOverModal.tsx";
 import GameplaySettings from "../../../settings/gameplay/GameplaySettings.tsx";
