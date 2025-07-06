@@ -1,4 +1,4 @@
-import "../styles/timer.scss";
+import "../../styles/chessElements/timer.scss";
 import { formatTime, getLowTimeThreshold } from "../../utils/timeUtils";
 
 type TimerProps = {

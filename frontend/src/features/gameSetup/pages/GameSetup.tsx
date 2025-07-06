@@ -7,7 +7,7 @@ import { displayTimeControl } from "../../../shared/utils/timeUtils";
 
 import DashboardNavbar from "../../../shared/components/DashboardNavbar/DashboardNavbar";
 import DisplayChessboard from "../components/DisplayChessboard";
-import Timer from "../../gameplay/common/components/Timer";
+import Timer from "../../../shared/components/chessElements/Timer";
 import { ParsedFEN } from "../../../shared/types/chessTypes/gameState.types";
 import { fetchFen } from "../../gameplay/passAndPlay/utils/passAndPlayApi";
 import CustomTimeControlScreen from "../components/CustomTimeControlScreen";

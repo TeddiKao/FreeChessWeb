@@ -1,9 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
-import "../../styles/gameplaySidePanel/gameplay-action-buttons.scss";
+import "../../../styles/chessElements/gameplaySidePanel/gameplay-action-buttons.scss";
 import { RefObject, StateSetterFunction } from "../../../types/utility.types";
-import useReactiveRef from "../../../hooks/useReactiveRef";
-import useWebSocket from "../../../hooks/websocket/useWebsocket";
 import { websocketBaseURL } from "../../../constants/urls";
 import ConfirmationPopup from "../../ConfirmationPopup";
 import useWebsocketWithLifecycle from "../../../hooks/websocket/useWebsocketWithLifecycle";

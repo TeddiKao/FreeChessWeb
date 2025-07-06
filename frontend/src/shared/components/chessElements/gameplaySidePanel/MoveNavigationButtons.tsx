@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import "../../styles/gameplaySidePanel/gameplay-action-buttons.scss";
+import "../../../styles/chessElements/gameplaySidePanel/move-navigation-buttons.scss";
 import {
 	OptionalValue,
 	RefObject,
@@ -7,7 +7,7 @@ import {
 } from "../../../types/utility.types";
 import { ArrowKeys } from "../../../enums/keyboardKeys";
 import { PositionList } from "../../../types/chessTypes/gameState.types";
-import { ChessboardSquareIndex } from "../../../../../shared/types/board.types";
+import { ChessboardSquareIndex } from "../../../types/chessTypes/board.types";
 
 type MoveNavigationButtonsProps = {
 	setPositionIndex: StateSetterFunction<number>;

@@ -15,11 +15,11 @@ import DashboardNavbar from "../../../../shared/components/DashboardNavbar/Dashb
 import { getOppositeColor } from "../../passAndPlay/utils/general";
 import useMultiplayerGameplayLogic from "../hooks/useMultiplayerGameplayLogic";
 import { isNullOrUndefined } from "../../../../shared/utils/generalUtils.js";
-import CapturedMaterial from "../../common/components/CapturedMaterial";
-import GameplayActionButtons from "../../common/components/gameplaySidePanel/GameplayActionButtons";
-import MoveListPanel from "../../common/components/gameplaySidePanel/MoveListPanel";
-import MoveNavigationButtons from "../../common/components/gameplaySidePanel/MoveNavigationButtons";
-import Timer from "../../common/components/Timer";
+import CapturedMaterial from "../../../../shared/components/chessElements/CapturedMaterial.js";
+import GameplayActionButtons from "../../../../shared/components/chessElements/gameplaySidePanel/GameplayActionButtons.js";
+import MoveListPanel from "../../../../shared/components/chessElements/gameplaySidePanel/MoveListPanel.js";
+import MoveNavigationButtons from "../../../../shared/components/chessElements/gameplaySidePanel/MoveNavigationButtons.js";
+import Timer from "../../../../shared/components/chessElements/Timer.js";
 import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
 import MultiplayerChessboard from "../components/MultiplayerChessboard";
 
