@@ -1,0 +1,60 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+tone_instructions: "constructive"
+review_instructions: |
+  Please use this structured format for all code reviews:
+  
+  ## ✨ Excellent Improvements
+  - Highlight positive changes and good practices observed
+  - Mention architectural improvements and technical excellence
+  - Acknowledge clean code patterns and smart solutions
+  
+  ## 🚨 Critical Issues (if any)
+  - List any blocking issues that prevent merge
+  - Provide specific examples with code snippets
+  - Focus on functionality, security, or performance problems
+  
+  ## 🔧 Recommended Fixes
+  - Provide concrete solutions for each critical issue
+  - Include code examples and implementation guidance
+  - Prioritize fixes by impact and complexity
+  
+  ## 💡 Optional Improvements
+  - Non-blocking suggestions for code enhancement
+  - Best practices recommendations
+  - Performance optimizations or refactoring ideas
+  
+  ## 📋 Final Verdict
+  - Clear approval status: ✅ Ready to merge OR ❌ Needs work
+  - Summary of required action items before merge
+  - Overall assessment of the PR quality
+  
+  Always start with positive observations, address issues constructively, 
+  and end with a clear verdict. Use emojis for visual clarity and maintain 
+  an encouraging, helpful tone throughout.
+
+reviews:
+  # Optional: Configure specific behaviors
+  request_changes_workflow: false
+  auto_review: 
+    enabled: true
+    auto_incremental_reviews: true
+    drafts: false
+  
+  # Optional: Path-based instructions for different areas
+  path_instructions:
+    - path: "frontend/**"
+      instructions: |
+        For frontend changes, also focus on:
+        - Component reusability and organization
+        - TypeScript usage and type safety
+        - Import path cleanliness
+        - UI/UX considerations
+        
+    - path: "backend/**"
+      instructions: |
+        For backend changes, also focus on:
+        - Django app configuration
+        - API design and security
+        - Database model relationships
+        - Error handling and validation
