@@ -18,7 +18,7 @@ import GameSetup from "../features/gameSetup/pages/GameSetup";
 import HomePage from "../pages/public/Home/HomePage";
 import NotFoundPage from "../pages/public/NotFound/NotFoundPage";
 import Dashboard from "../pages/protected/Dashboard/DashboardPage";
-import TempRoute from "../pages/TempRoute";
+import TempRoute from "../pages/helpers/TempRoute";
 import ChallengeWebsocketProvider from "./providers/ChallengeWebsocketProvider";
 import AuthenticationRoute from "./routing/AuthenticationRoute";
 import ProtectedRoute from "./routing/ProtectedRoute";
