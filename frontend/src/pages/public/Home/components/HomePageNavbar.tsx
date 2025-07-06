@@ -1,4 +1,4 @@
-import { githubLink } from "../../../shared/constants/urls";
+import { githubLink } from "../../../../shared/constants/urls";
 import "../styles/navbar.scss";
 
 function HomePageNavbar() {
