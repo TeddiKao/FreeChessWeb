@@ -4,10 +4,6 @@ import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySet
 import GameplaySettings from "../../../settings/gameplay/GameplaySettings";
 import BaseModal from "../../../../shared/components/layout/BaseModal";
 import { Navigate, useLocation } from "react-router-dom";
-import {
-	ChessboardSquareIndex,
-	OptionalValue,
-} from "../../../../shared/types/utility.types";
 import { isNullOrUndefined } from "../../../../shared/utils/generalUtils";
 import { playAudio } from "../../../../shared/utils/audioUtils";
 import { convertToMilliseconds } from "../../../../shared/utils/timeUtils";
@@ -26,6 +22,9 @@ import {
 	fetchBotGamePositionList,
 	fetchBotGameMoveList,
 } from "../botGameApiService";
+import BoardActions from "../../../../shared/components/chessboard/BoardActions";
+import { ChessboardSquareIndex } from "../../../../shared/types/chessTypes/board.types";
+import { OptionalValue } from "../../../../shared/types/utility.types";
 
 function PlayBot() {
 	const initialGameplaySettings = useGameplaySettings();
@@ -247,18 +246,10 @@ function PlayBot() {
 					/>
 				</div>
 
-				<div className="board-actions">
-					<img
-						onClick={toggleBoardOrientation}
-						className="flip-board-icon"
-						src="/icons/gameplay/boardActions/flip-board-icon.png"
-					/>
-					<img
-						className="settings-icon"
-						src="/icons/gameplay/boardActions/settings.svg"
-						onClick={handleSettingsDisplay}
-					/>
-				</div>
+				<BoardActions
+					toggleBoardOrientation={toggleBoardOrientation}
+					displaySettings={handleSettingsDisplay}
+				/>
 
 				<div className="gameplay-side-panel">
 					<MoveListPanel

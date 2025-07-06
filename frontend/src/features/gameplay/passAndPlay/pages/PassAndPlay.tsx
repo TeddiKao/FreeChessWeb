@@ -16,6 +16,7 @@ import {
 	GameEndedSetterContext,
 	GameWinnerSetterContext,
 } from "../contexts/gameEndStateSetters";
+import BoardActions from "../../../../shared/components/chessboard/BoardActions";
 
 function PassAndPlay() {
 	const [parsedFEN, setParsedFEN] = useState<ParsedFEN | null>(null);
@@ -105,18 +106,10 @@ function PassAndPlay() {
 							/>
 						</div>
 
-						<div className="board-actions">
-							<img
-								onClick={toggleBoardOrientation}
-								className="flip-board-icon"
-								src="/icons/gameplay/boardActions/flip-board-icon.png"
-							/>
-							<img
-								className="settings-icon"
-								src="/icons/gameplay/boardActions/settings.svg"
-								onClick={handleSettingsDisplay}
-							/>
-						</div>
+						<BoardActions
+							toggleBoardOrientation={toggleBoardOrientation}
+							displaySettings={handleSettingsDisplay}
+						/>
 					</div>
 				</GameWinnerSetterContext.Provider>
 			</GameEndedCauseSetterContext.Provider>
