@@ -1,5 +1,5 @@
-@use "../../../app//styles/mixins" as *;
-@use "../../../app/styles/variables";
+@use "../../../../app/styles/mixins" as *;
+@use "../../../../app/styles/variables";
 
 .game-over-modal-container {
 	@include parent-element-center-xy;
