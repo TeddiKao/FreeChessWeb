@@ -19,6 +19,7 @@ import {
 	fetchMoveList,
 } from "../../gameplay/common/utils/gameStateFetchApi";
 import { fetchGameWinner } from "../../gameplay/common/utils/gameResultFetchApi";
+import BoardActions from "../../../shared/components/chessboard/BoardActions";
 
 function ViewGame() {
 	const { gameId } = useParams();
@@ -186,13 +187,10 @@ function ViewGame() {
 					/>
 				</div>
 
-				<div className="board-actions">
-					<img
-						onClick={toggleBoardOrientation}
-						className="flip-board-icon"
-						src="/icons/gameplay/boardActions/flip-board-icon.png"
-					/>
-				</div>
+				<BoardActions
+					toggleBoardOrientation={toggleBoardOrientation}
+					showSettings={false}
+				/>
 
 				<div className="gameplay-side-panel">
 					<MoveListPanel

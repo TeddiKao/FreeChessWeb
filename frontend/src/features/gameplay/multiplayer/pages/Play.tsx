@@ -2,14 +2,12 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
 import "../styles/play.scss";
-import "../../../../shared/styles/chessboard/board-actions.scss";
 
 import GameOverModal from "../modals/GameOverModal";
 import GameplaySettings from "../../../settings/gameplay/GameplaySettings";
 import BaseModal from "../../../../shared/components/layout/BaseModal.js";
 import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings";
 import MessageBox from "../../../../shared/components/MessageBox";
-import { MessageBoxTypes } from "../../../../types/messageBox";
 import DrawOfferPopup from "../popups/DrawOfferPopup";
 import DashboardNavbar from "../../../../shared/components/DashboardNavbar/DashboardNavbar";
 import { getOppositeColor } from "../../passAndPlay/utils/general";
@@ -22,6 +20,8 @@ import MoveNavigationButtons from "../../../../shared/components/chessElements/g
 import Timer from "../../../../shared/components/chessElements/Timer.js";
 import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
 import MultiplayerChessboard from "../components/MultiplayerChessboard";
+import BoardActions from "../../../../shared/components/chessboard/BoardActions.js";
+import { MessageBoxTypes } from "../../../../shared/types/messageBox.types.js";
 
 function Play() {
 	const location = useLocation();
@@ -266,18 +266,10 @@ function Play() {
 					</div>
 				</div>
 
-				<div className="board-actions">
-					<img
-						onClick={toggleBoardOrientation}
-						className="flip-board-icon"
-						src="/icons/gameplay/boardActions/flip-board-icon.png"
-					/>
-					<img
-						className="settings-icon"
-						src="/icons/gameplay/boardActions/settings.svg"
-						onClick={handleSettingsDisplay}
-					/>
-				</div>
+				<BoardActions
+					displaySettings={handleSettingsDisplay}
+					toggleBoardOrientation={toggleBoardOrientation}
+				/>
 
 				<div className="gameplay-side-panel">
 					<MoveListPanel
