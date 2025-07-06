@@ -1,11 +1,19 @@
 import "../../styles/chessboard/board-actions.scss";
 
 interface BoardActionsProps {
-    displaySettings: () => void;
-    toggleBoardOrientation: () => void;
+	displaySettings: () => void;
+	toggleBoardOrientation: () => void;
+
+	showSettings?: boolean;
 }
 
-function BoardActions({ toggleBoardOrientation, displaySettings }: BoardActionsProps) {
+function BoardActions({
+	toggleBoardOrientation,
+	displaySettings,
+	showSettings,
+}: BoardActionsProps) {
+	const shouldShowSettings = showSettings ?? true;
+
 	return (
 		<div className="board-actions">
 			<img
@@ -13,11 +21,14 @@ function BoardActions({ toggleBoardOrientation, displaySettings }: BoardActionsP
 				className="flip-board-icon"
 				src="/icons/gameplay/boardActions/flip-board-icon.png"
 			/>
-			<img
-				className="settings-icon"
-				src="/icons/gameplay/boardActions/settings.svg"
-				onClick={displaySettings}
-			/>
+
+			{shouldShowSettings && (
+				<img
+					className="settings-icon"
+					src="/icons/gameplay/boardActions/settings.svg"
+					onClick={displaySettings}
+				/>
+			)}
 		</div>
 	);
 }
