@@ -1,7 +1,7 @@
 import "../../styles/chessboard/board-actions.scss";
 
 interface BoardActionsProps {
-	displaySettings: () => void;
+	displaySettings?: () => void;
 	toggleBoardOrientation: () => void;
 
 	showSettings?: boolean;
