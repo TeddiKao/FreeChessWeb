@@ -36,7 +36,9 @@ reviews:
 
   # Optional: Configure specific behaviors
   request_changes_workflow: true  # Request changes for critical issues
-  auto_review: true               # Enable automatic reviews
+  auto_review: 
+    enabled: true
+    drafts: false
   
   # Optional: Path-based instructions for different areas
   path_instructions:
