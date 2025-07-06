@@ -35,7 +35,7 @@ reviews:
     an encouraging, helpful tone throughout.
 
   # Optional: Configure specific behaviors
-  request_changes_workflow: true  # Request changes for critical issues
+  request_changes_workflow: false  # Request changes for critical issues
   auto_review: 
     enabled: true
     drafts: false
