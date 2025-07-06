@@ -4,9 +4,9 @@ import {
 	OptionalValue,
 	RefObject,
 	StateSetterFunction,
-} from "../../../../../shared/types/utility.types";
-import { ArrowKeys } from "../../../../../shared/enums/keyboardKeys";
-import { PositionList } from "../../../../../shared/types/chessTypes/gameState.types";
+} from "../../../types/utility.types";
+import { ArrowKeys } from "../../../enums/keyboardKeys";
+import { PositionList } from "../../../types/chessTypes/gameState.types";
 import { ChessboardSquareIndex } from "../../../../../shared/types/board.types";
 
 type MoveNavigationButtonsProps = {
