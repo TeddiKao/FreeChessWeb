@@ -1,0 +1,10 @@
+@use "../../../../app/styles/mixins" as *;
+
+.play-bot-interface-container {
+	@include flex-row;
+}
+
+.bot-chessboard-wrapper {
+	margin-top: 32px;
+	margin-left: 64px;
+}

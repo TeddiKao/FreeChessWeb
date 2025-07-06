@@ -1,0 +1,52 @@
+@use "../../../../app/styles/mixins" as *;
+
+.draw-offer-popup-container {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+
+	width: 280px;
+
+	padding-top: 12px;
+	padding-bottom: 12px;
+	padding-left: 8px;
+	padding-right: 20px;
+
+	border-left: 4px solid hsl(220, 100%, 60%);
+	border-radius: 4px;
+
+	background-color: hsl(220, 100%, 95%);
+
+	box-shadow: 5px 5px 5px hsl(0, 0%, 60%);
+
+	.draw-offer-popup-heading {
+		margin-top: 0;
+		margin-bottom: 4px;
+	}
+
+	.accept-draw-prompt {
+		margin-top: 0;
+		margin-bottom: 12px;
+	}
+
+	.action-buttons-container button {
+		margin-right: 8px;
+
+		padding-left: 12px;
+		padding-right: 12px;
+		padding-top: 4px;
+		padding-bottom: 4px;
+
+		border: none;
+		border-radius: 4px;
+	}
+
+	.action-buttons-container .accept-draw-button {
+		background-color: hsl(210, 100%, 60%);
+		color: white;
+	}
+
+	.action-buttons-container .decline-draw-button {
+		background-color: white;
+	}
+}

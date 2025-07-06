@@ -1,0 +1,52 @@
+@use "../../../app/styles/mixins" as *;
+@use "../../../app/styles/variables";
+
+.screen-header {
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.base-time-header,
+.increment-header {
+	margin-top: 12px;
+	margin-bottom: 8px;
+}
+
+.time-inputs {
+	@include flex-row;
+}
+
+.time-inputs input {
+	padding-top: 6px;
+	padding-bottom: 6px;
+	padding-left: 6px;
+
+	width: 40px;
+	margin-right: 8px;
+
+	border: none;
+	background-color: hsl(0, 0%, 85%);
+	border-radius: 4px;
+}
+
+.time-inputs input::placeholder {
+	color: hsl(0, 0%, 50%);
+}
+
+.custom-time-control-continue-button {
+	margin-top: 12px;
+
+	width: 100%;
+	padding-top: 8px;
+	padding-bottom: 8px;
+
+	border: none;
+	border-radius: 8px;
+	background-color: variables.$accent-color;
+	color: white;
+}
+
+.custom-time-control-continue-button:hover {
+	background-color: hsl(30, 100%, 40%);
+	transition: 0.25s ease;
+}

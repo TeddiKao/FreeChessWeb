@@ -1,0 +1,34 @@
+@use "../../../../app/styles/mixins" as *;
+
+.multiplayer-playing-interface-container {
+	@include flex-row-x-center;
+	@include page-center-xy;
+}
+
+.main-chessboard {
+	flex-direction: column;
+}
+
+.top-player-info,
+.bottom-player-info {
+	@include flex-row-space-between;
+	@include flex-row-y-center;
+
+	width: 464px;
+}
+
+.chessboard-info {
+	@include flex-row;
+	justify-content: right;
+}
+
+.gameplay-side-panel {
+	@include flex-column;
+	margin-top: 40px;
+	margin-left: 12px;
+	height: 480px;
+	width: 260px;
+
+	background-color: white;
+	box-shadow: 5px 5px 5px hsl(0, 0, 75%);
+}

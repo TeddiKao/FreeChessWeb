@@ -1,0 +1,10 @@
+@use "../../../app/styles/mixins" as *;
+
+.view-game-interface-container {
+	@include flex-row;
+}
+
+.view-game-chessboard-wrapper {
+	margin-top: 32px;
+	margin-left: 64px;
+}

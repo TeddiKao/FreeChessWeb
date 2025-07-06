@@ -1,0 +1,32 @@
+@use "../../app/styles/mixins" as *;
+
+.confirmation-popup-container {
+	position: absolute;
+	z-index: 1000;
+	bottom: 28px;
+
+	background-color: white;
+	box-shadow: 5px 5px 5px hsl(0, 0%, 75%);
+
+	width: 150px;
+
+	padding-bottom: 12px;
+	padding-top: 12px;
+
+	@include flex-column-x-center;
+}
+
+.confirmation-message {
+	margin-top: 4px;
+	margin-bottom: 4px;
+	
+	text-align: center;
+}
+
+.confirmation-buttons-container {
+	@include flex-row;
+
+	.confirm-button {
+		margin-right: 8px;
+	}
+}

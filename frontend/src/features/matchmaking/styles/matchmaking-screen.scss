@@ -1,0 +1,42 @@
+@use "../../../app/styles/mixins" as *;
+@use "../../../app/styles/variables";
+
+.matchmaking-screen-container {
+	@include flex-column;
+	align-items: center;
+	justify-content: center;
+
+	background-color: white;
+	box-shadow: 5px 5px 10px hsl(0, 0%, 60%);
+
+	margin-left: 24px;
+
+	padding-left: 18px;
+	padding-right: 18px;
+	padding-top: 18px;
+	padding-bottom: 18px;
+}
+
+.matchmaking-heading {
+	margin-top: 8px;
+	margin-bottom: 4px;
+}
+
+.matchmaking-time-control {
+	margin-top: 4px;
+	margin-bottom: 12px;
+}
+
+.cancel-matchmaking {
+	padding-top: 8px;
+	padding-bottom: 8px;
+
+	width: 100%;
+
+	background-color: variables.$accent-color;
+	border: none;
+	border-radius: 4px;
+
+	color: white;
+	font-size: 1rem;
+}
