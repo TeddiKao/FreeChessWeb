@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { isNullOrUndefined } from "../shared/utils/generalUtils";
+import { isNullOrUndefined } from "../../shared/utils/generalUtils";
 
 type LocationState = {
 	route: string;
