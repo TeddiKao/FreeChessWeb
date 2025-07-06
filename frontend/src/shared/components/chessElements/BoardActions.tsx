@@ -1,4 +1,9 @@
-function BoardActions() {
+interface BoardActionsProps {
+    displaySettings: () => void;
+    toggleBoardOrientation: () => void;
+}
+
+function BoardActions({ toggleBoardOrientation, displaySettings }: BoardActionsProps) {
 	return (
 		<div className="board-actions">
 			<img
@@ -9,7 +14,7 @@ function BoardActions() {
 			<img
 				className="settings-icon"
 				src="/icons/gameplay/boardActions/settings.svg"
-				onClick={handleSettingsDisplay}
+				onClick={displaySettings}
 			/>
 		</div>
 	);
