@@ -35,9 +35,10 @@ review_instructions: |
 
 reviews:
   # Optional: Configure specific behaviors
-  request_changes_workflow: false  # Request changes for critical issues
+  request_changes_workflow: false
   auto_review: 
     enabled: true
+    auto_incremental_reviews: true
     drafts: false
   
   # Optional: Path-based instructions for different areas
