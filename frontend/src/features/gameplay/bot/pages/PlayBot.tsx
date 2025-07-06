@@ -15,8 +15,8 @@ import { pieceAnimationTime } from "../../../../shared/constants/pieceAnimation"
 import usePieceAnimation from "../../../../shared/hooks/usePieceAnimation";
 import LocalGameOverModal from "../../passAndPlay/modals/GameOverModal";
 import DashboardNavbar from "../../../../shared/components/DashboardNavbar/DashboardNavbar";
-import MoveListPanel from "../../common/components/gameplaySidePanel/MoveListPanel";
-import MoveNavigationButtons from "../../common/components/gameplaySidePanel/MoveNavigationButtons";
+import MoveListPanel from "../../../../shared/components/chessElements/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "../../../../shared/components/chessElements/gameplaySidePanel/MoveNavigationButtons";
 import BotChessboard from "../components/BotChessboard";
 import {
 	MoveInfo,

@@ -11,8 +11,8 @@ import { convertToMilliseconds } from "../../../shared/utils/timeUtils";
 import { pieceAnimationTime } from "../../../shared/constants/pieceAnimation";
 import usePieceAnimation from "../../../shared/hooks/usePieceAnimation";
 import GameReplayChessboard from "../components/GameReplayChessboard";
-import MoveListPanel from "../../gameplay/common/components/gameplaySidePanel/MoveListPanel";
-import MoveNavigationButtons from "../../gameplay/common/components/gameplaySidePanel/MoveNavigationButtons";
+import MoveListPanel from "../../../shared/components/chessElements/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "../../../shared/components/chessElements/gameplaySidePanel/MoveNavigationButtons";
 import { ParsedFEN } from "../../../shared/types/chessTypes/gameState.types";
 import {
 	fetchPositionList,
