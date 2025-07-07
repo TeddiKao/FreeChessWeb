@@ -2,12 +2,12 @@ import "../../../styles/DashboardNavbar/dashboard-navbar-toggle.scss";
 
 interface DashboardNavbarToggleProps {
 	dashboardNavbarExpanded: boolean;
-    toggle: () => void;
+	toggle: () => void;
 }
 
 function DashboardNavbarToggle({
 	dashboardNavbarExpanded,
-    toggle
+	toggle,
 }: DashboardNavbarToggleProps) {
 	function getToggleIcon() {
 		if (dashboardNavbarExpanded) {
@@ -19,7 +19,11 @@ function DashboardNavbarToggle({
 
 	return (
 		<div onClick={toggle} className="dashboard-navbar-toggle-container">
-			<img className="dashboard-navbar-toggle-icon" alt="Toggle icon" src="/icons/dashboard/navbar/menu.svg"/>
+			<img
+				className="dashboard-navbar-toggle-icon"
+				alt="Toggle icon"
+				src={getToggleIcon()}
+			/>
 		</div>
 	);
 }
