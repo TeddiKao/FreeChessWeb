@@ -1,9 +1,8 @@
 @use "../../../../app/styles/mixins" as *;
 
 .main-link-container {
-    @include flex-row;
+    @include flex-row-y-center;
 
-    width: 32px;
     height: 36px;
 
     padding-top: 6px;
@@ -16,5 +15,11 @@
 
 .main-link-container:hover {
     cursor: pointer;
+ 
     background-color: hsl(0, 0%, 75%);
+}
+
+.main-link-name {
+    margin-top: 0;
+    margin-bottom: 0;
 }
