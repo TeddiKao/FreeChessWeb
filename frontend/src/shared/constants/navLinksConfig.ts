@@ -10,6 +10,11 @@ const dashboardNavLinks: DashboardNavLinks = [
         name: "Home",
         icon: "/icons/dashboard/navbar/siteLinks/home.svg",
         path: "/home"
+    },
+
+    {
+        name: "Play",
+        icon: "/icons/dashboard/navbar/siteLinks/play.svg",
     }
 ]
 
