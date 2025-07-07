@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import "../../../../../styles/DashboardNavbar/links/main-link.scss";
 
 interface MainLinkProps {
@@ -8,8 +9,16 @@ interface MainLinkProps {
 }
 
 function MainLink({ linkName, linkPath, linkIcon, subLinks }: MainLinkProps) {
+    const navigate = useNavigate();
+
+    function handleRedirect() {
+        if (!linkPath) return;
+
+        navigate(linkPath);
+    }
+
     return (
-        <div className="main-link-container">
+        <div onClick={handleRedirect} className="main-link-container">
             <img className="main-link-icon" alt="Link icon" src={linkIcon} />
         </div>
     );
