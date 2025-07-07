@@ -1,6 +1,8 @@
 import { dashboardNavLinks } from "../../../../constants/navLinksConfig";
 import MainLink from "./components/MainLink";
 
+import "../../../../styles/DashboardNavbar/site-links.scss";
+
 interface SiteLinkProps {
 	dashboardNavbarExpanded: boolean;
 }
