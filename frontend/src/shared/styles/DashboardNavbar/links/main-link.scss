@@ -1,4 +1,8 @@
+@use "../../../../app/styles/mixins" as *;
+
 .main-link-container {
+    @include flex-row;
+
     width: 32px;
     height: 36px;
 
