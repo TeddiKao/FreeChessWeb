@@ -17,4 +17,6 @@
 .dashboard-navbar-container.expanded {
     @include flex-column;
     align-items: flex-start;
+
+    width: 140px;
 }
