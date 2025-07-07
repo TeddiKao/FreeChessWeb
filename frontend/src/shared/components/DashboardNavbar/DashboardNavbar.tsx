@@ -1,6 +1,11 @@
+import AccountInfo from "./components/AccountInfo";
+import "../../styles/DashboardNavbar/dashboard-navbar.scss";
+
 function DashboardNavbar() {
 	return (
-		<nav></nav>
+		<nav className="dashboard-navbar-container">
+			<AccountInfo />
+		</nav>
 	)
 }
 
