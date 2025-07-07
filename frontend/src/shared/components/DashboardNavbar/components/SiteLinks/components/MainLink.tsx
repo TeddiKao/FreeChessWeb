@@ -1,3 +1,5 @@
+import "../../../../../styles/DashboardNavbar/links/main-link.scss";
+
 interface MainLinkProps {
     linkName: string;
     linkPath?: string;
