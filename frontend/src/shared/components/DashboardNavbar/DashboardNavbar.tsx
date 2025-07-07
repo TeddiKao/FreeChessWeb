@@ -19,7 +19,7 @@ function DashboardNavbar() {
 				dashboardNavbarExpanded={dashboardNavbarExpanded}
 				toggle={toggleDashboardNavbar}
 			/>
-			<SiteLinks />
+			<SiteLinks dashboardNavbarExpanded={dashboardNavbarExpanded} />
 		</nav>
 	);
 }
