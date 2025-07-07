@@ -1,3 +1,10 @@
+@use "../../../app/styles/mixins" as *;
+
+.account-info-container {
+    @include flex-column-x-center;
+    margin-bottom: 12px;
+}
+
 .profile-picture {
     margin-top: 10px;
 
@@ -9,3 +16,4 @@
     padding-top: 4px;
     padding-bottom: 4px;
 }
+
