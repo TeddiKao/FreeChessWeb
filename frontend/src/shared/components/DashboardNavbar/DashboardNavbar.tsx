@@ -13,7 +13,11 @@ function DashboardNavbar() {
 	}
 
 	return (
-		<nav className="dashboard-navbar-container">
+		<nav
+			className={`dashboard-navbar-container ${
+				dashboardNavbarExpanded ? "expanded" : ""
+			}`}
+		>
 			<AccountInfo />
 			<DashboardNavbarToggle
 				dashboardNavbarExpanded={dashboardNavbarExpanded}
