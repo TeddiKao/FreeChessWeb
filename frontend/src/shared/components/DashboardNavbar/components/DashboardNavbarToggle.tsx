@@ -1,3 +1,5 @@
+import "../../../styles/DashboardNavbar/dashboard-navbar-toggle.scss";
+
 interface DashboardNavbarToggleProps {
 	dashboardNavbarExpanded: boolean;
     toggle: () => void;
@@ -9,7 +11,7 @@ function DashboardNavbarToggle({
 }: DashboardNavbarToggleProps) {
 	return (
 		<div onClick={toggle} className="dashboard-navbar-toggle-container">
-			{dashboardNavbarExpanded ? "<" : ">"}
+			<img className="dashboard-navbar-toggle-icon" alt="Toggle icon" src="/icons/dashboard/navbar/menu.svg"/>
 		</div>
 	);
 }
