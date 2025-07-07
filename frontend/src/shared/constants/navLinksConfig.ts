@@ -8,7 +8,7 @@ type DashboardNavLinks = Array<{
 const dashboardNavLinks: DashboardNavLinks = [
     {
         name: "Home",
-        icon: "/icons/dashboard/home.svg",
+        icon: "/icons/dashboar/navbar/siteLinks/home.svg",
         path: "/home"
     }
 ]
