@@ -1,0 +1,13 @@
+@use "../../../app//styles//mixins" as *;
+
+.dashboard-navbar-container {
+    @include flex-column-x-center;
+    background-color: hsl(0, 0%, 95%);
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+
+    padding-left: 4px;
+    padding-right: 4px;
+}
