@@ -20,6 +20,8 @@
 .account-info {
     @include flex-column;
 
+    margin-left: 8px;
+
     p {
         margin-top: 4px;
         margin-bottom: 0;
