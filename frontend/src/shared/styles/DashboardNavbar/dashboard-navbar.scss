@@ -17,3 +17,10 @@
 
     width: max-content;
 }
+
+.main-navbar-content.expanded {
+    @include flex-column;
+    align-items: flex-start;
+
+    width: 140px;
+}
