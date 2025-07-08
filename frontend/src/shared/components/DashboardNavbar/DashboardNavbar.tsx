@@ -2,7 +2,6 @@ import AccountInfo from "./components/AccountInfo";
 import "../../styles/DashboardNavbar/dashboard-navbar.scss";
 import SiteLinks from "./components/SiteLinks/SiteLinks";
 import { useState } from "react";
-import DashboardNavbarToggle from "./components/DashboardNavbarToggle";
 
 function DashboardNavbar() {
 	const [dashboardNavbarExpanded, setDashboardNavbarExpanded] =
@@ -18,12 +17,12 @@ function DashboardNavbar() {
 				dashboardNavbarExpanded ? "expanded" : ""
 			}`}
 		>
-			<AccountInfo />
-			<DashboardNavbarToggle
-				dashboardNavbarExpanded={dashboardNavbarExpanded}
-				toggle={toggleDashboardNavbar}
-			/>
-			<SiteLinks dashboardNavbarExpanded={dashboardNavbarExpanded} />
+			<nav className="main-navbar-content">
+				<AccountInfo />
+				<SiteLinks dashboardNavbarExpanded={dashboardNavbarExpanded} />
+			</nav>
+
+			
 		</nav>
 	);
 }
