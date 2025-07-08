@@ -13,7 +13,7 @@ function SiteLinks({ dashboardNavbarExpanded }: SiteLinkProps) {
 
 	return (
 		<div className="site-links-container">
-			{dashboardNavLinks.map(({ name, icon, path }, index) => {
+			{dashboardNavLinks.map(({ name, icon, path, subLinks }, index) => {
 				return (
 					<MainLink
 						key={index}
@@ -23,6 +23,7 @@ function SiteLinks({ dashboardNavbarExpanded }: SiteLinkProps) {
 						dashboardNavbarExpanded={dashboardNavbarExpanded}
 						linkExpanded={expandedLink === name}
 						setExpandedLink={setExpandedLink}
+						subLinks={subLinks}
 					/>
 				);
 			})}
