@@ -17,10 +17,6 @@ body {
     padding: 0;
 }
 
-#root {
-    @include flex-row;
-}
-
 input,
 button {
     font-family: variables.$default-font, sans-serif;
