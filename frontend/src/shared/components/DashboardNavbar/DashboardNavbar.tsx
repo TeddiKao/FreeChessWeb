@@ -14,16 +14,21 @@ function DashboardNavbar() {
 
 	return (
 		<nav
-			className={`dashboard-navbar-container ${
-				dashboardNavbarExpanded ? "expanded" : ""
-			}`}
+			className="dashboard-navbar-container"
 		>
-			<nav className="main-navbar-content">
+			<nav
+				className={`main-navbar-content ${
+					dashboardNavbarExpanded ? "expanded" : ""
+				}`}
+			>
 				<AccountInfo />
 				<SiteLinks dashboardNavbarExpanded={dashboardNavbarExpanded} />
 			</nav>
 
-			<DashboardNavbarToggle toggle={toggleDashboardNavbar} dashboardNavbarExpanded={dashboardNavbarExpanded} />
+			<DashboardNavbarToggle
+				toggle={toggleDashboardNavbar}
+				dashboardNavbarExpanded={dashboardNavbarExpanded}
+			/>
 		</nav>
 	);
 }
