@@ -51,6 +51,7 @@ function MainLink({
 								linkName={name}
 								linkIcon={icon}
 								linkPath={path}
+								key={index}
 							/>
 						);
 					})}
