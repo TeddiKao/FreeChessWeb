@@ -3,12 +3,11 @@
 .account-info-container {
     @include flex-row-x-center;
     @include flex-row-y-center;
+    margin-top: 12px;
     margin-bottom: 12px;
 }
 
 .profile-picture {
-    margin-top: 12px;
-
     background-color: hsl(0, 0%, 85%);
     border-radius: 16px;
 
