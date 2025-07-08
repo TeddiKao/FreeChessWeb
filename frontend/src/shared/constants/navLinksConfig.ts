@@ -22,6 +22,18 @@ const dashboardNavLinks: DashboardNavLinks = [
                 path: "/select-bot",
                 icon: "/icons/dashboard/navbar/siteLinks/play-vs-bot.svg"
             },
+
+            {
+                name: "Play online",
+                path: "/game-setup",
+                icon: "/icons/dashboard/navbar/siteLinks/play-online.svg"
+            },
+
+            {
+                name: "Game history",
+                path: "/game-history",
+                icon: "/icons/dashboard/navbar/siteLinks/game-history.svg"
+            },
         ]
     }
 ]
