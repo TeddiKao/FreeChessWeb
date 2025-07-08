@@ -23,7 +23,7 @@ function MainLink({
 	subLinks,
 	dashboardNavbarExpanded,
 	linkExpanded,
-	setExpandedLink
+	setExpandedLink,
 }: MainLinkProps) {
 	const navigate = useNavigate();
 	const expandDashboardNavbar = useContext(ExpandNavbarContext);
@@ -42,10 +42,16 @@ function MainLink({
 
 	return (
 		<div onClick={handleRedirect} className="main-link-container">
-			<img className="main-link-icon" alt="Link icon" src={linkIcon} />
-			{dashboardNavbarExpanded && (
-				<p className="main-link-name">{linkName}</p>
-			)}
+			<div className="main-link-content">
+				<img
+					className="main-link-icon"
+					alt="Link icon"
+					src={linkIcon}
+				/>
+				{dashboardNavbarExpanded && (
+					<p className="main-link-name">{linkName}</p>
+				)}
+			</div>
 
 			{linkExpanded && subLinks && dashboardNavbarExpanded && (
 				<div className="sub-links-container">
