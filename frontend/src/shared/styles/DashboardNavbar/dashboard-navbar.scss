@@ -1,18 +1,19 @@
 @use "../../../app//styles//mixins" as *;
 
 .dashboard-navbar-container {
-    background-color: hsl(0, 0%, 95%);
+    @include flex-row;
 
     position: absolute;
     top: 0;
     bottom: 0;
+}
+
+.main-navbar-content {
+    @include flex-column-x-center;
+    background-color: hsl(0, 0%, 95%);
 
     padding-left: 8px;
     padding-right: 8px;
 
     width: max-content;
-}
-
-.main-navbar-content {
-    @include flex-column-x-center;
 }
