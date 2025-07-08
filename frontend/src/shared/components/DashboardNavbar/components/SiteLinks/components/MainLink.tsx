@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "../../../../../styles/DashboardNavbar/links/main-link.scss";
+import { useContext } from "react";
+import { ExpandNavbarContext } from "../../../DashboardNavbar";
 
 interface MainLinkProps {
 	linkName: string;
@@ -18,9 +20,15 @@ function MainLink({
 	dashboardNavbarExpanded,
 }: MainLinkProps) {
 	const navigate = useNavigate();
+	const expandDashboardNavbar = useContext(ExpandNavbarContext);
 
 	function handleRedirect() {
-		if (!linkPath) return;
+		if (!expandDashboardNavbar) return;
+
+		if (!linkPath) {
+			expandDashboardNavbar();
+			return;
+		};
 
 		navigate(linkPath);
 	}
