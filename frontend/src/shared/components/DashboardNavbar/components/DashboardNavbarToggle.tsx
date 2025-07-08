@@ -1,26 +1,30 @@
+import "../../../styles/DashboardNavbar/dashboard-navbar-toggle.scss";
+
 interface DashboardNavbarToggleProps {
 	dashboardNavbarExpanded: boolean;
-    toggle: () => void;
+	toggle: () => void;
 }
 
 function DashboardNavbarToggle({
 	dashboardNavbarExpanded,
-    toggle,
+	toggle,
 }: DashboardNavbarToggleProps) {
 	function getToggleIcon() {
 		if (dashboardNavbarExpanded) {
-			return "/icons/dashboard/navbar/toggle/collapse.svg";
+			return "/icons/dashboard/navbar/toggle/navbar-expanded.svg";
 		} else {
-			return "/icons/dashboard/navbar/toggle/expand.svg";
+			return "/icons/dashboard/navbar/toggle/navbar-collapsed.svg";
 		}
 	}
 
 	return (
 		<div onClick={toggle} className="dashboard-navbar-toggle-container">
-			<img
-				className="dashboard-navbar-toggle-icon"
-				src={getToggleIcon()}
-			/>
+			<div className="dashboard-navbar-toggle-icon-container">
+				<img
+					className="dashboard-navbar-toggle-icon"
+					src={getToggleIcon()}
+				/>
+			</div>
 		</div>
 	);
 }

@@ -1,0 +1,19 @@
+@use "../../../app/styles/mixins" as *;
+
+.dashboard-navbar-toggle-container {
+	height: 100%;
+	width: 24px;
+
+	@include flex-row-y-center;
+}
+
+.dashboard-navbar-toggle-icon-container {
+    background-color: hsl(0, 0%, 95%);
+    padding-top: 4px;
+    border-radius: 4px;
+}
+
+.dashboard-navbar-toggle-icon {
+	height: 24px;
+	width: 24px;
+}

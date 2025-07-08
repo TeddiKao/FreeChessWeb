@@ -6,7 +6,7 @@ import DashboardNavbarToggle from "./components/DashboardNavbarToggle";
 
 type ExpandNavbarContextType = (() => void) | undefined
 
-const ExpandNavbarContext = createContext<ExpandNavbarContextType>(undefined);
+export const ExpandNavbarContext = createContext<ExpandNavbarContextType>(undefined);
 
 function DashboardNavbar() {
 	const [dashboardNavbarExpanded, setDashboardNavbarExpanded] =
