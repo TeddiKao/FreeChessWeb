@@ -3,9 +3,8 @@
 .dashboard-navbar-container {
     @include flex-row;
 
-    position: absolute;
-    top: 0;
-    bottom: 0;
+    position: relative;
+    height: 100vh;
 }
 
 .main-navbar-content {
