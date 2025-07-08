@@ -11,10 +11,17 @@ interface SiteLinkProps {
 	setExpandedLink: StateSetterFunction<string | null>;
 }
 
-function SiteLinks({ dashboardNavbarExpanded, expandedLink, setExpandedLink }: SiteLinkProps) {
-
+function SiteLinks({
+	dashboardNavbarExpanded,
+	expandedLink,
+	setExpandedLink,
+}: SiteLinkProps) {
 	return (
-		<div className="site-links-container">
+		<div
+			className={`site-links-container ${
+				dashboardNavbarExpanded ? "expanded" : ""
+			}`}
+		>
 			{dashboardNavLinks.map(({ name, icon, path, subLinks }, index) => {
 				return (
 					<MainLink

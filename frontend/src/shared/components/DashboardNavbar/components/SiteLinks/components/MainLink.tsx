@@ -44,7 +44,7 @@ function MainLink({
 		<div onClick={handleRedirect} className="main-link-container">
 			<div
 				className={`main-link-content ${
-					linkExpanded ? "expanded" : ""
+					dashboardNavbarExpanded ? "expanded" : ""
 				}`}
 			>
 				<img
