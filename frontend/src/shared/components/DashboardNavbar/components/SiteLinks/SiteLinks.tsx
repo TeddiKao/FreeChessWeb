@@ -3,13 +3,15 @@ import MainLink from "./components/MainLink";
 
 import "../../../../styles/DashboardNavbar/site-links.scss";
 import { useState } from "react";
+import { StateSetterFunction } from "../../../../types/utility.types";
 
 interface SiteLinkProps {
 	dashboardNavbarExpanded: boolean;
+	expandedLink: string | null;
+	setExpandedLink: StateSetterFunction<string | null>;
 }
 
-function SiteLinks({ dashboardNavbarExpanded }: SiteLinkProps) {
-	const [expandedLink, setExpandedLink] = useState<string | null>(null);
+function SiteLinks({ dashboardNavbarExpanded, expandedLink, setExpandedLink }: SiteLinkProps) {
 
 	return (
 		<div className="site-links-container">

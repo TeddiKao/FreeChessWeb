@@ -11,6 +11,7 @@ export const ExpandNavbarContext = createContext<ExpandNavbarContextType>(undefi
 function DashboardNavbar() {
 	const [dashboardNavbarExpanded, setDashboardNavbarExpanded] =
 		useState(false);
+	const [expandedLink, setExpandedLink] = useState<string | null>(null);
 
 	function toggleDashboardNavbar() {
 		setDashboardNavbarExpanded((prevExpanded) => !prevExpanded);
@@ -31,6 +32,8 @@ function DashboardNavbar() {
 					<AccountInfo />
 					<SiteLinks
 						dashboardNavbarExpanded={dashboardNavbarExpanded}
+						expandedLink={expandedLink}
+						setExpandedLink={setExpandedLink}
 					/>
 				</nav>
 
