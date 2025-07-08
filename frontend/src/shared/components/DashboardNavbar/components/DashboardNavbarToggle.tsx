@@ -1,9 +1,11 @@
 interface DashboardNavbarToggleProps {
 	dashboardNavbarExpanded: boolean;
+    toggle: () => void;
 }
 
 function DashboardNavbarToggle({
 	dashboardNavbarExpanded,
+    toggle,
 }: DashboardNavbarToggleProps) {
 	function getToggleIcon() {
 		if (dashboardNavbarExpanded) {
@@ -14,7 +16,7 @@ function DashboardNavbarToggle({
 	}
 
 	return (
-		<div className="dashboard-navbar-toggle-container">
+		<div onClick={toggle} className="dashboard-navbar-toggle-container">
 			<img
 				className="dashboard-navbar-toggle-icon"
 				src={getToggleIcon()}
