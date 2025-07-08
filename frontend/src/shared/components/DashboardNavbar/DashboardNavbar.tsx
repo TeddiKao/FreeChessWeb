@@ -2,6 +2,7 @@ import AccountInfo from "./components/AccountInfo";
 import "../../styles/DashboardNavbar/dashboard-navbar.scss";
 import SiteLinks from "./components/SiteLinks/SiteLinks";
 import { useState } from "react";
+import DashboardNavbarToggle from "./components/DashboardNavbarToggle";
 
 function DashboardNavbar() {
 	const [dashboardNavbarExpanded, setDashboardNavbarExpanded] =
@@ -22,7 +23,7 @@ function DashboardNavbar() {
 				<SiteLinks dashboardNavbarExpanded={dashboardNavbarExpanded} />
 			</nav>
 
-			
+			<DashboardNavbarToggle dashboardNavbarExpanded={dashboardNavbarExpanded} />
 		</nav>
 	);
 }
