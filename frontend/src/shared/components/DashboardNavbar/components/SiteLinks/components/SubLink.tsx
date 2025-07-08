@@ -1,3 +1,5 @@
+import "../../../../../styles/DashboardNavbar/links/sub-link.scss";
+
 interface SubLinkProps {
     linkName: string;
     linkPath: string;

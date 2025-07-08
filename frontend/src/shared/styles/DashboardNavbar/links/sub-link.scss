@@ -3,3 +3,7 @@
 .sub-links-container {
     @include flex-column;
 }
+
+.sub-link-container {
+    @include flex-row-y-center;
+}
