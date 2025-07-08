@@ -3,8 +3,16 @@
 .account-info-container {
     @include flex-row-x-center;
     @include flex-row-y-center;
-    margin-top: 12px;
-    margin-bottom: 12px;
+
+    margin-top: 6px;
+    margin-bottom: 6px;
+
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 4px;
+    padding-right: 4px;
+
+    border-radius: 4px;
 }
 
 .profile-picture {
