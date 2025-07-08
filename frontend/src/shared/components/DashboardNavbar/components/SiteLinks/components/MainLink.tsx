@@ -42,7 +42,7 @@ function MainLink({
 
 	return (
 		<div onClick={handleRedirect} className="main-link-container">
-			<div className="main-link-content">
+			<div className={`main-link-content ${linkExpanded && "expanded"}`}>
 				<img
 					className="main-link-icon"
 					alt="Link icon"
