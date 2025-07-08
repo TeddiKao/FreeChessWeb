@@ -1,6 +1,10 @@
 import "../../../styles/DashboardNavbar/account-info.scss";
 
-function AccountInfo() {
+interface AccountInfoProps {
+	dashboardNavbarExpanded: boolean;
+}
+
+function AccountInfo({ dashboardNavbarExpanded }: AccountInfoProps) {
 	return (
 		<div className="account-info-container">
 			<img

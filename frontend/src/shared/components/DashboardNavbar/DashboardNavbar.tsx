@@ -29,7 +29,7 @@ function DashboardNavbar() {
 						dashboardNavbarExpanded ? "expanded" : ""
 					}`}
 				>
-					<AccountInfo />
+					<AccountInfo dashboardNavbarExpanded={dashboardNavbarExpanded} />
 					<SiteLinks
 						dashboardNavbarExpanded={dashboardNavbarExpanded}
 						expandedLink={expandedLink}
