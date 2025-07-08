@@ -30,6 +30,11 @@
     }
 }
 
+.account-info-container:hover {
+    cursor: pointer;
+    background-color: hsl(0, 0%, 75%);
+}
+
 .account-info-name {
     font-weight: bold;
 }
