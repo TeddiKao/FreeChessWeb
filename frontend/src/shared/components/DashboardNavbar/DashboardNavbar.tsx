@@ -1,8 +1,12 @@
 import AccountInfo from "./components/AccountInfo";
 import "../../styles/DashboardNavbar/dashboard-navbar.scss";
 import SiteLinks from "./components/SiteLinks/SiteLinks";
-import { useState } from "react";
+import { createContext, useState } from "react";
 import DashboardNavbarToggle from "./components/DashboardNavbarToggle";
+
+type ExpandNavbarContextType = (() => void) | undefined
+
+const ExpandNavbarContext = createContext<ExpandNavbarContextType>(undefined);
 
 function DashboardNavbar() {
 	const [dashboardNavbarExpanded, setDashboardNavbarExpanded] =
@@ -12,24 +16,30 @@ function DashboardNavbar() {
 		setDashboardNavbarExpanded((prevExpanded) => !prevExpanded);
 	}
 
-	return (
-		<nav
-			className="dashboard-navbar-container"
-		>
-			<nav
-				className={`main-navbar-content ${
-					dashboardNavbarExpanded ? "expanded" : ""
-				}`}
-			>
-				<AccountInfo />
-				<SiteLinks dashboardNavbarExpanded={dashboardNavbarExpanded} />
-			</nav>
+	function expandDashboardNavbar() {
+		setDashboardNavbarExpanded(true);
+	}
 
-			<DashboardNavbarToggle
-				toggle={toggleDashboardNavbar}
-				dashboardNavbarExpanded={dashboardNavbarExpanded}
-			/>
-		</nav>
+	return (
+		<ExpandNavbarContext.Provider value={expandDashboardNavbar}>
+			<nav className="dashboard-navbar-container">
+				<nav
+					className={`main-navbar-content ${
+						dashboardNavbarExpanded ? "expanded" : ""
+					}`}
+				>
+					<AccountInfo />
+					<SiteLinks
+						dashboardNavbarExpanded={dashboardNavbarExpanded}
+					/>
+				</nav>
+
+				<DashboardNavbarToggle
+					toggle={toggleDashboardNavbar}
+					dashboardNavbarExpanded={dashboardNavbarExpanded}
+				/>
+			</nav>
+		</ExpandNavbarContext.Provider>
 	);
 }
 
