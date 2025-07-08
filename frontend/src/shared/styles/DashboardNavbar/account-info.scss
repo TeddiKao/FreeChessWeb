@@ -1,19 +1,35 @@
 @use "../../../app/styles/mixins" as *;
 
 .account-info-container {
-    @include flex-column-x-center;
+    @include flex-row-x-center;
+    @include flex-row-y-center;
+    margin-top: 12px;
     margin-bottom: 12px;
 }
 
 .profile-picture {
-    margin-top: 10px;
-
     background-color: hsl(0, 0%, 85%);
     border-radius: 16px;
 
-    padding-left: 4px;
-    padding-right: 4px;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
+.account-info {
+    @include flex-column;
+
+    margin-left: 8px;
+
+    p {
+        margin-top: 2px;
+        margin-bottom: 0;
+
+        font-size: 14px;
+    }
+}
+
+.account-info-name {
+    font-weight: bold;
+}

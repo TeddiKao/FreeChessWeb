@@ -12,4 +12,16 @@ async function getUsername() {
 	return username;
 }
 
-export { getUsername };
+async function getEmail() {
+	let email = null;
+	try {
+		const response = await api.get("/users_api/get-email/");
+		email = response.data;
+	} catch (error) {
+		console.log(error);
+	}
+
+	return email;
+}
+
+export { getUsername, getEmail };
