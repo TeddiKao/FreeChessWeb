@@ -15,6 +15,14 @@ const dashboardNavLinks: DashboardNavLinks = [
     {
         name: "Play",
         icon: "/icons/dashboard/navbar/siteLinks/play.svg",
+
+        subLinks: [
+            {
+                name: "Play vs bot",
+                path: "/select-bot",
+                icon: "/icons/dashboard/navbar/siteLinks/play-vs-bot.svg"
+            },
+        ]
     }
 ]
 
