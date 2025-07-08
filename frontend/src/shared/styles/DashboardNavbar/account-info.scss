@@ -17,3 +17,6 @@
     padding-bottom: 4px;
 }
 
+.account-info {
+    @include flex-column;
+}
