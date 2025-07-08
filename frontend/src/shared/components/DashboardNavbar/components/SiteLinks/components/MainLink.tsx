@@ -47,7 +47,7 @@ function MainLink({
 				<p className="main-link-name">{linkName}</p>
 			)}
 
-			{linkExpanded && subLinks && (
+			{linkExpanded && subLinks && dashboardNavbarExpanded && (
 				<div className="sub-links-container">
 					{subLinks?.map(({ name, path, icon }, index) => {
 						return (
