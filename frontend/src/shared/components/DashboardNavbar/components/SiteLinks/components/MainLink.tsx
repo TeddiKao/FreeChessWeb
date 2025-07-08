@@ -3,6 +3,7 @@ import "../../../../../styles/DashboardNavbar/links/main-link.scss";
 import { useContext } from "react";
 import { ExpandNavbarContext } from "../../../DashboardNavbar";
 import SubLink from "./SubLink";
+import { StateSetterFunction } from "../../../../../types/utility.types";
 
 interface MainLinkProps {
 	linkName: string;
@@ -12,6 +13,7 @@ interface MainLinkProps {
 
 	dashboardNavbarExpanded: boolean;
 	linkExpanded: boolean;
+	setExpandedLink: StateSetterFunction<string | null>;
 }
 
 function MainLink({
@@ -21,6 +23,7 @@ function MainLink({
 	subLinks,
 	dashboardNavbarExpanded,
 	linkExpanded,
+	setExpandedLink
 }: MainLinkProps) {
 	const navigate = useNavigate();
 	const expandDashboardNavbar = useContext(ExpandNavbarContext);
@@ -30,6 +33,7 @@ function MainLink({
 
 		if (!linkPath) {
 			expandDashboardNavbar();
+			setExpandedLink(linkName);
 			return;
 		}
 

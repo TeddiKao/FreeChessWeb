@@ -22,6 +22,7 @@ function SiteLinks({ dashboardNavbarExpanded }: SiteLinkProps) {
 						linkIcon={icon}
 						dashboardNavbarExpanded={dashboardNavbarExpanded}
 						linkExpanded={expandedLink === name}
+						setExpandedLink={setExpandedLink}
 					/>
 				);
 			})}
