@@ -34,6 +34,12 @@ const dashboardNavLinks: DashboardNavLinks = [
                 path: "/game-history",
                 icon: "/icons/dashboard/navbar/siteLinks/game-history.svg"
             },
+
+            {
+                name: "Pass and play",
+                path: "/pass-and-play",
+                icon: "/icons/dashboard/navbar/siteLinks/pass-and-play.svg"
+            },
         ]
     }
 ]
