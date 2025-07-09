@@ -14,8 +14,14 @@ function AccountInfo({ dashboardNavbarExpanded }: AccountInfoProps) {
 	const [shouldDisplayAccountOptions, setShouldDisplayAccountOptions] =
 		useState(false);
 
+	function toggleAccountOptions() {
+		setShouldDisplayAccountOptions(
+			(prevShouldDisplay) => !prevShouldDisplay
+		);
+	}
+
 	return (
-		<div className="account-info-container">
+		<div onClick={toggleAccountOptions} className="account-info-container">
 			<img
 				className="profile-picture"
 				alt="profile picture"
