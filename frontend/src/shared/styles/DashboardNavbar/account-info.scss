@@ -1,6 +1,8 @@
 @use "../../../app/styles/mixins" as *;
 
 .account-info-container {
+    position: relative;
+
     @include flex-row-x-center;
     @include flex-row-y-center;
 
