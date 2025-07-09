@@ -6,7 +6,7 @@ interface FlyoutMenuProps {
 
 function FlyoutMenu({ children }: FlyoutMenuProps) {
     return (
-        <div className="flyout-menu">
+        <div className="flyout-menu-container">
             {children}
         </div>
     );
