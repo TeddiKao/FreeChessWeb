@@ -1,3 +1,4 @@
+import { useState } from "react";
 import useEmail from "../../../hooks/useEmail";
 import useUsername from "../../../hooks/useUsername";
 import "../../../styles/DashboardNavbar/account-info.scss";
@@ -9,6 +10,9 @@ interface AccountInfoProps {
 function AccountInfo({ dashboardNavbarExpanded }: AccountInfoProps) {
 	const username = useUsername();
 	const email = useEmail();
+
+	const [shouldDisplayAccountOptions, setShouldDisplayAccountOptions] =
+		useState(false);
 
 	return (
 		<div className="account-info-container">
