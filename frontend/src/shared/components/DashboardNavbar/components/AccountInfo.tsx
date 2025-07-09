@@ -2,6 +2,7 @@ import { useState } from "react";
 import useEmail from "../../../hooks/useEmail";
 import useUsername from "../../../hooks/useUsername";
 import "../../../styles/DashboardNavbar/account-info.scss";
+import AccountOptions from "./AccountOptions";
 
 interface AccountInfoProps {
 	dashboardNavbarExpanded: boolean;
@@ -34,6 +35,8 @@ function AccountInfo({ dashboardNavbarExpanded }: AccountInfoProps) {
 					<p className="account-info-email">{email}</p>
 				</div>
 			)}
+
+			{shouldDisplayAccountOptions && <AccountOptions />}
 		</div>
 	);
 }
