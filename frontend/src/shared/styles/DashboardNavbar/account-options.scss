@@ -1,0 +1,9 @@
+@use "../../../app/styles/mixins" as *;
+
+.account-options-container {
+    @include flex-column;
+}
+
+.logout-container {
+    @include flex-row-y-center;
+}
