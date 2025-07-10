@@ -2,7 +2,9 @@
 
 .account-info-container {
     position: relative;
+}
 
+.main-account-content {
     @include flex-row-x-center;
     @include flex-row-y-center;
 
@@ -40,7 +42,7 @@
     }
 }
 
-.account-info-container:hover {
+.main-account-content:hover {
     cursor: pointer;
     background-color: hsl(0, 0%, 75%);
 }
