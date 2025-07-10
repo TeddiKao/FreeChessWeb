@@ -8,7 +8,7 @@ interface FlyoutMenuProps {
 
 function FlyoutMenu({ children, gap }: FlyoutMenuProps) {
     const flyoutMenuStyles = {
-        left: `${gap ?? 0}px`,
+        left: `calc(100% + ${gap ?? 0}px`,
     }
     
     return (
