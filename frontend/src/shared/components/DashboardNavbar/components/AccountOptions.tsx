@@ -1,11 +1,18 @@
 import FlyoutMenu from "../../layout/FlyoutMenu";
 import "../../../styles/DashboardNavbar/account-options.scss";
+import { useNavigate } from "react-router-dom";
 
 function AccountOptions() {
+	const navigate = useNavigate();
+
+	function handleLogoutButtonClick() {
+		navigate("/logout");
+	}
+
 	return (
 		<FlyoutMenu>
 			<div className="account-options-container">
-				<div className="logout-container">
+				<div onClick={handleLogoutButtonClick} className="logout-container">
 					<img
 						className="logout-icon"
 						alt="Logout icon"
