@@ -10,7 +10,7 @@ function AccountOptions() {
 	}
 
 	return (
-		<FlyoutMenu>
+		<FlyoutMenu gap={8}>
 			<div className="account-options-container">
 				<div onClick={handleLogoutButtonClick} className="logout-container">
 					<img
