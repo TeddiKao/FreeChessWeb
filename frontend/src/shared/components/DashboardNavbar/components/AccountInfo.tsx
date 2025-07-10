@@ -23,18 +23,20 @@ function AccountInfo({ dashboardNavbarExpanded }: AccountInfoProps) {
 
 	return (
 		<div onClick={toggleAccountOptions} className="account-info-container">
-			<img
-				className="profile-picture"
-				alt="profile picture"
-				src="/icons/dashboard/navbar/accountLinks/user.svg"
-			/>
+			<div className="main-account-content">
+				<img
+					className="profile-picture"
+					alt="profile picture"
+					src="/icons/dashboard/navbar/accountLinks/user.svg"
+				/>
 
-			{dashboardNavbarExpanded && (
-				<div className="account-info">
-					<p className="account-info-name">{username}</p>
-					<p className="account-info-email">{email}</p>
-				</div>
-			)}
+				{dashboardNavbarExpanded && (
+					<div className="account-info">
+						<p className="account-info-name">{username}</p>
+						<p className="account-info-email">{email}</p>
+					</div>
+				)}
+			</div>
 
 			{shouldDisplayAccountOptions && <AccountOptions />}
 		</div>
