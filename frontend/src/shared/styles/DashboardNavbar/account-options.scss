@@ -20,6 +20,11 @@
     }
 }
 
+.account-options-container:hover {
+    cursor: pointer;
+    background-color: hsl(0, 0%, 75%);
+}
+
 .logout-text {
     margin-left: 4px;
 }
