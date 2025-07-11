@@ -21,21 +21,7 @@
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedSideEffectImports": true
-
-		/* Aliases */
-		// "baseUrl": "./",
-		// "paths": {
-		//     "@globalComponents/*": ["src/globalComponents"],
-		//     "@pageComponents/*": ["src/pageComponents"],
-		//     "@utils/*": ["src/utils"],
-		//     "@pages/*": ["src/pages"],
-		//     "@styles/*": ["src/styles"],
-		//     "@types/*": ["src/types"],
-		//     "@interfaces/*": ["src/interfaces"],
-		//     "@hooks/*": ["src/hooks"],
-		//     "@constants/*": ["src/constants"],
-		//     "@enums/*": ["src/enums"]
-		// }
 	},
+	
 	"include": ["src/**/*"]
 }
