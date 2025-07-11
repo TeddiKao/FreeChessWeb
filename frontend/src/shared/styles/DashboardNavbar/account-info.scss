@@ -1,10 +1,22 @@
 @use "../../../app/styles/mixins" as *;
 
 .account-info-container {
+    position: relative;
+}
+
+.main-account-content {
     @include flex-row-x-center;
     @include flex-row-y-center;
-    margin-top: 12px;
-    margin-bottom: 12px;
+
+    margin-top: 6px;
+    margin-bottom: 6px;
+
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 4px;
+    padding-right: 4px;
+
+    border-radius: 4px;
 }
 
 .profile-picture {
@@ -28,6 +40,11 @@
 
         font-size: 14px;
     }
+}
+
+.main-account-content:hover {
+    cursor: pointer;
+    background-color: hsl(0, 0%, 75%);
 }
 
 .account-info-name {

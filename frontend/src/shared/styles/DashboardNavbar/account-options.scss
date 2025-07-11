@@ -1,0 +1,34 @@
+@use "../../../app/styles/mixins" as *;
+
+.account-options-container {
+    @include flex-column;
+    background-color: hsl(0, 0%, 100%);
+
+    box-shadow: 4px 4px 4px hsl(0, 0%, 40%);
+
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 8px;
+    
+    width: 120px;
+
+    border-radius: 4px;
+
+    p {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+
+.account-options-container:hover {
+    cursor: pointer;
+    background-color: hsl(0, 0%, 75%);
+}
+
+.logout-text {
+    margin-left: 4px;
+}
+
+.logout-container {
+    @include flex-row-y-center;
+}
