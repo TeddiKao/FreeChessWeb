@@ -18,3 +18,7 @@ class CreateUserView(generics.CreateAPIView):
 class GetUsernameView(APIView):
 	def get(self, request):
 		return Response(request.user.username)
+
+class GetEmailView(APIView):
+	def get(self, request):
+		return Response(request.user.email)

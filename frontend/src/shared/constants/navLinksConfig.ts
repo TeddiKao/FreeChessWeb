@@ -8,37 +8,38 @@ type DashboardNavLinks = Array<{
 const dashboardNavLinks: DashboardNavLinks = [
     {
         name: "Home",
-        icon: "/icons/dashboard/navbar/mainLinks/home-page-icon.svg",
+        icon: "/icons/dashboard/navbar/siteLinks/home.svg",
         path: "/home"
     },
 
     {
         name: "Play",
-        icon: "/icons/dashboard/navbar/mainLinks/play-links-icon.svg",
+        icon: "/icons/dashboard/navbar/siteLinks/play.svg",
+
         subLinks: [
             {
-                name: "Pass and Play",
-                icon: "/icons/dashboard/navbar/mainLinks/pass-and-play-icon.svg",
-                path: "/pass-and-play"
+                name: "Play vs bot",
+                path: "/select-bot",
+                icon: "/icons/dashboard/navbar/siteLinks/play-vs-bot.svg"
             },
 
             {
-                name: "Play vs Bot",
-                icon: "/icons/dashboard/navbar/mainLinks/play-vs-bot-icon.svg",
-                path: "/select-bot"
+                name: "Play online",
+                path: "/game-setup",
+                icon: "/icons/dashboard/navbar/siteLinks/play-online.svg"
             },
 
             {
-                name: "Play vs Human",
-                icon: "/icons/dashboard/navbar/mainLinks/play-vs-human-icon.svg",
-                path: "/game-setup"
+                name: "Game history",
+                path: "/game-history",
+                icon: "/icons/dashboard/navbar/siteLinks/game-history.svg"
             },
 
             {
-                name: "Game History",
-                icon: "/icons/dashboard/navbar/mainLinks/game-history-icon.svg",
-                path: "/game-history"
-            }
+                name: "Pass and play",
+                path: "/pass-and-play",
+                icon: "/icons/dashboard/navbar/siteLinks/pass-and-play.svg"
+            },
         ]
     }
 ]

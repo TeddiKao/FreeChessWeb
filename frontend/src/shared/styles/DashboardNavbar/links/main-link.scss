@@ -1,0 +1,47 @@
+@use "../../../../app/styles/mixins" as *;
+
+.main-link-container {
+    @include flex-column-x-center;
+    width: 100%;
+}
+
+.main-link-content {
+    @include flex-row-y-center;
+
+    height: 36px;
+    width: 32px;
+
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 4px;
+    padding-right: 4px;
+
+    border-radius: 4px;
+}
+
+.main-link-content.expanded {
+    @include flex-row-y-center;
+
+    height: 36px;
+    width: 100%;
+
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 4px;
+    padding-right: 4px;
+
+    border-radius: 4px;
+}
+
+.main-link-content:hover {
+    cursor: pointer;
+ 
+    background-color: hsl(0, 0%, 75%);
+}
+
+.main-link-name {
+    margin-top: 0;
+    margin-bottom: 0;
+
+    margin-left: 8px;
+}

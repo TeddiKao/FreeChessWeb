@@ -1,9 +1,8 @@
 @use "../../../../app/styles/mixins" as *;
 
 .dashboard-interface-container {
-    margin-left: 64px;
-
     @include flex-column;
+    margin-left: 72px
 }
 
 .dashboard-suggestion-text {
