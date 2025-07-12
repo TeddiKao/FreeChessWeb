@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../../../../app/api";
+import api from "@appApi";
 
 function useGameplaySettings() {
 	const [gameplaySettings, setGameplaySettings] = useState<object | null>(
