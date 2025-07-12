@@ -1,8 +1,8 @@
 import useGameplaySettings from "./hooks/useGameplaySettings.js";
-import Setting from "../common/components/Setting.js";
+import Setting from "@settings/common/components/Setting.js";
 
 import "./styles/gameplay-settings.scss";
-import { StateSetterFunction } from "../../../shared/types/utility.types.js";
+import { StateSetterFunction } from "@sharedTypes/utility.types.js";
 
 type GameplaySettingsModalProps = {
 	onClose: () => void;
