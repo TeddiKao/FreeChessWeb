@@ -2,24 +2,24 @@ import {
 	BoardPlacement,
 	MoveInfo,
 	ParsedFEN,
-} from "../../../../shared/types/chessTypes/gameState.types";
+} from "@sharedTypes/chessTypes/gameState.types";
 import {
 	PieceColor,
 	PieceInfo,
 	PieceType,
-} from "../../../../shared/types/chessTypes/pieces.types";
+} from "@sharedTypes/chessTypes/pieces.types";
 import {
 	ChessboardSquareIndex,
 	OptionalValue,
 	RefObject,
 	StateSetterFunction,
-} from "../../../../shared/types/utility.types";
-import { getFile, getRank } from "../../../../shared/utils/boardUtils";
-import { fetchMoveIsValid } from "../../common/utils/moveService";
+} from "@sharedTypes/utility.types";
+import { getFile, getRank } from "@sharedUtils/boardUtils";
+import { fetchMoveIsValid } from "@gameplay/common/utils/moveService";
 import {
 	isPawnPromotion,
 	isPawnCapture,
-} from "../../common/utils/moveTypeDetection";
+} from "@gameplay/common/utils/moveTypeDetection";
 
 function clearUnpromotedPawn(
 	boardPlacement: BoardPlacement,

@@ -1,8 +1,8 @@
-import AccountInfo from "./components/AccountInfo";
-import "../../styles/DashboardNavbar/dashboard-navbar.scss";
-import SiteLinks from "./components/SiteLinks/SiteLinks";
+import AccountInfo from "@sharedComponents/DashboardNavbar/components/AccountInfo";
+import "@sharedStyles/DashboardNavbar/dashboard-navbar.scss";
+import SiteLinks from "@sharedComponents/DashboardNavbar/components/SiteLinks/SiteLinks";
 import { createContext, useState } from "react";
-import DashboardNavbarToggle from "./components/DashboardNavbarToggle";
+import DashboardNavbarToggle from "@sharedComponents/DashboardNavbar/components/DashboardNavbarToggle";
 
 type ExpandNavbarContextType = (() => void) | undefined
 

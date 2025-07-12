@@ -1,17 +1,19 @@
-import { websocketBaseURL } from "../../../../shared/constants/urls";
-import { ChessboardSquareIndex } from "../../../../shared/types/utility.types";
-import { getAccessToken } from "../../../auth/utils";
-import useWebsocketWithLifecycle from "../../../../shared/hooks/websocket/useWebsocketWithLifecycle";
-import { ParsedFEN } from "../../../../shared/types/chessTypes/gameState.types";
-import { PieceType } from "../../../../shared/types/chessTypes/pieces.types";
+import { websocketBaseURL } from "@sharedConstants/urls";
+import { ChessboardSquareIndex } from "@sharedTypes/utility.types";
+import { getAccessToken } from "@auth/utils";
+import useWebsocketWithLifecycle from "@sharedHooks/websocket/useWebsocketWithLifecycle";
+import { ParsedFEN } from "@sharedTypes/chessTypes/gameState.types";
+import { PieceType } from "@sharedTypes/chessTypes/pieces.types";
 import {
 	CheckmateEventData,
 	MoveListUpdateEventData,
 	MoveMadeEventData,
 	PositionListUpdateEventData,
 	TimerChangedEventData,
-} from "../types/gameEvents.types";
-import { GameplayWebSocketEventTypes } from "../types/gameEvents.enums";
+} from "@gameplay/multiplayer/types/gameEvents.types";
+import { GameplayWebSocketEventTypes } from "@gameplay/multiplayer/types/gameEvents.enums";
+
+import type { MultiplayerGameplayWebsocketHookProps } from "@gameplay/multiplayer/types/gameEvents.types";
 
 interface MultiplayerGameplayWebsocketHookProps {
 	gameId: number;

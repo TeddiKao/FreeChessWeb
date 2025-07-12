@@ -1,4 +1,4 @@
-import "../../styles/chessboard/board-actions.scss";
+import "@sharedStyles/chessboard/board-actions.scss";
 
 interface BoardActionsProps {
 	displaySettings?: () => void;

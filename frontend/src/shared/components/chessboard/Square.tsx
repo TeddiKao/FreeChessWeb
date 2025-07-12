@@ -1,6 +1,6 @@
 import { DragPreviewImage, useDrag, useDrop } from "react-dnd";
 
-import "../../styles/chessboard/square.scss";
+import "@sharedStyles/chessboard/square.scss";
 import PromotionPopup from "./PromotionPopup";
 import React, { useEffect, useState } from "react";
 import {
@@ -9,10 +9,10 @@ import {
 	isSquareLight,
 	isSquareOnFileEdge,
 	isSquareOnRankEdge,
-} from "../../utils/boardUtils";
-import { OptionalValue } from "../../types/utility.types";
-import { capitaliseFirstLetter } from "../../utils/generalUtils";
-import { FilledSquareProps } from "../../types/squareProps.types";
+} from "@sharedUtils/boardUtils";
+import { OptionalValue } from "@sharedTypes/utility.types";
+import { capitaliseFirstLetter } from "@sharedUtils/generalUtils";
+import { FilledSquareProps } from "@sharedTypes/chessTypes/squareProps.types";
 
 function Square({
 	squareNumber,

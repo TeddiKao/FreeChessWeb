@@ -1,4 +1,4 @@
-import "../styles/loading-spinner.scss";
+import "@sharedStyles/loading-spinner.scss";
 
 function LoadingSpinner() {
     return (

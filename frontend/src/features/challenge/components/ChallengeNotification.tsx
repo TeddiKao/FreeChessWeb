@@ -1,10 +1,10 @@
-import { TimeControl } from "../../../shared/types/time.types";
-import { displayTimeControl } from "../../../shared/utils/timeUtils";
-import BaseModal from "../../../shared/components/layout/BaseModal";
+import { TimeControl } from "@sharedTypes/time.types";
+import { displayTimeControl } from "@sharedUtils/timeUtils";
+import BaseModal from "@sharedComponents/layout/BaseModal";
 
-import "../styles/challenge-notification.scss";
+import "@challenge/styles/challenge-notification.scss";
 import { useContext } from "react";
-import { ChallengeWebsocketContext } from "../../../app/providers/ChallengeWebsocketProvider";
+import { ChallengeWebsocketContext } from "@appProviders/ChallengeWebsocketProvider";
 
 type ChallengeNotificationProps = {
 	visible: boolean;

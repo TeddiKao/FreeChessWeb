@@ -1,5 +1,5 @@
-import "../styles/draw-offer-popup.scss";
-import { RefObject } from "../../../../shared/types/utility.types";
+import "@gameplay/multiplayer/styles/draw-offer-popup.scss";
+import { RefObject } from "@sharedTypes/utility.types";
 
 type DrawOfferPopupProps = {
 	visible: boolean;

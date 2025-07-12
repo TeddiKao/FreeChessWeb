@@ -1,4 +1,4 @@
-import { TimeControl } from "../../shared/types/time.types";
+import { TimeControl } from "@sharedTypes/time.types";
 
 const bulletTimeControls: Array<TimeControl> = [
 	{

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { BotInfo } from "../botsConfig";
 
-import "../styles/bot-card.scss";
+import "@gameplay/bot/styles/bot-card.scss";
 import { createBotGame } from "../botGameApiService";
 
 type BotCardProps = {

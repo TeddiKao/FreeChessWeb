@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getEmail } from "../utils/apiUtils";
+import { getEmail } from "@sharedUtils/apiUtils";
 
 function useEmail() {
 	const [email, setEmail] = useState<string | null>(null);

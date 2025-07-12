@@ -1,4 +1,4 @@
-import "../../../styles/DashboardNavbar/dashboard-navbar-toggle.scss";
+import "@sharedStyles/DashboardNavbar/dashboard-navbar-toggle.scss";
 
 interface DashboardNavbarToggleProps {
 	dashboardNavbarExpanded: boolean;

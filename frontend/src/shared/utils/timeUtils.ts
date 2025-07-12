@@ -1,6 +1,6 @@
 import { floor } from "lodash";
 import { padZero } from "./generalUtils";
-import { TimeDuration, TimeControl } from "../types/time.types";
+import { TimeDuration, TimeControl } from "@sharedTypes/time.types";
 import { roundToNearest } from "./numberUtils";
 
 function convertTimeControlTime(time: number) {

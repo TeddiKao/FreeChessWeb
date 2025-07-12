@@ -20,22 +20,41 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
-		"noUncheckedSideEffectImports": true
+		"noUncheckedSideEffectImports": true,
 
-		/* Aliases */
-		// "baseUrl": "./",
-		// "paths": {
-		//     "@globalComponents/*": ["src/globalComponents"],
-		//     "@pageComponents/*": ["src/pageComponents"],
-		//     "@utils/*": ["src/utils"],
-		//     "@pages/*": ["src/pages"],
-		//     "@styles/*": ["src/styles"],
-		//     "@types/*": ["src/types"],
-		//     "@interfaces/*": ["src/interfaces"],
-		//     "@hooks/*": ["src/hooks"],
-		//     "@constants/*": ["src/constants"],
-		//     "@enums/*": ["src/enums"]
-		// }
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"],
+
+			"@shared/*": ["./src/shared/*"],
+			"@sharedComponents/*": ["./src/shared/components/*"],
+			"@sharedHooks/*": ["./src/shared/hooks/*"],
+			"@sharedTypes/*": ["./src/shared/types/*"],
+			"@sharedUtils/*": ["./src/shared/utils/*"],
+			"@sharedConstants/*": ["./src/shared/constants/*"],
+			"@sharedEnums/*": ["./src/shared/enums/*"],
+			"@sharedStyles/*": ["./src/shared/styles/*"],
+
+			"@features/*": ["./src/features/*"],
+			"@auth/*": ["./src/features/auth/*"],
+			"@challenge/*": ["./src/features/challenge/*"],
+			"@gameHistory/*": ["./src/features/gameHistory/*"],
+			"@gameplay/*": ["./src/features/gameplay/*"],
+			"@gameReplay/*": ["./src/features/gameReplay/*"],
+			"@gameSetup/*": ["./src/features/gameSetup/*"],
+			"@matchmaking/*": ["./src/features/matchmaking/*"],
+			"@settings/*": ["./src/features/settings/*"],
+
+			"@app/*": ["./src/app/*"],
+			"@appApi/*": ["./src/app/api/*"],
+			"@appApi": ["./src/app/api"],
+			"@appProviders/*": ["./src/app/providers/*"],
+			"@appRouting/*": ["./src/app/routing/*"],
+			"@appStyles/*": ["./src/app/styles/*"],
+
+			"@pages/*": ["./src/pages/*"],
+		}
 	},
+	
 	"include": ["src/**/*"]
 }

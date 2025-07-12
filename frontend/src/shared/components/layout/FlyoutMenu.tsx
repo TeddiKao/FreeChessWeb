@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import "../../styles/layout/flyout-menu.scss";
+import "@sharedStyles/layout/flyout-menu.scss";
 
 interface FlyoutMenuProps {
     children: ReactNode;

@@ -3,7 +3,7 @@ import {
 	OptionalValue,
 	RefObject,
 	StateSetterFunction,
-} from "../../types/utility.types";
+} from "@sharedTypes/utility.types";
 
 type WebSocketLifecycleHookProps = {
 	websocket: OptionalValue<WebSocket>;

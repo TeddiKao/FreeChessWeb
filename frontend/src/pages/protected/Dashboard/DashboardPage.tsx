@@ -1,4 +1,4 @@
-import DashboardNavbar from "../../../shared/components/DashboardNavbar/DashboardNavbar";
+import DashboardNavbar from "@sharedComponents/DashboardNavbar/DashboardNavbar";
 import DashboardSuggestions from "./components/DashboardSuggestions";
 import UserGreeting from "./components/UserGreeting";
 
