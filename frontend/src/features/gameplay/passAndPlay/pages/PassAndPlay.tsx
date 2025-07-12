@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 
-import "../../../../shared/styles/chessboard/board-actions.scss";
+import "@sharedStyles/chessboard/board-actions.scss";
 import "../styles/pass-and-play.scss";
 
 import Chessboard from "../Chessboard";
 import GameplaySettings from "@settings/gameplay/GameplaySettings";
-import BaseModal from "../../../../shared/components/layout/BaseModal";
+import BaseModal from "@sharedComponents/layout/BaseModal";
 import useGameplaySettings from "@settings/gameplay/hooks/useGameplaySettings";
 import DashboardNavbar from "@sharedComponents/DashboardNavbar/DashboardNavbar";
 import LocalGameOverModal from "../modals/GameOverModal";

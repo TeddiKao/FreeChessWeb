@@ -17,7 +17,7 @@ import BotChessboard from "../components/BotChessboard";
 import {
 	MoveInfo,
 	ParsedFEN,
-} from "../../../../shared/types/chessTypes/gameState.types";
+} from "@sharedTypes/chessTypes/gameState.types";
 import {
 	fetchBotGamePositionList,
 	fetchBotGameMoveList,
