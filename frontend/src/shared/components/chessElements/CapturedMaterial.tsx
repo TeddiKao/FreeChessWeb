@@ -1,6 +1,6 @@
 import { capitaliseFirstLetter } from "@sharedUtils/generalUtils";
 
-import "../../styles/chessElements/captured-material.scss";
+import "@sharedStyles/chessElements/captured-material.scss";
 import { pluralToSingularPieceMap } from "@sharedConstants/pieceMappings";
 import { CapturedPiecesList, PromotedPiecesList } from "@sharedTypes/chessTypes/gameState.types";
 import { PieceColor, CapturablePiecePlural } from "@sharedTypes/chessTypes/pieces.types";
