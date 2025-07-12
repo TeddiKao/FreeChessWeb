@@ -20,7 +20,21 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
-		"noUncheckedSideEffectImports": true
+		"noUncheckedSideEffectImports": true,
+
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"],
+
+			"@shared/*": ["./src/shared/*"],
+			"@sharedComponents/*": ["./src/shared/components/*"],
+			"@sharedHooks/*": ["./src/shared/hooks/*"],
+			"@sharedTypes/*": ["./src/shared/types/*"],
+			"@sharedUtils/*": ["./src/shared/utils/*"],
+			"@sharedConstants/*": ["./src/shared/constants/*"],
+			"@sharedEnums/*": ["./src/shared/enums/*"],
+			"@sharedStyles/*": ["./src/shared/styles/*"],
+		}
 	},
 	
 	"include": ["src/**/*"]
