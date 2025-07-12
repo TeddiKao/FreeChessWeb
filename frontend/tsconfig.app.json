@@ -34,6 +34,16 @@
 			"@sharedConstants/*": ["./src/shared/constants/*"],
 			"@sharedEnums/*": ["./src/shared/enums/*"],
 			"@sharedStyles/*": ["./src/shared/styles/*"],
+
+			"@features/*": ["./src/features/*"],
+			"@auth/*": ["./src/features/auth/*"],
+			"@challenge/*": ["./src/features/challenge/*"],
+			"@gameHistory/*": ["./src/features/gameHistory/*"],
+			"@gameplay/*": ["./src/features/gameplay/*"],
+			"@gameReplay/*": ["./src/features/gameReplay/*"],
+			"@gameSetup/*": ["./src/features/gameSetup/*"],
+			"@matchmaking/*": ["./src/features/matchmaking/*"],
+			"@settings/*": ["./src/features/settings/*"],
 		}
 	},
 	
