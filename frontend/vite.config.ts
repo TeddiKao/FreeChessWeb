@@ -32,5 +32,12 @@ export default defineConfig({
             "@appStyles": path.resolve(__dirname, "./src/app/styles"),
             "@pages": path.resolve(__dirname, "./src/pages"),
         }
-  }
+    },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: `@use "@appStyles/globals" as *;`,
+            },
+        },
+    },
 })
