@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 import "../../styles/chessboard/promotion-popup.scss";
-import { PieceColor, PieceType } from "../../types/pieces.types";
+import { PieceColor, PieceType } from "@sharedTypes/chessTypes/pieces.types";
 
 type PromotionCancelFunction = (color: PieceColor) => void;
 
