@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef } from "react";
 import {
 	clearSquaresStyling,
 	getRank,
-} from "../../../../shared/utils/boardUtils";
+} from "@sharedUtils/boardUtils";
 
 import useAnimationLogic from "./useAnimationLogic";
 import usePlayerClocks from "./usePlayerClocks";
@@ -19,13 +19,13 @@ import useSideToMove from "./useSideToMove";
 import {
 	displayLegalMoves,
 	performMoveValidation,
-} from "../../common/utils/moveService";
+} from "@gameplay/common/utils/moveService";
 import {
 	PieceColor,
 	PieceType,
-} from "../../../../shared/types/chessTypes/pieces.types";
-import { MoveMadeEventData } from "../types/gameEvents.types";
-import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
+} from "@sharedTypes/chessTypes/pieces.types";
+import { MoveMadeEventData } from "@gameplay/multiplayer/types/gameEvents.types";
+import { isPawnPromotion } from "@gameplay/common/utils/moveTypeDetection";
 
 function useMultiplayerGameplayLogic(
 	gameId: number,

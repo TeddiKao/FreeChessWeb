@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { PositionList } from "../../../../shared/types/chessTypes/gameState.types";
-import { PositionListUpdateEventData } from "../types/gameEvents.types";
-import { fetchPositionList } from "../../common/utils/gameStateFetchApi";
+import { PositionList } from "@sharedTypes/chessTypes/gameState.types";
+import { PositionListUpdateEventData } from "@gameplay/multiplayer/types/gameEvents.types";
+import { fetchPositionList } from "@gameplay/common/utils/gameStateFetchApi";
 
 function usePositionList(gameId: number) {
 	const [positionList, setPositionList] = useState<PositionList>([]);

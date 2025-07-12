@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { getOppositeColor } from "../../passAndPlay/utils/general";
-import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
-import { CheckmateEventData } from "../types/gameEvents.types";
+import { getOppositeColor } from "@gameplay/passAndPlay/utils/general";
+import { PieceColor } from "@sharedTypes/chessTypes/pieces.types";
+import { CheckmateEventData } from "@gameplay/multiplayer/types/gameEvents.types";
 
 function useGameEndState() {
 	const [hasGameEnded, setHasGameEnded] = useState<boolean>(false);
