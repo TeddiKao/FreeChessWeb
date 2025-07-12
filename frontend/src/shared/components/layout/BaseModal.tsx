@@ -1,4 +1,4 @@
-import "../../styles/layout/base-modal.scss";
+import "@sharedStyles/layout/base-modal.scss";
 import { ReactNode } from "react";
 import ReactDom from "react-dom";
 
