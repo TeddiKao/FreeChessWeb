@@ -1,6 +1,6 @@
-import LoadingSpinner from "../../../shared/components/LoadingSpinner";
-import "../styles/auth-loading-screen.scss";
-import BaseModal from "../../../shared/components/layout/BaseModal";
+import LoadingSpinner from "@sharedComponents/LoadingSpinner";
+import "@auth/styles/auth-loading-screen.scss";
+import BaseModal from "@sharedComponents/layout/BaseModal";
 
 type AuthLoadingScreenProps = {
 	visible: boolean;

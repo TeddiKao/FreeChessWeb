@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
-import { ACCESS_TOKEN } from "./constants";
-import { getAccessToken, getRefreshToken } from "./utils";
-import api from "../../app/api";
+import { ACCESS_TOKEN } from "@auth/constants";
+import { getAccessToken, getRefreshToken } from "@auth/utils";
+import api from "@appApi";
 
 function useIsAuthenticated() {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(
