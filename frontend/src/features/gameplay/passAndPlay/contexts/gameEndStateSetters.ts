@@ -2,7 +2,7 @@ import { createContext } from "react";
 import {
 	OptionalValue,
 	StateSetterFunction,
-} from "../../../../shared/types/utility.types";
+} from "@sharedTypes/utility.types";
 
 const GameEndedSetterContext =
 	createContext<OptionalValue<StateSetterFunction<boolean>>>(null);

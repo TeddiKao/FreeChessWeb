@@ -1,5 +1,5 @@
-import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
-import { getPromotionRank } from "../../passAndPlay/utils/promotion";
+import { PieceColor } from "@sharedTypes/chessTypes/pieces.types";
+import { getPromotionRank } from "@gameplay/passAndPlay/utils/promotion";
 
 function isPawnPromotion(color: PieceColor, destinationRank: number): boolean {
 	return destinationRank === getPromotionRank(color);
