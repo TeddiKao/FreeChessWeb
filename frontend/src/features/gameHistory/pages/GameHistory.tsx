@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { isNullOrUndefined } from "../../../shared/utils/generalUtils";
-import DashboardNavbar from "../../../shared/components/DashboardNavbar/DashboardNavbar";
+import { isNullOrUndefined } from "@sharedUtils/generalUtils";
+import DashboardNavbar from "@sharedComponents/DashboardNavbar/DashboardNavbar";
 import useCompletedGames from "../hooks/useCompletedGames";
-import useUsername from "../../../shared/hooks/useUsername";
-import { getTotalPages } from "../../../shared/utils/pageNavigationUtils";
+import useUsername from "@sharedHooks/useUsername";
+import { getTotalPages } from "@sharedUtils/pageNavigationUtils";
 import CompletedGameInfo from "../components/CompletedGameInfo";
 import PageNavigation from "../components/PageNavigation";
 
