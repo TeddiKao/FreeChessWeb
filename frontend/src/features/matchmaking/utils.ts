@@ -1,4 +1,4 @@
-import { getUsername } from "../../shared/utils/apiUtils";
+import { getUsername } from "@sharedUtils/apiUtils";
 
 async function getAssignedColor(whitePlayer: string, blackPlayer: string) {
 	const username = await getUsername();
