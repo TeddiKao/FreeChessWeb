@@ -1,8 +1,8 @@
 import { useState } from "react";
 import useEmail from "../../../hooks/useEmail";
 import useUsername from "../../../hooks/useUsername";
-import "../../../styles/DashboardNavbar/account-info.scss";
-import AccountOptions from "./AccountOptions";
+import "@sharedStyles/DashboardNavbar/account-info.scss";
+import AccountOptions from "@sharedComponents/DashboardNavbar/components/AccountOptions";
 
 interface AccountInfoProps {
 	dashboardNavbarExpanded: boolean;

@@ -1,9 +1,9 @@
 import { dashboardNavLinks } from "../../../../constants/navLinksConfig";
 import MainLink from "./components/MainLink";
 
-import "../../../../styles/DashboardNavbar/site-links.scss";
+import "@sharedStyles/DashboardNavbar/site-links.scss";
 import { useState } from "react";
-import { StateSetterFunction } from "../../../../types/utility.types";
+import { StateSetterFunction } from "@sharedTypes/utility.types";
 
 interface SiteLinkProps {
 	dashboardNavbarExpanded: boolean;

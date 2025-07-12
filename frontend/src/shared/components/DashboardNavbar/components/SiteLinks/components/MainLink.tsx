@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import "../../../../../styles/DashboardNavbar/links/main-link.scss";
+import "@sharedStyles/DashboardNavbar/links/main-link.scss";
 import { useContext } from "react";
 import { ExpandNavbarContext } from "../../../DashboardNavbar";
 import SubLink from "./SubLink";
-import { StateSetterFunction } from "../../../../../types/utility.types";
+import { StateSetterFunction } from "@sharedTypes/utility.types";
 
 interface MainLinkProps {
 	linkName: string;
