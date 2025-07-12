@@ -2,19 +2,19 @@ import React, { useEffect, useState } from "react";
 
 import "../styles/select-time-control.scss";
 
-import { capitaliseFirstLetter } from "../../../shared/utils/generalUtils";
-import { displayTimeControl } from "../../../shared/utils/timeUtils";
+import { capitaliseFirstLetter } from "@sharedUtils/generalUtils";
+import { displayTimeControl } from "@sharedUtils/timeUtils";
 
-import DashboardNavbar from "../../../shared/components/DashboardNavbar/DashboardNavbar";
-import DisplayChessboard from "../components/DisplayChessboard";
-import Timer from "../../../shared/components/chessElements/Timer";
-import { ParsedFEN } from "../../../shared/types/chessTypes/gameState.types";
-import { fetchFen } from "../../gameplay/passAndPlay/utils/passAndPlayApi";
-import CustomTimeControlScreen from "../components/CustomTimeControlScreen";
-import TimeControlSelection from "../components/TimeControlSelection";
-import TimeControlTypeContainer from "../components/TimeControlTypeContainer";
-import { GameSetupStages } from "../enums";
-import MatchmakingScreen from "../../matchmaking/components/MatchmakingScreen";
+import DashboardNavbar from "@sharedComponents/DashboardNavbar/DashboardNavbar";
+import DisplayChessboard from "@gameSetup/components/DisplayChessboard";
+import Timer from "@sharedComponents/chessElements/Timer";
+import { ParsedFEN } from "@sharedTypes/chessTypes/gameState.types";
+import { fetchFen } from "@gameplay/passAndPlay/utils/passAndPlayApi";
+import CustomTimeControlScreen from "@gameSetup/components/CustomTimeControlScreen";
+import TimeControlSelection from "@gameSetup/components/TimeControlSelection";
+import TimeControlTypeContainer from "@gameSetup/components/TimeControlTypeContainer";
+import { GameSetupStages } from "@gameSetup/enums";
+import MatchmakingScreen from "@matchmaking/components/MatchmakingScreen";
 
 type TimeControlInfo = {
 	baseTime: number;

@@ -4,8 +4,8 @@ import {
 	rapidTimeControls,
 	classicalTimeControls,
 } from "../timeControls";
-import { compareObjects } from "../../../shared/utils/generalUtils";
-import { displayTimeControl } from "../../../shared/utils/timeUtils";
+import { compareObjects } from "@sharedUtils/generalUtils";
+import { displayTimeControl } from "@sharedUtils/timeUtils";
 import { TimeControls } from "../enums";
 
 interface TimeControlInfo {
