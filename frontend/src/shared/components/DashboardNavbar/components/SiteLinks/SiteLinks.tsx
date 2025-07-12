@@ -1,5 +1,5 @@
-import { dashboardNavLinks } from "../../../../constants/navLinksConfig";
-import MainLink from "./components/MainLink";
+import { dashboardNavLinks } from "@sharedConstants/navLinksConfig";
+import MainLink from "@sharedComponents/DashboardNavbar/components/SiteLinks/components/MainLink";
 
 import "@sharedStyles/DashboardNavbar/site-links.scss";
 import { useState } from "react";

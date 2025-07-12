@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 
 import "@sharedStyles/chessElements/gameplaySidePanel/gameplay-action-buttons.scss";
-import { RefObject, StateSetterFunction } from "../../../types/utility.types";
-import { websocketBaseURL } from "../../../constants/urls";
-import ConfirmationPopup from "../../ConfirmationPopup";
-import useWebsocketWithLifecycle from "../../../hooks/websocket/useWebsocketWithLifecycle";
-import { getAccessToken } from "../../../../features/auth/utils";
-import { ActionWebSocketEventTypes } from "../../../../features/gameplay/multiplayer/types/gameEvents.enums";
-import { PieceColor } from "../../../types/chessTypes/pieces.types";
+import { RefObject, StateSetterFunction } from "@sharedTypes/utility.types";
+import { websocketBaseURL } from "@sharedConstants/urls";
+import ConfirmationPopup from "@sharedComponents/ConfirmationPopup";
+import useWebsocketWithLifecycle from "@sharedHooks/websocket/useWebsocketWithLifecycle";
+import { getAccessToken } from "@auth/utils";
+import { ActionWebSocketEventTypes } from "@gameplay/multiplayer/types/gameEvents.enums";
+import { PieceColor } from "@sharedTypes/chessTypes/pieces.types";
 
 type GameplayActionButtonsProps = {
 	gameId: string | number;
