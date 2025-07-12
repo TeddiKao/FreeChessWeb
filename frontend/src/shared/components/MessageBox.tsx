@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { StateSetterFunction } from "@sharedTypes/utility.types";
 import { convertToMilliseconds } from "@sharedUtils/timeUtils";
 
-import "../styles/message-box.scss";
+import "@sharedStyles/message-box.scss";
 import {
 	MessageBoxTypes,
 	XAlignment,
