@@ -1,15 +1,15 @@
-import { ChessboardSquareIndex } from "../../../../shared/types/board.types";
+import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
 import {
 	BoardPlacement,
 	MoveInfo,
 	ParsedFEN,
-} from "../../../../shared/types/chessTypes/gameState.types";
+} from "@sharedTypes/chessTypes/gameState.types";
 import {
 	PieceColor,
 	PieceType,
-} from "../../../../shared/types/chessTypes/pieces.types";
-import { OptionalValue } from "../../../../shared/types/utility.types";
-import { getRank } from "../../../../shared/utils/boardUtils";
+} from "@sharedTypes/chessTypes/pieces.types";
+import { OptionalValue } from "@sharedTypes/utility.types";
+import { getRank } from "@sharedUtils/boardUtils";
 
 function resetEnPassantTargetSquare(fenString: ParsedFEN): ParsedFEN {
 	const updatedFENString: ParsedFEN = structuredClone(fenString);

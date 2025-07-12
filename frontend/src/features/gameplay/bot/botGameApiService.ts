@@ -1,5 +1,5 @@
-import api from "../../../app/api";
-import { MoveInfo } from "../../../shared/types/chessTypes/gameState.types";
+import api from "@appApi";
+import { MoveInfo } from "@sharedTypes/chessTypes/gameState.types";
 
 async function createBotGame(botId: string) {
 	let gameId = null;

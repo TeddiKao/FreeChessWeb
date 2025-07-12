@@ -1,4 +1,4 @@
-import { displayTimeControl } from "../../../shared/utils/timeUtils";
+import { displayTimeControl } from "@sharedUtils/timeUtils";
 import "../styles/matchmaking-screen.scss";
 import useMatchmakingLogic from "../hooks/useMatchmakingLogic";
 

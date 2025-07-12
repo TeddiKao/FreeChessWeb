@@ -3,9 +3,9 @@ import { useState, useEffect, useContext, useRef } from "react";
 import {
 	clearSquaresStyling,
 	getSquareExists,
-} from "../../../shared/utils/boardUtils.js";
+} from "@sharedUtils/boardUtils";
 
-import { playAudio } from "../../../shared/utils/audioUtils.js";
+import { playAudio } from "@sharedUtils/audioUtils";
 
 import { disableCastling, handleCastling, isCastling } from "./utils/castling";
 
@@ -26,11 +26,11 @@ import {
 } from "./utils/basicMovement";
 
 import { getOppositeColor } from "./utils/general";
-import usePieceAnimation from "../../../shared/hooks/usePieceAnimation";
-import { convertToMilliseconds } from "../../../shared/utils/timeUtils.js";
-import { pieceAnimationTime } from "../../../shared/constants/pieceAnimation.js";
-import ChessboardGrid from "../../../shared/components/chessboard/ChessboardGrid";
-import Square from "../../../shared/components/chessboard/Square";
+import usePieceAnimation from "@sharedHooks/usePieceAnimation";
+import { convertToMilliseconds } from "@sharedUtils/timeUtils";
+import { pieceAnimationTime } from "@sharedConstants/pieceAnimation";
+import ChessboardGrid from "@sharedComponents/chessboard/ChessboardGrid";
+import Square from "@sharedComponents/chessboard/Square";
 import {
 	displayLegalMoves,
 	fetchMoveIsValid,
@@ -40,12 +40,12 @@ import {
 	CastlingSide,
 	MoveInfo,
 	ParsedFEN,
-} from "../../../shared/types/chessTypes/gameState.types";
+} from "@sharedTypes/chessTypes/gameState.types";
 import {
 	PieceColor,
 	PieceInfo,
 	PieceType,
-} from "../../../shared/types/chessTypes/pieces.types";
+} from "@sharedTypes/chessTypes/pieces.types";
 import {
 	getIsCheckmated,
 	getIsStalemated,
@@ -55,11 +55,11 @@ import {
 	GameEndedCauseSetterContext,
 	GameWinnerSetterContext,
 } from "./contexts/gameEndStateSetters";
-import { ChessboardSquareIndex } from "../../../shared/types/chessTypes/board.types";
-import { OptionalValue, StateSetterFunction } from "../../../shared/types/utility.types";
-import { MoveMethods } from "../../../shared/types/chessTypes/moveMethods.enums";
-import { BaseChessboardProps } from "../../../shared/types/chessTypes/chessboardProps.types.js";
-import { FilledSquareRenderParams, EmptySquareRenderParams } from "../../../shared/types/chessTypes/chessboardGrid.types.js";
+import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
+import { OptionalValue, StateSetterFunction } from "@sharedTypes/utility.types";
+import { MoveMethods } from "@sharedTypes/chessTypes/moveMethods.enums";
+import { BaseChessboardProps } from "@sharedTypes/chessTypes/chessboardProps.types";
+import { FilledSquareRenderParams, EmptySquareRenderParams } from "@sharedTypes/chessTypes/chessboardGrid.types";
 
 interface ChessboardProps extends BaseChessboardProps {
 	setBoardOrientation: StateSetterFunction<string>;

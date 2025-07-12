@@ -2,16 +2,16 @@ import {
 	whiteKingStartingSquare,
 	blackKingStartingSquare,
 	rookStartingSquares,
-} from "../constants/castlingSquares";
+} from "@gameplay/passAndPlay/constants/castlingSquares";
 import {
 	BoardPlacement,
 	CastlingRights,
 	CastlingSide,
 	ParsedFEN,
 	SquareInfo,
-} from "../../../../shared/types/chessTypes/gameState.types";
-import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
-import { capitaliseFirstLetter } from "../../../../shared/utils/generalUtils";
+} from "@sharedTypes/chessTypes/gameState.types";
+import { PieceColor } from "@sharedTypes/chessTypes/pieces.types";
+import { capitaliseFirstLetter } from "@sharedUtils/generalUtils";
 
 function getKingStartingSquare(color: string): number {
 	color = color.toLowerCase();

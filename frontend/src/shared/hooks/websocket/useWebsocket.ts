@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useReactiveRef from "../useReactiveRef";
+import useReactiveRef from "@sharedHooks/useReactiveRef";
 
 function useWebSocket(
 	url: string,

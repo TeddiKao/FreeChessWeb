@@ -1,11 +1,11 @@
-import { BaseWebsocketEventData } from "../../../../shared/types/websocket.types";
+import { BaseWebsocketEventData } from "@sharedTypes/websocket.types";
 import {
 	CapturedPiecesList,
 	MoveInfo,
 	ParsedFEN,
 	PromotedPiecesList,
-} from "../../../../shared/types/chessTypes/gameState.types";
-import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
+} from "@sharedTypes/chessTypes/gameState.types";
+import { PieceColor } from "@sharedTypes/chessTypes/pieces.types";
 
 interface MoveMadeEventData extends BaseWebsocketEventData {
 	move_data: MoveInfo;

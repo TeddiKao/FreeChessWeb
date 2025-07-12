@@ -1,8 +1,8 @@
-import "../../styles/chessboard/chessboard.scss";
-import { getFile, getRank, isSquareLight } from "../../utils/boardUtils";
-import { getPromotionRank } from "../../../features/gameplay/passAndPlay/utils/promotion";
-import { BoardPlacement } from "../../types/chessTypes/gameState.types";
-import { EmptySquareRenderParams, FilledSquareRenderParams } from "../../types/chessTypes/chessboardGrid.types";
+import "@sharedStyles/chessboard/chessboard.scss";
+import { getFile, getRank, isSquareLight } from "@sharedUtils/boardUtils";
+import { getPromotionRank } from "@gameplay/passAndPlay/utils/promotion";
+import { BoardPlacement } from "@sharedTypes/chessTypes/gameState.types";
+import { EmptySquareRenderParams, FilledSquareRenderParams } from "@sharedTypes/chessTypes/chessboardGrid.types";
 
 type ChessboardGridProps = {
 	boardOrientation: string;

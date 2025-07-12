@@ -1,7 +1,7 @@
-import { ChessboardSquareIndex } from "../../../../shared/types/chessTypes/board.types";
-import { BaseChessboardProps } from "../../../../shared/types/chessTypes/chessboardProps.types";
-import { ParsedFEN, MoveInfo } from "../../../../shared/types/chessTypes/gameState.types";
-import { StateSetterFunction, OptionalValue } from "../../../../shared/types/utility.types";
+import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
+import { BaseChessboardProps } from "@sharedTypes/chessTypes/chessboardProps.types";
+import { ParsedFEN, MoveInfo } from "@sharedTypes/chessTypes/gameState.types";
+import { StateSetterFunction, OptionalValue } from "@sharedTypes/utility.types";
 
 interface BotChessboardProps extends BaseChessboardProps {
 	gameplaySettings: any;

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "../styles/custom-time-control-screen.scss";
-import { TimeControl, TimeDuration } from "../../../shared/types/time.types";
-import { StateSetterFunction } from "../../../shared/types/utility.types";
-import { convertTimeControlToSeconds } from "../../../shared/utils/timeUtils";
+import { TimeControl, TimeDuration } from "@sharedTypes/time.types";
+import { StateSetterFunction } from "@sharedTypes/utility.types";
+import { convertTimeControlToSeconds } from "@sharedUtils/timeUtils";
 
 type CustomTimeControlScreenProps = {
 	setSelectionStage: StateSetterFunction<string>;

@@ -1,25 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import DashboardNavbar from "../../../shared/components/DashboardNavbar/DashboardNavbar";
+import DashboardNavbar from "@sharedComponents/DashboardNavbar/DashboardNavbar";
 
 import "../styles/view-game.scss";
-import { playAudio } from "../../../shared/utils/audioUtils";
-import { isNullOrUndefined } from "../../../shared/utils/generalUtils";
-import { OptionalValue } from "../../../shared/types/utility.types";
-import { convertToMilliseconds } from "../../../shared/utils/timeUtils";
-import { pieceAnimationTime } from "../../../shared/constants/pieceAnimation";
-import usePieceAnimation from "../../../shared/hooks/usePieceAnimation";
+import { playAudio } from "@sharedUtils/audioUtils";
+import { isNullOrUndefined } from "@sharedUtils/generalUtils";
+import { OptionalValue } from "@sharedTypes/utility.types";
+import { convertToMilliseconds } from "@sharedUtils/timeUtils";
+import { pieceAnimationTime } from "@sharedConstants/pieceAnimation";
+import usePieceAnimation from "@sharedHooks/usePieceAnimation";
 import GameReplayChessboard from "../components/GameReplayChessboard";
-import MoveListPanel from "../../../shared/components/chessElements/gameplaySidePanel/MoveListPanel";
-import MoveNavigationButtons from "../../../shared/components/chessElements/gameplaySidePanel/MoveNavigationButtons";
-import { ParsedFEN } from "../../../shared/types/chessTypes/gameState.types";
+import MoveListPanel from "@sharedComponents/chessElements/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "@sharedComponents/chessElements/gameplaySidePanel/MoveNavigationButtons";
+import { ParsedFEN } from "@sharedTypes/chessTypes/gameState.types";
 import {
 	fetchPositionList,
 	fetchMoveList,
-} from "../../gameplay/common/utils/gameStateFetchApi";
-import { fetchGameWinner } from "../../gameplay/common/utils/gameResultFetchApi";
-import BoardActions from "../../../shared/components/chessboard/BoardActions";
+} from "@gameplay/common/utils/gameStateFetchApi";
+import { fetchGameWinner } from "@gameplay/common/utils/gameResultFetchApi";
+import BoardActions from "@sharedComponents/chessboard/BoardActions";
 
 function ViewGame() {
 	const { gameId } = useParams();

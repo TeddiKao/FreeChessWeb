@@ -1,4 +1,4 @@
-import api from "../../../../app/api";
+import api from "@appApi";
 
 async function fetchFen(rawFenString: string): Promise<any> {
 	let parsedFen = null;

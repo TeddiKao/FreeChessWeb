@@ -1,30 +1,30 @@
 import { useEffect, useRef, useState } from "react";
-import "../styles/play-bot.scss";
-import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings";
-import GameplaySettings from "../../../settings/gameplay/GameplaySettings";
-import BaseModal from "../../../../shared/components/layout/BaseModal";
+import "@gameplay/bot/styles/play-bot.scss";
+import useGameplaySettings from "@settings/gameplay/hooks/useGameplaySettings";
+import GameplaySettings from "@settings/gameplay/GameplaySettings";
+import BaseModal from "@sharedComponents/layout/BaseModal";
 import { Navigate, useLocation } from "react-router-dom";
-import { isNullOrUndefined } from "../../../../shared/utils/generalUtils";
-import { playAudio } from "../../../../shared/utils/audioUtils";
-import { convertToMilliseconds } from "../../../../shared/utils/timeUtils";
-import { pieceAnimationTime } from "../../../../shared/constants/pieceAnimation";
-import usePieceAnimation from "../../../../shared/hooks/usePieceAnimation";
+import { isNullOrUndefined } from "@sharedUtils/generalUtils";
+import { playAudio } from "@sharedUtils/audioUtils";
+import { convertToMilliseconds } from "@sharedUtils/timeUtils";
+import { pieceAnimationTime } from "@sharedConstants/pieceAnimation";
+import usePieceAnimation from "@sharedHooks/usePieceAnimation";
 import LocalGameOverModal from "../../passAndPlay/modals/GameOverModal";
-import DashboardNavbar from "../../../../shared/components/DashboardNavbar/DashboardNavbar";
-import MoveListPanel from "../../../../shared/components/chessElements/gameplaySidePanel/MoveListPanel";
-import MoveNavigationButtons from "../../../../shared/components/chessElements/gameplaySidePanel/MoveNavigationButtons";
+import DashboardNavbar from "@sharedComponents/DashboardNavbar/DashboardNavbar";
+import MoveListPanel from "@sharedComponents/chessElements/gameplaySidePanel/MoveListPanel";
+import MoveNavigationButtons from "@sharedComponents/chessElements/gameplaySidePanel/MoveNavigationButtons";
 import BotChessboard from "../components/BotChessboard";
 import {
 	MoveInfo,
 	ParsedFEN,
-} from "../../../../shared/types/chessTypes/gameState.types";
+} from "@sharedTypes/chessTypes/gameState.types";
 import {
 	fetchBotGamePositionList,
 	fetchBotGameMoveList,
 } from "../botGameApiService";
-import BoardActions from "../../../../shared/components/chessboard/BoardActions";
-import { ChessboardSquareIndex } from "../../../../shared/types/chessTypes/board.types";
-import { OptionalValue } from "../../../../shared/types/utility.types";
+import BoardActions from "@sharedComponents/chessboard/BoardActions";
+import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
+import { OptionalValue } from "@sharedTypes/utility.types";
 
 function PlayBot() {
 	const initialGameplaySettings = useGameplaySettings();

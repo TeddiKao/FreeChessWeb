@@ -1,7 +1,7 @@
-import { BaseWebsocketEventData } from "../../shared/types/websocket.types";
-import { TimeControl } from "../../shared/types/time.types";
-import { PieceColor } from "../../shared/types/chessTypes/pieces.types";
-import { ChallengeRelationships } from "./challengerInfo.types";
+import { BaseWebsocketEventData } from "@sharedTypes/websocket.types";
+import { TimeControl } from "@sharedTypes/time.types";
+import { PieceColor } from "@sharedTypes/chessTypes/pieces.types";
+import { ChallengeRelationships } from "@challenge/challengerInfo.types";
 
 interface ChallengeReceivedWebsocketEventData extends BaseWebsocketEventData {
 	challenge_sender: string;

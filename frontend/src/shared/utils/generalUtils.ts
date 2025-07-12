@@ -1,6 +1,6 @@
 import { isEqual } from "lodash";
-import { websocketBaseURL } from "../constants/urls";
-import { getAccessToken } from "../../features/auth/utils";
+import { websocketBaseURL } from "@sharedConstants/urls";
+import { getAccessToken } from "@auth/utils";
 
 function capitaliseFirstLetter(string: string): string {
 	const capitalisedFirstLetter = string.charAt(0).toUpperCase();

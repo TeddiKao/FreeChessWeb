@@ -1,5 +1,5 @@
-import FlyoutMenu from "../../layout/FlyoutMenu";
-import "../../../styles/DashboardNavbar/account-options.scss";
+import FlyoutMenu from "@sharedComponents/layout/FlyoutMenu";
+import "@sharedStyles/DashboardNavbar/account-options.scss";
 import { useNavigate } from "react-router-dom";
 
 function AccountOptions() {

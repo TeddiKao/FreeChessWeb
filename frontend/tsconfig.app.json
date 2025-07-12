@@ -47,6 +47,7 @@
 
 			"@app/*": ["./src/app/*"],
 			"@appApi/*": ["./src/app/api/*"],
+			"@appApi": ["./src/app/api"],
 			"@appProviders/*": ["./src/app/providers/*"],
 			"@appRouting/*": ["./src/app/routing/*"],
 			"@appStyles/*": ["./src/app/styles/*"],

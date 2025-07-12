@@ -1,4 +1,4 @@
-import api from "../../app/api";
+import api from "@appApi";
 
 async function fetchCompletedGames(currentPage: number) {
 	let completedGames = null;

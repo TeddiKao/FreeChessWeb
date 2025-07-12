@@ -1,27 +1,27 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
-import "../styles/play.scss";
+import "@gameplay/multiplayer/styles/play.scss";
 
-import GameOverModal from "../modals/GameOverModal";
-import GameplaySettings from "../../../settings/gameplay/GameplaySettings";
-import BaseModal from "../../../../shared/components/layout/BaseModal.js";
-import useGameplaySettings from "../../../settings/gameplay/hooks/useGameplaySettings";
-import MessageBox from "../../../../shared/components/MessageBox";
-import DrawOfferPopup from "../popups/DrawOfferPopup";
-import DashboardNavbar from "../../../../shared/components/DashboardNavbar/DashboardNavbar";
-import { getOppositeColor } from "../../passAndPlay/utils/general";
-import useMultiplayerGameplayLogic from "../hooks/useMultiplayerGameplayLogic";
-import { isNullOrUndefined } from "../../../../shared/utils/generalUtils.js";
-import CapturedMaterial from "../../../../shared/components/chessElements/CapturedMaterial.js";
-import GameplayActionButtons from "../../../../shared/components/chessElements/gameplaySidePanel/GameplayActionButtons.js";
-import MoveListPanel from "../../../../shared/components/chessElements/gameplaySidePanel/MoveListPanel.js";
-import MoveNavigationButtons from "../../../../shared/components/chessElements/gameplaySidePanel/MoveNavigationButtons.js";
-import Timer from "../../../../shared/components/chessElements/Timer.js";
-import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
-import MultiplayerChessboard from "../components/MultiplayerChessboard";
-import BoardActions from "../../../../shared/components/chessboard/BoardActions.js";
-import { MessageBoxTypes } from "../../../../shared/types/messageBox.types.js";
+import GameOverModal from "@gameplay/multiplayer/modals/GameOverModal";
+import GameplaySettings from "@settings/gameplay/GameplaySettings";
+import BaseModal from "@sharedComponents/layout/BaseModal.js";
+import useGameplaySettings from "@settings/gameplay/hooks/useGameplaySettings";
+import MessageBox from "@sharedComponents/MessageBox";
+import DrawOfferPopup from "@gameplay/multiplayer/popups/DrawOfferPopup";
+import DashboardNavbar from "@sharedComponents/DashboardNavbar/DashboardNavbar";
+import { getOppositeColor } from "@gameplay/passAndPlay/utils/general";
+import useMultiplayerGameplayLogic from "@gameplay/multiplayer/hooks/useMultiplayerGameplayLogic";
+import { isNullOrUndefined } from "@sharedUtils/generalUtils.js";
+import CapturedMaterial from "@sharedComponents/chessElements/CapturedMaterial.js";
+import GameplayActionButtons from "@sharedComponents/chessElements/gameplaySidePanel/GameplayActionButtons.js";
+import MoveListPanel from "@sharedComponents/chessElements/gameplaySidePanel/MoveListPanel.js";
+import MoveNavigationButtons from "@sharedComponents/chessElements/gameplaySidePanel/MoveNavigationButtons.js";
+import Timer from "@sharedComponents/chessElements/Timer.js";
+import { PieceColor } from "@sharedTypes/chessTypes/pieces.types";
+import MultiplayerChessboard from "@gameplay/multiplayer/components/MultiplayerChessboard";
+import BoardActions from "@sharedComponents/chessboard/BoardActions.js";
+import { MessageBoxTypes } from "@sharedTypes/messageBox.types.js";
 
 function Play() {
 	const location = useLocation();

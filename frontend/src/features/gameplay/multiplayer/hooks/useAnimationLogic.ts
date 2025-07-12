@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { animatePieceImage } from "../../../../shared/utils/boardUtils";
-import { PieceColor } from "../../../../shared/types/chessTypes/pieces.types";
-import { ChessboardSquareIndex } from "../../../../shared/types/board.types";
+import { animatePieceImage } from "@sharedUtils/boardUtils";
+import { PieceColor } from "@sharedTypes/chessTypes/pieces.types";
+import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
 
 function useAnimationLogic(orientation: PieceColor) {
 	const animationRef = useRef<HTMLDivElement | null>(null);
