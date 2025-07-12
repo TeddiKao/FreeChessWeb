@@ -1,6 +1,6 @@
-import api from "../../../../app/api";
-import { ChessboardSquareIndex } from "../../../../shared/types/utility.types";
-import { ParsedFEN } from "../../../../shared/types/chessTypes/gameState.types";
+import api from "@appApi";
+import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
+import { ParsedFEN } from "@sharedTypes/chessTypes/gameState.types";
 
 async function displayLegalMoves(
 	parsedFEN: ParsedFEN,

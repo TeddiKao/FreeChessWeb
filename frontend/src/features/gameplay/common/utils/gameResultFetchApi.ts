@@ -1,5 +1,5 @@
-import api from "../../../../app/api";
-import { ParsedFEN } from "../../../../shared/types/chessTypes/gameState.types";
+import api from "@appApi";
+import { ParsedFEN } from "@sharedTypes/chessTypes/gameState.types";
 
 async function fetchGameWinner(gameId: number) {
 	let gameWinner = null;
