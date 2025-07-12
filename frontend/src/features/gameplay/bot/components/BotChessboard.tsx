@@ -26,13 +26,13 @@ import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
 import {
 	ParsedFEN,
 	MoveInfo,
-} from "../../../../shared/types/chessTypes/gameState.types";
+} from "@sharedTypes/chessTypes/gameState.types";
 import { MoveMethods } from "@sharedTypes/chessTypes/moveMethods.enums";
 import {
 	PieceInfo,
 	PieceColor,
 	PieceType,
-} from "../../../../shared/types/chessTypes/pieces.types";
+} from "@sharedTypes/chessTypes/pieces.types";
 import { OptionalValue } from "@sharedTypes/utility.types";
 import { BotChessboardProps } from "@gameplay/bot/types/botChessboardProps.types";
 import { FilledSquareRenderParams, EmptySquareRenderParams } from "@sharedTypes/chessTypes/chessboardGrid.types";
