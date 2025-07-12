@@ -1,9 +1,9 @@
-import { TimeControl } from "../../../shared/types/time.types";
-import { displayTimeControl } from "../../../shared/utils/timeUtils";
-import LoadingSpinner from "../../../shared/components/LoadingSpinner";
-import BaseModal from "../../../shared/components/layout/BaseModal";
+import { TimeControl } from "@sharedTypes/time.types";
+import { displayTimeControl } from "@sharedUtils/timeUtils";
+import LoadingSpinner from "@sharedComponents/LoadingSpinner";
+import BaseModal from "@sharedComponents/layout/BaseModal";
 
-import "../styles/challenge-response-wait-screen.scss";
+import "@challenge/styles/challenge-response-wait-screen.scss";
 
 type ChallengeResponseWaitScreenProps = {
 	visible: boolean;
