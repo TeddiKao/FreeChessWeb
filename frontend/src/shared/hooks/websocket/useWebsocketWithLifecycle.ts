@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import useWebSocket from "./useWebsocket";
 import useWebsocketLifecycle from "./useWebsocketLifecycle";
-import useReactiveRef from "../useReactiveRef";
+import useReactiveRef from "@sharedHooks/useReactiveRef";
 
 interface WebsocketWithLifecycleHookProps {
 	url: string;

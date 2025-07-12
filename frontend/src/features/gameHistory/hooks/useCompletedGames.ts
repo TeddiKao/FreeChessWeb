@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { OptionalValue } from "../../../shared/types/utility.types";
+import { OptionalValue } from "@sharedTypes/utility.types";
 import {
 	fetchCompletedGames,
 	fetchTotalCompletedGames,
