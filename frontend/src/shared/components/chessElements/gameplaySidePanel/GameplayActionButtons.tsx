@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import "../../../styles/chessElements/gameplaySidePanel/gameplay-action-buttons.scss";
+import "@sharedStyles/chessElements/gameplaySidePanel/gameplay-action-buttons.scss";
 import { RefObject, StateSetterFunction } from "../../../types/utility.types";
 import { websocketBaseURL } from "../../../constants/urls";
 import ConfirmationPopup from "../../ConfirmationPopup";

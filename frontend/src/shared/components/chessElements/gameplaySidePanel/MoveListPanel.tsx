@@ -1,4 +1,4 @@
-import "../../../styles/chessElements/gameplaySidePanel/move-list-panel.scss";
+import "@sharedStyles/chessElements/gameplaySidePanel/move-list-panel.scss";
 import { StateSetterFunction } from "@sharedTypes/utility.types";
 
 type MoveListPanelProps = {

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import "../../../styles/chessElements/gameplaySidePanel/move-navigation-buttons.scss";
+import "@sharedStyles/chessElements/gameplaySidePanel/move-navigation-buttons.scss";
 import {
 	OptionalValue,
 	RefObject,
