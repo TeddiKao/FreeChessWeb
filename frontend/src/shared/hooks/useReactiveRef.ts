@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import { RefObject, StateSetterFunction } from "../types/utility.types";
+import { RefObject, StateSetterFunction } from "@sharedTypes/utility.types";
 
 function useReactiveRef<T>(
 	initialValue: T
