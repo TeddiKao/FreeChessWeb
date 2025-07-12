@@ -1,17 +1,17 @@
 import { ReactNode, useState, createContext } from "react";
-import { parseWebsocketUrl } from "../../shared/utils/generalUtils";
-import ChallengeNotification from "../../features/challenge/components/ChallengeNotification";
-import { TimeControl } from "../../shared/types/time.types";
-import { ChallengeRelationships } from "../../features/challenge/challengerInfo.types";
+import { parseWebsocketUrl } from "@sharedUtils/generalUtils";
+import ChallengeNotification from "@challenge/components/ChallengeNotification";
+import { TimeControl } from "@sharedTypes/time.types";
+import { ChallengeRelationships } from "@challenge/challengerInfo.types";
 import {
 	ChallengeAcceptedWebsocketEventData,
 	ChallengeReceivedWebsocketEventData,
 	ChallengeSuccessfullySentEventData,
-} from "../../features/challenge/challengeEvents.types";
+} from "@challenge/challengeEvents.types";
 import { useNavigate } from "react-router-dom";
-import ChallengeResponseWaitScreen from "../../features/challenge/components/ChallengeResponseWaitScreen";
-import useWebsocketWithLifecycle from "../../shared/hooks/websocket/useWebsocketWithLifecycle";
-import { ChallengeWebsocketEventTypes } from "../../features/challenge/challengeEvents.enums";
+import ChallengeResponseWaitScreen from "@challenge/components/ChallengeResponseWaitScreen";
+import useWebsocketWithLifecycle from "@sharedHooks/websocket/useWebsocketWithLifecycle";
+import { ChallengeWebsocketEventTypes } from "@challenge/challengeEvents.enums";
 
 type ChallengeWebsocketProviderProps = {
 	children: ReactNode;
