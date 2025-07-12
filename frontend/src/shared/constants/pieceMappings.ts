@@ -1,7 +1,7 @@
 import {
 	CapturablePiece,
 	CapturablePiecePlural,
-} from "../features/gameplay/multiplayer/gameLogic.types";
+} from "@sharedTypes/chessTypes/pieces.types";
 
 interface PluralToSingularPieceMap {
 	[key: string]: CapturablePiece;
