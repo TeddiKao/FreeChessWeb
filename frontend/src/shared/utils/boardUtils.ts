@@ -1,11 +1,11 @@
-import { pieceAnimationTime } from "../constants/pieceAnimation";
-import { PieceColor } from "../features/gameplay/multiplayer/gameLogic.types";
+import { pieceAnimationTime } from "@sharedConstants/pieceAnimation";
+import { PieceColor } from "@sharedTypes/chessTypes/pieces.types";
 import {
-	ChessboardSquareIndex,
 	OptionalValue,
 	RefObject,
 	StateSetterFunction,
-} from "../types/utility.types";
+} from "@sharedTypes/utility.types";
+import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
 import { convertToMilliseconds } from "./timeUtils";
 
 function clearSquaresStyling(): void {
