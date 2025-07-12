@@ -44,6 +44,14 @@
 			"@gameSetup/*": ["./src/features/gameSetup/*"],
 			"@matchmaking/*": ["./src/features/matchmaking/*"],
 			"@settings/*": ["./src/features/settings/*"],
+
+			"@app/*": ["./src/app/*"],
+			"@appApi/*": ["./src/app/api/*"],
+			"@appProviders/*": ["./src/app/providers/*"],
+			"@appRouting/*": ["./src/app/routing/*"],
+			"@appStyles/*": ["./src/app/styles/*"],
+
+			"@pages/*": ["./src/pages/*"],
 		}
 	},
 	
