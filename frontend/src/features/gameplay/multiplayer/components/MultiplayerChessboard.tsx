@@ -1,17 +1,17 @@
 // Utils
-import { isNullOrUndefined } from "../../../../shared/utils/generalUtils";
+import { isNullOrUndefined } from "@sharedUtils/generalUtils";
 
 // Types, interfaces, enums
 import {
 	PieceColor,
 	PieceType,
-} from "../../../../shared/types/chessTypes/pieces.types";
-import { MultiplayerChessboardProps } from "../types/chessboardProps.types";
-import { FilledSquareRenderParams, EmptySquareRenderParams } from "../../../../shared/types/chessTypes/chessboardGrid.types";
+} from "@sharedTypes/chessTypes/pieces.types";
+import { MultiplayerChessboardProps } from "@gameplay/multiplayer/types/chessboardProps.types";
+import { FilledSquareRenderParams, EmptySquareRenderParams } from "@sharedTypes/chessTypes/chessboardGrid.types";
 
 // Basic imports like CSS files and components
-import ChessboardGrid from "../../../../shared/components/chessboard/ChessboardGrid";
-import Square from "../../../../shared/components/chessboard/Square";
+import ChessboardGrid from "@sharedComponents/chessboard/ChessboardGrid";
+import Square from "@sharedComponents/chessboard/Square";
 
 function MultiplayerChessboard({
 	parsed_fen_string,
