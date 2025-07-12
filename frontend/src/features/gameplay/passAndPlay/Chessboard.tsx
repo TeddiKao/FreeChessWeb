@@ -40,12 +40,12 @@ import {
 	CastlingSide,
 	MoveInfo,
 	ParsedFEN,
-} from "../../../shared/types/chessTypes/gameState.types";
+} from "@sharedTypes/chessTypes/gameState.types";
 import {
 	PieceColor,
 	PieceInfo,
 	PieceType,
-} from "../../../shared/types/chessTypes/pieces.types";
+} from "@sharedTypes/chessTypes/pieces.types";
 import {
 	getIsCheckmated,
 	getIsStalemated,
