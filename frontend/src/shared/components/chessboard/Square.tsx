@@ -1,6 +1,6 @@
 import { DragPreviewImage, useDrag, useDrop } from "react-dnd";
 
-import "../../styles/chessboard/square.scss";
+import "@sharedStyles/chessboard/square.scss";
 import PromotionPopup from "./PromotionPopup";
 import React, { useEffect, useState } from "react";
 import {

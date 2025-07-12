@@ -1,4 +1,4 @@
-import "../../styles/chessboard/chessboard.scss";
+import "@sharedStyles/chessboard/chessboard.scss";
 import { getFile, getRank, isSquareLight } from "@sharedUtils/boardUtils";
 import { getPromotionRank } from "@gameplay/passAndPlay/utils/promotion";
 import { BoardPlacement } from "@sharedTypes/chessTypes/gameState.types";
