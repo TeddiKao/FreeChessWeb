@@ -1,5 +1,5 @@
 import "../../styles/chessElements/timer.scss";
-import { formatTime, getLowTimeThreshold } from "../../utils/timeUtils";
+import { formatTime, getLowTimeThreshold } from "@sharedUtils/timeUtils";
 
 type TimerProps = {
 	playerColor: string;

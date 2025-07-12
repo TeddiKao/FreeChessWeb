@@ -1,9 +1,9 @@
-import { capitaliseFirstLetter } from "../../utils/generalUtils";
+import { capitaliseFirstLetter } from "@sharedUtils/generalUtils";
 
 import "../../styles/chessElements/captured-material.scss";
-import { pluralToSingularPieceMap } from "../../constants/pieceMappings";
-import { CapturedPiecesList, PromotedPiecesList } from "../../types/chessTypes/gameState.types";
-import { PieceColor, CapturablePiecePlural } from "../../types/chessTypes/pieces.types";
+import { pluralToSingularPieceMap } from "@sharedConstants/pieceMappings";
+import { CapturedPiecesList, PromotedPiecesList } from "@sharedTypes/chessTypes/gameState.types";
+import { PieceColor, CapturablePiecePlural } from "@sharedTypes/chessTypes/pieces.types";
 
 type CapturedMaterialProps = {
 	capturedPiecesList: CapturedPiecesList;

@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
-import { StateSetterFunction } from "../types/utility.types";
-import { convertToMilliseconds } from "../utils/timeUtils";
+import { StateSetterFunction } from "@sharedTypes/utility.types";
+import { convertToMilliseconds } from "@sharedUtils/timeUtils";
 
 import "../styles/message-box.scss";
 import {
 	MessageBoxTypes,
 	XAlignment,
 	YAlignment,
-} from "../types/messageBox.types";
+} from "@sharedTypes/messageBox.types";
 
 type MessageBoxProps = {
 	setVisible: StateSetterFunction<boolean>;
