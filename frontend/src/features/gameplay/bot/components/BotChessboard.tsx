@@ -3,39 +3,39 @@ import { useState, useEffect, useRef } from "react";
 import {
 	clearSquaresStyling,
 	getRank,
-} from "../../../../shared/utils/boardUtils.js";
+} from "@sharedUtils/boardUtils";
 
 import {
 	cancelPromotion,
 	handlePromotionCaptureStorage,
 	preparePawnPromotion,
-} from "../../passAndPlay/utils/promotion";
+} from "@gameplay/passAndPlay/utils/promotion";
 
 import {
 	isObjEmpty,
 	parseWebsocketUrl,
-} from "../../../../shared/utils/generalUtils.js";
-import usePieceAnimation from "../../../../shared/hooks/usePieceAnimation";
-import ChessboardGrid from "../../../../shared/components/chessboard/ChessboardGrid";
-import Square from "../../../../shared/components/chessboard/Square";
-import useWebsocketWithLifecycle from "../../../../shared/hooks/websocket/useWebsocketWithLifecycle";
+} from "@sharedUtils/generalUtils";
+import usePieceAnimation from "@sharedHooks/usePieceAnimation";
+import ChessboardGrid from "@sharedComponents/chessboard/ChessboardGrid";
+import Square from "@sharedComponents/chessboard/Square";
+import useWebsocketWithLifecycle from "@sharedHooks/websocket/useWebsocketWithLifecycle";
 import { fetchLegalMoves } from "../../common/utils/moveService";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
 import { BotGameWebSocketEventTypes } from "../botGameEvents.enums";
-import { ChessboardSquareIndex } from "../../../../shared/types/chessTypes/board.types";
+import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
 import {
 	ParsedFEN,
 	MoveInfo,
 } from "../../../../shared/types/chessTypes/gameState.types";
-import { MoveMethods } from "../../../../shared/types/chessTypes/moveMethods.enums";
+import { MoveMethods } from "@sharedTypes/chessTypes/moveMethods.enums";
 import {
 	PieceInfo,
 	PieceColor,
 	PieceType,
 } from "../../../../shared/types/chessTypes/pieces.types";
-import { OptionalValue } from "../../../../shared/types/utility.types";
-import { BotChessboardProps } from "../types/botChessboardProps.types.js";
-import { FilledSquareRenderParams, EmptySquareRenderParams } from "../../../../shared/types/chessTypes/chessboardGrid.types.js";
+import { OptionalValue } from "@sharedTypes/utility.types";
+import { BotChessboardProps } from "@gameplay/bot/types/botChessboardProps.types";
+import { FilledSquareRenderParams, EmptySquareRenderParams } from "@sharedTypes/chessTypes/chessboardGrid.types";
 function BotChessboard({
 	parsed_fen_string,
 	orientation,
