@@ -1,5 +1,5 @@
 import { websocketBaseURL } from "@sharedConstants/urls";
-import { ChessboardSquareIndex } from "@sharedTypes/utility.types";
+import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types"
 import { getAccessToken } from "@auth/utils";
 import useWebsocketWithLifecycle from "@sharedHooks/websocket/useWebsocketWithLifecycle";
 import { ParsedFEN } from "@sharedTypes/chessTypes/gameState.types";
@@ -12,8 +12,6 @@ import {
 	TimerChangedEventData,
 } from "@gameplay/multiplayer/types/gameEvents.types";
 import { GameplayWebSocketEventTypes } from "@gameplay/multiplayer/types/gameEvents.enums";
-
-import type { MultiplayerGameplayWebsocketHookProps } from "@gameplay/multiplayer/types/gameEvents.types";
 
 interface MultiplayerGameplayWebsocketHookProps {
 	gameId: number;
@@ -59,6 +57,7 @@ function useMultiplayerGameplayWebsocket({
 		const pieceInfo = boardPlacement[startingSquare.toString()];
 		const pieceColor = pieceInfo["piece_color"];
 		const pieceType = pieceInfo["piece_type"];
+		const initialSquare = pieceInfo["starting_square"];
 
 		const moveDetails = {
 			type: "move_made",
@@ -67,6 +66,7 @@ function useMultiplayerGameplayWebsocket({
 			piece_type: pieceType,
 			starting_square: startingSquare.toString(),
 			destination_square: destinationSquare.toString(),
+			initial_square: initialSquare,
 
 			additional_info: {},
 		};
