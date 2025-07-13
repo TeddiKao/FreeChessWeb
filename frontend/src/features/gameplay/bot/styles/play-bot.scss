@@ -1,5 +1,3 @@
-@use "../../../../app/styles/mixins" as *;
-
 .play-bot-interface-container {
 	@include flex-row;
 }

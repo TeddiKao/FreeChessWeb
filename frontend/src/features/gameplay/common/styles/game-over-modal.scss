@@ -1,6 +1,3 @@
-@use "../../../../app/styles/mixins" as *;
-@use "../../../../app/styles/variables";
-
 .game-over-modal-container {
 	@include parent-element-center-xy;
 
@@ -41,9 +38,9 @@
 	padding-left: 16px;
 	padding-right: 16px;
 
-	background-color: variables.$accent-color;
+	background-color: $accent-color;
 	border: none;
 
 	color: white;
-	font-size: variables.$button-font-size;
+	font-size: $button-font-size;
 }

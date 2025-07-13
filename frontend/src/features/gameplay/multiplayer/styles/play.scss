@@ -1,5 +1,3 @@
-@use "../../../../app/styles/mixins" as *;
-
 .multiplayer-playing-interface-container {
 	@include flex-row-x-center;
 	@include page-center-xy;

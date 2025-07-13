@@ -1,5 +1,3 @@
-@use "../../../app/styles/mixins" as *;
-
 .account-options-container {
     @include flex-column;
     background-color: hsl(0, 0%, 100%);

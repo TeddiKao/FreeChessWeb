@@ -1,6 +1,3 @@
-@use "../../../app/styles/mixins" as *;
-@use "../../../app/styles/variables";
-
 .auth-form-container {
 	@include flex-column-x-center;
 	position: fixed;
@@ -56,25 +53,25 @@
 .error-password-input {
 	@extend .password-input;
 	
-	border-color: variables.$error-input-color;
+	border-color: $error-input-color;
 	border-style: solid;
-	border-width: variables.$error-input-border-width;
+	border-width: $error-input-border-width;
 }
 
 .error-username-input {
 	@extend .username-input;
 
-	border-color: variables.$error-input-color;
+	border-color: $error-input-color;
 	border-style: solid;
-	border-width: variables.$error-input-border-width;
+	border-width: $error-input-border-width;
 }
 
 .error-email-input {
 	@extend .email-input;
 
-	border-color: variables.$error-input-color;
+	border-color: $error-input-color;
 	border-style: solid;
-	border-width: variables.$error-input-border-width;
+	border-width: $error-input-border-width;
 }
 
 .password-errors-container, .email-errors-container, .username-errors-container {
@@ -88,7 +85,7 @@
 
 	width: 250px;
 
-	color: variables.$error-input-color;
+	color: $error-input-color;
 	font-size: 0.9rem;
 }
 
@@ -129,7 +126,7 @@
 	padding-top: 10px;
 	padding-bottom: 10px;
 
-	background-color: variables.$accent-color;
+	background-color: $accent-color;
 	color: white;
 
 	border-radius: 4px;
