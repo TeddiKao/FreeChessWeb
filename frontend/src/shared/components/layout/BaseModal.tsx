@@ -1,11 +1,10 @@
+import { BaseWrapperProps } from "@/shared/types/wrapper.types";
 import "@sharedStyles/layout/base-modal.scss";
-import { ReactNode } from "react";
 import ReactDom from "react-dom";
 
-type BaseModalProps = {
-	children: ReactNode;
+interface BaseModalProps extends BaseWrapperProps {
 	visible: boolean;
-};
+}
 
 function BaseModal({ children, visible }: BaseModalProps) {
 	const portalRoot = document.getElementById("portal");
