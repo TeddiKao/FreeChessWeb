@@ -1,5 +1,3 @@
-@use "../../../app/styles/mixins" as *;
-
 .challenge-response-wait-screen-container {
     @include page-center-xy;
     @include flex-column-x-center;

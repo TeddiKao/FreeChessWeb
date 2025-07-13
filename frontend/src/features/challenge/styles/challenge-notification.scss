@@ -1,5 +1,3 @@
-@use "../../../app/styles/mixins" as *;
-
 .challenge-notification-modal-container {
 	@include page-center-xy;
 	@include flex-column-x-center;

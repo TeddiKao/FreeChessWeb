@@ -1,5 +1,3 @@
-@use "../../../../app/styles/mixins" as *;
-
 .gameplay-action-buttons-container {
 	@include flex-column;
 	justify-content: space-between;

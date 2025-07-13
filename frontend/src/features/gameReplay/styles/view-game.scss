@@ -1,5 +1,3 @@
-@use "../../../app/styles/mixins" as *;
-
 .view-game-interface-container {
 	@include flex-row;
 }

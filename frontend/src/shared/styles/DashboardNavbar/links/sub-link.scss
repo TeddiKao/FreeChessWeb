@@ -1,5 +1,3 @@
-@use "../../../../app//styles/mixins" as *;
-
 .sub-links-container {
     @include flex-column;
 }

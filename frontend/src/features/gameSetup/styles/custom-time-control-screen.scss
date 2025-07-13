@@ -1,6 +1,3 @@
-@use "../../../app/styles/mixins" as *;
-@use "../../../app/styles/variables";
-
 .screen-header {
 	margin-top: 8px;
 	margin-bottom: 8px;
@@ -42,7 +39,7 @@
 
 	border: none;
 	border-radius: 8px;
-	background-color: variables.$accent-color;
+	background-color: $accent-color;
 	color: white;
 }
 

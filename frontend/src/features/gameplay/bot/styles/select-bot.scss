@@ -1,5 +1,3 @@
-@use "../../../../app/styles/mixins" as *;
-
 .select-bot-interface-container {
 	@include flex-column;
 }
