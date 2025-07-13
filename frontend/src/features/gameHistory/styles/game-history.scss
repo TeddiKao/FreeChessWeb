@@ -1,5 +1,3 @@
-@use "../../../app/styles/mixins" as *;
-
 .game-history-interface-container {
 	margin-left: 64px;
 	@include flex-column;
