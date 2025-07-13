@@ -1,8 +1,9 @@
 import { Navigate } from "react-router-dom";
 
 import useIsAuthenticated from "@auth/useIsAuthenticated";
+import { BaseWrapperProps } from "@shared/types/wrapper.types";
 
-function AuthenticationRoute({ children }) {
+function AuthenticationRoute({ children }: BaseWrapperProps) {
 	const isAuthenticated = useIsAuthenticated();
 
 	if (isAuthenticated === null) {
