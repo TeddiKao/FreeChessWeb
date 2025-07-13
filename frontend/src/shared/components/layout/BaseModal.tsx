@@ -1,4 +1,4 @@
-import { BaseWrapperProps } from "@/shared/types/wrapper.types";
+import { BaseWrapperProps } from "@sharedTypes/wrapper.types";
 import "@sharedStyles/layout/base-modal.scss";
 import ReactDom from "react-dom";
 

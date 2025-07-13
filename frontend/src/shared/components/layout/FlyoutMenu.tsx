@@ -1,5 +1,5 @@
 import "@sharedStyles/layout/flyout-menu.scss";
-import { BaseWrapperProps } from "@/shared/types/wrapper.types";
+import { BaseWrapperProps } from "@sharedTypes/wrapper.types";
 
 interface FlyoutMenuProps extends BaseWrapperProps {
     gap?: number;
