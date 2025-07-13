@@ -1,5 +1,3 @@
-@use "../../../../app/styles/mixins" as *;
-
 .bot-category-container {
 	@include flex-column-y-center;
 }

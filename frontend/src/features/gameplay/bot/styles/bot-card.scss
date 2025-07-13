@@ -1,5 +1,3 @@
-@use "../../../../app/styles/mixins" as *;
-
 .bot-card-container {
     @include flex-column-x-center;
 
