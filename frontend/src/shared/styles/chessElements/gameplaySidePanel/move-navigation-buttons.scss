@@ -1,5 +1,3 @@
-@use "../../../../app/styles/mixins" as *;
-
 .gameplay-side-panel-buttons-container {
 	@include flex-row-y-center;
 	padding-left: 20px;

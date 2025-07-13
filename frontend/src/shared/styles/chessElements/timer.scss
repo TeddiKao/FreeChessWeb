@@ -1,5 +1,3 @@
-@use "../../../app/styles/mixins" as *;
-
 @mixin timer-active-styling {
 	&.active-timer {
 		opacity: 1;

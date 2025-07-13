@@ -1,5 +1,3 @@
-@use "../../app/styles/mixins" as *;
-
 .confirmation-popup-container {
 	position: absolute;
 	z-index: 1000;
@@ -12,8 +10,9 @@
 
 	padding-bottom: 12px;
 	padding-top: 12px;
-
-	@include flex-column-x-center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .confirmation-message {

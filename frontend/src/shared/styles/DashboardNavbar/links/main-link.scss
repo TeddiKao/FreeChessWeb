@@ -1,5 +1,3 @@
-@use "../../../../app/styles/mixins" as *;
-
 .main-link-container {
     @include flex-column-x-center;
     width: 100%;
