@@ -1,8 +1,7 @@
-import { ReactNode } from "react";
 import "@sharedStyles/layout/flyout-menu.scss";
+import { BaseWrapperProps } from "@sharedTypes/wrapper.types";
 
-interface FlyoutMenuProps {
-    children: ReactNode;
+interface FlyoutMenuProps extends BaseWrapperProps {
     gap?: number;
 }
 
