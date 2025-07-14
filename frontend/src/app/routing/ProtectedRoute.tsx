@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 
-import useIsAuthenticated from "@auth/useIsAuthenticated";
+import useIsAuthenticated from "@/features/auth/hooks/useIsAuthenticated";
 import { BaseWrapperProps } from "@shared/types/wrapper.types";
 
 function ProtectedRoute({ children }: BaseWrapperProps) {
