@@ -1,13 +1,14 @@
 import React, { ChangeEvent, useState } from "react";
 
 import "@auth/styles/auth-form.scss";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "@auth/constants";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { SignupErrors } from "@auth/validationErrors";
 import { isNullOrUndefined } from "@sharedUtils/generalUtils";
 import AuthLoadingScreen from "@auth/components/AuthLoadingScreen";
 import api from "@appApi";
+import useRefreshToken from "../hooks/useRefreshToken";
+import useAccessToken from "../hooks/useAccessToken";
 
 type AuthMethods = "Login" | "Signup";
 
@@ -92,6 +93,8 @@ function AuthForm({ method }: AuthFormProps) {
 	const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
 
 	const navigate = useNavigate();
+	const { accessToken, updateAccessToken, removeAccessToken } = useAccessToken();
+	const { refreshToken, updateRefreshToken, removeRefreshToken } = useRefreshToken();
 
 	function FormSubtitle() {
 		const loginPageSubititle = (
@@ -136,8 +139,8 @@ function AuthForm({ method }: AuthFormProps) {
 	}
 
 	function logUserIn(accessToken: string, refreshToken: string) {
-		localStorage.setItem(ACCESS_TOKEN, accessToken);
-		localStorage.setItem(REFRESH_TOKEN, refreshToken);
+		updateAccessToken(accessToken);
+		updateRefreshToken(refreshToken);
 	}
 
 	async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
