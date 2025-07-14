@@ -1,6 +1,5 @@
-import { useEffect } from "react";
-import useReactiveRef from "@sharedHooks/useReactiveRef";
-import useAccessToken from "@features/auth/hooks/useAccessToken";
+import { useContext, useEffect, useState } from "react";
+import { AuthProviderContext } from "@appProviders/AuthProvider";
 
 function useWebSocket(
 	url: string,
@@ -8,8 +7,8 @@ function useWebSocket(
 	onError?: any,
 	enabled = true
 ) {
-	const [socketRef, _, setSocket] = useReactiveRef<WebSocket | null>(null);
-	const { accessToken } = useAccessToken()
+	const [socket, setSocket] = useState<WebSocket | null>(null);
+	const { access: { accessToken } } = useContext(AuthProviderContext)!;
 
 	function createAndSetupWebSocket() {
 		const websocket = new WebSocket(url);
@@ -33,26 +32,25 @@ function useWebSocket(
 			return;
 		}
 
-		if (socketRef.current) {
+		if (socket) {
 			return;
 		}
 
 		createAndSetupWebSocket();
 
 		return () => {
-			if (socketRef.current?.readyState === WebSocket.OPEN) {
-				socketRef.current.close();
+			if (socket?.readyState === WebSocket.OPEN) {
+				socket.close();
 				setSocket(null);
 			}
 		};
 	}, [url, enabled]);
 
 	useEffect(() => {
-		socketRef.current = null;
 		createAndSetupWebSocket();
 	}, [accessToken]);
 
-	return socketRef.current;
+	return socket;
 }
 
 export default useWebSocket;
