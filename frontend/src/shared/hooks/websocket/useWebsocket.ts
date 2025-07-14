@@ -45,7 +45,12 @@ function useWebSocket(
 				setSocket(null);
 			}
 		};
-	}, [url, enabled, accessToken]);
+	}, [url, enabled]);
+
+	useEffect(() => {
+		socketRef.current = null;
+		createAndSetupWebSocket();
+	}, [accessToken]);
 
 	return socketRef.current;
 }
