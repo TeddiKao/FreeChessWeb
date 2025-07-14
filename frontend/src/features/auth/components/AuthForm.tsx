@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useContext, useState } from "react";
 
 import "@auth/styles/auth-form.scss";
 import { useNavigate } from "react-router-dom";
@@ -7,8 +7,7 @@ import { SignupErrors } from "@auth/validationErrors";
 import { isNullOrUndefined } from "@sharedUtils/generalUtils";
 import AuthLoadingScreen from "@auth/components/AuthLoadingScreen";
 import api from "@appApi";
-import useRefreshToken from "../hooks/useRefreshToken";
-import useAccessToken from "../hooks/useAccessToken";
+import { AuthProviderContext } from "@appProviders/AuthProvider";
 
 type AuthMethods = "Login" | "Signup";
 
@@ -94,8 +93,8 @@ function AuthForm({ method }: AuthFormProps) {
 
 	const navigate = useNavigate();
 	
-	const { updateAccessToken } = useAccessToken();
-	const { updateRefreshToken } = useRefreshToken();
+	const { access: { updateAccessToken } } = useContext(AuthProviderContext)!;
+	const { refresh: { updateRefreshToken } } = useContext(AuthProviderContext)!;
 
 	function FormSubtitle() {
 		const loginPageSubititle = (
