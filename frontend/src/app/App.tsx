@@ -22,13 +22,25 @@ import TempRoute from "@pages/helpers/TempRoute";
 import ChallengeWebsocketProvider from "@appProviders/ChallengeWebsocketProvider";
 import AuthenticationRoute from "@appRouting/AuthenticationRoute";
 import ProtectedRoute from "@appRouting/ProtectedRoute";
+import useAccessToken from "@/features/auth/hooks/useAccessToken";
+import useRefreshToken from "@/features/auth/hooks/useRefreshToken";
 
-function Logout() {
-	localStorage.clear();
+interface LogoutRouteProps {
+	removeAccessToken: () => void;
+	removeRefreshToken: () => void;
+}
+
+function Logout({ removeAccessToken, removeRefreshToken }: LogoutRouteProps) {
+	removeAccessToken();
+	removeRefreshToken();
+	
 	return <Navigate to="/login" />;
 }
 
 function App() {
+	const { removeAccessToken } = useAccessToken();
+	const { removeRefreshToken } = useRefreshToken();
+
 	useEffect(() => {
 		document.title = "FreeChess";
 	}, []);
@@ -58,7 +70,7 @@ function App() {
 								}
 							/>
 
-							<Route path="/logout" element={<Logout />} />
+							<Route path="/logout" element={<Logout removeAccessToken={removeAccessToken} removeRefreshToken={removeRefreshToken} />} />
 
 							<Route
 								path="/home"
