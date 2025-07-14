@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import useReactiveRef from "@sharedHooks/useReactiveRef";
+import useAccessToken from "@features/auth/hooks/useAccessToken";
 
 function useWebSocket(
 	url: string,
@@ -8,6 +9,7 @@ function useWebSocket(
 	enabled = true
 ) {
 	const [socketRef, _, setSocket] = useReactiveRef<WebSocket | null>(null);
+	const { accessToken } = useAccessToken()
 
 	useEffect(() => {
 		if (!enabled) {
@@ -39,7 +41,7 @@ function useWebSocket(
 				setSocket(null);
 			}
 		};
-	}, [url, enabled]);
+	}, [url, enabled, accessToken]);
 
 	return socketRef.current;
 }
