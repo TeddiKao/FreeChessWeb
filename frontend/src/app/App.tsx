@@ -24,135 +24,153 @@ import AuthenticationRoute from "@appRouting/AuthenticationRoute";
 import ProtectedRoute from "@appRouting/ProtectedRoute";
 import useAccessToken from "@/features/auth/hooks/useAccessToken";
 import useRefreshToken from "@/features/auth/hooks/useRefreshToken";
+import AuthProvider from "./providers/AuthProvider";
 
 interface LogoutRouteProps {
-	removeAccessToken: () => void;
-	removeRefreshToken: () => void;
+    removeAccessToken: () => void;
+    removeRefreshToken: () => void;
 }
 
 function Logout({ removeAccessToken, removeRefreshToken }: LogoutRouteProps) {
-	removeAccessToken();
-	removeRefreshToken();
-	
-	return <Navigate to="/login" />;
+    removeAccessToken();
+    removeRefreshToken();
+
+    return <Navigate to="/login" />;
 }
 
 function App() {
-	const { removeAccessToken } = useAccessToken();
-	const { removeRefreshToken } = useRefreshToken();
+    const { removeAccessToken } = useAccessToken();
+    const { removeRefreshToken } = useRefreshToken();
 
-	useEffect(() => {
-		document.title = "FreeChess";
-	}, []);
+    useEffect(() => {
+        document.title = "FreeChess";
+    }, []);
 
-	return (
-		<>
-			<BrowserRouter>
-				<ChallengeWebsocketProvider>
-					<DndProvider backend={MultiBackend} options={HTML5toTouch}>
-						<Routes>
-							<Route path="/" element={<HomePage />} />
-							<Route
-								path="/login"
-								element={
-									<AuthenticationRoute>
-										<Login />
-									</AuthenticationRoute>
-								}
-							/>
+    return (
+        <>
+            <BrowserRouter>
+                <AuthProvider>
+                    <ChallengeWebsocketProvider>
+                        <DndProvider
+                            backend={MultiBackend}
+                            options={HTML5toTouch}
+                        >
+                            <Routes>
+                                <Route path="/" element={<HomePage />} />
+                                <Route
+                                    path="/login"
+                                    element={
+                                        <AuthenticationRoute>
+                                            <Login />
+                                        </AuthenticationRoute>
+                                    }
+                                />
 
-							<Route
-								path="/signup"
-								element={
-									<AuthenticationRoute>
-										<Signup />
-									</AuthenticationRoute>
-								}
-							/>
+                                <Route
+                                    path="/signup"
+                                    element={
+                                        <AuthenticationRoute>
+                                            <Signup />
+                                        </AuthenticationRoute>
+                                    }
+                                />
 
-							<Route path="/logout" element={<Logout removeAccessToken={removeAccessToken} removeRefreshToken={removeRefreshToken} />} />
+                                <Route
+                                    path="/logout"
+                                    element={
+                                        <Logout
+                                            removeAccessToken={
+                                                removeAccessToken
+                                            }
+                                            removeRefreshToken={
+                                                removeRefreshToken
+                                            }
+                                        />
+                                    }
+                                />
 
-							<Route
-								path="/home"
-								element={
-									<ProtectedRoute>
-										<Dashboard />
-									</ProtectedRoute>
-								}
-							/>
+                                <Route
+                                    path="/home"
+                                    element={
+                                        <ProtectedRoute>
+                                            <Dashboard />
+                                        </ProtectedRoute>
+                                    }
+                                />
 
-							<Route
-								path="/game-setup"
-								element={
-									<ProtectedRoute>
-										<GameSetup />
-									</ProtectedRoute>
-								}
-							/>
+                                <Route
+                                    path="/game-setup"
+                                    element={
+                                        <ProtectedRoute>
+                                            <GameSetup />
+                                        </ProtectedRoute>
+                                    }
+                                />
 
-							<Route
-								path="/play"
-								element={
-									<ProtectedRoute>
-										<Play />
-									</ProtectedRoute>
-								}
-							/>
+                                <Route
+                                    path="/play"
+                                    element={
+                                        <ProtectedRoute>
+                                            <Play />
+                                        </ProtectedRoute>
+                                    }
+                                />
 
-							<Route
-								path="/pass-and-play"
-								element={
-									<ProtectedRoute>
-										<PassAndPlay />
-									</ProtectedRoute>
-								}
-							/>
+                                <Route
+                                    path="/pass-and-play"
+                                    element={
+                                        <ProtectedRoute>
+                                            <PassAndPlay />
+                                        </ProtectedRoute>
+                                    }
+                                />
 
-							<Route
-								path="/select-bot"
-								element={
-									<ProtectedRoute>
-										<SelectBot />
-									</ProtectedRoute>
-								}
-							/>
+                                <Route
+                                    path="/select-bot"
+                                    element={
+                                        <ProtectedRoute>
+                                            <SelectBot />
+                                        </ProtectedRoute>
+                                    }
+                                />
 
-							<Route
-								path="/play-bot"
-								element={
-									<ProtectedRoute>
-										<PlayBot />
-									</ProtectedRoute>
-								}
-							/>
+                                <Route
+                                    path="/play-bot"
+                                    element={
+                                        <ProtectedRoute>
+                                            <PlayBot />
+                                        </ProtectedRoute>
+                                    }
+                                />
 
-							<Route
-								path="/game-history"
-								element={
-									<ProtectedRoute>
-										<GameHistory />
-									</ProtectedRoute>
-								}
-							/>
+                                <Route
+                                    path="/game-history"
+                                    element={
+                                        <ProtectedRoute>
+                                            <GameHistory />
+                                        </ProtectedRoute>
+                                    }
+                                />
 
-							<Route
-								path="/:gameId/view"
-								element={
-									<ProtectedRoute>
-										<ViewGame />
-									</ProtectedRoute>
-								}
-							/>
+                                <Route
+                                    path="/:gameId/view"
+                                    element={
+                                        <ProtectedRoute>
+                                            <ViewGame />
+                                        </ProtectedRoute>
+                                    }
+                                />
 
-							<Route path="/temp" element={<TempRoute />} />
+                                <Route path="/temp" element={<TempRoute />} />
 
-							<Route path="*" element={<NotFoundPage />} />
-						</Routes>
-					</DndProvider>
-				</ChallengeWebsocketProvider>
-			</BrowserRouter>
-		</>
-	);
+                                <Route path="*" element={<NotFoundPage />} />
+                            </Routes>
+                        </DndProvider>
+                    </ChallengeWebsocketProvider>
+                </AuthProvider>
+            </BrowserRouter>
+        </>
+    );
 }
 
 export default App;
