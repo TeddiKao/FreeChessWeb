@@ -63,6 +63,8 @@ function ChallengeWebsocketProvider({
 		const data = JSON.parse(event.data);
 		const messageType = data["type"];
 
+		console.log(data);
+
 		switch (messageType) {
 			case ChallengeWebsocketEventTypes.CHALLENGE_RECEIVED:
 				handleChallengeReceived(data);
