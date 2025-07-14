@@ -11,15 +11,7 @@ function useWebSocket(
 	const [socketRef, _, setSocket] = useReactiveRef<WebSocket | null>(null);
 	const { accessToken } = useAccessToken()
 
-	useEffect(() => {
-		if (!enabled) {
-			return;
-		}
-
-		if (socketRef.current) {
-			return;
-		}
-
+	function createAndSetupWebSocket() {
 		const websocket = new WebSocket(url);
 		setSocket(websocket);
 
@@ -34,10 +26,22 @@ function useWebSocket(
 		websocket.onclose = () => {
 			console.log("Websocket closed");
 		};
+	}
+
+	useEffect(() => {
+		if (!enabled) {
+			return;
+		}
+
+		if (socketRef.current) {
+			return;
+		}
+
+		createAndSetupWebSocket();
 
 		return () => {
-			if (websocket.readyState === WebSocket.OPEN) {
-				websocket.close();
+			if (socketRef.current?.readyState === WebSocket.OPEN) {
+				socketRef.current.close();
 				setSocket(null);
 			}
 		};
