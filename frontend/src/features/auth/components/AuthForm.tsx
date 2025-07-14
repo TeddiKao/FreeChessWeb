@@ -93,8 +93,9 @@ function AuthForm({ method }: AuthFormProps) {
 	const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
 
 	const navigate = useNavigate();
-	const { accessToken, updateAccessToken, removeAccessToken } = useAccessToken();
-	const { refreshToken, updateRefreshToken, removeRefreshToken } = useRefreshToken();
+	
+	const { updateAccessToken } = useAccessToken();
+	const { updateRefreshToken } = useRefreshToken();
 
 	function FormSubtitle() {
 		const loginPageSubititle = (
