@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
-import { ACCESS_TOKEN } from "@auth/constants";
 import { getAccessToken, getRefreshToken } from "@auth/utils";
 import api from "@appApi";
+import { useContext } from "react";
+import { AuthProviderContext } from "@appProviders/AuthProvider";
 
 function useIsAuthenticated() {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(
 		null
 	);
+	const { access: { updateAccessToken } } = useContext(AuthProviderContext)!;
 
 	useEffect(() => {
 		auth().catch(() => {
@@ -28,7 +30,7 @@ function useIsAuthenticated() {
 			});
 
 			if (response.status === 200) {
-				localStorage.setItem(ACCESS_TOKEN, response.data.access);
+				updateAccessToken(response.data.access);
 				setIsAuthenticated(true);
 			} else {
 				setIsAuthenticated(false);
