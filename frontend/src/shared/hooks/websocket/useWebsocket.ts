@@ -32,16 +32,13 @@ function useWebSocket(
 			return;
 		}
 
-		if (socket) {
-			return;
-		}
-
 		createAndSetupWebSocket();
 
 		return () => {
-			if (socket?.readyState === WebSocket.OPEN) {
-				socket.close();
-				setSocket(null);
+			if (socket instanceof WebSocket) {
+				if (socket.readyState === WebSocket.OPEN) {
+					socket.close();
+				}
 			}
 		};
 	}, [url, enabled]);
