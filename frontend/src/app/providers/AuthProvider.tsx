@@ -10,7 +10,7 @@ interface AuthProviderContextType {
         accessToken: string | null;
         updateAccessToken: (accessToken: string) => void;
         removeAccessToken: () => void;
-    }
+    },
     refresh: {
         refreshToken: string | null;
         updateRefreshToken: (refreshToken: string) => void;
@@ -18,7 +18,7 @@ interface AuthProviderContextType {
     }
 }
 
-const AuthProviderContext = createContext<AuthProviderContextType | null>(null);
+const AuthProviderContext = createContext<AuthProviderContextType | undefined>(undefined);
 
 function AuthProvider({ children }: AuthProviderProps) {
     const { accessToken, updateAccessToken, removeAccessToken } = useAccessToken();
