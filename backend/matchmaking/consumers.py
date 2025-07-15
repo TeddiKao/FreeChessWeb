@@ -201,7 +201,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                     black_player = waiting_player_user_model if waiting_player_assigned_color.lower() == "black" else waiting_player_matched_user
 
                     await self.channel_layer.group_send(
-                        f"user_{waiting_player_user_id}",
+                        f"user_{waiting_player_user_model.id}",
                         {
                             "type": "player_matched",
                             "match_found": True,
