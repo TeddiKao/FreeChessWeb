@@ -186,6 +186,36 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                     break
 
                 if not matched_user and not player_in_queue and was_added_to_queue:
+                    waiting_player_model: WaitingPlayer = await self.get_player_in_queue(self.scope["user"])
+                    if not waiting_player_model:
+                        continue
+                    
+                    waiting_player_user_model = await self.get_user_model_from_waiting_player(waiting_player_model)
+                    waiting_player_matched_user = await waiting_player_model.get_matched_user()
+
+                    if not waiting_player_matched_user:
+                        continue
+
+                    waiting_player_matched_user_id = waiting_player_matched_user.id
+                    waiting_player_assigned_color = waiting_player_model.assigned_color
+                    waiting_player_assigned_game_id = waiting_player_model.assigned_game_id
+
+                    white_player = waiting_player_user_model if waiting_player_assigned_color and waiting_player_assigned_color.lower() == "white" else waiting_player_matched_user
+                    black_player = waiting_player_user_model if waiting_player_assigned_color and waiting_player_assigned_color.lower() == "black" else waiting_player_matched_user
+
+                    await self.channel_layer.group_send(
+                        f"user_{waiting_player_user_model.id}",
+                        {
+                            "type": "player_matched",
+                            "match_found": True,
+                            "white_player": white_player.username,
+                            "black_player": black_player.username,
+                            "game_id": waiting_player_assigned_game_id,
+                        }
+                    )
+
+                    await self.remove_player_from_queue(waiting_player_model)
+
                     break
 
                 player_in_queue_matched = None
