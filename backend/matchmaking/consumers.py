@@ -155,6 +155,8 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                     break
 
                 if matched_user and await matched_user.has_player_been_matched():
+                    logger.debug("Matched user has been matched!")
+                   
                     matched_player_user_model = await self.get_user_model_from_waiting_player(matched_user)
                     matched_player_user_id = matched_player_user_model.id
 
@@ -186,6 +188,8 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                     break
 
                 if not matched_user and not player_in_queue and was_added_to_queue:
+                    logger.debug("Player was added to queue!")
+                    
                     waiting_player_model: WaitingPlayer = await self.get_player_in_queue(self.scope["user"])
                     if not waiting_player_model:
                         continue
