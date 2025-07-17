@@ -133,11 +133,9 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
 
                     if not player_match:
                         continue
-                    
-                    player_match_user_model = await self.get_user_model_from_waiting_player(player_match)
 
-                    white_player = player_in_queue_user_model if assigned_color and assigned_color.lower() == "white" else player_match_user_model
-                    black_player = player_in_queue_user_model if assigned_color and assigned_color.lower() == "black" else player_match_user_model
+                    white_player = player_in_queue_user_model if assigned_color and assigned_color.lower() == "white" else player_match
+                    black_player = player_in_queue_user_model if assigned_color and assigned_color.lower() == "black" else player_match
 
                     await self.channel_layer.group_send(
                         self.room_group_name,
