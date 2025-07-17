@@ -200,7 +200,6 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                     if not waiting_player_matched_user:
                         continue
 
-                    waiting_player_matched_user_id = waiting_player_matched_user.id
                     waiting_player_assigned_color = waiting_player_model.assigned_color
                     waiting_player_assigned_game_id = waiting_player_model.assigned_game_id
 
