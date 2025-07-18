@@ -180,6 +180,7 @@ function animatePieceImage(
 		const yTransform = totalYTransform * progress;
 
 		ref.current.style.transform = `translate(${xTransform}px, ${yTransform}px)`;
+		ref.current.style.zIndex = "100";
 
 		if (timeElapsed < animationTimeMilliseconds) {
 			requestAnimationFrame(animationFrame);
