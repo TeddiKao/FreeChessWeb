@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import { MoveList, PositionList } from "@/shared/types/chessTypes/gameState.types";
 import { fetchBotGameMoveList, fetchBotGamePositionList } from "../botGameApiService";
 import { BotGameWebSocketEventTypes } from "../botGameEvents.enums";
+import { displayLegalMoves } from "../../common/utils/moveService";
+import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
+import { getRank } from "@/shared/utils/boardUtils";
 
 interface BotGameplayLogicHookProps {
     gameId: number;
@@ -49,6 +52,57 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         updatePositionList();
         updateMoveList();
     }, []);
+
+    useEffect(() => {
+
+    }, [draggedSquare, droppedSquare]);
+
+    useEffect(() => {
+
+    }, [prevClickedSquare, clickedSquare]);
+
+    async function processMove(moveMethod: "click" | "drag") {
+        const usingDrag = moveMethod === "drag";
+
+        const startingSquare = usingDrag ? draggedSquare : prevClickedSquare;
+        const destinationSquare = usingDrag ? droppedSquare : clickedSquare;
+
+        if (!parsedFEN) return;
+        if (!startingSquare) return;
+
+        if (startingSquare && !destinationSquare) {
+            displayLegalMoves(parsedFEN, startingSquare);
+            return;
+        }
+
+        if (startingSquare === destinationSquare) return;
+
+        const boardPlacement = parsedFEN["board_placement"];
+        const squareInfo = boardPlacement[startingSquare.toString()];
+        const pieceType = squareInfo["piece_type"];
+        const pieceColor = squareInfo["piece_color"];
+
+        if (pieceType.toLowerCase() === "pawn") {
+            if (isPawnPromotion(pieceColor, getRank(destinationSquare!))) {
+                // TODO: Implement pawn promotion logic
+                return;
+            }
+        }
+
+        const moveInfo = {
+            piece_type: pieceType,
+            piece_color: pieceColor,
+            starting_square: startingSquare,
+            destination_square: destinationSquare,
+
+            additional_info: {}
+        };
+
+        socketRef?.current?.send(JSON.stringify({
+            type: "move_made",
+            move_info: moveInfo,
+        }))
+    }
 
     async function updatePositionList() {
         const positionList = await fetchBotGamePositionList(gameId);
