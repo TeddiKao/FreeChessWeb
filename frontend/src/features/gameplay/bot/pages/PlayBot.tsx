@@ -126,6 +126,7 @@ function PlayBot() {
                         lastDroppedSquare={previousDroppedSquare}
                         squareSize={58}
                         setPositionList={setPositionList}
+                        setPositionIndex={setPositionIndex}
                         parsed_fen_string={parsedFEN}
                         orientation={boardOrientation}
                         gameplaySettings={gameplaySettings}
