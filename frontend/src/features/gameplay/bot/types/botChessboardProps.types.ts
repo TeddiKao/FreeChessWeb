@@ -47,6 +47,9 @@ interface BotChessboardProps extends BaseChessboardProps {
 
 	handleCheckmate: (eventData: CheckmateEventData) => void;
 	handleDraw: (drawCause: string) => void;
+
+	cancelPromotion: () => void;
+	handlePawnPromotion: () => void;
 }
 
 export type { BotChessboardProps }
