@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
 
-import { parseWebsocketUrl } from "@sharedUtils/generalUtils";
+import { parseWebsocketUrl, isObjEmpty } from "@sharedUtils/generalUtils";
 import usePieceAnimation from "@sharedHooks/usePieceAnimation";
 import ChessboardGrid from "@sharedComponents/chessboard/ChessboardGrid";
 import Square from "@sharedComponents/chessboard/Square";
