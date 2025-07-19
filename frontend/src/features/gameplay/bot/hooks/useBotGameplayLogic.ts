@@ -45,36 +45,6 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
     const [hasGameEnded, setHasGameEnded] = useState(false);
     const [gameEndedCause, setGameEndedCause] = useState<string>("");
 
-    function handleCheckmate({ game_winner: gameWinner }: any) {
-        setHasGameEnded(true);
-        setGameWinner(gameWinner);
-        setGameEndedCause("checkmate");
-    }
-
-    function handleDraw(drawCause: string) {
-        setHasGameEnded(true);
-        setGameEndedCause(drawCause);
-    }
-
-    function handlePlayerMoveMade({
-        new_position_list: newPositionList,
-        new_move_list: newMoveList,
-        move_data: moveData,
-    }: any) {
-        setPositionList(newPositionList);
-        setPositionIndex(newPositionList.length - 1);
-        setMoveList(newMoveList);
-    }
-
-    function handleBotMoveMade({
-        new_position_list: newPositionList,
-        new_move_list: newMoveList,
-    }: any) {
-        setPositionList(newPositionList);
-        setPositionIndex(newPositionList.length - 1);
-        setMoveList(newMoveList);
-    }
-
     useEffect(() => {
         updatePositionList();
         updateMoveList();
@@ -122,6 +92,36 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
                 handleBotMoveMade(parsedEventData);
                 break;
         }
+    }
+
+    function handleCheckmate({ game_winner: gameWinner }: any) {
+        setHasGameEnded(true);
+        setGameWinner(gameWinner);
+        setGameEndedCause("checkmate");
+    }
+
+    function handleDraw(drawCause: string) {
+        setHasGameEnded(true);
+        setGameEndedCause(drawCause);
+    }
+
+    function handlePlayerMoveMade({
+        new_position_list: newPositionList,
+        new_move_list: newMoveList,
+        move_data: moveData,
+    }: any) {
+        setPositionList(newPositionList);
+        setPositionIndex(newPositionList.length - 1);
+        setMoveList(newMoveList);
+    }
+
+    function handleBotMoveMade({
+        new_position_list: newPositionList,
+        new_move_list: newMoveList,
+    }: any) {
+        setPositionList(newPositionList);
+        setPositionIndex(newPositionList.length - 1);
+        setMoveList(newMoveList);
     }
 
     return {
