@@ -3,12 +3,19 @@ import useDraggedSquaresState from "../../multiplayer/hooks/useDraggedSquaresSta
 import useWebsocketWithLifecycle from "@/shared/hooks/websocket/useWebsocketWithLifecycle";
 import { parseWebsocketUrl } from "@/shared/utils/generalUtils";
 import { useEffect, useState } from "react";
-import { MoveList, PositionList } from "@/shared/types/chessTypes/gameState.types";
-import { fetchBotGameMoveList, fetchBotGamePositionList } from "../botGameApiService";
+import {
+    MoveList,
+    PositionList,
+} from "@/shared/types/chessTypes/gameState.types";
+import {
+    fetchBotGameMoveList,
+    fetchBotGamePositionList,
+} from "../botGameApiService";
 import { BotGameWebSocketEventTypes } from "../botGameEvents.enums";
 import { displayLegalMoves } from "../../common/utils/moveService";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
 import { clearSquaresStyling, getRank } from "@/shared/utils/boardUtils";
+import usePromotionLogic from "../../multiplayer/hooks/usePromotionLogic";
 
 interface BotGameplayLogicHookProps {
     gameId: number;
@@ -17,19 +24,21 @@ interface BotGameplayLogicHookProps {
 function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
     const websocketUrl = parseWebsocketUrl("bot-game-server", {
         gameId: gameId,
-    })
+    });
     const { socketRef } = useWebsocketWithLifecycle({
         url: websocketUrl,
         enabled: true,
-        onMessage: handleOnMessage
+        onMessage: handleOnMessage,
     });
 
     const [positionList, setPositionList] = useState<PositionList>([]);
     const [positionIndex, setPositionIndex] = useState<number>(0);
 
     const parsedFEN = positionList[positionIndex]?.["position"];
-    const previousDraggedSquare = positionList[positionIndex]?.["last_dragged_square"];;
-    const previousDroppedSquare = positionList[positionIndex]?.["last_dropped_square"];
+    const previousDraggedSquare =
+        positionList[positionIndex]?.["last_dragged_square"];
+    const previousDroppedSquare =
+        positionList[positionIndex]?.["last_dropped_square"];
 
     const [moveList, setMoveList] = useState<MoveList>([]);
 
@@ -46,6 +55,13 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
     const [gameWinner, setGameWinner] = useState<string>("");
     const [hasGameEnded, setHasGameEnded] = useState(false);
     const [gameEndedCause, setGameEndedCause] = useState<string>("");
+
+    const {
+        preparePromotion,
+        handlePawnPromotion,
+        cancelPromotion,
+        prePromotionBoardState,
+    } = usePromotionLogic(parsedFEN);
 
     useEffect(() => {
         updatePositionList();
@@ -84,8 +100,35 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         const pieceColor = squareInfo["piece_color"];
 
         if (pieceType.toLowerCase() === "pawn") {
-            if (isPawnPromotion(pieceColor, getRank(destinationSquare?.toString()!))) {
-                // TODO: Implement pawn promotion logic
+            if (
+                isPawnPromotion(
+                    pieceColor,
+                    getRank(destinationSquare?.toString()!)
+                )
+            ) {
+                preparePromotion(startingSquare, destinationSquare!);
+                handlePawnPromotion(() => {
+                    const moveInfo = {
+                        piece_type: pieceType,
+                        piece_color: pieceColor,
+                        starting_square: startingSquare.toString(),
+                        destination_square: destinationSquare?.toString(),
+
+                        additional_info: {
+                            promoted_piece: "queen",
+                        },
+                    };
+
+                    socketRef?.current?.send(
+                        JSON.stringify({
+                            type: "move_made",
+                            move_info: moveInfo,
+                        })
+                    );
+
+                    performPostMoveCleanup(moveMethod);
+                });
+
                 return;
             }
         }
@@ -96,13 +139,15 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
             starting_square: startingSquare.toString(),
             destination_square: destinationSquare?.toString(),
 
-            additional_info: {}
+            additional_info: {},
         };
 
-        socketRef?.current?.send(JSON.stringify({
-            type: "move_made",
-            move_info: moveInfo,
-        }))
+        socketRef?.current?.send(
+            JSON.stringify({
+                type: "move_made",
+                move_info: moveInfo,
+            })
+        );
 
         performPostMoveCleanup(moveMethod);
     }
