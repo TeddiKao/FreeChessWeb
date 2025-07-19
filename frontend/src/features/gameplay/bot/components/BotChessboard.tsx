@@ -1,20 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 
-import { clearSquaresStyling, getRank } from "@sharedUtils/boardUtils";
 
-import {
-    cancelPromotion,
-    handlePromotionCaptureStorage,
-    preparePawnPromotion,
-} from "@gameplay/passAndPlay/utils/promotion";
-
-import { isObjEmpty, parseWebsocketUrl } from "@sharedUtils/generalUtils";
+import { parseWebsocketUrl } from "@sharedUtils/generalUtils";
 import usePieceAnimation from "@sharedHooks/usePieceAnimation";
 import ChessboardGrid from "@sharedComponents/chessboard/ChessboardGrid";
 import Square from "@sharedComponents/chessboard/Square";
 import useWebsocketWithLifecycle from "@sharedHooks/websocket/useWebsocketWithLifecycle";
 import { fetchLegalMoves } from "../../common/utils/moveService";
-import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
 import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
 import { ParsedFEN, MoveInfo } from "@sharedTypes/chessTypes/gameState.types";
 import { MoveMethods } from "@sharedTypes/chessTypes/moveMethods.enums";
@@ -64,9 +56,7 @@ function BotChessboard({
     const [promotionCapturedPiece, setPromotionCapturedPiece] =
         useState<OptionalValue<PieceInfo>>(null);
 
-    const [lastUsedMoveMethod, setLastUsedMoveMethod] =
-        useState<OptionalValue<string>>(null);
-    const [pieceAnimationSquare, pieceAnimationStyles, animatePiece] =
+    const [pieceAnimationSquare, pieceAnimationStyles] =
         usePieceAnimation();
 
     const [sideToMove, setSideToMove] = useState<string>("white");
@@ -93,127 +83,9 @@ function BotChessboard({
     }, [parsed_fen_string]);
 
     useEffect(() => {
-        handleMoveMade("click");
-    }, [prevClickedSquare, clickedSquare]);
-
-    useEffect(() => {
-        handleMoveMade("drag");
-    }, [draggedSquare, droppedSquare]);
-
-    useEffect(() => {
         setPreviousDraggedSquare(lastDraggedSquare);
         setPreviousDroppedSquare(lastDroppedSquare);
     }, [lastDraggedSquare, lastDroppedSquare]);
-
-    function handleMoveMade(moveMethod: string) {
-        const startingSquare =
-            moveMethod === "drag" ? draggedSquare : prevClickedSquare;
-        const destinationSquare =
-            moveMethod === "drag" ? droppedSquare : clickedSquare;
-
-        clearSquaresStyling();
-
-        if (!parsedFENString) {
-            return null;
-        }
-
-        if (!(startingSquare && destinationSquare)) {
-            if (!startingSquare) {
-                return;
-            }
-
-            handleLegalMoveDisplay(moveMethod);
-
-            return;
-        }
-
-        if (startingSquare === destinationSquare) {
-            return;
-        }
-
-        const boardPlacement = parsedFENString["board_placement"];
-        const squareInfo = boardPlacement[`${startingSquare}`];
-
-        const pieceColor = squareInfo["piece_color"];
-        const pieceType = squareInfo["piece_type"];
-        const initialSquare = squareInfo["starting_square"];
-
-        updateBoardOnMove(pieceColor, pieceType, initialSquare);
-
-        if (moveMethod == MoveMethods.DRAG) {
-            setDraggedSquare(null);
-            setDroppedSquare(null);
-        } else if (moveMethod == MoveMethods.CLICK) {
-            setPrevClickedSquare(null);
-            setClickedSquare(null);
-        }
-
-        setLastUsedMoveMethod(moveMethod);
-    }
-
-    async function updateBoardOnMove(
-        pieceColor: PieceColor,
-        pieceType: PieceType,
-        initialSquare?: ChessboardSquareIndex
-    ) {
-        const startingSquare = `${draggedSquare || prevClickedSquare}`;
-        const destinationSquare = `${droppedSquare || clickedSquare}`;
-
-        if (pieceType.toLowerCase() === "pawn") {
-            handlePromotionCaptureStorage(
-                parsedFENString!,
-                pieceColor,
-                startingSquare,
-                destinationSquare,
-                setPromotionCapturedPiece,
-                selectingPromotionRef,
-                unpromotedBoardPlacementRef,
-                handlePawnPromotion,
-                gameplaySettings,
-                droppedSquare ? "drag" : "click"
-            );
-
-            if (isPawnPromotion(pieceColor, getRank(destinationSquare))) {
-                setParsedFEN((prevFENString) => {
-                    const moveInfo = {
-                        starting_square: startingSquare,
-                        destination_square: destinationSquare,
-                        piece_color: pieceColor,
-                        piece_type: pieceType,
-                        initial_square: initialSquare,
-                    };
-
-                    unpromotedBoardPlacementRef.current = preparePawnPromotion(
-                        prevFENString!,
-                        moveInfo
-                    );
-
-                    return preparePawnPromotion(prevFENString!, moveInfo);
-                });
-
-                selectingPromotionRef.current = true;
-            }
-        }
-
-        if (!selectingPromotionRef.current) {
-            botGameWebsocketRef.current?.send(
-                JSON.stringify({
-                    type: "move_made",
-                    move_info: {
-                        starting_square: `${
-                            draggedSquare || prevClickedSquare
-                        }`,
-                        destination_square: `${droppedSquare || clickedSquare}`,
-                        piece_color: pieceColor,
-                        piece_type: pieceType,
-                        initial_square: initialSquare,
-
-                        additional_info: {},
-                    },
-                })
-            );
-        }
-    }
 
     async function displayLegalMoves(
         pieceType: string,
@@ -432,7 +304,6 @@ function BotChessboard({
 				setClickedSquare={setClickedSquare}
                 previousDraggedSquare={previousDraggedSquare}
                 previousDroppedSquare={previousDroppedSquare}
-                moveMethod={lastUsedMoveMethod}
                 squareSize={squareSize}
 				prevClickedSquare={prevClickedSquare}
 				clickedSquare={clickedSquare}
@@ -473,7 +344,6 @@ function BotChessboard({
                 handlePawnPromotion={handlePawnPromotion}
                 previousDraggedSquare={previousDraggedSquare}
                 previousDroppedSquare={previousDroppedSquare}
-                moveMethod={lastUsedMoveMethod}
                 squareSize={squareSize}
 				prevClickedSquare={prevClickedSquare}
 				clickedSquare={clickedSquare}
