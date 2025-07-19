@@ -126,6 +126,8 @@ function PlayBot() {
             <div className="play-bot-interface-container">
                 <div className="bot-chessboard-wrapper">
                     <BotChessboard
+                        handleCheckmate={handleCheckmate}
+                        handleDraw={handleDraw}
                         lastDraggedSquare={previousDraggedSquare}
                         lastDroppedSquare={previousDroppedSquare}
                         squareSize={58}
