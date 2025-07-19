@@ -1,4 +1,3 @@
-import useWebsocketLifecycle from "@/shared/hooks/websocket/useWebsocketLifecycle";
 import useClickedSquaresState from "../../multiplayer/hooks/useClickedSquaresState";
 import useDraggedSquaresState from "../../multiplayer/hooks/useDraggedSquaresState";
 import useWebsocketWithLifecycle from "@/shared/hooks/websocket/useWebsocketWithLifecycle";
@@ -83,8 +82,6 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         const squareInfo = boardPlacement[startingSquare.toString()];
         const pieceType = squareInfo["piece_type"];
         const pieceColor = squareInfo["piece_color"];
-
-        
 
         if (pieceType.toLowerCase() === "pawn") {
             if (isPawnPromotion(pieceColor, getRank(destinationSquare?.toString()!))) {
