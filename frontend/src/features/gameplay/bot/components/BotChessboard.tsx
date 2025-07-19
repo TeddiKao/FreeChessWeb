@@ -528,6 +528,10 @@ function BotChessboard({
                 previousDroppedSquare={previousDroppedSquare}
                 moveMethod={lastUsedMoveMethod}
                 squareSize={squareSize}
+				prevClickedSquare={prevClickedSquare}
+				clickedSquare={clickedSquare}
+				draggedSquare={draggedSquare}
+				droppedSquare={droppedSquare}
                 // @ts-ignore
                 animatingPieceSquare={
                     pieceAnimationSquare || parentAnimationSquare
@@ -566,6 +570,10 @@ function BotChessboard({
                 previousDroppedSquare={previousDroppedSquare}
                 moveMethod={lastUsedMoveMethod}
                 squareSize={squareSize}
+				prevClickedSquare={prevClickedSquare}
+				clickedSquare={clickedSquare}
+				draggedSquare={draggedSquare}
+				droppedSquare={droppedSquare}
                 // @ts-ignore
                 animatingPieceSquare={
                     pieceAnimationSquare || parentAnimationSquare
