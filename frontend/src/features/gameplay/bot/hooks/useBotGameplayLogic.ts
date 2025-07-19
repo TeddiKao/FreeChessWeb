@@ -58,8 +58,12 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
     }, [draggedSquare, droppedSquare]);
 
     useEffect(() => {
-
+        processMove("click");
     }, [prevClickedSquare, clickedSquare]);
+
+    useEffect(() => {
+        processMove("drag");
+    }, [draggedSquare, droppedSquare]);
 
     async function processMove(moveMethod: "click" | "drag") {
         const usingDrag = moveMethod === "drag";
