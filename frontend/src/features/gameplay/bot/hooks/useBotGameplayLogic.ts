@@ -56,6 +56,25 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         setGameEndedCause(drawCause);
     }
 
+    function handlePlayerMoveMade({
+        new_position_list: newPositionList,
+        new_move_list: newMoveList,
+        move_data: moveData,
+    }: any) {
+        setPositionList(newPositionList);
+        setPositionIndex(newPositionList.length - 1);
+        setMoveList(newMoveList);
+    }
+
+    function handleBotMoveMade({
+        new_position_list: newPositionList,
+        new_move_list: newMoveList,
+    }: any) {
+        setPositionList(newPositionList);
+        setPositionIndex(newPositionList.length - 1);
+        setMoveList(newMoveList);
+    }
+
     useEffect(() => {
         updatePositionList();
         updateMoveList();
@@ -96,11 +115,11 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
                 break;
 
             case BotGameWebSocketEventTypes.MOVE_REGISTERED:
-                // Todo: Move logic to custom hook
+                handlePlayerMoveMade(parsedEventData);
                 break;
 
             case BotGameWebSocketEventTypes.BOT_MOVE_MADE:
-                // Todo: Move logic to custom hook
+                handleBotMoveMade(parsedEventData);
                 break;
         }
     }
