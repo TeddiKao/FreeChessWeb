@@ -15,7 +15,6 @@ import Square from "@sharedComponents/chessboard/Square";
 import useWebsocketWithLifecycle from "@sharedHooks/websocket/useWebsocketWithLifecycle";
 import { fetchLegalMoves } from "../../common/utils/moveService";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
-import { BotGameWebSocketEventTypes } from "../botGameEvents.enums";
 import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
 import { ParsedFEN, MoveInfo } from "@sharedTypes/chessTypes/gameState.types";
 import { MoveMethods } from "@sharedTypes/chessTypes/moveMethods.enums";
@@ -36,11 +35,8 @@ function BotChessboard({
     gameplaySettings,
     squareSize,
     gameId,
-    setMoveList,
-    setPositionList,
     lastDraggedSquare,
     lastDroppedSquare,
-    setPositionIndex,
 
     parentAnimationSquare,
     parentAnimationStyles,
@@ -57,9 +53,6 @@ function BotChessboard({
         setDraggedSquare,
         setDroppedSquare,
     },
-
-    handleCheckmate,
-    handleDraw
 }: BotChessboardProps) {
     const [parsedFENString, setParsedFEN] =
         useState<OptionalValue<ParsedFEN>>(parsed_fen_string);
@@ -92,7 +85,7 @@ function BotChessboard({
     const { socketRef: botGameWebsocketRef } = useWebsocketWithLifecycle({
         url: websocketURL,
         enabled: true,
-        onMessage: handleOnMessage,
+        onMessage: () => {}
     });
 
     useEffect(() => {
