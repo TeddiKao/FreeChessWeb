@@ -40,6 +40,21 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
     const { draggedSquare, setDraggedSquare, droppedSquare, setDroppedSquare } =
         useDraggedSquaresState();
 
+    const [gameWinner, setGameWinner] = useState<string>("");
+    const [hasGameEnded, setHasGameEnded] = useState(false);
+    const [gameEndedCause, setGameEndedCause] = useState<string>("");
+
+    function handleCheckmate({ game_winner: gameWinner }: any) {
+        setHasGameEnded(true);
+        setGameWinner(gameWinner);
+        setGameEndedCause("checkmate");
+    }
+
+    function handleDraw(drawCause: string) {
+        setHasGameEnded(true);
+        setGameEndedCause(drawCause);
+    }
+
     useEffect(() => {
         updatePositionList();
         updateMoveList();
@@ -85,6 +100,16 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         parsedFEN,
         previousDraggedSquare,
         previousDroppedSquare,
+
+        hasGameEnded,
+        setHasGameEnded,
+        gameWinner,
+        setGameWinner,
+        gameEndedCause,
+        setGameEndedCause,
+
+        handleCheckmate,
+        handleDraw,
     };
 }
 
