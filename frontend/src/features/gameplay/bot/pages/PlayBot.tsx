@@ -4,10 +4,6 @@ import useGameplaySettings from "@settings/gameplay/hooks/useGameplaySettings";
 import GameplaySettings from "@settings/gameplay/GameplaySettings";
 import BaseModal from "@sharedComponents/layout/BaseModal";
 import { Navigate, useLocation } from "react-router-dom";
-import { isNullOrUndefined } from "@sharedUtils/generalUtils";
-import { playAudio } from "@sharedUtils/audioUtils";
-import { convertToMilliseconds } from "@sharedUtils/timeUtils";
-import { pieceAnimationTime } from "@sharedConstants/pieceAnimation";
 import usePieceAnimation from "@sharedHooks/usePieceAnimation";
 import LocalGameOverModal from "../../passAndPlay/modals/GameOverModal";
 import DashboardNavbar from "@sharedComponents/DashboardNavbar/DashboardNavbar";
@@ -41,29 +37,7 @@ function PlayBot() {
     const [hasGameEnded, setHasGameEnded] = useState(false);
     const [gameEndedCause, setGameEndedCause] = useState<string>("");
 
-    const [positionList, setPositionList] = useState<
-        Array<{
-            position: ParsedFEN;
-            move_type: string;
-            last_dragged_square: ChessboardSquareIndex;
-            last_dropped_square: ChessboardSquareIndex;
-            move_info: MoveInfo;
-        }>
-    >([]);
-
     const previousPositionIndexRef = useRef<OptionalValue<number>>(null);
-    const [positionIndex, setPositionIndex] = useState<number>(
-        positionList.length - 1
-    );
-    const [parsedFEN, setParsedFEN] = useState(
-        positionList[positionIndex]?.["position"]
-    );
-    const [lastDraggedSquare, setLastDraggedSquare] = useState(
-        positionList[positionIndex]?.["last_dragged_square"]
-    );
-    const [lastDroppedSquare, setLastDroppedSquare] = useState(
-        positionList[positionIndex]?.["last_dropped_square"]
-    );
 
     const {
         clickedSquare,
@@ -74,6 +48,17 @@ function PlayBot() {
         setDraggedSquare,
         droppedSquare,
         setDroppedSquare,
+
+        gameStateHistory: {
+            positionList,
+            setPositionList,
+            positionIndex,
+            setPositionIndex,
+        },
+
+        parsedFEN,
+        previousDraggedSquare,
+        previousDroppedSquare,
     } = useBotGameplayLogic({ gameId });
 
     const [
@@ -92,54 +77,6 @@ function PlayBot() {
         updateMoveList();
         updatePositionList();
     }, [gameId]);
-
-    useEffect(() => {
-        const animationTimeout = setTimeout(() => {
-            setPositionIndex(positionList.length - 1);
-            setParsedFEN(positionList[positionIndex]?.["position"]);
-            setLastDraggedSquare(
-                positionList[positionIndex]?.["last_dragged_square"]
-            );
-            setLastDroppedSquare(
-                positionList[positionIndex]?.["last_dropped_square"]
-            );
-        }, convertToMilliseconds(pieceAnimationTime));
-
-        return () => {
-            clearTimeout(animationTimeout);
-        };
-    }, [positionList]);
-
-    useEffect(() => {
-        if (previousPositionIndexRef.current) {
-            if (previousPositionIndexRef.current + 1 === positionIndex) {
-                handleFastForwardMoveAnimation();
-            } else if (previousPositionIndexRef.current - 1 === positionIndex) {
-                handleReplayMoveAnimation();
-            } else {
-                setParsedFEN(positionList[positionIndex]?.["position"]);
-                setLastDraggedSquare(
-                    positionList[positionIndex]?.["last_dragged_square"]
-                );
-                setLastDroppedSquare(
-                    positionList[positionIndex]?.["last_dropped_square"]
-                );
-            }
-        } else {
-            setParsedFEN(positionList[positionIndex]?.["position"]);
-            setLastDraggedSquare(
-                positionList[positionIndex]?.["last_dragged_square"]
-            );
-            setLastDroppedSquare(
-                positionList[positionIndex]?.["last_dropped_square"]
-            );
-        }
-
-        const moveType = positionList[positionIndex]?.["move_type"];
-        if (!isNullOrUndefined(moveType)) {
-            playAudio(moveType);
-        }
-    }, [positionIndex]);
 
     useEffect(() => {
         setGameplaySettings(initialGameplaySettings);
@@ -175,56 +112,6 @@ function PlayBot() {
         setGameplaySettingsVisible(false);
     }
 
-    function handleFastForwardMoveAnimation() {
-        const moveInfo = positionList[positionIndex]["move_info"];
-
-        const startingSquare = moveInfo["starting_square"];
-        const destinationSquare = moveInfo["destination_square"];
-
-        console.log(startingSquare, destinationSquare);
-
-        // @ts-ignore
-        animatePiece(
-            startingSquare,
-            destinationSquare,
-            boardOrientation.toLowerCase()
-        );
-
-        setTimeout(() => {
-            setParsedFEN(positionList[positionIndex]?.["position"]);
-            setLastDraggedSquare(
-                positionList[positionIndex]?.["last_dragged_square"]
-            );
-            setLastDroppedSquare(
-                positionList[positionIndex]?.["last_dropped_square"]
-            );
-        }, convertToMilliseconds(pieceAnimationTime));
-    }
-
-    function handleReplayMoveAnimation() {
-        const moveInfo = positionList[positionIndex + 1]["move_info"];
-
-        const startingSquare = moveInfo["starting_square"];
-        const destinationSquare = moveInfo["destination_square"];
-
-        // @ts-ignore
-        animateMoveReplay(
-            startingSquare,
-            destinationSquare,
-            boardOrientation.toLowerCase()
-        );
-
-        setTimeout(() => {
-            setParsedFEN(positionList[positionIndex]?.["position"]);
-            setLastDraggedSquare(
-                positionList[positionIndex]?.["last_dragged_square"]
-            );
-            setLastDroppedSquare(
-                positionList[positionIndex]?.["last_dropped_square"]
-            );
-        }, convertToMilliseconds(pieceAnimationTime));
-    }
-
     if (!parsedFEN) {
         return null;
     }
@@ -235,8 +122,8 @@ function PlayBot() {
             <div className="play-bot-interface-container">
                 <div className="bot-chessboard-wrapper">
                     <BotChessboard
-                        lastDraggedSquare={lastDraggedSquare}
-                        lastDroppedSquare={lastDroppedSquare}
+                        lastDraggedSquare={previousDraggedSquare}
+                        lastDroppedSquare={previousDroppedSquare}
                         squareSize={58}
                         setPositionList={setPositionList}
                         parsed_fen_string={parsedFEN}
@@ -252,18 +139,18 @@ function PlayBot() {
                         parentAnimationSquare={pieceAnimationSquare}
                         // @ts-ignore
                         parentAnimationStyles={pieceAnimationStyles}
-						clickedSquaresState={{
-							prevClickedSquare,
-							clickedSquare,
-							setPrevClickedSquare,
-							setClickedSquare,
-						}}
-						dragAndDropSquaresState={{
-							draggedSquare,
-							droppedSquare,
-							setDraggedSquare,
-							setDroppedSquare,
-						}}
+                        clickedSquaresState={{
+                            prevClickedSquare,
+                            clickedSquare,
+                            setPrevClickedSquare,
+                            setClickedSquare,
+                        }}
+                        dragAndDropSquaresState={{
+                            draggedSquare,
+                            droppedSquare,
+                            setDraggedSquare,
+                            setDroppedSquare,
+                        }}
                     />
                 </div>
 
