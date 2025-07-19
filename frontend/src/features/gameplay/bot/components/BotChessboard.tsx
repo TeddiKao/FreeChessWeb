@@ -556,6 +556,8 @@ function BotChessboard({
                 setParsedFEN={setParsedFEN}
                 setDraggedSquare={setDraggedSquare}
                 setDroppedSquare={setDroppedSquare}
+				setClickedSquare={setClickedSquare}
+				setPrevClickedSquare={setPrevClickedSquare}
                 handlePromotionCancel={handlePromotionCancel}
                 handlePawnPromotion={handlePawnPromotion}
                 previousDraggedSquare={previousDraggedSquare}
