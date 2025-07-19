@@ -54,10 +54,6 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
     }, []);
 
     useEffect(() => {
-
-    }, [draggedSquare, droppedSquare]);
-
-    useEffect(() => {
         processMove("click");
     }, [prevClickedSquare, clickedSquare]);
 
@@ -83,15 +79,17 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
 
         if (startingSquare === destinationSquare) return;
 
-        console.log(startingSquare);
+        console.log(startingSquare, destinationSquare);
 
         const boardPlacement = parsedFEN["board_placement"];
         const squareInfo = boardPlacement[startingSquare.toString()];
         const pieceType = squareInfo["piece_type"];
         const pieceColor = squareInfo["piece_color"];
 
+        console.log(typeof(destinationSquare));
+
         if (pieceType.toLowerCase() === "pawn") {
-            if (isPawnPromotion(pieceColor, getRank(destinationSquare!))) {
+            if (isPawnPromotion(pieceColor, getRank(destinationSquare?.toString()!))) {
                 // TODO: Implement pawn promotion logic
                 return;
             }
@@ -100,8 +98,8 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         const moveInfo = {
             piece_type: pieceType,
             piece_color: pieceColor,
-            starting_square: startingSquare,
-            destination_square: destinationSquare,
+            starting_square: startingSquare.toString(),
+            destination_square: destinationSquare.toString(),
 
             additional_info: {}
         };
