@@ -83,6 +83,8 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
 
         if (startingSquare === destinationSquare) return;
 
+        console.log(startingSquare);
+
         const boardPlacement = parsedFEN["board_placement"];
         const squareInfo = boardPlacement[startingSquare.toString()];
         const pieceType = squareInfo["piece_type"];
@@ -108,6 +110,18 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
             type: "move_made",
             move_info: moveInfo,
         }))
+
+        performPostMoveCleanup(moveMethod);
+    }
+
+    function performPostMoveCleanup(moveMethod: string) {
+        if (moveMethod === "drag") {
+            setDraggedSquare(null);
+            setDroppedSquare(null);
+        } else {
+            setPrevClickedSquare(null);
+            setClickedSquare(null);
+        }
     }
 
     async function updatePositionList() {
