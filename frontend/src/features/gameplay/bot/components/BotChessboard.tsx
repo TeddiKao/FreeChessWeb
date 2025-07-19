@@ -50,6 +50,7 @@ function BotChessboard({
     handlePawnPromotion,
     cancelPromotion,
     promotionSquare,
+    shouldShowPromotionPopup
 }: BotChessboardProps) {
     const [parsedFENString, setParsedFEN] =
         useState<OptionalValue<ParsedFEN>>(parsed_fen_string);
@@ -95,8 +96,8 @@ function BotChessboard({
         const isPromotionSquareDefined = isNullOrUndefined(promotionSquare);
         const isPromotionSquare =
             Number(promotionSquare) === Number(squareIndex);
-        const shouldShowPromotionPopup =
-            isPromotionSquareDefined && isPromotionSquare;
+        const shouldDisplayPromotionPopup =
+            isPromotionSquareDefined && isPromotionSquare && shouldShowPromotionPopup;
 
         return (
             <Square
@@ -105,7 +106,7 @@ function BotChessboard({
                 squareColor={squareColor}
                 pieceColor={pieceColor as PieceColor}
                 pieceType={pieceType as PieceType}
-                displayPromotionPopup={shouldShowPromotionPopup}
+                displayPromotionPopup={shouldDisplayPromotionPopup}
                 orientation={orientation}
                 setParsedFEN={setParsedFEN}
                 setDraggedSquare={setDraggedSquare}
@@ -143,8 +144,8 @@ function BotChessboard({
         const isPromotionSquareDefined = isNullOrUndefined(promotionSquare);
         const isPromotionSquare =
             Number(promotionSquare) === Number(squareIndex);
-        const shouldShowPromotionPopup =
-            isPromotionSquareDefined && isPromotionSquare;
+        const shouldDisplayPromotionPopup =
+            isPromotionSquareDefined && isPromotionSquare && shouldShowPromotionPopup;
 
         return (
             <Square
@@ -152,7 +153,7 @@ function BotChessboard({
                 squareNumber={squareIndex}
                 squareColor={squareColor}
                 orientation={orientation}
-                displayPromotionPopup={shouldShowPromotionPopup}
+                displayPromotionPopup={shouldDisplayPromotionPopup}
                 setParsedFEN={setParsedFEN}
                 setDraggedSquare={setDraggedSquare}
                 setDroppedSquare={setDroppedSquare}
