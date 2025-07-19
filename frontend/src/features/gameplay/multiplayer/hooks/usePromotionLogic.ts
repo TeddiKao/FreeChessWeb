@@ -98,7 +98,6 @@ function usePromotionLogic(parsedFEN: ParsedFEN) {
 		if (autoQueen) {
 			sendPromotionMove(originalPawnSquare, promotionSquare, "queen");
 		} else {
-			console.log("Showing promotion popup!");
 			setShouldShowPromotionPopup(true);
 		}
 	}
