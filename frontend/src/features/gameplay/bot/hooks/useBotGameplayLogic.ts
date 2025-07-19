@@ -64,6 +64,8 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         cancelPromotion,
         prePromotionBoardState,
         performPostPromotionCleanup,
+        originalPawnSquareRef,
+        promotionSquareRef
     } = usePromotionLogic(parsedFEN);
 
     useEffect(() => {
@@ -287,6 +289,13 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
 
         cancelPromotion,
         prePromotionBoardState,
+
+        handlePromotionPieceSelected: (color: PieceColor, promotedPiece: PieceType) => {
+            if (!promotionSquareRef.current) return;
+            if (!originalPawnSquareRef.current) return;
+
+            sendPromotionMove(originalPawnSquareRef.current, promotionSquareRef.current, promotedPiece);
+        }
     };
 }
 
