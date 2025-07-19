@@ -3,6 +3,20 @@ import { BaseChessboardProps } from "@sharedTypes/chessTypes/chessboardProps.typ
 import { ParsedFEN, MoveInfo } from "@sharedTypes/chessTypes/gameState.types";
 import { StateSetterFunction, OptionalValue } from "@sharedTypes/utility.types";
 
+interface ClickedSquaresState {
+	prevClickedSquare: OptionalValue<ChessboardSquareIndex>;
+	clickedSquare: OptionalValue<ChessboardSquareIndex>;
+	setPrevClickedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
+	setClickedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
+}
+
+interface DragAndDropSquaresState {
+	draggedSquare: OptionalValue<ChessboardSquareIndex>;
+	droppedSquare: OptionalValue<ChessboardSquareIndex>;
+	setDraggedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
+	setDroppedSquare: StateSetterFunction<ChessboardSquareIndex | null>;
+}
+
 interface BotChessboardProps extends BaseChessboardProps {
 	gameplaySettings: any;
 	gameId: number;
@@ -19,6 +33,8 @@ interface BotChessboardProps extends BaseChessboardProps {
 	>;
 	lastDraggedSquare: ChessboardSquareIndex;
 	lastDroppedSquare: ChessboardSquareIndex;
+	clickedSquaresState: ClickedSquaresState;
+	dragAndDropSquaresState: DragAndDropSquaresState;
 
 	setGameEnded: StateSetterFunction<boolean>;
 	setGameEndedCause: StateSetterFunction<string>;
