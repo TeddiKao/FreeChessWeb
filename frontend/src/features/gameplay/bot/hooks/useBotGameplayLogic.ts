@@ -16,6 +16,8 @@ import { displayLegalMoves } from "../../common/utils/moveService";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
 import { clearSquaresStyling, getRank } from "@/shared/utils/boardUtils";
 import usePromotionLogic from "../../multiplayer/hooks/usePromotionLogic";
+import { PieceColor, PieceType } from "@/shared/types/chessTypes/pieces.types";
+import { ChessboardSquareIndex } from "@/shared/types/chessTypes/board.types";
 
 interface BotGameplayLogicHookProps {
     gameId: number;
@@ -61,6 +63,7 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         handlePawnPromotion,
         cancelPromotion,
         prePromotionBoardState,
+        performPostPromotionCleanup,
     } = usePromotionLogic(parsedFEN);
 
     useEffect(() => {
@@ -107,27 +110,7 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
                 )
             ) {
                 preparePromotion(startingSquare, destinationSquare!);
-                handlePawnPromotion(() => {
-                    const moveInfo = {
-                        piece_type: pieceType,
-                        piece_color: pieceColor,
-                        starting_square: startingSquare.toString(),
-                        destination_square: destinationSquare?.toString(),
-
-                        additional_info: {
-                            promoted_piece: "queen",
-                        },
-                    };
-
-                    socketRef?.current?.send(
-                        JSON.stringify({
-                            type: "move_made",
-                            move_info: moveInfo,
-                        })
-                    );
-
-                    performPostMoveCleanup(moveMethod);
-                });
+                handlePawnPromotion(() => {});
 
                 return;
             }
@@ -150,6 +133,33 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         );
 
         performPostMoveCleanup(moveMethod);
+    }
+
+    function sendPromotionMove(
+        pieceType: PieceType,
+        pieceColor: PieceColor,
+        startingSquare: ChessboardSquareIndex,
+        destinationSquare: ChessboardSquareIndex
+    ) {
+        const moveInfo = {
+            piece_type: pieceType,
+            piece_color: pieceColor,
+            starting_square: startingSquare.toString(),
+            destination_square: destinationSquare?.toString(),
+
+            additional_info: {
+                promoted_piece: "queen",
+            },
+        };
+
+        socketRef?.current?.send(
+            JSON.stringify({
+                type: "move_made",
+                move_info: moveInfo,
+            })
+        );
+
+        performPostPromotionCleanup();
     }
 
     function performPostMoveCleanup(moveMethod: string) {
@@ -268,6 +278,9 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
 
         handleCheckmate,
         handleDraw,
+
+        cancelPromotion,
+        prePromotionBoardState,
     };
 }
 
