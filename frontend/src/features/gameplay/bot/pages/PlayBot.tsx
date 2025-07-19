@@ -61,6 +61,11 @@ function PlayBot() {
 
         handleCheckmate,
         handleDraw,
+
+        cancelPromotion,
+        handlePromotionPieceSelected,
+        promotionSquare,
+        shouldShowPromotionPopup,
     } = useBotGameplayLogic({ gameId });
 
     const [
@@ -135,6 +140,9 @@ function PlayBot() {
                             setDraggedSquare,
                             setDroppedSquare,
                         }}
+                        cancelPromotion={cancelPromotion}
+                        handlePawnPromotion={handlePromotionPieceSelected}
+                        promotionSquare={promotionSquare}
                     />
                 </div>
 
