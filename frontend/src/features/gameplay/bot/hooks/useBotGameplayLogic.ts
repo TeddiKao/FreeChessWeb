@@ -49,6 +49,7 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         const positionList = await fetchBotGamePositionList(gameId);
 
         setPositionList(positionList);
+        setPositionIndex(positionList.length - 1);
     }
 
     async function updateMoveList() {
