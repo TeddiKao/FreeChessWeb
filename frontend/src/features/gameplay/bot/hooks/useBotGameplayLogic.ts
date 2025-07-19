@@ -178,7 +178,6 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
     function handlePlayerMoveMade({
         new_position_list: newPositionList,
         new_move_list: newMoveList,
-        move_data: moveData,
     }: any) {
         setPositionList(newPositionList);
         setPositionIndex(newPositionList.length - 1);
