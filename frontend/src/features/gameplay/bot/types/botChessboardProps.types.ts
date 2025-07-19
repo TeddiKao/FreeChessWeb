@@ -2,6 +2,7 @@ import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
 import { BaseChessboardProps } from "@sharedTypes/chessTypes/chessboardProps.types";
 import { ParsedFEN, MoveInfo } from "@sharedTypes/chessTypes/gameState.types";
 import { StateSetterFunction, OptionalValue } from "@sharedTypes/utility.types";
+import { CheckmateEventData } from "../../multiplayer/types/gameEvents.types";
 
 interface ClickedSquaresState {
 	prevClickedSquare: OptionalValue<ChessboardSquareIndex>;
@@ -43,6 +44,9 @@ interface BotChessboardProps extends BaseChessboardProps {
 
 	parentAnimationSquare: OptionalValue<ChessboardSquareIndex>;
 	parentAnimationStyles: Record<string, unknown>;
+
+	handleCheckmate: (eventData: CheckmateEventData) => void;
+	handleDraw: (drawCause: string) => void;
 }
 
 export type { BotChessboardProps }
