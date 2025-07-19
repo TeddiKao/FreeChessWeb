@@ -454,28 +454,12 @@ function BotChessboard({
                 handlePlayerMoveMade(parsedEventData);
                 break;
 
-            case BotGameWebSocketEventTypes.CHECKMATE_OCCURRED:
-                handleCheckmate(parsedEventData);
-                break;
-
-            case BotGameWebSocketEventTypes.STALEMATE_OCCURRED:
-                handleDraw("stalemate");
-                break;
-
-            case BotGameWebSocketEventTypes.THREEFOLD_REPETITION_OCCURRED:
-                handleDraw("repetition");
-                break;
-
-            case BotGameWebSocketEventTypes.FIFTY_MOVE_RULE_REACHED:
-                handleDraw("50-move rule");
-                break;
-
             case BotGameWebSocketEventTypes.BOT_MOVE_MADE:
                 handleBotMoveMade(parsedEventData);
                 break;
 
             default:
-                console.error(`Invalid event type ${eventType}`);
+                break;
         }
     }
 

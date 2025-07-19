@@ -95,8 +95,13 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
                 handleDraw("50-move rule");
                 break;
 
-            default:
-                console.error(`Invalid event type ${eventType}`);
+            case BotGameWebSocketEventTypes.MOVE_REGISTERED:
+                // Todo: Move logic to custom hook
+                break;
+
+            case BotGameWebSocketEventTypes.BOT_MOVE_MADE:
+                // Todo: Move logic to custom hook
+                break;
         }
     }
 
