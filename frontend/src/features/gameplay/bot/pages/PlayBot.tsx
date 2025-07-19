@@ -44,6 +44,8 @@ function PlayBot() {
             setPositionList,
             positionIndex,
             setPositionIndex,
+            moveList,
+            setMoveList,
         },
 
         parsedFEN,
@@ -65,8 +67,6 @@ function PlayBot() {
         pieceAnimationSquare,
         pieceAnimationStyles,
     ] = usePieceAnimation();
-
-    const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
 
     const [boardOrientation, setBoardOrientation] =
         useState<string>(assignedColor);
