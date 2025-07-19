@@ -3,8 +3,9 @@ import useClickedSquaresState from "../../multiplayer/hooks/useClickedSquaresSta
 import useDraggedSquaresState from "../../multiplayer/hooks/useDraggedSquaresState";
 import useWebsocketWithLifecycle from "@/shared/hooks/websocket/useWebsocketWithLifecycle";
 import { parseWebsocketUrl } from "@/shared/utils/generalUtils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MoveList, PositionList } from "@/shared/types/chessTypes/gameState.types";
+import { fetchBotGameMoveList, fetchBotGamePositionList } from "../botGameApiService";
 
 interface BotGameplayLogicHookProps {
     gameId: number;
@@ -38,6 +39,23 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
 
     const { draggedSquare, setDraggedSquare, droppedSquare, setDroppedSquare } =
         useDraggedSquaresState();
+
+    useEffect(() => {
+        updatePositionList();
+        updateMoveList();
+    }, []);
+
+    async function updatePositionList() {
+        const positionList = await fetchBotGamePositionList(gameId);
+
+        setPositionList(positionList);
+    }
+
+    async function updateMoveList() {
+        const moveList = await fetchBotGameMoveList(gameId);
+
+        setMoveList(moveList);
+    }
 
     function handleOnMessage() {
 
