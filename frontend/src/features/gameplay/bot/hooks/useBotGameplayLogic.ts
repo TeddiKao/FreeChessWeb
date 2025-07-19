@@ -53,15 +53,19 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         droppedSquare,
         setDroppedSquare,
 
-        positionList,
-        setPositionList,
-        positionIndex,
-        setPositionIndex,
+        gameStateHistory: {
+            positionList,
+            setPositionList,
+            positionIndex,
+            setPositionIndex,
+
+            moveList,
+            setMoveList,
+        },
+
         parsedFEN,
         previousDraggedSquare,
         previousDroppedSquare,
-        moveList,
-        setMoveList,
     };
 }
 
