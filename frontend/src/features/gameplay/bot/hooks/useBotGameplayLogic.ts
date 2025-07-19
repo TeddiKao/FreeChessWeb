@@ -9,7 +9,7 @@ import { fetchBotGameMoveList, fetchBotGamePositionList } from "../botGameApiSer
 import { BotGameWebSocketEventTypes } from "../botGameEvents.enums";
 import { displayLegalMoves } from "../../common/utils/moveService";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
-import { getRank } from "@/shared/utils/boardUtils";
+import { clearSquaresStyling, getRank } from "@/shared/utils/boardUtils";
 
 interface BotGameplayLogicHookProps {
     gameId: number;
@@ -66,6 +66,8 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
     }, [draggedSquare, droppedSquare]);
 
     async function processMove(moveMethod: "click" | "drag") {
+        clearSquaresStyling();
+
         const usingDrag = moveMethod === "drag";
 
         const startingSquare = usingDrag ? draggedSquare : prevClickedSquare;
