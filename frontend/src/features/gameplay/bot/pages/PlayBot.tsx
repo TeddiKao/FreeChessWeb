@@ -14,273 +14,294 @@ import DashboardNavbar from "@sharedComponents/DashboardNavbar/DashboardNavbar";
 import MoveListPanel from "@sharedComponents/chessElements/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "@sharedComponents/chessElements/gameplaySidePanel/MoveNavigationButtons";
 import BotChessboard from "../components/BotChessboard";
+import { MoveInfo, ParsedFEN } from "@sharedTypes/chessTypes/gameState.types";
 import {
-	MoveInfo,
-	ParsedFEN,
-} from "@sharedTypes/chessTypes/gameState.types";
-import {
-	fetchBotGamePositionList,
-	fetchBotGameMoveList,
+    fetchBotGamePositionList,
+    fetchBotGameMoveList,
 } from "../botGameApiService";
 import BoardActions from "@sharedComponents/chessboard/BoardActions";
 import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
 import { OptionalValue } from "@sharedTypes/utility.types";
+import useBotGameplayLogic from "../hooks/useBotGameplayLogic";
 
 function PlayBot() {
-	const initialGameplaySettings = useGameplaySettings();
-	const [gameplaySettings, setGameplaySettings] = useState<any>(
-		initialGameplaySettings
-	);
-	const [gameplaySettingsVisible, setGameplaySettingsVisible] =
-		useState<boolean>(false);
+    const location = useLocation();
+    const gameId = location.state?.gameId;
+    const bot = location.state?.bot;
+    const assignedColor = location.state?.assignedColor;
 
-	const [gameWinner, setGameWinner] = useState<string>("");
-	const [hasGameEnded, setHasGameEnded] = useState(false);
-	const [gameEndedCause, setGameEndedCause] = useState<string>("");
+    const initialGameplaySettings = useGameplaySettings();
+    const [gameplaySettings, setGameplaySettings] = useState<any>(
+        initialGameplaySettings
+    );
+    const [gameplaySettingsVisible, setGameplaySettingsVisible] =
+        useState<boolean>(false);
 
-	const [positionList, setPositionList] = useState<
-		Array<{
-			position: ParsedFEN;
-			move_type: string;
-			last_dragged_square: ChessboardSquareIndex;
-			last_dropped_square: ChessboardSquareIndex;
-			move_info: MoveInfo;
-		}>
-	>([]);
+    const [gameWinner, setGameWinner] = useState<string>("");
+    const [hasGameEnded, setHasGameEnded] = useState(false);
+    const [gameEndedCause, setGameEndedCause] = useState<string>("");
 
-	const previousPositionIndexRef = useRef<OptionalValue<number>>(null);
-	const [positionIndex, setPositionIndex] = useState<number>(
-		positionList.length - 1
-	);
-	const [parsedFEN, setParsedFEN] = useState(
-		positionList[positionIndex]?.["position"]
-	);
-	const [lastDraggedSquare, setLastDraggedSquare] = useState(
-		positionList[positionIndex]?.["last_dragged_square"]
-	);
-	const [lastDroppedSquare, setLastDroppedSquare] = useState(
-		positionList[positionIndex]?.["last_dropped_square"]
-	);
+    const [positionList, setPositionList] = useState<
+        Array<{
+            position: ParsedFEN;
+            move_type: string;
+            last_dragged_square: ChessboardSquareIndex;
+            last_dropped_square: ChessboardSquareIndex;
+            move_info: MoveInfo;
+        }>
+    >([]);
 
-	const [
-		pieceAnimationSquare,
-		pieceAnimationStyles,
-		animatePiece,
-		animateMoveReplay,
-	] = usePieceAnimation();
+    const previousPositionIndexRef = useRef<OptionalValue<number>>(null);
+    const [positionIndex, setPositionIndex] = useState<number>(
+        positionList.length - 1
+    );
+    const [parsedFEN, setParsedFEN] = useState(
+        positionList[positionIndex]?.["position"]
+    );
+    const [lastDraggedSquare, setLastDraggedSquare] = useState(
+        positionList[positionIndex]?.["last_dragged_square"]
+    );
+    const [lastDroppedSquare, setLastDroppedSquare] = useState(
+        positionList[positionIndex]?.["last_dropped_square"]
+    );
 
-	const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
+    const {
+        clickedSquare,
+        setClickedSquare,
+        prevClickedSquare,
+        setPrevClickedSquare,
+        draggedSquare,
+        setDraggedSquare,
+        droppedSquare,
+        setDroppedSquare,
+    } = useBotGameplayLogic({ gameId });
 
-	const location = useLocation();
-	const gameId = location.state?.gameId;
-	const bot = location.state?.bot;
-	const assignedColor = location.state?.assignedColor;
+    const [
+        pieceAnimationSquare,
+        pieceAnimationStyles,
+        animatePiece,
+        animateMoveReplay,
+    ] = usePieceAnimation();
 
-	const [boardOrientation, setBoardOrientation] =
-		useState<string>(assignedColor);
+    const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
 
-	useEffect(() => {
-		updateMoveList();
-		updatePositionList();
-	}, [gameId]);
+    const [boardOrientation, setBoardOrientation] =
+        useState<string>(assignedColor);
 
-	useEffect(() => {
-		const animationTimeout = setTimeout(() => {
-			setPositionIndex(positionList.length - 1);
-			setParsedFEN(positionList[positionIndex]?.["position"]);
-			setLastDraggedSquare(
-				positionList[positionIndex]?.["last_dragged_square"]
-			);
-			setLastDroppedSquare(
-				positionList[positionIndex]?.["last_dropped_square"]
-			);
-		}, convertToMilliseconds(pieceAnimationTime));
+    useEffect(() => {
+        updateMoveList();
+        updatePositionList();
+    }, [gameId]);
 
-		return () => {
-			clearTimeout(animationTimeout);
-		};
-	}, [positionList]);
+    useEffect(() => {
+        const animationTimeout = setTimeout(() => {
+            setPositionIndex(positionList.length - 1);
+            setParsedFEN(positionList[positionIndex]?.["position"]);
+            setLastDraggedSquare(
+                positionList[positionIndex]?.["last_dragged_square"]
+            );
+            setLastDroppedSquare(
+                positionList[positionIndex]?.["last_dropped_square"]
+            );
+        }, convertToMilliseconds(pieceAnimationTime));
 
-	useEffect(() => {
-		if (previousPositionIndexRef.current) {
-			if (previousPositionIndexRef.current + 1 === positionIndex) {
-				handleFastForwardMoveAnimation();
-			} else if (previousPositionIndexRef.current - 1 === positionIndex) {
-				handleReplayMoveAnimation();
-			} else {
-				setParsedFEN(positionList[positionIndex]?.["position"]);
-				setLastDraggedSquare(
-					positionList[positionIndex]?.["last_dragged_square"]
-				);
-				setLastDroppedSquare(
-					positionList[positionIndex]?.["last_dropped_square"]
-				);
-			}
-		} else {
-			setParsedFEN(positionList[positionIndex]?.["position"]);
-			setLastDraggedSquare(
-				positionList[positionIndex]?.["last_dragged_square"]
-			);
-			setLastDroppedSquare(
-				positionList[positionIndex]?.["last_dropped_square"]
-			);
-		}
+        return () => {
+            clearTimeout(animationTimeout);
+        };
+    }, [positionList]);
 
-		const moveType = positionList[positionIndex]?.["move_type"];
-		if (!isNullOrUndefined(moveType)) {
-			playAudio(moveType);
-		}
-	}, [positionIndex]);
+    useEffect(() => {
+        if (previousPositionIndexRef.current) {
+            if (previousPositionIndexRef.current + 1 === positionIndex) {
+                handleFastForwardMoveAnimation();
+            } else if (previousPositionIndexRef.current - 1 === positionIndex) {
+                handleReplayMoveAnimation();
+            } else {
+                setParsedFEN(positionList[positionIndex]?.["position"]);
+                setLastDraggedSquare(
+                    positionList[positionIndex]?.["last_dragged_square"]
+                );
+                setLastDroppedSquare(
+                    positionList[positionIndex]?.["last_dropped_square"]
+                );
+            }
+        } else {
+            setParsedFEN(positionList[positionIndex]?.["position"]);
+            setLastDraggedSquare(
+                positionList[positionIndex]?.["last_dragged_square"]
+            );
+            setLastDroppedSquare(
+                positionList[positionIndex]?.["last_dropped_square"]
+            );
+        }
 
-	useEffect(() => {
-		setGameplaySettings(initialGameplaySettings);
-	}, [initialGameplaySettings]);
+        const moveType = positionList[positionIndex]?.["move_type"];
+        if (!isNullOrUndefined(moveType)) {
+            playAudio(moveType);
+        }
+    }, [positionIndex]);
 
-	if (!location.state) {
-		return <Navigate to="/select-bot" />;
-	}
+    useEffect(() => {
+        setGameplaySettings(initialGameplaySettings);
+    }, [initialGameplaySettings]);
 
-	async function updatePositionList() {
-		const positionList = await fetchBotGamePositionList(gameId);
+    if (!location.state) {
+        return <Navigate to="/select-bot" />;
+    }
 
-		setPositionList(positionList);
-	}
+    async function updatePositionList() {
+        const positionList = await fetchBotGamePositionList(gameId);
 
-	async function updateMoveList() {
-		const moveList = await fetchBotGameMoveList(gameId);
+        setPositionList(positionList);
+    }
 
-		setMoveList(moveList);
-	}
+    async function updateMoveList() {
+        const moveList = await fetchBotGameMoveList(gameId);
 
-	function toggleBoardOrientation() {
-		const newOrientation =
-			boardOrientation.toLowerCase() === "white" ? "Black" : "White";
-		setBoardOrientation(newOrientation);
-	}
+        setMoveList(moveList);
+    }
 
-	function handleSettingsDisplay() {
-		setGameplaySettingsVisible(true);
-	}
+    function toggleBoardOrientation() {
+        const newOrientation =
+            boardOrientation.toLowerCase() === "white" ? "Black" : "White";
+        setBoardOrientation(newOrientation);
+    }
 
-	function handleSettingsModalClose() {
-		setGameplaySettingsVisible(false);
-	}
+    function handleSettingsDisplay() {
+        setGameplaySettingsVisible(true);
+    }
 
-	function handleFastForwardMoveAnimation() {
-		const moveInfo = positionList[positionIndex]["move_info"];
+    function handleSettingsModalClose() {
+        setGameplaySettingsVisible(false);
+    }
 
-		const startingSquare = moveInfo["starting_square"];
-		const destinationSquare = moveInfo["destination_square"];
+    function handleFastForwardMoveAnimation() {
+        const moveInfo = positionList[positionIndex]["move_info"];
 
-		console.log(startingSquare, destinationSquare);
+        const startingSquare = moveInfo["starting_square"];
+        const destinationSquare = moveInfo["destination_square"];
 
-		// @ts-ignore
-		animatePiece(
-			startingSquare,
-			destinationSquare,
-			boardOrientation.toLowerCase()
-		);
+        console.log(startingSquare, destinationSquare);
 
-		setTimeout(() => {
-			setParsedFEN(positionList[positionIndex]?.["position"]);
-			setLastDraggedSquare(
-				positionList[positionIndex]?.["last_dragged_square"]
-			);
-			setLastDroppedSquare(
-				positionList[positionIndex]?.["last_dropped_square"]
-			);
-		}, convertToMilliseconds(pieceAnimationTime));
-	}
+        // @ts-ignore
+        animatePiece(
+            startingSquare,
+            destinationSquare,
+            boardOrientation.toLowerCase()
+        );
 
-	function handleReplayMoveAnimation() {
-		const moveInfo = positionList[positionIndex + 1]["move_info"];
+        setTimeout(() => {
+            setParsedFEN(positionList[positionIndex]?.["position"]);
+            setLastDraggedSquare(
+                positionList[positionIndex]?.["last_dragged_square"]
+            );
+            setLastDroppedSquare(
+                positionList[positionIndex]?.["last_dropped_square"]
+            );
+        }, convertToMilliseconds(pieceAnimationTime));
+    }
 
-		const startingSquare = moveInfo["starting_square"];
-		const destinationSquare = moveInfo["destination_square"];
+    function handleReplayMoveAnimation() {
+        const moveInfo = positionList[positionIndex + 1]["move_info"];
 
-		// @ts-ignore
-		animateMoveReplay(
-			startingSquare,
-			destinationSquare,
-			boardOrientation.toLowerCase()
-		);
+        const startingSquare = moveInfo["starting_square"];
+        const destinationSquare = moveInfo["destination_square"];
 
-		setTimeout(() => {
-			setParsedFEN(positionList[positionIndex]?.["position"]);
-			setLastDraggedSquare(
-				positionList[positionIndex]?.["last_dragged_square"]
-			);
-			setLastDroppedSquare(
-				positionList[positionIndex]?.["last_dropped_square"]
-			);
-		}, convertToMilliseconds(pieceAnimationTime));
-	}
+        // @ts-ignore
+        animateMoveReplay(
+            startingSquare,
+            destinationSquare,
+            boardOrientation.toLowerCase()
+        );
 
-	if (!parsedFEN) {
-		return null;
-	}
+        setTimeout(() => {
+            setParsedFEN(positionList[positionIndex]?.["position"]);
+            setLastDraggedSquare(
+                positionList[positionIndex]?.["last_dragged_square"]
+            );
+            setLastDroppedSquare(
+                positionList[positionIndex]?.["last_dropped_square"]
+            );
+        }, convertToMilliseconds(pieceAnimationTime));
+    }
 
-	return (
-		<>
-			<DashboardNavbar />
-			<div className="play-bot-interface-container">
-				<div className="bot-chessboard-wrapper">
-					<BotChessboard
-						lastDraggedSquare={lastDraggedSquare}
-						lastDroppedSquare={lastDroppedSquare}
-						squareSize={58}
-						setPositionList={setPositionList}
-						parsed_fen_string={parsedFEN}
-						orientation={boardOrientation}
-						gameplaySettings={gameplaySettings}
-						gameId={gameId}
-						setMoveList={setMoveList}
-						botId={bot}
-						setGameEnded={setHasGameEnded}
-						setGameWinner={setGameWinner}
-						setGameEndedCause={setGameEndedCause}
-						// @ts-ignore
-						parentAnimationSquare={pieceAnimationSquare}
-						// @ts-ignore
-						parentAnimationStyles={pieceAnimationStyles}
-					/>
-				</div>
+    if (!parsedFEN) {
+        return null;
+    }
 
-				<BoardActions
-					toggleBoardOrientation={toggleBoardOrientation}
-					displaySettings={handleSettingsDisplay}
-				/>
+    return (
+        <>
+            <DashboardNavbar />
+            <div className="play-bot-interface-container">
+                <div className="bot-chessboard-wrapper">
+                    <BotChessboard
+                        lastDraggedSquare={lastDraggedSquare}
+                        lastDroppedSquare={lastDroppedSquare}
+                        squareSize={58}
+                        setPositionList={setPositionList}
+                        parsed_fen_string={parsedFEN}
+                        orientation={boardOrientation}
+                        gameplaySettings={gameplaySettings}
+                        gameId={gameId}
+                        setMoveList={setMoveList}
+                        botId={bot}
+                        setGameEnded={setHasGameEnded}
+                        setGameWinner={setGameWinner}
+                        setGameEndedCause={setGameEndedCause}
+                        // @ts-ignore
+                        parentAnimationSquare={pieceAnimationSquare}
+                        // @ts-ignore
+                        parentAnimationStyles={pieceAnimationStyles}
+						clickedSquaresState={{
+							prevClickedSquare,
+							clickedSquare,
+							setPrevClickedSquare,
+							setClickedSquare,
+						}}
+						dragAndDropSquaresState={{
+							draggedSquare,
+							droppedSquare,
+							setDraggedSquare,
+							setDroppedSquare,
+						}}
+                    />
+                </div>
 
-				<div className="gameplay-side-panel">
-					<MoveListPanel
-						moveList={moveList}
-						setPositionIndex={setPositionIndex}
-						gameWinner={gameWinner}
-						gameEnded={hasGameEnded}
-					/>
+                <BoardActions
+                    toggleBoardOrientation={toggleBoardOrientation}
+                    displaySettings={handleSettingsDisplay}
+                />
 
-					<MoveNavigationButtons
-						previousPositionIndexRef={previousPositionIndexRef}
-						setPositionIndex={setPositionIndex}
-						positionListLength={positionList.length}
-					/>
-				</div>
-			</div>
+                <div className="gameplay-side-panel">
+                    <MoveListPanel
+                        moveList={moveList}
+                        setPositionIndex={setPositionIndex}
+                        gameWinner={gameWinner}
+                        gameEnded={hasGameEnded}
+                    />
 
-			<BaseModal visible={gameplaySettingsVisible}>
-				<GameplaySettings
-					onClose={handleSettingsModalClose}
-					setGameplaySettings={setGameplaySettings}
-				/>
-			</BaseModal>
+                    <MoveNavigationButtons
+                        previousPositionIndexRef={previousPositionIndexRef}
+                        setPositionIndex={setPositionIndex}
+                        positionListLength={positionList.length}
+                    />
+                </div>
+            </div>
 
-			<LocalGameOverModal
-				gameEndCause={gameEndedCause}
-				gameWinner={gameWinner}
-				visible={hasGameEnded}
-			/>
-		</>
-	);
+            <BaseModal visible={gameplaySettingsVisible}>
+                <GameplaySettings
+                    onClose={handleSettingsModalClose}
+                    setGameplaySettings={setGameplaySettings}
+                />
+            </BaseModal>
+
+            <LocalGameOverModal
+                gameEndCause={gameEndedCause}
+                gameWinner={gameWinner}
+                visible={hasGameEnded}
+            />
+        </>
+    );
 }
 
 export default PlayBot;
