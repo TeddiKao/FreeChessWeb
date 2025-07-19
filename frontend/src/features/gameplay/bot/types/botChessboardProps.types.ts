@@ -50,6 +50,7 @@ interface BotChessboardProps extends BaseChessboardProps {
 
 	cancelPromotion: () => void;
 	handlePawnPromotion: () => void;
+	promotionSquare: ChessboardSquareIndex;
 }
 
 export type { BotChessboardProps }

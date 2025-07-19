@@ -295,7 +295,9 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
             if (!originalPawnSquareRef.current) return;
 
             sendPromotionMove(originalPawnSquareRef.current, promotionSquareRef.current, promotedPiece);
-        }
+        },
+
+        promotionSquare: promotionSquareRef.current;
     };
 }
 
