@@ -1,15 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 
-
-import { parseWebsocketUrl, isObjEmpty } from "@sharedUtils/generalUtils";
+import {
+    parseWebsocketUrl,
+    isObjEmpty,
+    isNullOrUndefined,
+} from "@sharedUtils/generalUtils";
 import usePieceAnimation from "@sharedHooks/usePieceAnimation";
 import ChessboardGrid from "@sharedComponents/chessboard/ChessboardGrid";
 import Square from "@sharedComponents/chessboard/Square";
 import useWebsocketWithLifecycle from "@sharedHooks/websocket/useWebsocketWithLifecycle";
-import { fetchLegalMoves } from "../../common/utils/moveService";
 import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
 import { ParsedFEN, MoveInfo } from "@sharedTypes/chessTypes/gameState.types";
-import { MoveMethods } from "@sharedTypes/chessTypes/moveMethods.enums";
 import {
     PieceInfo,
     PieceColor,
@@ -45,6 +46,10 @@ function BotChessboard({
         setDraggedSquare,
         setDroppedSquare,
     },
+
+    handlePawnPromotion,
+    cancelPromotion,
+    promotionSquare,
 }: BotChessboardProps) {
     const [parsedFENString, setParsedFEN] =
         useState<OptionalValue<ParsedFEN>>(parsed_fen_string);
@@ -53,30 +58,12 @@ function BotChessboard({
         useState<OptionalValue<ChessboardSquareIndex>>(lastDraggedSquare);
     const [previousDroppedSquare, setPreviousDroppedSquare] =
         useState<OptionalValue<ChessboardSquareIndex>>(lastDroppedSquare);
-    const [promotionCapturedPiece, setPromotionCapturedPiece] =
-        useState<OptionalValue<PieceInfo>>(null);
 
-    const [pieceAnimationSquare, pieceAnimationStyles] =
-        usePieceAnimation();
-
-    const [sideToMove, setSideToMove] = useState<string>("white");
-
-    const selectingPromotionRef = useRef<boolean>(false);
-    const unpromotedBoardPlacementRef = useRef<OptionalValue<ParsedFEN>>(null);
+    const [pieceAnimationSquare, pieceAnimationStyles] = usePieceAnimation();
 
     const chessboardStyles = {
         gridTemplateColumns: `repeat(8, ${squareSize}px)`,
     };
-
-    const websocketURL = parseWebsocketUrl("bot-game-server", {
-        gameId: gameId,
-    });
-
-    const { socketRef: botGameWebsocketRef } = useWebsocketWithLifecycle({
-        url: websocketURL,
-        enabled: true,
-        onMessage: () => {}
-    });
 
     useEffect(() => {
         setParsedFEN(parsed_fen_string);
@@ -105,6 +92,12 @@ function BotChessboard({
         promotionRank,
         pieceRank,
     }: FilledSquareRenderParams) {
+        const isPromotionSquareDefined = isNullOrUndefined(promotionSquare);
+        const isPromotionSquare =
+            Number(promotionSquare) === Number(squareIndex);
+        const shouldShowPromotionPopup =
+            isPromotionSquareDefined && isPromotionSquare;
+
         return (
             <Square
                 key={squareIndex}
@@ -112,26 +105,22 @@ function BotChessboard({
                 squareColor={squareColor}
                 pieceColor={pieceColor as PieceColor}
                 pieceType={pieceType as PieceType}
-                displayPromotionPopup={
-                    pieceType.toLowerCase() === "pawn" &&
-                    promotionRank === pieceRank &&
-                    !autoQueen
-                }
+                displayPromotionPopup={shouldShowPromotionPopup}
                 orientation={orientation}
                 setParsedFEN={setParsedFEN}
                 setDraggedSquare={setDraggedSquare}
                 setDroppedSquare={setDroppedSquare}
-                handlePromotionCancel={handlePromotionCancel}
+                handlePromotionCancel={cancelPromotion}
                 handlePawnPromotion={handlePawnPromotion}
-				setPrevClickedSquare={setPrevClickedSquare}
-				setClickedSquare={setClickedSquare}
+                setPrevClickedSquare={setPrevClickedSquare}
+                setClickedSquare={setClickedSquare}
                 previousDraggedSquare={previousDraggedSquare}
                 previousDroppedSquare={previousDroppedSquare}
                 squareSize={squareSize}
-				prevClickedSquare={prevClickedSquare}
-				clickedSquare={clickedSquare}
-				draggedSquare={draggedSquare}
-				droppedSquare={droppedSquare}
+                prevClickedSquare={prevClickedSquare}
+                clickedSquare={clickedSquare}
+                draggedSquare={draggedSquare}
+                droppedSquare={droppedSquare}
                 // @ts-ignore
                 animatingPieceSquare={
                     pieceAnimationSquare || parentAnimationSquare
@@ -151,27 +140,33 @@ function BotChessboard({
         squareIndex,
         squareColor,
     }: EmptySquareRenderParams) {
+        const isPromotionSquareDefined = isNullOrUndefined(promotionSquare);
+        const isPromotionSquare =
+            Number(promotionSquare) === Number(squareIndex);
+        const shouldShowPromotionPopup =
+            isPromotionSquareDefined && isPromotionSquare;
+
         return (
             <Square
                 key={squareIndex}
                 squareNumber={squareIndex}
                 squareColor={squareColor}
                 orientation={orientation}
-                displayPromotionPopup={false}
+                displayPromotionPopup={shouldShowPromotionPopup}
                 setParsedFEN={setParsedFEN}
                 setDraggedSquare={setDraggedSquare}
                 setDroppedSquare={setDroppedSquare}
-				setClickedSquare={setClickedSquare}
-				setPrevClickedSquare={setPrevClickedSquare}
-                handlePromotionCancel={handlePromotionCancel}
+                setClickedSquare={setClickedSquare}
+                setPrevClickedSquare={setPrevClickedSquare}
+                handlePromotionCancel={cancelPromotion}
                 handlePawnPromotion={handlePawnPromotion}
                 previousDraggedSquare={previousDraggedSquare}
                 previousDroppedSquare={previousDroppedSquare}
                 squareSize={squareSize}
-				prevClickedSquare={prevClickedSquare}
-				clickedSquare={clickedSquare}
-				draggedSquare={draggedSquare}
-				droppedSquare={droppedSquare}
+                prevClickedSquare={prevClickedSquare}
+                clickedSquare={clickedSquare}
+                draggedSquare={draggedSquare}
+                droppedSquare={droppedSquare}
                 // @ts-ignore
                 animatingPieceSquare={
                     pieceAnimationSquare || parentAnimationSquare
