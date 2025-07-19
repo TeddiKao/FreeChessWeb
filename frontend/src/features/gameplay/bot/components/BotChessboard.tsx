@@ -43,6 +43,7 @@ function BotChessboard({
     setGameEnded,
     setGameEndedCause,
     setGameWinner,
+    setPositionIndex,
 
     parentAnimationSquare,
     parentAnimationStyles,
@@ -369,6 +370,7 @@ function BotChessboard({
         );
 
         setPositionList(newPositionList);
+        setPositionIndex(newPositionList.length - 1);
         setMoveList(newMoveList);
     }
 
@@ -386,6 +388,7 @@ function BotChessboard({
         );
 
         setPositionList(newPositionList);
+        setPositionIndex(newPositionList.length - 1);
         setMoveList(newMoveList);
     }
 
