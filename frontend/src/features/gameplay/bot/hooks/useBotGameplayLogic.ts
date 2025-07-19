@@ -297,7 +297,7 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
             sendPromotionMove(originalPawnSquareRef.current, promotionSquareRef.current, promotedPiece);
         },
 
-        promotionSquare: promotionSquareRef.current;
+        promotionSquare: promotionSquareRef.current
     };
 }
 
