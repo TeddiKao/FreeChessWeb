@@ -40,9 +40,6 @@ function BotChessboard({
     setPositionList,
     lastDraggedSquare,
     lastDroppedSquare,
-    setGameEnded,
-    setGameEndedCause,
-    setGameWinner,
     setPositionIndex,
 
     parentAnimationSquare,
@@ -60,6 +57,9 @@ function BotChessboard({
         setDraggedSquare,
         setDroppedSquare,
     },
+
+    handleCheckmate,
+    handleDraw
 }: BotChessboardProps) {
     const [parsedFENString, setParsedFEN] =
         useState<OptionalValue<ParsedFEN>>(parsed_fen_string);
@@ -443,17 +443,6 @@ function BotChessboard({
         setPrevClickedSquare(null);
         setClickedSquare(null);
         setPromotionCapturedPiece(null);
-    }
-
-    function handleCheckmate({ game_winner: gameWinner }: any) {
-        setGameEnded(true);
-        setGameWinner(gameWinner);
-        setGameEndedCause("checkmate");
-    }
-
-    function handleDraw(drawCause: string) {
-        setGameEnded(true);
-        setGameEndedCause(drawCause);
     }
 
     function handleOnMessage(event: MessageEvent) {
