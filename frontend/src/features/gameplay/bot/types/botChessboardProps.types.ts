@@ -35,6 +35,7 @@ interface BotChessboardProps extends BaseChessboardProps {
 	lastDroppedSquare: ChessboardSquareIndex;
 	clickedSquaresState: ClickedSquaresState;
 	dragAndDropSquaresState: DragAndDropSquaresState;
+    setPositionIndex: StateSetterFunction<number>;
 
 	setGameEnded: StateSetterFunction<boolean>;
 	setGameEndedCause: StateSetterFunction<string>;
