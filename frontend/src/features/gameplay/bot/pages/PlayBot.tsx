@@ -33,10 +33,6 @@ function PlayBot() {
     const [gameplaySettingsVisible, setGameplaySettingsVisible] =
         useState<boolean>(false);
 
-    const [gameWinner, setGameWinner] = useState<string>("");
-    const [hasGameEnded, setHasGameEnded] = useState(false);
-    const [gameEndedCause, setGameEndedCause] = useState<string>("");
-
     const previousPositionIndexRef = useRef<OptionalValue<number>>(null);
 
     const {
@@ -59,13 +55,21 @@ function PlayBot() {
         parsedFEN,
         previousDraggedSquare,
         previousDroppedSquare,
+
+        hasGameEnded,
+        setHasGameEnded,
+        gameWinner,
+        setGameWinner,
+        gameEndedCause,
+        setGameEndedCause,
+
+        handleCheckmate,
+        handleDraw,
     } = useBotGameplayLogic({ gameId });
 
     const [
         pieceAnimationSquare,
         pieceAnimationStyles,
-        animatePiece,
-        animateMoveReplay,
     ] = usePieceAnimation();
 
     const [moveList, setMoveList] = useState<Array<Array<string>>>([]);
