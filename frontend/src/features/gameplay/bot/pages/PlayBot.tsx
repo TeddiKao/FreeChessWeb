@@ -10,13 +10,7 @@ import DashboardNavbar from "@sharedComponents/DashboardNavbar/DashboardNavbar";
 import MoveListPanel from "@sharedComponents/chessElements/gameplaySidePanel/MoveListPanel";
 import MoveNavigationButtons from "@sharedComponents/chessElements/gameplaySidePanel/MoveNavigationButtons";
 import BotChessboard from "../components/BotChessboard";
-import { MoveInfo, ParsedFEN } from "@sharedTypes/chessTypes/gameState.types";
-import {
-    fetchBotGamePositionList,
-    fetchBotGameMoveList,
-} from "../botGameApiService";
 import BoardActions from "@sharedComponents/chessboard/BoardActions";
-import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
 import { OptionalValue } from "@sharedTypes/utility.types";
 import useBotGameplayLogic from "../hooks/useBotGameplayLogic";
 
@@ -78,28 +72,11 @@ function PlayBot() {
         useState<string>(assignedColor);
 
     useEffect(() => {
-        updateMoveList();
-        updatePositionList();
-    }, [gameId]);
-
-    useEffect(() => {
         setGameplaySettings(initialGameplaySettings);
     }, [initialGameplaySettings]);
 
     if (!location.state) {
         return <Navigate to="/select-bot" />;
-    }
-
-    async function updatePositionList() {
-        const positionList = await fetchBotGamePositionList(gameId);
-
-        setPositionList(positionList);
-    }
-
-    async function updateMoveList() {
-        const moveList = await fetchBotGameMoveList(gameId);
-
-        setMoveList(moveList);
     }
 
     function toggleBoardOrientation() {
