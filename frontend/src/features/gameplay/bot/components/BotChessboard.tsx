@@ -260,14 +260,6 @@ function BotChessboard({
     const autoQueen = gameplaySettings["auto_queen"];
     const showLegalMoves = gameplaySettings["show_legal_moves"];
 
-    function handleSquareClick(event: React.MouseEvent<HTMLElement>) {
-        if (!prevClickedSquare && !clickedSquare) {
-            setPrevClickedSquare(event.currentTarget.id);
-        } else {
-            setClickedSquare(event.currentTarget.id);
-        }
-    }
-
     function handleLegalMoveDisplay(moveMethod: string) {
         if (!parsedFENString) {
             return;
@@ -516,7 +508,6 @@ function BotChessboard({
                     !autoQueen
                 }
                 orientation={orientation}
-                handleSquareClick={handleSquareClick}
                 setParsedFEN={setParsedFEN}
                 setDraggedSquare={setDraggedSquare}
                 setDroppedSquare={setDroppedSquare}
@@ -557,7 +548,6 @@ function BotChessboard({
                 squareNumber={squareIndex}
                 squareColor={squareColor}
                 orientation={orientation}
-                handleSquareClick={handleSquareClick}
                 displayPromotionPopup={false}
                 setParsedFEN={setParsedFEN}
                 setDraggedSquare={setDraggedSquare}
