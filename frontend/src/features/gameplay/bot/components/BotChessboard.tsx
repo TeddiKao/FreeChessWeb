@@ -356,42 +356,6 @@ function BotChessboard({
         );
     }
 
-    function handlePlayerMoveMade({
-        new_position_list: newPositionList,
-        new_move_list: newMoveList,
-        move_data: moveData,
-    }: any) {
-        // @ts-ignore
-        animatePiece(
-            moveData["starting_square"],
-            moveData["destination_square"],
-            orientation.toLowerCase(),
-            squareSize
-        );
-
-        setPositionList(newPositionList);
-        setPositionIndex(newPositionList.length - 1);
-        setMoveList(newMoveList);
-    }
-
-    function handleBotMoveMade({
-        new_position_list: newPositionList,
-        new_move_list: newMoveList,
-        move_data: moveData,
-    }: any) {
-        // @ts-ignore
-        animatePiece(
-            moveData["starting_square"],
-            moveData["destination_square"],
-            orientation.toLowerCase(),
-            squareSize
-        );
-
-        setPositionList(newPositionList);
-        setPositionIndex(newPositionList.length - 1);
-        setMoveList(newMoveList);
-    }
-
     async function handlePawnPromotion(
         color: PieceColor,
         promotedPiece: PieceType,
@@ -443,24 +407,6 @@ function BotChessboard({
         setPrevClickedSquare(null);
         setClickedSquare(null);
         setPromotionCapturedPiece(null);
-    }
-
-    function handleOnMessage(event: MessageEvent) {
-        const parsedEventData = JSON.parse(event.data);
-        const eventType = parsedEventData["type"];
-
-        switch (eventType) {
-            case BotGameWebSocketEventTypes.MOVE_REGISTERED:
-                handlePlayerMoveMade(parsedEventData);
-                break;
-
-            case BotGameWebSocketEventTypes.BOT_MOVE_MADE:
-                handleBotMoveMade(parsedEventData);
-                break;
-
-            default:
-                break;
-        }
     }
 
     function renderFilledSquare({
