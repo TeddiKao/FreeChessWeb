@@ -6,6 +6,7 @@ import { parseWebsocketUrl } from "@/shared/utils/generalUtils";
 import { useEffect, useState } from "react";
 import { MoveList, PositionList } from "@/shared/types/chessTypes/gameState.types";
 import { fetchBotGameMoveList, fetchBotGamePositionList } from "../botGameApiService";
+import { BotGameWebSocketEventTypes } from "../botGameEvents.enums";
 
 interface BotGameplayLogicHookProps {
     gameId: number;
@@ -73,8 +74,30 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         setMoveList(moveList);
     }
 
-    function handleOnMessage() {
+    function handleOnMessage(event: MessageEvent) {
+        const parsedEventData = JSON.parse(event.data);
+        const eventType = parsedEventData["type"];
 
+        switch (eventType) {
+            case BotGameWebSocketEventTypes.CHECKMATE_OCCURRED:
+                handleCheckmate(parsedEventData);
+                break;
+
+            case BotGameWebSocketEventTypes.STALEMATE_OCCURRED:
+                handleDraw("stalemate");
+                break;
+
+            case BotGameWebSocketEventTypes.THREEFOLD_REPETITION_OCCURRED:
+                handleDraw("repetition");
+                break;
+
+            case BotGameWebSocketEventTypes.FIFTY_MOVE_RULE_REACHED:
+                handleDraw("50-move rule");
+                break;
+
+            default:
+                console.error(`Invalid event type ${eventType}`);
+        }
     }
 
     return {
