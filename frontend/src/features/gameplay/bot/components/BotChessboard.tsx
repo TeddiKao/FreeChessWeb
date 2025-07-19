@@ -124,37 +124,6 @@ function BotChessboard({
     }
 
     const autoQueen = gameplaySettings["auto_queen"];
-    const showLegalMoves = gameplaySettings["show_legal_moves"];
-
-    function handleLegalMoveDisplay(moveMethod: string) {
-        if (!parsedFENString) {
-            return;
-        }
-
-        moveMethod = moveMethod.toLowerCase();
-
-        const usingDrag = moveMethod === MoveMethods.DRAG;
-        const startingSquare = usingDrag
-            ? `${draggedSquare}`
-            : `${prevClickedSquare}`;
-
-        console.log(typeof startingSquare);
-
-        if (!startingSquare) {
-            return;
-        }
-
-        const boardPlacement = parsedFENString["board_placement"];
-        const squareInfo = boardPlacement[`${startingSquare}`];
-        const pieceType = squareInfo["piece_type"];
-        const pieceColor = squareInfo["piece_color"];
-
-        if (!showLegalMoves) {
-            return;
-        }
-
-        displayLegalMoves(pieceType, pieceColor, startingSquare);
-    }
 
     function handlePromotionCancel(color: PieceColor) {
         if (!previousDraggedSquare || !previousDroppedSquare) {
