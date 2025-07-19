@@ -110,7 +110,7 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
                 )
             ) {
                 preparePromotion(startingSquare, destinationSquare!);
-                handlePawnPromotion(() => {});
+                handlePawnPromotion(sendPromotionMove);
 
                 return;
             }
@@ -136,19 +136,25 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
     }
 
     function sendPromotionMove(
-        pieceType: PieceType,
-        pieceColor: PieceColor,
-        startingSquare: ChessboardSquareIndex,
-        destinationSquare: ChessboardSquareIndex
+        originalPawnSquare: ChessboardSquareIndex,
+        promotionSquare: ChessboardSquareIndex,
+        promotedPiece: PieceType
     ) {
+        if (!parsedFEN) return;
+
+        const boardPlacement = parsedFEN["board_placement"];
+        const squareInfo = boardPlacement[originalPawnSquare.toString()];
+        const pieceType = squareInfo["piece_type"];
+        const pieceColor = squareInfo["piece_color"];
+
         const moveInfo = {
             piece_type: pieceType,
             piece_color: pieceColor,
-            starting_square: startingSquare.toString(),
-            destination_square: destinationSquare?.toString(),
+            starting_square: originalPawnSquare.toString(),
+            destination_square: promotionSquare?.toString(),
 
             additional_info: {
-                promoted_piece: "queen",
+                promoted_piece: promotedPiece,
             },
         };
 
