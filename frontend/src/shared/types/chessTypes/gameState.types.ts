@@ -49,11 +49,11 @@ interface PositionInfo {
 	last_dropped_square: string;
 	move_type: string;
 	move_info: MoveInfo;
-	captured_material: {
+	captured_material?: {
 		white: CapturedPiecesList;
 		black: CapturedPiecesList;
 	};
-	promoted_pieces: {
+	promoted_pieces?: {
 		white: PromotedPiecesList;
 		black: PromotedPiecesList;
 	};
