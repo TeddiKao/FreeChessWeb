@@ -21,6 +21,9 @@ castling_mapping = {
     }
 }
 
+white_king_starting_square = 4
+black_king_starting_square = 60
+
 def parse_raw_board_placement(structured_board_placement):
     raw_board_placement = ""
     consecutive_empty_squares = 0
@@ -108,7 +111,23 @@ def parse_raw_fen(structured_fen):
     fullmove_number = structured_fen["fullmove_number"]
 
     raw_board_placement = parse_raw_board_placement(structured_board_placement) 
+    
+    white_king_square = structured_board_placement[str(white_king_starting_square)]["square_number"]
+    black_king_square = structured_board_placement[str(black_king_starting_square)]["square_number"]
+    
+    is_white_king_on_starting_square = white_king_square["piece_type"].lower() == "king" and white_king_square["piece_color"].lower() == "white"
+    is_black_king_on_starting_square = black_king_square["piece_type"].lower() == "king" and black_king_square["piece_color"].lower() == "black"
+
+    if not is_white_king_on_starting_square:
+        structured_castling_rights["White"]["Kingside"] = "-"
+        structured_castling_rights["White"]["Queenside"] = "-"
+
+    if not is_black_king_on_starting_square:
+        structured_castling_rights["Black"]["Kingside"] = "-"
+        structured_castling_rights["Black"]["Queenside"] = "-"
+
     raw_castling_rights = parse_raw_castling_rights(structured_castling_rights)
+
     raw_side_to_move = parse_raw_side_to_move(structured_side_to_move)
     raw_en_passant_target_square = parse_raw_en_passant_target_square(en_passant_target_square_number)
 
