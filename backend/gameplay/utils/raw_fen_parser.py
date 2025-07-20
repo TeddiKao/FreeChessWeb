@@ -112,8 +112,8 @@ def parse_raw_fen(structured_fen):
 
     raw_board_placement = parse_raw_board_placement(structured_board_placement) 
     
-    white_king_square = structured_board_placement[str(white_king_starting_square)]["square_number"]
-    black_king_square = structured_board_placement[str(black_king_starting_square)]["square_number"]
+    white_king_square = structured_board_placement[str(white_king_starting_square)]
+    black_king_square = structured_board_placement[str(black_king_starting_square)]
     
     is_white_king_on_starting_square = white_king_square["piece_type"].lower() == "king" and white_king_square["piece_color"].lower() == "white"
     is_black_king_on_starting_square = black_king_square["piece_type"].lower() == "king" and black_king_square["piece_color"].lower() == "black"
