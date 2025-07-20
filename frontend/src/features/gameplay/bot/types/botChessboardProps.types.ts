@@ -33,8 +33,8 @@ interface BotChessboardProps extends BaseChessboardProps {
 			move_info: MoveInfo;
 		}>
 	>;
-	lastDraggedSquare: ChessboardSquareIndex;
-	lastDroppedSquare: ChessboardSquareIndex;
+	previousDraggedSquare: ChessboardSquareIndex;
+	previousDroppedSquare: ChessboardSquareIndex;
 	clickedSquaresState: ClickedSquaresState;
 	dragAndDropSquaresState: DragAndDropSquaresState;
     setPositionIndex: StateSetterFunction<number>;
