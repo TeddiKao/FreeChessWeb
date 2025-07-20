@@ -111,8 +111,8 @@ function PlayBot() {
                     <BotChessboard
                         handleCheckmate={handleCheckmate}
                         handleDraw={handleDraw}
-                        lastDraggedSquare={previousDraggedSquare}
-                        lastDroppedSquare={previousDroppedSquare}
+                        previousDraggedSquare={previousDraggedSquare}
+                        previousDroppedSquare={previousDroppedSquare}
                         squareSize={58}
                         setPositionList={setPositionList}
                         setPositionIndex={setPositionIndex}
