@@ -1,22 +1,14 @@
-import { useState, useEffect, useRef } from "react";
-
 import {
-    parseWebsocketUrl,
     isObjEmpty,
     isNullOrUndefined,
 } from "@sharedUtils/generalUtils";
 import usePieceAnimation from "@sharedHooks/usePieceAnimation";
 import ChessboardGrid from "@sharedComponents/chessboard/ChessboardGrid";
 import Square from "@sharedComponents/chessboard/Square";
-import useWebsocketWithLifecycle from "@sharedHooks/websocket/useWebsocketWithLifecycle";
-import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
-import { ParsedFEN, MoveInfo } from "@sharedTypes/chessTypes/gameState.types";
 import {
-    PieceInfo,
     PieceColor,
     PieceType,
 } from "@sharedTypes/chessTypes/pieces.types";
-import { OptionalValue } from "@sharedTypes/utility.types";
 import { BotChessboardProps } from "@gameplay/bot/types/botChessboardProps.types";
 import {
     FilledSquareRenderParams,
@@ -27,9 +19,8 @@ function BotChessboard({
     orientation,
     gameplaySettings,
     squareSize,
-    gameId,
-    lastDraggedSquare,
-    lastDroppedSquare,
+    previousDraggedSquare,
+    previousDroppedSquare,
 
     parentAnimationSquare,
     parentAnimationStyles,
@@ -52,38 +43,19 @@ function BotChessboard({
     promotionSquare,
     shouldShowPromotionPopup,
 }: BotChessboardProps) {
-    const [parsedFENString, setParsedFEN] =
-        useState<OptionalValue<ParsedFEN>>(parsed_fen_string);
-
-    const [previousDraggedSquare, setPreviousDraggedSquare] =
-        useState<OptionalValue<ChessboardSquareIndex>>(lastDraggedSquare);
-    const [previousDroppedSquare, setPreviousDroppedSquare] =
-        useState<OptionalValue<ChessboardSquareIndex>>(lastDroppedSquare);
-
     const [pieceAnimationSquare, pieceAnimationStyles] = usePieceAnimation();
 
     const chessboardStyles = {
         gridTemplateColumns: `repeat(8, ${squareSize}px)`,
     };
 
-    useEffect(() => {
-        setParsedFEN(parsed_fen_string);
-    }, [parsed_fen_string]);
-
-    useEffect(() => {
-        setPreviousDraggedSquare(lastDraggedSquare);
-        setPreviousDroppedSquare(lastDroppedSquare);
-    }, [lastDraggedSquare, lastDroppedSquare]);
-
-    if (!parsedFENString) {
+    if (!parsed_fen_string) {
         return null;
     }
 
     if (!gameplaySettings) {
         return null;
     }
-
-    const autoQueen = gameplaySettings["auto_queen"];
 
     function renderFilledSquare({
         squareIndex,
@@ -110,7 +82,6 @@ function BotChessboard({
                 pieceType={pieceType as PieceType}
                 displayPromotionPopup={shouldDisplayPromotionPopup}
                 orientation={orientation}
-                setParsedFEN={setParsedFEN}
                 setDraggedSquare={setDraggedSquare}
                 setDroppedSquare={setDroppedSquare}
                 handlePromotionCancel={cancelPromotion}
@@ -158,7 +129,6 @@ function BotChessboard({
                 squareColor={squareColor}
                 orientation={orientation}
                 displayPromotionPopup={shouldDisplayPromotionPopup}
-                setParsedFEN={setParsedFEN}
                 setDraggedSquare={setDraggedSquare}
                 setDroppedSquare={setDroppedSquare}
                 setClickedSquare={setClickedSquare}
@@ -193,7 +163,7 @@ function BotChessboard({
                 renderFilledSquare={renderFilledSquare}
                 renderEmptySquare={renderEmptySquare}
                 boardOrientation={orientation}
-                boardPlacement={parsedFENString["board_placement"]}
+                boardPlacement={parsed_fen_string["board_placement"]}
                 chessboardStyles={chessboardStyles}
             />
         </>
