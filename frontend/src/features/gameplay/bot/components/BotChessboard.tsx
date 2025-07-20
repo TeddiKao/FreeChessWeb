@@ -50,7 +50,7 @@ function BotChessboard({
     handlePawnPromotion,
     cancelPromotion,
     promotionSquare,
-    shouldShowPromotionPopup
+    shouldShowPromotionPopup,
 }: BotChessboardProps) {
     const [parsedFENString, setParsedFEN] =
         useState<OptionalValue<ParsedFEN>>(parsed_fen_string);
@@ -93,11 +93,13 @@ function BotChessboard({
         promotionRank,
         pieceRank,
     }: FilledSquareRenderParams) {
-        const isPromotionSquareDefined = isNullOrUndefined(promotionSquare);
+        const isPromotionSquareDefined = !isNullOrUndefined(promotionSquare);
         const isPromotionSquare =
             Number(promotionSquare) === Number(squareIndex);
         const shouldDisplayPromotionPopup =
-            isPromotionSquareDefined && isPromotionSquare && shouldShowPromotionPopup;
+            isPromotionSquareDefined &&
+            isPromotionSquare &&
+            shouldShowPromotionPopup;
 
         return (
             <Square
@@ -141,11 +143,13 @@ function BotChessboard({
         squareIndex,
         squareColor,
     }: EmptySquareRenderParams) {
-        const isPromotionSquareDefined = isNullOrUndefined(promotionSquare);
+        const isPromotionSquareDefined = !isNullOrUndefined(promotionSquare);
         const isPromotionSquare =
             Number(promotionSquare) === Number(squareIndex);
         const shouldDisplayPromotionPopup =
-            isPromotionSquareDefined && isPromotionSquare && shouldShowPromotionPopup;
+            isPromotionSquareDefined &&
+            isPromotionSquare &&
+            shouldShowPromotionPopup;
 
         return (
             <Square

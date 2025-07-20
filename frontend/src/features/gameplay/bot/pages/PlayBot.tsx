@@ -66,6 +66,7 @@ function PlayBot() {
         handlePromotionPieceSelected,
         promotionSquare,
         shouldShowPromotionPopup,
+        prePromotionBoardState,
     } = useBotGameplayLogic({ gameId });
 
     const [
@@ -115,7 +116,7 @@ function PlayBot() {
                         squareSize={58}
                         setPositionList={setPositionList}
                         setPositionIndex={setPositionIndex}
-                        parsed_fen_string={parsedFEN}
+                        parsed_fen_string={prePromotionBoardState ?? parsedFEN}
                         orientation={boardOrientation}
                         gameplaySettings={gameplaySettings}
                         gameId={gameId}
@@ -143,6 +144,7 @@ function PlayBot() {
                         cancelPromotion={cancelPromotion}
                         handlePawnPromotion={handlePromotionPieceSelected}
                         promotionSquare={promotionSquare}
+                        shouldShowPromotionPopup={shouldShowPromotionPopup}
                     />
                 </div>
 

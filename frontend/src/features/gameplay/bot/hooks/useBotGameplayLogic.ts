@@ -65,7 +65,8 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         prePromotionBoardState,
         performPostPromotionCleanup,
         originalPawnSquareRef,
-        promotionSquareRef
+        promotionSquareRef,
+        shouldShowPromotionPopup
     } = usePromotionLogic(parsedFEN);
 
     useEffect(() => {
@@ -111,8 +112,11 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
                     getRank(destinationSquare?.toString()!)
                 )
             ) {
+                console.log("Pawn promotion detected");
+
                 preparePromotion(startingSquare, destinationSquare!);
                 handlePawnPromotion(sendPromotionMove);
+                performPostMoveCleanup(moveMethod);
 
                 return;
             }
@@ -288,7 +292,7 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         handleDraw,
 
         cancelPromotion,
-        prePromotionBoardState,
+        prePromotionBoardState: prePromotionBoardState.current,
 
         handlePromotionPieceSelected: (color: PieceColor, promotedPiece: PieceType) => {
             if (!promotionSquareRef.current) return;
@@ -297,7 +301,8 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
             sendPromotionMove(originalPawnSquareRef.current, promotionSquareRef.current, promotedPiece);
         },
 
-        promotionSquare: promotionSquareRef.current
+        promotionSquare: promotionSquareRef.current,
+        shouldShowPromotionPopup
     };
 }
 
