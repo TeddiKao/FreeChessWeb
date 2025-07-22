@@ -1,7 +1,7 @@
 import useClickedSquaresState from "../../multiplayer/hooks/useClickedSquaresState";
 import useDraggedSquaresState from "../../multiplayer/hooks/useDraggedSquaresState";
 import { useEffect, useState } from "react";
-import { BotGameWebSocketEventTypes } from "../botGameEvents.enums";
+import { BotGameWebSocketEventTypes } from "../types/botGameEvents.enums";
 import { displayLegalMoves } from "../../common/utils/moveService";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
 import {
