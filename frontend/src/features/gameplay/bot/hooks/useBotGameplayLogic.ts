@@ -14,7 +14,11 @@ import {
 import { BotGameWebSocketEventTypes } from "../botGameEvents.enums";
 import { displayLegalMoves } from "../../common/utils/moveService";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
-import { clearSquaresStyling, getRank } from "@/shared/utils/boardUtils";
+import {
+    animatePieceImage,
+    clearSquaresStyling,
+    getRank,
+} from "@/shared/utils/boardUtils";
 import usePromotionLogic from "../../multiplayer/hooks/usePromotionLogic";
 import { PieceColor, PieceType } from "@/shared/types/chessTypes/pieces.types";
 import { ChessboardSquareIndex } from "@/shared/types/chessTypes/board.types";
@@ -25,7 +29,10 @@ interface BotGameplayLogicHookProps {
     orientation: PieceColor;
 }
 
-function useBotGameplayLogic({ gameId, orientation }: BotGameplayLogicHookProps) {
+function useBotGameplayLogic({
+    gameId,
+    orientation,
+}: BotGameplayLogicHookProps) {
     const websocketUrl = parseWebsocketUrl("bot-game-server", {
         gameId: gameId,
     });
@@ -68,10 +75,11 @@ function useBotGameplayLogic({ gameId, orientation }: BotGameplayLogicHookProps)
         performPostPromotionCleanup,
         originalPawnSquareRef,
         promotionSquareRef,
-        shouldShowPromotionPopup
+        shouldShowPromotionPopup,
     } = usePromotionLogic(parsedFEN);
 
-    const { animationRef, animationSquare, prepareAnimationData } = useAnimationLogic(orientation);
+    const { animationRef, animationSquare, prepareAnimationData } =
+        useAnimationLogic(orientation);
 
     useEffect(() => {
         updatePositionList();
@@ -246,10 +254,16 @@ function useBotGameplayLogic({ gameId, orientation }: BotGameplayLogicHookProps)
     function handlePlayerMoveMade({
         new_position_list: newPositionList,
         new_move_list: newMoveList,
+        move_data: moveData,
     }: any) {
-        setPositionList(newPositionList);
-        setPositionIndex(newPositionList.length - 1);
-        setMoveList(newMoveList);
+        const startingSquare = moveData["starting_square"];
+        const destinationSquare = moveData["destination_square"];
+
+        prepareAnimationData(startingSquare, destinationSquare, () => {
+            setPositionList(newPositionList);
+            setPositionIndex(newPositionList.length - 1);
+            setMoveList(newMoveList);
+        });
     }
 
     function handleBotMoveMade({
@@ -298,11 +312,18 @@ function useBotGameplayLogic({ gameId, orientation }: BotGameplayLogicHookProps)
         cancelPromotion,
         prePromotionBoardState: prePromotionBoardState.current,
 
-        handlePromotionPieceSelected: (color: PieceColor, promotedPiece: PieceType) => {
+        handlePromotionPieceSelected: (
+            color: PieceColor,
+            promotedPiece: PieceType
+        ) => {
             if (!promotionSquareRef.current) return;
             if (!originalPawnSquareRef.current) return;
 
-            sendPromotionMove(originalPawnSquareRef.current, promotionSquareRef.current, promotedPiece);
+            sendPromotionMove(
+                originalPawnSquareRef.current,
+                promotionSquareRef.current,
+                promotedPiece
+            );
         },
 
         promotionSquare: promotionSquareRef.current,
