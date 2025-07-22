@@ -95,21 +95,8 @@ function BotChessboard({
                 squareSize={squareSize}
                 prevClickedSquare={prevClickedSquare}
                 clickedSquare={clickedSquare}
-                draggedSquare={draggedSquare}
-                droppedSquare={droppedSquare}
-                // @ts-ignore
-                animatingPieceSquare={
-                    pieceAnimationSquare || parentAnimationSquare
-                }
-                // @ts-ignore
-                animatingPieceStyle={
-                    // @ts-ignore
-                    isObjEmpty(pieceAnimationStyles)
-                        ? parentAnimationStyles
-                        : pieceAnimationStyles
-                }
                 animationRef={animationRef}
-                animationSquare={animationSquare}
+                animatingPieceSquare={animationSquare}
             />
         );
     }
@@ -144,21 +131,8 @@ function BotChessboard({
                 squareSize={squareSize}
                 prevClickedSquare={prevClickedSquare}
                 clickedSquare={clickedSquare}
-                draggedSquare={draggedSquare}
-                droppedSquare={droppedSquare}
-                // @ts-ignore
-                animatingPieceSquare={
-                    pieceAnimationSquare || parentAnimationSquare
-                }
-                // @ts-ignore
-                animatingPieceStyle={
-                    // @ts-ignore
-                    isObjEmpty(pieceAnimationStyles)
-                        ? parentAnimationStyles
-                        : pieceAnimationStyles
-                }
                 animationRef={animationRef}
-                animationSquare={animationSquare}
+                animatingPieceSquare={animationSquare}
             />
         );
     }
