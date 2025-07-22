@@ -23,6 +23,7 @@ import usePromotionLogic from "../../multiplayer/hooks/usePromotionLogic";
 import { PieceColor, PieceType } from "@/shared/types/chessTypes/pieces.types";
 import { ChessboardSquareIndex } from "@/shared/types/chessTypes/board.types";
 import useAnimationLogic from "../../multiplayer/hooks/useAnimationLogic";
+import useBotPositionList from "./useBotPositionList";
 
 interface BotGameplayLogicHookProps {
     gameId: number;
@@ -42,14 +43,15 @@ function useBotGameplayLogic({
         onMessage: handleOnMessage,
     });
 
-    const [positionList, setPositionList] = useState<PositionList>([]);
-    const [positionIndex, setPositionIndex] = useState<number>(0);
-
-    const parsedFEN = positionList[positionIndex]?.["position"];
-    const previousDraggedSquare =
-        positionList[positionIndex]?.["last_dragged_square"];
-    const previousDroppedSquare =
-        positionList[positionIndex]?.["last_dropped_square"];
+    const {
+        positionList,
+        positionIndex,
+        parsedFEN,
+        previousDraggedSquare,
+        previousDroppedSquare,
+        setPositionIndex,
+        setPositionList
+    } = useBotPositionList(gameId);
 
     const [moveList, setMoveList] = useState<MoveList>([]);
 
@@ -243,7 +245,6 @@ function useBotGameplayLogic({
         setGameEndedCause(drawCause);
     }
 
-    
     function handlePlayerMoveMade({
         new_position_list: newPositionList,
         new_move_list: newMoveList,
