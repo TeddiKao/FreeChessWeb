@@ -1,7 +1,7 @@
 import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
 import { BaseChessboardProps } from "@sharedTypes/chessTypes/chessboardProps.types";
 import { ParsedFEN, MoveInfo } from "@sharedTypes/chessTypes/gameState.types";
-import { StateSetterFunction, OptionalValue } from "@sharedTypes/utility.types";
+import { StateSetterFunction, OptionalValue, RefObject } from "@sharedTypes/utility.types";
 import { CheckmateEventData } from "../../multiplayer/types/gameEvents.types";
 import { PieceColor, PieceType } from "@/shared/types/chessTypes/pieces.types";
 
@@ -53,6 +53,9 @@ interface BotChessboardProps extends BaseChessboardProps {
 	handlePawnPromotion: (color: PieceColor, promotedPiece: PieceType) => void;
 	promotionSquare: ChessboardSquareIndex | null;
 	shouldShowPromotionPopup: boolean;
+
+	animationRef: RefObject<HTMLDivElement | null>;
+	animationSquare: OptionalValue<ChessboardSquareIndex>;
 }
 
 export type { BotChessboardProps }
