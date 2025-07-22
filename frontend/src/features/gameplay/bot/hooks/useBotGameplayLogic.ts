@@ -1,7 +1,5 @@
 import useClickedSquaresState from "../../multiplayer/hooks/useClickedSquaresState";
 import useDraggedSquaresState from "../../multiplayer/hooks/useDraggedSquaresState";
-import useWebsocketWithLifecycle from "@/shared/hooks/websocket/useWebsocketWithLifecycle";
-import { parseWebsocketUrl } from "@/shared/utils/generalUtils";
 import { useEffect, useState } from "react";
 import {
     MoveList,
@@ -21,6 +19,7 @@ import { PieceColor, PieceType } from "@/shared/types/chessTypes/pieces.types";
 import { ChessboardSquareIndex } from "@/shared/types/chessTypes/board.types";
 import useAnimationLogic from "../../multiplayer/hooks/useAnimationLogic";
 import useBotPositionList from "./useBotPositionList";
+import useBotGameplayWebsocket from "./useBotGameplayWebsocket";
 
 interface BotGameplayLogicHookProps {
     gameId: number;
@@ -31,13 +30,9 @@ function useBotGameplayLogic({
     gameId,
     orientation,
 }: BotGameplayLogicHookProps) {
-    const websocketUrl = parseWebsocketUrl("bot-game-server", {
+    const { sendMessage } = useBotGameplayWebsocket({
         gameId: gameId,
-    });
-    const { socketRef } = useWebsocketWithLifecycle({
-        url: websocketUrl,
-        enabled: true,
-        onMessage: handleOnMessage,
+        handleOnMessage: handleOnMessage,
     });
 
     const {
@@ -141,12 +136,10 @@ function useBotGameplayLogic({
             additional_info: {},
         };
 
-        socketRef?.current?.send(
-            JSON.stringify({
-                type: "move_made",
-                move_info: moveInfo,
-            })
-        );
+        sendMessage({
+            type: "move_made",
+            move_info: moveInfo,
+        });
 
         performPostMoveCleanup(moveMethod);
     }
@@ -174,12 +167,10 @@ function useBotGameplayLogic({
             },
         };
 
-        socketRef?.current?.send(
-            JSON.stringify({
-                type: "move_made",
-                move_info: moveInfo,
-            })
-        );
+        sendMessage({
+            type: "move_made",
+            move_info: moveInfo,
+        });
 
         performPostPromotionCleanup();
     }
