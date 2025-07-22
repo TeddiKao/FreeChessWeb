@@ -34,6 +34,7 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		if get_is_checkmated(updated_structured_fen, opposite_color):
 			await self.send(json.dumps({
 				"type": "checkmate_occurred",
+				"winning_color": piece_color_moved,
 				"game_winner": "player" if piece_color_moved.lower() == player_color.lower() else "bot"
 			}))
 
