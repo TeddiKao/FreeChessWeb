@@ -13,6 +13,7 @@ import BotChessboard from "../components/BotChessboard";
 import BoardActions from "@sharedComponents/chessboard/BoardActions";
 import { OptionalValue } from "@sharedTypes/utility.types";
 import useBotGameplayLogic from "../hooks/useBotGameplayLogic";
+import { PieceColor } from "@/shared/types/chessTypes/pieces.types";
 
 function PlayBot() {
     const location = useLocation();
@@ -28,6 +29,11 @@ function PlayBot() {
         useState<boolean>(false);
 
     const previousPositionIndexRef = useRef<OptionalValue<number>>(null);
+
+    const [pieceAnimationSquare, pieceAnimationStyles] = usePieceAnimation();
+
+    const [boardOrientation, setBoardOrientation] =
+        useState<string>(assignedColor);
 
     const {
         clickedSquare,
@@ -67,15 +73,11 @@ function PlayBot() {
         promotionSquare,
         shouldShowPromotionPopup,
         prePromotionBoardState,
-    } = useBotGameplayLogic({ gameId });
 
-    const [
-        pieceAnimationSquare,
-        pieceAnimationStyles,
-    ] = usePieceAnimation();
-
-    const [boardOrientation, setBoardOrientation] =
-        useState<string>(assignedColor);
+        prepareAnimationData,
+        animationRef,
+        animationSquare
+    } = useBotGameplayLogic({ gameId, orientation: boardOrientation as PieceColor });
 
     useEffect(() => {
         setGameplaySettings(initialGameplaySettings);
@@ -145,6 +147,8 @@ function PlayBot() {
                         handlePawnPromotion={handlePromotionPieceSelected}
                         promotionSquare={promotionSquare}
                         shouldShowPromotionPopup={shouldShowPromotionPopup}
+                        animationRef={animationRef}
+                        animationSquare={animationSquare}
                     />
                 </div>
 
@@ -165,6 +169,7 @@ function PlayBot() {
                         previousPositionIndexRef={previousPositionIndexRef}
                         setPositionIndex={setPositionIndex}
                         positionListLength={positionList.length}
+                        prepareAnimationData={prepareAnimationData}
                     />
                 </div>
             </div>
