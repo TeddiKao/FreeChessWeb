@@ -5,17 +5,14 @@ import { parseWebsocketUrl } from "@/shared/utils/generalUtils";
 import { useEffect, useState } from "react";
 import {
     MoveList,
-    PositionList,
 } from "@/shared/types/chessTypes/gameState.types";
 import {
     fetchBotGameMoveList,
-    fetchBotGamePositionList,
 } from "../botGameApiService";
 import { BotGameWebSocketEventTypes } from "../botGameEvents.enums";
 import { displayLegalMoves } from "../../common/utils/moveService";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
 import {
-    animatePieceImage,
     clearSquaresStyling,
     getRank,
 } from "@/shared/utils/boardUtils";
