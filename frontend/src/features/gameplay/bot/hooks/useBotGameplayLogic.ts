@@ -18,12 +18,14 @@ import { clearSquaresStyling, getRank } from "@/shared/utils/boardUtils";
 import usePromotionLogic from "../../multiplayer/hooks/usePromotionLogic";
 import { PieceColor, PieceType } from "@/shared/types/chessTypes/pieces.types";
 import { ChessboardSquareIndex } from "@/shared/types/chessTypes/board.types";
+import useAnimationLogic from "../../multiplayer/hooks/useAnimationLogic";
 
 interface BotGameplayLogicHookProps {
     gameId: number;
+    orientation: PieceColor;
 }
 
-function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
+function useBotGameplayLogic({ gameId, orientation }: BotGameplayLogicHookProps) {
     const websocketUrl = parseWebsocketUrl("bot-game-server", {
         gameId: gameId,
     });
@@ -68,6 +70,8 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         promotionSquareRef,
         shouldShowPromotionPopup
     } = usePromotionLogic(parsedFEN);
+
+    const { animationRef, animationSquare, prepareAnimationData } = useAnimationLogic(orientation);
 
     useEffect(() => {
         updatePositionList();
@@ -302,7 +306,11 @@ function useBotGameplayLogic({ gameId }: BotGameplayLogicHookProps) {
         },
 
         promotionSquare: promotionSquareRef.current,
-        shouldShowPromotionPopup
+        shouldShowPromotionPopup,
+
+        animationRef,
+        animationSquare,
+        prepareAnimationData,
     };
 }
 
