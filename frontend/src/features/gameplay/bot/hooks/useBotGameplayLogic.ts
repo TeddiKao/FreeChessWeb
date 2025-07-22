@@ -1,13 +1,10 @@
 import useClickedSquaresState from "../../multiplayer/hooks/useClickedSquaresState";
 import useDraggedSquaresState from "../../multiplayer/hooks/useDraggedSquaresState";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BotGameWebSocketEventTypes } from "../types/botGameEvents.enums";
 import { displayLegalMoves } from "../../common/utils/moveService";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
-import {
-    clearSquaresStyling,
-    getRank,
-} from "@/shared/utils/boardUtils";
+import { clearSquaresStyling, getRank } from "@/shared/utils/boardUtils";
 import usePromotionLogic from "../../multiplayer/hooks/usePromotionLogic";
 import { PieceColor, PieceType } from "@/shared/types/chessTypes/pieces.types";
 import { ChessboardSquareIndex } from "@/shared/types/chessTypes/board.types";
@@ -15,6 +12,7 @@ import useAnimationLogic from "../../multiplayer/hooks/useAnimationLogic";
 import useBotPositionList from "./useBotPositionList";
 import useBotGameplayWebsocket from "./useBotGameplayWebsocket";
 import useBotMoveList from "./useBotMoveList";
+import useBotGameEndState from "./useBotGameEndState";
 
 interface BotGameplayLogicHookProps {
     gameId: number;
@@ -37,7 +35,7 @@ function useBotGameplayLogic({
         previousDraggedSquare,
         previousDroppedSquare,
         setPositionIndex,
-        setPositionList
+        setPositionList,
     } = useBotPositionList(gameId);
 
     const { moveList, setMoveList } = useBotMoveList(gameId);
@@ -52,9 +50,16 @@ function useBotGameplayLogic({
     const { draggedSquare, setDraggedSquare, droppedSquare, setDroppedSquare } =
         useDraggedSquaresState();
 
-    const [gameWinner, setGameWinner] = useState<string>("");
-    const [hasGameEnded, setHasGameEnded] = useState(false);
-    const [gameEndedCause, setGameEndedCause] = useState<string>("");
+    const {
+        gameWinner,
+        hasGameEnded,
+        gameEndedCause,
+        handleDraw,
+        handleCheckmate,
+        setHasGameEnded,
+        setGameEndedCause,
+        setGameWinner,
+    } = useBotGameEndState();
 
     const {
         preparePromotion,
@@ -207,17 +212,6 @@ function useBotGameplayLogic({
         }
     }
 
-    function handleCheckmate({ game_winner: gameWinner }: any) {
-        setHasGameEnded(true);
-        setGameWinner(gameWinner);
-        setGameEndedCause("checkmate");
-    }
-
-    function handleDraw(drawCause: string) {
-        setHasGameEnded(true);
-        setGameEndedCause(drawCause);
-    }
-
     function handlePlayerMoveMade({
         new_position_list: newPositionList,
         new_move_list: newMoveList,
@@ -286,7 +280,7 @@ function useBotGameplayLogic({
         prePromotionBoardState: prePromotionBoardState.current,
 
         handlePromotionPieceSelected: (
-            color: PieceColor,
+            _: PieceColor,
             promotedPiece: PieceType
         ) => {
             if (!promotionSquareRef.current) return;
