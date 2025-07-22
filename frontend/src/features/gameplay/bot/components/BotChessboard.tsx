@@ -1,8 +1,6 @@
 import {
-    isObjEmpty,
     isNullOrUndefined,
 } from "@sharedUtils/generalUtils";
-import usePieceAnimation from "@sharedHooks/usePieceAnimation";
 import ChessboardGrid from "@sharedComponents/chessboard/ChessboardGrid";
 import Square from "@sharedComponents/chessboard/Square";
 import {
@@ -22,9 +20,6 @@ function BotChessboard({
     previousDraggedSquare,
     previousDroppedSquare,
 
-    parentAnimationSquare,
-    parentAnimationStyles,
-
     clickedSquaresState: {
         prevClickedSquare,
         clickedSquare,
@@ -32,8 +27,6 @@ function BotChessboard({
         setClickedSquare,
     },
     dragAndDropSquaresState: {
-        draggedSquare,
-        droppedSquare,
         setDraggedSquare,
         setDroppedSquare,
     },
@@ -45,8 +38,6 @@ function BotChessboard({
     animationRef,
     animationSquare
 }: BotChessboardProps) {
-    const [pieceAnimationSquare, pieceAnimationStyles] = usePieceAnimation();
-
     const chessboardStyles = {
         gridTemplateColumns: `repeat(8, ${squareSize}px)`,
     };
