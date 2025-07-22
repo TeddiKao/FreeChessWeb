@@ -5,17 +5,14 @@ import { parseWebsocketUrl } from "@/shared/utils/generalUtils";
 import { useEffect, useState } from "react";
 import {
     MoveList,
-    PositionList,
 } from "@/shared/types/chessTypes/gameState.types";
 import {
     fetchBotGameMoveList,
-    fetchBotGamePositionList,
 } from "../botGameApiService";
 import { BotGameWebSocketEventTypes } from "../botGameEvents.enums";
 import { displayLegalMoves } from "../../common/utils/moveService";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
 import {
-    animatePieceImage,
     clearSquaresStyling,
     getRank,
 } from "@/shared/utils/boardUtils";
@@ -23,6 +20,7 @@ import usePromotionLogic from "../../multiplayer/hooks/usePromotionLogic";
 import { PieceColor, PieceType } from "@/shared/types/chessTypes/pieces.types";
 import { ChessboardSquareIndex } from "@/shared/types/chessTypes/board.types";
 import useAnimationLogic from "../../multiplayer/hooks/useAnimationLogic";
+import useBotPositionList from "./useBotPositionList";
 
 interface BotGameplayLogicHookProps {
     gameId: number;
@@ -42,14 +40,15 @@ function useBotGameplayLogic({
         onMessage: handleOnMessage,
     });
 
-    const [positionList, setPositionList] = useState<PositionList>([]);
-    const [positionIndex, setPositionIndex] = useState<number>(0);
-
-    const parsedFEN = positionList[positionIndex]?.["position"];
-    const previousDraggedSquare =
-        positionList[positionIndex]?.["last_dragged_square"];
-    const previousDroppedSquare =
-        positionList[positionIndex]?.["last_dropped_square"];
+    const {
+        positionList,
+        positionIndex,
+        parsedFEN,
+        previousDraggedSquare,
+        previousDroppedSquare,
+        setPositionIndex,
+        setPositionList
+    } = useBotPositionList(gameId);
 
     const [moveList, setMoveList] = useState<MoveList>([]);
 
@@ -82,7 +81,6 @@ function useBotGameplayLogic({
         useAnimationLogic(orientation);
 
     useEffect(() => {
-        updatePositionList();
         updateMoveList();
     }, []);
 
@@ -194,13 +192,6 @@ function useBotGameplayLogic({
             setPrevClickedSquare(null);
             setClickedSquare(null);
         }
-    }
-
-    async function updatePositionList() {
-        const positionList = await fetchBotGamePositionList(gameId);
-
-        setPositionList(positionList);
-        setPositionIndex(positionList.length - 1);
     }
 
     async function updateMoveList() {
