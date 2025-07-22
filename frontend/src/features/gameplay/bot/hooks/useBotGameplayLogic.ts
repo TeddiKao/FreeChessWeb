@@ -82,7 +82,6 @@ function useBotGameplayLogic({
         useAnimationLogic(orientation);
 
     useEffect(() => {
-        updatePositionList();
         updateMoveList();
     }, []);
 
@@ -194,13 +193,6 @@ function useBotGameplayLogic({
             setPrevClickedSquare(null);
             setClickedSquare(null);
         }
-    }
-
-    async function updatePositionList() {
-        const positionList = await fetchBotGamePositionList(gameId);
-
-        setPositionList(positionList);
-        setPositionIndex(positionList.length - 1);
     }
 
     async function updateMoveList() {
