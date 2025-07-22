@@ -42,6 +42,8 @@ function BotChessboard({
     cancelPromotion,
     promotionSquare,
     shouldShowPromotionPopup,
+    animationRef,
+    animationSquare
 }: BotChessboardProps) {
     const [pieceAnimationSquare, pieceAnimationStyles] = usePieceAnimation();
 
@@ -106,6 +108,8 @@ function BotChessboard({
                         ? parentAnimationStyles
                         : pieceAnimationStyles
                 }
+                animationRef={animationRef}
+                animationSquare={animationSquare}
             />
         );
     }
@@ -153,6 +157,8 @@ function BotChessboard({
                         ? parentAnimationStyles
                         : pieceAnimationStyles
                 }
+                animationRef={animationRef}
+                animationSquare={animationSquare}
             />
         );
     }
