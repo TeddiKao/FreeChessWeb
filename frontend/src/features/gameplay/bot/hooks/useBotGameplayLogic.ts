@@ -1,12 +1,6 @@
 import useClickedSquaresState from "../../multiplayer/hooks/useClickedSquaresState";
 import useDraggedSquaresState from "../../multiplayer/hooks/useDraggedSquaresState";
 import { useEffect, useState } from "react";
-import {
-    MoveList,
-} from "@/shared/types/chessTypes/gameState.types";
-import {
-    fetchBotGameMoveList,
-} from "../botGameApiService";
 import { BotGameWebSocketEventTypes } from "../botGameEvents.enums";
 import { displayLegalMoves } from "../../common/utils/moveService";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
@@ -20,6 +14,7 @@ import { ChessboardSquareIndex } from "@/shared/types/chessTypes/board.types";
 import useAnimationLogic from "../../multiplayer/hooks/useAnimationLogic";
 import useBotPositionList from "./useBotPositionList";
 import useBotGameplayWebsocket from "./useBotGameplayWebsocket";
+import useBotMoveList from "./useBotMoveList";
 
 interface BotGameplayLogicHookProps {
     gameId: number;
@@ -45,7 +40,7 @@ function useBotGameplayLogic({
         setPositionList
     } = useBotPositionList(gameId);
 
-    const [moveList, setMoveList] = useState<MoveList>([]);
+    const { moveList, setMoveList } = useBotMoveList(gameId);
 
     const {
         clickedSquare,
@@ -74,10 +69,6 @@ function useBotGameplayLogic({
 
     const { animationRef, animationSquare, prepareAnimationData } =
         useAnimationLogic(orientation);
-
-    useEffect(() => {
-        updateMoveList();
-    }, []);
 
     useEffect(() => {
         processMove("click");
@@ -183,12 +174,6 @@ function useBotGameplayLogic({
             setPrevClickedSquare(null);
             setClickedSquare(null);
         }
-    }
-
-    async function updateMoveList() {
-        const moveList = await fetchBotGameMoveList(gameId);
-
-        setMoveList(moveList);
     }
 
     function handleOnMessage(event: MessageEvent) {
