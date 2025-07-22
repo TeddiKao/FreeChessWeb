@@ -1,7 +1,5 @@
 import useClickedSquaresState from "../../multiplayer/hooks/useClickedSquaresState";
 import useDraggedSquaresState from "../../multiplayer/hooks/useDraggedSquaresState";
-import useWebsocketWithLifecycle from "@/shared/hooks/websocket/useWebsocketWithLifecycle";
-import { parseWebsocketUrl } from "@/shared/utils/generalUtils";
 import { useEffect, useState } from "react";
 import {
     MoveList,
