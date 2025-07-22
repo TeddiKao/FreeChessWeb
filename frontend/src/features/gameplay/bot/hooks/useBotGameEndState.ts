@@ -24,6 +24,10 @@ function useBotGameEndState() {
 		gameWinner,
 		handleDraw,
 		handleCheckmate,
+
+        setHasGameEnded,
+        setGameEndedCause,
+        setGameWinner,
 	};
 }
 
