@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PositionList } from "@shared/types/chessTypes/gameState.types";
+import { fetchBotGamePositionList } from "../botGameApiService";
 
 function useBotPositionList(gameId: number) {
     const [positionList, setPositionList] = useState<PositionList>([]);
@@ -10,6 +11,17 @@ function useBotPositionList(gameId: number) {
         positionList[positionIndex]?.["last_dragged_square"];
     const previousDroppedSquare =
         positionList[positionIndex]?.["last_dropped_square"];
+
+    useEffect(() => {
+        updatePositionList();
+    }, [gameId]);
+
+    async function updatePositionList() {
+        const positionList = await fetchBotGamePositionList(gameId);
+
+        setPositionList(positionList);
+        setPositionIndex(positionList.length - 1);
+    }
 
     return {
         positionList,
