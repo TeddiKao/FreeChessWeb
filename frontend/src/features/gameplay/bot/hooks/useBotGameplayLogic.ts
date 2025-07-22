@@ -251,6 +251,7 @@ function useBotGameplayLogic({
         setGameEndedCause(drawCause);
     }
 
+    
     function handlePlayerMoveMade({
         new_position_list: newPositionList,
         new_move_list: newMoveList,
