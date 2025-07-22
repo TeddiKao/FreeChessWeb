@@ -269,10 +269,16 @@ function useBotGameplayLogic({
     function handleBotMoveMade({
         new_position_list: newPositionList,
         new_move_list: newMoveList,
+        move_data: moveData,
     }: any) {
-        setPositionList(newPositionList);
-        setPositionIndex(newPositionList.length - 1);
-        setMoveList(newMoveList);
+        const startingSquare = moveData["starting_square"];
+        const destinationSquare = moveData["destination_square"];
+
+        prepareAnimationData(startingSquare, destinationSquare, () => {
+            setPositionList(newPositionList);
+            setPositionIndex(newPositionList.length - 1);
+            setMoveList(newMoveList);
+        });
     }
 
     return {
