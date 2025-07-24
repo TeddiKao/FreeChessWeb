@@ -8,6 +8,7 @@ import { ParsedFEN } from "@/shared/types/chessTypes/gameState.types";
 
 interface BotGameplayWebsocketHookProps {
     gameId: number;
+    parsedFEN: ParsedFEN;
     functionCallbacks: {
         handleCheckmate: (data: BotCheckmateEventData) => void;
         handleDraw: (drawCause: string) => void;
@@ -19,6 +20,7 @@ interface BotGameplayWebsocketHookProps {
 
 function useBotGameplayWebsocket({
     gameId,
+    parsedFEN,
     functionCallbacks: {
         handleCheckmate,
         handleDraw,
@@ -73,7 +75,6 @@ function useBotGameplayWebsocket({
     }
 
     function sendPromotionMove(
-        parsedFEN: ParsedFEN,
         originalPawnSquare: ChessboardSquareIndex,
         promotionSquare: ChessboardSquareIndex,
         promotedPiece: PieceType,
