@@ -1,7 +1,6 @@
 import useClickedSquaresState from "../../multiplayer/hooks/useClickedSquaresState";
 import useDraggedSquaresState from "../../multiplayer/hooks/useDraggedSquaresState";
 import { useEffect } from "react";
-import { BotGameWebSocketEventTypes } from "../types/botGameEvents.enums";
 import { displayLegalMoves } from "../../common/utils/moveService";
 import { isPawnPromotion } from "../../common/utils/moveTypeDetection";
 import { clearSquaresStyling, getRank } from "@/shared/utils/boardUtils";
@@ -23,11 +22,6 @@ function useBotGameplayLogic({
     gameId,
     orientation,
 }: BotGameplayLogicHookProps) {
-    const { sendMessage } = useBotGameplayWebsocket({
-        gameId: gameId,
-        handleOnMessage: handleOnMessage,
-    });
-
     const {
         positionList,
         positionIndex,
@@ -60,6 +54,16 @@ function useBotGameplayLogic({
         setGameEndedCause,
         setGameWinner,
     } = useBotGameEndState();
+
+    const { sendMessage } = useBotGameplayWebsocket({
+        gameId: gameId,
+        functionCallbacks: {
+            handleCheckmate,
+            handleDraw,
+            handlePlayerMoveMade,
+            handleBotMoveMade,
+        },
+    });
 
     const {
         preparePromotion,
@@ -178,37 +182,6 @@ function useBotGameplayLogic({
         } else {
             setPrevClickedSquare(null);
             setClickedSquare(null);
-        }
-    }
-
-    function handleOnMessage(event: MessageEvent) {
-        const parsedEventData = JSON.parse(event.data);
-        const eventType = parsedEventData["type"];
-
-        switch (eventType) {
-            case BotGameWebSocketEventTypes.CHECKMATE_OCCURRED:
-                handleCheckmate(parsedEventData);
-                break;
-
-            case BotGameWebSocketEventTypes.STALEMATE_OCCURRED:
-                handleDraw("stalemate");
-                break;
-
-            case BotGameWebSocketEventTypes.THREEFOLD_REPETITION_OCCURRED:
-                handleDraw("repetition");
-                break;
-
-            case BotGameWebSocketEventTypes.FIFTY_MOVE_RULE_REACHED:
-                handleDraw("50-move rule");
-                break;
-
-            case BotGameWebSocketEventTypes.MOVE_REGISTERED:
-                handlePlayerMoveMade(parsedEventData);
-                break;
-
-            case BotGameWebSocketEventTypes.BOT_MOVE_MADE:
-                handleBotMoveMade(parsedEventData);
-                break;
         }
     }
 
