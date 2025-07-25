@@ -12,6 +12,7 @@ import {
     FilledSquareRenderParams,
     EmptySquareRenderParams,
 } from "@sharedTypes/chessTypes/chessboardGrid.types";
+import { ChessboardSquareIndex } from "@/shared/types/chessTypes/board.types";
 function BotChessboard({
     parsed_fen_string,
     orientation,
@@ -50,14 +51,7 @@ function BotChessboard({
         return null;
     }
 
-    function renderFilledSquare({
-        squareIndex,
-        squareColor,
-        pieceType,
-        pieceColor,
-        promotionRank,
-        pieceRank,
-    }: FilledSquareRenderParams) {
+    function getShouldDisplayPromotionPopup(squareIndex: ChessboardSquareIndex) {
         const isPromotionSquareDefined = !isNullOrUndefined(promotionSquare);
         const isPromotionSquare =
             Number(promotionSquare) === Number(squareIndex);
@@ -66,6 +60,17 @@ function BotChessboard({
             isPromotionSquare &&
             shouldShowPromotionPopup;
 
+        return shouldDisplayPromotionPopup;
+    }
+
+    function renderFilledSquare({
+        squareIndex,
+        squareColor,
+        pieceType,
+        pieceColor,
+        promotionRank,
+        pieceRank,
+    }: FilledSquareRenderParams) {
         return (
             <Square
                 key={squareIndex}
@@ -73,7 +78,7 @@ function BotChessboard({
                 squareColor={squareColor}
                 pieceColor={pieceColor as PieceColor}
                 pieceType={pieceType as PieceType}
-                displayPromotionPopup={shouldDisplayPromotionPopup}
+                displayPromotionPopup={getShouldDisplayPromotionPopup(squareIndex)}
                 orientation={orientation}
                 setDraggedSquare={setDraggedSquare}
                 setDroppedSquare={setDroppedSquare}
@@ -96,21 +101,13 @@ function BotChessboard({
         squareIndex,
         squareColor,
     }: EmptySquareRenderParams) {
-        const isPromotionSquareDefined = !isNullOrUndefined(promotionSquare);
-        const isPromotionSquare =
-            Number(promotionSquare) === Number(squareIndex);
-        const shouldDisplayPromotionPopup =
-            isPromotionSquareDefined &&
-            isPromotionSquare &&
-            shouldShowPromotionPopup;
-
         return (
             <Square
                 key={squareIndex}
                 squareNumber={squareIndex}
                 squareColor={squareColor}
                 orientation={orientation}
-                displayPromotionPopup={shouldDisplayPromotionPopup}
+                displayPromotionPopup={getShouldDisplayPromotionPopup(squareIndex)}
                 setDraggedSquare={setDraggedSquare}
                 setDroppedSquare={setDroppedSquare}
                 setClickedSquare={setClickedSquare}
