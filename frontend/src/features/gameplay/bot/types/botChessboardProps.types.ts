@@ -2,7 +2,7 @@ import { ChessboardSquareIndex } from "@sharedTypes/chessTypes/board.types";
 import { BaseChessboardProps } from "@sharedTypes/chessTypes/chessboardProps.types";
 import { ParsedFEN, MoveInfo } from "@sharedTypes/chessTypes/gameState.types";
 import { StateSetterFunction, OptionalValue, RefObject } from "@sharedTypes/utility.types";
-import { CheckmateEventData } from "../../multiplayer/types/gameEvents.types";
+import { BotCheckmateEventData } from "./botGameEvents.types";
 import { PieceColor, PieceType } from "@/shared/types/chessTypes/pieces.types";
 
 interface ClickedSquaresState {
@@ -46,7 +46,7 @@ interface BotChessboardProps extends BaseChessboardProps {
 	parentAnimationSquare: OptionalValue<ChessboardSquareIndex>;
 	parentAnimationStyles: Record<string, unknown>;
 
-	handleCheckmate: (eventData: CheckmateEventData) => void;
+	handleCheckmate: (eventData: BotCheckmateEventData) => void;
 	handleDraw: (drawCause: string) => void;
 
 	cancelPromotion: () => void;
