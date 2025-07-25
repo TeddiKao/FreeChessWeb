@@ -55,16 +55,6 @@ function useBotGameplayLogic({
         setGameWinner,
     } = useBotGameEndState();
 
-    const { sendMessage } = useBotGameplayWebsocket({
-        gameId: gameId,
-        functionCallbacks: {
-            handleCheckmate,
-            handleDraw,
-            handlePlayerMoveMade,
-            handleBotMoveMade,
-        },
-    });
-
     const {
         preparePromotion,
         handlePawnPromotion,
@@ -75,6 +65,18 @@ function useBotGameplayLogic({
         promotionSquareRef,
         shouldShowPromotionPopup,
     } = usePromotionLogic(parsedFEN);
+
+    const { sendMessage, sendPromotionMove } = useBotGameplayWebsocket({
+        gameId: gameId,
+        functionCallbacks: {
+            handleCheckmate,
+            handleDraw,
+            handlePlayerMoveMade,
+            handleBotMoveMade,
+            performPostPromotionCleanup,
+        },
+        parsedFEN: parsedFEN,
+    });
 
     const { animationRef, animationSquare, prepareAnimationData } =
         useAnimationLogic(orientation);
@@ -142,37 +144,6 @@ function useBotGameplayLogic({
         });
 
         performPostMoveCleanup(moveMethod);
-    }
-
-    function sendPromotionMove(
-        originalPawnSquare: ChessboardSquareIndex,
-        promotionSquare: ChessboardSquareIndex,
-        promotedPiece: PieceType
-    ) {
-        if (!parsedFEN) return;
-
-        const boardPlacement = parsedFEN["board_placement"];
-        const squareInfo = boardPlacement[originalPawnSquare.toString()];
-        const pieceType = squareInfo["piece_type"];
-        const pieceColor = squareInfo["piece_color"];
-
-        const moveInfo = {
-            piece_type: pieceType,
-            piece_color: pieceColor,
-            starting_square: originalPawnSquare.toString(),
-            destination_square: promotionSquare?.toString(),
-
-            additional_info: {
-                promoted_piece: promotedPiece,
-            },
-        };
-
-        sendMessage({
-            type: "move_made",
-            move_info: moveInfo,
-        });
-
-        performPostPromotionCleanup();
     }
 
     function performPostMoveCleanup(moveMethod: string) {

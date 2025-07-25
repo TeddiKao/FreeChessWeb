@@ -2,24 +2,31 @@ import useWebsocketWithLifecycle from "@/shared/hooks/websocket/useWebsocketWith
 import { parseWebsocketUrl } from "@/shared/utils/generalUtils";
 import { BotCheckmateEventData } from "../types/botGameEvents.types";
 import { BotGameWebSocketEventTypes } from "../types/botGameEvents.enums";
+import { ChessboardSquareIndex } from "@/shared/types/chessTypes/board.types";
+import { PieceType } from "@/shared/types/chessTypes/pieces.types";
+import { ParsedFEN } from "@/shared/types/chessTypes/gameState.types";
 
 interface BotGameplayWebsocketHookProps {
     gameId: number;
+    parsedFEN: ParsedFEN;
     functionCallbacks: {
         handleCheckmate: (data: BotCheckmateEventData) => void;
         handleDraw: (drawCause: string) => void;
         handlePlayerMoveMade: (data: any) => void;
         handleBotMoveMade: (data: any) => void;
+        performPostPromotionCleanup: () => void;
     };
 }
 
 function useBotGameplayWebsocket({
     gameId,
+    parsedFEN,
     functionCallbacks: {
         handleCheckmate,
         handleDraw,
         handlePlayerMoveMade,
         handleBotMoveMade,
+        performPostPromotionCleanup,
     },
 }: BotGameplayWebsocketHookProps) {
     const websocketUrl = parseWebsocketUrl("bot-game-server", {
@@ -67,7 +74,38 @@ function useBotGameplayWebsocket({
         }
     }
 
-    return { sendMessage };
+    function sendPromotionMove(
+        originalPawnSquare: ChessboardSquareIndex,
+        promotionSquare: ChessboardSquareIndex,
+        promotedPiece: PieceType,
+    ) {
+        if (!parsedFEN) return;
+
+        const boardPlacement = parsedFEN["board_placement"];
+        const squareInfo = boardPlacement[originalPawnSquare.toString()];
+        const pieceType = squareInfo["piece_type"];
+        const pieceColor = squareInfo["piece_color"];
+
+        const moveInfo = {
+            piece_type: pieceType,
+            piece_color: pieceColor,
+            starting_square: originalPawnSquare.toString(),
+            destination_square: promotionSquare?.toString(),
+
+            additional_info: {
+                promoted_piece: promotedPiece,
+            },
+        };
+
+        sendMessage({
+            type: "move_made",
+            move_info: moveInfo,
+        });
+
+        performPostPromotionCleanup();
+    }
+
+    return { sendMessage, sendPromotionMove };
 }
 
 export default useBotGameplayWebsocket;
