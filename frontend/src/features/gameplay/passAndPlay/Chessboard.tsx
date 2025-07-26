@@ -569,6 +569,10 @@ function Chessboard({
 				setParsedFEN={setParsedFEN}
 				setDraggedSquare={setDraggedSquare}
 				setDroppedSquare={setDroppedSquare}
+				clickedSquare={clickedSquare}
+				previousClickedSquare={previousClickedSquare}
+				setPreviousClickedSquare={setPreviousClickedSquare}
+				setClickedSquare={setClickedSquare}
 				handlePromotionCancel={handlePromotionCancel}
 				handlePawnPromotion={handlePawnPromotion}
 				previousDraggedSquare={previousDraggedSquare}
