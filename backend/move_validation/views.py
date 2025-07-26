@@ -9,7 +9,6 @@ from rest_framework.permissions import IsAuthenticated
 from .utils.get_legal_moves import get_legal_moves
 from .utils.move_validation import validate_move
 from .utils.get_move_type import get_move_type
-from .utils.result_detection import get_is_checkmated, get_is_stalemated
 
 class ShowLegalMoveView(APIView):
 	permission_classes = [IsAuthenticated]
