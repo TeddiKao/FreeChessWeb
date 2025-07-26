@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     "bots",
     "game_history",
     "move_processing",
+    "result_detection",
 	"core"
 ]
 
