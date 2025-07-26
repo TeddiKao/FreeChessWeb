@@ -11,6 +11,4 @@ class ProcessMoveView(APIView):
 
         updated_structured_fen = update_structured_fen(structured_fen, move_info)
 
-        print(updated_structured_fen)
-
         return Response(updated_structured_fen, status=status.HTTP_200_OK)
