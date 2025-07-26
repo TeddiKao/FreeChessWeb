@@ -29,7 +29,7 @@ async function processMove(structuredFEN: ParsedFEN, moveInfo: MoveInfo) {
 	let updatedStructuredFEN = null;
 
 	try {
-		const response = await api.post("/move_processing/process-move/", {
+		const response = await api.post("/move-processing/process-move/", {
 			structured_fen: structuredFEN,
 			move_info: moveInfo
 		});
