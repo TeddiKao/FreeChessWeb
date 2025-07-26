@@ -209,22 +209,7 @@ function Chessboard({
 
 		setParsedFEN(updatedStructuredFEN);
 
-		const isCheckmated = await getIsCheckmated(updatedStructuredFEN, pieceColorToValidate);
-		const isStalemated = await getIsStalemated(updatedStructuredFEN, pieceColorToValidate);
-
-		if (isCheckmated) {
-			setGameEnded!(true);
-			setGameEndedCause!("checkmate");
-			setGameWinner!(getOppositeColor(pieceColorToValidate));
-			return;
-		}
-
-		if (isStalemated) {
-			setGameEnded!(true);
-			setGameEndedCause!("stalemate");
-			setGameWinner!(null);
-			return;
-		}
+		await checkForGameEnd(updatedStructuredFEN, getOppositeColor(pieceColorToValidate));
 
 		const newSideToMove = getOppositeColor(pieceColorToValidate);
 
@@ -239,6 +224,25 @@ function Chessboard({
 		setDraggedSquare(null);
 		setDroppedSquare(null);
 		setLastUsedMoveMethod("drag");
+	}
+
+	async function checkForGameEnd(structuredFEN: ParsedFEN, kingColor: PieceColor) {
+		const isCheckmated = await getIsCheckmated(structuredFEN, kingColor);
+		const isStalemated = await getIsStalemated(structuredFEN, kingColor);
+
+		if (isCheckmated) {
+			setGameEnded!(true);
+			setGameEndedCause!("checkmate");
+			setGameWinner!(getOppositeColor(kingColor));
+			return;
+		}
+
+		if (isStalemated) {
+			setGameEnded!(true);
+			setGameEndedCause!("stalemate");
+			setGameWinner!(null);
+			return;
+		}
 	}
 
 	async function handleClickToMove() {
