@@ -20,15 +20,8 @@ import {
 	updatePromotedBoardPlacment,
 } from "./utils/promotion";
 
-import {
-	addPieceToDestinationSquare,
-	clearStartingSquare,
-} from "./utils/basicMovement";
-
 import { getOppositeColor } from "./utils/general";
 import usePieceAnimation from "@sharedHooks/usePieceAnimation";
-import { convertToMilliseconds } from "@sharedUtils/timeUtils";
-import { pieceAnimationTime } from "@sharedConstants/pieceAnimation";
 import ChessboardGrid from "@sharedComponents/chessboard/ChessboardGrid";
 import Square from "@sharedComponents/chessboard/Square";
 import {
@@ -47,10 +40,6 @@ import {
 	PieceType,
 } from "@sharedTypes/chessTypes/pieces.types";
 import {
-	getIsCheckmated,
-	getIsStalemated,
-} from "../common/utils/gameResultFetchApi";
-import {
 	GameEndedSetterContext,
 	GameEndedCauseSetterContext,
 	GameWinnerSetterContext,
@@ -60,7 +49,7 @@ import { OptionalValue, StateSetterFunction } from "@sharedTypes/utility.types";
 import { MoveMethods } from "@sharedTypes/chessTypes/moveMethods.enums";
 import { BaseChessboardProps } from "@sharedTypes/chessTypes/chessboardProps.types";
 import { FilledSquareRenderParams, EmptySquareRenderParams } from "@sharedTypes/chessTypes/chessboardGrid.types";
-import { processMove } from "@/shared/utils/apiUtils";
+import { getIsCheckmated, getIsStalemated, processMove } from "@/shared/utils/apiUtils";
 
 interface ChessboardProps extends BaseChessboardProps {
 	setBoardOrientation: StateSetterFunction<string>;
@@ -219,6 +208,23 @@ function Chessboard({
 		}
 
 		setParsedFEN(updatedStructuredFEN);
+
+		const isCheckmated = await getIsCheckmated(updatedStructuredFEN, pieceColorToValidate);
+		const isStalemated = await getIsStalemated(updatedStructuredFEN, pieceColorToValidate);
+
+		if (isCheckmated) {
+			setGameEnded!(true);
+			setGameEndedCause!("checkmate");
+			setGameWinner!(getOppositeColor(pieceColorToValidate));
+			return;
+		}
+
+		if (isStalemated) {
+			setGameEnded!(true);
+			setGameEndedCause!("stalemate");
+			setGameWinner!(null);
+			return;
+		}
 
 		const newSideToMove = getOppositeColor(pieceColorToValidate);
 
