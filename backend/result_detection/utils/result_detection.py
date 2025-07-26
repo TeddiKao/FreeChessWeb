@@ -1,6 +1,3 @@
-import json
-import hashlib
-
 from .get_legal_moves import is_king_in_check, get_legal_moves
 from .general import get_all_pieces_on_board
 
