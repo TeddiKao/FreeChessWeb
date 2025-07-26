@@ -16,7 +16,7 @@ from channels.db import database_sync_to_async
 from move_validation.utils.move_validation import validate_move
 from move_validation.utils.get_move_type import get_move_type, get_is_capture
 from move_validation.utils.general import *
-from move_validation.utils.result_detection import is_checkmated_or_stalemated, is_threefold_repetiiton, check_50_move_rule_draw, has_sufficient_material
+from result_detection.utils.result_detection import is_checkmated_or_stalemated, is_threefold_repetiiton, check_50_move_rule_draw, has_sufficient_material
 
 from users.models import UserAuthModel
 
