@@ -329,6 +329,7 @@ function Chessboard({
 		}
 
 		setParsedFEN(updatedStructuredFEN);
+		await checkForGameEnd(updatedStructuredFEN, getOppositeColor(pieceColorToValidate));
 
 		const newSideToMove = getOppositeColor(pieceColorToValidate);
 
