@@ -20,15 +20,8 @@ import {
 	updatePromotedBoardPlacment,
 } from "./utils/promotion";
 
-import {
-	addPieceToDestinationSquare,
-	clearStartingSquare,
-} from "./utils/basicMovement";
-
 import { getOppositeColor } from "./utils/general";
 import usePieceAnimation from "@sharedHooks/usePieceAnimation";
-import { convertToMilliseconds } from "@sharedUtils/timeUtils";
-import { pieceAnimationTime } from "@sharedConstants/pieceAnimation";
 import ChessboardGrid from "@sharedComponents/chessboard/ChessboardGrid";
 import Square from "@sharedComponents/chessboard/Square";
 import {
@@ -47,10 +40,6 @@ import {
 	PieceType,
 } from "@sharedTypes/chessTypes/pieces.types";
 import {
-	getIsCheckmated,
-	getIsStalemated,
-} from "../common/utils/gameResultFetchApi";
-import {
 	GameEndedSetterContext,
 	GameEndedCauseSetterContext,
 	GameWinnerSetterContext,
@@ -60,7 +49,7 @@ import { OptionalValue, StateSetterFunction } from "@sharedTypes/utility.types";
 import { MoveMethods } from "@sharedTypes/chessTypes/moveMethods.enums";
 import { BaseChessboardProps } from "@sharedTypes/chessTypes/chessboardProps.types";
 import { FilledSquareRenderParams, EmptySquareRenderParams } from "@sharedTypes/chessTypes/chessboardGrid.types";
-import { processMove } from "@/shared/utils/apiUtils";
+import { getIsCheckmated, getIsStalemated, processMove } from "@/shared/utils/apiUtils";
 
 interface ChessboardProps extends BaseChessboardProps {
 	setBoardOrientation: StateSetterFunction<string>;
@@ -220,6 +209,8 @@ function Chessboard({
 
 		setParsedFEN(updatedStructuredFEN);
 
+		await checkForGameEnd(updatedStructuredFEN, getOppositeColor(pieceColorToValidate));
+
 		const newSideToMove = getOppositeColor(pieceColorToValidate);
 
 		if (!selectingPromotionRef.current) {
@@ -233,6 +224,25 @@ function Chessboard({
 		setDraggedSquare(null);
 		setDroppedSquare(null);
 		setLastUsedMoveMethod("drag");
+	}
+
+	async function checkForGameEnd(structuredFEN: ParsedFEN, kingColor: PieceColor) {
+		const isCheckmated = await getIsCheckmated(structuredFEN, kingColor);
+		const isStalemated = await getIsStalemated(structuredFEN, kingColor);
+
+		if (isCheckmated) {
+			setGameEnded!(true);
+			setGameEndedCause!("checkmate");
+			setGameWinner!(getOppositeColor(kingColor));
+			return;
+		}
+
+		if (isStalemated) {
+			setGameEnded!(true);
+			setGameEndedCause!("stalemate");
+			setGameWinner!(null);
+			return;
+		}
 	}
 
 	async function handleClickToMove() {
@@ -319,6 +329,7 @@ function Chessboard({
 		}
 
 		setParsedFEN(updatedStructuredFEN);
+		await checkForGameEnd(updatedStructuredFEN, getOppositeColor(pieceColorToValidate));
 
 		const newSideToMove = getOppositeColor(pieceColorToValidate);
 

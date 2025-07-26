@@ -9,7 +9,6 @@ from rest_framework.permissions import IsAuthenticated
 from .utils.get_legal_moves import get_legal_moves
 from .utils.move_validation import validate_move
 from .utils.get_move_type import get_move_type
-from .utils.result_detection import get_is_checkmated, get_is_stalemated
 
 class ShowLegalMoveView(APIView):
 	permission_classes = [IsAuthenticated]
@@ -45,20 +44,3 @@ class ValidateMoveView(APIView):
 			}, status=status.HTTP_200_OK)
 		else:
 			return Response({"is_valid": False}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-
-
-class GetIsCheckmatedView(APIView):
-	def post(self, request):
-		current_fen = request.data.get("current_fen")
-		king_color = request.data.get("king_color")
-
-		is_checkmated = get_is_checkmated(current_fen, king_color)
-		return Response(is_checkmated, status=status.HTTP_200_OK)
-	
-class GetIsStalematedView(APIView):
-	def post(self, request):
-		current_fen = request.data.get("current_fen")
-		king_color = request.data.get("king_color")
-
-		is_stalemated = get_is_stalemated(current_fen, king_color)
-		return Response(is_stalemated, status=status.HTTP_200_OK)

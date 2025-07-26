@@ -15,5 +15,6 @@ urlpatterns = [
 	path("bots/", include("bots.urls")),
     path("game-history/", include("game_history.urls")),
     path("move-processing/", include("move_processing.urls")),
+    path("result-detection/", include("result_detection.urls")),
     path("core/", include("core.urls")),
 ]

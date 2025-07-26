@@ -15,7 +15,7 @@ from gameplay.utils.structured_move_parser import parse_structured_move
 
 from move_validation.utils.move_validation import validate_move
 from move_validation.utils.get_move_type import get_move_type
-from move_validation.utils.result_detection import get_is_checkmated, get_is_stalemated, is_threefold_repetiiton, check_50_move_rule_draw
+from result_detection.utils.result_detection import get_is_checkmated, get_is_stalemated, is_threefold_repetiiton, check_50_move_rule_draw
 from move_validation.utils.general import get_opposite_color
 
 logger = logging.getLogger(__name__)
