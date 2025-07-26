@@ -570,7 +570,7 @@ function Chessboard({
 				setDraggedSquare={setDraggedSquare}
 				setDroppedSquare={setDroppedSquare}
 				clickedSquare={clickedSquare}
-				previousClickedSquare={previousClickedSquare}
+				prevClickedSquare={previousClickedSquare}
 				setPrevClickedSquare={setPreviousClickedSquare}
 				setClickedSquare={setClickedSquare}
 				handlePromotionCancel={handlePromotionCancel}
