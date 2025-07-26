@@ -8,7 +8,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from .models import BotGame
 from .engines import initialise_stockfish_instance
 
-from gameplay.utils.position_update import update_structured_fen
+from move_processing.utils.position_update import update_structured_fen
 from gameplay.utils.game_state_history_update import update_move_list, update_position_list
 from gameplay.utils.raw_fen_parser import parse_raw_fen
 from gameplay.utils.structured_move_parser import parse_structured_move
