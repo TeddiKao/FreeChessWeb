@@ -1,5 +1,6 @@
 import json
 import asyncio
+import logging
 
 from urllib.parse import parse_qs
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -17,6 +18,8 @@ from move_validation.utils.get_move_type import get_move_type
 from move_validation.utils.result_detection import get_is_checkmated, get_is_stalemated, is_threefold_repetiiton, check_50_move_rule_draw
 from move_validation.utils.general import get_opposite_color
 
+logger = logging.getLogger(__name__)
+
 class BotGameConsumer(AsyncWebsocketConsumer):
 	async def check_for_results(self, bot_game_model: BotGame, piece_color_moved):
 		updated_structured_fen, updated_position_list, updated_halfmove_clock, player_color = await asyncio.gather(
@@ -31,6 +34,7 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		if get_is_checkmated(updated_structured_fen, opposite_color):
 			await self.send(json.dumps({
 				"type": "checkmate_occurred",
+				"winning_color": piece_color_moved,
 				"game_winner": "player" if piece_color_moved.lower() == player_color.lower() else "bot"
 			}))
 
@@ -129,6 +133,7 @@ class BotGameConsumer(AsyncWebsocketConsumer):
 		raw_fen = parse_raw_fen(current_structured_fen)
 
 		self.stockfish_engine.set_fen_position(raw_fen)
+		logger.info(raw_fen)
 
 		best_move = self.stockfish_engine.get_best_move()
 

@@ -45,15 +45,15 @@ interface MoveInfo {
 
 interface PositionInfo {
 	position: ParsedFEN;
-	last_dragged_square: string;
-	last_dropped_square: string;
+	last_dragged_square: ChessboardSquareIndex;
+	last_dropped_square: ChessboardSquareIndex;
 	move_type: string;
 	move_info: MoveInfo;
-	captured_material: {
+	captured_material?: {
 		white: CapturedPiecesList;
 		black: CapturedPiecesList;
 	};
-	promoted_pieces: {
+	promoted_pieces?: {
 		white: PromotedPiecesList;
 		black: PromotedPiecesList;
 	};

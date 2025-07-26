@@ -161,6 +161,7 @@ function Square({
 		}
 
 		let squareHTML = null;
+
 		if (displayPromotionPopup) {
 			squareHTML = (
 				<PromotionPopup

@@ -84,6 +84,10 @@ function usePromotionLogic(parsedFEN: ParsedFEN) {
 			pieceType: PieceType
 		) => void
 	) {
+		console.log(originalPawnSquareRef.current);
+		console.log(promotionSquareRef.current);
+		console.log(parsedFEN);
+
 		if (!parsedFEN) return;
 
 		if (!originalPawnSquareRef.current) return;
@@ -98,7 +102,7 @@ function usePromotionLogic(parsedFEN: ParsedFEN) {
 		if (autoQueen) {
 			sendPromotionMove(originalPawnSquare, promotionSquare, "queen");
 		} else {
-			console.log("Showing promotion popup!");
+			console.log("Showing promotion popup")
 			setShouldShowPromotionPopup(true);
 		}
 	}

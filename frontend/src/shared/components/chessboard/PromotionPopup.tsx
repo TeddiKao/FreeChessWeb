@@ -27,8 +27,6 @@ function PromotionPopup({
 	handlePawnPromotion,
 	boardOrientation,
 }: PromotionPopupProps) {
-	console.log(boardOrientation.toLowerCase(), color.toLowerCase());
-
 	const positionClass: string =
 		boardOrientation.toLowerCase() === color.toLowerCase()
 			? "top"
