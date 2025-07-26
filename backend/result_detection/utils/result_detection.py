@@ -1,5 +1,6 @@
-from .get_legal_moves import is_king_in_check, get_legal_moves
-from .general import get_all_pieces_on_board
+from move_validation.utils.get_legal_moves import get_legal_moves
+from move_validation.utils.get_legal_moves import is_king_in_check
+from move_validation.utils.general import get_all_pieces_on_board
 
 from core.utils.dict_utils import are_dictionaries_equal
 
