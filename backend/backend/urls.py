@@ -14,5 +14,6 @@ urlpatterns = [
 	path("move_validation_api/", include("move_validation.urls")),
 	path("bots/", include("bots.urls")),
     path("game-history/", include("game_history.urls")),
+    path("move-processing/", include("move_processing.urls")),
     path("core/", include("core.urls")),
 ]
