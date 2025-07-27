@@ -69,11 +69,11 @@ function Chessboard({
 	flipOnMove,
 	gameplaySettings,
 	squareSize,
+	clickedSquare,
+	setClickedSquare,
+	prevClickedSquare,
+	setPrevClickedSquare,
 }: ChessboardProps) {
-	const [previousClickedSquare, setPreviousClickedSquare] =
-		useState<OptionalValue<ChessboardSquareIndex>>(null);
-	const [clickedSquare, setClickedSquare] =
-		useState<OptionalValue<ChessboardSquareIndex>>(null);
 	const [parsedFENString, setParsedFEN] =
 		useState<OptionalValue<ParsedFEN>>(parsed_fen_string);
 
@@ -115,7 +115,7 @@ function Chessboard({
 
 	useEffect(() => {
 		handleClickToMove();
-	}, [previousClickedSquare, clickedSquare]);
+	}, [prevClickedSquare, clickedSquare]);
 
 	useEffect(() => {
 		handleOnDrop();
@@ -255,7 +255,7 @@ function Chessboard({
 			return;
 		}
 
-		if (!previousClickedSquare) {
+		if (!prevClickedSquare) {
 			return;
 		}
 
@@ -264,42 +264,42 @@ function Chessboard({
 
 		clearSquaresStyling();
 
-		if (!getSquareExists(previousClickedSquare, boardPlacement)) {
-			setPreviousClickedSquare(null);
+		if (!getSquareExists(prevClickedSquare, boardPlacement)) {
+			setPrevClickedSquare(null);
 			return;
 		}
 
-		const shouldMove = previousClickedSquare && clickedSquare;
+		const shouldMove = prevClickedSquare && clickedSquare;
 		if (!shouldMove) {
 			handleLegalMoveDisplay("click");
 
 			return;
 		}
 
-		if (previousClickedSquare === clickedSquare) {
-			setPreviousClickedSquare(null);
+		if (prevClickedSquare === clickedSquare) {
+			setPrevClickedSquare(null);
 			setClickedSquare(null);
 
 			return;
 		}
 
 		const initialSquare =
-			boardPlacement[`${previousClickedSquare}`]["starting_square"];
+			boardPlacement[`${prevClickedSquare}`]["starting_square"];
 		const pieceTypeToValidate =
-			boardPlacement[`${previousClickedSquare}`]["piece_type"];
+			boardPlacement[`${prevClickedSquare}`]["piece_type"];
 		const pieceColorToValidate: PieceColor =
-			boardPlacement[`${previousClickedSquare}`]["piece_color"];
+			boardPlacement[`${prevClickedSquare}`]["piece_color"];
 
 		const [isMoveLegal, moveType] = await fetchMoveIsValid(
 			parsedFENString,
 			pieceColorToValidate,
 			pieceTypeToValidate,
-			previousClickedSquare.toString(),
+			prevClickedSquare.toString(),
 			clickedSquare.toString()
 		);
 
 		if (!isMoveLegal) {
-			setPreviousClickedSquare(null);
+			setPrevClickedSquare(null);
 			setClickedSquare(null);
 
 			return;
@@ -309,7 +309,7 @@ function Chessboard({
 			handlePromotionCaptureStorage(
 				parsedFENString,
 				pieceColorToValidate,
-				previousClickedSquare,
+				prevClickedSquare,
 				clickedSquare,
 				setPromotionCapturedPiece,
 				selectingPromotionRef,
@@ -321,7 +321,7 @@ function Chessboard({
 		}
 
 		const moveInfo: MoveInfo = {
-			starting_square: previousClickedSquare.toString(),
+			starting_square: prevClickedSquare.toString(),
 			destination_square: clickedSquare.toString(),
 			piece_type: pieceTypeToValidate,
 			piece_color: pieceColorToValidate,
@@ -342,9 +342,9 @@ function Chessboard({
 
 		playAudio(moveType);
 
-		setPreviousDraggedSquare(previousClickedSquare);
+		setPreviousDraggedSquare(prevClickedSquare);
 		setPreviousDroppedSquare(clickedSquare);
-		setPreviousClickedSquare(null);
+		setPrevClickedSquare(null);
 		setClickedSquare(null);
 		setLastUsedMoveMethod("click");
 	}
@@ -361,9 +361,9 @@ function Chessboard({
 	const showLegalMoves = gameplaySettings["show_legal_moves"];
 
 	function handleSquareClick(event: React.MouseEvent<HTMLElement>) {
-		if (!previousClickedSquare && !clickedSquare) {
-			setPreviousClickedSquare(event.currentTarget.id);
-		} else if (previousClickedSquare && !clickedSquare) {
+		if (!prevClickedSquare && !clickedSquare) {
+			setPrevClickedSquare(event.currentTarget.id);
+		} else if (prevClickedSquare && !clickedSquare) {
 			setClickedSquare(event.currentTarget.id);
 		}
 	}
@@ -378,7 +378,7 @@ function Chessboard({
 		const usingDrag = moveMethod === MoveMethods.DRAG;
 		const startingSquare = usingDrag
 			? draggedSquare
-			: previousClickedSquare;
+			: prevClickedSquare;
 
 		if (!startingSquare) {
 			return;
@@ -468,7 +468,7 @@ function Chessboard({
 		moveMethod = moveMethod.toLowerCase();
 
 		if (moveMethod === MoveMethods.CLICK) {
-			return autoQueen ? previousClickedSquare : previousDraggedSquare;
+			return autoQueen ? prevClickedSquare : previousDraggedSquare;
 		} else if (moveMethod === MoveMethods.DRAG) {
 			return autoQueen ? draggedSquare : previousDraggedSquare;
 		}
@@ -544,7 +544,7 @@ function Chessboard({
 
 		setDraggedSquare(null);
 		setDroppedSquare(null);
-		setPreviousClickedSquare(null);
+		setPrevClickedSquare(null);
 		setClickedSquare(null);
 		setPromotionCapturedPiece(null);
 	}
@@ -575,8 +575,8 @@ function Chessboard({
 				setDraggedSquare={setDraggedSquare}
 				setDroppedSquare={setDroppedSquare}
 				clickedSquare={clickedSquare}
-				prevClickedSquare={previousClickedSquare}
-				setPrevClickedSquare={setPreviousClickedSquare}
+				prevClickedSquare={prevClickedSquare}
+				setPrevClickedSquare={setPrevClickedSquare}
 				setClickedSquare={setClickedSquare}
 				handlePromotionCancel={handlePromotionCancel}
 				handlePawnPromotion={handlePawnPromotion}
@@ -608,9 +608,9 @@ function Chessboard({
 				setDraggedSquare={setDraggedSquare}
 				setDroppedSquare={setDroppedSquare}
 				handlePromotionCancel={handlePromotionCancel}
-				prevClickedSquare={previousClickedSquare}
+				prevClickedSquare={prevClickedSquare}
 				clickedSquare={clickedSquare}
-				setPrevClickedSquare={setPreviousClickedSquare}
+				setPrevClickedSquare={setPrevClickedSquare}
 				setClickedSquare={setClickedSquare}
 				handlePawnPromotion={handlePawnPromotion}
 				previousDraggedSquare={previousDraggedSquare}
