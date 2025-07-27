@@ -53,10 +53,6 @@ function PassAndPlay() {
     } = usePassAndPlayLogic();
 
     useEffect(() => {
-        getParsedFEN();
-    }, []);
-
-    useEffect(() => {
         setGameplaySettings(initialGameplaySettings);
     }, [initialGameplaySettings]);
 
@@ -77,18 +73,6 @@ function PassAndPlay() {
         const newOrientation = isWhite ? "Black" : "White";
 
         setBoardOrientation(newOrientation);
-    }
-
-    async function getParsedFEN() {
-        const startingPositionFEN =
-            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-        try {
-            const fetchedFEN = await fetchFen(startingPositionFEN);
-            setParsedFEN(fetchedFEN);
-        } catch (error) {
-            console.log(error);
-        }
     }
 
     return (
