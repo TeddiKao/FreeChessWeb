@@ -55,6 +55,11 @@ interface ChessboardProps extends BaseChessboardProps {
 	setBoardOrientation: StateSetterFunction<string>;
 	flipOnMove: boolean;
 	gameplaySettings: any;
+	
+	clickedSquare: OptionalValue<ChessboardSquareIndex>;
+	setClickedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
+	prevClickedSquare: OptionalValue<ChessboardSquareIndex>;
+	setPrevClickedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
 }
 
 function Chessboard({
