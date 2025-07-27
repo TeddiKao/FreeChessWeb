@@ -41,6 +41,10 @@ function PassAndPlay() {
         setClickedSquare,
         prevClickedSquare,
         setPrevClickedSquare,
+        draggedSquare,
+        setDraggedSquare,
+        droppedSquare,
+        setDroppedSquare,
     } = usePassAndPlayLogic();
 
     useEffect(() => {
@@ -101,6 +105,10 @@ function PassAndPlay() {
                                     setClickedSquare={setClickedSquare}
                                     prevClickedSquare={prevClickedSquare}
                                     setPrevClickedSquare={setPrevClickedSquare}
+                                    draggedSquare={draggedSquare}
+                                    setDraggedSquare={setDraggedSquare}
+                                    droppedSquare={droppedSquare}
+                                    setDroppedSquare={setDroppedSquare}
                                 />
                             </div>
 

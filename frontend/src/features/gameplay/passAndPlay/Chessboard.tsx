@@ -60,6 +60,11 @@ interface ChessboardProps extends BaseChessboardProps {
 	setClickedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
 	prevClickedSquare: OptionalValue<ChessboardSquareIndex>;
 	setPrevClickedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
+
+	draggedSquare: OptionalValue<ChessboardSquareIndex>;
+	setDraggedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
+	droppedSquare: OptionalValue<ChessboardSquareIndex>;
+	setDroppedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
 }
 
 function Chessboard({
@@ -73,14 +78,13 @@ function Chessboard({
 	setClickedSquare,
 	prevClickedSquare,
 	setPrevClickedSquare,
+	draggedSquare,
+	setDraggedSquare,
+	droppedSquare,
+	setDroppedSquare,
 }: ChessboardProps) {
 	const [parsedFENString, setParsedFEN] =
 		useState<OptionalValue<ParsedFEN>>(parsed_fen_string);
-
-	const [draggedSquare, setDraggedSquare] =
-		useState<OptionalValue<ChessboardSquareIndex>>(null);
-	const [droppedSquare, setDroppedSquare] =
-		useState<OptionalValue<ChessboardSquareIndex>>(null);
 
 	const [previousDraggedSquare, setPreviousDraggedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);

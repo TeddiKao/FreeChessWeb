@@ -1,4 +1,5 @@
 import useClickedSquaresState from "../../multiplayer/hooks/useClickedSquaresState";
+import useDraggedSquaresState from "../../multiplayer/hooks/useDraggedSquaresState";
 
 function usePassAndPlayLogic() {
     const {
@@ -8,7 +9,19 @@ function usePassAndPlayLogic() {
         setPrevClickedSquare,
     } = useClickedSquaresState();
 
-    return { clickedSquare, setClickedSquare, prevClickedSquare, setPrevClickedSquare };
+    const { draggedSquare, setDraggedSquare, droppedSquare, setDroppedSquare } =
+        useDraggedSquaresState();
+
+    return {
+        clickedSquare,
+        setClickedSquare,
+        prevClickedSquare,
+        setPrevClickedSquare,
+        draggedSquare,
+        setDraggedSquare,
+        droppedSquare,
+        setDroppedSquare,
+    };
 }
 
 export default usePassAndPlayLogic;
