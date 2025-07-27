@@ -65,6 +65,11 @@ interface ChessboardProps extends BaseChessboardProps {
 	setDraggedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
 	droppedSquare: OptionalValue<ChessboardSquareIndex>;
 	setDroppedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
+
+	previousDraggedSquare: OptionalValue<ChessboardSquareIndex>;
+	setPreviousDraggedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
+	previousDroppedSquare: OptionalValue<ChessboardSquareIndex>;
+	setPreviousDroppedSquare: StateSetterFunction<OptionalValue<ChessboardSquareIndex>>;
 }
 
 function Chessboard({
