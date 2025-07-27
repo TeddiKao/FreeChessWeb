@@ -29,6 +29,10 @@ function usePassAndPlayLogic() {
         setDraggedSquare,
         droppedSquare,
         setDroppedSquare,
+        previousDraggedSquare,
+        setPreviousDraggedSquare,
+        previousDroppedSquare,
+        setPreviousDroppedSquare,
     };
 }
 
