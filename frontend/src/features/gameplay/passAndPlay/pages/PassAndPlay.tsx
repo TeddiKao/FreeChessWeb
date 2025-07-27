@@ -12,109 +12,117 @@ import LocalGameOverModal from "../modals/GameOverModal";
 import { ParsedFEN } from "@sharedTypes/chessTypes/gameState.types";
 import { fetchFen } from "../utils/passAndPlayApi";
 import {
-	GameEndedCauseSetterContext,
-	GameEndedSetterContext,
-	GameWinnerSetterContext,
+    GameEndedCauseSetterContext,
+    GameEndedSetterContext,
+    GameWinnerSetterContext,
 } from "../contexts/gameEndStateSetters";
 import BoardActions from "@sharedComponents/chessboard/BoardActions";
+import usePassAndPlayLogic from "../hooks/usePassAndPlayLogic";
 
 function PassAndPlay() {
-	const [parsedFEN, setParsedFEN] = useState<ParsedFEN | null>(null);
+    const [parsedFEN, setParsedFEN] = useState<ParsedFEN | null>(null);
 
-	const [gameEnded, setGameEnded] = useState<boolean>(false);
-	const [gameEndedCause, setGameEndedCause] = useState<string>("");
-	const [gameWinner, setGameWinner] = useState<string>("");
+    const [gameEnded, setGameEnded] = useState<boolean>(false);
+    const [gameEndedCause, setGameEndedCause] = useState<string>("");
+    const [gameWinner, setGameWinner] = useState<string>("");
 
-	const initialGameplaySettings = useGameplaySettings();
-	const [gameplaySettings, setGameplaySettings] = useState(
-		initialGameplaySettings
-	);
+    const initialGameplaySettings = useGameplaySettings();
+    const [gameplaySettings, setGameplaySettings] = useState(
+        initialGameplaySettings
+    );
 
-	const [gameplaySettingsVisible, setGameplaySettingsVisible] =
-		useState(false);
+    const [gameplaySettingsVisible, setGameplaySettingsVisible] =
+        useState(false);
 
-	const [boardOrientation, setBoardOrientation] = useState("White");
+    const [boardOrientation, setBoardOrientation] = useState("White");
 
-	useEffect(() => {
-		getParsedFEN();
-	}, []);
+    const {
+        clickedSquare,
+        setClickedSquare,
+        prevClickedSquare,
+        setPrevClickedSquare,
+    } = usePassAndPlayLogic();
 
-	useEffect(() => {
-		setGameplaySettings(initialGameplaySettings);
-	}, [initialGameplaySettings]);
+    useEffect(() => {
+        getParsedFEN();
+    }, []);
 
-	if (!initialGameplaySettings) {
-		return null;
-	}
+    useEffect(() => {
+        setGameplaySettings(initialGameplaySettings);
+    }, [initialGameplaySettings]);
 
-	function handleSettingsClose() {
-		setGameplaySettingsVisible(false);
-	}
+    if (!initialGameplaySettings) {
+        return null;
+    }
 
-	function handleSettingsDisplay() {
-		setGameplaySettingsVisible(true);
-	}
+    function handleSettingsClose() {
+        setGameplaySettingsVisible(false);
+    }
 
-	function toggleBoardOrientation() {
-		const isWhite = boardOrientation.toLowerCase() === "white";
-		const newOrientation = isWhite ? "Black" : "White";
+    function handleSettingsDisplay() {
+        setGameplaySettingsVisible(true);
+    }
 
-		setBoardOrientation(newOrientation);
-	}
+    function toggleBoardOrientation() {
+        const isWhite = boardOrientation.toLowerCase() === "white";
+        const newOrientation = isWhite ? "Black" : "White";
 
-	async function getParsedFEN() {
-		const startingPositionFEN =
-			"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        setBoardOrientation(newOrientation);
+    }
 
-		try {
-			const fetchedFEN = await fetchFen(startingPositionFEN);
-			setParsedFEN(fetchedFEN);
-		} catch (error) {
-			console.log(error);
-		}
-	}
+    async function getParsedFEN() {
+        const startingPositionFEN =
+            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-	return (
-		<GameEndedSetterContext.Provider value={setGameEnded}>
-			<GameEndedCauseSetterContext.Provider value={setGameEndedCause}>
-				<GameWinnerSetterContext.Provider value={setGameWinner}>
-					<DashboardNavbar />
-					<div className="playing-interface-container">
-						<div className="main-chessboard">
-							<div className="chessboard-wrapper">
-								<Chessboard
-									parsed_fen_string={parsedFEN as ParsedFEN}
-									orientation={boardOrientation}
-									setBoardOrientation={setBoardOrientation}
-									flipOnMove={false}
-									squareSize={70}
-									gameplaySettings={gameplaySettings}
-								/>
-							</div>
+        try {
+            const fetchedFEN = await fetchFen(startingPositionFEN);
+            setParsedFEN(fetchedFEN);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-							<BaseModal visible={gameplaySettingsVisible}>
-								<GameplaySettings
-									onClose={handleSettingsClose}
-									setGameplaySettings={setGameplaySettings}
-								/>
-							</BaseModal>
+    return (
+        <GameEndedSetterContext.Provider value={setGameEnded}>
+            <GameEndedCauseSetterContext.Provider value={setGameEndedCause}>
+                <GameWinnerSetterContext.Provider value={setGameWinner}>
+                    <DashboardNavbar />
+                    <div className="playing-interface-container">
+                        <div className="main-chessboard">
+                            <div className="chessboard-wrapper">
+                                <Chessboard
+                                    parsed_fen_string={parsedFEN as ParsedFEN}
+                                    orientation={boardOrientation}
+                                    setBoardOrientation={setBoardOrientation}
+                                    flipOnMove={false}
+                                    squareSize={70}
+                                    gameplaySettings={gameplaySettings}
+                                />
+                            </div>
 
-							<LocalGameOverModal
-								visible={gameEnded}
-								gameEndCause={gameEndedCause}
-								gameWinner={gameWinner}
-							/>
-						</div>
+                            <BaseModal visible={gameplaySettingsVisible}>
+                                <GameplaySettings
+                                    onClose={handleSettingsClose}
+                                    setGameplaySettings={setGameplaySettings}
+                                />
+                            </BaseModal>
 
-						<BoardActions
-							toggleBoardOrientation={toggleBoardOrientation}
-							displaySettings={handleSettingsDisplay}
-						/>
-					</div>
-				</GameWinnerSetterContext.Provider>
-			</GameEndedCauseSetterContext.Provider>
-		</GameEndedSetterContext.Provider>
-	);
+                            <LocalGameOverModal
+                                visible={gameEnded}
+                                gameEndCause={gameEndedCause}
+                                gameWinner={gameWinner}
+                            />
+                        </div>
+
+                        <BoardActions
+                            toggleBoardOrientation={toggleBoardOrientation}
+                            displaySettings={handleSettingsDisplay}
+                        />
+                    </div>
+                </GameWinnerSetterContext.Provider>
+            </GameEndedCauseSetterContext.Provider>
+        </GameEndedSetterContext.Provider>
+    );
 }
 
 export default PassAndPlay;
