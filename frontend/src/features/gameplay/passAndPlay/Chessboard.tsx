@@ -53,6 +53,8 @@ import { getIsCheckmated, getIsStalemated, processMove } from "@/shared/utils/ap
 
 interface ChessboardProps extends BaseChessboardProps {
 	setBoardOrientation: StateSetterFunction<string>;
+	setParsedFEN: StateSetterFunction<ParsedFEN>;
+
 	flipOnMove: boolean;
 	gameplaySettings: any;
 	
@@ -76,6 +78,7 @@ function Chessboard({
 	parsed_fen_string,
 	orientation,
 	setBoardOrientation,
+	setParsedFEN,
 	flipOnMove,
 	gameplaySettings,
 	squareSize,
