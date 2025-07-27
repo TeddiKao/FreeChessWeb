@@ -85,6 +85,7 @@ function PassAndPlay() {
                             <div className="chessboard-wrapper">
                                 <Chessboard
                                     parsed_fen_string={parsedFEN!}
+                                    setParsedFEN={setParsedFEN}
                                     orientation={boardOrientation}
                                     setBoardOrientation={setBoardOrientation}
                                     flipOnMove={false}
