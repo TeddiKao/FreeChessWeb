@@ -78,14 +78,13 @@ function Chessboard({
 	setClickedSquare,
 	prevClickedSquare,
 	setPrevClickedSquare,
+	draggedSquare,
+	setDraggedSquare,
+	droppedSquare,
+	setDroppedSquare,
 }: ChessboardProps) {
 	const [parsedFENString, setParsedFEN] =
 		useState<OptionalValue<ParsedFEN>>(parsed_fen_string);
-
-	const [draggedSquare, setDraggedSquare] =
-		useState<OptionalValue<ChessboardSquareIndex>>(null);
-	const [droppedSquare, setDroppedSquare] =
-		useState<OptionalValue<ChessboardSquareIndex>>(null);
 
 	const [previousDraggedSquare, setPreviousDraggedSquare] =
 		useState<OptionalValue<ChessboardSquareIndex>>(null);
