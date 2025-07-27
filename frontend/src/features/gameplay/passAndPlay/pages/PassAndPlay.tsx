@@ -97,6 +97,10 @@ function PassAndPlay() {
                                     flipOnMove={false}
                                     squareSize={70}
                                     gameplaySettings={gameplaySettings}
+                                    clickedSquare={clickedSquare}
+                                    setClickedSquare={setClickedSquare}
+                                    prevClickedSquare={prevClickedSquare}
+                                    setPrevClickedSquare={setPrevClickedSquare}
                                 />
                             </div>
 
