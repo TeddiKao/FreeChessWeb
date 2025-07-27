@@ -87,14 +87,14 @@ function Chessboard({
 	setDraggedSquare,
 	droppedSquare,
 	setDroppedSquare,
+	previousDraggedSquare,
+	setPreviousDraggedSquare,
+	previousDroppedSquare,
+	setPreviousDroppedSquare,
 }: ChessboardProps) {
 	const [parsedFENString, setParsedFEN] =
 		useState<OptionalValue<ParsedFEN>>(parsed_fen_string);
 
-	const [previousDraggedSquare, setPreviousDraggedSquare] =
-		useState<OptionalValue<ChessboardSquareIndex>>(null);
-	const [previousDroppedSquare, setPreviousDroppedSquare] =
-		useState<OptionalValue<ChessboardSquareIndex>>(null);
 	const [promotionCapturedPiece, setPromotionCapturedPiece] =
 		useState<OptionalValue<PieceInfo>>(null);
 
