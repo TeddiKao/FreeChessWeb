@@ -9,7 +9,6 @@ import BaseModal from "@sharedComponents/layout/BaseModal";
 import useGameplaySettings from "@settings/gameplay/hooks/useGameplaySettings";
 import DashboardNavbar from "@sharedComponents/DashboardNavbar/DashboardNavbar";
 import LocalGameOverModal from "../modals/GameOverModal";
-import { ParsedFEN } from "@sharedTypes/chessTypes/gameState.types";
 import { fetchFen } from "../utils/passAndPlayApi";
 import {
     GameEndedCauseSetterContext,
@@ -20,8 +19,6 @@ import BoardActions from "@sharedComponents/chessboard/BoardActions";
 import usePassAndPlayLogic from "../hooks/usePassAndPlayLogic";
 
 function PassAndPlay() {
-    const [parsedFEN, setParsedFEN] = useState<ParsedFEN | null>(null);
-
     const [gameEnded, setGameEnded] = useState<boolean>(false);
     const [gameEndedCause, setGameEndedCause] = useState<string>("");
     const [gameWinner, setGameWinner] = useState<string>("");
@@ -50,11 +47,10 @@ function PassAndPlay() {
         setPreviousDraggedSquare,
         previousDroppedSquare,
         setPreviousDroppedSquare,
+		
+		parsedFEN,
+		setParsedFEN,
     } = usePassAndPlayLogic();
-
-    useEffect(() => {
-        getParsedFEN();
-    }, []);
 
     useEffect(() => {
         setGameplaySettings(initialGameplaySettings);
@@ -79,18 +75,6 @@ function PassAndPlay() {
         setBoardOrientation(newOrientation);
     }
 
-    async function getParsedFEN() {
-        const startingPositionFEN =
-            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-        try {
-            const fetchedFEN = await fetchFen(startingPositionFEN);
-            setParsedFEN(fetchedFEN);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     return (
         <GameEndedSetterContext.Provider value={setGameEnded}>
             <GameEndedCauseSetterContext.Provider value={setGameEndedCause}>
@@ -100,7 +84,8 @@ function PassAndPlay() {
                         <div className="main-chessboard">
                             <div className="chessboard-wrapper">
                                 <Chessboard
-                                    parsed_fen_string={parsedFEN as ParsedFEN}
+                                    parsed_fen_string={parsedFEN!}
+                                    setParsedFEN={setParsedFEN}
                                     orientation={boardOrientation}
                                     setBoardOrientation={setBoardOrientation}
                                     flipOnMove={false}
